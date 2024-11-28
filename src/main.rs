@@ -58,7 +58,7 @@ fn get_file_size_string(size: u64) -> String {
 fn main() {
     execute!(
         std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster CLI v1.0.0")
+        crossterm::terminal::SetTitle("WinBooster CLI v1.0.1")
     );
 
     let username = &*whoami::username();
@@ -836,7 +836,7 @@ fn main() {
     };
     database.push(c_program_files_obs_studio_bin_64bit);
     let c_users_appdata_roaming_obs_studio_logs = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\obs-studio\\logs\\*txt".parse().unwrap(),
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\obs-studio\\logs\\*txt",
         program: "OBS Studio".parse().unwrap(),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
@@ -881,7 +881,7 @@ fn main() {
     //</editor-fold>
     //<editor-fold desc="1Password""">
     let c_users_appdata_local_1password_logs_setup = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\1Password\\logs\\setup\\*.log".parse().unwrap(),
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\1Password\\logs\\setup\\*.log",
         program: "1Password".parse().unwrap(),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
@@ -1030,7 +1030,7 @@ fn main() {
     //</editor-fold>
     //<editor-fold desc="Tribler""">
     let c_users_appdata_roaming_tribler = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\.Tribler\\*.log".parse().unwrap(),
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\.Tribler\\*.log",
         program: "Tribler".parse().unwrap(),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
