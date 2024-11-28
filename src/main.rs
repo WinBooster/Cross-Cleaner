@@ -1770,7 +1770,7 @@ fn main() {
     //</editor-fold>
     //<editor-fold desc="Notepad++"""">
     let c_users_appdata_roaming_notepad_plus_plus = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Notepad++\\*.log".parse().unwrap(),
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Notepad++\\*.log",
         program: "Notepad++".parse().unwrap(),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
@@ -1872,7 +1872,7 @@ fn main() {
     //</editor-fold>
     //<editor-fold desc="Exodus Crypto Wallet"""">
     let c_users_appdata_local_exodus = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\exodus\\*.log".parse().unwrap(),
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\exodus\\*.log",
         program: "Exodus Crypto Wallet".parse().unwrap(),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
@@ -1887,7 +1887,7 @@ fn main() {
     //</editor-fold>
     //<editor-fold desc="Wasabi Wallet"""">
     let c_users_appdata_roaming_walletwasabi_client = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\WalletWasabi\\Client\\*.txt".parse().unwrap(),
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\WalletWasabi\\Client\\*.txt",
         program: "Wasabi Wallet".parse().unwrap(),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
@@ -1917,7 +1917,7 @@ fn main() {
     //</editor-fold>
     //<editor-fold desc="Memu"""">
     let c_users_memuhyperv = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\.MemuHyperv\\*log*".parse().unwrap(),
+        path: "C:\\Users\\".to_owned() + username + "\\.MemuHyperv\\*log*",
         program: "Memu".parse().unwrap(),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
