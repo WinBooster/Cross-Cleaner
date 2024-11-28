@@ -201,7 +201,7 @@ fn get_file_size_string(size: u64) -> String {
 async fn main() {
     execute!(
         std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster CLI v1.0.5")
+        crossterm::terminal::SetTitle("WinBooster CLI v1.0.6")
     );
 
     let username = &*whoami::username();
