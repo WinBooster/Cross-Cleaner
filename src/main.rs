@@ -2070,6 +2070,19 @@ fn main() {
         folders_to_remove: vec![]
     };
     database.push(c_users_appdata_roaming_minecraft_logs);
+    let c_users_appdata_roaming_minecraft_saves = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\.minecraft\\saves\\*",
+        program: "Minecraft".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Saves".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: true,
+        folders_to_remove: vec![]
+    };
+    database.push(c_users_appdata_roaming_minecraft_saves);
     //</editor-fold>
     //<editor-fold desc="Lunar Client">
     let c_users_appdata_lunarclient_logs = CleanerData {
