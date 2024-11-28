@@ -16,10 +16,8 @@ fn get_steam_directory() -> String {
 }
 pub fn get_database() -> Vec<CleanerData> {
     let username = &*whoami::username();
-    let mut steam_directory:String = String::new();
-    let string = get_steam_directory();
+    let mut steam_directory: String = get_steam_directory();
 
-    println!("Steam: {}", string);
     let mut database: Vec<CleanerData> = Vec::new();
     //<editor-fold desc="Windows">
     let c_windows_debug_wia = CleanerData {
@@ -220,7 +218,10 @@ pub fn get_database() -> Vec<CleanerData> {
     let c_program_files_nvidia_corporation = CleanerData {
         path: "C:\\Program Files\\NVIDIA Corporation".parse().unwrap(),
         program: "NVIDIA Corporation".parse().unwrap(),
-        files_to_remove: vec!["license.txt".parse().unwrap()],
+        files_to_remove: vec![
+            "license.txt".parse().unwrap(),
+            "nvstlink.log".parse().unwrap()
+        ],
         category: "Logs".parse().unwrap(),
         remove_directories: false,
         remove_files: false,
@@ -233,7 +234,9 @@ pub fn get_database() -> Vec<CleanerData> {
     let c_program_files_nvidia_corporation_nvsmi = CleanerData {
         path: "C:\\Program Files\\NVIDIA Corporation\\NVSMI".parse().unwrap(),
         program: "NVIDIA Corporation".parse().unwrap(),
-        files_to_remove: vec!["nvidia-smi.1.pdf".parse().unwrap()],
+        files_to_remove: vec![
+            "nvidia-smi.1.pdf".parse().unwrap()
+        ],
         category: "Logs".parse().unwrap(),
         remove_directories: false,
         remove_files: false,
@@ -243,6 +246,37 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![]
     };
     database.push(c_program_files_nvidia_corporation_nvsmi);
+    let c_program_files_nvidia_corporation_nv_stereo_installer = CleanerData {
+        path: "C:\\Program Files\\NVIDIA Corporation\\nvStereoInstaller".parse().unwrap(),
+        program: "NVIDIA Corporation".parse().unwrap(),
+        files_to_remove: vec![
+            "nvStInst.log".parse().unwrap(),
+            "nvStInst.old".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(c_program_files_nvidia_corporation_nv_stereo_installer);
+    let c_program_files_nvidia_corporation_nv_fbs_plugin = CleanerData {
+        path: "C:\\Program Files\\NVIDIA Corporation\\NvFBCPlugin".parse().unwrap(),
+        program: "NVIDIA Corporation".parse().unwrap(),
+        files_to_remove: vec![
+            "logPluginError.txt".parse().unwrap(),
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(c_program_files_nvidia_corporation_nv_fbs_plugin);
     //</editor-fold>
     //<editor-fold desc="Java">
     let java_1 = CleanerData {
@@ -2459,7 +2493,7 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![],
     };
     database.push(c_program_filex_x86_radmin_vpn_chatlogs);
-    let c_program_files_amnezia_vpn = CleanerData {
+    let c_program_files_radmin_vpn = CleanerData {
         path: "C:\\ProgramData\\Famatech\\Radmin VPN\\*.txt".parse().unwrap(),
         program: "Radmin VPN".parse().unwrap(),
         files_to_remove: vec![],
@@ -2471,7 +2505,20 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_directory_after_clean: false,
         folders_to_remove: vec![],
     };
-    database.push(c_program_files_amnezia_vpn);
+    database.push(c_program_files_radmin_vpn);
+    let c_program_files_radmin_vpn_logs = CleanerData {
+        path: "C:\\ProgramData\\Famatech\\Radmin VPN\\*.log".parse().unwrap(),
+        program: "Radmin VPN".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_radmin_vpn_logs);
     //</editor-fold>
     //<editor-fold desc="UrbanVPN""">
     let c_users_urbanvpm_logs = CleanerData {
