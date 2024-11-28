@@ -42,17 +42,10 @@ fn get_steam_directory() {
 
 }
 
-fn get_file_lenght(path: String) {
-    let mut vec = vec![];
-
-    vec.try_reserve_exact(n)?;
-    file.by_ref().take(n).read_to_end(&mut vec)?;
-}
-
 fn main() {
     execute!(
         std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster CLI")
+        crossterm::terminal::SetTitle("WinBooster CLI v1.0.0")
     );
 
     let username = &*whoami::username();
@@ -987,6 +980,7 @@ fn main() {
     println!("Cleared programms:");
     let table = Table::new(cleared_programs).to_string();
     println!("{}", table);
+    println!("Removed bytes: {}", bytes_cleared);
     println!("Removed files: {}", removed_files);
     println!("Removed directories: {}", removed_directories);
     let mut s=String::new();
