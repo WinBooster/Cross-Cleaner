@@ -1013,6 +1013,36 @@ fn main() {
     };
     database.push(c_users_mccreator_logs);
     //</editor-fold>
+    //<editor-fold desc="7-Zip""">
+    let c_program_files_7_zip = CleanerData {
+        path: "C:\\Program Files\\7-Zip\\*.txt".parse().unwrap(),
+        program: "7-Zip".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_7_zip);
+    //</editor-fold>
+    //<editor-fold desc="Tribler""">
+    let c_users_appdata_roaming_tribler = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\.Tribler\\*.log".parse().unwrap(),
+        program: "Tribler".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_tribler);
+    //</editor-fold>
 
     //<editor-fold desc="Images">
 
