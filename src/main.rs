@@ -849,6 +849,112 @@ fn main() {
     };
     database.push(c_users_appdata_roaming_obs_studio_logs);
     //</editor-fold>
+    //<editor-fold desc="Unity Hub"">
+    let c_program_files_unity_hub = CleanerData {
+        path: "C:\\Program Files\\Unity Hub\\*.html".parse().unwrap(),
+        program: "Unity Hub".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_unity_hub);
+    //</editor-fold>
+    //<editor-fold desc="KeePass 2""">
+    let c_program_files_keepass_password_safe_2 = CleanerData {
+        path: "C:\\Program Files\\KeePass Password Safe 2\\*.txt".parse().unwrap(),
+        program: "KeePass 2".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_keepass_password_safe_2);
+    //</editor-fold>
+    //<editor-fold desc="1Password""">
+    let c_users_appdata_local_1password_logs_setup = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\1Password\\logs\\setup\\*.log".parse().unwrap(),
+        program: "1Password".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_1password_logs_setup);
+    //</editor-fold>
+    //<editor-fold desc="LGHUB""">
+    let c_program_files_lghub = CleanerData {
+        path: "C:\\Program Files\\LGHUB".parse().unwrap(),
+        program: "LGHUB".parse().unwrap(),
+        files_to_remove: vec![
+            "LICENSE".parse().unwrap(),
+            "LICENSES.chromium.html".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_lghub);
+    //</editor-fold>
+    //<editor-fold desc="DeepL""">
+    let c_users_appdata_local_deepl_se_logs = CleanerData {
+        path: "C:\\Users\\{username}\\AppData\\Local\\DeepL_SE\\logs\\*".parse().unwrap(),
+        program: "LGHUB".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_deepl_se_logs);
+    let c_users_appdata_local_deepl_se_cache = CleanerData {
+        path: "C:\\Users\\{username}\\AppData\\Local\\DeepL_SE\\cache\\*".parse().unwrap(),
+        program: "LGHUB".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_deepl_se_cache);
+    //</editor-fold>
+    //<editor-fold desc="Microsoft Lobe""">
+    let c_users_appdata_roaming_lobe_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Lobe\\logs\\*",
+        program: "Microsoft Lobe".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_lobe_logs);
+    //</editor-fold>
 
     //<editor-fold desc="Images">
 
