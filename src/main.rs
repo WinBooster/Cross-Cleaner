@@ -1120,8 +1120,9 @@ fn main() {
         folders_to_remove: vec![],
     };
     database.push(c_program_filex_x86_boxedapppacker);
+    //</editor-fold>
     //<editor-fold desc="Enigma Virtual Box""">
-    let c_program_filex_x86_boxedapppacker = CleanerData {
+    let c_program_files_enigma_virtual_box = CleanerData {
         path: "C:\\Program Files (x86)\\Enigma Virtual Box".parse().unwrap(),
         program: "Enigma Virtual Box".parse().unwrap(),
         files_to_remove: vec![
@@ -1140,7 +1141,461 @@ fn main() {
         remove_directory_after_clean: false,
         folders_to_remove: vec![],
     };
-    database.push(c_program_filex_x86_boxedapppacker);
+    database.push(c_program_files_enigma_virtual_box);
+    //</editor-fold>
+    //<editor-fold desc="GnuPG""">
+    let c_program_files_gnupg = CleanerData {
+        path: "C:\\Program Files (x86)\\GnuPG".parse().unwrap(),
+        program: "GnuPG".parse().unwrap(),
+        files_to_remove: vec![
+            "README.txt".parse().unwrap(),
+            "VERSION".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_gnupg);
+    //</editor-fold>
+    //<editor-fold desc="Gpg4win""">
+    let c_program_files_enigma_x86_gpg4win = CleanerData {
+        path: "C:\\Program Files (x86)\\Gpg4win".parse().unwrap(),
+        program: "Gpg4win".parse().unwrap(),
+        files_to_remove: vec![
+            "VERSION".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_enigma_x86_gpg4win);
+    //</editor-fold>
+    //<editor-fold desc="Inno Setup 6""">
+    let c_program_files_enigma_x86_inno_setup_6 = CleanerData {
+        path: "C:\\Program Files (x86)\\Inno Setup 6".parse().unwrap(),
+        program: "Inno Setup 6".parse().unwrap(),
+        files_to_remove: vec![
+            "whatsnew.htm".parse().unwrap(),
+            "isfaq.url".parse().unwrap(),
+            "license.txt".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_enigma_x86_inno_setup_6);
+    let c_program_files_enigma_x86_inno_setup_6 = CleanerData {
+        path: "C:\\Program Files (x86)\\Inno Setup 6\\Examples\\*.txt".parse().unwrap(),
+        program: "Inno Setup 6".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_enigma_x86_inno_setup_6);
+    //</editor-fold>
+    //<editor-fold desc="VirtualBox""">
+    let c_users_virtualbox_vms_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\VirtualBox VMs\\**\\Logs\\*.log",
+        program: "VirtualBox".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_virtualbox_vms_logs);
+    let c_users_virtualbox_vms = CleanerData {
+        path: "C:\\Program Files\\Oracle\\VirtualBox\\*.rtf".parse().unwrap(),
+        program: "VirtualBox".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_virtualbox_vms);
+    let c_users_virtualbox_vms_doc = CleanerData {
+        path: "C:\\Program Files\\Oracle\\VirtualBox\\doc\\*".parse().unwrap(),
+        program: "VirtualBox".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_virtualbox_vms_doc);
+    //</editor-fold>
+    //<editor-fold desc="Recaf""">
+    let c_users_appdata_roaming_recaf = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Recaf\\*.log",
+        program: "Recaf".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_recaf);
+    //</editor-fold>
+    //<editor-fold desc="Process Hacker 2""">
+    let c_program_files_process_hacker_2 = CleanerData {
+        path: "C:\\Program Files\\Process Hacker 2".parse().unwrap(),
+        program: "Process Hacker 2".parse().unwrap(),
+        files_to_remove: vec![
+            "CHANGELOG.txt".parse().unwrap(),
+            "COPYRIGHT.txt".parse().unwrap(),
+            "LICENSE.txt".parse().unwrap(),
+            "README.txt".parse().unwrap(),
+            "ProcessHacker.sig".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_process_hacker_2);
+    //</editor-fold>
+    //<editor-fold desc="Docker""">
+    let c_programdata_dockerdesktop = CleanerData {
+        path: "C:\\ProgramData\\DockerDesktop\\*.txt".parse().unwrap(),
+        program: "Docker".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_programdata_dockerdesktop);
+    let c_users_appdata_local_docker_logs = CleanerData {
+        path: "C:\\Users\\{username}\\AppData\\Local\\Docker\\log\\**\\*".parse().unwrap(),
+        program: "Docker".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_docker_logs);
+    let c_users_appdata_local_docker = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\Docker\\*.txt".parse().unwrap(),
+        program: "Docker".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_docker);
+    //</editor-fold>
+    //<editor-fold desc="HiAlgo Boost""">
+    let c_programdata_dockerdesktop = CleanerData {
+        path: "C:\\Program Files (x86)\\HiAlgo\\Plugins\\BOOST".parse().unwrap(),
+        program: "HiAlgo Boost".parse().unwrap(),
+        files_to_remove: vec![
+            "hialgo_eula.txt".parse().unwrap(),
+            "Update Boost.log".parse().unwrap(),
+            "UpdateListing.txt".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_programdata_dockerdesktop);
+    //</editor-fold>
+    //<editor-fold desc="SoundWire Server""">
+    let c_program_files_x86_soundwire_server = CleanerData {
+        path: "C:\\Program Files (x86)\\SoundWire Server".parse().unwrap(),
+        program: "SoundWire Server".parse().unwrap(),
+        files_to_remove: vec![
+            "license.txt".parse().unwrap(),
+            "opus_license.txt".parse().unwrap(),
+            "readerwriterqueue_license.txt".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_x86_soundwire_server);
+    //</editor-fold>
+    //<editor-fold desc="System Informer""">
+    let c_program_files_systeminformer = CleanerData {
+        path: "C:\\Program Files\\SystemInformer".parse().unwrap(),
+        program: "SoundWire Server".parse().unwrap(),
+        files_to_remove: vec![
+            "LICENSE.txt".parse().unwrap(),
+            "README.txt".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_systeminformer);
+    //</editor-fold>
+    //<editor-fold desc="Sandboxie Plus""">
+    let c_program_files_sandboxie_plus = CleanerData {
+        path: "C:\\Program Files\\Sandboxie-Plus".parse().unwrap(),
+        program: "SoundWire Server".parse().unwrap(),
+        files_to_remove: vec![
+            "Manifest0.txt".parse().unwrap(),
+            "Manifest1.txt".parse().unwrap(),
+            "Manifest2.txt".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_sandboxie_plus);
+    //</editor-fold>
+    //<editor-fold desc="JetBrains""">
+    let c_program_files_jetbrains_license = CleanerData {
+        path: "C:\\Program Files\\JetBrains\\**\\license".parse().unwrap(),
+        program: "JetBrains".parse().unwrap(),
+        files_to_remove: vec![
+            "javahelp_license.txt".parse().unwrap(),
+            "javolution_license.txt".parse().unwrap(),
+            "launcher-third-party-libraries.html".parse().unwrap(),
+            "saxon-conditions.html".parse().unwrap(),
+            "third-party-libraries.html".parse().unwrap(),
+            "yourkit-license-redist.txt".parse().unwrap(),
+            "remote-dev-server.html".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_jetbrains_license);
+    let c_program_files_jetbrains = CleanerData {
+        path: "C:\\Program Files\\JetBrains\\**".parse().unwrap(),
+        program: "JetBrains".parse().unwrap(),
+        files_to_remove: vec![
+            "LICENSE.txt".parse().unwrap(),
+            "NOTICE.txt".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_jetbrains);
+    //</editor-fold>
+    //<editor-fold desc="Discord""">
+    let c_users_appdata_local_discord = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\Discord\\*.log",
+        program: "Discord".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_discord);
+    //</editor-fold>
+    //<editor-fold desc="Guilded""">
+    let c_users_appdata_roaming_guilded = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Guilded\\*.log",
+        program: "Guilded".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_guilded);
+    //</editor-fold>
+    //<editor-fold desc="Element""">
+    let c_users_appdata_local_element_desktop = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\element-desktop\\*.log",
+        program: "Element".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_element_desktop);
+    //</editor-fold>
+    //<editor-fold desc="Telegram""">
+    let c_users_appdata_roaming_telefram_desktop_tdata = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata",
+        program: "Telegram".parse().unwrap(),
+        files_to_remove: vec![
+            "key_datas".parse().unwrap()
+        ],
+        category: "Accounts".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_telefram_desktop_tdata);
+    let c_users_appdata_roaming_telefram_desktop = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Telegram Desktop\\*.txt",
+        program: "Telegram".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_telefram_desktop);
+    let c_users_appdata_roaming_telefram_desktop_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Telegram Desktop\\*.log",
+        program: "Telegram".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_telefram_desktop_logs);
+    let c_users_appdata_roaming_telefram_desktop_tdata_emoji_cache = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata\\emoji\\*cache_*",
+        program: "Telegram".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_telefram_desktop_tdata_emoji_cache);
+    let c_users_appdata_roaming_telefram_desktop_tdata_user_data_cache = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata\\user_data\\cache\\**\\*",
+        program: "Telegram".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_telefram_desktop_tdata_user_data_cache);
+    let c_users_appdata_roaming_telefram_desktop_tdata_user_data_media_cache = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata\\user_data\\media_cache\\**\\*",
+        program: "Telegram".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_telefram_desktop_tdata_user_data_media_cache);
+    //</editor-fold>
+    //<editor-fold desc="Signal""">
+    let c_users_appdata_roaming_signal = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Signal\\logs\\*",
+        program: "Telegram".parse().unwrap(),
+        files_to_remove: vec![ ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_signal);
+    let c_users_appdata_roaming_signal_update_cache = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Signal\\update-cache\\*",
+        program: "Telegram".parse().unwrap(),
+        files_to_remove: vec![ ],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_signal_update_cache);
     //</editor-fold>
 
     //<editor-fold desc="Images">
