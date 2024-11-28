@@ -10,15 +10,46 @@ dependencies = [
  "glob",
  "inquire",
  "tabled",
+ "tokio",
  "whoami",
  "winres",
 ]
+
+[[package]]
+name = "addr2line"
+version = "0.24.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dfbe277e56a376000877090da837660b4427aad530e3028d44e0bffe4f89a1c1"
+dependencies = [
+ "gimli",
+]
+
+[[package]]
+name = "adler2"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "512761e0bb2578dd7380c6baaa0f4ce03e84f95e960231d1dec8bf4d7d6e2627"
 
 [[package]]
 name = "autocfg"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ace50bade8e6234aa140d9a2f552bbee1db4d353f69b8217bc503490fc1a9f26"
+
+[[package]]
+name = "backtrace"
+version = "0.3.74"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8d82cb332cdfaed17ae235a638438ac4d4839913cc2af585c3c6746e8f8bee1a"
+dependencies = [
+ "addr2line",
+ "cfg-if",
+ "libc",
+ "miniz_oxide",
+ "object",
+ "rustc-demangle",
+ "windows-targets 0.52.6",
+]
 
 [[package]]
 name = "bitflags"
@@ -128,6 +159,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "gimli"
+version = "0.31.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "07e28edb80900c19c28f1072f2e8aeca7fa06b23cd4169cefe1af5aa3260783f"
+
+[[package]]
 name = "glob"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -188,6 +225,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a7a70ba024b9dc04c27ea2f0c0548feb474ec5c54bba33a7f72f873a39d07b24"
 
 [[package]]
+name = "memchr"
+version = "2.7.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
+
+[[package]]
+name = "miniz_oxide"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e2d80299ef12ff69b16a84bb182e3b9df68b5a91574d3d4fa6e41b65deec4df1"
+dependencies = [
+ "adler2",
+]
+
+[[package]]
 name = "mio"
 version = "0.8.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -206,6 +258,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "47b6b097ecb1cbfed438542d16e84fd7ad9b0c76c8a65b7f9039212a3d14dc7f"
 dependencies = [
  "unicode-segmentation",
+]
+
+[[package]]
+name = "object"
+version = "0.36.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aedf0a2d09c573ed1d8d85b30c119153926a2b36dce0ab28322c09a117a4683e"
+dependencies = [
+ "memchr",
 ]
 
 [[package]]
@@ -247,6 +308,12 @@ dependencies = [
  "smallvec",
  "windows-targets 0.52.6",
 ]
+
+[[package]]
+name = "pin-project-lite"
+version = "0.2.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "915a1e146535de9163f3987b8944ed8cf49a18bb0056bcebcdcece385cece4ff"
 
 [[package]]
 name = "proc-macro-error-attr2"
@@ -296,6 +363,12 @@ checksum = "9b6dfecf2c74bce2466cabf93f6664d6998a69eb21e39f4207930065b27b771f"
 dependencies = [
  "bitflags 2.6.0",
 ]
+
+[[package]]
+name = "rustc-demangle"
+version = "0.1.24"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "719b953e2095829ee67db738b3bfa9fa368c94900df327b3f07fe6e794d2fe1f"
 
 [[package]]
 name = "scopeguard"
@@ -412,6 +485,28 @@ checksum = "8b9ef9bad013ada3808854ceac7b46812a6465ba368859a37e2100283d2d719c"
 dependencies = [
  "cfg-if",
  "once_cell",
+]
+
+[[package]]
+name = "tokio"
+version = "1.41.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "22cfb5bee7a6a52939ca9224d6ac897bb669134078daa8735560897f69de4d33"
+dependencies = [
+ "backtrace",
+ "pin-project-lite",
+ "tokio-macros",
+]
+
+[[package]]
+name = "tokio-macros"
+version = "2.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "693d596312e88961bc67d7f1f97af8a70227d9f90c31bba5806eec004978d752"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.89",
 ]
 
 [[package]]
