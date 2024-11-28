@@ -65,7 +65,7 @@ fn main() {
     let mut database: Vec<CleanerData> = Vec::new();
 
     let mut options: Vec<&str> = vec![];
-
+    let mut programs: Vec<&str> = vec![];
     //<editor-fold desc="Windows">
     let c_windows_debug_wia = CleanerData {
         path: "C:\\Windows\\debug\\WIA\\*".parse().unwrap(),
@@ -2663,7 +2663,12 @@ fn main() {
         if !options.contains(&&*data.category) {
             options.push(&*data.category);
         }
+        if !programs.contains(&&*data.program) {
+            programs.push(&*data.program);
+        }
+
     }
+    println!("DataBase Programs: {}", programs.iter().count());
     let validator = |a: &[ListOption<&&str>]| {
         if a.len() < 1 {
             return Ok(Validation::Invalid("No category is selected!".into()));
