@@ -1102,6 +1102,46 @@ fn main() {
     };
     database.push(c_users_appdata_local_i2peasy_licenses);
     //</editor-fold>
+    //<editor-fold desc="BoxedAppPacker""">
+    let c_program_filex_x86_boxedapppacker = CleanerData {
+        path: "C:\\Program Files (x86)\\BoxedAppPacker".parse().unwrap(),
+        program: "BoxedAppPacker".parse().unwrap(),
+        files_to_remove: vec![
+            "changelog.txt".parse().unwrap(),
+            "HomePage.url".parse().unwrap(),
+            "purchase.url".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_filex_x86_boxedapppacker);
+    //<editor-fold desc="Enigma Virtual Box""">
+    let c_program_filex_x86_boxedapppacker = CleanerData {
+        path: "C:\\Program Files (x86)\\Enigma Virtual Box".parse().unwrap(),
+        program: "Enigma Virtual Box".parse().unwrap(),
+        files_to_remove: vec![
+            "help.chm".parse().unwrap(),
+            "History.txt".parse().unwrap(),
+            "License.txt".parse().unwrap(),
+            "site.url".parse().unwrap(),
+            "forum.url".parse().unwrap(),
+            "support.url".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_filex_x86_boxedapppacker);
+    //</editor-fold>
 
     //<editor-fold desc="Images">
 
