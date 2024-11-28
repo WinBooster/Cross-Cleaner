@@ -200,7 +200,7 @@ fn get_file_size_string(size: u64) -> String {
 async fn main() {
     execute!(
         std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster CLI v1.0.7.1")
+        crossterm::terminal::SetTitle("WinBooster CLI v1.0.8")
     );
     let mut database: Vec<CleanerData> = database::get_database();
 

@@ -2466,7 +2466,7 @@ pub fn get_database() -> Vec<CleanerData> {
     };
     database.push(c_users_appdata_local_discord);
     let c_users_appdata_local_discord_logs = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\Discord\\*",
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\Discord\\*.log",
         program: "Discord".parse().unwrap(),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
@@ -2478,6 +2478,19 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![],
     };
     database.push(c_users_appdata_local_discord_logs);
+    let c_users_appdata_roaming_discord_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\discord\\logs\\*",
+        program: "Discord".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_discord_logs);
     //</editor-fold>
     //<editor-fold desc="Guilded""">
     let c_users_appdata_roaming_guilded = CleanerData {
