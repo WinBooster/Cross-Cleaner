@@ -1,4 +1,3 @@
-use std::num::ParseIntError;
 use winreg::RegKey;
 use winreg::enums::*;
 
@@ -214,6 +213,21 @@ pub fn get_database() -> Vec<CleanerData> {
     };
     database.push(c_users_downloads);
     //</editor-fold>
+    //<editor-fold desc="OneDrive">
+    let c_program_files_nvidia_corporation = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\OneDrive\\cache\\qmlcache\\*.qmlc",
+        program: "OneDrive".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(c_program_files_nvidia_corporation);
+    //</editor-fold>
     //<editor-fold desc="NVIDIA Corporation">
     let c_program_files_nvidia_corporation = CleanerData {
         path: "C:\\Program Files\\NVIDIA Corporation".parse().unwrap(),
@@ -277,6 +291,19 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![]
     };
     database.push(c_program_files_nvidia_corporation_nv_fbs_plugin);
+    let c_users_appdata_local_nvidia_corporation_gfn_runtime_sdk = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\NVIDIA Corporation\\GfnRuntimeSdk\\*.log",
+        program: "NVIDIA Corporation".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(c_users_appdata_local_nvidia_corporation_gfn_runtime_sdk);
     //</editor-fold>
     //<editor-fold desc="Java">
     let java_1 = CleanerData {
@@ -2088,6 +2115,77 @@ pub fn get_database() -> Vec<CleanerData> {
 
     //<editor-fold desc="Games">
 
+    //<editor-fold desc="Melissia Games Launcher">
+    let c_users_appdata_locallow_igg_lords_mobile_pc = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\LocalLow\\MelissiaGamesLauncher\\GameFolder\\_logs\\*.log",
+        program: "Melissia Games Launcher".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(c_users_appdata_locallow_igg_lords_mobile_pc);
+    let c_users_appdata_locallow_igg_lords_mobile = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\LocalLow\\IGG\\Lords Mobile\\*.log",
+        program: "Lords Mobile".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(c_users_appdata_locallow_igg_lords_mobile);
+    //</editor-fold>
+    //<editor-fold desc="Lords Mobile">
+    let c_users_appdata_locallow_igg_lords_mobile_pc = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\LocalLow\\IGG\\Lords Mobile PC\\*.log",
+        program: "Lords Mobile".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(c_users_appdata_locallow_igg_lords_mobile_pc);
+    let c_users_appdata_locallow_igg_lords_mobile = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\LocalLow\\IGG\\Lords Mobile\\*.log",
+        program: "Lords Mobile".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(c_users_appdata_locallow_igg_lords_mobile);
+    //</editor-fold>
+    //<editor-fold desc="Roblox">
+    let c_users_appdata_local_roblox_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\Roblox\\logs",
+        program: "Roblox".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: true,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(c_users_appdata_local_roblox_logs);
+    //</editor-fold>
     //<editor-fold desc="PowerToys">
     let krnl = CleanerData {
         path: "C:\\Program Files\\PowerToys".parse().unwrap(),
@@ -2096,7 +2194,7 @@ pub fn get_database() -> Vec<CleanerData> {
             "License.rtf".parse().unwrap(),
             "Notice.md".parse().unwrap()
         ],
-        category: "Cheats".parse().unwrap(),
+        category: "Logs".parse().unwrap(),
         remove_directories: true,
         remove_files: false,
         directories_to_remove: vec![],
