@@ -1043,6 +1043,65 @@ fn main() {
     };
     database.push(c_users_appdata_roaming_tribler);
     //</editor-fold>
+    //<editor-fold desc="I2P""">
+    let c_users_appdata_local_i2peasy_addressbook = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\i2peasy\\addressbook",
+        program: "I2P".parse().unwrap(),
+        files_to_remove: vec![
+            "log.txt".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_i2peasy_addressbook);
+    let c_users_appdata_local_i2peasy = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\i2peasy",
+        program: "I2P".parse().unwrap(),
+        files_to_remove: vec![
+            "eventlog.txt".parse().unwrap(),
+            "wrapper.log".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_i2peasy);
+    let c_users_appdata_local_i2peasy_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\i2peasy\\logs\\*",
+        program: "I2P".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_i2peasy_logs);
+    let c_users_appdata_local_i2peasy_licenses = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\i2peasy\\licenses\\*",
+        program: "I2P".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_i2peasy_licenses);
+    //</editor-fold>
 
     //<editor-fold desc="Images">
 
