@@ -3,6 +3,7 @@ use std::fmt::{format, Debug};
 use std::fs;
 use std::io::stdin;
 use std::path::Path;
+use std::sync::Arc;
 use crossterm::execute;
 use glob::{glob, GlobResult, Paths, PatternError};
 use inquire::formatter::MultiOptionFormatter;
@@ -10,6 +11,7 @@ use inquire::list_option::ListOption;
 use inquire::MultiSelect;
 use inquire::validator::Validation;
 use tabled::{Table, Tabled};
+use tokio::task;
 
 #[derive(PartialEq, Tabled)]
 struct Cleared {
@@ -24,6 +26,7 @@ impl PartialEq<Option<Cleared>> for &Cleared {
         }
     }
 }
+#[derive(Clone)]
 struct CleanerData {
     pub path: String,
     pub category: String,
@@ -2829,36 +2832,38 @@ async fn main() {
     let mut removed_directories = 0;
     let mut cleared_programs:Vec<Cleared> = vec![];
 
+    let database2 = database.iter().cloned();
+    if let Ok(ans) = ans {
+        let async_list: Vec<_> = database2
+            .filter(|data| ans.contains(&&*data.category)) // Убедитесь, что ans содержит правильные значения
+            .map(|data| {
+                let data = Arc::new(data.clone()); // Клонируем значение и оборачиваем в Arc
+                task::spawn(async move {
+                    clear_category(&data) // Предполагаем, что clear_category асинхронный
+                })
+            })
+            .collect();
 
-    match ans {
-        Ok(ans) => {
-            let mut async_list = vec![];
-            for data in database.iter().clone() {
-                if ans.contains(&&*data.category) {
-                    let asyncs = async {
-                        let result = clear_category(data);
-                        return result;
-                    };
-                    async_list.push(asyncs);
-                }
-            }
-
-            for asyncscc in async_list {
-                let result = asyncscc.await;
-                removed_files += result.files;
-                removed_directories += result.folders;
-                bytes_cleared += result.bytes;
-                if result.working {
-                    let data = Cleared { Program: result.program };
-                    if !cleared_programs.contains(&data) {
-                        cleared_programs.push(data);
+        for async_task in async_list {
+            match async_task.await {
+                Ok(result) => {
+                    removed_files += result.files;
+                    removed_directories += result.folders;
+                    bytes_cleared += result.bytes;
+                    if result.working {
+                        let data2 = Cleared { Program: result.program };
+                        if !cleared_programs.contains(&data2) {
+                            cleared_programs.push(data2);
+                        }
                     }
+                },
+                Err(_) => {
+                    eprintln!("Error waiting for task completion");
                 }
-
             }
-        },
-        Err(_) => println!("Can't work with these categories"),
+        }
     }
+
     println!("Cleared programms:");
     let table = Table::new(cleared_programs).to_string();
     println!("{}", table);
