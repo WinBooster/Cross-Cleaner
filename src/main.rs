@@ -1442,6 +1442,496 @@ fn main() {
     };
     database.push(c_program_files_jetbrains);
     //</editor-fold>
+    //<editor-fold desc="AAF Optimus DCH Audio""">
+    let c_program_files_afftweak = CleanerData {
+        path: "C:\\Program Files\\AAFTweak".parse().unwrap(),
+        program: "AAF Optimus DCH Audio".parse().unwrap(),
+        files_to_remove: vec![
+            "RT.pdb".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_afftweak);
+    //</editor-fold>
+    //<editor-fold desc="FL Studio""">
+    let c_program_files_image_line = CleanerData {
+        path: "C:\\Program Files\\Image-Line\\**".parse().unwrap(),
+        program: "FL Studio".parse().unwrap(),
+        files_to_remove: vec![
+            "WhatsNew.rtf".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_image_line);
+    let c_program_files_image_line_shared_start = CleanerData {
+        path: "C:\\Program Files\\Image-Line\\Shared\\Start\\**".parse().unwrap(),
+        program: "FL Studio".parse().unwrap(),
+        files_to_remove: vec![
+            "What's new.lnk".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_image_line_shared_start);
+    //</editor-fold>
+    //<editor-fold desc="ASIO4ALL v2""">
+    let c_program_files_x86_asio4all = CleanerData {
+        path: "C:\\Program Files (x86)\\ASIO4ALL v2".parse().unwrap(),
+        program: "ASIO4ALL v2".parse().unwrap(),
+        files_to_remove: vec![
+            "ASIO4ALL Web Site.url".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_x86_asio4all);
+    //</editor-fold>
+    //<editor-fold desc="VideoLAN""">
+    let c_program_files_videolan_vlc = CleanerData {
+        path: "C:\\Program Files\\VideoLAN\\VLC".parse().unwrap(),
+        program: "ASIO4ALL v2".parse().unwrap(),
+        files_to_remove: vec![
+            "AUTHORS.txt".parse().unwrap(),
+            "COPYING.txt".parse().unwrap(),
+            "NEWS.txt".parse().unwrap(),
+            "README.txt".parse().unwrap(),
+            "THANKS.txt".parse().unwrap(),
+            "VideoLAN Website.url".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_videolan_vlc);
+    //</editor-fold>
+    //<editor-fold desc="HandBrake""">
+    let c_users_appdata_roaming_handbrake_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\HandBrake\\logs\\*.txt",
+        program: "HandBrake".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_handbrake_logs);
+    let c_users_appdata_roaming_handbrake_docs = CleanerData {
+        path: "C:\\Program Files\\HandBrake\\doc\\*".parse().unwrap(),
+        program: "HandBrake".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_handbrake_docs);
+    //</editor-fold>
+    //<editor-fold desc="Topaz Video AI"""">
+    let c_programdata_topaz_labs_llc_topaz_video_ai = CleanerData {
+        path: "C:\\ProgramData\\Topaz Labs LLC\\Topaz Video AI\\*.txt".parse().unwrap(),
+        program: "Topaz Video AI".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_programdata_topaz_labs_llc_topaz_video_ai);
+    //</editor-fold>
+    //<editor-fold desc="AVCLabs Video Enhancer AI"""">
+    let c_program_files_x86_avclabs_avclabs_video_encharcer_ai_1 = CleanerData {
+        path: "C:\\Program Files (x86)\\AVCLabs\\AVCLabs Video Enhancer AI\\*.txt".parse().unwrap(),
+        program: "AVCLabs Video Enhancer AI".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_x86_avclabs_avclabs_video_encharcer_ai_1);
+    let c_program_files_x86_avclabs_avclabs_video_encharcer_ai_2 = CleanerData {
+        path: "C:\\Program Files (x86)\\AVCLabs\\AVCLabs Video Enhancer AI\\*.html".parse().unwrap(),
+        program: "AVCLabs Video Enhancer AI".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_x86_avclabs_avclabs_video_encharcer_ai_2);
+    let c_program_files_x86_avclabs_avclabs_video_encharcer_ai_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\AVCLabs Video Enhancer AI\\logs\\*.log",
+        program: "AVCLabs Video Enhancer AI".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_x86_avclabs_avclabs_video_encharcer_ai_logs);
+    //</editor-fold>
+    //<editor-fold desc="iTop Screen Recorder"""">
+    let c_users_appdata_roaming_itop_screen_recorder_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\iTop Screen Recorder\\Logs\\*.log",
+        program: "iTop Screen Recorder".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_itop_screen_recorder_logs);
+    //</editor-fold>
+    //<editor-fold desc="Rave"""">
+    let c_users_appdata_roaming_rave_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Rave\\logs\\*.log",
+        program: "Rave".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_rave_logs);
+    let c_users_appdata_roaming_rave_cache = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Rave\\Cache\\*",
+        program: "Rave".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_rave_cache);
+    let c_users_appdata_roaming_rave_code_cache = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Rave\\Code Cache\\*",
+        program: "Rave".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_rave_code_cache);
+    //</editor-fold>
+    //<editor-fold desc="ImageGlass"""">
+    let c_program_files_imageglass = CleanerData {
+        path: "C:\\Program Files\\ImageGlass".parse().unwrap(),
+        program: "ImageGlass".parse().unwrap(),
+        files_to_remove: vec![
+            "ReadMe.rtf".parse().unwrap(),
+            "CliWrap.xml".parse().unwrap(),
+            "DotNetZip.pdb".parse().unwrap(),
+            "DotNetZip.xml".parse().unwrap(),
+            "ImageGlass.ImageBox.xml".parse().unwrap(),
+            "ImageGlass.ImageListView.xml".parse().unwrap(),
+            "LICENSE".parse().unwrap(),
+            "Magick.NET.Core.xml".parse().unwrap(),
+            "Magick.NET.SystemDrawing.xml".parse().unwrap(),
+            "Magick.NET-Q16-HDRI-OpenMP-x64.xml".parse().unwrap(),
+            "Microsoft.Bcl.AsyncInterfaces.xml".parse().unwrap(),
+            "System.Buffers.xml".parse().unwrap(),
+            "System.Memory.xml".parse().unwrap(),
+            "System.Numerics.Vectors.xml".parse().unwrap(),
+            "System.Runtime.CompilerServices.Unsafe.xml".parse().unwrap(),
+            "System.Text.Encodings.Web.xml".parse().unwrap(),
+            "System.Text.Json.xml".parse().unwrap(),
+            "System.Threading.Tasks.Extensions.xml".parse().unwrap(),
+            "System.ValueTuple.xml".parse().unwrap(),"".parse().unwrap(),
+            "ImageGlass.WebP.pdb".parse().unwrap(),
+            "Visit ImageGlass website.url".parse().unwrap(),
+            "default.jpg".parse().unwrap()
+
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_imageglass);
+    //</editor-fold>
+    //<editor-fold desc="InkSpace"""">
+    let c_program_files_inkscape = CleanerData {
+        path: "C:\\Program Files\\Inkscape".parse().unwrap(),
+        program: "InkSpace".parse().unwrap(),
+        files_to_remove: vec![
+            "NEWS.md".parse().unwrap(),
+            "README.md".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_inkscape);
+    let c_users_appdata_roaming_inkscape = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\inkscape\\*.log",
+        program: "InkSpace".parse().unwrap(),
+        files_to_remove: vec![ ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_inkscape);
+    //</editor-fold>
+    //<editor-fold desc="Magpie"""">
+    let c_program_files_magpie_logs = CleanerData {
+        path: "C:\\Program Files\\Magpie\\logs\\*.log".parse().unwrap(),
+        program: "Magpie".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_magpie_logs);
+    let c_program_files_magpie_logs = CleanerData {
+        path: "C:\\Program Files\\Magpie\\cache\\*".parse().unwrap(),
+        program: "Magpie".parse().unwrap(),
+        files_to_remove: vec![ ],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_magpie_logs);
+    //</editor-fold>
+    //<editor-fold desc="Notepad++"""">
+    let c_users_appdata_roaming_notepad_plus_plus = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Notepad++\\*.log".parse().unwrap(),
+        program: "Notepad++".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_notepad_plus_plus);
+    let c_program_files_notepad_plus_plus = CleanerData {
+        path: "C:\\Program Files\\Notepad++\\*.log".parse().unwrap(),
+        program: "Notepad++".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_notepad_plus_plus);
+    let c_program_files_notepad_plus_plus_1 = CleanerData {
+        path: "C:\\Program Files\\Notepad++\\*.txt".parse().unwrap(),
+        program: "Notepad++".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_notepad_plus_plus_1);
+    let c_program_files_notepad_plus_plus_2 = CleanerData {
+        path: "C:\\Program Files\\Notepad++\\*LICENSE*".parse().unwrap(),
+        program: "Notepad++".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_notepad_plus_plus_2);
+    //</editor-fold>
+    //<editor-fold desc="Sublime Text"""">
+    let c_program_files_sublime_text = CleanerData {
+        path: "C:\\Program Files\\Sublime Text\\*.txt".parse().unwrap(),
+        program: "Sublime Text".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_sublime_text);
+    //</editor-fold>
+    //<editor-fold desc="LibreOffice"""">
+    let c_program_files_libreoffice = CleanerData {
+        path: "C:\\Program Files\\LibreOffice".parse().unwrap(),
+        program: "LibreOffice".parse().unwrap(),
+        files_to_remove: vec![
+            "CREDITS.fodt".parse().unwrap(),
+            "LICENSE.html".parse().unwrap(),
+            "license.txt".parse().unwrap(),
+            "NOTICE".parse().unwrap(),
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_libreoffice);
+    let c_program_files_libreoffice_readmes = CleanerData {
+        path: "C:\\Program Files\\LibreOffice\\readmes\\*".parse().unwrap(),
+        program: "LibreOffice".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_libreoffice_readmes);
+    //</editor-fold>
+    //<editor-fold desc="Exodus Crypto Wallet"""">
+    let c_users_appdata_local_exodus = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\exodus\\*.log".parse().unwrap(),
+        program: "Exodus Crypto Wallet".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_exodus);
+    //</editor-fold>
+    //<editor-fold desc="Wasabi Wallet"""">
+    let c_users_appdata_roaming_walletwasabi_client = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\WalletWasabi\\Client\\*.txt".parse().unwrap(),
+        program: "Wasabi Wallet".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_walletwasabi_client);
+    //</editor-fold>
+    //<editor-fold desc="Bit Monero"""">
+    let c_programdata_bitmonero = CleanerData {
+        path: "C:\\ProgramData\\bitmonero\\*.log".parse().unwrap(),
+        program: "Bit Monero".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_programdata_bitmonero);
+    //</editor-fold>
+    //<editor-fold desc="Memu"""">
+    let c_users_memuhyperv = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\.MemuHyperv\\*log*".parse().unwrap(),
+        program: "Memu".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_memuhyperv);
+    //</editor-fold>
+
+    //<editor-fold desc="Messangers""">
     //<editor-fold desc="Discord""">
     let c_users_appdata_local_discord = CleanerData {
         path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\Discord\\*.log",
@@ -1572,7 +2062,7 @@ fn main() {
     //<editor-fold desc="Signal""">
     let c_users_appdata_roaming_signal = CleanerData {
         path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Signal\\logs\\*",
-        program: "Telegram".parse().unwrap(),
+        program: "Signal".parse().unwrap(),
         files_to_remove: vec![ ],
         category: "Logs".parse().unwrap(),
         remove_directories: true,
@@ -1585,7 +2075,7 @@ fn main() {
     database.push(c_users_appdata_roaming_signal);
     let c_users_appdata_roaming_signal_update_cache = CleanerData {
         path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Signal\\update-cache\\*",
-        program: "Telegram".parse().unwrap(),
+        program: "Signal".parse().unwrap(),
         files_to_remove: vec![ ],
         category: "Cache".parse().unwrap(),
         remove_directories: true,
@@ -1597,7 +2087,132 @@ fn main() {
     };
     database.push(c_users_appdata_roaming_signal_update_cache);
     //</editor-fold>
-
+    //</editor-fold>
+    //<editor-fold desc="VPN Clients""">
+    //<editor-fold desc="Amnezia VPN""">
+    let c_program_files_amnezia_vpn = CleanerData {
+        path: "C:\\Program Files\\AmneziaVPN".parse().unwrap(),
+        program: "Amnezia VPN".parse().unwrap(),
+        files_to_remove: vec![
+            "InstallationLog.txt".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_amnezia_vpn);
+    let c_program_files_amnezia_vpn_tap = CleanerData {
+        path: "C:\\Program Files\\AmneziaVPN\\tap".parse().unwrap(),
+        program: "Amnezia VPN".parse().unwrap(),
+        files_to_remove: vec![
+            "license.txt".parse().unwrap()
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_amnezia_vpn_tap);
+    //</editor-fold>
+    //<editor-fold desc="Radmin VPN""">
+    let c_program_filex_x86_radmin_vpn_chatlogs = CleanerData {
+        path: "C:\\Program Files (x86)\\Radmin VPN\\CHATLOGS\\*".parse().unwrap(),
+        program: "Radmin VPN".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_filex_x86_radmin_vpn_chatlogs);
+    let c_program_files_amnezia_vpn = CleanerData {
+        path: "C:\\ProgramData\\Famatech\\Radmin VPN\\*.txt".parse().unwrap(),
+        program: "Radmin VPN".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_amnezia_vpn);
+    //</editor-fold>
+    //<editor-fold desc="UrbanVPN""">
+    let c_users_urbanvpm_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\UrbanVPN\\log\\*",
+        program: "UrbanVPN".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_urbanvpm_logs);
+    //</editor-fold>
+    //<editor-fold desc="CloudFlare""">
+    let c_users_urbanvpm_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\Cloudflare\\*.log",
+        program: "CloudFlare".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_urbanvpm_logs);
+    //</editor-fold>
+    //<editor-fold desc="PlanetVPN""">
+    let c_users_appdata_local_planetvpn_cache_qmlcache = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\PlanetVPN\\cache\\qmlcache\\*",
+        program: "PlanetVPN".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_planetvpn_cache_qmlcache);
+    //</editor-fold>
+    //<editor-fold desc="iTop VPN""">
+    let c_programdata_itop_vpn = CleanerData {
+        path: "C:\\ProgramData\\iTop VPN".parse().unwrap(),
+        program: "iTop VPN".parse().unwrap(),
+        files_to_remove: vec![
+            "iTop_setup.log".parse().unwrap(),
+            "Setup.log".parse().unwrap()
+        ],
+        category: "Cache".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_programdata_itop_vpn);
+    //</editor-fold>
+    //</editor-fold>
     //<editor-fold desc="Images">
 
     //<editor-fold desc="ShareX">
@@ -1605,6 +2220,8 @@ fn main() {
     database.push(sharex_1);
     let sharex_2 = CleanerData { path: "C:\\Users\\".to_owned() + username + "\\Documents\\ShareX\\Screenshots\\**\\*.png", program: "ShareX".parse().unwrap(), files_to_remove: vec![], category: "Images".parse().unwrap(), remove_directories: false, remove_files: true, directories_to_remove: vec![], remove_all_in_dir: false, remove_directory_after_clean: false, folders_to_remove: vec![] };
     database.push(sharex_2);
+    let sharex_3 = CleanerData { path: "C:\\Users\\".to_owned() + username + "\\Documents\\ShareX\\Logs\\*", program: "ShareX".parse().unwrap(), files_to_remove: vec![], category: "Logs".parse().unwrap(), remove_directories: false, remove_files: true, directories_to_remove: vec![], remove_all_in_dir: false, remove_directory_after_clean: false, folders_to_remove: vec![] };
+    database.push(sharex_3);
     //</editor-fold>
 
     //</editor-fold>
@@ -1690,6 +2307,11 @@ fn main() {
                                         }
                                         for directory in &data.directories_to_remove {
                                             let file_path = path.to_owned() + "\\" + &*directory;
+                                            let metadata = fs::metadata(file_path.clone());
+                                            match metadata {
+                                                Ok(res) => { lenght += res.len(); }
+                                                Err(_) => {}
+                                            }
                                             match fs::remove_dir_all(file_path) {
                                                 Ok(_) => {
                                                     working = true;
@@ -1703,6 +2325,11 @@ fn main() {
 
                                         for dir in &data.directories_to_remove {
                                             let dir_path = path.to_owned() + "\\" + &*dir;
+                                            let metadata = fs::metadata(dir_path.clone());
+                                            match metadata {
+                                                Ok(res) => { lenght += res.len(); }
+                                                Err(_) => {}
+                                            }
                                             match fs::remove_dir(dir_path) {
                                                 Ok(_) => {
                                                     removed_directories += 1;
