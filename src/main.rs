@@ -1,5 +1,5 @@
 use std::ffi::OsStr;
-use std::fmt::format;
+use std::fmt::{format, Debug};
 use std::fs;
 use std::io::stdin;
 use std::path::Path;
@@ -64,9 +64,7 @@ fn main() {
     let username = &*whoami::username();
     let mut database: Vec<CleanerData> = Vec::new();
 
-    let mut options: Vec<&str> = vec![
-
-    ];
+    let mut options: Vec<&str> = vec![];
 
     //<editor-fold desc="Windows">
     let c_windows_debug_wia = CleanerData {
@@ -961,15 +959,36 @@ fn main() {
                                         }
                                         if data.remove_all_in_dir {
                                             let results: Result<Paths, PatternError> = glob(&*(path.to_owned() + "\\*"));
-
-                                            match fs::remove_dir_all(path) {
-                                                Ok(_) => {
-                                                    working = true;
-                                                    bytes_cleared += lenght;
-                                                    removed_files += results.unwrap().count();
+                                            let mut files = 0;
+                                            let mut dirs = 0;
+                                            match results {
+                                                Ok(results) => {
+                                                    for result in results {
+                                                        match result {
+                                                            Ok(result) => {
+                                                                if result.is_file() {
+                                                                    files += 1;
+                                                                }
+                                                                if result.is_dir() {
+                                                                    dirs += 1;
+                                                                }
+                                                            }
+                                                            Err(_) => {}
+                                                        }
+                                                    }
+                                                    match fs::remove_dir_all(path) {
+                                                        Ok(_) => {
+                                                            working = true;
+                                                            bytes_cleared += lenght;
+                                                            removed_files += files;
+                                                            removed_directories += dirs;
+                                                        }
+                                                        Err(_) => {}
+                                                    }
                                                 }
                                                 Err(_) => {}
                                             }
+
                                         }
                                     }
                                     Err(_) => {}
