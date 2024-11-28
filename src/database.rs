@@ -2715,7 +2715,7 @@ pub fn get_database() -> Vec<CleanerData> {
     };
     database.push(steam_common_counter_string_global_offensive_pandora);
     //</editor-fold>
-    //<editor-fold desc="Pandora">
+    //<editor-fold desc="OneTap">
     let steam_common_counter_string_global_offensive_ot = CleanerData {
         path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive\\ot\\*",
         program: "Pandora".parse().unwrap(),
