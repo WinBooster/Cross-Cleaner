@@ -1,7 +1,25 @@
-use crate::CleanerData;
+use std::num::ParseIntError;
+use winreg::RegKey;
+use winreg::enums::*;
 
+use crate::CleanerData;
+fn get_steam_directory() -> String {
+    let hkcu = RegKey::predef(HKEY_CURRENT_USER);
+    let software_valve_steam = hkcu.open_subkey("SOFTWARE\\Valve\\Steam");
+    match software_valve_steam {
+        Ok(software_valve_steam) => {
+            let path: String = software_valve_steam.get_value("SteamPath").unwrap_or_default();
+            return path;
+        }
+        Err(_) => { String::from("") }
+    }
+}
 pub fn get_database() -> Vec<CleanerData> {
     let username = &*whoami::username();
+    let mut steam_directory:String = String::new();
+    let string = get_steam_directory();
+
+    println!("Steam: {}", string);
     let mut database: Vec<CleanerData> = Vec::new();
     //<editor-fold desc="Windows">
     let c_windows_debug_wia = CleanerData {
@@ -2536,9 +2554,9 @@ pub fn get_database() -> Vec<CleanerData> {
     //<editor-fold desc="Meteor Client">
     let c_users_appdata_roaming_minecraft_meteor_client = CleanerData {
         path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\.minecraft\\meteor-client\\*",
-        program: "Minecraft".parse().unwrap(),
+        program: "Meteor Client".parse().unwrap(),
         files_to_remove: vec![],
-        category: "Saves".parse().unwrap(),
+        category: "Cheats".parse().unwrap(),
         remove_directories: true,
         remove_files: true,
         directories_to_remove: vec![],
@@ -2573,7 +2591,7 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![]
     };
     database.push(c_users_appdata_roaming_polymc_instances_minecraft_meteor_client);
-
+    //</editor-fold>
     //<editor-fold desc="Weave">
     let weave_1 = CleanerData {
         path: "C:\\Weave\\*".parse().unwrap(),
@@ -2633,6 +2651,84 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![]
     };
     database.push(krnl);
+    //</editor-fold>
+    //<editor-fold desc="Fatality">
+    let steam_common_counter_string_global_offensive = CleanerData {
+        path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive",
+        program: "Fatality".parse().unwrap(),
+        files_to_remove: vec![
+            "slot1".parse().unwrap(),
+            "slot2".parse().unwrap(),
+            "slot3".parse().unwrap(),
+            "slot4".parse().unwrap(),
+            "skins".parse().unwrap(),
+            "flog.log".parse().unwrap()
+        ],
+        category: "Cheats".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(steam_common_counter_string_global_offensive);
+    let steam_common_counter_string_global_offensive_fatality = CleanerData {
+        path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive\\fatality\\*",
+        program: "Fatality".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cheats".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: true,
+        folders_to_remove: vec![]
+    };
+    database.push(steam_common_counter_string_global_offensive_fatality);
+    //</editor-fold>
+    //<editor-fold desc="Pandora">
+    let steam_common_counter_string_global_offensive_pdr = CleanerData {
+        path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive\\*.pdr",
+        program: "Pandora".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cheats".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(steam_common_counter_string_global_offensive_pdr);
+    let steam_common_counter_string_global_offensive_pandora = CleanerData {
+        path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive\\Pandora",
+        program: "Pandora".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cheats".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: true,
+        folders_to_remove: vec![]
+    };
+    database.push(steam_common_counter_string_global_offensive_pandora);
+    //</editor-fold>
+    //<editor-fold desc="Pandora">
+    let steam_common_counter_string_global_offensive_ot = CleanerData {
+        path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive\\ot\\*",
+        program: "Pandora".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cheats".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: true,
+        folders_to_remove: vec![]
+    };
+    database.push(steam_common_counter_string_global_offensive_ot);
     //</editor-fold>
 
     //</editor-fold>

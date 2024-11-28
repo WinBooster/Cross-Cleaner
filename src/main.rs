@@ -50,9 +50,6 @@ struct CleanerResult {
     pub working: bool,
     pub program: String
 }
-fn get_steam_directory() {
-
-}
 
 fn clear_category(data: &CleanerData) -> CleanerResult{
     let mut cleaner_result: CleanerResult = CleanerResult { files: 0, folders: 0, bytes: 0, working: false, program: "".parse().unwrap() };
