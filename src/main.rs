@@ -58,7 +58,7 @@ fn get_file_size_string(size: u64) -> String {
 fn main() {
     execute!(
         std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster CLI v1.0.1")
+        crossterm::terminal::SetTitle("WinBooster CLI v1.0.2")
     );
 
     let username = &*whoami::username();
@@ -1302,7 +1302,7 @@ fn main() {
     };
     database.push(c_programdata_dockerdesktop);
     let c_users_appdata_local_docker_logs = CleanerData {
-        path: "C:\\Users\\{username}\\AppData\\Local\\Docker\\log\\**\\*".parse().unwrap(),
+        path: "C:\\Users\\".to_owned() + username +"\\AppData\\Local\\Docker\\log\\**\\*",
         program: "Docker".parse().unwrap(),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
@@ -1315,7 +1315,7 @@ fn main() {
     };
     database.push(c_users_appdata_local_docker_logs);
     let c_users_appdata_local_docker = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\Docker\\*.txt".parse().unwrap(),
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\Docker\\*.txt",
         program: "Docker".parse().unwrap(),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
@@ -1670,7 +1670,11 @@ fn main() {
                                         let is_file: bool = result.is_file();
                                         let path: &str = result.as_path().to_str().unwrap();
                                         let name: Option<&str> = result.file_name().unwrap().to_str();
-                                        let lenght = result.metadata().unwrap().len();
+                                        let mut lenght = 0;
+                                        match result.metadata() {
+                                            Ok(res) => { lenght += res.len(); }
+                                            Err(_) => {}
+                                        }
                                         //println!("Found: {}", path);
                                         for file in &data.files_to_remove {
                                             let file_path = path.to_owned() + "\\" + &*file;
