@@ -284,7 +284,7 @@ pub fn get_database() -> Vec<CleanerData> {
         program: "Java".parse().unwrap(),
         files_to_remove: vec![
             "javafx-src.zip".parse().unwrap(),
-            "src.zip".parse().unwrap()
+            "src.zip".parse().unwrap(),
         ],
         category: "Cache".parse().unwrap(),
         remove_directories: false,
@@ -295,23 +295,28 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![],
     };
     database.push(java_1);
+    let java_files = vec![
+        "NOTICE".parse().unwrap(),
+        "COPYRIGHT".parse().unwrap(),
+        "LICENSE".parse().unwrap(),
+        "release".parse().unwrap(),
+        "README".parse().unwrap(),
+        "ADDITIONAL_LICENSE_INFO".parse().unwrap(),
+        "ASSEMBLY_EXCEPTION".parse().unwrap(),
+        "Welcome.html".parse().unwrap(),
+        "THIRDPARTYLICENSEREADME-JAVAFX.txt".parse().unwrap(),
+        "THIRDPARTYLICENSEREADME.txt".parse().unwrap(),
+        "README.txt".parse().unwrap(),
+        "DISCLAIMER".parse().unwrap(),
+        "commitId.txt".parse().unwrap(),
+        "THIRD_PARTY_README".parse().unwrap(),
+        "version.txt".parse().unwrap(),
+        "README.md".parse().unwrap()
+    ];
     let java_2 = CleanerData {
         path: "C:\\Users\\".to_owned() + username + "\\.jdks\\**",
         program: "Java".parse().unwrap(),
-        files_to_remove: vec![
-            "NOTICE".parse().unwrap(),
-            "COPYRIGHT".parse().unwrap(),
-            "LICENSE".parse().unwrap(),
-            "release".parse().unwrap(),
-            "README".parse().unwrap(),
-            "ADDITIONAL_LICENSE_INFO".parse().unwrap(),
-            "ASSEMBLY_EXCEPTION".parse().unwrap(),
-            "Welcome.html".parse().unwrap(),
-            "THIRDPARTYLICENSEREADME-JAVAFX.txt".parse().unwrap(),
-            "THIRDPARTYLICENSEREADME.txt".parse().unwrap(),
-            "README.txt".parse().unwrap(),
-            "DISCLAIMER".parse().unwrap()
-        ],
+        files_to_remove: java_files,
         category: "Logs".parse().unwrap(),
         remove_directories: false,
         remove_files: false,
@@ -340,20 +345,7 @@ pub fn get_database() -> Vec<CleanerData> {
     let java_2 = CleanerData {
         path: "C:\\Program Files\\Java\\**".parse().unwrap(),
         program: "Java".parse().unwrap(),
-        files_to_remove: vec![
-            "NOTICE".parse().unwrap(),
-            "COPYRIGHT".parse().unwrap(),
-            "LICENSE".parse().unwrap(),
-            "release".parse().unwrap(),
-            "README".parse().unwrap(),
-            "ADDITIONAL_LICENSE_INFO".parse().unwrap(),
-            "ASSEMBLY_EXCEPTION".parse().unwrap(),
-            "Welcome.html".parse().unwrap(),
-            "THIRDPARTYLICENSEREADME-JAVAFX.txt".parse().unwrap(),
-            "THIRDPARTYLICENSEREADME.txt".parse().unwrap(),
-            "README.txt".parse().unwrap(),
-            "DISCLAIMER".parse().unwrap()
-        ],
+        files_to_remove: java_files,
         category: "Logs".parse().unwrap(),
         remove_directories: false,
         remove_files: false,
@@ -366,20 +358,7 @@ pub fn get_database() -> Vec<CleanerData> {
     let java_3 = CleanerData {
         path: "C:\\Program Files\\Eclipse Adoptium\\**".parse().unwrap(),
         program: "Java".parse().unwrap(),
-        files_to_remove: vec![
-            "NOTICE".parse().unwrap(),
-            "COPYRIGHT".parse().unwrap(),
-            "LICENSE".parse().unwrap(),
-            "release".parse().unwrap(),
-            "README".parse().unwrap(),
-            "ADDITIONAL_LICENSE_INFO".parse().unwrap(),
-            "ASSEMBLY_EXCEPTION".parse().unwrap(),
-            "Welcome.html".parse().unwrap(),
-            "THIRDPARTYLICENSEREADME-JAVAFX.txt".parse().unwrap(),
-            "THIRDPARTYLICENSEREADME.txt".parse().unwrap(),
-            "README.txt".parse().unwrap(),
-            "DISCLAIMER".parse().unwrap()
-        ],
+        files_to_remove: java_files,
         category: "Logs".parse().unwrap(),
         remove_directories: false,
         remove_files: false,
@@ -392,20 +371,7 @@ pub fn get_database() -> Vec<CleanerData> {
     let java_4 = CleanerData {
         path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\.loliland\\java",
         program: "Java".parse().unwrap(),
-        files_to_remove: vec![
-            "NOTICE".parse().unwrap(),
-            "COPYRIGHT".parse().unwrap(),
-            "LICENSE".parse().unwrap(),
-            "release".parse().unwrap(),
-            "README".parse().unwrap(),
-            "ADDITIONAL_LICENSE_INFO".parse().unwrap(),
-            "ASSEMBLY_EXCEPTION".parse().unwrap(),
-            "Welcome.html".parse().unwrap(),
-            "THIRDPARTYLICENSEREADME-JAVAFX.txt".parse().unwrap(),
-            "THIRDPARTYLICENSEREADME.txt".parse().unwrap(),
-            "README.txt".parse().unwrap(),
-            "DISCLAIMER".parse().unwrap()
-        ],
+        files_to_remove: java_files,
         category: "Logs".parse().unwrap(),
         remove_directories: false,
         remove_files: false,
