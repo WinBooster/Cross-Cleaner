@@ -955,6 +955,64 @@ fn main() {
     };
     database.push(c_users_appdata_roaming_lobe_logs);
     //</editor-fold>
+    //<editor-fold desc="Tonfotos Telegram Connector""">
+    let c_users_pictures_tonfotos_telegram_connector = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\Pictures\\Tonfotos Telegram Connector\\*",
+        program: "Tonfotos Telegram Connector".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Images".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_pictures_tonfotos_telegram_connector);
+    //</editor-fold>
+    //<editor-fold desc="DotNet""">
+    let c_program_files_x86_dotnet = CleanerData {
+        path: "C:\\Program Files (x86)\\dotnet\\*.txt".parse().unwrap(),
+        program: "DotNet".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_x86_dotnet);
+    let c_users_dotnet_telemetry_storage_service = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\.dotnet\\TelemetryStorageService\\*",
+        program: "DotNet".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_dotnet_telemetry_storage_service);
+    //</editor-fold>
+    //<editor-fold desc="MCCreator""">
+    let c_users_mccreator_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\.mcreator\\logs\\*.log",
+        program: "MCCreator".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_mccreator_logs);
+    //</editor-fold>
 
     //<editor-fold desc="Images">
 
