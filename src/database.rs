@@ -316,7 +316,7 @@ pub fn get_database() -> Vec<CleanerData> {
     let java_2 = CleanerData {
         path: "C:\\Users\\".to_owned() + username + "\\.jdks\\**",
         program: "Java".parse().unwrap(),
-        files_to_remove: java_files,
+        files_to_remove: java_files.clone(),
         category: "Logs".parse().unwrap(),
         remove_directories: false,
         remove_files: false,
@@ -345,7 +345,7 @@ pub fn get_database() -> Vec<CleanerData> {
     let java_2 = CleanerData {
         path: "C:\\Program Files\\Java\\**".parse().unwrap(),
         program: "Java".parse().unwrap(),
-        files_to_remove: java_files,
+        files_to_remove: java_files.clone(),
         category: "Logs".parse().unwrap(),
         remove_directories: false,
         remove_files: false,
@@ -358,7 +358,7 @@ pub fn get_database() -> Vec<CleanerData> {
     let java_3 = CleanerData {
         path: "C:\\Program Files\\Eclipse Adoptium\\**".parse().unwrap(),
         program: "Java".parse().unwrap(),
-        files_to_remove: java_files,
+        files_to_remove: java_files.clone(),
         category: "Logs".parse().unwrap(),
         remove_directories: false,
         remove_files: false,
@@ -371,7 +371,7 @@ pub fn get_database() -> Vec<CleanerData> {
     let java_4 = CleanerData {
         path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\.loliland\\java",
         program: "Java".parse().unwrap(),
-        files_to_remove: java_files,
+        files_to_remove: java_files.clone(),
         category: "Logs".parse().unwrap(),
         remove_directories: false,
         remove_files: false,
@@ -511,6 +511,19 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![],
     };
     database.push(c_users_appdata_roaming_github_desktop_logs);
+    let c_users_appdata_roaming_github_desktop_logs2 = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\GitHubDesktop\\**\\*.log",
+        program: "GitHub Desktop".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_github_desktop_logs2);
     //</editor-fold>
     //<editor-fold desc="Panda Security"">
     let c_programdata_panda_security_pslogs = CleanerData {
@@ -1396,6 +1409,19 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![],
     };
     database.push(c_program_files_jetbrains);
+    let c_users_appdata_local_jetbrains = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\JetBrains\\**\\*",
+        program: "JetBrains".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_jetbrains);
     //</editor-fold>
     //<editor-fold desc="AAF Optimus DCH Audio""">
     let c_program_files_afftweak = CleanerData {
@@ -1988,6 +2014,77 @@ pub fn get_database() -> Vec<CleanerData> {
     };
     database.push(c_program_files_faceit_ac_logs);
     //</editor-fold>
+    //<editor-fold desc="Obsidian">
+    let c_users_appdata_roaming_obsidian = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\obsidian\\*.log",
+        program: "Obsidian".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_obsidian);
+    //</editor-fold>
+    //<editor-fold desc="Epic Games">
+    let c_users_appdata_local_epic_games_launcher_saved_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\EpicGamesLauncher\\Saved\\Logs\\*.log",
+        program: "Epic Games".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_epic_games_launcher_saved_logs);
+    let c_users_appdata_local_epic_online_services_uihelper_saved_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\EpicOnlineServicesUIHelper\\Saved\\Logs\\*.log",
+        program: "Epic Games".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_epic_online_services_uihelper_saved_logs);
+    //</editor-fold>
+    //<editor-fold desc="VK GameCenter">
+    let c_users_appdata_local_epic_games_launcher_saved_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\GameCenter\\*.log",
+        program: "VK GameCenter".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_epic_games_launcher_saved_logs);
+    let c_users_appdata_local_epic_online_services_uihelper_saved_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\EpicOnlineServicesUIHelper\\Saved\\Logs\\*.log",
+        program: "Epic Games".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_epic_online_services_uihelper_saved_logs);
+    //</editor-fold>
 
     //<editor-fold desc="Games">
 
@@ -2270,6 +2367,19 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![],
     };
     database.push(c_users_appdata_local_discord);
+    let c_users_appdata_local_discord_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\Discord\\*",
+        program: "Discord".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_discord_logs);
     //</editor-fold>
     //<editor-fold desc="Guilded""">
     let c_users_appdata_roaming_guilded = CleanerData {
