@@ -1,6 +1,13 @@
+use disk_name::get_letters;
 use crate::CleanerData;
 use crate::registry_utils::{get_steam_directory_from_registry};
 
+
+pub fn get_drives() -> Vec<String> {
+    let disk_names: Vec<String> = get_letters();
+
+    disk_names
+}
 pub fn get_database() -> Vec<CleanerData> {
     let username = &*whoami::username();
 
@@ -8,11 +15,12 @@ pub fn get_database() -> Vec<CleanerData> {
 
     let mut database: Vec<CleanerData> = Vec::new();
 
-    let drives = vec!["C", "D", "Z", "E"];
+    let drives = get_drives();
     for drive in drives {
+        println!("Drive: {}", drive);
         //<editor-fold desc="Windows">
         let c_windows_debug_wia = CleanerData {
-            path: drive.to_owned() + ":\\Windows\\debug\\*",
+            path: drive.to_owned() + "Windows\\debug\\*",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -25,7 +33,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_windows_debug_wia);
         let c_windows_prefetch = CleanerData {
-            path: drive.to_owned() + ":\\Windows\\Prefetch\\*",
+            path: drive.to_owned() + "Windows\\Prefetch\\*",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -38,7 +46,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_windows_prefetch);
         let c_windows_dumps = CleanerData {
-            path: drive.to_owned() + ":\\Windows\\Minidump\\*",
+            path: drive.to_owned() + "Windows\\Minidump\\*",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -51,7 +59,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_windows_dumps);
         let c_windows_security_logs = CleanerData {
-            path: drive.to_owned() + ":\\Windows\\security\\logs\\*.log",
+            path: drive.to_owned() + "Windows\\security\\logs\\*.log",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(), remove_directories: false,
@@ -62,7 +70,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_windows_security_logs);
         let c_windows_security_database_logs = CleanerData {
-            path: drive.to_owned() + ":\\Windows\\security\\database\\*.log",
+            path: drive.to_owned() + "Windows\\security\\database\\*.log",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -75,7 +83,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_windows_security_database_logs);
         let c_windows_logs = CleanerData {
-            path: drive.to_owned() + ":\\Windows\\Logs\\**\\*",
+            path: drive.to_owned() + "Windows\\Logs\\**\\*",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -88,7 +96,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_windows_logs);
         let c_temp = CleanerData {
-            path: drive.to_owned() + ":\\Temp\\*",
+            path: drive.to_owned() + "Temp\\*",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -101,7 +109,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_temp);
         let c_windows_panther = CleanerData {
-            path: drive.to_owned() + ":\\Windows\\Panther",
+            path: drive.to_owned() + "Windows\\Panther",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -113,7 +121,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_windows_panther);
         let c_windows_temp = CleanerData {
-            path: drive.to_owned() + ":\\Windows\\Temp\\*",
+            path: drive.to_owned() + "Windows\\Temp\\*",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -126,7 +134,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_windows_temp);
         let c_windows_logs = CleanerData {
-            path: drive.to_owned() + ":\\Windows\\Logs\\*",
+            path: drive.to_owned() + "Windows\\Logs\\*",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -139,7 +147,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_windows_logs);
         let c_windows_logs_windows_update = CleanerData {
-            path: drive.to_owned() + ":\\Windows\\Logs\\WindowsUpdate\\*",
+            path: drive.to_owned() + "Windows\\Logs\\WindowsUpdate\\*",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -152,7 +160,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_windows_logs_windows_update);
         let c_users_appdata_local_temp = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Local\\Temp\\*",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Local\\Temp\\*",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -165,7 +173,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_temp);
         let c_programdata_usoshared_logs = CleanerData {
-            path: drive.to_owned() + ":\\ProgramData\\USOShared\\Logs\\*",
+            path: drive.to_owned() + "ProgramData\\USOShared\\Logs\\*",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -178,7 +186,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_programdata_usoshared_logs);
         let c_users_appdata_local_connecteddiveces_platform = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\ConnectedDevicesPlatform\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\ConnectedDevicesPlatform\\*",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "LastActivity".parse().unwrap(),
@@ -191,7 +199,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_connecteddiveces_platform);
         let c_users_appdata_local_crash_dumps = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\CrashDumps\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\CrashDumps\\*",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -204,7 +212,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_crash_dumps);
         let c_users_downloads = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\Downloads\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\Downloads\\*",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Downloads".parse().unwrap(),
@@ -219,7 +227,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="OneDrive">
         let c_program_files_nvidia_corporation = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\OneDrive\\cache\\qmlcache\\*.qmlc",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\OneDrive\\cache\\qmlcache\\*.qmlc",
             program: "OneDrive".parse().unwrap(),
             files_to_remove: vec![],
             category: "Сache".parse().unwrap(),
@@ -234,7 +242,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="NVIDIA Corporation">
         let c_program_files_nvidia_corporation = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\NVIDIA Corporation",
+            path: drive.to_owned() + "Program Files\\NVIDIA Corporation",
             program: "NVIDIA Corporation".parse().unwrap(),
             files_to_remove: vec![
                 "license.txt".parse().unwrap(),
@@ -250,7 +258,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_nvidia_corporation);
         let c_program_files_nvidia_corporation_nvsmi = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\NVIDIA Corporation\\NVSMI",
+            path: drive.to_owned() + "Program Files\\NVIDIA Corporation\\NVSMI",
             program: "NVIDIA Corporation".parse().unwrap(),
             files_to_remove: vec![
                 "nvidia-smi.1.pdf".parse().unwrap()
@@ -265,7 +273,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_nvidia_corporation_nvsmi);
         let c_program_files_nvidia_corporation_nv_stereo_installer = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\NVIDIA Corporation\\nvStereoInstaller",
+            path: drive.to_owned() + "Program Files\\NVIDIA Corporation\\nvStereoInstaller",
             program: "NVIDIA Corporation".parse().unwrap(),
             files_to_remove: vec![
                 "nvStInst.log".parse().unwrap(),
@@ -281,7 +289,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_nvidia_corporation_nv_stereo_installer);
         let c_program_files_nvidia_corporation_nv_fbs_plugin = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\NVIDIA Corporation\\NvFBCPlugin",
+            path: drive.to_owned() + "Program Files\\NVIDIA Corporation\\NvFBCPlugin",
             program: "NVIDIA Corporation".parse().unwrap(),
             files_to_remove: vec![
                 "logPluginError.txt".parse().unwrap(),
@@ -296,7 +304,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_nvidia_corporation_nv_fbs_plugin);
         let c_users_appdata_local_nvidia_corporation_gfn_runtime_sdk = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\NVIDIA Corporation\\GfnRuntimeSdk\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\NVIDIA Corporation\\GfnRuntimeSdk\\*.log",
             program: "NVIDIA Corporation".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -315,7 +323,7 @@ pub fn get_database() -> Vec<CleanerData> {
             "src.zip".parse().unwrap()
         ];
         let java_1 = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\.jdks\\**",
+            path: drive.to_owned() + "Users\\" + username + "\\.jdks\\**",
             program: "Java".parse().unwrap(),
             files_to_remove: java_cache.clone(),
             category: "Сache".parse().unwrap(),
@@ -346,7 +354,7 @@ pub fn get_database() -> Vec<CleanerData> {
             "README.md".parse().unwrap()
         ];
         let java_2 = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\.jdks\\**",
+            path: drive.to_owned() + "Users\\" + username + "\\.jdks\\**",
             program: "Java".parse().unwrap(),
             files_to_remove: java_files.clone(),
             category: "Logs".parse().unwrap(),
@@ -359,7 +367,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(java_2);
         let java_5 = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\.jdks\\**",
+            path: drive.to_owned() + "Users\\" + username + "\\.jdks\\**",
             program: "Java".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -375,7 +383,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(java_5);
         let java_2 = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Java\\**",
+            path: drive.to_owned() + "Program Files\\Java\\**",
             program: "Java".parse().unwrap(),
             files_to_remove: java_files.clone(),
             category: "Logs".parse().unwrap(),
@@ -388,7 +396,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(java_2);
         let java_3 = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Eclipse Adoptium\\**",
+            path: drive.to_owned() + "Program Files\\Eclipse Adoptium\\**",
             program: "Java".parse().unwrap(),
             files_to_remove: java_files.clone(),
             category: "Logs".parse().unwrap(),
@@ -401,7 +409,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(java_3);
         let java_4 = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\.loliland\\java",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\.loliland\\java",
             program: "Java".parse().unwrap(),
             files_to_remove: java_files.clone(),
             category: "Logs".parse().unwrap(),
@@ -414,7 +422,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(java_4);
         let java_5 = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Android\\jdk\\**\\**",
+            path: drive.to_owned() + "Program Files\\Android\\jdk\\**\\**",
             program: "Java".parse().unwrap(),
             files_to_remove: java_files.clone(),
             category: "Logs".parse().unwrap(),
@@ -427,7 +435,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(java_5);
         let java_6 = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Android\\jdk\\**\\**",
+            path: drive.to_owned() + "Program Files\\Android\\jdk\\**\\**",
             program: "Java".parse().unwrap(),
             files_to_remove: java_cache.clone(),
             category: "Logs".parse().unwrap(),
@@ -442,7 +450,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="4uKey for Android">
         let c_program_files_x86_tenorshare_4ukey_for_android_logs = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\Tenorshare\\4uKey for Android\\Logs\\*",
+            path: drive.to_owned() + "Program Files (x86)\\Tenorshare\\4uKey for Android\\Logs\\*",
             program: "4uKey for Android".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -455,7 +463,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_x86_tenorshare_4ukey_for_android_logs);
         let c_users_appdata_roaming_tsmonitor_4uker_for_android = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Roaming\\TSMonitor\\4uKey for Android\\logs\\*",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\TSMonitor\\4uKey for Android\\logs\\*",
             program: "4uKey for Android".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -470,7 +478,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Postman">
         let c_users_appdata_roaming_postman_agent_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\PostmanAgent\\logs\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\PostmanAgent\\logs\\*.log",
             program: "Postman".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -483,7 +491,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_postman_agent_logs);
         let c_users_appdata_local_postman_agent = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Local\\Postman-Agent\\*.log",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Local\\Postman-Agent\\*.log",
             program: "4uKey for Android".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -498,7 +506,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="IDA Pro">
         let c_users_appdata_roaming_hex_rays_ida_pro = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Hex-Rays\\IDA Pro\\*.lst",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Hex-Rays\\IDA Pro\\*.lst",
             program: "IDA Pro".parse().unwrap(),
             files_to_remove: vec![],
             category: "Сache".parse().unwrap(),
@@ -514,7 +522,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Xamarin">
         let c_users_appdata_local_xamarin_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\Xamarin\\Logs\\**\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Xamarin\\Logs\\**\\*.log",
             program: "Xamarin".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -529,7 +537,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Windscribe">
         let c_users_appdata_local_windscribe = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\Windscribe\\Windscribe2\\*.txt",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Windscribe\\Windscribe2\\*.txt",
             program: "Windscribe".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -544,7 +552,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="GitHub Desktop">
         let c_users_appdata_roaming_github_desktop = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\GitHub Desktop\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\GitHub Desktop\\*.log",
             program: "GitHub Desktop".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -557,7 +565,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_github_desktop);
         let c_users_appdata_roaming_github_desktop_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\GitHub Desktop\\logs\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\GitHub Desktop\\logs\\*.log",
             program: "GitHub Desktop".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -570,7 +578,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_github_desktop_logs);
         let c_users_appdata_roaming_github_desktop_logs2 = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\GitHubDesktop\\**\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\GitHubDesktop\\**\\*.log",
             program: "GitHub Desktop".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -585,7 +593,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Panda Security">
         let c_programdata_panda_security_pslogs = CleanerData {
-            path: drive.to_owned() + ":\\ProgramData\\Panda Security\\PSLogs\\*.log",
+            path: drive.to_owned() + "ProgramData\\Panda Security\\PSLogs\\*.log",
             program: "Panda Security".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -600,7 +608,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="NetLimiter">
         let c_programdata_panda_security_pslogs = CleanerData {
-            path: drive.to_owned() + ":\\ProgramData\\Locktime\\NetLimiter\\**\\logs\\*.log",
+            path: drive.to_owned() + "ProgramData\\Locktime\\NetLimiter\\**\\logs\\*.log",
             program: "NetLimiter".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -615,7 +623,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="MiniBin">
         let c_program_files_x86_minibin = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\MiniBin\\*.txt",
+            path: drive.to_owned() + "Program Files (x86)\\MiniBin\\*.txt",
             program: "MiniBin".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -630,7 +638,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Mem Reduct">
         let c_program_files_brave_software_brave_browser_application = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Mem Reduct",
+            path: drive.to_owned() + "Program Files\\Mem Reduct",
             program: "Mem Reduct".parse().unwrap(),
             files_to_remove: vec![
                 "History.txt".parse().unwrap(),
@@ -650,7 +658,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="qBittorrent">
         let c_program_files_qbittorent = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\qBittorrent\\*.pdb",
+            path: drive.to_owned() + "Program Files\\qBittorrent\\*.pdb",
             program: "qBittorrent".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -663,7 +671,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_qbittorent);
         let c_program_files_qbittorent_logs = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\qBittorrent\\logs\\*.log",
+            path: drive.to_owned() + "Program Files\\qBittorrent\\logs\\*.log",
             program: "qBittorrent".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -678,7 +686,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="CCleaner">
         let c_program_files_ccleaner_logs = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\CCleaner\\LOG\\*",
+            path: drive.to_owned() + "Program Files\\CCleaner\\LOG\\*",
             program: "ССleaner".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -693,7 +701,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="IObit Malware Fighter">
         let c_program_files_ccleaner_logs = CleanerData {
-            path: drive.to_owned() + ":\\ProgramData\\IObit\\IObit Malware Fighter\\*.log",
+            path: drive.to_owned() + "ProgramData\\IObit\\IObit Malware Fighter\\*.log",
             program: "IObit Malware Fighter".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -706,7 +714,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_ccleaner_logs);
         let c_program_data_iobit_iobit_malware_finghter_homepage_advisor = CleanerData {
-            path: drive.to_owned() + ":\\ProgramData\\IObit\\IObit Malware Fighter\\Homepage Advisor\\*.log",
+            path: drive.to_owned() + "ProgramData\\IObit\\IObit Malware Fighter\\Homepage Advisor\\*.log",
             program: "IObit Malware Fighter".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -721,7 +729,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="IObit Driver Booster">
         let c_users_appdata_roaming_iobit_driver_booster_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\IObit\\Driver Booster\\Logs\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\IObit\\Driver Booster\\Logs\\*",
             program: "IObit Driver Booster".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -734,7 +742,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_iobit_driver_booster_logs);
         let c_program_files_x86_iobit_driver_booster = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\IObit\\Driver Booster\\*.log",
+            path: drive.to_owned() + "Program Files (x86)\\IObit\\Driver Booster\\*.log",
             program: "IObit Driver Booster".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -747,7 +755,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_x86_iobit_driver_booster);
         let c_program_files_x86_iobit_driver_booster_1 = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\IObit\\Driver Booster\\*.txt",
+            path: drive.to_owned() + "Program Files (x86)\\IObit\\Driver Booster\\*.txt",
             program: "IObit Driver Booster".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -762,7 +770,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Process Lasso">
         let c_program_data_process_lasso_logs = CleanerData {
-            path: drive.to_owned() + ":\\ProgramData\\ProcessLasso\\logs\\*",
+            path: drive.to_owned() + "ProgramData\\ProcessLasso\\logs\\*",
             program: "Process Lasso".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -777,7 +785,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="OBS Studio">
         let c_program_files_obs_studio_bin_64bit = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\obs-studio\\bin\\64bit\\*.log",
+            path: drive.to_owned() + "Program Files\\obs-studio\\bin\\64bit\\*.log",
             program: "OBS Studio".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -790,7 +798,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_obs_studio_bin_64bit);
         let c_users_appdata_roaming_obs_studio_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\obs-studio\\logs\\*txt",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\obs-studio\\logs\\*txt",
             program: "OBS Studio".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -805,7 +813,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Unity Hub">
         let c_program_files_unity_hub = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Unity Hub\\*.html",
+            path: drive.to_owned() + "Program Files\\Unity Hub\\*.html",
             program: "Unity Hub".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -820,7 +828,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="KeePass 2">
         let c_program_files_keepass_password_safe_2 = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\KeePass Password Safe 2\\*.txt",
+            path: drive.to_owned() + "Program Files\\KeePass Password Safe 2\\*.txt",
             program: "KeePass 2".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -835,7 +843,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="1Password">
         let c_users_appdata_local_1password_logs_setup = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\1Password\\logs\\setup\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\1Password\\logs\\setup\\*.log",
             program: "1Password".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -850,7 +858,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="LGHUB">
         let c_program_files_lghub = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\LGHUB",
+            path: drive.to_owned() + "Program Files\\LGHUB",
             program: "LGHUB".parse().unwrap(),
             files_to_remove: vec![
                 "LICENSE".parse().unwrap(),
@@ -868,7 +876,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="DeepL">
         let c_users_appdata_local_deepl_se_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\DeepL_SE\\logs\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\DeepL_SE\\logs\\*",
             program: "LGHUB".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -881,7 +889,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_deepl_se_logs);
         let c_users_appdata_local_deepl_se_cache = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\DeepL_SE\\cache\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\DeepL_SE\\cache\\*",
             program: "LGHUB".parse().unwrap(),
             files_to_remove: vec![],
             category: "Сache".parse().unwrap(),
@@ -896,7 +904,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Microsoft Lobe">
         let c_users_appdata_roaming_lobe_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Lobe\\logs\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Lobe\\logs\\*",
             program: "Microsoft Lobe".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -911,7 +919,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Tonfotos Telegram Connector">
         let c_users_pictures_tonfotos_telegram_connector = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\Pictures\\Tonfotos Telegram Connector\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\Pictures\\Tonfotos Telegram Connector\\*",
             program: "Tonfotos Telegram Connector".parse().unwrap(),
             files_to_remove: vec![],
             category: "Images".parse().unwrap(),
@@ -926,7 +934,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="DotNet">
         let c_program_files_x86_dotnet = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\dotnet\\*.txt",
+            path: drive.to_owned() + "Program Files (x86)\\dotnet\\*.txt",
             program: "DotNet".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -939,7 +947,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_x86_dotnet);
         let c_users_dotnet_telemetry_storage_service = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\.dotnet\\TelemetryStorageService\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\.dotnet\\TelemetryStorageService\\*",
             program: "DotNet".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -954,7 +962,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="MCCreator">
         let c_users_mccreator_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\.mcreator\\logs\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\.mcreator\\logs\\*.log",
             program: "MCCreator".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -969,7 +977,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="7-Zip">
         let c_program_files_7_zip = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\7-Zip\\*.txt",
+            path: drive.to_owned() + "Program Files\\7-Zip\\*.txt",
             program: "7-Zip".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -984,7 +992,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Tribler">
         let c_users_appdata_roaming_tribler = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\.Tribler\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\.Tribler\\*.log",
             program: "Tribler".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -999,7 +1007,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="I2P">
         let c_users_appdata_local_i2peasy_addressbook = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\i2peasy\\addressbook",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\i2peasy\\addressbook",
             program: "I2P".parse().unwrap(),
             files_to_remove: vec![
                 "log.txt".parse().unwrap()
@@ -1014,7 +1022,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_i2peasy_addressbook);
         let c_users_appdata_local_i2peasy = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\i2peasy",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\i2peasy",
             program: "I2P".parse().unwrap(),
             files_to_remove: vec![
                 "eventlog.txt".parse().unwrap(),
@@ -1030,7 +1038,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_i2peasy);
         let c_users_appdata_local_i2peasy_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\i2peasy\\logs\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\i2peasy\\logs\\*",
             program: "I2P".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1043,7 +1051,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_i2peasy_logs);
         let c_users_appdata_local_i2peasy_licenses = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\i2peasy\\licenses\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\i2peasy\\licenses\\*",
             program: "I2P".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1058,7 +1066,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="BoxedAppPacker">
         let c_program_filex_x86_boxedapppacker = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\BoxedAppPacker",
+            path: drive.to_owned() + "Program Files (x86)\\BoxedAppPacker",
             program: "BoxedAppPacker".parse().unwrap(),
             files_to_remove: vec![
                 "CHANGELOG.txt".parse().unwrap(),
@@ -1077,7 +1085,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Enigma Virtual Box">
         let c_program_files_enigma_virtual_box = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\Enigma Virtual Box",
+            path: drive.to_owned() + "Program Files (x86)\\Enigma Virtual Box",
             program: "Enigma Virtual Box".parse().unwrap(),
             files_to_remove: vec![
                 "help.chm".parse().unwrap(),
@@ -1099,7 +1107,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="GnuPG">
         let c_program_files_gnupg = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\GnuPG",
+            path: drive.to_owned() + "Program Files (x86)\\GnuPG",
             program: "GnuPG".parse().unwrap(),
             files_to_remove: vec![
                 "README.txt".parse().unwrap(),
@@ -1117,7 +1125,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Gpg4win">
         let c_program_files_enigma_x86_gpg4win = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\Gpg4win",
+            path: drive.to_owned() + "Program Files (x86)\\Gpg4win",
             program: "Gpg4win".parse().unwrap(),
             files_to_remove: vec![
                 "VERSION".parse().unwrap()
@@ -1134,7 +1142,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Inno Setup 6">
         let c_program_files_enigma_x86_inno_setup_6 = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\Inno Setup 6",
+            path: drive.to_owned() + "Program Files (x86)\\Inno Setup 6",
             program: "Inno Setup 6".parse().unwrap(),
             files_to_remove: vec![
                 "whatsnew.htm".parse().unwrap(),
@@ -1151,7 +1159,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_enigma_x86_inno_setup_6);
         let c_program_files_enigma_x86_inno_setup_6 = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\Inno Setup 6\\Examples\\*.txt",
+            path: drive.to_owned() + "Program Files (x86)\\Inno Setup 6\\Examples\\*.txt",
             program: "Inno Setup 6".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1166,7 +1174,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="VirtualBox">
         let c_users_virtualbox_vms_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\VirtualBox VMs\\**\\Logs\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\VirtualBox VMs\\**\\Logs\\*.log",
             program: "VirtualBox".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1179,7 +1187,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_virtualbox_vms_logs);
         let c_users_virtualbox_vms = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Oracle\\VirtualBox\\*.rtf",
+            path: drive.to_owned() + "Program Files\\Oracle\\VirtualBox\\*.rtf",
             program: "VirtualBox".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1192,7 +1200,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_virtualbox_vms);
         let c_users_virtualbox_vms_doc = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Oracle\\VirtualBox\\doc\\*",
+            path: drive.to_owned() + "Program Files\\Oracle\\VirtualBox\\doc\\*",
             program: "VirtualBox".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1207,7 +1215,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Recaf">
         let c_users_appdata_roaming_recaf = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Recaf\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Recaf\\*.log",
             program: "Recaf".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1222,7 +1230,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Process Hacker 2">
         let c_program_files_process_hacker_2 = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Process Hacker 2",
+            path: drive.to_owned() + "Program Files\\Process Hacker 2",
             program: "Process Hacker 2".parse().unwrap(),
             files_to_remove: vec![
                 "CHANGELOG.txt".parse().unwrap(),
@@ -1243,7 +1251,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Docker">
         let c_programdata_dockerdesktop = CleanerData {
-            path: drive.to_owned() + ":\\ProgramData\\DockerDesktop\\*.txt",
+            path: drive.to_owned() + "ProgramData\\DockerDesktop\\*.txt",
             program: "Docker".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1256,7 +1264,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_programdata_dockerdesktop);
         let c_users_appdata_local_docker_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Local\\Docker\\log\\**\\*",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Local\\Docker\\log\\**\\*",
             program: "Docker".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1269,7 +1277,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_docker_logs);
         let c_users_appdata_local_docker = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\Docker\\*.txt",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Docker\\*.txt",
             program: "Docker".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1284,7 +1292,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="HiAlgo Boost">
         let c_programdata_dockerdesktop = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\HiAlgo\\Plugins\\BOOST",
+            path: drive.to_owned() + "Program Files (x86)\\HiAlgo\\Plugins\\BOOST",
             program: "HiAlgo Boost".parse().unwrap(),
             files_to_remove: vec![
                 "hialgo_eula.txt".parse().unwrap(),
@@ -1303,7 +1311,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="SoundWire Server">
         let c_program_files_x86_soundwire_server = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\SoundWire Server",
+            path: drive.to_owned() + "Program Files (x86)\\SoundWire Server",
             program: "SoundWire Server".parse().unwrap(),
             files_to_remove: vec![
                 "license.txt".parse().unwrap(),
@@ -1322,7 +1330,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="System Informer">
         let c_program_files_systeminformer = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\SystemInformer",
+            path: drive.to_owned() + "Program Files\\SystemInformer",
             program: "SoundWire Server".parse().unwrap(),
             files_to_remove: vec![
                 "LICENSE.txt".parse().unwrap(),
@@ -1341,7 +1349,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Sandboxie Plus">
         let c_program_files_sandboxie_plus = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Sandboxie-Plus",
+            path: drive.to_owned() + "Program Files\\Sandboxie-Plus",
             program: "SoundWire Server".parse().unwrap(),
             files_to_remove: vec![
                 "Manifest0.txt".parse().unwrap(),
@@ -1360,7 +1368,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="JetBrains">
         let c_program_files_jetbrains_license = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\JetBrains\\**\\license",
+            path: drive.to_owned() + "Program Files\\JetBrains\\**\\license",
             program: "JetBrains".parse().unwrap(),
             files_to_remove: vec![
                 "javahelp_license.txt".parse().unwrap(),
@@ -1381,7 +1389,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_jetbrains_license);
         let c_program_files_jetbrains = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\JetBrains\\**",
+            path: drive.to_owned() + "Program Files\\JetBrains\\**",
             program: "JetBrains".parse().unwrap(),
             files_to_remove: vec![
                 "LICENSE.txt".parse().unwrap(),
@@ -1397,7 +1405,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_jetbrains);
         let c_users_appdata_local_jetbrains_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\JetBrains\\**\\log\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\JetBrains\\**\\log\\*",
             program: "JetBrains".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1412,7 +1420,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="AAF Optimus DCH Audio">
         let c_program_files_afftweak = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\AAFTweak",
+            path: drive.to_owned() + "Program Files\\AAFTweak",
             program: "AAF Optimus DCH Audio".parse().unwrap(),
             files_to_remove: vec![
                 "RT.pdb".parse().unwrap()
@@ -1429,7 +1437,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="FL Studio">
         let c_program_files_image_line = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Image-Line\\**",
+            path: drive.to_owned() + "Program Files\\Image-Line\\**",
             program: "FL Studio".parse().unwrap(),
             files_to_remove: vec![
                 "WhatsNew.rtf".parse().unwrap()
@@ -1444,7 +1452,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_image_line);
         let c_program_files_image_line_shared_start = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Image-Line\\Shared\\Start\\**",
+            path: drive.to_owned() + "Program Files\\Image-Line\\Shared\\Start\\**",
             program: "FL Studio".parse().unwrap(),
             files_to_remove: vec![
                 "What's new.lnk".parse().unwrap()
@@ -1461,7 +1469,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="ASIO4ALL v2">
         let c_program_files_x86_asio4all = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\ASIO4ALL v2",
+            path: drive.to_owned() + "Program Files (x86)\\ASIO4ALL v2",
             program: "ASIO4ALL v2".parse().unwrap(),
             files_to_remove: vec![
                 "ASIO4ALL Web Site.url".parse().unwrap()
@@ -1478,7 +1486,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Rave">
         let c_users_appdata_roaming_rave_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Rave\\logs\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Rave\\logs\\*.log",
             program: "Rave".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1491,7 +1499,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_rave_logs);
         let c_users_appdata_roaming_rave_cache = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Rave\\Cache\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Rave\\Cache\\*",
             program: "Rave".parse().unwrap(),
             files_to_remove: vec![],
             category: "Сache".parse().unwrap(),
@@ -1504,7 +1512,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_rave_cache);
         let c_users_appdata_roaming_rave_code_cache = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Rave\\Code Cache\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Rave\\Code Cache\\*",
             program: "Rave".parse().unwrap(),
             files_to_remove: vec![],
             category: "Сache".parse().unwrap(),
@@ -1519,7 +1527,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Magpie">
         let c_program_files_magpie_logs = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Magpie\\logs\\*.log",
+            path: drive.to_owned() + "Program Files\\Magpie\\logs\\*.log",
             program: "Magpie".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1532,7 +1540,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_magpie_logs);
         let c_program_files_magpie_logs = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Magpie\\cache\\*",
+            path: drive.to_owned() + "Program Files\\Magpie\\cache\\*",
             program: "Magpie".parse().unwrap(),
             files_to_remove: vec![ ],
             category: "Сache".parse().unwrap(),
@@ -1547,7 +1555,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="LibreOffice">
         let c_program_files_libreoffice = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\LibreOffice",
+            path: drive.to_owned() + "Program Files\\LibreOffice",
             program: "LibreOffice".parse().unwrap(),
             files_to_remove: vec![
                 "CREDITS.fodt".parse().unwrap(),
@@ -1565,7 +1573,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_libreoffice);
         let c_program_files_libreoffice_readmes = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\LibreOffice\\readmes\\*",
+            path: drive.to_owned() + "Program Files\\LibreOffice\\readmes\\*",
             program: "LibreOffice".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1580,7 +1588,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc=drive.to_owned() + "heat Engine">
         let c_program_files_faceit_ac_logs = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Cheat Engine 7.5\\*.txt",
+            path: drive.to_owned() + "Program Files\\Cheat Engine 7.5\\*.txt",
             program: "Cheat Engine".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1595,7 +1603,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Epic Games">
         let c_users_appdata_local_epic_games_launcher_saved_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\EpicGamesLauncher\\Saved\\Logs\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\EpicGamesLauncher\\Saved\\Logs\\*.log",
             program: "Epic Games".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1608,7 +1616,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_epic_games_launcher_saved_logs);
         let c_users_appdata_local_epic_online_services_uihelper_saved_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\EpicOnlineServicesUIHelper\\Saved\\Logs\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\EpicOnlineServicesUIHelper\\Saved\\Logs\\*.log",
             program: "Epic Games".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1623,7 +1631,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="VK GameCenter">
         let c_users_appdata_local_epic_games_launcher_saved_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\GameCenter\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\GameCenter\\*.log",
             program: "VK GameCenter".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1638,7 +1646,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Adobe">
         let c_program_files_adobe_legal = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Adobe\\**\\Legal\\**\\*.html",
+            path: drive.to_owned() + "Program Files\\Adobe\\**\\Legal\\**\\*.html",
             program: "Adobe".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1653,7 +1661,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Git">
         let c_program_files_adobe_legal = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Git",
+            path: drive.to_owned() + "Program Files\\Git",
             program: "Git".parse().unwrap(),
             files_to_remove: vec![
                 "LICENSE.txt".parse().unwrap(),
@@ -1671,7 +1679,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="DotNet">
         let c_program_files_dotnet = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\dotnet\\*.txt",
+            path: drive.to_owned() + "Program Files\\dotnet\\*.txt",
             program: "DotNet".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1686,7 +1694,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="DotNet">
         let c_program_files_winrar = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\WinRAR",
+            path: drive.to_owned() + "Program Files\\WinRAR",
             program: "WinRaR".parse().unwrap(),
             files_to_remove: vec![
                 "License.txt".parse().unwrap(),
@@ -1708,7 +1716,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Windows SDK">
         let c_program_files_x86_windows_kits_licenses = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\Windows Kits\\**\\Licenses\\**\\*.rtf",
+            path: drive.to_owned() + "Program Files (x86)\\Windows Kits\\**\\Licenses\\**\\*.rtf",
             program: "Windows SDK".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1723,7 +1731,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Electron App's">
         let c_pusers_appdata_local_programs_microsoft_vs_code = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\Programs\\Microsoft VS Code",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Programs\\Microsoft VS Code",
             program: "Electron App's".parse().unwrap(),
             files_to_remove: vec![
                 "LICENSES.chromium.html".parse().unwrap(),
@@ -1744,7 +1752,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="Brave Browser">
         let c_program_files_brave_software_brave_browser_application = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\*.log",
+            path: drive.to_owned() + "Program Files\\BraveSoftware\\Brave-Browser\\Application\\*.log",
             program: "Brave Browser".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1757,7 +1765,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_brave_software_brave_browser_application);
         let c_users_appdata_local_brave_software_brave_browser_user_data_default = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username+ "\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default",
+            path: drive.to_owned() + "Users\\" + username+ "\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default",
             program: "Brave Browser".parse().unwrap(),
             files_to_remove: vec![
                 "Favicons".parse().unwrap(),
@@ -1776,7 +1784,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_brave_software_brave_browser_user_data_default);
         let c_users_appdata_local_brave_software_brave_browser_user_data_default_dawn_cache = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\DawnCache",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\DawnCache",
             program: "Brave Browser".parse().unwrap(),
             files_to_remove: vec![
                 "data_0".parse().unwrap(),
@@ -1795,7 +1803,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_brave_software_brave_browser_user_data_default_dawn_cache);
         let c_users_appdata_local_brave_software_brave_browser_user_data_default_gpu_cache = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\GPUCache",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\GPUCache",
             program: "Brave Browser".parse().unwrap(),
             files_to_remove: vec![
                 "data_0".parse().unwrap(),
@@ -1816,7 +1824,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Google Chrome">
         let c_users_appdata_local_google_chrome_user_data_default = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
             program: "Google Chrome".parse().unwrap(),
             files_to_remove: vec![
                 "Favicons".parse().unwrap(),
@@ -1841,7 +1849,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="Obsidian">
         let c_users_appdata_roaming_obsidian = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\obsidian\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\obsidian\\*.log",
             program: "Obsidian".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1856,7 +1864,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Notepad++">
         let c_users_appdata_roaming_notepad_plus_plus = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Notepad++\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Notepad++\\*.log",
             program: "Notepad++".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1869,7 +1877,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_notepad_plus_plus);
         let c_program_files_notepad_plus_plus = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Notepad++\\*.log",
+            path: drive.to_owned() + "Program Files\\Notepad++\\*.log",
             program: "Notepad++".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1882,7 +1890,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_notepad_plus_plus);
         let c_program_files_notepad_plus_plus_1 = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Notepad++\\*.txt",
+            path: drive.to_owned() + "Program Files\\Notepad++\\*.txt",
             program: "Notepad++".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1895,7 +1903,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_notepad_plus_plus_1);
         let c_program_files_notepad_plus_plus_2 = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Notepad++\\*LICENSE*",
+            path: drive.to_owned() + "Program Files\\Notepad++\\*LICENSE*",
             program: "Notepad++".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1910,7 +1918,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Sublime Text">
         let c_program_files_sublime_text = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Sublime Text\\*.txt",
+            path: drive.to_owned() + "Program Files\\Sublime Text\\*.txt",
             program: "Sublime Text".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1929,7 +1937,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="HandBrake">
         let c_users_appdata_roaming_handbrake_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\HandBrake\\logs\\*.txt",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\HandBrake\\logs\\*.txt",
             program: "HandBrake".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1942,7 +1950,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_handbrake_logs);
         let c_users_appdata_roaming_handbrake_docs = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\HandBrake\\doc\\*",
+            path: drive.to_owned() + "Program Files\\HandBrake\\doc\\*",
             program: "HandBrake".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1957,7 +1965,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Topaz Video AI">
         let c_programdata_topaz_labs_llc_topaz_video_ai = CleanerData {
-            path: drive.to_owned() + ":\\ProgramData\\Topaz Labs LLC\\Topaz Video AI\\*.txt",
+            path: drive.to_owned() + "ProgramData\\Topaz Labs LLC\\Topaz Video AI\\*.txt",
             program: "Topaz Video AI".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1972,7 +1980,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="AVCLabs Video Enhancer AI">
         let c_program_files_x86_avclabs_avclabs_video_encharcer_ai_1 = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\AVCLabs\\AVCLabs Video Enhancer AI\\*.txt",
+            path: drive.to_owned() + "Program Files (x86)\\AVCLabs\\AVCLabs Video Enhancer AI\\*.txt",
             program: "AVCLabs Video Enhancer AI".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1985,7 +1993,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_x86_avclabs_avclabs_video_encharcer_ai_1);
         let c_program_files_x86_avclabs_avclabs_video_encharcer_ai_2 = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\AVCLabs\\AVCLabs Video Enhancer AI\\*.html",
+            path: drive.to_owned() + "Program Files (x86)\\AVCLabs\\AVCLabs Video Enhancer AI\\*.html",
             program: "AVCLabs Video Enhancer AI".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -1998,7 +2006,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_x86_avclabs_avclabs_video_encharcer_ai_2);
         let c_program_files_x86_avclabs_avclabs_video_encharcer_ai_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\AVCLabs Video Enhancer AI\\logs\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\AVCLabs Video Enhancer AI\\logs\\*.log",
             program: "AVCLabs Video Enhancer AI".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2013,7 +2021,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="iTop Screen Recorder">
         let c_users_appdata_roaming_itop_screen_recorder_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\iTop Screen Recorder\\Logs\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\iTop Screen Recorder\\Logs\\*.log",
             program: "iTop Screen Recorder".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2028,7 +2036,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="VideoLAN">
         let c_program_files_videolan_vlc = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\VideoLAN\\VLC",
+            path: drive.to_owned() + "Program Files\\VideoLAN\\VLC",
             program: "ASIO4ALL v2".parse().unwrap(),
             files_to_remove: vec![
                 "AUTHORS.txt".parse().unwrap(),
@@ -2056,7 +2064,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="Exodus Crypto Wallet">
         let c_users_appdata_local_exodus = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\exodus\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\exodus\\*.log",
             program: "Exodus Crypto Wallet".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2071,7 +2079,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Wasabi Wallet">
         let c_users_appdata_roaming_walletwasabi_client = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\WalletWasabi\\Client\\*.txt",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\WalletWasabi\\Client\\*.txt",
             program: "Wasabi Wallet".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2086,7 +2094,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Bit Monero">
         let c_programdata_bitmonero = CleanerData {
-            path: drive.to_owned() + ":\\ProgramData\\bitmonero\\*.log",
+            path: drive.to_owned() + "ProgramData\\bitmonero\\*.log",
             program: "Bit Monero".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2105,7 +2113,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="FACEIT AC">
         let c_program_files_faceit_ac_logs = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\FACEIT AC\\logs\\*.log",
+            path: drive.to_owned() + "Program Files\\FACEIT AC\\logs\\*.log",
             program: "FACEIT AC".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2120,7 +2128,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="EasyAntiCheat">
         let c_program_files_faceit_ac_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\EasyAntiCheat\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\EasyAntiCheat\\*.log",
             program: "EasyAntiCheat".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2139,7 +2147,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="Memu">
         let c_users_memuhyperv = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\.MemuHyperv\\*log*",
+            path: drive.to_owned() + "Users\\" + username + "\\.MemuHyperv\\*log*",
             program: "Memu".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2154,7 +2162,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Gameloop">
         let c_users_appdata_roaming_gametop_launcher = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\com.gametop.launcher\\logs\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\com.gametop.launcher\\logs\\*",
             program: "Gameloop".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2169,7 +2177,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="BlueStacks 5">
         let c_appdata_bluestacks_nxt_logs = CleanerData {
-            path: drive.to_owned() + ":\\ProgramData\\BlueStacks_nxt\\Logs\\*.log",
+            path: drive.to_owned() + "ProgramData\\BlueStacks_nxt\\Logs\\*.log",
             program: "BlueStacks 5".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2182,7 +2190,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_appdata_bluestacks_nxt_logs);
         let c_users_pictures_bluestacks = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\Pictures\\BlueStacks\\*.png",
+            path: drive.to_owned() + "Users\\" + username + "\\Pictures\\BlueStacks\\*.png",
             program: "BlueStacks 5".parse().unwrap(),
             files_to_remove: vec![],
             category: "Images".parse().unwrap(),
@@ -2197,7 +2205,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="GameGuard">
         let c_program_files_x86_gameguard_cache = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\GameGuard\\cache\\*.cache",
+            path: drive.to_owned() + "Program Files (x86)\\GameGuard\\cache\\*.cache",
             program: "GameGuard".parse().unwrap(),
             files_to_remove: vec![],
             category: "Сache".parse().unwrap(),
@@ -2216,7 +2224,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="Melissia Games Launcher">
         let c_users_appdata_locallow_igg_lords_mobile_pc = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\LocalLow\\MelissiaGamesLauncher\\GameFolder\\_logs\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\LocalLow\\MelissiaGamesLauncher\\GameFolder\\_logs\\*.log",
             program: "Melissia Games Launcher".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2229,7 +2237,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_locallow_igg_lords_mobile_pc);
         let c_users_appdata_locallow_igg_lords_mobile = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\LocalLow\\IGG\\Lords Mobile\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\LocalLow\\IGG\\Lords Mobile\\*.log",
             program: "Lords Mobile".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2244,7 +2252,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Lords Mobile">
         let c_users_appdata_locallow_igg_lords_mobile_pc = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\LocalLow\\IGG\\Lords Mobile PC\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\LocalLow\\IGG\\Lords Mobile PC\\*.log",
             program: "Lords Mobile".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2257,7 +2265,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_locallow_igg_lords_mobile_pc);
         let c_users_appdata_locallow_igg_lords_mobile = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\LocalLow\\IGG\\Lords Mobile\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\LocalLow\\IGG\\Lords Mobile\\*.log",
             program: "Lords Mobile".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2272,7 +2280,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Roblox">
         let c_users_appdata_local_roblox_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\Roblox\\logs",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Roblox\\logs",
             program: "Roblox".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2287,7 +2295,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="PowerToys">
         let krnl = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\PowerToys",
+            path: drive.to_owned() + "Program Files\\PowerToys",
             program: "PowerToys".parse().unwrap(),
             files_to_remove: vec![
                 "License.rtf".parse().unwrap(),
@@ -2308,7 +2316,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="Minecraft">
         let c_users_appdata_roaming_minecraft_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\logs\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\.minecraft\\logs\\*",
             program: "Minecraft".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2321,7 +2329,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_minecraft_logs);
         let c_users_appdata_roaming_minecraft_saves = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\saves\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\.minecraft\\saves\\*",
             program: "Minecraft".parse().unwrap(),
             files_to_remove: vec![],
             category: "Saves".parse().unwrap(),
@@ -2334,7 +2342,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_minecraft_saves);
         let c_users_appdata_roaming_minecraft_meteor_client = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\.minecraft\\meteor-client",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\.minecraft\\meteor-client",
             program: "Meteor Client".parse().unwrap(),
             files_to_remove: vec![],
             category: "Cheats".parse().unwrap(),
@@ -2349,7 +2357,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Lunar Client">
         let c_users_appdata_lunarclient_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\.lunarclient\\logs\\launcher\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\.lunarclient\\logs\\launcher\\*",
             program: "Minecraft".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2362,7 +2370,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_lunarclient_logs);
         let c_users_appdata_lunarclient_licenses = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\.lunarclient\\licenses\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\.lunarclient\\licenses\\*",
             program: "Minecraft".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2377,7 +2385,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="PrismLauncher">
         let c_users_appdata_roaming_prismlauncher = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\PrismLauncher\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\PrismLauncher\\*.log",
             program: "PrismLauncher".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2390,7 +2398,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_prismlauncher);
         let c_users_appdata_roaming_prismlauncher_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\PrismLauncher\\logs\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\PrismLauncher\\logs\\*.log",
             program: "PrismLauncher".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2403,7 +2411,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_prismlauncher_logs);
         let c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_reports = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\crash-reports\\*",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\crash-reports\\*",
             program: "PrismLauncher".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2416,7 +2424,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_reports);
         let c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\logs\\*",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\logs\\*",
             program: "PrismLauncher".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2429,7 +2437,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_logs);
         let c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\screenshots\\*",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\screenshots\\*",
             program: "PrismLauncher".parse().unwrap(),
             files_to_remove: vec![],
             category: "Images".parse().unwrap(),
@@ -2442,7 +2450,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots);
         let c_users_appdata_roaming_prismlauncher_instances_minecraft_saves = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\saves\\*",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\saves\\*",
             program: "PrismLauncher".parse().unwrap(),
             files_to_remove: vec![],
             category: "Saves".parse().unwrap(),
@@ -2455,7 +2463,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_saves);
         let c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\cache\\*",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\cache\\*",
             program: "PrismLauncher".parse().unwrap(),
             files_to_remove: vec![],
             category: "Images".parse().unwrap(),
@@ -2468,7 +2476,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots);
         let c_users_appdata_roaming_prismlauncher_instances_minecraft_meteor_client = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\meteor-client",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\meteor-client",
             program: "Meteor Client".parse().unwrap(),
             files_to_remove: vec![],
             category: "Cheats".parse().unwrap(),
@@ -2483,7 +2491,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="PolyMC">
         let c_users_appdata_roaming_polymc = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\PolyMC\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\PolyMC\\*.log",
             program: "PolyMC".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2496,7 +2504,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_polymc);
         let c_users_appdata_roaming_polymc_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\PolyMC\\logs\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\PolyMC\\logs\\*.log",
             program: "PolyMC".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2509,7 +2517,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_polymc_logs);
         let c_users_appdata_roaming_polymc_instances_minecraft_crash_reports = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\crash-reports\\*",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\crash-reports\\*",
             program: "PolyMC".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2522,7 +2530,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_polymc_instances_minecraft_crash_reports);
         let c_users_appdata_roaming_polymc_instances_minecraft_crash_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\logs\\*",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\logs\\*",
             program: "PolyMC".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2535,7 +2543,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_polymc_instances_minecraft_crash_logs);
         let c_users_appdata_roaming_polymc_instances_minecraft_screenshots = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\screenshots\\*",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\screenshots\\*",
             program: "PolyMC".parse().unwrap(),
             files_to_remove: vec![],
             category: "Images".parse().unwrap(),
@@ -2548,7 +2556,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_polymc_instances_minecraft_screenshots);
         let c_users_appdata_roaming_polymc_instances_minecraft_saves = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\saves\\*",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\saves\\*",
             program: "PolyMC".parse().unwrap(),
             files_to_remove: vec![],
             category: "Saves".parse().unwrap(),
@@ -2561,7 +2569,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_polymc_instances_minecraft_saves);
         let c_users_appdata_roaming_polymc_instances_minecraft_screenshots = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Roaming\\PolyMC\\cache\\*",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\cache\\*",
             program: "PolyMC".parse().unwrap(),
             files_to_remove: vec![],
             category: "Images".parse().unwrap(),
@@ -2574,7 +2582,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_polymc_instances_minecraft_screenshots);
         let c_users_appdata_roaming_polymc_instances_minecraft_meteor_client = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\meteor-client",
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\meteor-client",
             program: "Meteor Client".parse().unwrap(),
             files_to_remove: vec![],
             category: "Cheats".parse().unwrap(),
@@ -2595,7 +2603,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="Discord">
         let c_users_appdata_local_discord = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\Discord\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Discord\\*.log",
             program: "Discord".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2608,7 +2616,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_discord);
         let c_users_appdata_local_discord_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\Discord\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Discord\\*.log",
             program: "Discord".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2621,7 +2629,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_discord_logs);
         let c_users_appdata_roaming_discord_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\discord\\logs\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\discord\\logs\\*",
             program: "Discord".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2636,7 +2644,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Guilded">
         let c_users_appdata_roaming_guilded = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Guilded\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Guilded\\*.log",
             program: "Guilded".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2651,7 +2659,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Element">
         let c_users_appdata_local_element_desktop = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\element-desktop\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\element-desktop\\*.log",
             program: "Element".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2666,7 +2674,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Telegram">
         let c_users_appdata_roaming_telefram_desktop_tdata = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata",
             program: "Telegram".parse().unwrap(),
             files_to_remove: vec![
                 "key_datas".parse().unwrap()
@@ -2681,7 +2689,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_telefram_desktop_tdata);
         let c_users_appdata_roaming_telefram_desktop = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\*.txt",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\*.txt",
             program: "Telegram".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2694,7 +2702,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_telefram_desktop);
         let c_users_appdata_roaming_telefram_desktop_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\*.log",
             program: "Telegram".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2707,7 +2715,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_telefram_desktop_logs);
         let c_users_appdata_roaming_telefram_desktop_tdata_emoji_cache = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata\\emoji\\*cache_*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata\\emoji\\*cache_*",
             program: "Telegram".parse().unwrap(),
             files_to_remove: vec![],
             category: "Сache".parse().unwrap(),
@@ -2720,7 +2728,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_telefram_desktop_tdata_emoji_cache);
         let c_users_appdata_roaming_telefram_desktop_tdata_user_data_cache = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata\\user_data\\cache\\**\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata\\user_data\\cache\\**\\*",
             program: "Telegram".parse().unwrap(),
             files_to_remove: vec![],
             category: "Сache".parse().unwrap(),
@@ -2733,7 +2741,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_telefram_desktop_tdata_user_data_cache);
         let c_users_appdata_roaming_telefram_desktop_tdata_user_data_media_cache = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata\\user_data\\media_cache\\**\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata\\user_data\\media_cache\\**\\*",
             program: "Telegram".parse().unwrap(),
             files_to_remove: vec![],
             category: "Сache".parse().unwrap(),
@@ -2748,7 +2756,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Signal">
         let c_users_appdata_roaming_signal = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Signal\\logs\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Signal\\logs\\*",
             program: "Signal".parse().unwrap(),
             files_to_remove: vec![ ],
             category: "Logs".parse().unwrap(),
@@ -2761,7 +2769,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_signal);
         let c_users_appdata_roaming_signal_update_cache = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Signal\\update-cache\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Signal\\update-cache\\*",
             program: "Signal".parse().unwrap(),
             files_to_remove: vec![ ],
             category: "Сache".parse().unwrap(),
@@ -2780,7 +2788,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="Amnezia VPN">
         let c_program_files_amnezia_vpn = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\AmneziaVPN",
+            path: drive.to_owned() + "Program Files\\AmneziaVPN",
             program: "Amnezia VPN".parse().unwrap(),
             files_to_remove: vec![
                 "InstallationLog.txt".parse().unwrap()
@@ -2795,7 +2803,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_amnezia_vpn);
         let c_program_files_amnezia_vpn_tap = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\AmneziaVPN\\tap",
+            path: drive.to_owned() + "Program Files\\AmneziaVPN\\tap",
             program: "Amnezia VPN".parse().unwrap(),
             files_to_remove: vec![
                 "license.txt".parse().unwrap()
@@ -2812,7 +2820,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Radmin VPN">
         let c_program_filex_x86_radmin_vpn_chatlogs = CleanerData {
-            path: drive.to_owned() + ":\\Program Files (x86)\\Radmin VPN\\CHATLOGS\\*",
+            path: drive.to_owned() + "Program Files (x86)\\Radmin VPN\\CHATLOGS\\*",
             program: "Radmin VPN".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2825,7 +2833,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_filex_x86_radmin_vpn_chatlogs);
         let c_program_files_radmin_vpn = CleanerData {
-            path: drive.to_owned() + ":\\ProgramData\\Famatech\\Radmin VPN\\*.txt",
+            path: drive.to_owned() + "ProgramData\\Famatech\\Radmin VPN\\*.txt",
             program: "Radmin VPN".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2838,7 +2846,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_radmin_vpn);
         let c_program_files_radmin_vpn_logs = CleanerData {
-            path: drive.to_owned() + ":\\ProgramData\\Famatech\\Radmin VPN\\*.log",
+            path: drive.to_owned() + "ProgramData\\Famatech\\Radmin VPN\\*.log",
             program: "Radmin VPN".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2853,7 +2861,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="UrbanVPN">
         let c_users_urbanvpm_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\UrbanVPN\\log\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\UrbanVPN\\log\\*",
             program: "UrbanVPN".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2868,7 +2876,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc=drive.to_owned() + "loudFlare">
         let c_users_urbanvpm_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\Cloudflare\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Cloudflare\\*.log",
             program: "CloudFlare".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -2883,7 +2891,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="PlanetVPN">
         let c_users_appdata_local_planetvpn_cache_qmlcache = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\PlanetVPN\\cache\\qmlcache\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\PlanetVPN\\cache\\qmlcache\\*",
             program: "PlanetVPN".parse().unwrap(),
             files_to_remove: vec![],
             category: "Сache".parse().unwrap(),
@@ -2898,7 +2906,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="iTop VPN">
         let c_programdata_itop_vpn = CleanerData {
-            path: drive.to_owned() + ":\\ProgramData\\iTop VPN",
+            path: drive.to_owned() + "ProgramData\\iTop VPN",
             program: "iTop VPN".parse().unwrap(),
             files_to_remove: vec![
                 "iTop_setup.log".parse().unwrap(),
@@ -2920,7 +2928,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="ImageGlass">
         let c_program_files_imageglass = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\ImageGlass",
+            path: drive.to_owned() + "Program Files\\ImageGlass",
             program: "ImageGlass".parse().unwrap(),
             files_to_remove: vec![
                 "ReadMe.rtf".parse().unwrap(),
@@ -2957,7 +2965,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_imageglass);
         let c_users_appdata_local_imageglass_thumbails_cache = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\ImageGlass\\ThumbnailsCache\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\ImageGlass\\ThumbnailsCache\\*",
             program: "ImageGlass".parse().unwrap(),
             files_to_remove: vec![],
             category: "Cache".parse().unwrap(),
@@ -2970,7 +2978,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_imageglass_thumbails_cache);
         let c_users_appdata_local_imageglass_thumbails_cache = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Local\\ImageGlass\\ThumbnailsCache\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\ImageGlass\\ThumbnailsCache\\*",
             program: "ImageGlass".parse().unwrap(),
             files_to_remove: vec![],
             category: "Cache".parse().unwrap(),
@@ -2985,7 +2993,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="InkSpace">
         let c_program_files_inkscape = CleanerData {
-            path: drive.to_owned() + ":\\Program Files\\Inkscape",
+            path: drive.to_owned() + "Program Files\\Inkscape",
             program: "InkSpace".parse().unwrap(),
             files_to_remove: vec![
                 "NEWS.md".parse().unwrap(),
@@ -3001,7 +3009,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_inkscape);
         let c_users_appdata_roaming_inkscape = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\inkscape\\*.log",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\inkscape\\*.log",
             program: "InkSpace".parse().unwrap(),
             files_to_remove: vec![ ],
             category: "Logs".parse().unwrap(),
@@ -3016,7 +3024,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="ShareX">
         let sharex_1 = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\Documents\\ShareX\\Screenshots\\**\\*.jpg",
+            path: drive.to_owned() + "Users\\" + username + "\\Documents\\ShareX\\Screenshots\\**\\*.jpg",
             program: "ShareX".parse().unwrap(),
             files_to_remove: vec![],
             category: "Images".parse().unwrap(),
@@ -3029,7 +3037,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(sharex_1);
         let c_users_documents_sharex_screenshots = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\Documents\\ShareX\\Screenshots\\**\\*.png",
+            path: drive.to_owned() + "Users\\" + username + "\\Documents\\ShareX\\Screenshots\\**\\*.png",
             program: "ShareX".parse().unwrap(),
             files_to_remove: vec![],
             category: "Images".parse().unwrap(),
@@ -3042,7 +3050,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_documents_sharex_screenshots);
         let c_users_documents_sharex_logs = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\Documents\\ShareX\\Logs\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\Documents\\ShareX\\Logs\\*",
             program: "ShareX".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
@@ -3056,7 +3064,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_documents_sharex_logs);
         let c_users_documents_sharex_backups = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\Documents\\ShareX\\Backup\\*",
+            path: drive.to_owned() + "Users\\" + username + "\\Documents\\ShareX\\Backup\\*",
             program: "ShareX".parse().unwrap(),
             files_to_remove: vec![],
             category: "Backups".parse().unwrap(),
@@ -3076,7 +3084,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="Weave">
         let c_weave = CleanerData {
-            path: drive.to_owned() + ":\\Weave",
+            path: drive.to_owned() + "Weave",
             program: "Weave".parse().unwrap(),
             files_to_remove: vec![],
             category: "Cheats".parse().unwrap(),
@@ -3091,7 +3099,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="INTERIUM">
         let interium = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\INTERIUM",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\INTERIUM",
             program: "INTERIUM".parse().unwrap(),
             files_to_remove: vec![],
             category: "Cheats".parse().unwrap(),
@@ -3106,7 +3114,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Krnl">
         let krnl = CleanerData {
-            path: drive.to_owned() + ":\\Users\\" + username + "\\AppData\\Roaming\\Krnl",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Krnl",
             program: "Krnl".parse().unwrap(),
             files_to_remove: vec![],
             category: "Cheats".parse().unwrap(),
@@ -3121,7 +3129,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="ExecHack">
         let krnl = CleanerData {
-            path: drive.to_owned() + ":\\exechack",
+            path: drive.to_owned() + "exechack",
             program: "Krnl".parse().unwrap(),
             files_to_remove: vec![],
             category: "Cheats".parse().unwrap(),
@@ -3137,6 +3145,9 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //</editor-fold>
     }
+
+    //<editor-fold desc="Cheats">
+
     //<editor-fold desc="Weave">
     let steam_common_counter_string_global_offensive_weave = CleanerData {
         path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive\\weave",
@@ -3229,6 +3240,8 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![]
     };
     database.push(steam_common_counter_string_global_offensive_ot);
+    //</editor-fold>
+
     //</editor-fold>
 
     database

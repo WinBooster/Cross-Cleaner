@@ -7,6 +7,7 @@ name = "WinBooster"
 version = "0.1.0"
 dependencies = [
  "crossterm 0.27.0",
+ "disk-name",
  "glob",
  "indicatif",
  "inquire",
@@ -148,6 +149,12 @@ checksum = "acdd7c62a3665c7f6830a51635d9ac9b23ed385797f70a83bb8bafe9c572ab2b"
 dependencies = [
  "winapi",
 ]
+
+[[package]]
+name = "disk-name"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dabe887f9ddd90bb3576750a054afb0c0ba430608e0b3f72774d5b595a490928"
 
 [[package]]
 name = "dyn-clone"

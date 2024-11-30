@@ -179,7 +179,7 @@ fn get_file_size_string(size: u64) -> String {
 async fn main() {
     execute!(
         std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster CLI v1.0.8.2")
+        crossterm::terminal::SetTitle("WinBooster CLI v1.0.8.3")
     );
     let sty = ProgressStyle::with_template(
         "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
