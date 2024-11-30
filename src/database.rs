@@ -676,7 +676,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_qbittorent_logs);
         //</editor-fold>
-        //<editor-fold desc=drive.to_owned() + drive.to_owned() + "leaner">
+        //<editor-fold desc="CCleaner">
         let c_program_files_ccleaner_logs = CleanerData {
             path: drive.to_owned() + ":\\Program Files\\CCleaner\\LOG\\*",
             program: "ССleaner".parse().unwrap(),
