@@ -1,4 +1,6 @@
 mod database;
+mod structures;
+mod registry_utils;
 
 use std::ffi::{CString, OsStr};
 use std::fmt::{format, Debug};
@@ -15,43 +17,7 @@ use inquire::validator::Validation;
 use tabled::{Table, Tabled};
 use tokio::task;
 use indicatif::{ProgressBar, ProgressStyle};
-
-#[derive(PartialEq, Tabled)]
-struct Cleared {
-    Program: String,
-
-}
-impl PartialEq<Option<Cleared>> for &Cleared {
-    fn eq(&self, other: &Option<Cleared>) -> bool {
-        match other {
-            Some(other) => return other.Program.eq(&*self.Program),
-            None => return false,
-        }
-    }
-}
-#[derive(Clone)]
-struct CleanerData {
-    pub path: String,
-    pub category: String,
-    pub program: String,
-
-    pub files_to_remove: Vec<String>,
-    pub folders_to_remove: Vec<String>,
-    pub directories_to_remove: Vec<String>,
-
-    pub remove_all_in_dir: bool,
-    pub remove_directory_after_clean: bool,
-    pub remove_directories: bool,
-    pub remove_files: bool
-}
-struct CleanerResult {
-    pub files: u64,
-    pub folders: u64,
-    pub bytes: u64,
-    pub working: bool,
-    pub path: String,
-    pub program: String
-}
+use crate::structures::{CleanerData, CleanerResult, Cleared};
 
 fn clear_category(data: &CleanerData) -> CleanerResult{
     let mut cleaner_result: CleanerResult = CleanerResult { files: 0, folders: 0, bytes: 0, working: false, program: "".parse().unwrap(), path: "".parse().unwrap() };
@@ -213,7 +179,7 @@ fn get_file_size_string(size: u64) -> String {
 async fn main() {
     execute!(
         std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster CLI v1.0.8.1")
+        crossterm::terminal::SetTitle("WinBooster CLI v1.0.8.2")
     );
     let sty = ProgressStyle::with_template(
         "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
@@ -266,8 +232,8 @@ async fn main() {
                 let data = Arc::new(data.clone());
                 let data2 = Arc::new(pb.clone());
                 task::spawn(async move {
+                    data2.set_message(format!("{}", data.path));
                     let result = clear_category(&data);
-                    data2.set_message(format!("{}", result.path));
                     data2.inc(1);
                     result
                 })
