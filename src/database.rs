@@ -15,17 +15,18 @@ fn get_steam_directory() -> String {
 }
 pub fn get_database() -> Vec<CleanerData> {
     let username = &*whoami::username();
+
     let mut steam_directory: String = get_steam_directory();
 
     let mut database: Vec<CleanerData> = Vec::new();
     //<editor-fold desc="Windows">
     let c_windows_debug_wia = CleanerData {
-        path: "C:\\Windows\\debug\\WIA\\*".parse().unwrap(),
+        path: "C:\\Windows\\debug\\*".parse().unwrap(),
         program: "Windows".parse().unwrap(),
-        files_to_remove: vec!["wiatrace.log".parse().unwrap()],
+        files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: false,
+        remove_directories: true,
+        remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
         remove_directory_after_clean: false,
@@ -82,7 +83,19 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![]
     };
     database.push(c_windows_security_database_logs);
-
+    let c_windows_logs = CleanerData {
+        path: "C:\\Windows\\Logs\\**\\*".parse().unwrap(),
+        program: "Windows".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(c_windows_logs);
     let c_temp = CleanerData {
         path: "C:\\Temp\\*".parse().unwrap(),
         program: "Windows".parse().unwrap(),
@@ -148,7 +161,7 @@ pub fn get_database() -> Vec<CleanerData> {
     };
     database.push(c_windows_logs_windows_update);
     let c_users_appdata_local_temp = CleanerData {
-        path: "C:\\Users\\{username}\\AppData\\Local\\Temp\\*".parse().unwrap(),
+        path: "C:\\Users\\".to_owned() + username +"\\AppData\\Local\\Temp\\*",
         program: "Windows".parse().unwrap(),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
@@ -909,7 +922,7 @@ pub fn get_database() -> Vec<CleanerData> {
     //</editor-fold>
     //<editor-fold desc="DeepL""">
     let c_users_appdata_local_deepl_se_logs = CleanerData {
-        path: "C:\\Users\\{username}\\AppData\\Local\\DeepL_SE\\logs\\*".parse().unwrap(),
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\DeepL_SE\\logs\\*",
         program: "LGHUB".parse().unwrap(),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
@@ -922,7 +935,7 @@ pub fn get_database() -> Vec<CleanerData> {
     };
     database.push(c_users_appdata_local_deepl_se_logs);
     let c_users_appdata_local_deepl_se_cache = CleanerData {
-        path: "C:\\Users\\{username}\\AppData\\Local\\DeepL_SE\\cache\\*".parse().unwrap(),
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\DeepL_SE\\cache\\*",
         program: "LGHUB".parse().unwrap(),
         files_to_remove: vec![],
         category: "Cache".parse().unwrap(),
@@ -1878,154 +1891,6 @@ pub fn get_database() -> Vec<CleanerData> {
     };
     database.push(c_program_files_libreoffice_readmes);
     //</editor-fold>
-    //<editor-fold desc="Exodus Crypto Wallet"""">
-    let c_users_appdata_local_exodus = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\exodus\\*.log",
-        program: "Exodus Crypto Wallet".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![],
-    };
-    database.push(c_users_appdata_local_exodus);
-    //</editor-fold>
-    //<editor-fold desc="Wasabi Wallet"""">
-    let c_users_appdata_roaming_walletwasabi_client = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\WalletWasabi\\Client\\*.txt",
-        program: "Wasabi Wallet".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![],
-    };
-    database.push(c_users_appdata_roaming_walletwasabi_client);
-    //</editor-fold>
-    //<editor-fold desc="Bit Monero"""">
-    let c_programdata_bitmonero = CleanerData {
-        path: "C:\\ProgramData\\bitmonero\\*.log".parse().unwrap(),
-        program: "Bit Monero".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![],
-    };
-    database.push(c_programdata_bitmonero);
-    //</editor-fold>
-    //<editor-fold desc="Memu"""">
-    let c_users_memuhyperv = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\.MemuHyperv\\*log*",
-        program: "Memu".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![],
-    };
-    database.push(c_users_memuhyperv);
-    //</editor-fold>
-    //<editor-fold desc="Gameloop">
-    let c_users_appdata_roaming_gametop_launcher = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\com.gametop.launcher\\logs\\*",
-        program: "Gameloop".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![],
-    };
-    database.push(c_users_appdata_roaming_gametop_launcher);
-    //</editor-fold>
-    //<editor-fold desc="BlueStacks 5"""">
-    let c_appdata_bluestacks_nxt_logs = CleanerData {
-        path: "C:\\ProgramData\\BlueStacks_nxt\\Logs\\*.log".parse().unwrap(),
-        program: "BlueStacks 5".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![],
-    };
-    database.push(c_appdata_bluestacks_nxt_logs);
-    let c_users_pictures_bluestacks = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\Pictures\\BlueStacks\\*.png",
-        program: "BlueStacks 5".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Images".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![],
-    };
-    database.push(c_users_pictures_bluestacks);
-    //</editor-fold>
-    //<editor-fold desc="GameGuard 5">
-    let c_program_files_x86_gameguard_cache = CleanerData {
-        path: "C:\\Program Files (x86)\\GameGuard\\cache\\*.cache".parse().unwrap(),
-        program: "GameGuard".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![],
-    };
-    database.push(c_program_files_x86_gameguard_cache);
-    //</editor-fold>
-    //<editor-fold desc="FACEIT AC" 5">
-    let c_program_files_faceit_ac_logs = CleanerData {
-        path: "C:\\Program Files\\FACEIT AC\\logs\\*.log".parse().unwrap(),
-        program: "FACEIT AC".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![],
-    };
-    database.push(c_program_files_faceit_ac_logs);
-    //</editor-fold>
-    //<editor-fold desc="EasyAntiCheat">
-    let c_program_files_faceit_ac_logs = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\EasyAntiCheat\\*.log",
-        program: "EasyAntiCheat".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![],
-    };
-    database.push(c_program_files_faceit_ac_logs);
-    //</editor-fold>
     //<editor-fold desc="Cheat Engine">
     let c_program_files_faceit_ac_logs = CleanerData {
         path: "C:\\Program Files\\Cheat Engine 7.5\\*.txt".parse().unwrap(),
@@ -2113,6 +1978,166 @@ pub fn get_database() -> Vec<CleanerData> {
     database.push(c_users_appdata_local_epic_online_services_uihelper_saved_logs);
     //</editor-fold>
 
+    //<editor-fold desc="Crypto Wallets">
+
+    //<editor-fold desc="Exodus Crypto Wallet"""">
+    let c_users_appdata_local_exodus = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Local\\exodus\\*.log",
+        program: "Exodus Crypto Wallet".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_local_exodus);
+    //</editor-fold>
+    //<editor-fold desc="Wasabi Wallet"""">
+    let c_users_appdata_roaming_walletwasabi_client = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\WalletWasabi\\Client\\*.txt",
+        program: "Wasabi Wallet".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_walletwasabi_client);
+    //</editor-fold>
+    //<editor-fold desc="Bit Monero"""">
+    let c_programdata_bitmonero = CleanerData {
+        path: "C:\\ProgramData\\bitmonero\\*.log".parse().unwrap(),
+        program: "Bit Monero".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_programdata_bitmonero);
+    //</editor-fold>
+
+    //</editor-fold>
+    //<editor-fold desc="AntiCheats">
+
+    //<editor-fold desc="FACEIT AC" 5">
+    let c_program_files_faceit_ac_logs = CleanerData {
+        path: "C:\\Program Files\\FACEIT AC\\logs\\*.log".parse().unwrap(),
+        program: "FACEIT AC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_faceit_ac_logs);
+    //</editor-fold>
+    //<editor-fold desc="EasyAntiCheat">
+    let c_program_files_faceit_ac_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\EasyAntiCheat\\*.log",
+        program: "EasyAntiCheat".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_faceit_ac_logs);
+    //</editor-fold>
+
+    //</editor-fold>
+    //<editor-fold desc="Emulators">
+
+    //<editor-fold desc="Memu"""">
+    let c_users_memuhyperv = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\.MemuHyperv\\*log*",
+        program: "Memu".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_memuhyperv);
+    //</editor-fold>
+    //<editor-fold desc="Gameloop">
+    let c_users_appdata_roaming_gametop_launcher = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\com.gametop.launcher\\logs\\*",
+        program: "Gameloop".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_appdata_roaming_gametop_launcher);
+    //</editor-fold>
+    //<editor-fold desc="BlueStacks 5"""">
+    let c_appdata_bluestacks_nxt_logs = CleanerData {
+        path: "C:\\ProgramData\\BlueStacks_nxt\\Logs\\*.log".parse().unwrap(),
+        program: "BlueStacks 5".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_appdata_bluestacks_nxt_logs);
+    let c_users_pictures_bluestacks = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\Pictures\\BlueStacks\\*.png",
+        program: "BlueStacks 5".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Images".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_users_pictures_bluestacks);
+    //</editor-fold>
+    //<editor-fold desc="GameGuard 5">
+    let c_program_files_x86_gameguard_cache = CleanerData {
+        path: "C:\\Program Files (x86)\\GameGuard\\cache\\*.cache".parse().unwrap(),
+        program: "GameGuard".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![],
+    };
+    database.push(c_program_files_x86_gameguard_cache);
+    //</editor-fold>
+
+    //</editor-fold>
     //<editor-fold desc="Games">
 
     //<editor-fold desc="Melissia Games Launcher">
@@ -2233,6 +2258,19 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![]
     };
     database.push(c_users_appdata_roaming_minecraft_saves);
+    let c_users_appdata_roaming_minecraft_meteor_client = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\.minecraft\\meteor-client",
+        program: "Meteor Client".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cheats".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: true,
+        folders_to_remove: vec![]
+    };
+    database.push(c_users_appdata_roaming_minecraft_meteor_client);
     //</editor-fold>
     //<editor-fold desc="Lunar Client">
     let c_users_appdata_lunarclient_logs = CleanerData {
@@ -2262,7 +2300,7 @@ pub fn get_database() -> Vec<CleanerData> {
     };
     database.push(c_users_appdata_lunarclient_licenses);
     //</editor-fold>
-    //<editor-fold desc="PrismLauncher Client">
+    //<editor-fold desc="PrismLauncher">
     let c_users_appdata_roaming_prismlauncher = CleanerData {
         path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\PrismLauncher\\*.log",
         program: "PrismLauncher".parse().unwrap(),
@@ -2327,6 +2365,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_directory_after_clean: false,
         folders_to_remove: vec![]
     };
+    database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots);
     let c_users_appdata_roaming_prismlauncher_instances_minecraft_saves = CleanerData {
         path: "C:\\Users\\".to_owned() + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\saves\\*",
         program: "PrismLauncher".parse().unwrap(),
@@ -2353,8 +2392,21 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![]
     };
     database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots);
+    let c_users_appdata_roaming_prismlauncher_instances_minecraft_meteor_client = CleanerData {
+        path: "C:\\Users\\".to_owned() + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\meteor-client",
+        program: "Meteor Client".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cheats".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: true,
+        remove_directory_after_clean: true,
+        folders_to_remove: vec![]
+    };
+    database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_meteor_client);
     //</editor-fold>
-    //<editor-fold desc="PolyMC Client">
+    //<editor-fold desc="PolyMC">
     let c_users_appdata_roaming_polymc = CleanerData {
         path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\PolyMC\\*.log",
         program: "PolyMC".parse().unwrap(),
@@ -2419,6 +2471,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_directory_after_clean: false,
         folders_to_remove: vec![]
     };
+    database.push(c_users_appdata_roaming_polymc_instances_minecraft_screenshots);
     let c_users_appdata_roaming_polymc_instances_minecraft_saves = CleanerData {
         path: "C:\\Users\\".to_owned() + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\saves\\*",
         program: "PolyMC".parse().unwrap(),
@@ -2445,6 +2498,19 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![]
     };
     database.push(c_users_appdata_roaming_polymc_instances_minecraft_screenshots);
+    let c_users_appdata_roaming_polymc_instances_minecraft_meteor_client = CleanerData {
+        path: "C:\\Users\\".to_owned() + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\meteor-client",
+        program: "Meteor Client".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cheats".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: true,
+        remove_directory_after_clean: true,
+        folders_to_remove: vec![]
+    };
+    database.push(c_users_appdata_roaming_polymc_instances_minecraft_meteor_client);
     //</editor-fold>
 
     //</editor-fold>
@@ -2774,68 +2840,75 @@ pub fn get_database() -> Vec<CleanerData> {
     //<editor-fold desc="Images">
 
     //<editor-fold desc="ShareX">
-    let sharex_1 = CleanerData { path: "C:\\Users\\".to_owned() + username + "\\Documents\\ShareX\\Screenshots\\**\\*.jpg", program: "ShareX".parse().unwrap(), files_to_remove: vec![], category: "Images".parse().unwrap(), remove_directories: false, remove_files: true, directories_to_remove: vec![], remove_all_in_dir: false, remove_directory_after_clean: false, folders_to_remove: vec![] };
+    let sharex_1 = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\Documents\\ShareX\\Screenshots\\**\\*.jpg",
+        program: "ShareX".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Images".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
     database.push(sharex_1);
-    let sharex_2 = CleanerData { path: "C:\\Users\\".to_owned() + username + "\\Documents\\ShareX\\Screenshots\\**\\*.png", program: "ShareX".parse().unwrap(), files_to_remove: vec![], category: "Images".parse().unwrap(), remove_directories: false, remove_files: true, directories_to_remove: vec![], remove_all_in_dir: false, remove_directory_after_clean: false, folders_to_remove: vec![] };
-    database.push(sharex_2);
-    let sharex_3 = CleanerData { path: "C:\\Users\\".to_owned() + username + "\\Documents\\ShareX\\Logs\\*", program: "ShareX".parse().unwrap(), files_to_remove: vec![], category: "Logs".parse().unwrap(), remove_directories: false, remove_files: true, directories_to_remove: vec![], remove_all_in_dir: false, remove_directory_after_clean: false, folders_to_remove: vec![] };
-    database.push(sharex_3);
+    let c_users_documents_sharex_screenshots = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\Documents\\ShareX\\Screenshots\\**\\*.png",
+        program: "ShareX".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Images".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(c_users_documents_sharex_screenshots);
+    let c_users_documents_sharex_logs = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\Documents\\ShareX\\Logs\\*",
+        program: "ShareX".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean:
+        false,
+        folders_to_remove: vec![]
+    };
+    database.push(c_users_documents_sharex_logs);
+    let c_users_documents_sharex_backups = CleanerData {
+        path: "C:\\Users\\".to_owned() + username + "\\Documents\\ShareX\\Backup\\*",
+        program: "ShareX".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Backups".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean:
+        false,
+        folders_to_remove: vec![]
+    };
+    database.push(c_users_documents_sharex_backups);
     //</editor-fold>
 
     //</editor-fold>
     //<editor-fold desc="Cheats">
 
-    //<editor-fold desc="Meteor Client">
-    let c_users_appdata_roaming_minecraft_meteor_client = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\.minecraft\\meteor-client\\*",
-        program: "Meteor Client".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cheats".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: true,
-        folders_to_remove: vec![]
-    };
-    database.push(c_users_appdata_roaming_minecraft_meteor_client);
-    let c_users_appdata_roaming_prismlauncher_instances_minecraft_meteor_client = CleanerData {
-        path: "C:\\Users\\".to_owned() + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\meteor-client\\*",
-        program: "Meteor Client".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cheats".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_meteor_client);
-    let c_users_appdata_roaming_polymc_instances_minecraft_meteor_client = CleanerData {
-        path: "C:\\Users\\".to_owned() + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\meteor-client\\*",
-        program: "Meteor Client".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cheats".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(c_users_appdata_roaming_polymc_instances_minecraft_meteor_client);
-    //</editor-fold>
     //<editor-fold desc="Weave">
     let weave_1 = CleanerData {
-        path: "C:\\Weave\\*".parse().unwrap(),
+        path: "C:\\Weave".parse().unwrap(),
         program: "Weave".parse().unwrap(),
         files_to_remove: vec![],
         category: "Cheats".parse().unwrap(),
         remove_directories: true,
         remove_files: true,
         directories_to_remove: vec![],
-        remove_all_in_dir: false,
+        remove_all_in_dir: true,
         remove_directory_after_clean: true,
         folders_to_remove: vec![]
     };
@@ -2843,14 +2916,14 @@ pub fn get_database() -> Vec<CleanerData> {
     //</editor-fold>
     //<editor-fold desc="INTERIUM">
     let interium = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\INTERIUM\\*",
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\INTERIUM",
         program: "INTERIUM".parse().unwrap(),
         files_to_remove: vec![],
         category: "Cheats".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
+        remove_directories: false,
+        remove_files: false,
         directories_to_remove: vec![],
-        remove_all_in_dir: false,
+        remove_all_in_dir: true,
         remove_directory_after_clean: true,
         folders_to_remove: vec![]
     };
@@ -2858,29 +2931,29 @@ pub fn get_database() -> Vec<CleanerData> {
     //</editor-fold>
     //<editor-fold desc="Krnl">
     let krnl = CleanerData {
-        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Krnl\\*",
+        path: "C:\\Users\\".to_owned() + username + "\\AppData\\Roaming\\Krnl",
         program: "Krnl".parse().unwrap(),
         files_to_remove: vec![],
         category: "Cheats".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
+        remove_directories: false,
+        remove_files: false,
         directories_to_remove: vec![],
-        remove_all_in_dir: false,
+        remove_all_in_dir: true,
         remove_directory_after_clean: true,
         folders_to_remove: vec![]
     };
     database.push(krnl);
     //</editor-fold>
-    //<editor-fold desc="Krnl">
+    //<editor-fold desc="ExecHack">
     let krnl = CleanerData {
-        path: "C:\\exechack\\*".parse().unwrap(),
+        path: "C:\\exechack".parse().unwrap(),
         program: "Krnl".parse().unwrap(),
         files_to_remove: vec![],
         category: "Cheats".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
+        remove_directories: false,
+        remove_files: false,
         directories_to_remove: vec![],
-        remove_all_in_dir: false,
+        remove_all_in_dir: true,
         remove_directory_after_clean: true,
         folders_to_remove: vec![]
     };
@@ -2951,14 +3024,14 @@ pub fn get_database() -> Vec<CleanerData> {
     //</editor-fold>
     //<editor-fold desc="OneTap">
     let steam_common_counter_string_global_offensive_ot = CleanerData {
-        path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive\\ot\\*",
-        program: "Pandora".parse().unwrap(),
+        path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive\\ot",
+        program: "OneTap".parse().unwrap(),
         files_to_remove: vec![],
         category: "Cheats".parse().unwrap(),
         remove_directories: false,
-        remove_files: true,
+        remove_files: false,
         directories_to_remove: vec![],
-        remove_all_in_dir: false,
+        remove_all_in_dir: true,
         remove_directory_after_clean: true,
         folders_to_remove: vec![]
     };
@@ -2967,5 +3040,5 @@ pub fn get_database() -> Vec<CleanerData> {
 
     //</editor-fold>
 
-    return database;
+    database
 }

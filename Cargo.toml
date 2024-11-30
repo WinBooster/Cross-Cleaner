@@ -12,6 +12,7 @@ tabled = "0.17.0"
 crossterm = "0.27.0"
 tokio = { version = "1", features = ["full"] }
 winreg = "0.52.0"
+indicatif = "0.17.7"
 
 [build-dependencies]
 winres = "0.1"

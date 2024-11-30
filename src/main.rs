@@ -14,6 +14,7 @@ use inquire::MultiSelect;
 use inquire::validator::Validation;
 use tabled::{Table, Tabled};
 use tokio::task;
+use indicatif::{ProgressBar, ProgressStyle};
 
 #[derive(PartialEq, Tabled)]
 struct Cleared {
@@ -48,13 +49,15 @@ struct CleanerResult {
     pub folders: u64,
     pub bytes: u64,
     pub working: bool,
+    pub path: String,
     pub program: String
 }
 
 fn clear_category(data: &CleanerData) -> CleanerResult{
-    let mut cleaner_result: CleanerResult = CleanerResult { files: 0, folders: 0, bytes: 0, working: false, program: "".parse().unwrap() };
+    let mut cleaner_result: CleanerResult = CleanerResult { files: 0, folders: 0, bytes: 0, working: false, program: "".parse().unwrap(), path: "".parse().unwrap() };
     let results: Result<Paths, PatternError> = glob(&*data.path);
     cleaner_result.program = (&*data.program).parse().unwrap();
+    cleaner_result.path = (&*data.path).parse().unwrap();
     match results {
         Ok(results) => {
             for result in results {
@@ -151,6 +154,7 @@ fn clear_category(data: &CleanerData) -> CleanerResult{
                                             Ok(result) => {
                                                 if result.is_file() {
                                                     files += 1;
+
                                                 }
                                                 if result.is_dir() {
                                                     dirs += 1;
@@ -171,7 +175,16 @@ fn clear_category(data: &CleanerData) -> CleanerResult{
                                 }
                                 Err(_) => {}
                             }
-
+                        }
+                        if data.remove_directory_after_clean {
+                            match fs::remove_dir_all(path) {
+                                Ok(_) => {
+                                    cleaner_result.folders += 1;
+                                    cleaner_result.working = true;
+                                    //println!("Removed directory: {}", name.unwrap());
+                                }
+                                Err(_) => {}
+                            }
                         }
                     }
                     Err(_) => {}
@@ -200,8 +213,12 @@ fn get_file_size_string(size: u64) -> String {
 async fn main() {
     execute!(
         std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster CLI v1.0.8")
+        crossterm::terminal::SetTitle("WinBooster CLI v1.0.8.1")
     );
+    let sty = ProgressStyle::with_template(
+        "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
+
+    ).unwrap().progress_chars("##-").tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
     let mut database: Vec<CleanerData> = database::get_database();
 
     let mut options: Vec<&str> = vec![];
@@ -239,16 +256,24 @@ async fn main() {
 
     let database2 = database.iter().cloned();
     if let Ok(ans) = ans {
+        let mut pb = ProgressBar::new(0 as u64);
+        pb.set_style(sty.clone());
+        pb.set_prefix("Clearing");
+
         let async_list: Vec<_> = database2
-            .filter(|data| ans.contains(&&*data.category)) // Убедитесь, что ans содержит правильные значения
+            .filter(|data| ans.contains(&&*data.category))
             .map(|data| {
-                let data = Arc::new(data.clone()); // Клонируем значение и оборачиваем в Arc
+                let data = Arc::new(data.clone());
+                let data2 = Arc::new(pb.clone());
                 task::spawn(async move {
-                    clear_category(&data) // Предполагаем, что clear_category асинхронный
+                    let result = clear_category(&data);
+                    data2.set_message(format!("{}", result.path));
+                    data2.inc(1);
+                    result
                 })
             })
             .collect();
-
+        pb.set_length(async_list.len() as u64);
         for async_task in async_list {
             match async_task.await {
                 Ok(result) => {
@@ -267,9 +292,11 @@ async fn main() {
                 }
             }
         }
+        pb.set_message(format!("{}", "done"));
+        pb.finish();
     }
 
-    println!("Cleared programms:");
+    println!("Cleared programs:");
     let table = Table::new(cleared_programs).to_string();
     println!("{}", table);
     println!("Removed: {}", get_file_size_string(bytes_cleared));
