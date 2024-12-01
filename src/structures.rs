@@ -3,7 +3,6 @@ use tabled::Tabled;
 #[derive(PartialEq, Tabled)]
 pub struct Cleared {
     pub(crate) Program: String,
-
 }
 impl PartialEq<Option<Cleared>> for &Cleared {
     fn eq(&self, other: &Option<Cleared>) -> bool {

@@ -2,12 +2,6 @@ use disk_name::get_letters;
 use crate::CleanerData;
 use crate::registry_utils::{get_steam_directory_from_registry};
 
-
-pub fn get_drives() -> Vec<String> {
-    let disk_names: Vec<String> = get_letters();
-
-    disk_names
-}
 pub fn get_database() -> Vec<CleanerData> {
     let username = &*whoami::username();
 
@@ -15,9 +9,8 @@ pub fn get_database() -> Vec<CleanerData> {
 
     let mut database: Vec<CleanerData> = Vec::new();
 
-    let drives = get_drives();
+    let drives = get_letters();
     for drive in drives {
-        println!("Drive: {}", drive);
         //<editor-fold desc="Windows">
         let c_windows_debug_wia = CleanerData {
             path: drive.to_owned() + "Windows\\debug\\*",
@@ -447,6 +440,19 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![],
         };
         database.push(java_6);
+        let java_7 = CleanerData {
+            path: drive.to_owned() + "Program Files\\Zulu\\**",
+            program: "Java".parse().unwrap(),
+            files_to_remove: java_files.clone(),
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(java_7);
         //</editor-fold>
         //<editor-fold desc="4uKey for Android">
         let c_program_files_x86_tenorshare_4ukey_for_android_logs = CleanerData {
@@ -1586,8 +1592,8 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_libreoffice_readmes);
         //</editor-fold>
-        //<editor-fold desc=drive.to_owned() + "heat Engine">
-        let c_program_files_faceit_ac_logs = CleanerData {
+        //<editor-fold desc="Cheat Engine">
+        let c_program_files_cheat_engine_7_5 = CleanerData {
             path: drive.to_owned() + "Program Files\\Cheat Engine 7.5\\*.txt",
             program: "Cheat Engine".parse().unwrap(),
             files_to_remove: vec![],
@@ -1599,7 +1605,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_directory_after_clean: false,
             folders_to_remove: vec![],
         };
-        database.push(c_program_files_faceit_ac_logs);
+        database.push(c_program_files_cheat_engine_7_5);
         //</editor-fold>
         //<editor-fold desc="Epic Games">
         let c_users_appdata_local_epic_games_launcher_saved_logs = CleanerData {
@@ -1731,7 +1737,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Electron App's">
         let c_pusers_appdata_local_programs_microsoft_vs_code = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Programs\\Microsoft VS Code",
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Programs\\**",
             program: "Electron App's".parse().unwrap(),
             files_to_remove: vec![
                 "LICENSES.chromium.html".parse().unwrap(),
@@ -1746,6 +1752,21 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![],
         };
         database.push(c_pusers_appdata_local_programs_microsoft_vs_code);
+        //</editor-fold>
+        //<editor-fold desc="VS Code">
+        let c_pusers_appdata_roamong_code_logs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Code\\logs",
+            program: "VS Code".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_pusers_appdata_roamong_code_logs);
         //</editor-fold>
 
         //<editor-fold desc="Browsers">
@@ -1823,6 +1844,19 @@ pub fn get_database() -> Vec<CleanerData> {
         database.push(c_users_appdata_local_brave_software_brave_browser_user_data_default_gpu_cache);
         //</editor-fold>
         //<editor-fold desc="Google Chrome">
+        let program_files_x86_google_google_updater = CleanerData {
+            path: drive.to_owned() + "Program Files (x86)\\Google\\GoogleUpdater\\*.log",
+            program: "Google Chrome".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(program_files_x86_google_google_updater);
         let c_users_appdata_local_google_chrome_user_data_default = CleanerData {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
             program: "Google Chrome".parse().unwrap(),
@@ -1835,7 +1869,7 @@ pub fn get_database() -> Vec<CleanerData> {
             ],
             category: "Logs".parse().unwrap(),
             remove_directories: false,
-            remove_files: true,
+            remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
@@ -2060,7 +2094,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
 
         //</editor-fold>
-        //<editor-fold desc=drive.to_owned() + "rypto Wallets">
+        //<editor-fold desc="Crypto Wallets">
 
         //<editor-fold desc="Exodus Crypto Wallet">
         let c_users_appdata_local_exodus = CleanerData {
@@ -2223,7 +2257,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //<editor-fold desc="Games">
 
         //<editor-fold desc="Melissia Games Launcher">
-        let c_users_appdata_locallow_igg_lords_mobile_pc = CleanerData {
+        let users_appdata_locallow_melissia_games_launcher_game_folder_logs = CleanerData {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\LocalLow\\MelissiaGamesLauncher\\GameFolder\\_logs\\*.log",
             program: "Melissia Games Launcher".parse().unwrap(),
             files_to_remove: vec![],
@@ -2235,11 +2269,20 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_directory_after_clean: false,
             folders_to_remove: vec![]
         };
-        database.push(c_users_appdata_locallow_igg_lords_mobile_pc);
-        let c_users_appdata_locallow_igg_lords_mobile = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\AppData\\LocalLow\\IGG\\Lords Mobile\\*.log",
-            program: "Lords Mobile".parse().unwrap(),
-            files_to_remove: vec![],
+        database.push(users_appdata_locallow_melissia_games_launcher_game_folder_logs);
+        let program_files_x86_melissia_games_melissia_games_launcher = CleanerData {
+            path: drive.to_owned() + "Program Files (x86)\\Melissia Games\\Melissia Games Launcher\\**",
+            program: "Melissia Games Launcher".parse().unwrap(),
+            files_to_remove: vec![
+                "THIRD_PARTY_NOTICES.md".parse().unwrap(),
+                "LICENSE.rtf".parse().unwrap(),
+                "InnoSetupHelper.pdb".parse().unwrap(),
+                "Hi3Helper.Sophon.pdb".parse().unwrap(),
+                "Hi3Helper.Http.pdb".parse().unwrap(),
+                "Hi3Helper.Core.pdb".parse().unwrap(),
+                "DiscordRPC.pdb".parse().unwrap(),
+                "ColorThief.pdb".parse().unwrap(),
+            ],
             category: "Logs".parse().unwrap(),
             remove_directories: false,
             remove_files: true,
@@ -2248,7 +2291,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_directory_after_clean: false,
             folders_to_remove: vec![]
         };
-        database.push(c_users_appdata_locallow_igg_lords_mobile);
+        database.push(program_files_x86_melissia_games_melissia_games_launcher);
         //</editor-fold>
         //<editor-fold desc="Lords Mobile">
         let c_users_appdata_locallow_igg_lords_mobile_pc = CleanerData {
@@ -2858,6 +2901,21 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![],
         };
         database.push(c_program_files_radmin_vpn_logs);
+        let program_files_x86_radmin_vpn = CleanerData {
+            path: drive.to_owned() + "Program Files (x86)\\Radmin VPN",
+            program: "Radmin VPN".parse().unwrap(),
+            files_to_remove: vec![
+                "eula.txt".parse().unwrap()
+            ],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(program_files_x86_radmin_vpn);
         //</editor-fold>
         //<editor-fold desc="UrbanVPN">
         let c_users_urbanvpm_logs = CleanerData {
@@ -2874,7 +2932,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_urbanvpm_logs);
         //</editor-fold>
-        //<editor-fold desc=drive.to_owned() + "loudFlare">
+        //<editor-fold desc="CloudFlare">
         let c_users_urbanvpm_logs = CleanerData {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Cloudflare\\*.log",
             program: "CloudFlare".parse().unwrap(),
@@ -2990,6 +3048,19 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_imageglass_thumbails_cache);
+        let program_files_imageglass_license = CleanerData {
+            path: drive.to_owned() + "Program Files\\ImageGlass\\License\\*",
+            program: "ImageGlass".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(program_files_imageglass_license);
         //</editor-fold>
         //<editor-fold desc="InkSpace">
         let c_program_files_inkscape = CleanerData {

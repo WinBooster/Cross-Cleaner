@@ -75,7 +75,7 @@ fn clear_category(data: &CleanerData) -> CleanerResult{
                                 Ok(res) => { lenght += res.len(); }
                                 Err(_) => {}
                             }
-                            match fs::remove_dir(dir_path) {
+                            match fs::remove_dir_all(dir_path) {
                                 Ok(_) => {
                                     cleaner_result.folders += 1;
                                     cleaner_result.bytes += lenght;
@@ -120,7 +120,6 @@ fn clear_category(data: &CleanerData) -> CleanerResult{
                                             Ok(result) => {
                                                 if result.is_file() {
                                                     files += 1;
-
                                                 }
                                                 if result.is_dir() {
                                                     dirs += 1;
@@ -159,7 +158,8 @@ fn clear_category(data: &CleanerData) -> CleanerResult{
         }
         Err(_) => {}
     }
-    return cleaner_result;
+
+    cleaner_result
 }
 
 fn get_file_size_string(size: u64) -> String {
@@ -179,11 +179,10 @@ fn get_file_size_string(size: u64) -> String {
 async fn main() {
     execute!(
         std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster CLI v1.0.8.3")
+        crossterm::terminal::SetTitle("WinBooster CLI v1.8.3")
     );
     let sty = ProgressStyle::with_template(
         "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
-
     ).unwrap().progress_chars("##-").tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
     let mut database: Vec<CleanerData> = database::get_database();
 
@@ -230,11 +229,11 @@ async fn main() {
             .filter(|data| ans.contains(&&*data.category))
             .map(|data| {
                 let data = Arc::new(data.clone());
-                let data2 = Arc::new(pb.clone());
+                let progress_bar = Arc::new(pb.clone());
                 task::spawn(async move {
-                    data2.set_message(format!("{}", data.path));
+                    progress_bar.set_message(format!("{}", data.path));
                     let result = clear_category(&data);
-                    data2.inc(1);
+                    progress_bar.inc(1);
                     result
                 })
             })
@@ -268,10 +267,6 @@ async fn main() {
     println!("Removed: {}", get_file_size_string(bytes_cleared));
     println!("Removed files: {}", removed_files);
     println!("Removed directories: {}", removed_directories);
-    let mut s=String::new();
+    let mut s= String::new();
     stdin().read_line(&mut s).expect("Did not enter a correct string");
-
-
-
-
 }

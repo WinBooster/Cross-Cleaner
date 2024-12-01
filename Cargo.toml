@@ -1,6 +1,6 @@
 [package]
 name = "WinBooster"
-version = "0.1.0"
+version = "1.8.3"
 edition = "2021"
 build = "build.rs"
 
@@ -17,3 +17,10 @@ disk-name = "1.0.0"
 
 [build-dependencies]
 winres = "0.1"
+
+[package.metadata.winres]
+FileDescription = "Garbage remover"
+OriginalFilename = "WinBooster.exe"
+LegalCopyright = "Copyright © 2024"
+ProductName = "WinBooster"
+ProductVersion = "1.8.3"
