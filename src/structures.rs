@@ -2,7 +2,7 @@ use tabled::Tabled;
 
 #[derive(PartialEq, Tabled)]
 pub struct Cleared {
-    pub(crate) Program: String,
+    pub Program: String,
 }
 impl PartialEq<Option<Cleared>> for &Cleared {
     fn eq(&self, other: &Option<Cleared>) -> bool {
@@ -33,5 +33,5 @@ pub struct CleanerResult {
     pub bytes: u64,
     pub working: bool,
     pub path: String,
-    pub program: String
+    pub program: String,
 }

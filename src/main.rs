@@ -2,14 +2,15 @@ mod database;
 mod structures;
 mod registry_utils;
 
-use std::ffi::{CString, OsStr};
-use std::fmt::{format, Debug};
-use std::fs;
+use std::fmt::{Debug};
+use std::{env, fs};
 use std::io::stdin;
+use std::iter::Cloned;
 use std::path::Path;
+use std::slice::Iter;
 use std::sync::Arc;
 use crossterm::execute;
-use glob::{glob, GlobResult, Paths, PatternError};
+use glob::{glob, Paths, PatternError};
 use inquire::formatter::MultiOptionFormatter;
 use inquire::list_option::ListOption;
 use inquire::MultiSelect;
@@ -46,7 +47,6 @@ fn clear_category(data: &CleanerData) -> CleanerResult{
                                     cleaner_result.files += 1;
                                     cleaner_result.bytes += lenght;
                                     cleaner_result.working = true;
-                                    //println!("Removed file: {}", name.unwrap());
                                 }
                                 Err(_) => {}
                             }
@@ -54,6 +54,7 @@ fn clear_category(data: &CleanerData) -> CleanerResult{
                         for directory in &data.directories_to_remove {
                             let file_path = path.to_owned() + "\\" + &*directory;
                             let metadata = fs::metadata(file_path.clone());
+                            let mut name = String::new();
                             match metadata {
                                 Ok(res) => { lenght += res.len(); }
                                 Err(_) => {}
@@ -88,11 +89,14 @@ fn clear_category(data: &CleanerData) -> CleanerResult{
 
                         //println!("Found: {}", path);
                         if data.remove_files && is_file {
+                            let path = Path::new(path);
                             match fs::remove_file(path) {
                                 Ok(_) => {
                                     cleaner_result.files += 1;
                                     cleaner_result.bytes += lenght;
                                     cleaner_result.working = true;
+
+                                    //cleaner_result.files_vec.push(String::from(path.file_name()));
                                     //println!("Removed file: {}", name.unwrap());
                                 }
                                 Err(_) => {}
@@ -119,6 +123,7 @@ fn clear_category(data: &CleanerData) -> CleanerResult{
                                         match result {
                                             Ok(result) => {
                                                 if result.is_file() {
+                                                    //cleaner_result.files_vec.push(String::from(result.file_name().unwrap().to_str()));
                                                     files += 1;
                                                 }
                                                 if result.is_dir() {
@@ -174,17 +179,74 @@ fn get_file_size_string(size: u64) -> String {
     format!("{:.1} {}", size_in_units, units[digit_groups])
 }
 
+async fn work(categories: Vec<&str>, database: Vec<CleanerData>) {
+    let sty = ProgressStyle::with_template(
+        "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
+    ).unwrap().progress_chars("##-").tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
+
+
+    let mut bytes_cleared = 0;
+    let mut removed_files = 0;
+    let mut removed_directories = 0;
+    let mut cleared_programs:Vec<Cleared> = vec![];
+
+    let pb = ProgressBar::new(0);
+    pb.set_style(sty.clone());
+    pb.set_prefix("Clearing");
+
+    let database2 = database.iter().to_owned();
+    let async_list: Vec<_> = database2
+        .filter(|data| categories.contains(&&*data.category))
+        .map(|data| {
+            let data = Arc::new(data.clone());
+            let progress_bar = Arc::new(pb.clone());
+            task::spawn(async move {
+                progress_bar.set_message(format!("{}", data.path));
+                let result = clear_category(&data);
+                progress_bar.inc(1);
+                result
+            })
+        })
+        .collect();
+    pb.set_length(async_list.len() as u64);
+    for async_task in async_list {
+        match async_task.await {
+            Ok(result) => {
+                removed_files += result.files;
+                removed_directories += result.folders;
+                bytes_cleared += result.bytes;
+                if result.working {
+                    let data2 = Cleared { Program: result.program };
+                    if !cleared_programs.contains(&data2) {
+                        cleared_programs.push(data2);
+                    }
+                }
+            },
+            Err(_) => {
+                eprintln!("Error waiting for task completion");
+            }
+        }
+    }
+    pb.set_message(format!("{}", "done"));
+    pb.finish();
+
+    println!("Cleared programs:");
+    let table = Table::new(cleared_programs).to_string();
+    println!("{}", table);
+    println!("Removed: {}", get_file_size_string(bytes_cleared));
+    println!("Removed files: {}", removed_files);
+    println!("Removed directories: {}", removed_directories);
+}
 
 #[tokio::main]
 async fn main() {
     execute!(
         std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster CLI v1.8.3")
+        crossterm::terminal::SetTitle("WinBooster CLI v1.8.4")
     );
-    let sty = ProgressStyle::with_template(
-        "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
-    ).unwrap().progress_chars("##-").tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
-    let mut database: Vec<CleanerData> = database::get_database();
+
+
+    let database: Vec<CleanerData> = database::get_database();
 
     let mut options: Vec<&str> = vec![];
     let mut programs: Vec<&str> = vec![];
@@ -207,66 +269,27 @@ async fn main() {
             return Ok(Validation::Valid);
         }
     };
+    if env::args().count() == 0 {
+        let formatter: MultiOptionFormatter<'_, &str> = &|a| format!("{} selected categories", a.len());
+        let ans = MultiSelect::new("Select the clearing categories:", options)
+            .with_validator(validator)
+            .with_formatter(formatter)
+            .prompt();
 
-    let formatter: MultiOptionFormatter<'_, &str> = &|a| format!("{} selected categories", a.len());
-    let ans = MultiSelect::new("Select the clearing categories:", options)
-        .with_validator(validator)
-        .with_formatter(formatter)
-        .prompt();
-
-    let mut bytes_cleared = 0;
-    let mut removed_files = 0;
-    let mut removed_directories = 0;
-    let mut cleared_programs:Vec<Cleared> = vec![];
-
-    let database2 = database.iter().cloned();
-    if let Ok(ans) = ans {
-        let mut pb = ProgressBar::new(0 as u64);
-        pb.set_style(sty.clone());
-        pb.set_prefix("Clearing");
-
-        let async_list: Vec<_> = database2
-            .filter(|data| ans.contains(&&*data.category))
-            .map(|data| {
-                let data = Arc::new(data.clone());
-                let progress_bar = Arc::new(pb.clone());
-                task::spawn(async move {
-                    progress_bar.set_message(format!("{}", data.path));
-                    let result = clear_category(&data);
-                    progress_bar.inc(1);
-                    result
-                })
-            })
-            .collect();
-        pb.set_length(async_list.len() as u64);
-        for async_task in async_list {
-            match async_task.await {
-                Ok(result) => {
-                    removed_files += result.files;
-                    removed_directories += result.folders;
-                    bytes_cleared += result.bytes;
-                    if result.working {
-                        let data2 = Cleared { Program: result.program };
-                        if !cleared_programs.contains(&data2) {
-                            cleared_programs.push(data2);
-                        }
-                    }
-                },
-                Err(_) => {
-                    eprintln!("Error waiting for task completion");
-                }
-            }
+        let database2 = database.iter().cloned();
+        if let Ok(ans) = ans {
+            work(ans, database.clone()).await;
         }
-        pb.set_message(format!("{}", "done"));
-        pb.finish();
+    }
+    else {
+        let mut ans = vec![];
+        for argument in env::args() {
+            ans.push(argument);
+        }
+        let v2: Vec<&str> = ans.iter().map(|s| &**s).collect();
+        work(v2, database.clone()).await;
     }
 
-    println!("Cleared programs:");
-    let table = Table::new(cleared_programs).to_string();
-    println!("{}", table);
-    println!("Removed: {}", get_file_size_string(bytes_cleared));
-    println!("Removed files: {}", removed_files);
-    println!("Removed directories: {}", removed_directories);
     let mut s= String::new();
     stdin().read_line(&mut s).expect("Did not enter a correct string");
 }

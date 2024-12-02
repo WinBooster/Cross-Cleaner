@@ -3,14 +3,15 @@ use crate::CleanerData;
 use crate::registry_utils::{get_steam_directory_from_registry};
 
 pub fn get_database() -> Vec<CleanerData> {
+    let mut database: Vec<CleanerData> = Vec::new();
     let username = &*whoami::username();
 
     let mut steam_directory: String = get_steam_directory_from_registry();
 
-    let mut database: Vec<CleanerData> = Vec::new();
-
+    //<editor-fold desc="Windows">
     let drives = get_letters();
     for drive in drives {
+
         //<editor-fold desc="Windows">
         let c_windows_debug_wia = CleanerData {
             path: drive.to_owned() + "Windows\\debug\\*",
@@ -80,6 +81,19 @@ pub fn get_database() -> Vec<CleanerData> {
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_windows_logs);
+        let c_windows_logs = CleanerData {
+            path: String::from(drive.clone() + "Windows\\*.log"),
+            program: String::from("Windows"),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
             remove_directories: false,
             remove_files: true,
             directories_to_remove: vec![],
@@ -1754,7 +1768,7 @@ pub fn get_database() -> Vec<CleanerData> {
         database.push(c_pusers_appdata_local_programs_microsoft_vs_code);
         //</editor-fold>
         //<editor-fold desc="VS Code">
-        let c_pusers_appdata_roamong_code_logs = CleanerData {
+        let c_users_appdata_roaming_code_logs = CleanerData {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Code\\logs",
             program: "VS Code".parse().unwrap(),
             files_to_remove: vec![],
@@ -1766,7 +1780,41 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_directory_after_clean: false,
             folders_to_remove: vec![],
         };
-        database.push(c_pusers_appdata_roamong_code_logs);
+        database.push(c_users_appdata_roaming_code_logs);
+        let c_users_appdata_roaming_code_logs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Code\\Network",
+            program: "VS Code".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("Cookies"),
+                String::from("Cookies-journal"),
+            ],
+            category: "Cookies".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_users_appdata_roaming_code_logs);
+        //</editor-fold>
+        //<editor-fold desc="PowerToys">
+        let krnl = CleanerData {
+            path: drive.to_owned() + "Program Files\\PowerToys",
+            program: "PowerToys".parse().unwrap(),
+            files_to_remove: vec![
+                "License.rtf".parse().unwrap(),
+                "Notice.md".parse().unwrap()
+            ],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(krnl);
         //</editor-fold>
 
         //<editor-fold desc="Browsers">
@@ -1795,7 +1843,7 @@ pub fn get_database() -> Vec<CleanerData> {
                 "History-journal".parse().unwrap(),
                 "Visited Links".parse().unwrap()
             ],
-            category: "Сache".parse().unwrap(),
+            category: "LastActivity".parse().unwrap(),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -1804,6 +1852,40 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_brave_software_brave_browser_user_data_default);
+        let users_appdata_local_bravesoftware_brave_browser_user_data_default = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default",
+            program: "Brave Browser".parse().unwrap(),
+            files_to_remove: vec![
+                "Login Data".parse().unwrap(),
+                "Login Data For Account".parse().unwrap(),
+                "Login Data For Account-journal".parse().unwrap(),
+                "Login Data-journal".parse().unwrap()
+            ],
+            category: String::from("Passwords"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(users_appdata_local_bravesoftware_brave_browser_user_data_default);
+        let users_appdata_local_bravesoftware_brave_browser_user_data_default_network = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Network",
+            program: "Brave Browser".parse().unwrap(),
+            files_to_remove: vec![
+                "Cookies".parse().unwrap(),
+                "Cookies-journal".parse().unwrap()
+            ],
+            category: String::from("Cookies"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(users_appdata_local_bravesoftware_brave_browser_user_data_default_network);
         let c_users_appdata_local_brave_software_brave_browser_user_data_default_dawn_cache = CleanerData {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\DawnCache",
             program: "Brave Browser".parse().unwrap(),
@@ -1867,7 +1949,7 @@ pub fn get_database() -> Vec<CleanerData> {
                 "History-journal".parse().unwrap(),
                 "Visited Links".parse().unwrap()
             ],
-            category: "Logs".parse().unwrap(),
+            category: "LastActivity".parse().unwrap(),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -1876,6 +1958,212 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_google_chrome_user_data_default);
+        let c_users_appdata_local_google_chrome_user_data_default = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
+            program: "Google Chrome".parse().unwrap(),
+            files_to_remove: vec![
+                "Login Data".parse().unwrap(),
+                "Login Data For Account".parse().unwrap(),
+                "Login Data For Account-journal".parse().unwrap(),
+                "Login Data-journal".parse().unwrap()
+            ],
+            category: String::from("Passwords"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_users_appdata_local_google_chrome_user_data_default);
+        let c_users_appdata_local_google_chrome_user_data_default_network = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Network",
+            program: "Google Chrome".parse().unwrap(),
+            files_to_remove: vec![
+                "Cookies".parse().unwrap(),
+                "Cookies-journal".parse().unwrap()
+            ],
+            category: String::from("Cookies"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_users_appdata_local_google_chrome_user_data_default_network);
+        //</editor-fold>
+        //<editor-fold desc="Vivaldi">
+        let c_users_appdata_local_vivaldi_user_data_default = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Vivaldi\\User Data\\Default",
+            program: "Vivaldi".parse().unwrap(),
+            files_to_remove: vec![
+                "Favicons".parse().unwrap(),
+                "Favicons-journal".parse().unwrap(),
+                "History".parse().unwrap(),
+                "History-journal".parse().unwrap(),
+                "Visited Links".parse().unwrap()
+            ],
+            category: "LastActivity".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_users_appdata_local_vivaldi_user_data_default);
+        let c_users_appdata_local_vivaldi_user_data_default = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Vivaldi\\User Data\\Default",
+            program: "Vivaldi".parse().unwrap(),
+            files_to_remove: vec![
+                "Login Data".parse().unwrap(),
+                "Login Data For Account".parse().unwrap(),
+                "Login Data For Account-journal".parse().unwrap(),
+                "Login Data-journal".parse().unwrap()
+            ],
+            category: String::from("Passwords"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_users_appdata_local_vivaldi_user_data_default);
+        let c_users_appdata_local_vivaldi_user_data_default_network = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Vivaldi\\User Data\\Default\\Network",
+            program: "Google Chrome".parse().unwrap(),
+            files_to_remove: vec![
+                "Cookies".parse().unwrap(),
+                "Cookies-journal".parse().unwrap()
+            ],
+            category: String::from("Cookies"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_users_appdata_local_vivaldi_user_data_default_network);
+        //</editor-fold>
+        //<editor-fold desc="Opera GX">
+        let users_appdata_roaming_opera_software_opera_gx_stable = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Opera Software\\Opera GX Stable"),
+            program: String::from("Opera GX"),
+            files_to_remove: vec![
+               String::from("Favicons"),
+               String::from("Favicons-journal"),
+               String::from("History"),
+               String::from("History-journal"),
+               String::from("Visited Links"),
+            ],
+            category: "LastActivity".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(users_appdata_roaming_opera_software_opera_gx_stable);
+        let users_appdata_roaming_opera_software_opera_gx_stable = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Opera Software\\Opera GX Stable"),
+            program: String::from("Opera GX"),
+            files_to_remove: vec![
+                String::from("Login Data"),
+                String::from("Login Data-journal")
+            ],
+            category: String::from("Passwords"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(users_appdata_roaming_opera_software_opera_gx_stable);
+        let users_appdata_roaming_opera_software_opera_gx_stable = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Opera Software\\Opera GX Stable\\Network"),
+            program: String::from("Opera GX"),
+            files_to_remove: vec![
+                String::from("Browser cookies"),
+                String::from("Cookies-journal")
+            ],
+            category: String::from("Cookies"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(users_appdata_roaming_opera_software_opera_gx_stable);
+        //</editor-fold>
+        //<editor-fold desc="Mozilla Firefox">
+        let program_files_mozila_firefox = CleanerData {
+            path: String::from(drive.clone() + "Program Files\\Mozilla Firefox"),
+            program: String::from("Mozilla Firefox"),
+            files_to_remove: vec![
+                String::from("install.log"),
+            ],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(program_files_mozila_firefox);
+        let users_appdata_roaming_mozila_firefox_profiles = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**"),
+            program: String::from("Mozilla Firefox"),
+            files_to_remove: vec![
+                String::from("favicons.sqlite"),
+                String::from("favicons.sqlite-shm"),
+                String::from("favicons.sqlite-wal"),
+            ],
+            category: String::from("LastActivity"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(users_appdata_roaming_mozila_firefox_profiles);
+        let users_appdata_roaming_mozila_firefox_profiles = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**"),
+            program: String::from("Mozilla Firefox"),
+            files_to_remove: vec![
+                String::from("cookies.sqlite"),
+                String::from("cookies.sqlite-shm"),
+                String::from("cookies.sqlite-wal"),
+            ],
+            category: String::from("Cookies"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(users_appdata_roaming_mozila_firefox_profiles);
+        let users_appdata_roaming_mozila_firefox_profiles_shader_cache = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**\\shader-cache\\*"),
+            program: String::from("Mozilla Firefox"),
+            files_to_remove: vec![],
+            category: String::from("Cache"),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(users_appdata_roaming_mozila_firefox_profiles_shader_cache);
         //</editor-fold>
 
         //</editor-fold>
@@ -2336,33 +2624,62 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_local_roblox_logs);
         //</editor-fold>
-        //<editor-fold desc="PowerToys">
-        let krnl = CleanerData {
-            path: drive.to_owned() + "Program Files\\PowerToys",
-            program: "PowerToys".parse().unwrap(),
-            files_to_remove: vec![
-                "License.rtf".parse().unwrap(),
-                "Notice.md".parse().unwrap()
-            ],
-            category: "Logs".parse().unwrap(),
-            remove_directories: true,
+        //<editor-fold desc="The Powder Toy">
+        let c_users_appdata_local_roblox_logs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\The Powder Toy\\Saves",
+            program: "The Powder Toy".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Saves".parse().unwrap(),
+            remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
-            remove_all_in_dir: false,
+            remove_all_in_dir: true,
             remove_directory_after_clean: false,
             folders_to_remove: vec![]
         };
-        database.push(krnl);
+        database.push(c_users_appdata_local_roblox_logs);
         //</editor-fold>
 
         //<editor-fold desc="Minecraft Clients">
 
+        //<editor-fold desc="CurseForge">
+        let users_curseforge_minecraft_install = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\curseforge\\minecraft\\Install"),
+            program: String::from("CurseForge"),
+            files_to_remove: vec![
+                String::from("launcher_accounts.json"),
+            ],
+            category: String::from("Accounts"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(users_curseforge_minecraft_install);
+        //</editor-fold>
+        //<editor-fold desc="Modrinth">
+        let users_curseforge_minecraft_install = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\ModrinthApp\\launcher_logs\\*"),
+            program: String::from("Modrinth"),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(users_curseforge_minecraft_install);
+        //</editor-fold>
         //<editor-fold desc="Minecraft">
         let c_users_appdata_roaming_minecraft_logs = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\.minecraft\\logs\\*",
-            program: "Minecraft".parse().unwrap(),
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.minecraft\\logs\\*"),
+            program: String::from("Minecraft"),
             files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
+            category: String::from("Logs"),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -2372,10 +2689,10 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_minecraft_logs);
         let c_users_appdata_roaming_minecraft_saves = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\.minecraft\\saves\\*",
-            program: "Minecraft".parse().unwrap(),
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.minecraft\\saves\\*"),
+            program: String::from("Minecraft"),
             files_to_remove: vec![],
-            category: "Saves".parse().unwrap(),
+            category: String::from("Saves"),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -2426,7 +2743,208 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_lunarclient_licenses);
         //</editor-fold>
+        //<editor-fold desc="MultiMC">
+        let users_appdata_roaming_prismlauncher = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\MultiMC",
+            program: "MultiMC".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("accounts.json")
+            ],
+            category: "Accounts".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_prismlauncher);
+        let c_users_appdata_roaming_prismlauncher = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\MultiMC\\*.log",
+            program: "MultiMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher);
+        let c_users_appdata_roaming_prismlauncher_logs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\MultiMC\\logs\\*.log",
+            program: "MultiMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_logs);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_reports = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft\\crash-reports\\*",
+            program: "MultiMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_reports);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_logs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft\\logs\\*",
+            program: "MultiMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_logs);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft\\screenshots\\*",
+            program: "MultiMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Images".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_saves = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft\\saves\\*",
+            program: "MultiMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Saves".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_saves);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_meteor_client = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft\\meteor-client",
+            program: "Meteor Client".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cheats".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_meteor_client);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\cache\\*",
+            program: "MultiMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Images".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_reports = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\instances\\**\\.minecraft\\crash-reports\\*",
+            program: "MultiMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_reports);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_logs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\instances\\**\\.minecraft\\logs\\*",
+            program: "MultiMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_logs);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\instances\\**\\.minecraft\\screenshots\\*",
+            program: "MultiMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Images".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_saves = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\instances\\**\\.minecraft\\saves\\*",
+            program: "MultiMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Saves".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_saves);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_meteor_client = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\instances\\**\\.minecraft\\meteor-client",
+            program: "Meteor Client".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cheats".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_meteor_client);
+        //</editor-fold>
         //<editor-fold desc="PrismLauncher">
+        let users_appdata_roaming_prismlauncher = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\PrismLauncher",
+            program: "PrismLauncher".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("accounts.json")
+            ],
+            category: "Accounts".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_prismlauncher);
         let c_users_appdata_roaming_prismlauncher = CleanerData {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\PrismLauncher\\*.log",
             program: "PrismLauncher".parse().unwrap(),
@@ -2505,19 +3023,6 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![]
         };
         database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_saves);
-        let c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots = CleanerData {
-            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\cache\\*",
-            program: "PrismLauncher".parse().unwrap(),
-            files_to_remove: vec![],
-            category: "Images".parse().unwrap(),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
-        };
-        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots);
         let c_users_appdata_roaming_prismlauncher_instances_minecraft_meteor_client = CleanerData {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\meteor-client",
             program: "Meteor Client".parse().unwrap(),
@@ -2531,8 +3036,101 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![]
         };
         database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_meteor_client);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\cache\\*",
+            program: "PrismLauncher".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Images".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_reports = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft\\crash-reports\\*",
+            program: "PrismLauncher".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_reports);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_logs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft\\logs\\*",
+            program: "PrismLauncher".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_crash_logs);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft\\screenshots\\*",
+            program: "PrismLauncher".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Images".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_screenshots);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_saves = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft\\saves\\*",
+            program: "PrismLauncher".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Saves".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_saves);
+        let c_users_appdata_roaming_prismlauncher_instances_minecraft_meteor_client = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft\\meteor-client",
+            program: "Meteor Client".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cheats".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_prismlauncher_instances_minecraft_meteor_client);
         //</editor-fold>
         //<editor-fold desc="PolyMC">
+        let users_appdata_roaming_polymc = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\PolyMC",
+            program: "PrismLauncher".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("accounts.json")
+            ],
+            category: "Accounts".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_polymc);
         let c_users_appdata_roaming_polymc = CleanerData {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\PolyMC\\*.log",
             program: "PolyMC".parse().unwrap(),
@@ -2611,19 +3209,6 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![]
         };
         database.push(c_users_appdata_roaming_polymc_instances_minecraft_saves);
-        let c_users_appdata_roaming_polymc_instances_minecraft_screenshots = CleanerData {
-            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\cache\\*",
-            program: "PolyMC".parse().unwrap(),
-            files_to_remove: vec![],
-            category: "Images".parse().unwrap(),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
-        };
-        database.push(c_users_appdata_roaming_polymc_instances_minecraft_screenshots);
         let c_users_appdata_roaming_polymc_instances_minecraft_meteor_client = CleanerData {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\meteor-client",
             program: "Meteor Client".parse().unwrap(),
@@ -2637,6 +3222,207 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![]
         };
         database.push(c_users_appdata_roaming_polymc_instances_minecraft_meteor_client);
+        let c_users_appdata_roaming_polymc_instances_minecraft_screenshots = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\cache\\*",
+            program: "PolyMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Images".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_polymc_instances_minecraft_screenshots);
+        let c_users_appdata_roaming_polymc_instances_minecraft_crash_reports = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft\\crash-reports\\*",
+            program: "PolyMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_polymc_instances_minecraft_crash_reports);
+        let c_users_appdata_roaming_polymc_instances_minecraft_crash_logs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft\\logs\\*",
+            program: "PolyMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_polymc_instances_minecraft_crash_logs);
+        let c_users_appdata_roaming_polymc_instances_minecraft_screenshots = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft\\screenshots\\*",
+            program: "PolyMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Images".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_polymc_instances_minecraft_screenshots);
+        let c_users_appdata_roaming_polymc_instances_minecraft_saves = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft\\saves\\*",
+            program: "PolyMC".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Saves".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_polymc_instances_minecraft_saves);
+        let c_users_appdata_roaming_polymc_instances_minecraft_meteor_client = CleanerData {
+            path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft\\meteor-client",
+            program: "Meteor Client".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cheats".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_roaming_polymc_instances_minecraft_meteor_client);
+        //</editor-fold>
+        //<editor-fold desc="ATLauncher">
+        let users_appdata_roaming_atlauncher_logs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\ATLauncher\\logs\\*"),
+            program: String::from("ATLauncher"),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_atlauncher_logs);
+        let users_appdata_roaming_atlauncher_instances_logs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\ATLauncher\\instances\\**\\logs"),
+            program: String::from("ATLauncher"),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_atlauncher_instances_logs);
+        let users_appdata_roaming_atlauncher_instances_logs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\ATLauncher\\instances\\**\\screenshots"),
+            program: String::from("ATLauncher"),
+            files_to_remove: vec![],
+            category: String::from("Images"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_atlauncher_instances_logs);
+        let users_appdata_roaming_atlauncher_instances_logs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\ATLauncher\\instances\\**\\meteor-client"),
+            program: String::from("ATLauncher"),
+            files_to_remove: vec![],
+            category: String::from("Cheats"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_atlauncher_instances_logs);
+        //</editor-fold>
+        //<editor-fold desc="LoliLand">
+        let loliland_updates_clients_logs = CleanerData {
+            path: drive.to_owned() + "loliland\\updates\\clients\\**\\logs",
+            program: "LoliLand".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(loliland_updates_clients_logs);
+        let loliland_updates_clients_logs = CleanerData {
+            path: drive.to_owned() + "loliland\\updates\\clients\\**\\screenshots",
+            program: "LoliLand".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Images".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(loliland_updates_clients_logs);
+        let loliland_updates_clients_logs = CleanerData {
+            path: drive.to_owned() + "loliland\\updates\\clients\\**\\saves",
+            program: "LoliLand".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Saves".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(loliland_updates_clients_logs);
+        //</editor-fold>
+        //<editor-fold desc="Cristalix">
+        let users_cristalix_updates_logs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\.cristalix\\updates\\**\\logs\\*.log"),
+            program: String::from("Cristalix"),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_cristalix_updates_logs);
+        let users_cristalix_updates_logs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\.cristalix\\updates\\**\\screenshots\\*"),
+            program: String::from("Cristalix"),
+            files_to_remove: vec![],
+            category: String::from("Images"),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_cristalix_updates_logs);
         //</editor-fold>
 
         //</editor-fold>
@@ -3311,6 +4097,8 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![]
     };
     database.push(steam_common_counter_string_global_offensive_ot);
+    //</editor-fold>
+
     //</editor-fold>
 
     //</editor-fold>
