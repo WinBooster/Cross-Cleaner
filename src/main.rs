@@ -269,23 +269,26 @@ async fn main() {
             return Ok(Validation::Valid);
         }
     };
-    if env::args().count() == 0 {
+
+    let mut ans = vec![];
+    for argument in env::args() {
+        if (options.contains(&&*argument)) {
+            ans.push(argument);
+        }
+    }
+
+    if ans.is_empty() {
         let formatter: MultiOptionFormatter<'_, &str> = &|a| format!("{} selected categories", a.len());
         let ans = MultiSelect::new("Select the clearing categories:", options)
             .with_validator(validator)
             .with_formatter(formatter)
             .prompt();
 
-        let database2 = database.iter().cloned();
         if let Ok(ans) = ans {
             work(ans, database.clone()).await;
         }
     }
     else {
-        let mut ans = vec![];
-        for argument in env::args() {
-            ans.push(argument);
-        }
         let v2: Vec<&str> = ans.iter().map(|s| &**s).collect();
         work(v2, database.clone()).await;
     }
