@@ -1,6 +1,6 @@
 [package]
 name = "WinBooster"
-version = "1.8.4"
+version = "1.8.5"
 edition = "2021"
 build = "build.rs"
 
@@ -25,4 +25,12 @@ FileDescription = "Garbage remover"
 OriginalFilename = "WinBooster.exe"
 LegalCopyright = "Copyright © 2024"
 ProductName = "WinBooster"
-ProductVersion = "1.8.4"
+ProductVersion = "1.8.5"
+
+[profile.release] # optimize file size
+lto = true
+codegen-units = 1
+opt-level = "z"
+strip = true
+panic = "abort"
+debug  = false

@@ -179,7 +179,7 @@ fn get_file_size_string(size: u64) -> String {
     format!("{:.1} {}", size_in_units, units[digit_groups])
 }
 
-async fn work(categories: Vec<&str>, database: Vec<CleanerData>) {
+async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<CleanerData>) {
     let sty = ProgressStyle::with_template(
         "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
     ).unwrap().progress_chars("##-").tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
@@ -196,7 +196,7 @@ async fn work(categories: Vec<&str>, database: Vec<CleanerData>) {
 
     let database2 = database.iter().to_owned();
     let async_list: Vec<_> = database2
-        .filter(|data| categories.contains(&&*data.category))
+        .filter(|data| categories.contains(&&*data.category) && !disabledPrograms.contains(&&*data.program))
         .map(|data| {
             let data = Arc::new(data.clone());
             let progress_bar = Arc::new(pb.clone());
@@ -242,7 +242,7 @@ async fn work(categories: Vec<&str>, database: Vec<CleanerData>) {
 async fn main() {
     execute!(
         std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster CLI v1.8.4")
+        crossterm::terminal::SetTitle("WinBooster CLI v1.8.5")
     );
 
 
@@ -272,25 +272,40 @@ async fn main() {
 
     let mut ans = vec![];
     for argument in env::args() {
-        if (options.contains(&&*argument)) {
+        if options.contains(&&*argument) {
             ans.push(argument);
         }
     }
 
     if ans.is_empty() {
-        let formatter: MultiOptionFormatter<'_, &str> = &|a| format!("{} selected categories", a.len());
-        let ans = MultiSelect::new("Select the clearing categories:", options)
+        let formatter_categories: MultiOptionFormatter<'_, &str> = &|a| format!("{} selected categories", a.len());
+        let ans_categories = MultiSelect::new("Select the clearing categories:", options)
             .with_validator(validator)
-            .with_formatter(formatter)
+            .with_formatter(formatter_categories)
             .prompt();
 
-        if let Ok(ans) = ans {
-            work(ans, database.clone()).await;
+        if let Ok(ans_categories) = ans_categories {
+            let mut programs2 = vec![];
+
+            for data in database.iter().clone() {
+                if ans_categories.contains(&&*data.category) && !programs2.contains(&&*data.program) {
+                    programs2.push(&*data.program);
+                }
+            }
+
+            let ans_programs = MultiSelect::new("Select the disabled programs for clearing:", programs2)
+                .with_validator(validator)
+                .with_formatter(formatter_categories)
+                .prompt();
+
+            if let Ok(ans_programs) = ans_programs {
+                work(ans_programs, ans_categories, database.clone()).await;
+            }
         }
     }
     else {
         let v2: Vec<&str> = ans.iter().map(|s| &**s).collect();
-        work(v2, database.clone()).await;
+        work(vec![], v2, database.clone()).await;
     }
 
     let mut s= String::new();

@@ -237,7 +237,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\OneDrive\\cache\\qmlcache\\*.qmlc",
             program: "OneDrive".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: false,
             remove_files: true,
             directories_to_remove: vec![],
@@ -333,7 +333,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\.jdks\\**",
             program: "Java".parse().unwrap(),
             files_to_remove: java_cache.clone(),
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -529,7 +529,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Hex-Rays\\IDA Pro\\*.lst",
             program: "IDA Pro".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: false,
             remove_files: true,
             directories_to_remove: vec![],
@@ -912,7 +912,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\DeepL_SE\\cache\\*",
             program: "LGHUB".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: false,
             remove_files: true,
             directories_to_remove: vec![],
@@ -1522,7 +1522,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Rave\\Cache\\*",
             program: "Rave".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: false,
             remove_files: true,
             directories_to_remove: vec![],
@@ -1535,7 +1535,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Rave\\Code Cache\\*",
             program: "Rave".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: false,
             remove_files: true,
             directories_to_remove: vec![],
@@ -1563,7 +1563,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Program Files\\Magpie\\cache\\*",
             program: "Magpie".parse().unwrap(),
             files_to_remove: vec![ ],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -1785,10 +1785,10 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Code\\Network",
             program: "VS Code".parse().unwrap(),
             files_to_remove: vec![
-                String::from("Cookies"),
+                String::from("Browser cookies"),
                 String::from("Cookies-journal"),
             ],
-            category: "Cookies".parse().unwrap(),
+            category: String::from("Browser cookies"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -1861,7 +1861,7 @@ pub fn get_database() -> Vec<CleanerData> {
                 "Login Data For Account-journal".parse().unwrap(),
                 "Login Data-journal".parse().unwrap()
             ],
-            category: String::from("Passwords"),
+            category: String::from("Browser passwords"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -1874,10 +1874,10 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Network",
             program: "Brave Browser".parse().unwrap(),
             files_to_remove: vec![
-                "Cookies".parse().unwrap(),
+                String::from("Browser cookies"),
                 "Cookies-journal".parse().unwrap()
             ],
-            category: String::from("Cookies"),
+            category: String::from("Browser cookies"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -1896,7 +1896,7 @@ pub fn get_database() -> Vec<CleanerData> {
                 "data_3".parse().unwrap(),
                 "index".parse().unwrap()
             ],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -1915,7 +1915,7 @@ pub fn get_database() -> Vec<CleanerData> {
                 "data_3".parse().unwrap(),
                 "index".parse().unwrap()
             ],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -1967,7 +1967,7 @@ pub fn get_database() -> Vec<CleanerData> {
                 "Login Data For Account-journal".parse().unwrap(),
                 "Login Data-journal".parse().unwrap()
             ],
-            category: String::from("Passwords"),
+            category: String::from("Browser passwords"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -1980,10 +1980,10 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Network",
             program: "Google Chrome".parse().unwrap(),
             files_to_remove: vec![
-                "Cookies".parse().unwrap(),
+                String::from("Browser cookies"),
                 "Cookies-journal".parse().unwrap()
             ],
-            category: String::from("Cookies"),
+            category: String::from("Browser cookies"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -2022,7 +2022,7 @@ pub fn get_database() -> Vec<CleanerData> {
                 "Login Data For Account-journal".parse().unwrap(),
                 "Login Data-journal".parse().unwrap()
             ],
-            category: String::from("Passwords"),
+            category: String::from("Browser passwords"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -2035,10 +2035,10 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Vivaldi\\User Data\\Default\\Network",
             program: "Vivaldi".parse().unwrap(),
             files_to_remove: vec![
-                "Cookies".parse().unwrap(),
+                String::from("Browser cookies"),
                 "Cookies-journal".parse().unwrap()
             ],
-            category: String::from("Cookies"),
+            category: String::from("Browser cookies"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -2088,7 +2088,7 @@ pub fn get_database() -> Vec<CleanerData> {
                 String::from("Login Data"),
                 String::from("Login Data-journal")
             ],
-            category: String::from("Passwords"),
+            category: String::from("Browser passwords"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -2104,7 +2104,7 @@ pub fn get_database() -> Vec<CleanerData> {
                 String::from("Browser cookies"),
                 String::from("Cookies-journal")
             ],
-            category: String::from("Cookies"),
+            category: String::from("Browser cookies"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -2155,7 +2155,7 @@ pub fn get_database() -> Vec<CleanerData> {
                 String::from("cookies.sqlite-shm"),
                 String::from("cookies.sqlite-wal"),
             ],
-            category: String::from("Cookies"),
+            category: String::from("Browser cookies"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -2543,7 +2543,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Program Files (x86)\\GameGuard\\cache\\*.cache",
             program: "GameGuard".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: false,
             remove_files: true,
             directories_to_remove: vec![],
@@ -2639,10 +2639,10 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="The Powder Toy">
         let c_users_appdata_local_roblox_logs = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\The Powder Toy\\Saves",
-            program: "The Powder Toy".parse().unwrap(),
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\The Powder Toy\\Saves"),
+            program: String::from("The Powder Toy"),
             files_to_remove: vec![],
-            category: "Saves".parse().unwrap(),
+            category: String::from("Game saves"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -2651,6 +2651,65 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![]
         };
         database.push(c_users_appdata_local_roblox_logs);
+        //</editor-fold>
+        //<editor-fold desc="Terraria">
+        let users_documents_my_gam_terraria_players = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\Documents\\My Games\\Terraria\\Players"),
+            program: String::from("Terraria"),
+            files_to_remove: vec![],
+            category: String::from("Game saves"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_documents_my_gam_terraria_players);
+        let users_documents_my_gam_terraria_players = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\Documents\\My Games\\Terraria\\Worlds"),
+            program: String::from("Terraria"),
+            files_to_remove: vec![],
+            category: String::from("Game saves"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_documents_my_gam_terraria_players);
+        let users_documents_my_gam_terraria = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\Documents\\My Games\\Terraria"),
+            program: String::from("Terraria"),
+            files_to_remove: vec![
+                String::from("favorites.json")
+            ],
+            category: String::from("Game saves"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_documents_my_gam_terraria);
+        let users_documents_my_gam_terraria = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\Documents\\My Games\\Terraria"),
+            program: String::from("Terraria"),
+            files_to_remove: vec![
+                String::from("config.json"),
+                String::from("input profiles.json")
+            ],
+            category: String::from("Game settings"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_documents_my_gam_terraria);
         //</editor-fold>
 
         //<editor-fold desc="Minecraft Clients">
@@ -2705,7 +2764,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.minecraft\\saves\\*"),
             program: String::from("Minecraft"),
             files_to_remove: vec![],
-            category: String::from("Saves"),
+            category: String::from("Game saves"),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -2715,10 +2774,10 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_appdata_roaming_minecraft_saves);
         let c_users_appdata_roaming_minecraft_meteor_client = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\.minecraft\\meteor-client",
-            program: "Meteor Client".parse().unwrap(),
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.minecraft\\meteor-client"),
+            program: String::from("Meteor Client"),
             files_to_remove: vec![],
-            category: "Cheats".parse().unwrap(),
+            category: String::from("Cheats"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -2841,7 +2900,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft\\saves\\*",
             program: "MultiMC".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Saves".parse().unwrap(),
+            category: String::from("Game saves"),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -2919,7 +2978,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\instances\\**\\.minecraft\\saves\\*",
             program: "MultiMC".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Saves".parse().unwrap(),
+            category: String::from("Game saves"),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -3027,7 +3086,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\saves\\*",
             program: "PrismLauncher".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Saves".parse().unwrap(),
+            category: String::from("Game saves"),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -3105,7 +3164,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft\\saves\\*",
             program: "PrismLauncher".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Saves".parse().unwrap(),
+            category: String::from("Game saves"),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -3213,7 +3272,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\saves\\*",
             program: "PolyMC".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Saves".parse().unwrap(),
+            category: String::from("Game saves"),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -3291,7 +3350,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft\\saves\\*",
             program: "PolyMC".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Saves".parse().unwrap(),
+            category: String::from("Game saves"),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -3399,7 +3458,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "loliland\\updates\\clients\\**\\saves",
             program: "LoliLand".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Saves".parse().unwrap(),
+            category: String::from("Game saves"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -3560,7 +3619,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata\\emoji\\*cache_*",
             program: "Telegram".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: false,
             remove_files: true,
             directories_to_remove: vec![],
@@ -3573,7 +3632,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata\\user_data\\cache\\**\\*",
             program: "Telegram".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -3586,7 +3645,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Telegram Desktop\\tdata\\user_data\\media_cache\\**\\*",
             program: "Telegram".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -3614,7 +3673,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Signal\\update-cache\\*",
             program: "Signal".parse().unwrap(),
             files_to_remove: vec![ ],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -3751,7 +3810,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\PlanetVPN\\cache\\qmlcache\\*",
             program: "PlanetVPN".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: false,
             remove_files: true,
             directories_to_remove: vec![],
@@ -3769,7 +3828,7 @@ pub fn get_database() -> Vec<CleanerData> {
                 "iTop_setup.log".parse().unwrap(),
                 "Setup.log".parse().unwrap()
             ],
-            category: "Сache".parse().unwrap(),
+            category: String::from("Cache"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -4113,6 +4172,85 @@ pub fn get_database() -> Vec<CleanerData> {
     //</editor-fold>
 
     //</editor-fold>
+    //<editor-fold desc="Games">
+
+    //<editor-fold desc="Counter-Strike Global Offensive">
+    let steam_userdata_730_local_cfg = CleanerData {
+        path: steam_directory.clone() + "\\userdata\\**\\730\\local\\cfg\\*",
+        program: "Counter-Strike Global Offensive".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Game settings".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(steam_userdata_730_local_cfg);
+    //</editor-fold>
+    //<editor-fold desc="Dota 2">
+    let steam_userdata_570_local_cfg = CleanerData {
+        path: steam_directory.clone() + "\\userdata\\**\\570\\local\\cfg\\*",
+        program: "Dota 2".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Game settings".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(steam_userdata_570_local_cfg);
+    //</editor-fold>
+    //<editor-fold desc="Rust">
+    let steam_userdata_252490_local_cfg = CleanerData {
+        path: steam_directory.clone() + "\\userdata\\**\\252490\\local\\cfg\\*",
+        program: "Rust".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Game settings".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(steam_userdata_252490_local_cfg);
+    //</editor-fold>
+    //<editor-fold desc="Unturned">
+    let steam_userdata_252490_local_cfg = CleanerData {
+        path: steam_directory.clone() + "\\userdata\\**\\304930\\local\\cfg\\*",
+        program: "Unturned".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Game settings".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(steam_userdata_252490_local_cfg);
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Unturned">
+    let steam_userdata = CleanerData {
+        path: steam_directory.clone() + "\\userdata\\**",
+        program: "Steam".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Accounts".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(steam_userdata);
 
     //</editor-fold>
 

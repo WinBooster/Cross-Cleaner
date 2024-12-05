@@ -4,7 +4,7 @@ version = 3
 
 [[package]]
 name = "WinBooster"
-version = "1.8.4"
+version = "1.8.5"
 dependencies = [
  "crossterm 0.27.0",
  "disk-name",
