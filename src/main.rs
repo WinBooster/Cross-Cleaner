@@ -294,7 +294,6 @@ async fn main() {
             }
 
             let ans_programs = MultiSelect::new("Select the disabled programs for clearing:", programs2)
-                .with_validator(validator)
                 .with_formatter(formatter_categories)
                 .prompt();
 
