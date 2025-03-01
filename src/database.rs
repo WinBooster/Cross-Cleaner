@@ -467,6 +467,45 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![],
         };
         database.push(java_7);
+        let java_8 = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\.lunarclient\\jre\\**\\**",
+            program: "Java".parse().unwrap(),
+            files_to_remove: java_files.clone(),
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(java_8);
+        let java_9 = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\.tecknixsoftware\\tecknixclient\\runtimes\\**",
+            program: "Java".parse().unwrap(),
+            files_to_remove: java_files.clone(),
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(java_9);
+        let java_10 = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\MCSkill\\updates\\**",
+            program: "Java".parse().unwrap(),
+            files_to_remove: java_files.clone(),
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(java_10);
         //</editor-fold>
         //<editor-fold desc="4uKey for Android">
         let c_program_files_x86_tenorshare_4ukey_for_android_logs = CleanerData {
@@ -1712,7 +1751,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_program_files_dotnet);
         //</editor-fold>
-        //<editor-fold desc="DotNet">
+        //<editor-fold desc="WinRAR">
         let c_program_files_winrar = CleanerData {
             path: drive.to_owned() + "Program Files\\WinRAR",
             program: "WinRaR".parse().unwrap(),
@@ -1799,7 +1838,7 @@ pub fn get_database() -> Vec<CleanerData> {
         database.push(c_users_appdata_roaming_code_logs);
         //</editor-fold>
         //<editor-fold desc="PowerToys">
-        let krnl = CleanerData {
+        let program_files_powertoys = CleanerData {
             path: drive.to_owned() + "Program Files\\PowerToys",
             program: "PowerToys".parse().unwrap(),
             files_to_remove: vec![
@@ -1814,7 +1853,22 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_directory_after_clean: false,
             folders_to_remove: vec![]
         };
-        database.push(krnl);
+        database.push(program_files_powertoys);
+        //</editor-fold>
+        //<editor-fold desc="LM Studio">
+        let users_appdata_roaming_lm_studio_logs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\LM Studio\\logs\\*",
+            program: "LM Studio".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_lm_studio_logs);
         //</editor-fold>
 
         //<editor-fold desc="Browsers">
@@ -2411,6 +2465,36 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_exodus);
+        let c_users_appdata_local_exodus = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\exodus\\**",
+            program: "Exodus Crypto Wallet".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("SquirrelSetup.log")
+            ],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_users_appdata_local_exodus);
+        let c_users_appdata_local_exodus = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\exodus",
+            program: "Exodus Crypto Wallet".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("SquirrelSetup.log")
+            ],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_users_appdata_local_exodus);
         //</editor-fold>
         //<editor-fold desc="Wasabi Wallet">
         let c_users_appdata_roaming_walletwasabi_client = CleanerData {
@@ -2480,6 +2564,34 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Emulators">
 
+        //<editor-fold desc="Nox">
+        let c_users_vmlogs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\vmlogs\\*",
+            program: "Nox".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_users_vmlogs);
+        let c_users_bignox = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\.BigNox\\*",
+            program: "Nox".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_users_bignox);
+        //</editor-fold>
         //<editor-fold desc="Memu">
         let c_users_memuhyperv = CleanerData {
             path: drive.to_owned() + "Users\\" + username + "\\.MemuHyperv\\*log*",
@@ -2714,14 +2826,27 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="Minecraft Clients">
 
-        //<editor-fold desc="CurseForge">
+        //<editor-fold desc="Badlion Client">
+        let users_appdata_roaming_badlion_client_logs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Badlion Client\\logs\\**"),
+            program: String::from("Badlion Client"),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_badlion_client_logs);
+        //</editor-fold>
+        //<editor-fold desc="Tecknix Client">
         let users_curseforge_minecraft_install = CleanerData {
-            path: String::from(drive.clone() + "Users\\" + username + "\\curseforge\\minecraft\\Install"),
-            program: String::from("CurseForge"),
-            files_to_remove: vec![
-                String::from("launcher_accounts.json"),
-            ],
-            category: String::from("Accounts"),
+            path: String::from(drive.clone() + "Users\\" + username + "\\.tecknixsoftware\\tecknixlauncher\\logs\\*"),
+            program: String::from("Tecknix Client"),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -2789,8 +2914,8 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="Lunar Client">
         let c_users_appdata_lunarclient_logs = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\.lunarclient\\logs\\launcher\\*",
-            program: "Minecraft".parse().unwrap(),
+            path: drive.to_owned() + "Users\\" + username + "\\.lunarclient\\logs\\**\\*",
+            program: "Lunar Client".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
             remove_directories: true,
@@ -2803,7 +2928,7 @@ pub fn get_database() -> Vec<CleanerData> {
         database.push(c_users_appdata_lunarclient_logs);
         let c_users_appdata_lunarclient_licenses = CleanerData {
             path: drive.to_owned() + "Users\\" + username + "\\.lunarclient\\licenses\\*",
-            program: "Minecraft".parse().unwrap(),
+            program: "Lunar Client".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
             remove_directories: true,
@@ -2814,6 +2939,19 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![]
         };
         database.push(c_users_appdata_lunarclient_licenses);
+        let c_users_appdata_lunarclient_offline_multiver_logs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\.lunarclient\\offline\\**\\logs\\*",
+            program: "Lunar Client".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_lunarclient_offline_multiver_logs);
         //</editor-fold>
         //<editor-fold desc="MultiMC">
         let users_appdata_roaming_prismlauncher = CleanerData {
@@ -3495,6 +3633,107 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![]
         };
         database.push(users_cristalix_updates_logs);
+        //</editor-fold>
+        //<editor-fold desc="MCSkill">
+        let users_appdata_roaming_mcskill_updates_logs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\MCSkill\\updates\\**\\logs\\*"),
+            program: String::from("MCSkill"),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_mcskill_updates_logs);
+        //</editor-fold>
+        //<editor-fold desc="GribLand">
+        let users_appdata_roaming_grigbland_bin_logs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.gribland\\bin\\logs"),
+            program: String::from("GribLand"),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_grigbland_bin_logs);
+        let users_appdata_roaming_grigbland_logs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.gribland\\logs"),
+            program: String::from("GribLand"),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_grigbland_logs);
+        let users_appdata_roaming_grigbland_logs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.gribland\\**\\logs"),
+            program: String::from("GribLand"),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_grigbland_logs);
+        //</editor-fold>
+        //<editor-fold desc="CurseForge">
+        let users_curseforge_minecraft_install = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\curseforge\\minecraft\\Install"),
+            program: String::from("CurseForge"),
+            files_to_remove: vec![
+                String::from("launcher_accounts.json"),
+            ],
+            category: String::from("Accounts"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(users_curseforge_minecraft_install);
+        let users_curseforge_minecraft_instances_logs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\curseforge\\minecraft\\Instances\\**\\logs\\*"),
+            program: String::from("CurseForge"),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_curseforge_minecraft_instances_logs);
+        //</editor-fold>
+        //<editor-fold desc="McLaunch">
+        let users_appdata_roaming_mclaunch_launcher_crashreports = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.mclaunch\\launcher_crashreports\\*"),
+            program: String::from("McLaunch"),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_mclaunch_launcher_crashreports);
         //</editor-fold>
 
         //</editor-fold>
@@ -4237,7 +4476,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
     //</editor-fold>
 
-    //<editor-fold desc="Unturned">
+    //<editor-fold desc="Steam">
     let steam_userdata = CleanerData {
         path: steam_directory.clone() + "\\userdata\\**",
         program: "Steam".parse().unwrap(),
