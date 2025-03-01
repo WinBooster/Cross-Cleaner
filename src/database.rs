@@ -1862,7 +1862,7 @@ pub fn get_database() -> Vec<CleanerData> {
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
             remove_directories: true,
-            remove_files: false,
+            remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
@@ -2488,7 +2488,7 @@ pub fn get_database() -> Vec<CleanerData> {
             ],
             category: "Logs".parse().unwrap(),
             remove_directories: false,
-            remove_files: true,
+            remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
@@ -2828,7 +2828,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="Badlion Client">
         let users_appdata_roaming_badlion_client_logs = CleanerData {
-            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Badlion Client\\logs\\**"),
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Badlion Client\\logs\\*"),
             program: String::from("Badlion Client"),
             files_to_remove: vec![],
             category: String::from("Logs"),
@@ -3636,11 +3636,11 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="MCSkill">
         let users_appdata_roaming_mcskill_updates_logs = CleanerData {
-            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\MCSkill\\updates\\**\\logs"),
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\MCSkill\\updates\\**\\logs\\*"),
             program: String::from("MCSkill"),
             files_to_remove: vec![],
             category: String::from("Logs"),
-            remove_directories: false,
+            remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
@@ -3651,7 +3651,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="GribLand">
         let users_appdata_roaming_grigbland_bin_logs = CleanerData {
-            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.gribland\\bin\\logs"),
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.gribland\\bin\\logs\\*"),
             program: String::from("GribLand"),
             files_to_remove: vec![],
             category: String::from("Logs"),
@@ -3664,7 +3664,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(users_appdata_roaming_grigbland_bin_logs);
         let users_appdata_roaming_grigbland_logs = CleanerData {
-            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.gribland\\logs"),
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.gribland\\logs\\*"),
             program: String::from("GribLand"),
             files_to_remove: vec![],
             category: String::from("Logs"),
@@ -3677,7 +3677,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(users_appdata_roaming_grigbland_logs);
         let users_appdata_roaming_grigbland_logs = CleanerData {
-            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.gribland\\**\\logs"),
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.gribland\\**\\logs\\*"),
             program: String::from("GribLand"),
             files_to_remove: vec![],
             category: String::from("Logs"),
@@ -3727,7 +3727,7 @@ pub fn get_database() -> Vec<CleanerData> {
             files_to_remove: vec![],
             category: String::from("Logs"),
             remove_directories: false,
-            remove_files: false,
+            remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: true,
