@@ -3636,7 +3636,7 @@ pub fn get_database() -> Vec<CleanerData> {
         //</editor-fold>
         //<editor-fold desc="MCSkill">
         let users_appdata_roaming_mcskill_updates_logs = CleanerData {
-            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\MCSkill\\updates\\**\\logs\\*"),
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\MCSkill\\updates\\**\\logs"),
             program: String::from("MCSkill"),
             files_to_remove: vec![],
             category: String::from("Logs"),
