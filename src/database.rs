@@ -2,11 +2,18 @@ use disk_name::get_letters;
 use crate::CleanerData;
 use crate::registry_utils::{get_steam_directory_from_registry};
 
+#[cfg(linux)]
+pub fn get_database() -> Vec<CleanerData> {
+    let mut database: Vec<CleanerData> = Vec::new();
+
+    database
+}
+#[cfg(windows)]
 pub fn get_database() -> Vec<CleanerData> {
     let mut database: Vec<CleanerData> = Vec::new();
     let username = &*whoami::username();
 
-    let mut steam_directory: String = get_steam_directory_from_registry();
+    let steam_directory: String = get_steam_directory_from_registry();
 
     //<editor-fold desc="Windows">
     let drives = get_letters();
@@ -506,6 +513,19 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![],
         };
         database.push(java_10);
+        let java_11 = CleanerData {
+            path: drive.to_owned() + "\\Program Files (x86)\\GribLand\\runtime\\**",
+            program: "Java".parse().unwrap(),
+            files_to_remove: java_files.clone(),
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(java_11);
         //</editor-fold>
         //<editor-fold desc="4uKey for Android">
         let c_program_files_x86_tenorshare_4ukey_for_android_logs = CleanerData {
@@ -1789,7 +1809,7 @@ pub fn get_database() -> Vec<CleanerData> {
         database.push(c_program_files_x86_windows_kits_licenses);
         //</editor-fold>
         //<editor-fold desc="Electron App's">
-        let c_pusers_appdata_local_programs_microsoft_vs_code = CleanerData {
+        let users_appdata_local_programs = CleanerData {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\Programs\\**",
             program: "Electron App's".parse().unwrap(),
             files_to_remove: vec![
@@ -1804,7 +1824,20 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_directory_after_clean: false,
             folders_to_remove: vec![],
         };
-        database.push(c_pusers_appdata_local_programs_microsoft_vs_code);
+        database.push(users_appdata_local_programs);
+        let users_appdata_roaming_ow_electron_logs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\ow-electron\\**\\logs\\*",
+            program: "Electron App's".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(users_appdata_roaming_ow_electron_logs);
         //</editor-fold>
         //<editor-fold desc="VS Code">
         let c_users_appdata_roaming_code_logs = CleanerData {
@@ -1869,6 +1902,69 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![]
         };
         database.push(users_appdata_roaming_lm_studio_logs);
+        //</editor-fold>
+        //<editor-fold desc="ImgBurn">
+        let users_appdata_roaming_imgburn_log_files = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\ImgBurn\\Log Files\\*",
+            program: "ImgBurn".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_imgburn_log_files);
+        let users_appdata_roaming_imgburn_log_files = CleanerData {
+            path: drive.to_owned() + "Program Files (x86)\\ImgBurn",
+            program: "ImgBurn".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("ReadMe.txt")
+            ],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_roaming_imgburn_log_files);
+        //</editor-fold>
+        //<editor-fold desc="Magic TDX">
+        let program_files_magic_txd_licenses = CleanerData {
+            path: drive.to_owned() + "Program Files\\Magic TXD\\licenses\\*",
+            program: "Magic TDX".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(program_files_magic_txd_licenses);
+        //</editor-fold>
+        //<editor-fold desc="VulcanRT">
+        let program_files_magic_txd_licenses = CleanerData {
+            path: drive.to_owned() + "Program Files (x86)\\VulkanRT\\**",
+            program: "VulcanRT".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("LICENSE.txt"),
+                String::from("VULKANRT_LICENSE.rtf")
+            ],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(program_files_magic_txd_licenses);
         //</editor-fold>
 
         //<editor-fold desc="Browsers">
@@ -2623,6 +2719,36 @@ pub fn get_database() -> Vec<CleanerData> {
         database.push(c_users_appdata_roaming_gametop_launcher);
         //</editor-fold>
         //<editor-fold desc="BlueStacks 5">
+        let programdata_bluestacks_nxt_dumps = CleanerData {
+            path: drive.to_owned() + "ProgramData\\BlueStacks_nxt\\Dumps\\*",
+            program: "BlueStacks 5".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(programdata_bluestacks_nxt_dumps);
+        let c_appdata_bluestacks_nxt_logs = CleanerData {
+            path: drive.to_owned() + "Program Files\\BlueStacks_nxt",
+            program: "BlueStacks 5".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("LICENSE.txt"),
+                String::from("NOTICE.html"),
+                String::from("ffmpeg_command_template.txt")
+            ],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_appdata_bluestacks_nxt_logs);
         let c_appdata_bluestacks_nxt_logs = CleanerData {
             path: drive.to_owned() + "ProgramData\\BlueStacks_nxt\\Logs\\*.log",
             program: "BlueStacks 5".parse().unwrap(),
@@ -2823,6 +2949,83 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(users_documents_my_gam_terraria);
         //</editor-fold>
+        //<editor-fold desc="Arizona Games">
+        let users_appdata_local_programs_arizona_games_launcher = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher"),
+            program: String::from("Arizona Games Launcher"),
+            files_to_remove: vec![
+                String::from("logs.log")
+            ],
+            category: String::from("Logs"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_local_programs_arizona_games_launcher);
+        let users_appdata_local_programs_arizona_games_launcher_bin_moonloader = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\moonloader"),
+            program: String::from("Arizona Games Launcher"),
+            files_to_remove: vec![
+                String::from("moonloader.log")
+            ],
+            category: String::from("Logs"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_local_programs_arizona_games_launcher_bin_moonloader);
+        let users_appdata_local_programs_arizona_games_launcher_bin_sampfuncs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\SAMPFUNCS"),
+            program: String::from("Arizona Games Launcher"),
+            files_to_remove: vec![
+                String::from("SAMPFUNCS.log")
+            ],
+            category: String::from("Logs"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_local_programs_arizona_games_launcher_bin_sampfuncs);
+        let users_appdata_local_programs_arizona_games_launcher_bin_crashlogs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\crashlog\\*"),
+            program: String::from("Arizona Games Launcher"),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_local_programs_arizona_games_launcher_bin_crashlogs);
+        let users_appdata_local_programs_arizona_games_launcher_bin_crashlogs = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**"),
+            program: String::from("Arizona Games Launcher"),
+            files_to_remove: vec![
+                String::from("!GAMELOG.txt"),
+                String::from("fastman92limitAdjuster.log"),
+                String::from("libped.log")
+            ],
+            category: String::from("Logs"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(users_appdata_local_programs_arizona_games_launcher_bin_crashlogs);
+        //</editor-fold>
 
         //<editor-fold desc="Minecraft Clients">
 
@@ -2944,6 +3147,19 @@ pub fn get_database() -> Vec<CleanerData> {
             program: "Lunar Client".parse().unwrap(),
             files_to_remove: vec![],
             category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(c_users_appdata_lunarclient_offline_multiver_logs);
+        let c_users_appdata_lunarclient_offline_multiver_logs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\.lunarclient\\game-cache\\*",
+            program: "Lunar Client".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -4309,6 +4525,21 @@ pub fn get_database() -> Vec<CleanerData> {
             folders_to_remove: vec![]
         };
         database.push(krnl);
+        //</editor-fold>
+        //<editor-fold desc="Vape Client">
+        let vapeclient = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\.vapeclient",
+            program: "Vape Client".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cheats".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: true,
+            folders_to_remove: vec![]
+        };
+        database.push(vapeclient);
         //</editor-fold>
 
         //</editor-fold>

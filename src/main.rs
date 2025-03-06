@@ -1,6 +1,7 @@
 mod database;
 mod structures;
 mod registry_utils;
+mod registry_database;
 
 use std::fmt::{Debug};
 use std::{env, fs};
@@ -18,6 +19,8 @@ use inquire::validator::Validation;
 use tabled::{Table, Tabled};
 use tokio::task;
 use indicatif::{ProgressBar, ProgressStyle};
+use notify_rust::Notification;
+use crate::registry_database::clear_last_activity;
 use crate::structures::{CleanerData, CleanerResult, Cleared};
 
 fn clear_category(data: &CleanerData) -> CleanerResult{
@@ -180,21 +183,36 @@ fn get_file_size_string(size: u64) -> String {
 }
 
 async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<CleanerData>) {
-    let sty = ProgressStyle::with_template(
-        "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
-    ).unwrap().progress_chars("##-").tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
+    //let sty = ProgressStyle::with_template(
+    //    "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
+    //).unwrap().progress_chars("##-").tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
 
 
+    let cat2 = categories.clone();
     let mut bytes_cleared = 0;
     let mut removed_files = 0;
     let mut removed_directories = 0;
     let mut cleared_programs:Vec<Cleared> = vec![];
 
     let pb = ProgressBar::new(0);
-    pb.set_style(sty.clone());
-    pb.set_prefix("Clearing");
+    //pb.set_style(sty.clone());
+    //pb.set_prefix("Clearing");
 
     let database2 = database.iter().to_owned();
+    let database3 = database.iter().to_owned();
+
+    let async_list: Vec<_> = database3
+        .filter(|data| categories.contains(&&*"LastActivity"))
+        .map(|data| {})
+        .collect();
+
+    let has_last_activity = async_list.len() > 0;
+
+    if has_last_activity {
+        println!("Yes");
+        clear_last_activity();
+    }
+
     let async_list: Vec<_> = database2
         .filter(|data| categories.contains(&&*data.category) && !disabledPrograms.contains(&&*data.program))
         .map(|data| {
@@ -203,12 +221,13 @@ async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<
             task::spawn(async move {
                 progress_bar.set_message(format!("{}", data.path));
                 let result = clear_category(&data);
-                progress_bar.inc(1);
+                //progress_bar.inc(1);
                 result
             })
         })
         .collect();
-    pb.set_length(async_list.len() as u64);
+    //pb.set_length(async_list.len() as u64);
+
     for async_task in async_list {
         match async_task.await {
             Ok(result) => {
@@ -227,8 +246,9 @@ async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<
             }
         }
     }
-    pb.set_message(format!("{}", "done"));
-    pb.finish();
+
+    //pb.set_message(format!("{}", "done"));
+    //pb.finish();
 
     println!("Cleared programs:");
     let table = Table::new(cleared_programs).to_string();
@@ -236,13 +256,19 @@ async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<
     println!("Removed: {}", get_file_size_string(bytes_cleared));
     println!("Removed files: {}", removed_files);
     println!("Removed directories: {}", removed_directories);
+
+    Notification::new()
+        .summary("WinBooster CLI")
+        .body(&*("Removed: ".to_owned() + &*get_file_size_string(bytes_cleared) + "\nFiles: " + &*removed_files.to_string()))
+        .icon("assets\\icon.png")
+        .show().expect("Notification error");
 }
 
 #[tokio::main]
 async fn main() {
     execute!(
         std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster CLI v1.8.5")
+        crossterm::terminal::SetTitle("WinBooster CLI v1.8.7")
     );
 
 
@@ -262,11 +288,10 @@ async fn main() {
     }
     println!("DataBase Programs: {}", programs.iter().count());
     let validator = |a: &[ListOption<&&str>]| {
-        if a.len() < 1 {
-            return Ok(Validation::Invalid("No category is selected!".into()));
-        }
-        else {
-            return Ok(Validation::Valid);
+        return if a.len() < 1 {
+            Ok(Validation::Invalid("No category is selected!".into()))
+        } else {
+            Ok(Validation::Valid)
         }
     };
 

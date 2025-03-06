@@ -13,9 +13,10 @@ crossterm = "0.27.0"
 tokio = { version = "1", features = ["full"] }
 indicatif = "0.17.7"
 disk-name = "1.0.0"
+notify-rust = "4"
 
 [target.'cfg(windows)'.dependencies]
-winreg = "0.52.0"
+winreg = "0.55.0"
 
 [build-dependencies]
 winres = "0.1"
