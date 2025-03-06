@@ -183,9 +183,9 @@ fn get_file_size_string(size: u64) -> String {
 }
 
 async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<CleanerData>) {
-    //let sty = ProgressStyle::with_template(
-    //    "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
-    //).unwrap().progress_chars("##-").tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
+    let sty = ProgressStyle::with_template(
+        "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
+    ).unwrap().progress_chars("##-").tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
 
 
     let cat2 = categories.clone();
@@ -195,8 +195,8 @@ async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<
     let mut cleared_programs:Vec<Cleared> = vec![];
 
     let pb = ProgressBar::new(0);
-    //pb.set_style(sty.clone());
-    //pb.set_prefix("Clearing");
+    pb.set_style(sty.clone());
+    pb.set_prefix("Clearing");
 
     let database2 = database.iter().to_owned();
     let database3 = database.iter().to_owned();
@@ -209,7 +209,6 @@ async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<
     let has_last_activity = async_list.len() > 0;
 
     if has_last_activity {
-        println!("Yes");
         clear_last_activity();
     }
 
@@ -221,12 +220,12 @@ async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<
             task::spawn(async move {
                 progress_bar.set_message(format!("{}", data.path));
                 let result = clear_category(&data);
-                //progress_bar.inc(1);
+                progress_bar.inc(1);
                 result
             })
         })
         .collect();
-    //pb.set_length(async_list.len() as u64);
+    pb.set_length(async_list.len() as u64);
 
     for async_task in async_list {
         match async_task.await {

@@ -24,12 +24,9 @@ pub fn remove_all_in_tree_in_registry(key: &RegKey, path: String) {
             for val in typed_path_read.enum_keys() {
                 match val {
                     Ok(name) => {
-                        println!("{}", name);
                         keys.push(name);
                     }
-                    Err(e) => {
-                        eprintln!("Ошибка при чтении ключа: {}", e);
-                    }
+                    Err(e) => {}
                 }
             }
         }
