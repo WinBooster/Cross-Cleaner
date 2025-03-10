@@ -3,19 +3,18 @@
 version = 4
 
 [[package]]
-name = "WinBooster"
-version = "1.8.8"
+name = "WinBooster_CLI"
+version = "1.8.9"
 dependencies = [
+ "cleaner",
  "crossterm 0.27.0",
- "disk-name",
+ "database",
  "glob",
  "indicatif",
  "inquire",
  "notify-rust",
  "tabled",
  "tokio",
- "whoami",
- "winreg",
  "winres",
 ]
 
@@ -281,6 +280,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 
 [[package]]
+name = "cleaner"
+version = "0.1.0"
+dependencies = [
+ "database",
+ "glob",
+]
+
+[[package]]
 name = "concurrent-queue"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -347,6 +354,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "acdd7c62a3665c7f6830a51635d9ac9b23ed385797f70a83bb8bafe9c572ab2b"
 dependencies = [
  "winapi",
+]
+
+[[package]]
+name = "database"
+version = "0.1.0"
+dependencies = [
+ "disk-name",
+ "tabled",
+ "whoami",
+ "winreg",
 ]
 
 [[package]]
@@ -550,6 +567,22 @@ name = "glob"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b"
+
+[[package]]
+name = "gui"
+version = "0.1.0"
+dependencies = [
+ "cleaner",
+ "crossterm 0.27.0",
+ "database",
+ "glob",
+ "indicatif",
+ "inquire",
+ "notify-rust",
+ "tabled",
+ "tokio",
+ "winres",
+]
 
 [[package]]
 name = "hashbrown"
