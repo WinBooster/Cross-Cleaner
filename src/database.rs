@@ -239,6 +239,39 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(c_users_downloads);
         //</editor-fold>
+        //<editor-fold desc="Windows Defender">
+        let program_files_windows_defender = CleanerData {
+            path: drive.to_owned() + "Program Files\\Windows Defender",
+            program: "Windows Defender".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("ThirdPartyNotices.txt")
+            ],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(program_files_windows_defender);
+        let program_files_windows_defender = CleanerData {
+            path: drive.to_owned() + "Program Files\\Windows Defender Advanced Threat Protection",
+            program: "Windows Defender".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("ThirdPartyNotice"),
+                String::from("SenseAp.ThirdPartyNotice.txt")
+            ],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(program_files_windows_defender);
+        //</editor-fold>
         //<editor-fold desc="OneDrive">
         let c_program_files_nvidia_corporation = CleanerData {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\OneDrive\\cache\\qmlcache\\*.qmlc",
@@ -1012,6 +1045,19 @@ pub fn get_database() -> Vec<CleanerData> {
         database.push(c_users_pictures_tonfotos_telegram_connector);
         //</editor-fold>
         //<editor-fold desc="DotNet">
+        let c_program_files_x86_dotnet = CleanerData {
+            path: drive.to_owned() + "Program Files\\dotnet\\*.txt",
+            program: "DotNet".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_program_files_x86_dotnet);
         let c_program_files_x86_dotnet = CleanerData {
             path: drive.to_owned() + "Program Files (x86)\\dotnet\\*.txt",
             program: "DotNet".parse().unwrap(),
@@ -1839,37 +1885,6 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(users_appdata_roaming_ow_electron_logs);
         //</editor-fold>
-        //<editor-fold desc="VS Code">
-        let c_users_appdata_roaming_code_logs = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Code\\logs",
-            program: "VS Code".parse().unwrap(),
-            files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
-            remove_directories: false,
-            remove_files: false,
-            directories_to_remove: vec![],
-            remove_all_in_dir: true,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![],
-        };
-        database.push(c_users_appdata_roaming_code_logs);
-        let c_users_appdata_roaming_code_logs = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Code\\Network",
-            program: "VS Code".parse().unwrap(),
-            files_to_remove: vec![
-                String::from("Browser cookies"),
-                String::from("Cookies-journal"),
-            ],
-            category: String::from("Browser cookies"),
-            remove_directories: false,
-            remove_files: false,
-            directories_to_remove: vec![],
-            remove_all_in_dir: true,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![],
-        };
-        database.push(c_users_appdata_roaming_code_logs);
-        //</editor-fold>
         //<editor-fold desc="PowerToys">
         let program_files_powertoys = CleanerData {
             path: drive.to_owned() + "Program Files\\PowerToys",
@@ -1949,7 +1964,7 @@ pub fn get_database() -> Vec<CleanerData> {
         database.push(program_files_magic_txd_licenses);
         //</editor-fold>
         //<editor-fold desc="VulcanRT">
-        let program_files_magic_txd_licenses = CleanerData {
+        let program_files_86_vulcan_rt = CleanerData {
             path: drive.to_owned() + "Program Files (x86)\\VulkanRT\\**",
             program: "VulcanRT".parse().unwrap(),
             files_to_remove: vec![
@@ -1958,15 +1973,83 @@ pub fn get_database() -> Vec<CleanerData> {
             ],
             category: "Logs".parse().unwrap(),
             remove_directories: true,
-            remove_files: true,
+            remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
             folders_to_remove: vec![]
         };
-        database.push(program_files_magic_txd_licenses);
+        database.push(program_files_86_vulcan_rt);
+        //</editor-fold>
+        //<editor-fold desc="Git">
+        let program_files_git = CleanerData {
+            path: drive.to_owned() + "Program Files\\Git",
+            program: "Git".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("LICENSE.txt"),
+                String::from("ReleaseNotes.html")
+            ],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(program_files_git);
         //</editor-fold>
 
+        //<editor-fold desc="Code Editors">
+
+        //<editor-fold desc="Sublime Text">
+        let c_program_files_sublime_text = CleanerData {
+            path: drive.to_owned() + "Program Files\\Sublime Text\\*.txt",
+            program: "Sublime Text".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_program_files_sublime_text);
+        //</editor-fold>
+        //<editor-fold desc="VS Code">
+        let c_users_appdata_roaming_code_logs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Code\\logs",
+            program: "VS Code".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_users_appdata_roaming_code_logs);
+        let c_users_appdata_roaming_code_logs = CleanerData {
+            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Code\\Network",
+            program: "VS Code".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("Browser cookies"),
+                String::from("Cookies-journal"),
+            ],
+            category: String::from("Browser cookies"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: true,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![],
+        };
+        database.push(c_users_appdata_roaming_code_logs);
+        //</editor-fold>
+
+        //</editor-fold>
         //<editor-fold desc="Browsers">
 
         //<editor-fold desc="Brave Browser">
@@ -2328,93 +2411,41 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(users_appdata_roaming_mozila_firefox_profiles_shader_cache);
         //</editor-fold>
-
-        //</editor-fold>
-        //<editor-fold desc="Text Editors">
-
-        //<editor-fold desc="Obsidian">
-        let c_users_appdata_roaming_obsidian = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\obsidian\\*.log",
-            program: "Obsidian".parse().unwrap(),
-            files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
+        //<editor-fold desc="LibreWoolf">
+        let users_appdata_roaming_librewolf_profiles_favicons = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\librewolf\\Profiles\\**"),
+            program: String::from("LibreWolf"),
+            files_to_remove: vec![
+                String::from("favicons.sqlite"),
+                String::from("favicons.sqlite-shm"),
+                String::from("favicons.sqlite-wal"),
+            ],
+            category: String::from("LastActivity"),
             remove_directories: false,
-            remove_files: true,
+            remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
             folders_to_remove: vec![],
         };
-        database.push(c_users_appdata_roaming_obsidian);
-        //</editor-fold>
-        //<editor-fold desc="Notepad++">
-        let c_users_appdata_roaming_notepad_plus_plus = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Notepad++\\*.log",
-            program: "Notepad++".parse().unwrap(),
-            files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
+        database.push(users_appdata_roaming_librewolf_profiles_favicons);
+        let users_appdata_roaming_librewolf_profiles_cookies = CleanerData {
+            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\librewolf\\Profiles\\**"),
+            program: String::from("LibreWolf"),
+            files_to_remove: vec![
+                String::from("cookies.sqlite"),
+                String::from("cookies.sqlite-shm"),
+                String::from("cookies.sqlite-wal"),
+            ],
+            category: String::from("Browser cookies"),
             remove_directories: false,
-            remove_files: true,
+            remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
             folders_to_remove: vec![],
         };
-        database.push(c_users_appdata_roaming_notepad_plus_plus);
-        let c_program_files_notepad_plus_plus = CleanerData {
-            path: drive.to_owned() + "Program Files\\Notepad++\\*.log",
-            program: "Notepad++".parse().unwrap(),
-            files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
-            remove_directories: false,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![],
-        };
-        database.push(c_program_files_notepad_plus_plus);
-        let c_program_files_notepad_plus_plus_1 = CleanerData {
-            path: drive.to_owned() + "Program Files\\Notepad++\\*.txt",
-            program: "Notepad++".parse().unwrap(),
-            files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
-            remove_directories: false,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![],
-        };
-        database.push(c_program_files_notepad_plus_plus_1);
-        let c_program_files_notepad_plus_plus_2 = CleanerData {
-            path: drive.to_owned() + "Program Files\\Notepad++\\*LICENSE*",
-            program: "Notepad++".parse().unwrap(),
-            files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
-            remove_directories: false,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![],
-        };
-        database.push(c_program_files_notepad_plus_plus_2);
-        //</editor-fold>
-        //<editor-fold desc="Sublime Text">
-        let c_program_files_sublime_text = CleanerData {
-            path: drive.to_owned() + "Program Files\\Sublime Text\\*.txt",
-            program: "Sublime Text".parse().unwrap(),
-            files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
-            remove_directories: false,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![],
-        };
-        database.push(c_program_files_sublime_text);
+        database.push(users_appdata_roaming_librewolf_profiles_cookies);
         //</editor-fold>
 
         //</editor-fold>
@@ -4642,7 +4673,7 @@ pub fn get_database() -> Vec<CleanerData> {
     //</editor-fold>
 
     //</editor-fold>
-    //<editor-fold desc="Games">
+    //<editor-fold desc="Steam games">
 
     //<editor-fold desc="Counter-Strike Global Offensive">
     let steam_userdata_730_local_cfg = CleanerData {

@@ -1,6 +1,6 @@
 [package]
 name = "WinBooster"
-version = "1.8.6"
+version = "1.8.8"
 edition = "2021"
 build = "build.rs"
 

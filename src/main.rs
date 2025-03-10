@@ -206,11 +206,34 @@ async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<
         .map(|data| {})
         .collect();
 
-    let has_last_activity = async_list.len() > 0;
+    let mut threads = vec![];
 
-    if has_last_activity {
-        clear_last_activity();
-    }
+    let mut has_last_activity = !async_list.is_empty();
+
+    let clear_last_activity_task = {
+        let progress_bar = Arc::new(pb.clone());
+        task::spawn(async move {
+            let data = CleanerResult {
+                files: 0,
+                folders: 0,
+                bytes: 0,
+                working: false,
+                path: String::new(),
+                program: String::new(),
+            };
+
+            if has_last_activity {
+                clear_last_activity();
+            }
+
+            progress_bar.inc(1);
+            data
+        })
+    };
+
+    threads.push(clear_last_activity_task);
+
+
 
     let async_list: Vec<_> = database2
         .filter(|data| categories.contains(&&*data.category) && !disabledPrograms.contains(&&*data.program))
@@ -225,9 +248,11 @@ async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<
             })
         })
         .collect();
-    pb.set_length(async_list.len() as u64);
+    threads.extend(async_list);
 
-    for async_task in async_list {
+    pb.set_length(threads.len() as u64);
+
+    for async_task in threads {
         match async_task.await {
             Ok(result) => {
                 removed_files += result.files;
@@ -246,8 +271,8 @@ async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<
         }
     }
 
-    //pb.set_message(format!("{}", "done"));
-    //pb.finish();
+    pb.set_message(format!("{}", "done"));
+    pb.finish();
 
     println!("Cleared programs:");
     let table = Table::new(cleared_programs).to_string();
@@ -256,18 +281,18 @@ async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<
     println!("Removed files: {}", removed_files);
     println!("Removed directories: {}", removed_directories);
 
-    Notification::new()
+    let _ = Notification::new()
         .summary("WinBooster CLI")
         .body(&*("Removed: ".to_owned() + &*get_file_size_string(bytes_cleared) + "\nFiles: " + &*removed_files.to_string()))
         .icon("assets\\icon.png")
-        .show().expect("Notification error");
+        .show();
 }
 
 #[tokio::main]
 async fn main() {
     execute!(
         std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster CLI v1.8.7")
+        crossterm::terminal::SetTitle("WinBooster CLI v1.8.8")
     );
 
 
