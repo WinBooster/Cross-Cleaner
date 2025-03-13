@@ -24,7 +24,6 @@ pub fn clear_data(data: &CleanerData) -> CleanerResult {
                         let is_dir: bool = result.is_dir();
                         let is_file: bool = result.is_file();
                         let path: &str = result.as_path().to_str().unwrap();
-                        let name: Option<&str> = result.file_name().unwrap().to_str();
                         let mut lenght = 0;
                         match result.metadata() {
                             Ok(res) => { lenght += res.len(); }
@@ -45,7 +44,6 @@ pub fn clear_data(data: &CleanerData) -> CleanerResult {
                         for directory in &data.directories_to_remove {
                             let file_path = path.to_owned() + "\\" + &*directory;
                             let metadata = fs::metadata(file_path.clone());
-                            let mut name = String::new();
                             match metadata {
                                 Ok(res) => { lenght += res.len(); }
                                 Err(_) => {}
@@ -54,7 +52,6 @@ pub fn clear_data(data: &CleanerData) -> CleanerResult {
                                 Ok(_) => {
                                     cleaner_result.folders += 1;
                                     cleaner_result.working = true;
-                                    //println!("Removed file: {}", name.unwrap());
                                 }
                                 Err(_) => {}
                             }
@@ -72,7 +69,6 @@ pub fn clear_data(data: &CleanerData) -> CleanerResult {
                                     cleaner_result.folders += 1;
                                     cleaner_result.bytes += lenght;
                                     cleaner_result.working = true;
-                                    //println!("Removed directory: {}", name.unwrap());
                                 }
                                 Err(_) => {}
                             }
@@ -86,9 +82,6 @@ pub fn clear_data(data: &CleanerData) -> CleanerResult {
                                     cleaner_result.files += 1;
                                     cleaner_result.bytes += lenght;
                                     cleaner_result.working = true;
-
-                                    //cleaner_result.files_vec.push(String::from(path.file_name()));
-                                    //println!("Removed file: {}", name.unwrap());
                                 }
                                 Err(_) => {}
                             }
@@ -99,7 +92,6 @@ pub fn clear_data(data: &CleanerData) -> CleanerResult {
                                     cleaner_result.folders += 1;
                                     cleaner_result.bytes += lenght;
                                     cleaner_result.working = true;
-                                    //println!("Removed directory: {}", name.unwrap());
                                 }
                                 Err(_) => {}
                             }

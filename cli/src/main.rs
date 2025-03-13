@@ -127,7 +127,7 @@ async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<
 async fn main() {
     execute!(
         std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster CLI v1.8.9")
+        crossterm::terminal::SetTitle("WinBooster Definitive Edition CLI v".to_owned() + &*database::get_winbooster_version())
     );
 
 
