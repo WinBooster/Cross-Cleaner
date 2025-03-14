@@ -20,3 +20,11 @@ winres = "0.1"
 
 [build]
 target = "x86_64-pc-windows-msvc"
+
+[profile.release] # optimize file size
+lto = true
+codegen-units = 1
+opt-level = "z"
+strip = true
+panic = "abort"
+debug  = false

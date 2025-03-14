@@ -37,7 +37,7 @@ async fn work(
     disabled_programs: Vec<&str>,
     categories: Vec<String>,
     database: Vec<CleanerData>,
-    progress_sender: mpsc::Sender<String>, // Канал для отправки сообщений о прогрессе
+    progress_sender: mpsc::Sender<String>,
 ) {
     let sty = ProgressStyle::with_template(
         "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",

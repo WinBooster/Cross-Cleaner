@@ -20,7 +20,7 @@ dependencies = [
 
 [[package]]
 name = "WinBooster_GUI"
-version = "0.1.0"
+version = "1.8.9"
 dependencies = [
  "cleaner",
  "database",
