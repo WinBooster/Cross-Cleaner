@@ -1,10 +1,634 @@
+#[cfg(windows)]
 use disk_name::get_letters;
 use crate::CleanerData;
+#[cfg(windows)]
 use crate::registry_utils::{get_steam_directory_from_registry};
 
-#[cfg(linux)]
+#[cfg(unix)]
 pub fn get_database() -> Vec<CleanerData> {
     let mut database: Vec<CleanerData> = Vec::new();
+    let username = &*whoami::username();
+
+    //<editor-fold desc="JetBrains">
+    let home_cache_librewolf_thumnails = CleanerData {
+        path: "/home/".to_owned() + username + "/.cache/JetBrains/**/log/*",
+        program: "JetBrains".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_cache_librewolf_thumnails);
+    //</editor-fold>
+    //<editor-fold desc="System">
+    let home_cache_librewolf_thumnails = CleanerData {
+        path: "/home/".to_owned() + username + "/.cache/thumbnails/normal/*",
+        program: "System".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_cache_librewolf_thumnails);
+    //</editor-fold>
+    //<editor-fold desc="Yandex Music">
+    let home_config_yandex_music_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/yandex-music/logs/*",
+        program: "Yandex Music".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_yandex_music_logs);
+    let home_config_yandex_music_cache = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/yandex-music/Cache/*",
+        program: "Yandex Music".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_yandex_music_cache);
+    let home_config_yandex_music_code_cache = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/yandex-music/Code Cache/*",
+        program: "Yandex Music".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_yandex_music_code_cache);
+    let home_config_yandex_music_dawn_graphite_cache = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/yandex-music/DawnGraphiteCache/*",
+        program: "Yandex Music".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_yandex_music_dawn_graphite_cache);
+    let home_config_yandex_music_dawn_web_gpu_cache = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/yandex-music/DawnWebGPUCache/*",
+        program: "Yandex Music".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_yandex_music_dawn_web_gpu_cache);
+    let home_config_yandex_music_gpu_cache = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/yandex-music/GPUCache/*",
+        program: "Yandex Music".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_yandex_music_gpu_cache);
+    //</editor-fold>
+    //<editor-fold desc="GitHub Desktop">
+    let home_config_github_desktop_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/GitHub Desktop/logs/*",
+        program: "GitHub Desktop".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_github_desktop_logs);
+    let home_config_github_desktop_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/GitHub Desktop/Cache/*",
+        program: "GitHub Desktop".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_github_desktop_logs);
+    //</editor-fold>
+
+
+    //<editor-fold desc="Messangers""">
+
+    //<editor-fold desc="Discord">
+    let home_config_discord_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/discord/logs/*",
+        program: "Discord".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_discord_logs);
+    let home_config_discord_cache = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/discord/Cache/*",
+        program: "Discord".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_discord_cache);
+    let home_config_discord_code_cache = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/discord/Code Cache/*",
+        program: "Discord".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_discord_code_cache);
+    let home_config_discord_dawn_graphite_cache = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/discord/DawnGraphiteCache/*",
+        program: "Discord".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_discord_dawn_graphite_cache);
+    let home_config_discord_dawn_web_gpu_cache = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/discord/DawnWebGPUCache/*",
+        program: "Discord".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_discord_dawn_web_gpu_cache);
+    let home_config_discord_gpu_cache = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/discord/GPUCache/*",
+        program: "Discord".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_discord_gpu_cache);
+    //</editor-fold>
+    //<editor-fold desc="Telegram">
+    let home_local_share_telegram_desktop = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/TelegramDesktop/log*.txt",
+        program: "Telegram".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_telegram_desktop);
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Browsers">
+
+    //<editor-fold desc="FireFox">
+    let home_cache_librewolf_thumnails = CleanerData {
+        path: "/home/".to_owned() + username + "/.cache/firefox/**/thumbnails/*",
+        program: "FireFox".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_cache_librewolf_thumnails);
+    //</editor-fold>
+    //<editor-fold desc="LibreWolf">
+    let home_cache_librewolf_thumnails = CleanerData {
+        path: "/home/".to_owned() + username + "/.cache/librewolf/**/thumbnails/*",
+        program: "LibreWolf".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_cache_librewolf_thumnails);
+    let home_cache_librewolf_thumnails = CleanerData {
+        path: "/home/".to_owned() + username + "/.librewolf/**/",
+        program: "LibreWolf".parse().unwrap(),
+        files_to_remove: vec![
+            String::from("favicons.sqlite"),
+            String::from("favicons.sqlite-wal"),
+            String::from("formhistory.sqlite")
+        ],
+        category: "LastActivity".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_cache_librewolf_thumnails);
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Minecraft launchers">
+
+    //<editor-fold desc="MultiMC">
+    let home_local_share_prism_launcher_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/MultiMC/cache/*",
+        program: "MultiMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_logs);
+    let home_local_share_prism_launcher_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/MultiMC/logs/*",
+        program: "MultiMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_logs);
+    let home_local_share_prism_launcher_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/MultiMC",
+        program: "MultiMC".parse().unwrap(),
+        files_to_remove: vec![
+            String::from("accounts.json")
+        ],
+        category: "Accounts".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_logs);
+    let home_local_share_prism_launcher_instances_minecraft_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/MultiMC/instances/**/minecraft/logs/*",
+        program: "MultiMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_logs);
+    let home_local_share_prism_launcher_instances_minecraft_crash_reports = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/MultiMC/instances/**/minecraft/crash-reports/*",
+        program: "MultiMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_crash_reports);
+    let home_local_share_prism_launcher_instances_minecraft_saves = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/MultiMC/instances/**/minecraft/saves/*",
+        program: "MultiMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Game saves".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_saves);
+    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/MultiMC/instances/**/minecraft/screenshots/*",
+        program: "MultiMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Images".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
+    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/MultiMC/instances/**/minecraft/meteor-client/*",
+        program: "Meteor Client".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cheats".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
+    //</editor-fold>
+    //<editor-fold desc="PolyMC">
+    let home_local_share_prism_launcher_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PolyMC/cache/*",
+        program: "PolyMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_logs);
+    let home_local_share_prism_launcher_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PolyMC/logs/*",
+        program: "PolyMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_logs);
+    let home_local_share_prism_launcher_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PolyMC",
+        program: "PolyMC".parse().unwrap(),
+        files_to_remove: vec![
+            String::from("accounts.json")
+        ],
+        category: "Accounts".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_logs);
+    let home_local_share_prism_launcher_instances_minecraft_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PolyMC/instances/**/minecraft/logs/*",
+        program: "PolyMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_logs);
+    let home_local_share_prism_launcher_instances_minecraft_crash_reports = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PolyMC/instances/**/minecraft/crash-reports/*",
+        program: "PolyMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_crash_reports);
+    let home_local_share_prism_launcher_instances_minecraft_saves = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PolyMC/instances/**/minecraft/saves/*",
+        program: "PolyMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Game saves".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_saves);
+    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PolyMC/instances/**/minecraft/screenshots/*",
+        program: "PolyMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Images".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
+    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PolyMC/instances/**/minecraft/meteor-client/*",
+        program: "Meteor Client".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cheats".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
+    //</editor-fold>
+    //<editor-fold desc="PrismLauncher">
+    let home_local_share_prism_launcher_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/cache/*",
+        program: "PrismLauncher".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_logs);
+    let home_local_share_prism_launcher_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/logs/*",
+        program: "PrismLauncher".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_logs);
+    let home_local_share_prism_launcher_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher",
+        program: "PrismLauncher".parse().unwrap(),
+        files_to_remove: vec![
+            String::from("accounts.json")
+        ],
+        category: "Accounts".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_logs);
+    let home_local_share_prism_launcher_instances_minecraft_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/instances/**/minecraft/logs/*",
+        program: "PrismLauncher".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_logs);
+    let home_local_share_prism_launcher_instances_minecraft_crash_reports = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/instances/**/minecraft/crash-reports/*",
+        program: "PrismLauncher".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_crash_reports);
+    let home_local_share_prism_launcher_instances_minecraft_saves = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/instances/**/minecraft/saves/*",
+        program: "PrismLauncher".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Game saves".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_saves);
+    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/instances/**/minecraft/screenshots/*",
+        program: "PrismLauncher".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Images".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
+    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/instances/**/minecraft/meteor-client/*",
+        program: "Meteor Client".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cheats".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
+    //</editor-fold>
+
+    //</editor-fold>
 
     database
 }
@@ -3722,7 +4346,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\cache\\*",
             program: "PolyMC".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Images".parse().unwrap(),
+            category: "Cache".parse().unwrap(),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],

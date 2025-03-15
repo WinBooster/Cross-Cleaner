@@ -61,6 +61,7 @@ async fn work(
         let task = task::spawn(async move {
             progress_bar.set_message("LastActivity");
             progress_sender.send("Clearing LastActivity...".to_string()).await.unwrap();
+            #[cfg(windows)]
             registry_database::clear_last_activity();
             progress_bar.inc(1);
             CleanerResult {

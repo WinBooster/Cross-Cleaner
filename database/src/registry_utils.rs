@@ -1,4 +1,6 @@
+#[cfg(windows)]
 use winreg::enums::{HKEY_CURRENT_USER, KEY_ALL_ACCESS, KEY_READ, KEY_WRITE};
+#[cfg(windows)]
 use winreg::RegKey;
 
 #[cfg(windows)]

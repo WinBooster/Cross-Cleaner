@@ -60,6 +60,7 @@ async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<
 
             if has_last_activity {
                 progress_bar.set_message("LastActivity");
+                #[cfg(windows)]
                 registry_database::clear_last_activity();
             }
 
