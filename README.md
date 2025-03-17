@@ -2,7 +2,7 @@
 	<h1>WinBooster Definitive Edition</h1>
 	</a>
 	<a href="https://github.com/WinBooster/WinBooster-DF/releases"><img src="https://img.shields.io/github/downloads/WinBooster/WinBooster-DF/total" alt="Downloads"/></a>
-	<a href="https://github.com/WinBooster/WinBooster-DF/releases"><img src="https://img.shields.io/github/downloads/WinBooster/WinBooster-DF/1.8.8/total" alt="Downloads"/></a>
+	<a href="https://github.com/WinBooster/WinBooster-DF/releases"><img src="https://img.shields.io/github/downloads/WinBooster/WinBooster-DF/1.8.9/total" alt="Downloads"/></a>
 </div>
 
 <div align="center">
