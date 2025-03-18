@@ -9,6 +9,34 @@ pub fn get_database() -> Vec<CleanerData> {
     let mut database: Vec<CleanerData> = Vec::new();
     let username = &*whoami::username();
 
+    //<editor-fold desc="System">
+    let home_cache_librewolf_thumnails_normal = CleanerData {
+        path: "/home/".to_owned() + username + "/.cache/thumbnails/normal/*",
+        program: "System".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_cache_librewolf_thumnails_normal);
+    let home_cache_librewolf_thumnails_large = CleanerData {
+        path: "/home/".to_owned() + username + "/.cache/thumbnails/large/*",
+        program: "System".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_cache_librewolf_thumnails_large);
+    //</editor-fold>
     //<editor-fold desc="JetBrains">
     let home_cache_librewolf_thumnails = CleanerData {
         path: "/home/".to_owned() + username + "/.cache/JetBrains/**/log/*",
@@ -16,21 +44,6 @@ pub fn get_database() -> Vec<CleanerData> {
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
         remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_cache_librewolf_thumnails);
-    //</editor-fold>
-    //<editor-fold desc="System">
-    let home_cache_librewolf_thumnails = CleanerData {
-        path: "/home/".to_owned() + username + "/.cache/thumbnails/normal/*",
-        program: "System".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: false,
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
@@ -147,9 +160,52 @@ pub fn get_database() -> Vec<CleanerData> {
     };
     database.push(home_config_github_desktop_logs);
     //</editor-fold>
+    //<editor-fold desc="Steam">
+    let homo_local_share_steam_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/Steam/logs/*",
+        program: "Steam".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(homo_local_share_steam_logs);
+    let homo_local_share_steam_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/..local/share/Steam/userdata/*",
+        program: "Steam".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Accounts".parse().unwrap(),
+        remove_directories: true,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(homo_local_share_steam_logs);
+    let homo_local_share_steam_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/Proton Hotfix/",
+        program: "Steam proton".parse().unwrap(),
+        files_to_remove: vec![
+            String::from("LICENSE"),
+            String::from("LICENSE.OFL")
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(homo_local_share_steam_logs);
+    //</editor-fold>
 
-
-    //<editor-fold desc="Messangers""">
+    //<editor-fold desc="Messangers">
 
     //<editor-fold desc="Discord">
     let home_config_discord_logs = CleanerData {
@@ -252,7 +308,7 @@ pub fn get_database() -> Vec<CleanerData> {
     //<editor-fold desc="Browsers">
 
     //<editor-fold desc="FireFox">
-    let home_cache_librewolf_thumnails = CleanerData {
+    let home_cache_firefox_thumbnails = CleanerData {
         path: "/home/".to_owned() + username + "/.cache/firefox/**/thumbnails/*",
         program: "FireFox".parse().unwrap(),
         files_to_remove: vec![],
@@ -264,7 +320,40 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_directory_after_clean: false,
         folders_to_remove: vec![]
     };
-    database.push(home_cache_librewolf_thumnails);
+    database.push(home_cache_firefox_thumbnails);
+    let home_mozila_firefox_cookies = CleanerData {
+        path: "/home/".to_owned() + username + "/.mozilla/firefox/**/",
+        program: "FireFox".parse().unwrap(),
+        files_to_remove: vec![
+            String::from("cookies.sqlite"),
+            String::from("cookies.sqlite-wal")
+        ],
+        category: "Browser cookies".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_mozila_firefox_cookies);
+    let home_mozila_firefox_cookies = CleanerData {
+        path: "/home/".to_owned() + username + "/.mozilla/firefox/**/",
+        program: "FireFox".parse().unwrap(),
+        files_to_remove: vec![
+            String::from("formhistory.sqlite"),
+            String::from("favicons.sqlite"),
+            String::from("favicons.sqlite-wal")
+        ],
+        category: "LastActivity".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_mozila_firefox_cookies);
     //</editor-fold>
     //<editor-fold desc="LibreWolf">
     let home_cache_librewolf_thumnails = CleanerData {
@@ -303,6 +392,73 @@ pub fn get_database() -> Vec<CleanerData> {
 
     //<editor-fold desc="Minecraft launchers">
 
+    //<editor-fold desc="Minecraft Launcher">
+    let home_local_share_prism_launcher_instances_minecraft_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.minecraft/logs/*",
+        program: "MultiMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_logs);
+    let home_local_share_prism_launcher_instances_minecraft_crash_reports = CleanerData {
+        path: "/home/".to_owned() + username + "/.minecraft/crash-reports/*",
+        program: "MultiMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Crash reports".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_crash_reports);
+    let home_local_share_prism_launcher_instances_minecraft_saves = CleanerData {
+        path: "/home/".to_owned() + username + "/.minecraft/saves/*",
+        program: "MultiMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Game saves".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_saves);
+    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
+        path: "/home/".to_owned() + username + "/.minecraft/screenshots/*",
+        program: "MultiMC".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Images".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
+    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
+        path: "/home/".to_owned() + username + "/.minecraft/meteor-client/*",
+        program: "Meteor Client".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cheats".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
+    //</editor-fold>
     //<editor-fold desc="MultiMC">
     let home_local_share_prism_launcher_logs = CleanerData {
         path: "/home/".to_owned() + username + "/.local/share/MultiMC/cache/*",
@@ -362,7 +518,7 @@ pub fn get_database() -> Vec<CleanerData> {
         path: "/home/".to_owned() + username + "/.local/share/MultiMC/instances/**/minecraft/crash-reports/*",
         program: "MultiMC".parse().unwrap(),
         files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
+        category: "Crash reports".parse().unwrap(),
         remove_directories: true,
         remove_files: true,
         directories_to_remove: vec![],
@@ -470,7 +626,7 @@ pub fn get_database() -> Vec<CleanerData> {
         path: "/home/".to_owned() + username + "/.local/share/PolyMC/instances/**/minecraft/crash-reports/*",
         program: "PolyMC".parse().unwrap(),
         files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
+        category: "Crash reports".parse().unwrap(),
         remove_directories: true,
         remove_files: true,
         directories_to_remove: vec![],
@@ -578,7 +734,7 @@ pub fn get_database() -> Vec<CleanerData> {
         path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/instances/**/minecraft/crash-reports/*",
         program: "PrismLauncher".parse().unwrap(),
         files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
+        category: "Crash reports".parse().unwrap(),
         remove_directories: true,
         remove_files: true,
         directories_to_remove: vec![],
@@ -626,6 +782,97 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![]
     };
     database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Games">
+
+    //<editor-fold desc="Terraria">
+    let home_local_share_terraria_worlds = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/Terraria/Worlds/*",
+        program: "Terraria".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Game saves".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_terraria_worlds);
+    let home_local_share_terraria_playes = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/Terraria/Playes/*",
+        program: "Terraria".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Game saves".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_terraria_playes);
+    let home_local_share_steam_steam_apps_common_terraria = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/Terraria/",
+        program: "Terraria".parse().unwrap(),
+        files_to_remove: vec![
+            String::from("changelog.txt")
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_steam_steam_apps_common_terraria);
+    let home_local_share_steam_steam_apps_common_terraria = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/Terraria/*.blob",
+        program: "Terraria".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Crash reports".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_steam_steam_apps_common_terraria);
+    //</editor-fold>
+    //<editor-fold desc="Garry's mod">
+    let home_local_share_steam_steam_apps_common_garrys_mod = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/GarrysMod/",
+        program: "Garry's mod".parse().unwrap(),
+        files_to_remove: vec![
+            String::from("chromium.log")
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_steam_steam_apps_common_garrys_mod);
+    let home_local_share_steam_steam_apps_common_garrys_mod = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/GarrysMod/crashes/*",
+        program: "Garry's mod".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Crash reports".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_steam_steam_apps_common_garrys_mod);
     //</editor-fold>
 
     //</editor-fold>
@@ -840,7 +1087,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Local\\CrashDumps\\*",
             program: "Windows".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
+            category: "Crash reports".parse().unwrap(),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -3693,7 +3940,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\crashlog\\*"),
             program: String::from("Arizona Games Launcher"),
             files_to_remove: vec![],
-            category: String::from("Logs"),
+            category: String::from("Crash reports"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
@@ -3909,7 +4156,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft\\crash-reports\\*",
             program: "MultiMC".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
+            category: "Crash reports".parse().unwrap(),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -3987,7 +4234,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\MultiMC\\instances\\**\\.minecraft\\crash-reports\\*",
             program: "MultiMC".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
+            category: "Crash reports".parse().unwrap(),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -4095,7 +4342,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\crash-reports\\*",
             program: "PrismLauncher".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
+            category: "Crash reports".parse().unwrap(),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -4173,7 +4420,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft\\crash-reports\\*",
             program: "PrismLauncher".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
+            category: "Crash reports".parse().unwrap(),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -4281,7 +4528,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\crash-reports\\*",
             program: "PolyMC".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
+            category: "Crash reports".parse().unwrap(),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -4359,7 +4606,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: drive.to_owned() + "Users\\" + username +"\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft\\crash-reports\\*",
             program: "PolyMC".parse().unwrap(),
             files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
+            category: "Crash reports".parse().unwrap(),
             remove_directories: true,
             remove_files: true,
             directories_to_remove: vec![],
@@ -4635,7 +4882,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.mclaunch\\launcher_crashreports\\*"),
             program: String::from("McLaunch"),
             files_to_remove: vec![],
-            category: String::from("Logs"),
+            category: String::from("Crash reports"),
             remove_directories: false,
             remove_files: true,
             directories_to_remove: vec![],

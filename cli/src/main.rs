@@ -120,7 +120,6 @@ async fn work(disabledPrograms: Vec<&str>, categories: Vec<&str>, database: Vec<
     let _ = Notification::new()
         .summary("WinBooster CLI")
         .body(&*("Removed: ".to_owned() + &*get_file_size_string(bytes_cleared) + "\nFiles: " + &*removed_files.to_string()))
-        .icon("assets\\icon.png")
         .show();
 }
 

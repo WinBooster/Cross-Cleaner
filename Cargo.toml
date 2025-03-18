@@ -1,5 +1,13 @@
 [workspace]
+resolver = "2"
 members = [
     "cli",
     "gui",
 ]
+[profile.release] # optimize file size
+lto = true
+codegen-units = 1
+opt-level = "z"
+strip = true
+panic = "abort"
+debug  = false

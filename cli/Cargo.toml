@@ -1,6 +1,6 @@
 [package]
 name = "WinBooster_CLI"
-version = "1.8.9"
+version = "1.9.0"
 edition = "2021"
 build = "build.rs"
 

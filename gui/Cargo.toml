@@ -1,6 +1,6 @@
 [package]
 name = "WinBooster_GUI"
-version = "1.8.9"
+version = "1.9.0"
 edition = "2024"
 
 [dependencies]
@@ -17,9 +17,6 @@ cleaner = { path = "../cleaner" }
 
 [build-dependencies]
 winres = "0.1"
-
-[build]
-target = "x86_64-pc-windows-msvc"
 
 [profile.release] # optimize file size
 lto = true

@@ -18,7 +18,10 @@ async fn main() -> eframe::Result {
 
     let options = eframe::NativeOptions {
         run_and_return: true,
-        viewport: egui::ViewportBuilder::default().with_inner_size([420.0, 130.0]),
+        #[cfg(windows)]
+        viewport: egui::ViewportBuilder::default().with_inner_size([430.0, 150.0]),
+        #[cfg(unix)]
+        viewport: egui::ViewportBuilder::default().with_inner_size([430.0, 105.0]),
         ..Default::default()
     };
 
@@ -131,7 +134,6 @@ async fn work(
     let _ = Notification::new()
         .summary("WinBooster CLI")
         .body(&*("Removed: ".to_owned() + &*get_file_size_string(bytes_cleared) + "\nFiles: " + &*removed_files.to_string()))
-        .icon("assets\\icon.png")
         .show();
 }
 
