@@ -4010,7 +4010,7 @@ pub fn get_database() -> Vec<CleanerData> {
             };
             database.push(folder_launcher_licenses);
             let folder_launcher_accounts = CleanerData {
-                path: folder.0.clone(),
+                path: folder.0.clone() + "\\",
                 program: folder.1.clone(),
                 files_to_remove: vec![
                     String::from("accounts.json")
@@ -4025,7 +4025,7 @@ pub fn get_database() -> Vec<CleanerData> {
             };
             database.push(folder_launcher_accounts);
             let folder_launcher_accounts = CleanerData {
-                path: folder.0.clone() + "/",
+                path: folder.0.clone() + "\\",
                 program: folder.1.clone(),
                 files_to_remove: vec![
                     String::from("launcher_accounts.json")
