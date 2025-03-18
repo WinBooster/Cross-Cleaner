@@ -1,6 +1,6 @@
 [package]
 name = "WinBooster_GUI"
-version = "1.9.1"
+version = "1.9.2"
 edition = "2024"
 
 [dependencies]

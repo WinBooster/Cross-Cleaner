@@ -1,6 +1,7 @@
 #[cfg(windows)]
 use disk_name::get_letters;
 use crate::CleanerData;
+use crate::minecraft_launchers_database::{get_minecraft_launchers_folders, get_minecraft_launchers_instances_folders};
 #[cfg(windows)]
 use crate::registry_utils::{get_steam_directory_from_registry};
 
@@ -498,397 +499,150 @@ pub fn get_database() -> Vec<CleanerData> {
 
     //<editor-fold desc="Minecraft launchers">
 
-    //<editor-fold desc="Minecraft Launcher">
-    let home_local_share_prism_launcher_instances_minecraft_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.minecraft/logs/*",
-        program: "Minecraft".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_logs);
-    let home_local_share_prism_launcher_instances_minecraft_crash_reports = CleanerData {
-        path: "/home/".to_owned() + username + "/.minecraft/crash-reports/*",
-        program: "Minecraft".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Crash reports".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_crash_reports);
-    let home_local_share_prism_launcher_instances_minecraft_saves = CleanerData {
-        path: "/home/".to_owned() + username + "/.minecraft/saves/*",
-        program: "Minecraft".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Game saves".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_saves);
-    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
-        path: "/home/".to_owned() + username + "/.minecraft/screenshots/*",
-        program: "Minecraft".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Images".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
-    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
-        path: "/home/".to_owned() + username + "/.minecraft/meteor-client/*",
-        program: "Meteor Client".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cheats".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
-    //</editor-fold>
-    //<editor-fold desc="MultiMC">
-    let home_local_share_prism_launcher_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/MultiMC/cache/*",
-        program: "MultiMC".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_logs);
-    let home_local_share_prism_launcher_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/MultiMC/logs/*",
-        program: "MultiMC".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_logs);
-    let home_local_share_prism_launcher_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/MultiMC",
-        program: "MultiMC".parse().unwrap(),
-        files_to_remove: vec![
-            String::from("accounts.json")
-        ],
-        category: "Accounts".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_logs);
-    let home_local_share_prism_launcher_instances_minecraft_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/MultiMC/instances/**/minecraft/logs/*",
-        program: "MultiMC".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_logs);
-    let home_local_share_prism_launcher_instances_minecraft_crash_reports = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/MultiMC/instances/**/minecraft/crash-reports/*",
-        program: "MultiMC".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Crash reports".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_crash_reports);
-    let home_local_share_prism_launcher_instances_minecraft_saves = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/MultiMC/instances/**/minecraft/saves/*",
-        program: "MultiMC".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Game saves".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_saves);
-    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/MultiMC/instances/**/minecraft/screenshots/*",
-        program: "MultiMC".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Images".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
-    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/MultiMC/instances/**/minecraft/meteor-client/*",
-        program: "Meteor Client".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cheats".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
-    //</editor-fold>
-    //<editor-fold desc="PolyMC">
-    let home_local_share_prism_launcher_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PolyMC/cache/*",
-        program: "PolyMC".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_logs);
-    let home_local_share_prism_launcher_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PolyMC/logs/*",
-        program: "PolyMC".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_logs);
-    let home_local_share_prism_launcher_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PolyMC",
-        program: "PolyMC".parse().unwrap(),
-        files_to_remove: vec![
-            String::from("accounts.json")
-        ],
-        category: "Accounts".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_logs);
-    let home_local_share_prism_launcher_instances_minecraft_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PolyMC/instances/**/minecraft/logs/*",
-        program: "PolyMC".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_logs);
-    let home_local_share_prism_launcher_instances_minecraft_crash_reports = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PolyMC/instances/**/minecraft/crash-reports/*",
-        program: "PolyMC".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Crash reports".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_crash_reports);
-    let home_local_share_prism_launcher_instances_minecraft_saves = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PolyMC/instances/**/minecraft/saves/*",
-        program: "PolyMC".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Game saves".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_saves);
-    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PolyMC/instances/**/minecraft/screenshots/*",
-        program: "PolyMC".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Images".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
-    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PolyMC/instances/**/minecraft/meteor-client/*",
-        program: "Meteor Client".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cheats".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
-    //</editor-fold>
-    //<editor-fold desc="PrismLauncher">
-    let home_local_share_prism_launcher_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/cache/*",
-        program: "PrismLauncher".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_logs);
-    let home_local_share_prism_launcher_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/logs/*",
-        program: "PrismLauncher".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_logs);
-    let home_local_share_prism_launcher_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher",
-        program: "PrismLauncher".parse().unwrap(),
-        files_to_remove: vec![
-            String::from("accounts.json")
-        ],
-        category: "Accounts".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_logs);
-    let home_local_share_prism_launcher_instances_minecraft_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/instances/**/minecraft/logs/*",
-        program: "PrismLauncher".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_logs);
-    let home_local_share_prism_launcher_instances_minecraft_crash_reports = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/instances/**/minecraft/crash-reports/*",
-        program: "PrismLauncher".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Crash reports".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_crash_reports);
-    let home_local_share_prism_launcher_instances_minecraft_saves = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/instances/**/minecraft/saves/*",
-        program: "PrismLauncher".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Game saves".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_saves);
-    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/instances/**/minecraft/screenshots/*",
-        program: "PrismLauncher".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Images".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
-    let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/PrismLauncher/instances/**/minecraft/meteor-client/*",
-        program: "Meteor Client".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cheats".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_local_share_prism_launcher_instances_minecraft_screenshots);
-    //</editor-fold>
+    let get_minecraft_launchers_instances_folders = get_minecraft_launchers_instances_folders(username);
+    for instance in get_minecraft_launchers_instances_folders {
+        let instance_logs = CleanerData {
+            path: instance.0.clone() + "/logs/*",
+            program: instance.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(instance_logs);
+        let instance_crash_reports = CleanerData {
+            path: instance.0.clone() + "/crash-reports/*",
+            program: instance.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Crash reports"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(instance_crash_reports);
+        let instance_saves = CleanerData {
+            path: instance.0.clone() + "/saves/*",
+            program: instance.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Game saves"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(instance_saves);
+        let instance_screenshots = CleanerData {
+            path: instance.0.clone() + "/screenshots/*",
+            program: instance.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Images"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(instance_screenshots);
+        let instance_cheats = CleanerData {
+            path: instance.0.clone() + "/",
+            program: instance.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Cheats"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![
+                String::from("meteor-client"),
+                String::from("LiquidBounce")
+            ],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(instance_cheats);
+    }
+
+    let get_minecraft_launchers_folders = get_minecraft_launchers_folders(username);
+    for folder in get_minecraft_launchers_folders {
+        let folder_cache = CleanerData {
+            path: folder.0.clone() + "/cache/*",
+            program: folder.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Cache"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(folder_cache);
+        let folder_logs = CleanerData {
+            path: folder.0.clone() + "/logs/*",
+            program: folder.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(folder_logs);
+        let folder_accounts = CleanerData {
+            path: folder.0.clone() + "/",
+            program: folder.1.clone(),
+            files_to_remove: vec![
+                String::from("accounts.json")
+            ],
+            category: String::from("Accounts"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(folder_accounts);
+        let folder_launcher_accounts = CleanerData {
+            path: folder.0.clone() + "/",
+            program: folder.1.clone(),
+            files_to_remove: vec![
+                String::from("launcher_accounts.json")
+            ],
+            category: String::from("Accounts"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(folder_launcher_accounts);
+        let folder_launcher_log_files = CleanerData {
+            path: folder.0.clone() + "/*log*",
+            program: folder.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+            folders_to_remove: vec![]
+        };
+        database.push(folder_launcher_log_files);
+    }
 
     //</editor-fold>
 
@@ -4098,162 +3852,7 @@ pub fn get_database() -> Vec<CleanerData> {
 
         //<editor-fold desc="Minecraft Clients">
 
-        //<editor-fold desc="Badlion Client">
-        let users_appdata_roaming_badlion_client_logs = CleanerData {
-            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Badlion Client\\logs\\*"),
-            program: String::from("Badlion Client"),
-            files_to_remove: vec![],
-            category: String::from("Logs"),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
-        };
-        database.push(users_appdata_roaming_badlion_client_logs);
-        //</editor-fold>
-        //<editor-fold desc="Tecknix Client">
-        let users_curseforge_minecraft_install = CleanerData {
-            path: String::from(drive.clone() + "Users\\" + username + "\\.tecknixsoftware\\tecknixlauncher\\logs\\*"),
-            program: String::from("Tecknix Client"),
-            files_to_remove: vec![],
-            category: String::from("Logs"),
-            remove_directories: false,
-            remove_files: false,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
-        };
-        database.push(users_curseforge_minecraft_install);
-        //</editor-fold>
-        //<editor-fold desc="Modrinth">
-        let users_curseforge_minecraft_install = CleanerData {
-            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\ModrinthApp\\launcher_logs\\*"),
-            program: String::from("Modrinth"),
-            files_to_remove: vec![],
-            category: String::from("Logs"),
-            remove_directories: false,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
-        };
-        database.push(users_curseforge_minecraft_install);
-        //</editor-fold>
-        //<editor-fold desc="Minecraft">
-        let c_users_appdata_roaming_minecraft_logs = CleanerData {
-            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.minecraft\\logs\\*"),
-            program: String::from("Minecraft"),
-            files_to_remove: vec![],
-            category: String::from("Logs"),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
-        };
-        database.push(c_users_appdata_roaming_minecraft_logs);
-        let c_users_appdata_roaming_minecraft_saves = CleanerData {
-            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.minecraft\\saves\\*"),
-            program: String::from("Minecraft"),
-            files_to_remove: vec![],
-            category: String::from("Game saves"),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
-        };
-        database.push(c_users_appdata_roaming_minecraft_saves);
-        let c_users_appdata_roaming_minecraft_meteor_client = CleanerData {
-            path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.minecraft\\meteor-client"),
-            program: String::from("Meteor Client"),
-            files_to_remove: vec![],
-            category: String::from("Cheats"),
-            remove_directories: false,
-            remove_files: false,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
-        };
-        database.push(c_users_appdata_roaming_minecraft_meteor_client);
-        //</editor-fold>
-        //<editor-fold desc="Lunar Client">
-        let c_users_appdata_lunarclient_logs = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\.lunarclient\\logs\\**\\*",
-            program: "Lunar Client".parse().unwrap(),
-            files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
-        };
-        database.push(c_users_appdata_lunarclient_logs);
-        let c_users_appdata_lunarclient_licenses = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\.lunarclient\\licenses\\*",
-            program: "Lunar Client".parse().unwrap(),
-            files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
-        };
-        database.push(c_users_appdata_lunarclient_licenses);
-        let c_users_appdata_lunarclient_offline_multiver_logs = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\.lunarclient\\offline\\**\\logs\\*",
-            program: "Lunar Client".parse().unwrap(),
-            files_to_remove: vec![],
-            category: "Logs".parse().unwrap(),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
-        };
-        database.push(c_users_appdata_lunarclient_offline_multiver_logs);
-        let c_users_appdata_lunarclient_offline_multiver_logs = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\.lunarclient\\game-cache\\*",
-            program: "Lunar Client".parse().unwrap(),
-            files_to_remove: vec![],
-            category: "Cache".parse().unwrap(),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
-        };
-        database.push(c_users_appdata_lunarclient_offline_multiver_logs);
-        //</editor-fold>
         //<editor-fold desc="MultiMC">
-        let users_appdata_roaming_prismlauncher = CleanerData {
-            path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\MultiMC",
-            program: "MultiMC".parse().unwrap(),
-            files_to_remove: vec![
-                String::from("accounts.json")
-            ],
-            category: "Accounts".parse().unwrap(),
-            remove_directories: false,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
-        };
-        database.push(users_appdata_roaming_prismlauncher);
         let c_users_appdata_roaming_prismlauncher = CleanerData {
             path: drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\MultiMC\\*.log",
             program: "MultiMC".parse().unwrap(),
@@ -5021,6 +4620,124 @@ pub fn get_database() -> Vec<CleanerData> {
         database.push(users_appdata_roaming_mclaunch_launcher_crashreports);
         //</editor-fold>
 
+
+
+        let get_minecraft_launchers_instances_folders = get_minecraft_launchers_instances_folders(&drive, username);
+        for instance in get_minecraft_launchers_instances_folders {
+            let instance_logs = CleanerData {
+                path: instance.0.clone() + "\\logs\\*",
+                program: instance.1.clone(),
+                files_to_remove: vec![],
+                category: String::from("Logs"),
+                remove_directories: true,
+                remove_files: true,
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                folders_to_remove: vec![]
+            };
+            database.push(instance_logs);
+            let instance_saves = CleanerData {
+                path: instance.0.clone() + "\\saves\\*",
+                program: instance.1.clone(),
+                files_to_remove: vec![],
+                category: String::from("Gave saves"),
+                remove_directories: true,
+                remove_files: true,
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                folders_to_remove: vec![]
+            };
+            database.push(instance_saves);
+            let instance_meteor_client = CleanerData {
+                path: instance.0.clone() + "\\",
+                program: instance.1.clone(),
+                files_to_remove: vec![],
+                category: String::from("Cheats"),
+                remove_directories: true,
+                remove_files: true,
+                directories_to_remove: vec![
+                    String::from("meteor-client")
+                ],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                folders_to_remove: vec![]
+            };
+            database.push(instance_meteor_client);
+        }
+
+        let get_minecraft_launchers_folders = get_minecraft_launchers_folders(&drive, username);
+        for folder in get_minecraft_launchers_folders {
+            let folder_logs = CleanerData {
+                path: folder.0.clone() + "\\logs\\*",
+                program: folder.1.clone(),
+                files_to_remove: vec![],
+                category: String::from("Logs"),
+                remove_directories: true,
+                remove_files: true,
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                folders_to_remove: vec![]
+            };
+            database.push(folder_logs);
+            let folder_launcher_logs = CleanerData {
+                path: folder.0.clone() + "\\launcher_logs\\*",
+                program: folder.1.clone(),
+                files_to_remove: vec![],
+                category: String::from("Logs"),
+                remove_directories: true,
+                remove_files: true,
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                folders_to_remove: vec![]
+            };
+            database.push(folder_launcher_logs);
+            let folder_launcher_licenses = CleanerData {
+                path: folder.0.clone() + "\\licenses\\*",
+                program: folder.1.clone(),
+                files_to_remove: vec![],
+                category: String::from("Logs"),
+                remove_directories: true,
+                remove_files: true,
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                folders_to_remove: vec![]
+            };
+            database.push(folder_launcher_licenses);
+            let folder_launcher_licenses = CleanerData {
+                path: folder.0.clone() + "\\game-cache\\*",
+                program: folder.1.clone(),
+                files_to_remove: vec![],
+                category: String::from("Cache"),
+                remove_directories: true,
+                remove_files: true,
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                folders_to_remove: vec![]
+            };
+            database.push(folder_launcher_licenses);
+            let folder_launcher_accounts = CleanerData {
+                path: folder.0.clone(),
+                program: folder.1.clone(),
+                files_to_remove: vec![
+                    String::from("accounts.json")
+                ],
+                category: String::from("Accounts"),
+                remove_directories: true,
+                remove_files: true,
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                folders_to_remove: vec![]
+            };
+            database.push(folder_launcher_accounts);
+
+        }
         //</editor-fold>
 
         //</editor-fold>
