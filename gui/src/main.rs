@@ -1,7 +1,9 @@
 use std::cell::RefCell;
+use std::collections::HashSet;
 use std::rc::Rc;
 use std::sync::Arc;
 use eframe::egui;
+use egui::Context;
 use indicatif::{ProgressBar, ProgressStyle};
 use notify_rust::Notification;
 use tabled::Table;
@@ -21,7 +23,7 @@ async fn main() -> eframe::Result {
         #[cfg(windows)]
         viewport: egui::ViewportBuilder::default().with_inner_size([430.0, 150.0]),
         #[cfg(unix)]
-        viewport: egui::ViewportBuilder::default().with_inner_size([430.0, 105.0]),
+        viewport: egui::ViewportBuilder::default().with_inner_size([430.0, 125.0]),
         ..Default::default()
     };
 
@@ -36,7 +38,7 @@ async fn main() -> eframe::Result {
 }
 
 async fn work(
-    ctx: egui::Context,
+    ctx: Context,
     disabled_programs: Vec<&str>,
     categories: Vec<String>,
     database: Vec<CleanerData>,
@@ -49,21 +51,19 @@ async fn work(
     let mut bytes_cleared = 0;
     let mut removed_files = 0;
     let mut removed_directories = 0;
-    let mut cleared_programs: Vec<Cleared> = vec![];
+    let mut cleared_programs: HashSet<String> = HashSet::new();
 
     let pb = ProgressBar::new(0);
     pb.set_style(sty.clone());
     pb.set_prefix("Clearing");
-
-    let mut threads = vec![];
-
     let has_last_activity = categories.contains(&"LastActivity".to_string());
+
+    let mut tasks = Vec::new();
+
     if has_last_activity {
         let progress_bar = Arc::new(pb.clone());
-        let progress_sender = progress_sender.clone();
         let task = task::spawn(async move {
             progress_bar.set_message("LastActivity");
-            progress_sender.send("Clearing LastActivity...".to_string()).await.unwrap();
             #[cfg(windows)]
             registry_database::clear_last_activity();
             progress_bar.inc(1);
@@ -76,41 +76,41 @@ async fn work(
                 program: String::new(),
             }
         });
-        threads.push(task);
+        tasks.push(task);
     }
 
-    for data in database.iter() {
-        if categories.contains(&data.category) && !disabled_programs.contains(&data.program.as_str()) {
-            let data = Arc::new(data.clone());
-            let progress_bar = Arc::new(pb.clone());
-            let progress_sender = progress_sender.clone();
-            let ctx = ctx.clone();
+    let disabled_programs_set: HashSet<&str> = disabled_programs.into_iter().collect();
+    let categories_set: HashSet<String> = categories.into_iter().collect();
 
-            let task = task::spawn(async move {
-                progress_bar.set_message(format!("{}", data.path.clone()));
-                progress_sender.send(format!("{}", data.path.clone())).await.unwrap();
-                ctx.request_repaint(); // Запрашиваем обновление UI
-                let result = clear_data(&data);
-                progress_bar.inc(1);
-                result
-            });
-            threads.push(task);
+    for data in database
+        .into_iter()
+        .filter(|data| categories_set.contains(&data.category))
+    {
+        if disabled_programs_set.contains(data.program.as_str()) {
+            continue;
         }
+
+        let data = Arc::new(data);
+        let progress_bar = Arc::new(pb.clone());
+        let task = task::spawn(async move {
+            progress_bar.set_message(format!("{}", data.path));
+            let result = clear_data(&data);
+            progress_bar.inc(1);
+            result
+        });
+        tasks.push(task);
     }
 
-    pb.set_length(threads.len() as u64);
+    pb.set_length(tasks.len() as u64);
 
-    for task in threads {
+    for task in tasks {
         match task.await {
             Ok(result) => {
                 removed_files += result.files;
                 removed_directories += result.folders;
                 bytes_cleared += result.bytes;
                 if result.working {
-                    let data2 = Cleared { Program: result.program };
-                    if !cleared_programs.contains(&data2) {
-                        cleared_programs.push(data2);
-                    }
+                    cleared_programs.insert(result.program);
                 }
             },
             Err(_) => {
@@ -122,17 +122,15 @@ async fn work(
     pb.set_message("done");
     pb.finish();
 
-    progress_sender.send("Cleaning complete!".to_string()).await.unwrap();
-
     println!("Cleared programs:");
-    let table = Table::new(cleared_programs).to_string();
+    let table = Table::new(cleared_programs.into_iter()).to_string();
     println!("{}", table);
     println!("Removed: {}", get_file_size_string(bytes_cleared));
     println!("Removed files: {}", removed_files);
     println!("Removed directories: {}", removed_directories);
 
     let _ = Notification::new()
-        .summary("WinBooster CLI")
+        .summary("WinBooster GUI")
         .body(&*("Removed: ".to_owned() + &*get_file_size_string(bytes_cleared) + "\nFiles: " + &*removed_files.to_string()))
         .show();
 }
@@ -173,11 +171,10 @@ impl MyApp {
 
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        // Проверяем, есть ли новые сообщения о прогрессе
         if let Some(receiver) = &mut self.progress_receiver {
             if let Ok(message) = receiver.try_recv() {
                 self.progress_message = message;
-                ctx.request_repaint(); // Запрашиваем обновление UI
+                ctx.request_repaint();
             }
         }
 
@@ -201,12 +198,10 @@ impl eframe::App for MyApp {
                 let available_width = ui.available_width();
 
                 if ui.add_sized([available_width, 25.0], egui::Button::new("Clear")).clicked() {
-                    let mut selected_options = vec![];
-                    for (checkbox, label) in &self.checked_boxes {
-                        if *checkbox.borrow() {
-                            selected_options.push(label.clone());
-                        }
-                    }
+                    let selected_options: Vec<String> = self.checked_boxes.iter()
+                        .filter(|(checkbox, _)| *checkbox.borrow())
+                        .map(|(_, label)| label.clone())
+                        .collect();
 
                     let database: Vec<CleanerData> = database::cleaner_database::get_database();
 
@@ -217,7 +212,6 @@ impl eframe::App for MyApp {
                     let handle = tokio::spawn(work(ctx, vec![], selected_options, database, progress_sender));
                     self.task_handle = Some(handle);
 
-                    // Сбрасываем все чекбоксы
                     for (checkbox, _) in &self.checked_boxes {
                         *checkbox.borrow_mut() = false;
                     }

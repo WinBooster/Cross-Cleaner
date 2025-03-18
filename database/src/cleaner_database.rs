@@ -10,7 +10,7 @@ pub fn get_database() -> Vec<CleanerData> {
     let username = &*whoami::username();
 
     //<editor-fold desc="System">
-    let home_cache_librewolf_thumnails_normal = CleanerData {
+    let home_cache_thumnails_normal = CleanerData {
         path: "/home/".to_owned() + username + "/.cache/thumbnails/normal/*",
         program: "System".parse().unwrap(),
         files_to_remove: vec![],
@@ -22,8 +22,8 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_directory_after_clean: false,
         folders_to_remove: vec![]
     };
-    database.push(home_cache_librewolf_thumnails_normal);
-    let home_cache_librewolf_thumnails_large = CleanerData {
+    database.push(home_cache_thumnails_normal);
+    let home_cache_thumnails_large = CleanerData {
         path: "/home/".to_owned() + username + "/.cache/thumbnails/large/*",
         program: "System".parse().unwrap(),
         files_to_remove: vec![],
@@ -35,7 +35,20 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_directory_after_clean: false,
         folders_to_remove: vec![]
     };
-    database.push(home_cache_librewolf_thumnails_large);
+    database.push(home_cache_thumnails_large);
+    let home_local_share_trash_files = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/Trash/files/*",
+        program: "System".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Trash".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_trash_files);
     //</editor-fold>
     //<editor-fold desc="JetBrains">
     let home_cache_librewolf_thumnails = CleanerData {
@@ -52,6 +65,126 @@ pub fn get_database() -> Vec<CleanerData> {
     };
     database.push(home_cache_librewolf_thumnails);
     //</editor-fold>
+    //<editor-fold desc="GitHub Desktop">
+    let home_config_github_desktop_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/GitHub Desktop/logs/*",
+        program: "GitHub Desktop".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_github_desktop_logs);
+    let home_config_github_desktop_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/GitHub Desktop/Cache/*",
+        program: "GitHub Desktop".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cache".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_config_github_desktop_logs);
+    //</editor-fold>
+    //<editor-fold desc="Steam">
+    let homo_local_share_steam_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/Steam/logs/*",
+        program: "Steam".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(homo_local_share_steam_logs);
+    let homo_local_share_steam_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/..local/share/Steam/userdata/*",
+        program: "Steam".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Accounts".parse().unwrap(),
+        remove_directories: true,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(homo_local_share_steam_logs);
+    let homo_local_share_steam_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/Proton Hotfix/",
+        program: "Steam proton".parse().unwrap(),
+        files_to_remove: vec![
+            String::from("LICENSE"),
+            String::from("LICENSE.OFL")
+        ],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: false,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(homo_local_share_steam_logs);
+    //</editor-fold>
+    //<editor-fold desc="Ghidra">
+    let home_ghidra_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.ghidra/**/*.log",
+        program: "Ghidra".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_ghidra_logs);
+    //</editor-fold>
+    //<editor-fold desc="Thunderbird">
+    let home_ghidra_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.cache/thunderbird/**/cache2/*.log",
+        program: "Thunderbird".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Logs".parse().unwrap(),
+        remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_ghidra_logs);
+    //</editor-fold>
+    //<editor-fold desc="Exodus Crypto Wallet">
+    let home_ghidra_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/.config/Exodus/exodus.wallet/*",
+        program: "Exodus Crypto Wallet".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Accounts".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_ghidra_logs);
+    //</editor-fold>
+
+    //<editor-fold desc="Music clients">
+
     //<editor-fold desc="Yandex Music">
     let home_config_yandex_music_logs = CleanerData {
         path: "/home/".to_owned() + username + "/.config/yandex-music/logs/*",
@@ -132,10 +265,10 @@ pub fn get_database() -> Vec<CleanerData> {
     };
     database.push(home_config_yandex_music_gpu_cache);
     //</editor-fold>
-    //<editor-fold desc="GitHub Desktop">
-    let home_config_github_desktop_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.config/GitHub Desktop/logs/*",
-        program: "GitHub Desktop".parse().unwrap(),
+    //<editor-fold desc="Cassettle">
+    let home_cache_cassettle = CleanerData {
+        path: "/home/".to_owned() + username + "/.cache/cassette/*.log",
+        program: String::from("Cassettle"),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
         remove_directories: false,
@@ -145,25 +278,12 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_directory_after_clean: false,
         folders_to_remove: vec![]
     };
-    database.push(home_config_github_desktop_logs);
-    let home_config_github_desktop_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.config/GitHub Desktop/Cache/*",
-        program: "GitHub Desktop".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(home_config_github_desktop_logs);
+    database.push(home_cache_cassettle);
     //</editor-fold>
-    //<editor-fold desc="Steam">
-    let homo_local_share_steam_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/Steam/logs/*",
-        program: "Steam".parse().unwrap(),
+    //<editor-fold desc="Spotify">
+    let home_cache_spotify = CleanerData {
+        path: "/home/".to_owned() + username + "/.cache/spotify/*.log",
+        program: String::from("Spotify"),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
         remove_directories: false,
@@ -173,36 +293,9 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_directory_after_clean: false,
         folders_to_remove: vec![]
     };
-    database.push(homo_local_share_steam_logs);
-    let homo_local_share_steam_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/..local/share/Steam/userdata/*",
-        program: "Steam".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Accounts".parse().unwrap(),
-        remove_directories: true,
-        remove_files: false,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(homo_local_share_steam_logs);
-    let homo_local_share_steam_logs = CleanerData {
-        path: "/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/Proton Hotfix/",
-        program: "Steam proton".parse().unwrap(),
-        files_to_remove: vec![
-            String::from("LICENSE"),
-            String::from("LICENSE.OFL")
-        ],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
-    };
-    database.push(homo_local_share_steam_logs);
+    database.push(home_cache_spotify);
+    //</editor-fold>
+
     //</editor-fold>
 
     //<editor-fold desc="Messangers">
@@ -294,6 +387,19 @@ pub fn get_database() -> Vec<CleanerData> {
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
         remove_directories: false,
+        remove_files: true,
+        directories_to_remove: vec![],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_telegram_desktop);
+    let home_local_share_telegram_desktop = CleanerData {
+        path: "/home/".to_owned() + username + "/.local/share/TelegramDesktop/tdata/*",
+        program: "Telegram".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Accounts".parse().unwrap(),
+        remove_directories: true,
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
@@ -395,7 +501,7 @@ pub fn get_database() -> Vec<CleanerData> {
     //<editor-fold desc="Minecraft Launcher">
     let home_local_share_prism_launcher_instances_minecraft_logs = CleanerData {
         path: "/home/".to_owned() + username + "/.minecraft/logs/*",
-        program: "MultiMC".parse().unwrap(),
+        program: "Minecraft".parse().unwrap(),
         files_to_remove: vec![],
         category: "Logs".parse().unwrap(),
         remove_directories: true,
@@ -408,7 +514,7 @@ pub fn get_database() -> Vec<CleanerData> {
     database.push(home_local_share_prism_launcher_instances_minecraft_logs);
     let home_local_share_prism_launcher_instances_minecraft_crash_reports = CleanerData {
         path: "/home/".to_owned() + username + "/.minecraft/crash-reports/*",
-        program: "MultiMC".parse().unwrap(),
+        program: "Minecraft".parse().unwrap(),
         files_to_remove: vec![],
         category: "Crash reports".parse().unwrap(),
         remove_directories: true,
@@ -421,7 +527,7 @@ pub fn get_database() -> Vec<CleanerData> {
     database.push(home_local_share_prism_launcher_instances_minecraft_crash_reports);
     let home_local_share_prism_launcher_instances_minecraft_saves = CleanerData {
         path: "/home/".to_owned() + username + "/.minecraft/saves/*",
-        program: "MultiMC".parse().unwrap(),
+        program: "Minecraft".parse().unwrap(),
         files_to_remove: vec![],
         category: "Game saves".parse().unwrap(),
         remove_directories: true,
@@ -434,7 +540,7 @@ pub fn get_database() -> Vec<CleanerData> {
     database.push(home_local_share_prism_launcher_instances_minecraft_saves);
     let home_local_share_prism_launcher_instances_minecraft_screenshots = CleanerData {
         path: "/home/".to_owned() + username + "/.minecraft/screenshots/*",
-        program: "MultiMC".parse().unwrap(),
+        program: "Minecraft".parse().unwrap(),
         files_to_remove: vec![],
         category: "Images".parse().unwrap(),
         remove_directories: true,
@@ -873,6 +979,28 @@ pub fn get_database() -> Vec<CleanerData> {
         folders_to_remove: vec![]
     };
     database.push(home_local_share_steam_steam_apps_common_garrys_mod);
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Cheats">
+
+    //<editor-fold desc="Future Client">
+    let home_local_share_prism_launcher_logs = CleanerData {
+        path: "/home/".to_owned() + username + "/",
+        program: "Future Client".parse().unwrap(),
+        files_to_remove: vec![],
+        category: "Cheats".parse().unwrap(),
+        remove_directories: true,
+        remove_files: true,
+        directories_to_remove: vec![
+            String::from("Future")
+        ],
+        remove_all_in_dir: false,
+        remove_directory_after_clean: false,
+        folders_to_remove: vec![]
+    };
+    database.push(home_local_share_prism_launcher_logs);
     //</editor-fold>
 
     //</editor-fold>

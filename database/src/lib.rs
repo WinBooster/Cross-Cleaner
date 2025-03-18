@@ -7,5 +7,5 @@ pub mod utils;
 mod registry_utils;
 
 pub fn get_winbooster_version() -> String {
-    String::from("1.9.0")
+    String::from("1.9.1")
 }
