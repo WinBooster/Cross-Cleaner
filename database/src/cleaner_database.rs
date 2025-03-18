@@ -4038,7 +4038,7 @@ pub fn get_database() -> Vec<CleanerData> {
                 remove_directory_after_clean: false,
                 folders_to_remove: vec![]
             };
-
+            database.push(folder_launcher_accounts);
         }
         //</editor-fold>
 
