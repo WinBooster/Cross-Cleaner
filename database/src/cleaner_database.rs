@@ -554,7 +554,7 @@ pub fn get_database() -> Vec<CleanerData> {
         };
         database.push(instance_screenshots);
         let instance_cheats = CleanerData {
-            path: instance.0.clone() + "/",
+            path: instance.0.clone(),
             program: instance.1.clone(),
             files_to_remove: vec![],
             category: String::from("Cheats"),
@@ -3925,7 +3925,7 @@ pub fn get_database() -> Vec<CleanerData> {
             };
             database.push(instance_screenshots);
             let instance_cheats = CleanerData {
-                path: instance.0.clone() + "/",
+                path: instance.0.clone(),
                 program: instance.1.clone(),
                 files_to_remove: vec![],
                 category: String::from("Cheats"),
@@ -4024,6 +4024,20 @@ pub fn get_database() -> Vec<CleanerData> {
                 folders_to_remove: vec![]
             };
             database.push(folder_launcher_accounts);
+            let folder_launcher_accounts = CleanerData {
+                path: folder.0.clone() + "/",
+                program: folder.1.clone(),
+                files_to_remove: vec![
+                    String::from("launcher_accounts.json")
+                ],
+                category: String::from("Accounts"),
+                remove_directories: false,
+                remove_files: false,
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                folders_to_remove: vec![]
+            };
 
         }
         //</editor-fold>
