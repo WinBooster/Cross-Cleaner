@@ -603,21 +603,7 @@ pub fn get_database() -> Vec<CleanerData> {
             path: folder.0.clone() + "/",
             program: folder.1.clone(),
             files_to_remove: vec![
-                String::from("accounts.json")
-            ],
-            category: String::from("Accounts"),
-            remove_directories: false,
-            remove_files: false,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
-        };
-        database.push(folder_accounts);
-        let folder_launcher_accounts = CleanerData {
-            path: folder.0.clone() + "/",
-            program: folder.1.clone(),
-            files_to_remove: vec![
+                String::from("accounts.json"),
                 String::from("launcher_accounts.json")
             ],
             category: String::from("Accounts"),
@@ -628,7 +614,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_directory_after_clean: false,
             folders_to_remove: vec![]
         };
-        database.push(folder_launcher_accounts);
+        database.push(folder_accounts);
         let folder_launcher_log_files = CleanerData {
             path: folder.0.clone() + "/*log*",
             program: folder.1.clone(),
@@ -4013,26 +3999,12 @@ pub fn get_database() -> Vec<CleanerData> {
                 path: folder.0.clone() + "\\",
                 program: folder.1.clone(),
                 files_to_remove: vec![
-                    String::from("accounts.json")
+                    String::from("accounts.json"),
+                    String::from("launcher_accounts.json")
                 ],
                 category: String::from("Accounts"),
                 remove_directories: true,
                 remove_files: true,
-                directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                folders_to_remove: vec![]
-            };
-            database.push(folder_launcher_accounts);
-            let folder_launcher_accounts = CleanerData {
-                path: folder.0.clone() + "\\",
-                program: folder.1.clone(),
-                files_to_remove: vec![
-                    String::from("launcher_accounts.json")
-                ],
-                category: String::from("Accounts"),
-                remove_directories: false,
-                remove_files: false,
                 directories_to_remove: vec![],
                 remove_all_in_dir: false,
                 remove_directory_after_clean: false,
