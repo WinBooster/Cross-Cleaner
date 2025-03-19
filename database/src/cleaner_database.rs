@@ -71,7 +71,9 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
             directories_to_remove: vec![
                 String::from("meteor-client"),
                 String::from("LiquidBounce"),
-                String::from("Impact")
+                String::from("Impact"),
+                String::from("Wurst"),
+                String::from("Nodus")
             ],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
