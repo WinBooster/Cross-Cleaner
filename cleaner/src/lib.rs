@@ -31,7 +31,10 @@ pub fn clear_data(data: &CleanerData) -> CleanerResult {
                         }
                         //println!("Found: {}", path);
                         for file in &data.files_to_remove {
+                            #[cfg(windows)]
                             let file_path = path.to_owned() + "\\" + &*file;
+                            #[cfg(unix)]
+                            let file_path = path.to_owned() + "/" + &*file;
                             match fs::remove_file(file_path) {
                                 Ok(_) => {
                                     cleaner_result.files += 1;
@@ -42,7 +45,10 @@ pub fn clear_data(data: &CleanerData) -> CleanerResult {
                             }
                         }
                         for directory in &data.directories_to_remove {
+                            #[cfg(windows)]
                             let file_path = path.to_owned() + "\\" + &*directory;
+                            #[cfg(unix)]
+                            let file_path = path.to_owned() + "/" + &*directory;
                             let metadata = fs::metadata(file_path.clone());
                             match metadata {
                                 Ok(res) => { lenght += res.len(); }
@@ -58,7 +64,10 @@ pub fn clear_data(data: &CleanerData) -> CleanerResult {
                         }
 
                         for dir in &data.directories_to_remove {
+                            #[cfg(windows)]
                             let dir_path = path.to_owned() + "\\" + &*dir;
+                            #[cfg(unix)]
+                            let dir_path = path.to_owned() + "/" + &*dir;
                             let metadata = fs::metadata(dir_path.clone());
                             match metadata {
                                 Ok(res) => { lenght += res.len(); }
@@ -97,7 +106,10 @@ pub fn clear_data(data: &CleanerData) -> CleanerResult {
                             }
                         }
                         if data.remove_all_in_dir {
+                            #[cfg(windows)]
                             let results: Result<Paths, PatternError> = glob(&*(path.to_owned() + "\\*"));
+                            #[cfg(unix)]
+                            let results: Result<Paths, PatternError> = glob(&*(path.to_owned() + "/*"));
                             let mut files = 0;
                             let mut dirs = 0;
                             match results {
