@@ -11,7 +11,6 @@ fn remove_directory_recursive(path: &Path, cleaner_result: &mut CleanerResult) -
             let entry_path = entry.path();
             if entry_path.is_dir() {
                 remove_directory_recursive(&entry_path, cleaner_result)?;
-                cleaner_result.folders += 1;
             } else {
                 remove_file(&entry_path, cleaner_result)?;
             }
