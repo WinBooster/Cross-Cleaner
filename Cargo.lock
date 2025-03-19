@@ -912,6 +912,7 @@ dependencies = [
  "disk-name",
  "tabled",
  "whoami",
+ "winreg",
 ]
 
 [[package]]

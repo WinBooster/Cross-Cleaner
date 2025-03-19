@@ -16,3 +16,4 @@ ProductVersion = "1.9.2"
 
 [target.'cfg(windows)'.dependencies]
 disk-name = "1.0.0"
+winreg = "0.55.0"
