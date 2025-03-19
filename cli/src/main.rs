@@ -1,26 +1,32 @@
-use std::fmt::{Debug};
-use std::{env};
 use std::collections::HashSet;
+use std::env;
+use std::fmt::Debug;
 use std::sync::Arc;
 use crossterm::execute;
 use inquire::formatter::MultiOptionFormatter;
 use inquire::list_option::ListOption;
-use inquire::MultiSelect;
 use inquire::validator::Validation;
-use tabled::{Table};
+use inquire::MultiSelect;
+use tabled::Table;
 use tokio::task;
 use indicatif::{ProgressBar, ProgressStyle};
 use notify_rust::Notification;
 use cleaner::clear_data;
-use database::{get_winbooster_version, registry_database};
+use database::{get_pcbooster_version};
 use database::structures::{CleanerData, CleanerResult, Cleared};
 use database::utils::get_file_size_string;
-use std::io::stdin;
+
+#[cfg(windows)]
+use std::io::{stdin};
+use std::io::stdout;
 
 async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: Vec<CleanerData>) {
     let sty = ProgressStyle::with_template(
         "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
-    ).unwrap().progress_chars("##-").tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
+    )
+        .unwrap()
+        .progress_chars("##-")
+        .tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
 
     let mut bytes_cleared = 0;
     let mut removed_files = 0;
@@ -33,14 +39,14 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: V
 
     let has_last_activity = categories.contains(&"LastActivity".to_string());
 
-    let mut threads = Vec::new();
+    let mut tasks = Vec::new();
 
     if has_last_activity {
         let progress_bar = Arc::new(pb.clone());
         let task = task::spawn(async move {
             progress_bar.set_message("LastActivity");
             #[cfg(windows)]
-            registry_database::clear_last_activity();
+            database::registry_database::clear_last_activity();
             progress_bar.inc(1);
             CleanerResult {
                 files: 0,
@@ -51,7 +57,7 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: V
                 program: String::new(),
             }
         });
-        threads.push(task);
+        tasks.push(task);
     }
 
     for data in database
@@ -65,31 +71,33 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: V
         let data = Arc::new(data.clone());
         let progress_bar = Arc::new(pb.clone());
         let task = task::spawn(async move {
-            progress_bar.set_message(format!("{}", data.path));
+            progress_bar.set_message(data.path.clone());
             let result = clear_data(&data);
             progress_bar.inc(1);
             result
         });
-        threads.push(task);
+        tasks.push(task);
     }
 
-    pb.set_length(threads.len() as u64);
+    pb.set_length(tasks.len() as u64);
 
-    for async_task in threads {
-        match async_task.await {
+    for task in tasks {
+        match task.await {
             Ok(result) => {
                 removed_files += result.files;
                 removed_directories += result.folders;
                 bytes_cleared += result.bytes;
                 if result.working {
-                    let data2 = Cleared { Program: result.program };
-                    if !cleared_programs.contains(&data2) {
-                        cleared_programs.push(data2);
+                    let cleared = Cleared {
+                        Program: result.program,
+                    };
+                    if !cleared_programs.contains(&cleared) {
+                        cleared_programs.push(cleared);
                     }
                 }
-            },
-            Err(_) => {
-                eprintln!("Error waiting for task completion");
+            }
+            Err(e) => {
+                eprintln!("Error waiting for task completion: {:?}", e);
             }
         }
     }
@@ -104,26 +112,34 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: V
     println!("Removed files: {}", removed_files);
     println!("Removed directories: {}", removed_directories);
 
-    let _ = Notification::new()
-        .summary("WinBooster CLI")
-        .body(&*("Removed: ".to_owned() + &*get_file_size_string(bytes_cleared) + "\nFiles: " + &*removed_files.to_string()))
-        .show();
+    if let Err(e) = Notification::new()
+        .summary("Cross Cleaner CLI")
+        .body(&format!(
+            "Removed: {}\nFiles: {}",
+            get_file_size_string(bytes_cleared),
+            removed_files
+        ))
+        .show()
+    {
+        eprintln!("Failed to show notification: {:?}", e);
+    }
 }
 
 #[tokio::main]
 async fn main() {
     execute!(
-        std::io::stdout(),
-        crossterm::terminal::SetTitle("WinBooster Definitive Edition CLI v".to_owned() + &get_winbooster_version())
-    ).unwrap();
+        stdout(),
+        crossterm::terminal::SetTitle(format!("Cross Cleaner CLI v{}", get_pcbooster_version()))
+    )
+        .unwrap();
 
     let database: Vec<CleanerData> = database::cleaner_database::get_database();
 
-    let mut options: HashSet<&str> = HashSet::new();
+    let mut options: HashSet<String> = HashSet::new();
     let mut programs: HashSet<&str> = HashSet::new();
 
     for data in &database {
-        options.insert(&data.category);
+        options.insert(String::from(&data.category));
         programs.insert(&data.program);
     }
 
@@ -150,13 +166,17 @@ async fn main() {
         let formatter_categories: MultiOptionFormatter<'_, &str> =
             &|a| format!("{} selected categories", a.len());
 
-        let ans_categories = MultiSelect::new("Select the clearing categories:", options.into_iter().collect())
+        let options_str: Vec<&str> = options.iter().map(|s| s.as_str()).collect();
+        let ans_categories = MultiSelect::new(
+            "Select the clearing categories:",
+            options_str,
+        )
             .with_validator(validator)
             .with_formatter(formatter_categories)
             .prompt();
 
         if let Ok(ans_categories) = ans_categories {
-            let ans_categories: Vec<String> = ans_categories.into_iter().map(|s| s.to_owned()).collect();
+            let ans_categories: Vec<String> = ans_categories.into_iter().map(|s| s.to_string()).collect();
 
             let programs2: Vec<&str> = database
                 .iter()
@@ -166,7 +186,10 @@ async fn main() {
                 .into_iter()
                 .collect();
 
-            let ans_programs = MultiSelect::new("Select the disabled programs for clearing:", programs2)
+            let ans_programs = MultiSelect::new(
+                "Select the disabled programs for clearing:",
+                programs2,
+            )
                 .with_formatter(formatter_categories)
                 .prompt();
 

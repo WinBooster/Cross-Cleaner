@@ -7,6 +7,6 @@ pub mod utils;
 mod registry_utils;
 mod minecraft_launchers_database;
 
-pub fn get_winbooster_version() -> String {
+pub fn get_pcbooster_version() -> String {
     String::from("1.9.2")
 }

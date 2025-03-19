@@ -738,6 +738,8 @@ pub fn get_database() -> Vec<CleanerData> {
 
     //</editor-fold>
 
+    database.sort_by(|a, b| a.category.cmp(&b.category));
+
     database
 }
 #[cfg(windows)]
@@ -4369,6 +4371,8 @@ pub fn get_database() -> Vec<CleanerData> {
     database.push(steam_userdata);
 
     //</editor-fold>
+
+    database.sort_by(|a, b| a.category.cmp(&b.category));
 
     database
 }

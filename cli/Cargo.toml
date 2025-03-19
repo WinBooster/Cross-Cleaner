@@ -1,11 +1,10 @@
 [package]
-name = "WinBooster_CLI"
+name = "Cross_Cleaner_CLI"
 version = "1.9.2"
 edition = "2021"
 build = "build.rs"
 
 [dependencies]
-glob = "0.3.1"
 inquire = "0.7.5"
 crossterm = "0.27.0"
 tokio = { version = "1", features = ["full"] }
@@ -15,15 +14,15 @@ tabled = "0.17.0"
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }
 
-[build-dependencies]
-winres = "0.1"
+[target.'cfg(windows)'.dependencies]
+winreg = "0.55.0"
 
 [package.metadata.winres]
 FileDescription = "Garbage remover"
-OriginalFilename = "WinBooster.exe"
+OriginalFilename = "Cross Cleaner.exe"
 LegalCopyright = "Copyright Monolith Development © 2025"
-ProductName = "WinBooster"
-ProductVersion = "1.8.9"
+ProductName = "Cross Cleaner"
+ProductVersion = "1.9.2"
 
 [profile.release] # optimize file size
 lto = true

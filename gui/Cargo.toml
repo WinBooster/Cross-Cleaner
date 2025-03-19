@@ -1,5 +1,5 @@
 [package]
-name = "WinBooster_GUI"
+name = "Cross_Cleaner_GUI"
 version = "1.9.2"
 edition = "2024"
 
@@ -8,15 +8,20 @@ egui = "0.31.1"
 eframe = "0.31.1"
 env_logger = "0.11.6"
 tokio = { version = "1", features = ["full"] }
-indicatif = "0.17.7"
 notify-rust = "4"
-tabled = "0.17.0"
 
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }
 
-[build-dependencies]
-winres = "0.1"
+[target.'cfg(windows)'.dependencies]
+winreg = "0.55.0"
+
+[package.metadata.winres]
+FileDescription = "Garbage remover"
+OriginalFilename = "Cross Cleaner.exe"
+LegalCopyright = "Copyright Monolith Development © 2025"
+ProductName = "Cross Cleaner"
+ProductVersion = "1.9.2"
 
 [profile.release] # optimize file size
 lto = true

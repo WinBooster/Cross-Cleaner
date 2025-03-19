@@ -6,7 +6,13 @@ edition = "2024"
 [dependencies]
 tabled = "0.17.0"
 whoami = "1.5.2"
-disk-name = "1.0.0"
+
+[package.metadata.winres]
+FileDescription = "Garbage remover"
+OriginalFilename = "Cross Cleaner.exe"
+LegalCopyright = "Copyright Monolith Development © 2025"
+ProductName = "Cross Cleaner"
+ProductVersion = "1.9.2"
 
 [target.'cfg(windows)'.dependencies]
-winreg = "0.55.0"
+disk-name = "1.0.0"

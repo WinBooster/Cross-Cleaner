@@ -3,15 +3,12 @@ use std::collections::HashSet;
 use std::rc::Rc;
 use std::sync::Arc;
 use eframe::egui;
-use egui::Context;
-use indicatif::{ProgressBar, ProgressStyle};
 use notify_rust::Notification;
-use tabled::Table;
 use tokio::sync::mpsc;
 use tokio::task;
 use cleaner::clear_data;
-use database::{get_winbooster_version, registry_database};
-use database::structures::{CleanerData, CleanerResult, Cleared};
+use database::{get_pcbooster_version, registry_database};
+use database::structures::{CleanerData, CleanerResult};
 use database::utils::get_file_size_string;
 
 #[tokio::main]
@@ -28,7 +25,7 @@ async fn main() -> eframe::Result {
     };
 
     eframe::run_native(
-        &*("WinBooster Definitive Edition GUI v".to_owned() + &*get_winbooster_version()),
+        &*("Cross Cleaner GUI v".to_owned() + &*get_pcbooster_version()),
         options.clone(),
         Box::new(|_cc| {
             _cc.egui_ctx.set_visuals(egui::Visuals::dark());
@@ -38,35 +35,26 @@ async fn main() -> eframe::Result {
 }
 
 async fn work(
-    ctx: Context,
     disabled_programs: Vec<&str>,
     categories: Vec<String>,
     database: Vec<CleanerData>,
     progress_sender: mpsc::Sender<String>,
 ) {
-    let sty = ProgressStyle::with_template(
-        "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
-    ).unwrap().progress_chars("##-").tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
-
     let mut bytes_cleared = 0;
     let mut removed_files = 0;
     let mut removed_directories = 0;
     let mut cleared_programs: HashSet<String> = HashSet::new();
 
-    let pb = ProgressBar::new(0);
-    pb.set_style(sty.clone());
-    pb.set_prefix("Clearing");
     let has_last_activity = categories.contains(&"LastActivity".to_string());
 
     let mut tasks = Vec::new();
 
     if has_last_activity {
-        let progress_bar = Arc::new(pb.clone());
+        let progress_sender = progress_sender.clone();
         let task = task::spawn(async move {
-            progress_bar.set_message("LastActivity");
+            let _ = progress_sender.send("LastActivity".to_string()).await;
             #[cfg(windows)]
             registry_database::clear_last_activity();
-            progress_bar.inc(1);
             CleanerResult {
                 files: 0,
                 folders: 0,
@@ -91,17 +79,14 @@ async fn work(
         }
 
         let data = Arc::new(data);
-        let progress_bar = Arc::new(pb.clone());
+        let progress_sender = progress_sender.clone();
         let task = task::spawn(async move {
-            progress_bar.set_message(format!("{}", data.path));
+            let _ = progress_sender.send(format!("{}", data.path)).await;
             let result = clear_data(&data);
-            progress_bar.inc(1);
             result
         });
         tasks.push(task);
     }
-
-    pb.set_length(tasks.len() as u64);
 
     for task in tasks {
         match task.await {
@@ -119,18 +104,8 @@ async fn work(
         }
     }
 
-    pb.set_message("done");
-    pb.finish();
-
-    println!("Cleared programs:");
-    let table = Table::new(cleared_programs.into_iter()).to_string();
-    println!("{}", table);
-    println!("Removed: {}", get_file_size_string(bytes_cleared));
-    println!("Removed files: {}", removed_files);
-    println!("Removed directories: {}", removed_directories);
-
     let _ = Notification::new()
-        .summary("WinBooster GUI")
+        .summary("Cross Cleaner GUI")
         .body(&*("Removed: ".to_owned() + &*get_file_size_string(bytes_cleared) + "\nFiles: " + &*removed_files.to_string()))
         .show();
 }
@@ -139,8 +114,8 @@ struct MyApp {
     pub(crate) checked_boxes: Vec<(Rc<RefCell<bool>>, String)>,
     pub(crate) selected_options: Vec<String>,
     pub(crate) task_handle: Option<tokio::task::JoinHandle<()>>,
-    pub(crate) progress_message: String, // Сообщение о прогрессе
-    pub(crate) progress_receiver: Option<mpsc::Receiver<String>>, // Канал для получения сообщений о прогрессе
+    pub(crate) progress_message: String,
+    pub(crate) progress_receiver: Option<mpsc::Receiver<String>>,
 }
 
 impl MyApp {
@@ -208,8 +183,7 @@ impl eframe::App for MyApp {
                     let (progress_sender, progress_receiver) = mpsc::channel(32);
                     self.progress_receiver = Some(progress_receiver);
 
-                    let ctx = ctx.clone();
-                    let handle = tokio::spawn(work(ctx, vec![], selected_options, database, progress_sender));
+                    let handle = tokio::spawn(work(vec![], selected_options, database, progress_sender));
                     self.task_handle = Some(handle);
 
                     for (checkbox, _) in &self.checked_boxes {
