@@ -5,6 +5,140 @@ use crate::minecraft_launchers_database::{get_minecraft_launchers_folders, get_m
 #[cfg(windows)]
 use crate::registry_utils::{get_steam_directory_from_registry};
 
+
+fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
+    let mut database: Vec<CleanerData> = Vec::new();
+    #[cfg(unix)]
+    let get_minecraft_launchers_instances_folders = get_minecraft_launchers_instances_folders(username);
+    #[cfg(windows)]
+    let get_minecraft_launchers_instances_folders = get_minecraft_launchers_instances_folders(drive, username);
+    for instance in get_minecraft_launchers_instances_folders {
+        let instance_logs = CleanerData {
+            path: instance.0.clone() + "/logs/*",
+            program: instance.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(instance_logs);
+        let instance_crash_reports = CleanerData {
+            path: instance.0.clone() + "/crash-reports/*",
+            program: instance.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Crash reports"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(instance_crash_reports);
+        let instance_saves = CleanerData {
+            path: instance.0.clone() + "/saves/*",
+            program: instance.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Game saves"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(instance_saves);
+        let instance_screenshots = CleanerData {
+            path: instance.0.clone() + "/screenshots/*",
+            program: instance.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Images"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(instance_screenshots);
+        let instance_cheats = CleanerData {
+            path: instance.0.clone(),
+            program: instance.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Cheats"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![
+                String::from("meteor-client"),
+                String::from("LiquidBounce"),
+                String::from("Impact")
+            ],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false,
+        };
+        database.push(instance_cheats);
+    }
+
+    #[cfg(unix)]
+    let get_minecraft_launchers_folders = get_minecraft_launchers_folders(username);
+    #[cfg(windows)]
+    let get_minecraft_launchers_folders = get_minecraft_launchers_folders(drive, username);
+    for folder in get_minecraft_launchers_folders {
+        let folder_cache = CleanerData {
+            path: folder.0.clone() + "/cache/*",
+            program: folder.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Cache"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(folder_cache);
+        let folder_logs = CleanerData {
+            path: folder.0.clone() + "/logs/*",
+            program: folder.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(folder_logs);
+        let folder_accounts = CleanerData {
+            path: folder.0.clone() + "/",
+            program: folder.1.clone(),
+            files_to_remove: vec![
+                String::from("accounts.json"),
+                String::from("launcher_accounts.json")
+            ],
+            category: String::from("Accounts"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(folder_accounts);
+        let folder_launcher_log_files = CleanerData {
+            path: folder.0.clone() + "/*log*",
+            program: folder.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(folder_launcher_log_files);
+    }
+    database
+}
+
 #[cfg(unix)]
 pub fn get_database() -> Vec<CleanerData> {
     let mut database: Vec<CleanerData> = Vec::new();
@@ -20,8 +154,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_cache_thumnails_normal);
     let home_cache_thumnails_large = CleanerData {
@@ -33,8 +166,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_cache_thumnails_large);
     let home_local_share_trash_files = CleanerData {
@@ -46,8 +178,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_local_share_trash_files);
     //</editor-fold>
@@ -61,8 +192,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_cache_librewolf_thumnails);
     //</editor-fold>
@@ -76,8 +206,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_config_github_desktop_logs);
     let home_config_github_desktop_logs = CleanerData {
@@ -89,8 +218,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_config_github_desktop_logs);
     //</editor-fold>
@@ -104,8 +232,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(homo_local_share_steam_logs);
     let homo_local_share_steam_logs = CleanerData {
@@ -117,8 +244,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: false,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(homo_local_share_steam_logs);
     let homo_local_share_steam_logs = CleanerData {
@@ -133,8 +259,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: false,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(homo_local_share_steam_logs);
     //</editor-fold>
@@ -148,8 +273,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_ghidra_logs);
     //</editor-fold>
@@ -163,8 +287,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_ghidra_logs);
     //</editor-fold>
@@ -178,8 +301,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_ghidra_logs);
     //</editor-fold>
@@ -196,8 +318,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_config_yandex_music_logs);
     let home_config_yandex_music_cache = CleanerData {
@@ -209,8 +330,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_config_yandex_music_cache);
     let home_config_yandex_music_code_cache = CleanerData {
@@ -222,8 +342,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_config_yandex_music_code_cache);
     let home_config_yandex_music_dawn_graphite_cache = CleanerData {
@@ -235,8 +354,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_config_yandex_music_dawn_graphite_cache);
     let home_config_yandex_music_dawn_web_gpu_cache = CleanerData {
@@ -248,8 +366,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_config_yandex_music_dawn_web_gpu_cache);
     let home_config_yandex_music_gpu_cache = CleanerData {
@@ -261,8 +378,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_config_yandex_music_gpu_cache);
     //</editor-fold>
@@ -276,8 +392,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_cache_cassettle);
     //</editor-fold>
@@ -291,8 +406,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_cache_spotify);
     //</editor-fold>
@@ -311,8 +425,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_config_discord_logs);
     let home_config_discord_cache = CleanerData {
@@ -324,8 +437,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_config_discord_cache);
     let home_config_discord_code_cache = CleanerData {
@@ -337,8 +449,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_config_discord_code_cache);
     let home_config_discord_dawn_graphite_cache = CleanerData {
@@ -350,8 +461,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_config_discord_dawn_graphite_cache);
     let home_config_discord_dawn_web_gpu_cache = CleanerData {
@@ -363,8 +473,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_config_discord_dawn_web_gpu_cache);
     let home_config_discord_gpu_cache = CleanerData {
@@ -376,8 +485,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_config_discord_gpu_cache);
     //</editor-fold>
@@ -391,8 +499,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_local_share_telegram_desktop);
     let home_local_share_telegram_desktop = CleanerData {
@@ -404,8 +511,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_local_share_telegram_desktop);
     //</editor-fold>
@@ -424,8 +530,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_cache_firefox_thumbnails);
     let home_mozila_firefox_cookies = CleanerData {
@@ -440,8 +545,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_mozila_firefox_cookies);
     let home_mozila_firefox_cookies = CleanerData {
@@ -457,8 +561,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_mozila_firefox_cookies);
     //</editor-fold>
@@ -472,8 +575,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_cache_librewolf_thumnails);
     let home_cache_librewolf_thumnails = CleanerData {
@@ -489,8 +591,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: false,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_cache_librewolf_thumnails);
     //</editor-fold>
@@ -499,136 +600,8 @@ pub fn get_database() -> Vec<CleanerData> {
 
     //<editor-fold desc="Minecraft launchers">
 
-    let get_minecraft_launchers_instances_folders = get_minecraft_launchers_instances_folders(username);
-    for instance in get_minecraft_launchers_instances_folders {
-        let instance_logs = CleanerData {
-            path: instance.0.clone() + "/logs/*",
-            program: instance.1.clone(),
-            files_to_remove: vec![],
-            category: String::from("Logs"),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
-        };
-        database.push(instance_logs);
-        let instance_crash_reports = CleanerData {
-            path: instance.0.clone() + "/crash-reports/*",
-            program: instance.1.clone(),
-            files_to_remove: vec![],
-            category: String::from("Crash reports"),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
-        };
-        database.push(instance_crash_reports);
-        let instance_saves = CleanerData {
-            path: instance.0.clone() + "/saves/*",
-            program: instance.1.clone(),
-            files_to_remove: vec![],
-            category: String::from("Game saves"),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
-        };
-        database.push(instance_saves);
-        let instance_screenshots = CleanerData {
-            path: instance.0.clone() + "/screenshots/*",
-            program: instance.1.clone(),
-            files_to_remove: vec![],
-            category: String::from("Images"),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
-        };
-        database.push(instance_screenshots);
-        let instance_cheats = CleanerData {
-            path: instance.0.clone(),
-            program: instance.1.clone(),
-            files_to_remove: vec![],
-            category: String::from("Cheats"),
-            remove_directories: false,
-            remove_files: false,
-            directories_to_remove: vec![
-                String::from("meteor-client"),
-                String::from("LiquidBounce")
-            ],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
-        };
-        database.push(instance_cheats);
-    }
-
-    let get_minecraft_launchers_folders = get_minecraft_launchers_folders(username);
-    for folder in get_minecraft_launchers_folders {
-        let folder_cache = CleanerData {
-            path: folder.0.clone() + "/cache/*",
-            program: folder.1.clone(),
-            files_to_remove: vec![],
-            category: String::from("Cache"),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
-        };
-        database.push(folder_cache);
-        let folder_logs = CleanerData {
-            path: folder.0.clone() + "/logs/*",
-            program: folder.1.clone(),
-            files_to_remove: vec![],
-            category: String::from("Logs"),
-            remove_directories: true,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
-        };
-        database.push(folder_logs);
-        let folder_accounts = CleanerData {
-            path: folder.0.clone() + "/",
-            program: folder.1.clone(),
-            files_to_remove: vec![
-                String::from("accounts.json"),
-                String::from("launcher_accounts.json")
-            ],
-            category: String::from("Accounts"),
-            remove_directories: false,
-            remove_files: false,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
-        };
-        database.push(folder_accounts);
-        let folder_launcher_log_files = CleanerData {
-            path: folder.0.clone() + "/*log*",
-            program: folder.1.clone(),
-            files_to_remove: vec![],
-            category: String::from("Logs"),
-            remove_directories: false,
-            remove_files: true,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
-        };
-        database.push(folder_launcher_log_files);
-    }
+    let mut mc_database = get_minecraft_database("", username);
+    database.append(&mut mc_database);
 
     //</editor-fold>
 
@@ -644,8 +617,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_local_share_terraria_worlds);
     let home_local_share_terraria_playes = CleanerData {
@@ -657,8 +629,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_local_share_terraria_playes);
     let home_local_share_steam_steam_apps_common_terraria = CleanerData {
@@ -672,8 +643,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: false,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_local_share_steam_steam_apps_common_terraria);
     let home_local_share_steam_steam_apps_common_terraria = CleanerData {
@@ -685,8 +655,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_local_share_steam_steam_apps_common_terraria);
     //</editor-fold>
@@ -702,8 +671,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: false,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_local_share_steam_steam_apps_common_garrys_mod);
     let home_local_share_steam_steam_apps_common_garrys_mod = CleanerData {
@@ -715,8 +683,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_local_share_steam_steam_apps_common_garrys_mod);
     //</editor-fold>
@@ -737,8 +704,7 @@ pub fn get_database() -> Vec<CleanerData> {
             String::from("Future")
         ],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(home_local_share_prism_launcher_logs);
     //</editor-fold>
@@ -768,8 +734,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_windows_debug_wia);
         let c_windows_prefetch = CleanerData {
@@ -781,8 +746,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_windows_prefetch);
         let c_windows_dumps = CleanerData {
@@ -794,8 +758,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_windows_dumps);
         let c_windows_security_logs = CleanerData {
@@ -805,8 +768,7 @@ pub fn get_database() -> Vec<CleanerData> {
             category: "Logs".parse().unwrap(), remove_directories: false,
             remove_files: true, directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_windows_security_logs);
         let c_windows_security_database_logs = CleanerData {
@@ -818,8 +780,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_windows_security_database_logs);
         let c_windows_logs = CleanerData {
@@ -831,8 +792,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_windows_logs);
         let c_windows_logs = CleanerData {
@@ -844,8 +804,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_windows_logs);
         let c_temp = CleanerData {
@@ -857,8 +816,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_temp);
         let c_windows_panther = CleanerData {
@@ -869,8 +827,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_directories: false,
             remove_files: false, directories_to_remove: vec![],
             remove_all_in_dir: true,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_windows_panther);
         let c_windows_temp = CleanerData {
@@ -882,8 +839,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_windows_temp);
         let c_windows_logs = CleanerData {
@@ -895,8 +851,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_windows_logs);
         let c_windows_logs_windows_update = CleanerData {
@@ -908,8 +863,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_windows_logs_windows_update);
         let c_users_appdata_local_temp = CleanerData {
@@ -921,8 +875,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_users_appdata_local_temp);
         let c_programdata_usoshared_logs = CleanerData {
@@ -934,8 +887,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_programdata_usoshared_logs);
         let c_users_appdata_local_connecteddiveces_platform = CleanerData {
@@ -947,8 +899,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_users_appdata_local_connecteddiveces_platform);
         let c_users_appdata_local_crash_dumps = CleanerData {
@@ -960,8 +911,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_users_appdata_local_crash_dumps);
         let c_users_downloads = CleanerData {
@@ -973,8 +923,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_users_downloads);
         //</editor-fold>
@@ -990,8 +939,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(program_files_windows_defender);
         let program_files_windows_defender = CleanerData {
@@ -1006,8 +954,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(program_files_windows_defender);
         //</editor-fold>
@@ -1021,8 +968,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_program_files_nvidia_corporation);
         //</editor-fold>
@@ -1039,8 +985,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_program_files_nvidia_corporation);
         let c_program_files_nvidia_corporation_nvsmi = CleanerData {
@@ -1054,8 +999,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_program_files_nvidia_corporation_nvsmi);
         let c_program_files_nvidia_corporation_nv_stereo_installer = CleanerData {
@@ -1070,8 +1014,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_program_files_nvidia_corporation_nv_stereo_installer);
         let c_program_files_nvidia_corporation_nv_fbs_plugin = CleanerData {
@@ -1085,8 +1028,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_program_files_nvidia_corporation_nv_fbs_plugin);
         let c_users_appdata_local_nvidia_corporation_gfn_runtime_sdk = CleanerData {
@@ -1098,8 +1040,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_users_appdata_local_nvidia_corporation_gfn_runtime_sdk);
         let program_data_nvidia_corporation_nvstapisvr = CleanerData {
@@ -1111,8 +1052,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(program_data_nvidia_corporation_nvstapisvr);
         let program_data_nvidia_corporation_nvStereoInstaller = CleanerData {
@@ -1124,8 +1064,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(program_data_nvidia_corporation_nvStereoInstaller);
         let program_data_nvidia_corporation = CleanerData {
@@ -1137,8 +1076,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(program_data_nvidia_corporation);
         //</editor-fold>
@@ -1157,7 +1095,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(java_1);
         let java_files = vec![
@@ -1188,7 +1125,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(java_2);
         let java_5 = CleanerData {
@@ -1198,13 +1134,12 @@ pub fn get_database() -> Vec<CleanerData> {
             category: "Logs".parse().unwrap(),
             remove_directories: false,
             remove_files: false,
-            directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![
+            directories_to_remove: vec![
                 "sample".parse().unwrap(),
                 "demo".parse().unwrap()
             ],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
         };
         database.push(java_5);
         let java_2 = CleanerData {
@@ -1217,7 +1152,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(java_2);
         let java_3 = CleanerData {
@@ -1230,7 +1164,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(java_3);
         let java_4 = CleanerData {
@@ -1243,7 +1176,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(java_4);
         let java_5 = CleanerData {
@@ -1256,7 +1188,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(java_5);
         let java_6 = CleanerData {
@@ -1269,7 +1200,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(java_6);
         let java_7 = CleanerData {
@@ -1282,7 +1212,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(java_7);
         let java_8 = CleanerData {
@@ -1295,7 +1224,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(java_8);
         let java_9 = CleanerData {
@@ -1308,7 +1236,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(java_9);
         let java_10 = CleanerData {
@@ -1321,7 +1248,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(java_10);
         let java_11 = CleanerData {
@@ -1334,7 +1260,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(java_11);
         //</editor-fold>
@@ -1349,7 +1274,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_x86_tenorshare_4ukey_for_android_logs);
         let c_users_appdata_roaming_tsmonitor_4uker_for_android = CleanerData {
@@ -1362,7 +1286,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_tsmonitor_4uker_for_android);
         //</editor-fold>
@@ -1377,7 +1300,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_postman_agent_logs);
         let c_users_appdata_local_postman_agent = CleanerData {
@@ -1390,7 +1312,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_postman_agent);
         //</editor-fold>
@@ -1405,7 +1326,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_hex_rays_ida_pro);
 
@@ -1421,7 +1341,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_xamarin_logs);
         //</editor-fold>
@@ -1436,7 +1355,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_windscribe);
         //</editor-fold>
@@ -1451,7 +1369,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_github_desktop);
         let c_users_appdata_roaming_github_desktop_logs = CleanerData {
@@ -1464,7 +1381,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_github_desktop_logs);
         let c_users_appdata_roaming_github_desktop_logs2 = CleanerData {
@@ -1477,7 +1393,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_github_desktop_logs2);
         //</editor-fold>
@@ -1492,7 +1407,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_programdata_panda_security_pslogs);
         //</editor-fold>
@@ -1507,7 +1421,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_programdata_panda_security_pslogs);
         //</editor-fold>
@@ -1522,7 +1435,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_x86_minibin);
         //</editor-fold>
@@ -1542,7 +1454,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_brave_software_brave_browser_application);
         //</editor-fold>
@@ -1557,7 +1468,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_qbittorent);
         let c_program_files_qbittorent_logs = CleanerData {
@@ -1570,7 +1480,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_qbittorent_logs);
         //</editor-fold>
@@ -1585,7 +1494,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_ccleaner_logs);
         //</editor-fold>
@@ -1600,7 +1508,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_ccleaner_logs);
         let c_program_data_iobit_iobit_malware_finghter_homepage_advisor = CleanerData {
@@ -1613,7 +1520,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_data_iobit_iobit_malware_finghter_homepage_advisor);
         //</editor-fold>
@@ -1628,7 +1534,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_iobit_driver_booster_logs);
         let c_program_files_x86_iobit_driver_booster = CleanerData {
@@ -1641,7 +1546,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_x86_iobit_driver_booster);
         let c_program_files_x86_iobit_driver_booster_1 = CleanerData {
@@ -1654,7 +1558,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_x86_iobit_driver_booster_1);
         //</editor-fold>
@@ -1669,7 +1572,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_data_process_lasso_logs);
         //</editor-fold>
@@ -1684,7 +1586,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_obs_studio_bin_64bit);
         let c_users_appdata_roaming_obs_studio_logs = CleanerData {
@@ -1697,7 +1598,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_obs_studio_logs);
         //</editor-fold>
@@ -1712,7 +1612,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_unity_hub);
         //</editor-fold>
@@ -1727,7 +1626,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_keepass_password_safe_2);
         //</editor-fold>
@@ -1742,7 +1640,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_1password_logs_setup);
         //</editor-fold>
@@ -1760,7 +1657,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_lghub);
         //</editor-fold>
@@ -1775,7 +1671,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_deepl_se_logs);
         let c_users_appdata_local_deepl_se_cache = CleanerData {
@@ -1788,7 +1683,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_deepl_se_cache);
         //</editor-fold>
@@ -1803,7 +1697,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_lobe_logs);
         //</editor-fold>
@@ -1818,7 +1711,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_pictures_tonfotos_telegram_connector);
         //</editor-fold>
@@ -1833,7 +1725,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_x86_dotnet);
         let c_program_files_x86_dotnet = CleanerData {
@@ -1846,7 +1737,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_x86_dotnet);
         let c_users_dotnet_telemetry_storage_service = CleanerData {
@@ -1859,7 +1749,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_dotnet_telemetry_storage_service);
         //</editor-fold>
@@ -1874,7 +1763,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_mccreator_logs);
         //</editor-fold>
@@ -1889,7 +1777,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_7_zip);
         //</editor-fold>
@@ -1904,7 +1791,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_tribler);
         //</editor-fold>
@@ -1921,7 +1807,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_i2peasy_addressbook);
         let c_users_appdata_local_i2peasy = CleanerData {
@@ -1937,7 +1822,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_i2peasy);
         let c_users_appdata_local_i2peasy_logs = CleanerData {
@@ -1950,7 +1834,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_i2peasy_logs);
         let c_users_appdata_local_i2peasy_licenses = CleanerData {
@@ -1963,7 +1846,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_i2peasy_licenses);
         //</editor-fold>
@@ -1982,7 +1864,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_filex_x86_boxedapppacker);
         //</editor-fold>
@@ -2004,7 +1885,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_enigma_virtual_box);
         //</editor-fold>
@@ -2022,7 +1902,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_gnupg);
         //</editor-fold>
@@ -2039,7 +1918,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_enigma_x86_gpg4win);
         //</editor-fold>
@@ -2058,7 +1936,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_enigma_x86_inno_setup_6);
         let c_program_files_enigma_x86_inno_setup_6 = CleanerData {
@@ -2071,7 +1948,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_enigma_x86_inno_setup_6);
         //</editor-fold>
@@ -2086,7 +1962,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_virtualbox_vms_logs);
         let c_users_virtualbox_vms = CleanerData {
@@ -2099,7 +1974,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_virtualbox_vms);
         let c_users_virtualbox_vms_doc = CleanerData {
@@ -2112,7 +1986,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_virtualbox_vms_doc);
         //</editor-fold>
@@ -2127,7 +2000,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_recaf);
         //</editor-fold>
@@ -2148,7 +2020,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_process_hacker_2);
         //</editor-fold>
@@ -2163,7 +2034,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_programdata_dockerdesktop);
         let c_users_appdata_local_docker_logs = CleanerData {
@@ -2176,7 +2046,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_docker_logs);
         let c_users_appdata_local_docker = CleanerData {
@@ -2189,7 +2058,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_docker);
         //</editor-fold>
@@ -2208,7 +2076,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_programdata_dockerdesktop);
         //</editor-fold>
@@ -2227,7 +2094,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_x86_soundwire_server);
         //</editor-fold>
@@ -2246,7 +2112,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_systeminformer);
         //</editor-fold>
@@ -2265,7 +2130,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_sandboxie_plus);
         //</editor-fold>
@@ -2288,7 +2152,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_jetbrains_license);
         let c_program_files_jetbrains = CleanerData {
@@ -2304,7 +2167,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_jetbrains);
         let c_users_appdata_local_jetbrains_logs = CleanerData {
@@ -2317,7 +2179,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_jetbrains_logs);
         //</editor-fold>
@@ -2334,7 +2195,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_afftweak);
         //</editor-fold>
@@ -2351,7 +2211,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_image_line);
         let c_program_files_image_line_shared_start = CleanerData {
@@ -2366,7 +2225,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_image_line_shared_start);
         //</editor-fold>
@@ -2383,7 +2241,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_x86_asio4all);
         //</editor-fold>
@@ -2398,7 +2255,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_rave_logs);
         let c_users_appdata_roaming_rave_cache = CleanerData {
@@ -2411,7 +2267,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_rave_cache);
         let c_users_appdata_roaming_rave_code_cache = CleanerData {
@@ -2424,7 +2279,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_rave_code_cache);
         //</editor-fold>
@@ -2439,7 +2293,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_magpie_logs);
         let c_program_files_magpie_logs = CleanerData {
@@ -2452,7 +2305,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_magpie_logs);
         //</editor-fold>
@@ -2472,7 +2324,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_libreoffice);
         let c_program_files_libreoffice_readmes = CleanerData {
@@ -2485,7 +2336,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_libreoffice_readmes);
         //</editor-fold>
@@ -2500,7 +2350,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_cheat_engine_7_5);
         //</editor-fold>
@@ -2515,7 +2364,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_epic_games_launcher_saved_logs);
         let c_users_appdata_local_epic_online_services_uihelper_saved_logs = CleanerData {
@@ -2528,7 +2376,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_epic_online_services_uihelper_saved_logs);
         //</editor-fold>
@@ -2543,7 +2390,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_epic_games_launcher_saved_logs);
         //</editor-fold>
@@ -2558,7 +2404,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_adobe_legal);
         //</editor-fold>
@@ -2576,7 +2421,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_adobe_legal);
         //</editor-fold>
@@ -2591,7 +2435,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_dotnet);
         //</editor-fold>
@@ -2613,7 +2456,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_winrar);
         //</editor-fold>
@@ -2628,7 +2470,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_x86_windows_kits_licenses);
         //</editor-fold>
@@ -2646,7 +2487,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(users_appdata_local_programs);
         let users_appdata_roaming_ow_electron_logs = CleanerData {
@@ -2659,7 +2499,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(users_appdata_roaming_ow_electron_logs);
         //</editor-fold>
@@ -2676,8 +2515,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(program_files_powertoys);
         //</editor-fold>
@@ -2691,8 +2529,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(users_appdata_roaming_lm_studio_logs);
         //</editor-fold>
@@ -2706,8 +2543,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(users_appdata_roaming_imgburn_log_files);
         let users_appdata_roaming_imgburn_log_files = CleanerData {
@@ -2721,8 +2557,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(users_appdata_roaming_imgburn_log_files);
         //</editor-fold>
@@ -2736,8 +2571,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(program_files_magic_txd_licenses);
         //</editor-fold>
@@ -2754,8 +2588,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(program_files_86_vulcan_rt);
         //</editor-fold>
@@ -2772,8 +2605,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(program_files_git);
         //</editor-fold>
@@ -2791,7 +2623,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_sublime_text);
         //</editor-fold>
@@ -2806,7 +2637,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: true,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_code_logs);
         let c_users_appdata_roaming_code_logs = CleanerData {
@@ -2822,7 +2652,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: true,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_code_logs);
         //</editor-fold>
@@ -2841,7 +2670,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_brave_software_brave_browser_application);
         let c_users_appdata_local_brave_software_brave_browser_user_data_default = CleanerData {
@@ -2860,7 +2688,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_brave_software_brave_browser_user_data_default);
         let users_appdata_local_bravesoftware_brave_browser_user_data_default = CleanerData {
@@ -2878,7 +2705,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(users_appdata_local_bravesoftware_brave_browser_user_data_default);
         let users_appdata_local_bravesoftware_brave_browser_user_data_default_network = CleanerData {
@@ -2894,7 +2720,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(users_appdata_local_bravesoftware_brave_browser_user_data_default_network);
         let c_users_appdata_local_brave_software_brave_browser_user_data_default_dawn_cache = CleanerData {
@@ -2913,7 +2738,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_brave_software_brave_browser_user_data_default_dawn_cache);
         let c_users_appdata_local_brave_software_brave_browser_user_data_default_gpu_cache = CleanerData {
@@ -2932,7 +2756,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_brave_software_brave_browser_user_data_default_gpu_cache);
         //</editor-fold>
@@ -2947,7 +2770,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(program_files_x86_google_google_updater);
         let c_users_appdata_local_google_chrome_user_data_default = CleanerData {
@@ -2966,7 +2788,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_google_chrome_user_data_default);
         let c_users_appdata_local_google_chrome_user_data_default = CleanerData {
@@ -2984,7 +2805,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_google_chrome_user_data_default);
         let c_users_appdata_local_google_chrome_user_data_default_network = CleanerData {
@@ -3000,7 +2820,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_google_chrome_user_data_default_network);
         //</editor-fold>
@@ -3021,7 +2840,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_vivaldi_user_data_default);
         let c_users_appdata_local_vivaldi_user_data_default = CleanerData {
@@ -3039,7 +2857,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_vivaldi_user_data_default);
         let c_users_appdata_local_vivaldi_user_data_default_network = CleanerData {
@@ -3055,7 +2872,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_vivaldi_user_data_default_network);
         let c_users_appdata_local_vivaldi_user_data_default_network = CleanerData {
@@ -3068,7 +2884,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_vivaldi_user_data_default_network);
         //</editor-fold>
@@ -3089,7 +2904,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(users_appdata_roaming_opera_software_opera_gx_stable);
         let users_appdata_roaming_opera_software_opera_gx_stable = CleanerData {
@@ -3105,7 +2919,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(users_appdata_roaming_opera_software_opera_gx_stable);
         let users_appdata_roaming_opera_software_opera_gx_stable = CleanerData {
@@ -3121,7 +2934,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(users_appdata_roaming_opera_software_opera_gx_stable);
         //</editor-fold>
@@ -3138,7 +2950,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(program_files_mozila_firefox);
         let users_appdata_roaming_mozila_firefox_profiles = CleanerData {
@@ -3155,7 +2966,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(users_appdata_roaming_mozila_firefox_profiles);
         let users_appdata_roaming_mozila_firefox_profiles = CleanerData {
@@ -3172,7 +2982,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(users_appdata_roaming_mozila_firefox_profiles);
         let users_appdata_roaming_mozila_firefox_profiles_shader_cache = CleanerData {
@@ -3185,7 +2994,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(users_appdata_roaming_mozila_firefox_profiles_shader_cache);
         //</editor-fold>
@@ -3204,7 +3012,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(users_appdata_roaming_librewolf_profiles_favicons);
         let users_appdata_roaming_librewolf_profiles_cookies = CleanerData {
@@ -3221,7 +3028,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(users_appdata_roaming_librewolf_profiles_cookies);
         //</editor-fold>
@@ -3240,7 +3046,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_handbrake_logs);
         let c_users_appdata_roaming_handbrake_docs = CleanerData {
@@ -3253,7 +3058,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_handbrake_docs);
         //</editor-fold>
@@ -3268,7 +3072,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_programdata_topaz_labs_llc_topaz_video_ai);
         //</editor-fold>
@@ -3283,7 +3086,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_x86_avclabs_avclabs_video_encharcer_ai_1);
         let c_program_files_x86_avclabs_avclabs_video_encharcer_ai_2 = CleanerData {
@@ -3296,7 +3098,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_x86_avclabs_avclabs_video_encharcer_ai_2);
         let c_program_files_x86_avclabs_avclabs_video_encharcer_ai_logs = CleanerData {
@@ -3309,7 +3110,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_x86_avclabs_avclabs_video_encharcer_ai_logs);
         //</editor-fold>
@@ -3324,7 +3124,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_itop_screen_recorder_logs);
         //</editor-fold>
@@ -3348,7 +3147,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_videolan_vlc);
         //</editor-fold>
@@ -3367,7 +3165,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_exodus);
         let c_users_appdata_local_exodus = CleanerData {
@@ -3382,7 +3179,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_exodus);
         let c_users_appdata_local_exodus = CleanerData {
@@ -3397,7 +3193,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_exodus);
         //</editor-fold>
@@ -3412,7 +3207,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_walletwasabi_client);
         //</editor-fold>
@@ -3427,7 +3221,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_programdata_bitmonero);
         //</editor-fold>
@@ -3446,7 +3239,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_faceit_ac_logs);
         //</editor-fold>
@@ -3461,7 +3253,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_faceit_ac_logs);
         //</editor-fold>
@@ -3480,7 +3271,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_vmlogs);
         let c_users_bignox = CleanerData {
@@ -3493,7 +3283,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_bignox);
         //</editor-fold>
@@ -3508,7 +3297,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_memuhyperv);
         //</editor-fold>
@@ -3523,7 +3311,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_gametop_launcher);
         //</editor-fold>
@@ -3538,7 +3325,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(programdata_bluestacks_nxt_dumps);
         let c_appdata_bluestacks_nxt_logs = CleanerData {
@@ -3555,7 +3341,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_appdata_bluestacks_nxt_logs);
         let c_appdata_bluestacks_nxt_logs = CleanerData {
@@ -3568,7 +3353,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_appdata_bluestacks_nxt_logs);
         let c_users_pictures_bluestacks = CleanerData {
@@ -3581,7 +3365,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_pictures_bluestacks);
         //</editor-fold>
@@ -3596,7 +3379,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_x86_gameguard_cache);
         //</editor-fold>
@@ -3614,8 +3396,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(users_appdata_locallow_melissia_games_launcher_game_folder_logs);
         let program_files_x86_melissia_games_melissia_games_launcher = CleanerData {
@@ -3636,8 +3417,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(program_files_x86_melissia_games_melissia_games_launcher);
         //</editor-fold>
@@ -3651,8 +3431,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_users_appdata_locallow_igg_lords_mobile_pc);
         let c_users_appdata_locallow_igg_lords_mobile = CleanerData {
@@ -3664,8 +3443,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_users_appdata_locallow_igg_lords_mobile);
         //</editor-fold>
@@ -3679,8 +3457,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: true,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_users_appdata_local_roblox_logs);
         //</editor-fold>
@@ -3694,8 +3471,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: true,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_users_appdata_local_roblox_logs);
         //</editor-fold>
@@ -3709,8 +3485,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: true,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(users_documents_my_gam_terraria_players);
         let users_documents_my_gam_terraria_players = CleanerData {
@@ -3722,8 +3497,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: true,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(users_documents_my_gam_terraria_players);
         let users_documents_my_gam_terraria = CleanerData {
@@ -3737,8 +3511,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: true,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(users_documents_my_gam_terraria);
         let users_documents_my_gam_terraria = CleanerData {
@@ -3753,8 +3526,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: true,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(users_documents_my_gam_terraria);
         //</editor-fold>
@@ -3770,8 +3542,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(users_appdata_local_programs_arizona_games_launcher);
         let users_appdata_local_programs_arizona_games_launcher_bin_moonloader = CleanerData {
@@ -3785,8 +3556,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(users_appdata_local_programs_arizona_games_launcher_bin_moonloader);
         let users_appdata_local_programs_arizona_games_launcher_bin_sampfuncs = CleanerData {
@@ -3800,8 +3570,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(users_appdata_local_programs_arizona_games_launcher_bin_sampfuncs);
         let users_appdata_local_programs_arizona_games_launcher_bin_crashlogs = CleanerData {
@@ -3813,8 +3582,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: true,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(users_appdata_local_programs_arizona_games_launcher_bin_crashlogs);
         let users_appdata_local_programs_arizona_games_launcher_bin_crashlogs = CleanerData {
@@ -3830,15 +3598,12 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(users_appdata_local_programs_arizona_games_launcher_bin_crashlogs);
         //</editor-fold>
 
         //<editor-fold desc="Minecraft Clients">
-
-        //<editor-fold desc="MultiMC">
 
         //<editor-fold desc="McLaunch">
         let users_appdata_roaming_mclaunch_launcher_crashreports = CleanerData {
@@ -3850,168 +3615,13 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: true
         };
         database.push(users_appdata_roaming_mclaunch_launcher_crashreports);
         //</editor-fold>
 
-        let get_minecraft_launchers_instances_folders = get_minecraft_launchers_instances_folders(username);
-        for instance in get_minecraft_launchers_instances_folders {
-            let instance_logs = CleanerData {
-                path: instance.0.clone() + "/logs/*",
-                program: instance.1.clone(),
-                files_to_remove: vec![],
-                category: String::from("Logs"),
-                remove_directories: true,
-                remove_files: true,
-                directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                folders_to_remove: vec![]
-            };
-            database.push(instance_logs);
-            let instance_crash_reports = CleanerData {
-                path: instance.0.clone() + "/crash-reports/*",
-                program: instance.1.clone(),
-                files_to_remove: vec![],
-                category: String::from("Crash reports"),
-                remove_directories: true,
-                remove_files: true,
-                directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                folders_to_remove: vec![]
-            };
-            database.push(instance_crash_reports);
-            let instance_saves = CleanerData {
-                path: instance.0.clone() + "/saves/*",
-                program: instance.1.clone(),
-                files_to_remove: vec![],
-                category: String::from("Game saves"),
-                remove_directories: true,
-                remove_files: true,
-                directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                folders_to_remove: vec![]
-            };
-            database.push(instance_saves);
-            let instance_screenshots = CleanerData {
-                path: instance.0.clone() + "/screenshots/*",
-                program: instance.1.clone(),
-                files_to_remove: vec![],
-                category: String::from("Images"),
-                remove_directories: true,
-                remove_files: true,
-                directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                folders_to_remove: vec![]
-            };
-            database.push(instance_screenshots);
-            let instance_cheats = CleanerData {
-                path: instance.0.clone(),
-                program: instance.1.clone(),
-                files_to_remove: vec![],
-                category: String::from("Cheats"),
-                remove_directories: false,
-                remove_files: false,
-                directories_to_remove: vec![
-                    String::from("meteor-client"),
-                    String::from("LiquidBounce")
-                ],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                folders_to_remove: vec![]
-            };
-            database.push(instance_cheats);
-        }
-
-        let get_minecraft_launchers_folders = get_minecraft_launchers_folders(&drive, username);
-        for folder in get_minecraft_launchers_folders {
-            let folder_logs = CleanerData {
-                path: folder.0.clone() + "\\logs\\*",
-                program: folder.1.clone(),
-                files_to_remove: vec![],
-                category: String::from("Logs"),
-                remove_directories: true,
-                remove_files: true,
-                directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                folders_to_remove: vec![]
-            };
-            database.push(folder_logs);
-            let folder_logs_1 = CleanerData {
-                path: folder.0.clone() + "\\*.log",
-                program: folder.1.clone(),
-                files_to_remove: vec![],
-                category: String::from("Logs"),
-                remove_directories: false,
-                remove_files: true,
-                directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                folders_to_remove: vec![]
-            };
-            database.push(folder_logs_1);
-            let folder_launcher_logs = CleanerData {
-                path: folder.0.clone() + "\\launcher_logs\\*",
-                program: folder.1.clone(),
-                files_to_remove: vec![],
-                category: String::from("Logs"),
-                remove_directories: true,
-                remove_files: true,
-                directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                folders_to_remove: vec![]
-            };
-            database.push(folder_launcher_logs);
-            let folder_launcher_licenses = CleanerData {
-                path: folder.0.clone() + "\\licenses\\*",
-                program: folder.1.clone(),
-                files_to_remove: vec![],
-                category: String::from("Logs"),
-                remove_directories: true,
-                remove_files: true,
-                directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                folders_to_remove: vec![]
-            };
-            database.push(folder_launcher_licenses);
-            let folder_launcher_licenses = CleanerData {
-                path: folder.0.clone() + "\\game-cache\\*",
-                program: folder.1.clone(),
-                files_to_remove: vec![],
-                category: String::from("Cache"),
-                remove_directories: true,
-                remove_files: true,
-                directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                folders_to_remove: vec![]
-            };
-            database.push(folder_launcher_licenses);
-            let folder_launcher_accounts = CleanerData {
-                path: folder.0.clone() + "\\",
-                program: folder.1.clone(),
-                files_to_remove: vec![
-                    String::from("accounts.json"),
-                    String::from("launcher_accounts.json")
-                ],
-                category: String::from("Accounts"),
-                remove_directories: true,
-                remove_files: true,
-                directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                folders_to_remove: vec![]
-            };
-            database.push(folder_launcher_accounts);
-        }
+        let mut mc_database = get_minecraft_database(&drive, username);
+        database.append(&mut mc_database);
         //</editor-fold>
 
         //</editor-fold>
@@ -4028,7 +3638,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_discord);
         let c_users_appdata_local_discord_logs = CleanerData {
@@ -4041,7 +3650,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_discord_logs);
         let c_users_appdata_roaming_discord_logs = CleanerData {
@@ -4054,7 +3662,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_discord_logs);
         //</editor-fold>
@@ -4069,7 +3676,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_guilded);
         //</editor-fold>
@@ -4084,7 +3690,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_element_desktop);
         //</editor-fold>
@@ -4101,7 +3706,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_telefram_desktop_tdata);
         let c_users_appdata_roaming_telefram_desktop = CleanerData {
@@ -4114,7 +3718,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_telefram_desktop);
         let c_users_appdata_roaming_telefram_desktop_logs = CleanerData {
@@ -4127,7 +3730,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_telefram_desktop_logs);
         let c_users_appdata_roaming_telefram_desktop_tdata_emoji_cache = CleanerData {
@@ -4140,7 +3742,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_telefram_desktop_tdata_emoji_cache);
         let c_users_appdata_roaming_telefram_desktop_tdata_user_data_cache = CleanerData {
@@ -4153,7 +3754,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_telefram_desktop_tdata_user_data_cache);
         let c_users_appdata_roaming_telefram_desktop_tdata_user_data_media_cache = CleanerData {
@@ -4166,7 +3766,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_telefram_desktop_tdata_user_data_media_cache);
         //</editor-fold>
@@ -4181,7 +3780,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_signal);
         let c_users_appdata_roaming_signal_update_cache = CleanerData {
@@ -4194,7 +3792,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_signal_update_cache);
         //</editor-fold>
@@ -4215,7 +3812,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_amnezia_vpn);
         let c_program_files_amnezia_vpn_tap = CleanerData {
@@ -4230,7 +3826,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_amnezia_vpn_tap);
         //</editor-fold>
@@ -4245,7 +3840,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_filex_x86_radmin_vpn_chatlogs);
         let c_program_files_radmin_vpn = CleanerData {
@@ -4258,7 +3852,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_radmin_vpn);
         let c_program_files_radmin_vpn_logs = CleanerData {
@@ -4271,7 +3864,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_radmin_vpn_logs);
         let program_files_x86_radmin_vpn = CleanerData {
@@ -4286,7 +3878,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(program_files_x86_radmin_vpn);
         //</editor-fold>
@@ -4301,7 +3892,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_urbanvpm_logs);
         //</editor-fold>
@@ -4316,7 +3906,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_urbanvpm_logs);
         //</editor-fold>
@@ -4331,7 +3920,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_planetvpn_cache_qmlcache);
         //</editor-fold>
@@ -4349,7 +3937,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_programdata_itop_vpn);
         //</editor-fold>
@@ -4392,7 +3979,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_imageglass);
         let c_users_appdata_local_imageglass_thumbails_cache = CleanerData {
@@ -4405,7 +3991,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_imageglass_thumbails_cache);
         let c_users_appdata_local_imageglass_thumbails_cache = CleanerData {
@@ -4418,7 +4003,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_local_imageglass_thumbails_cache);
         let program_files_imageglass_license = CleanerData {
@@ -4431,7 +4015,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(program_files_imageglass_license);
         //</editor-fold>
@@ -4449,7 +4032,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_program_files_inkscape);
         let c_users_appdata_roaming_inkscape = CleanerData {
@@ -4462,7 +4044,6 @@ pub fn get_database() -> Vec<CleanerData> {
             directories_to_remove: vec![],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
-            folders_to_remove: vec![],
         };
         database.push(c_users_appdata_roaming_inkscape);
         //</editor-fold>
@@ -4476,8 +4057,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(sharex_1);
         let c_users_documents_sharex_screenshots = CleanerData {
@@ -4489,8 +4069,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_users_documents_sharex_screenshots);
         let c_users_documents_sharex_logs = CleanerData {
@@ -4502,9 +4081,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean:
-            false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_users_documents_sharex_logs);
         let c_users_documents_sharex_backups = CleanerData {
@@ -4516,9 +4093,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean:
-            false,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: false
         };
         database.push(c_users_documents_sharex_backups);
         //</editor-fold>
@@ -4536,8 +4111,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: true,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: true
         };
         database.push(c_weave);
         //</editor-fold>
@@ -4551,8 +4125,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: true,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: true
         };
         database.push(interium);
         //</editor-fold>
@@ -4566,8 +4139,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: true,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: true
         };
         database.push(krnl);
         //</editor-fold>
@@ -4581,8 +4153,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: true,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: true
         };
         database.push(krnl);
         //</editor-fold>
@@ -4596,8 +4167,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: true,
-            remove_directory_after_clean: true,
-            folders_to_remove: vec![]
+            remove_directory_after_clean: true
         };
         database.push(vapeclient);
         //</editor-fold>
@@ -4617,8 +4187,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: false,
         directories_to_remove: vec![],
         remove_all_in_dir: true,
-        remove_directory_after_clean: true,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: true
     };
     database.push(steam_common_counter_string_global_offensive_weave);
     //</editor-fold>
@@ -4639,8 +4208,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: false,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(steam_common_counter_string_global_offensive);
     let steam_common_counter_string_global_offensive_fatality = CleanerData {
@@ -4652,8 +4220,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: true,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: true
     };
     database.push(steam_common_counter_string_global_offensive_fatality);
     //</editor-fold>
@@ -4667,8 +4234,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(steam_common_counter_string_global_offensive_pdr);
     let steam_common_counter_string_global_offensive_pandora = CleanerData {
@@ -4680,8 +4246,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: true,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: true
     };
     database.push(steam_common_counter_string_global_offensive_pandora);
     //</editor-fold>
@@ -4695,8 +4260,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: false,
         directories_to_remove: vec![],
         remove_all_in_dir: true,
-        remove_directory_after_clean: true,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: true
     };
     database.push(steam_common_counter_string_global_offensive_ot);
     //</editor-fold>
@@ -4714,8 +4278,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(steam_userdata_730_local_cfg);
     //</editor-fold>
@@ -4729,8 +4292,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(steam_userdata_570_local_cfg);
     //</editor-fold>
@@ -4744,8 +4306,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(steam_userdata_252490_local_cfg);
     //</editor-fold>
@@ -4759,8 +4320,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(steam_userdata_252490_local_cfg);
     //</editor-fold>
@@ -4777,8 +4337,7 @@ pub fn get_database() -> Vec<CleanerData> {
         remove_files: true,
         directories_to_remove: vec![],
         remove_all_in_dir: false,
-        remove_directory_after_clean: false,
-        folders_to_remove: vec![]
+        remove_directory_after_clean: false
     };
     database.push(steam_userdata);
 

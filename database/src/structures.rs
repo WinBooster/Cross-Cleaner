@@ -19,7 +19,6 @@ pub struct CleanerData {
     pub program: String,
 
     pub files_to_remove: Vec<String>,
-    pub folders_to_remove: Vec<String>,
     pub directories_to_remove: Vec<String>,
 
     pub remove_all_in_dir: bool,
