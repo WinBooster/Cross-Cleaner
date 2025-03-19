@@ -2,7 +2,7 @@
 	<h1>Cross Cleaner</h1>
 	</a>
 	<a href="https://github.com/WinBooster/WinBooster-DF/releases"><img src="https://img.shields.io/github/downloads/WinBooster/WinBooster-DF/total" alt="Downloads"/></a>
-	<a href="https://github.com/WinBooster/WinBooster-DF/releases"><img src="https://img.shields.io/github/downloads/WinBooster/WinBooster-DF/1.9.1/total" alt="Downloads"/></a>
+	<a href="https://github.com/WinBooster/WinBooster-DF/releases"><img src="https://img.shields.io/github/downloads/WinBooster/WinBooster-DF/1.9.2/total" alt="Downloads"/></a>
 </div>
 
 <div align="center">
