@@ -1,160 +1,103 @@
 use std::fs;
-use std::path::Path;
-use glob::{glob, Paths, PatternError};
-use database::structures::{CleanerData, CleanerResult, Cleared};
+use std::path::{Path};
+use glob::glob;
+use database::structures::{CleanerData, CleanerResult};
 
+/// Рекурсивно удаляет директорию и обновляет счетчики в `cleaner_result`.
+fn remove_directory_recursive(path: &Path, cleaner_result: &mut CleanerResult) -> std::io::Result<()> {
+    if path.is_dir() {
+        for entry in fs::read_dir(path)? {
+            let entry = entry?;
+            let entry_path = entry.path();
+            if entry_path.is_dir() {
+                remove_directory_recursive(&entry_path, cleaner_result)?;
+                cleaner_result.folders += 1;
+            } else {
+                remove_file(&entry_path, cleaner_result)?;
+            }
+        }
+        fs::remove_dir(path)?;
+        cleaner_result.folders += 1;
+    }
+    Ok(())
+}
+
+/// Удаляет файл и обновляет счетчики в `cleaner_result`.
+fn remove_file(path: &Path, cleaner_result: &mut CleanerResult) -> std::io::Result<()> {
+    let metadata = fs::metadata(path)?;
+    fs::remove_file(path)?;
+    cleaner_result.bytes += metadata.len();
+    cleaner_result.files += 1;
+    Ok(())
+}
+
+/// Основная функция для очистки данных.
 pub fn clear_data(data: &CleanerData) -> CleanerResult {
-    let mut cleaner_result: CleanerResult = CleanerResult {
+    let mut cleaner_result = CleanerResult {
         files: 0,
         folders: 0,
         bytes: 0,
         working: false,
-        program: String::new(),
-        path: String::new()
+        program: data.program.clone(),
+        path: data.path.clone(),
     };
 
-    let results: Result<Paths, PatternError> = glob(&*data.path);
-    cleaner_result.program = (&*data.program).parse().unwrap();
-    cleaner_result.path = (&*data.path).parse().unwrap();
-    match results {
-        Ok(results) => {
-            for result in results {
-                match result {
-                    Ok(result) => {
-                        let is_dir: bool = result.is_dir();
-                        let is_file: bool = result.is_file();
-                        let path: &str = result.as_path().to_str().unwrap();
-                        let mut lenght = 0;
-                        match result.metadata() {
-                            Ok(res) => { lenght += res.len(); }
-                            Err(_) => {}
-                        }
-                        //println!("Found: {}", path);
-                        for file in &data.files_to_remove {
-                            #[cfg(windows)]
-                            let file_path = path.to_owned() + "\\" + &*file;
-                            #[cfg(unix)]
-                            let file_path = path.to_owned() + "/" + &*file;
-                            match fs::remove_file(file_path) {
-                                Ok(_) => {
-                                    cleaner_result.files += 1;
-                                    cleaner_result.bytes += lenght;
-                                    cleaner_result.working = true;
-                                }
-                                Err(_) => {}
-                            }
-                        }
-                        for directory in &data.directories_to_remove {
-                            #[cfg(windows)]
-                            let file_path = path.to_owned() + "\\" + &*directory;
-                            #[cfg(unix)]
-                            let file_path = path.to_owned() + "/" + &*directory;
-                            let metadata = fs::metadata(file_path.clone());
-                            match metadata {
-                                Ok(res) => { lenght += res.len(); }
-                                Err(_) => {}
-                            }
-                            match fs::remove_dir_all(file_path) {
-                                Ok(_) => {
-                                    cleaner_result.folders += 1;
-                                    cleaner_result.working = true;
-                                }
-                                Err(_) => {}
-                            }
-                        }
+    // Используем glob для поиска файлов и директорий
+    if let Ok(results) = glob(&data.path) {
+        for result in results.flatten() {
+            let path = result.as_path();
+            let is_dir = path.is_dir();
+            let is_file = path.is_file();
 
-                        for dir in &data.directories_to_remove {
-                            #[cfg(windows)]
-                            let dir_path = path.to_owned() + "\\" + &*dir;
-                            #[cfg(unix)]
-                            let dir_path = path.to_owned() + "/" + &*dir;
-                            let metadata = fs::metadata(dir_path.clone());
-                            match metadata {
-                                Ok(res) => { lenght += res.len(); }
-                                Err(_) => {}
-                            }
-                            match fs::remove_dir_all(dir_path) {
-                                Ok(_) => {
-                                    cleaner_result.folders += 1;
-                                    cleaner_result.bytes += lenght;
-                                    cleaner_result.working = true;
-                                }
-                                Err(_) => {}
-                            }
-                        }
-
-                        //println!("Found: {}", path);
-                        if data.remove_files && is_file {
-                            let path = Path::new(path);
-                            match fs::remove_file(path) {
-                                Ok(_) => {
-                                    cleaner_result.files += 1;
-                                    cleaner_result.bytes += lenght;
-                                    cleaner_result.working = true;
-                                }
-                                Err(_) => {}
-                            }
-                        }
-                        if data.remove_directories && is_dir {
-                            match fs::remove_dir_all(path) {
-                                Ok(_) => {
-                                    cleaner_result.folders += 1;
-                                    cleaner_result.bytes += lenght;
-                                    cleaner_result.working = true;
-                                }
-                                Err(_) => {}
-                            }
-                        }
-                        if data.remove_all_in_dir {
-                            #[cfg(windows)]
-                            let results: Result<Paths, PatternError> = glob(&*(path.to_owned() + "\\*"));
-                            #[cfg(unix)]
-                            let results: Result<Paths, PatternError> = glob(&*(path.to_owned() + "/*"));
-                            let mut files = 0;
-                            let mut dirs = 0;
-                            match results {
-                                Ok(results) => {
-                                    for result in results {
-                                        match result {
-                                            Ok(result) => {
-                                                if result.is_file() {
-                                                    files += 1;
-                                                }
-                                                if result.is_dir() {
-                                                    dirs += 1;
-                                                }
-                                            }
-                                            Err(_) => {}
-                                        }
-                                    }
-                                    match fs::remove_dir_all(path) {
-                                        Ok(_) => {
-                                            cleaner_result.files += files;
-                                            cleaner_result.folders += dirs;
-                                            cleaner_result.bytes += lenght;
-                                            cleaner_result.working = true;
-                                        }
-                                        Err(_) => {}
-                                    }
-                                }
-                                Err(_) => {}
-                            }
-                        }
-                        if data.remove_directory_after_clean {
-                            match fs::remove_dir_all(path) {
-                                Ok(_) => {
-                                    cleaner_result.folders += 1;
-                                    cleaner_result.working = true;
-                                }
-                                Err(_) => {}
-                            }
-                        }
+            // Удаление указанных файлов
+            for file in &data.files_to_remove {
+                let file_path = path.join(file);
+                if file_path.exists() && file_path.is_file() {
+                    if remove_file(&file_path, &mut cleaner_result).is_ok() {
+                        cleaner_result.working = true;
                     }
-                    Err(_) => {}
+                }
+            }
+
+            // Удаление указанных директорий
+            for dir in &data.directories_to_remove {
+                let dir_path = path.join(dir);
+                if dir_path.exists() && dir_path.is_dir() {
+                    if remove_directory_recursive(&dir_path, &mut cleaner_result).is_ok() {
+                        cleaner_result.working = true;
+                    }
+                }
+            }
+
+            // Удаление всех файлов и директорий, если требуется
+            if data.remove_all_in_dir && is_dir {
+                if remove_directory_recursive(path, &mut cleaner_result).is_ok() {
+                    cleaner_result.working = true;
+                }
+            }
+
+            // Удаление файлов, если требуется
+            if data.remove_files && is_file {
+                if remove_file(path, &mut cleaner_result).is_ok() {
+                    cleaner_result.working = true;
+                }
+            }
+
+            // Удаление директорий, если требуется
+            if data.remove_directories && is_dir {
+                if remove_directory_recursive(path, &mut cleaner_result).is_ok() {
+                    cleaner_result.working = true;
+                }
+            }
+
+            // Удаление директории после очистки, если требуется
+            if data.remove_directory_after_clean && is_dir {
+                if fs::remove_dir_all(path).is_ok() {
+                    cleaner_result.folders += 1;
+                    cleaner_result.working = true;
                 }
             }
         }
-        Err(_) => {}
     }
 
     cleaner_result

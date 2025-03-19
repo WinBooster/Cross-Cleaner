@@ -6,6 +6,8 @@ pub fn get_minecraft_launchers_instances_folders(username: &str) -> Vec<(String,
     database.push((String::from("/home/".to_owned() + username + "/.local/share/MultiMC/instances/**/.minecraft"), String::from("MultiMC")));
     database.push((String::from("/home/".to_owned() + username + "/.local/share/PolyMC/instances/**/.minecraft"), String::from("PolyMC")));
     database.push((String::from("/home/".to_owned() + username + "/.local/share/PrismLauncher/instances/**/minecraft"), String::from("Prism Launcher")));
+    database.push((String::from("/home/".to_owned() + username + "/.lunarclient/offline/multiver"), String::from("Lunar Client")));
+    database.push((String::from("/home/".to_owned() + username + "/.cristalix/updates/**"), String::from("Cristalix")));
 
     database
 }
@@ -17,6 +19,7 @@ pub fn get_minecraft_launchers_folders(username: &str) -> Vec<(String, String)> 
     database.push((String::from("/home/".to_owned() + username + "/.local/share/MultiMC"), String::from("MultiMC")));
     database.push((String::from("/home/".to_owned() + username + "/.local/share/PolyMC"), String::from("PolyMC")));
     database.push((String::from("/home/".to_owned() + username + "/.local/share/PrismLauncher"), String::from("Prism Launcher")));
+    database.push((String::from("/home/".to_owned() + username + "/.lunarclient"), String::from("Lunar Client")));
 
     database
 }
@@ -40,6 +43,7 @@ pub fn get_minecraft_launchers_instances_folders(drive: &str, username: &str) ->
     database.push((String::from(drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\MCSkill\\updates\\**"), String::from("MCSkill")));
     database.push((String::from(drive.to_owned() + "Users\\" + username + "\\AppData\\Roaming\\.gribland\\**"), String::from("GribLand")));
     database.push((String::from(drive.to_owned() + "Users\\" + username + "\\curseforge\\minecraft\\Instances\\**"), String::from("CurseForge")));
+
     database
 }
 

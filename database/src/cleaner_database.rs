@@ -73,7 +73,8 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
                 String::from("LiquidBounce"),
                 String::from("Impact"),
                 String::from("Wurst"),
-                String::from("Nodus")
+                String::from("Nodus"),
+                String::from("Aristois")
             ],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
@@ -86,6 +87,18 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
     #[cfg(windows)]
     let get_minecraft_launchers_folders = get_minecraft_launchers_folders(drive, username);
     for folder in get_minecraft_launchers_folders {
+        let folder_game_cache = CleanerData {
+            path: folder.0.clone() + "/game-cache/*",
+            program: folder.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Cache"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(folder_game_cache);
         let folder_cache = CleanerData {
             path: folder.0.clone() + "/cache/*",
             program: folder.1.clone(),
@@ -98,6 +111,18 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
             remove_directory_after_clean: false
         };
         database.push(folder_cache);
+        let folder_licenses = CleanerData {
+            path: folder.0.clone() + "/licenses/*",
+            program: folder.1.clone(),
+            files_to_remove: vec![],
+            category: String::from("Logs"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(folder_licenses);
         let folder_logs = CleanerData {
             path: folder.0.clone() + "/logs/*",
             program: folder.1.clone(),
