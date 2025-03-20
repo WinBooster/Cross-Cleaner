@@ -191,37 +191,37 @@ async fn work(
 struct Args {
     /// Specify categories to clear (comma-separated)
     /// /// Example: --clear=logs,cache
-    #[arg(long, value_name = "CATEGORIES")]
+    #[arg(long, value_name = "categories")]
     clear: Option<String>,
 
     /// Specify programs to disable (comma-separated)
     /// Example: --disabled=minecraft,firefox
-    #[arg(long, value_name = "PROGRAMS")]
+    #[arg(long, value_name = "programs")]
     disabled: Option<String>,
 
     /// Show database statistic.
     /// Example: --show-database-info=true
-    #[arg(long, value_name = "BOOL", default_value_t = false, action = ArgAction::Set)]
+    #[arg(long, value_name = "bool", default_value_t = false, action = ArgAction::Set)]
     show_database_info: bool,
 
     /// Show progress bar during execution.
     /// Example: --progress-bar=false
-    #[arg(long, value_name = "BOOL", default_value_t = true, action = ArgAction::Set)]
+    #[arg(long, value_name = "bool", default_value_t = true, action = ArgAction::Set)]
     show_progress_bar: bool,
 
     /// Show the result as a table after execution.
     /// Example: --result-table=false
-    #[arg(long, value_name = "BOOL", default_value_t = true, action = ArgAction::Set)]
+    #[arg(long, value_name = "bool", default_value_t = true, action = ArgAction::Set)]
     show_result_table: bool,
 
     /// Show the result as a string after execution.
     /// Example: --result-string=false
-    #[arg(long, value_name = "BOOL", default_value_t = true, action = ArgAction::Set)]
+    #[arg(long, value_name = "bool", default_value_t = true, action = ArgAction::Set)]
     show_result_string: bool,
 
     /// Show a desktop notification after execution.
     /// Example: --show-notification=false
-    #[arg(long, value_name = "BOOL", default_value_t = true, action = ArgAction::Set)]
+    #[arg(long, value_name = "bool", default_value_t = true, action = ArgAction::Set)]
     show_notification: bool,
 }
 
