@@ -1,17 +1,17 @@
-use std::cell::RefCell;
-use std::collections::HashSet;
-use std::rc::Rc;
-use std::sync::Arc;
-use eframe::egui;
-use notify_rust::Notification;
-use tokio::sync::mpsc;
-use tokio::task;
 use cleaner::clear_data;
 use database::get_pcbooster_version;
 #[cfg(windows)]
 use database::registry_database;
 use database::structures::{CleanerData, CleanerResult};
 use database::utils::get_file_size_string;
+use eframe::egui;
+use notify_rust::Notification;
+use std::cell::RefCell;
+use std::collections::HashSet;
+use std::rc::Rc;
+use std::sync::Arc;
+use tokio::sync::mpsc;
+use tokio::task;
 
 #[tokio::main]
 async fn main() -> eframe::Result {
@@ -63,7 +63,7 @@ async fn work(
                 working: false,
                 path: String::new(),
                 program: String::new(),
-                category: String::new()
+                category: String::new(),
             }
         });
         tasks.push(task);
@@ -71,7 +71,8 @@ async fn work(
 
     let categories_set: HashSet<String> = categories.into_iter().collect();
 
-    for data in database.to_vec()
+    for data in database
+        .to_vec()
         .into_iter()
         .filter(|data| categories_set.contains(&data.category))
     {
@@ -94,7 +95,7 @@ async fn work(
                 if result.working {
                     cleared_programs.insert(result.program);
                 }
-            },
+            }
             Err(_) => {
                 eprintln!("Error waiting for task completion");
             }
@@ -103,7 +104,12 @@ async fn work(
 
     let _ = Notification::new()
         .summary("Cross Cleaner GUI")
-        .body(&*("Removed: ".to_owned() + &*get_file_size_string(bytes_cleared) + "\nFiles: " + &*removed_files.to_string()))
+        .body(
+            &*("Removed: ".to_owned()
+                + &*get_file_size_string(bytes_cleared)
+                + "\nFiles: "
+                + &*removed_files.to_string()),
+        )
         .show();
 }
 
@@ -169,8 +175,13 @@ impl eframe::App for MyApp {
             if self.task_handle.is_none() {
                 let available_width = ui.available_width();
 
-                if ui.add_sized([available_width, 25.0], egui::Button::new("Clear")).clicked() {
-                    let selected_options: Vec<String> = self.checked_boxes.iter()
+                if ui
+                    .add_sized([available_width, 25.0], egui::Button::new("Clear"))
+                    .clicked()
+                {
+                    let selected_options: Vec<String> = self
+                        .checked_boxes
+                        .iter()
                         .filter(|(checkbox, _)| *checkbox.borrow())
                         .map(|(_, label)| label.clone())
                         .collect();

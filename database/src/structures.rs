@@ -1,5 +1,5 @@
-use tabled::Tabled;
 use crate::utils;
+use tabled::Tabled;
 
 #[derive(PartialEq, Tabled)]
 pub struct Cleared {
@@ -40,7 +40,7 @@ pub struct CleanerData {
     pub remove_all_in_dir: bool,
     pub remove_directory_after_clean: bool,
     pub remove_directories: bool,
-    pub remove_files: bool
+    pub remove_files: bool,
 }
 pub struct CleanerResult {
     pub files: u64,

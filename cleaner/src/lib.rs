@@ -1,10 +1,13 @@
-use std::fs;
-use std::path::{Path};
-use glob::glob;
 use database::structures::{CleanerData, CleanerResult};
+use glob::glob;
+use std::fs;
+use std::path::Path;
 
 /// Recursively deletes the directory and updates the counters in `cleaner_result`.
-fn remove_directory_recursive(path: &Path, cleaner_result: &mut CleanerResult) -> std::io::Result<()> {
+fn remove_directory_recursive(
+    path: &Path,
+    cleaner_result: &mut CleanerResult,
+) -> std::io::Result<()> {
     if path.is_dir() {
         for entry in fs::read_dir(path)? {
             let entry = entry?;

@@ -1,17 +1,17 @@
 #[cfg(windows)]
-use winreg::enums::{HKEY_CURRENT_USER, KEY_READ, KEY_WRITE};
-#[cfg(windows)]
 use winreg::RegKey;
+#[cfg(windows)]
+use winreg::enums::{HKEY_CURRENT_USER, KEY_READ, KEY_WRITE};
 
 #[cfg(windows)]
 pub fn get_steam_directory_from_registry() -> String {
     let hkcu = RegKey::predef(HKEY_CURRENT_USER);
     let software_valve_steam = hkcu.open_subkey("SOFTWARE\\Valve\\Steam");
     match software_valve_steam {
-        Ok(software_valve_steam) => {
-            software_valve_steam.get_value("SteamPath").unwrap_or_default()
-        }
-        Err(_) => { String::from("") }
+        Ok(software_valve_steam) => software_valve_steam
+            .get_value("SteamPath")
+            .unwrap_or_default(),
+        Err(_) => String::from(""),
     }
 }
 
@@ -32,7 +32,7 @@ pub fn remove_all_in_tree_in_registry(key: &RegKey, path: String) {
                 }
             }
         }
-        Err(_) => { }
+        Err(_) => {}
     }
 
     let typed_path_write = key.open_subkey_with_flags(path, KEY_WRITE);
@@ -64,7 +64,7 @@ pub fn remove_all_in_registry(key: &RegKey, value: String) {
                 }
             }
         }
-        Err(_) => { }
+        Err(_) => {}
     }
 
     let typed_path_write = key.open_subkey_with_flags(path, KEY_WRITE);
