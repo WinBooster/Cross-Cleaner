@@ -190,26 +190,32 @@ async fn work(
 #[command(version, about, long_about = None)]
 struct Args {
     /// Specify categories to clear (comma-separated)
+    /// /// Example: --clear logs,cache
     #[arg(long, value_name = "Categories")]
     clear: Option<String>,
 
     /// Specify programs to disable (comma-separated)
+    /// Example: --disabled minecraft,firefox
     #[arg(long, value_name = "Programs")]
     disabled: Option<String>,
 
-    /// Show progress bar [default: true]
+    /// Show progress bar during execution.
+    /// Example: --progress-bar (enabled by default)
     #[arg(long, value_name = "Progress_bar", default_value_t = true)]
     progress_bar: bool,
 
-    /// Show result table \[default: true\]
+    /// Show the result as a table after execution.
+    /// Example: --result-table (enabled by default)
     #[arg(long, value_name = "Result_table", default_value_t = true)]
     result_table: bool,
 
-    /// Show result string \[default: true\]
+    /// Show the result as a string after execution.
+    /// Example: --result-string (enabled by default)
     #[arg(long, value_name = "Result_strings", default_value_t = true)]
     result_string: bool,
 
-    /// Show notification \[default: true\]
+    /// Show a desktop notification after execution.
+    /// Example: --show-notification (enabled by default)
     #[arg(long, value_name = "Notification", default_value_t = true)]
     show_notification: bool,
 }
