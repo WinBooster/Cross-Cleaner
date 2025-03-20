@@ -23,7 +23,7 @@ fn display_categories(categories: &Vec<String>) -> String {
 impl PartialEq<Option<Cleared>> for &Cleared {
     fn eq(&self, other: &Option<Cleared>) -> bool {
         match other {
-            Some(other) => other.Program.eq(&*self.Program),
+            Some(other) => other.program.eq(&*self.program),
             None => false,
         }
     }
