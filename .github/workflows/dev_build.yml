@@ -8,7 +8,6 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  GITHUB_TOKEN: ${{ secrets.PAT }}
 
 jobs:
   build:
@@ -38,4 +37,5 @@ jobs:
         files: |
             ./target/release/Cross_Cleaner_CLI
             ./target/release/Cross_Cleaner_GUI
-            ./target/release/x86_64-pc-windows-gnu/*.exe
+            ./target/release/x86_64-pc-windows-gnu/Cross_Cleaner_CLI.exe
+            ./target/release/x86_64-pc-windows-gnu/Cross_Cleaner_GUI.exe
