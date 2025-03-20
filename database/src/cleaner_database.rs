@@ -1,18 +1,21 @@
+use crate::CleanerData;
+use crate::minecraft_launchers_database::{
+    get_minecraft_launchers_folders, get_minecraft_launchers_instances_folders,
+};
+#[cfg(windows)]
+use crate::registry_utils::get_steam_directory_from_registry;
 #[cfg(windows)]
 use disk_name::get_letters;
 use lazy_static::lazy_static;
-use crate::CleanerData;
-use crate::minecraft_launchers_database::{get_minecraft_launchers_folders, get_minecraft_launchers_instances_folders};
-#[cfg(windows)]
-use crate::registry_utils::{get_steam_directory_from_registry};
-
 
 fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
     let mut database: Vec<CleanerData> = Vec::new();
     #[cfg(unix)]
-    let get_minecraft_launchers_instances_folders = get_minecraft_launchers_instances_folders(username);
+    let get_minecraft_launchers_instances_folders =
+        get_minecraft_launchers_instances_folders(username);
     #[cfg(windows)]
-    let get_minecraft_launchers_instances_folders = get_minecraft_launchers_instances_folders(drive, username);
+    let get_minecraft_launchers_instances_folders =
+        get_minecraft_launchers_instances_folders(drive, username);
     for instance in get_minecraft_launchers_instances_folders {
         let instance_logs = CleanerData {
             path: instance.0.clone() + "/logs/*",
@@ -23,7 +26,7 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false
+            remove_directory_after_clean: false,
         };
         database.push(instance_logs);
         let instance_crash_reports = CleanerData {
@@ -35,7 +38,7 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false
+            remove_directory_after_clean: false,
         };
         database.push(instance_crash_reports);
         let instance_saves = CleanerData {
@@ -47,7 +50,7 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false
+            remove_directory_after_clean: false,
         };
         database.push(instance_saves);
         let instance_screenshots = CleanerData {
@@ -59,7 +62,7 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false
+            remove_directory_after_clean: false,
         };
         database.push(instance_screenshots);
         let instance_cheats = CleanerData {
@@ -75,7 +78,7 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
                 String::from("Impact"),
                 String::from("Wurst"),
                 String::from("Nodus"),
-                String::from("Aristois")
+                String::from("Aristois"),
             ],
             remove_all_in_dir: false,
             remove_directory_after_clean: false,
@@ -97,7 +100,7 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false
+            remove_directory_after_clean: false,
         };
         database.push(folder_game_cache);
         let folder_cache = CleanerData {
@@ -109,7 +112,7 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false
+            remove_directory_after_clean: false,
         };
         database.push(folder_cache);
         let folder_licenses = CleanerData {
@@ -121,7 +124,7 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false
+            remove_directory_after_clean: false,
         };
         database.push(folder_licenses);
         let folder_logs = CleanerData {
@@ -133,7 +136,7 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false
+            remove_directory_after_clean: false,
         };
         database.push(folder_logs);
         let folder_accounts = CleanerData {
@@ -141,14 +144,14 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
             program: folder.1.clone(),
             files_to_remove: vec![
                 String::from("accounts.json"),
-                String::from("launcher_accounts.json")
+                String::from("launcher_accounts.json"),
             ],
             category: String::from("Accounts"),
             remove_directories: false,
             remove_files: false,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false
+            remove_directory_after_clean: false,
         };
         database.push(folder_accounts);
         let folder_launcher_log_files = CleanerData {
@@ -160,7 +163,7 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
             remove_files: true,
             directories_to_remove: vec![],
             remove_all_in_dir: false,
-            remove_directory_after_clean: false
+            remove_directory_after_clean: false,
         };
         database.push(folder_launcher_log_files);
     }
@@ -755,32 +758,32 @@ lazy_static! {
         remove_directory_after_clean: false
     };
     database.push(home_config_yandex_music_dawn_web_gpu_cache);
-    let home_config_yandex_music_gpu_cache = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/yandex-music/GPUCache/*"),
-        program: "Yandex Music".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_yandex_music_gpu_cache);
-    //</editor-fold>
-    //<editor-fold desc="Cassettle">
-    let home_cache_cassettle = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.cache/cassette/*.log"),
-        program: String::from("Cassettle"),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_cache_cassettle);
+        let home_config_yandex_music_gpu_cache = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/yandex-music/GPUCache/*"),
+            program: "Yandex Music".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_config_yandex_music_gpu_cache);
+        //</editor-fold>
+        //<editor-fold desc="Cassettle">
+        let home_cache_cassettle = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.cache/cassette/*.log"),
+            program: String::from("Cassettle"),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_cache_cassettle);
         let home_cache_cassettle = CleanerData {
             path: String::from("/home/".to_owned() + username + "/.cache/audios/*"),
             program: String::from("Cassettle"),

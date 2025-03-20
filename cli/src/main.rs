@@ -1,20 +1,20 @@
 use clap::Parser;
-use std::collections::HashSet;
-use std::sync::Arc;
-use tokio::sync::Mutex;
+use cleaner::clear_data;
 use crossterm::execute;
+use database::get_pcbooster_version;
+use database::structures::{CleanerData, CleanerResult, Cleared};
+use database::utils::get_file_size_string;
+use indicatif::{ProgressBar, ProgressStyle};
 use inquire::formatter::MultiOptionFormatter;
 use inquire::list_option::ListOption;
 use inquire::validator::Validation;
 use inquire::MultiSelect;
-use tabled::Table;
-use tokio::task;
-use indicatif::{ProgressBar, ProgressStyle};
 use notify_rust::Notification;
-use cleaner::clear_data;
-use database::{get_pcbooster_version};
-use database::structures::{CleanerData, CleanerResult, Cleared};
-use database::utils::get_file_size_string;
+use std::collections::HashSet;
+use std::sync::Arc;
+use tabled::Table;
+use tokio::sync::Mutex;
+use tokio::task;
 
 #[cfg(windows)]
 use std::io::stdin;
@@ -92,7 +92,10 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
 
             if result.working {
                 let mut cleared_programs = cleared_programs.lock().await;
-                if let Some(cleared) = cleared_programs.iter_mut().find(|c| c.program == result.program) {
+                if let Some(cleared) = cleared_programs
+                    .iter_mut()
+                    .find(|c| c.program == result.program)
+                {
                     cleared.removed_bytes += result.bytes as u64;
                     cleared.removed_files += result.files as u64;
                     cleared.removed_directories += result.folders as u64;
@@ -173,7 +176,7 @@ async fn main() {
         stdout(),
         crossterm::terminal::SetTitle(format!("Cross Cleaner CLI v{}", get_pcbooster_version()))
     )
-        .unwrap();
+    .unwrap();
 
     let database: &Vec<CleanerData> = database::cleaner_database::get_database();
 
@@ -204,20 +207,12 @@ async fn main() {
 
     let clear_categories: HashSet<String> = args
         .clear
-        .map(|s| {
-            s.split(',')
-                .map(|x| x.trim().to_lowercase())
-                .collect()
-        })
+        .map(|s| s.split(',').map(|x| x.trim().to_lowercase()).collect())
         .unwrap_or_default();
 
     let disabled_programs: HashSet<String> = args
         .disabled
-        .map(|s| {
-            s.split(',')
-                .map(|x| x.trim().to_lowercase())
-                .collect()
-        })
+        .map(|s| s.split(',').map(|x| x.trim().to_lowercase()).collect())
         .unwrap_or_default();
 
     if clear_categories.is_empty() && disabled_programs.is_empty() {
@@ -225,16 +220,14 @@ async fn main() {
             &|a| format!("{} selected categories", a.len());
 
         let options_str: Vec<&str> = options.iter().map(|s| s.as_str()).collect();
-        let ans_categories = MultiSelect::new(
-            "Select the clearing categories:",
-            options_str,
-        )
+        let ans_categories = MultiSelect::new("Select the clearing categories:", options_str)
             .with_validator(validator)
             .with_formatter(formatter_categories)
             .prompt();
 
         if let Ok(ans_categories) = ans_categories {
-            let ans_categories: Vec<String> = ans_categories.into_iter().map(|s| s.to_string()).collect();
+            let ans_categories: Vec<String> =
+                ans_categories.into_iter().map(|s| s.to_string()).collect();
 
             let programs2: Vec<&str> = database
                 .iter()
@@ -244,30 +237,32 @@ async fn main() {
                 .into_iter()
                 .collect();
 
-            let ans_programs = MultiSelect::new(
-                "Select the disabled programs for clearing:",
-                programs2,
-            )
-                .with_formatter(formatter_categories)
-                .prompt();
+            let ans_programs =
+                MultiSelect::new("Select the disabled programs for clearing:", programs2)
+                    .with_formatter(formatter_categories)
+                    .prompt();
 
             if let Ok(ans_programs) = ans_programs {
                 work(
                     ans_programs.iter().map(|s| &**s).collect(),
                     ans_categories.iter().map(|s| s.to_lowercase()).collect(),
-                    &database
-                ).await;
+                    &database,
+                )
+                .await;
             }
         }
     } else {
-        let ans_categories: Vec<String> = clear_categories.iter().map(|s| s.to_lowercase()).collect();
-        let ans_programs: Vec<String> = disabled_programs.iter().map(|s| s.to_lowercase()).collect();
+        let ans_categories: Vec<String> =
+            clear_categories.iter().map(|s| s.to_lowercase()).collect();
+        let ans_programs: Vec<String> =
+            disabled_programs.iter().map(|s| s.to_lowercase()).collect();
 
         work(
             ans_programs.iter().map(|s| s.as_str()).collect(),
             ans_categories,
             &database,
-        ).await;
+        )
+        .await;
     }
 
     #[cfg(windows)]
