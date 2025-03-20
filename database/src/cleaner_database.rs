@@ -240,7 +240,7 @@ lazy_static! {
             remove_all_in_dir: false,
             remove_directory_after_clean: false
         };
-    	database.push(home_config_github_desktop_logs);
+        database.push(home_config_github_desktop_logs);
         let home_config_github_desktop_logs = CleanerData {
             path: String::from("/home/".to_owned() + username + "/.config/GitHub Desktop/Cache/*"),
             program: "GitHub Desktop".parse().unwrap(),

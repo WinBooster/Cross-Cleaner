@@ -20,7 +20,12 @@ use tokio::task;
 use std::io::stdin;
 use std::io::stdout;
 
-async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &Vec<CleanerData>) {
+async fn work(
+    args: &Args,
+    disabled_programs: Vec<&str>,
+    categories: Vec<String>,
+    database: &Vec<CleanerData>,
+) {
     let sty = ProgressStyle::with_template(
         "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
     )
@@ -133,28 +138,33 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
     pb.set_message("done");
     pb.finish();
 
-    println!("Cleared result:");
-    let cleared_programs = cleared_programs.lock().await;
-    let table = Table::new(cleared_programs.iter()).to_string();
-    println!("{}", table);
+    if args.result_table {
+        println!("Cleared result:");
+        let cleared_programs = cleared_programs.lock().await;
+        let table = Table::new(cleared_programs.iter()).to_string();
+        println!("{}", table);
+    }
+    if args.show_notification {
+        let bytes_cleared = bytes_cleared.lock().await;
+        let removed_files = removed_files.lock().await;
+        let removed_directories = removed_directories.lock().await;
+        println!("Removed size: {}", get_file_size_string(*bytes_cleared));
+        println!("Removed files: {}", *removed_files);
+        println!("Removed directories: {}", *removed_directories);
+    }
 
-    let bytes_cleared = bytes_cleared.lock().await;
-    let removed_files = removed_files.lock().await;
-    let removed_directories = removed_directories.lock().await;
-    println!("Removed size: {}", get_file_size_string(*bytes_cleared));
-    println!("Removed files: {}", *removed_files);
-    println!("Removed directories: {}", *removed_directories);
-
-    if let Err(e) = Notification::new()
-        .summary("Cross Cleaner CLI")
-        .body(&format!(
-            "Removed: {}\nFiles: {}",
-            get_file_size_string(*bytes_cleared),
-            *removed_files
-        ))
-        .show()
-    {
-        eprintln!("Failed to show notification: {:?}", e);
+    if args.result_string {
+        if let Err(e) = Notification::new()
+            .summary("Cross Cleaner CLI")
+            .body(&format!(
+                "Removed: {}\nFiles: {}",
+                get_file_size_string(*bytes_cleared),
+                *removed_files
+            ))
+            .show()
+            {
+                eprintln!("Failed to show notification: {:?}", e);
+            }
     }
 }
 
@@ -162,12 +172,28 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
 #[command(version, about, long_about = None)]
 struct Args {
     /// Specify categories to clear (comma-separated)
-    #[arg(long, value_name = "CATEGORIES")]
+    #[arg(long, value_name = "Categories")]
     clear: Option<String>,
 
     /// Specify programs to disable (comma-separated)
-    #[arg(long, value_name = "PROGRAMS")]
+    #[arg(long, value_name = "Programs")]
     disabled: Option<String>,
+
+    /// Show progress bar
+    #[arg(long, value_name = "Progress bar", action = ArgAction::SetTrue, default_value_t = true)]
+    progress_bar: bool,
+
+    /// Show result table
+    #[arg(long, value_name = "Result table", action = ArgAction::SetTrue, default_value_t = true)]
+    result_table: bool,
+
+    /// Show result string
+    #[arg(long, value_name = "Result string", action = ArgAction::SetTrue, default_value_t = true)]
+    result_string: bool,
+
+    /// Show notification
+    #[arg(long, value_name = "Is show notification", action = ArgAction::SetTrue, default_value_t = true)]
+    show_notification: bool,
 }
 
 #[tokio::main]
@@ -244,6 +270,7 @@ async fn main() {
 
             if let Ok(ans_programs) = ans_programs {
                 work(
+                    &args,
                     ans_programs.iter().map(|s| &**s).collect(),
                     ans_categories.iter().map(|s| s.to_lowercase()).collect(),
                     &database,
@@ -258,6 +285,7 @@ async fn main() {
             disabled_programs.iter().map(|s| s.to_lowercase()).collect();
 
         work(
+            &args,
             ans_programs.iter().map(|s| s.as_str()).collect(),
             ans_categories,
             &database,
