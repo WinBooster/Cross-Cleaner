@@ -1,6 +1,5 @@
 use clap::{Parser, ValueEnum};
 use std::collections::HashSet;
-use std::env;
 use std::sync::Arc;
 use crossterm::execute;
 use inquire::formatter::MultiOptionFormatter;
@@ -63,9 +62,9 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
 
     for data in database
         .iter()
-        .filter(|data| categories.contains(&data.category))
+        .filter(|data| categories.contains(&data.category.to_lowercase()))
     {
-        if disabled_programs.contains(&data.program.as_str()) {
+        if disabled_programs.contains(&data.program.to_lowercase().as_str()) {
             continue;
         }
 
@@ -138,7 +137,7 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
 }
 
 #[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
+#[command(1.0.0, None, long_about = None)]
 struct Args {
     /// Specify categories to clear (comma-separated)
     #[arg(long, value_name = "CATEGORIES")]
@@ -185,15 +184,22 @@ async fn main() {
 
     let args = Args::parse();
 
-    // Получаем значения параметров
     let clear_categories: HashSet<String> = args
         .clear
-        .map(|s| s.split(',').map(|x| x.trim().to_string()).collect())
+        .map(|s| {
+            s.split(',')
+                .map(|x| x.trim().to_lowercase()) // Приводим к нижнему регистру
+                .collect()
+        })
         .unwrap_or_default();
 
     let disabled_programs: HashSet<String> = args
         .disabled
-        .map(|s| s.split(',').map(|x| x.trim().to_string()).collect())
+        .map(|s| {
+            s.split(',')
+                .map(|x| x.trim().to_lowercase()) // Приводим к нижнему регистру
+                .collect()
+        })
         .unwrap_or_default();
 
 

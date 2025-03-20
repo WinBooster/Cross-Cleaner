@@ -7,7 +7,7 @@ use crate::registry_utils::{remove_all_in_registry, remove_all_in_tree_in_regist
 
 #[cfg(windows)]
 pub fn clear_last_activity() -> String {
-    let mut result = String::new();
+    let result = String::new();
     let hkcu = RegKey::predef(HKEY_CURRENT_USER);
     let hklm = RegKey::predef(HKEY_LOCAL_MACHINE);
 
