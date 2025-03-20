@@ -1,4 +1,4 @@
-use clap::Parser;
+use clap::{ArgAction, Parser};
 use cleaner::clear_data;
 use crossterm::execute;
 use database::get_pcbooster_version;
@@ -26,33 +26,43 @@ async fn work(
     categories: Vec<String>,
     database: &Vec<CleanerData>,
 ) {
-    let sty = ProgressStyle::with_template(
-        "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
-    )
-        .unwrap()
-        .progress_chars("##-")
-        .tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
-
     let bytes_cleared = Arc::new(Mutex::new(0));
     let removed_files = Arc::new(Mutex::new(0));
     let removed_directories = Arc::new(Mutex::new(0));
     let cleared_programs = Arc::new(Mutex::new(Vec::<Cleared>::new()));
 
-    let pb = ProgressBar::new(0);
-    pb.set_style(sty.clone());
-    pb.set_prefix("Clearing");
+    // Создаем прогресс-бар только если он включен
+    let pb = if args.progress_bar {
+        let sty = ProgressStyle::with_template(
+            "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
+        )
+            .unwrap()
+            .progress_chars("##-")
+            .tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
+
+        let pb = ProgressBar::new(0);
+        pb.set_style(sty);
+        pb.set_prefix("Clearing");
+        Some(pb)
+    } else {
+        None
+    };
 
     let has_last_activity = categories.contains(&"LastActivity".to_string());
 
     let mut tasks = Vec::new();
 
     if has_last_activity {
-        let progress_bar = Arc::new(pb.clone());
+        let progress_bar = pb.clone();
         let task = task::spawn(async move {
-            progress_bar.set_message("LastActivity");
+            if let Some(pb) = progress_bar {
+                pb.set_message("LastActivity");
+            }
             #[cfg(windows)]
             database::registry_database::clear_last_activity();
-            progress_bar.inc(1);
+            if let Some(pb) = progress_bar {
+                pb.inc(1);
+            }
             CleanerResult {
                 files: 0,
                 folders: 0,
@@ -75,16 +85,20 @@ async fn work(
         }
 
         let data = Arc::new(data.clone());
-        let progress_bar = Arc::new(pb.clone());
+        let progress_bar = pb.clone();
         let bytes_cleared = Arc::clone(&bytes_cleared);
         let removed_files = Arc::clone(&removed_files);
         let removed_directories = Arc::clone(&removed_directories);
         let cleared_programs = Arc::clone(&cleared_programs);
 
         let task = task::spawn(async move {
-            progress_bar.set_message(data.path.clone());
-            let result = clear_data(&data);
-            progress_bar.inc(1);
+            if let Some(pb) = &progress_bar {
+                pb.set_message(data.path.clone());
+            }
+            let result = clear_data(&data); // Убрали .await, если clear_data синхронная
+            if let Some(pb) = progress_bar {
+                pb.inc(1);
+            }
 
             let mut bytes_cleared = bytes_cleared.lock().await;
             *bytes_cleared += result.bytes;
@@ -124,7 +138,9 @@ async fn work(
         tasks.push(task);
     }
 
-    pb.set_length(tasks.len() as u64);
+    if let Some(pb) = &pb {
+        pb.set_length(tasks.len() as u64);
+    }
 
     for task in tasks {
         match task.await {
@@ -135,8 +151,10 @@ async fn work(
         }
     }
 
-    pb.set_message("done");
-    pb.finish();
+    if let Some(pb) = &pb {
+        pb.set_message("done");
+        pb.finish();
+    }
 
     if args.result_table {
         println!("Cleared result:");
@@ -158,13 +176,13 @@ async fn work(
             .summary("Cross Cleaner CLI")
             .body(&format!(
                 "Removed: {}\nFiles: {}",
-                get_file_size_string(*bytes_cleared),
-                *removed_files
+                get_file_size_string(*bytes_cleared.lock().await),
+                *removed_files.lock().await
             ))
             .show()
-            {
-                eprintln!("Failed to show notification: {:?}", e);
-            }
+        {
+            eprintln!("Failed to show notification: {:?}", e);
+        }
     }
 }
 
