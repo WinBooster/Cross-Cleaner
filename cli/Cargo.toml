@@ -1,6 +1,6 @@
 [package]
 name = "Cross_Cleaner_CLI"
-version = "1.9.2"
+version = "1.9.3"
 edition = "2021"
 build = "build.rs"
 
@@ -22,7 +22,7 @@ FileDescription = "Garbage remover"
 OriginalFilename = "Cross Cleaner.exe"
 LegalCopyright = "Copyright Monolith Development © 2025"
 ProductName = "Cross Cleaner"
-ProductVersion = "1.9.2"
+ProductVersion = "1.9.3"
 
 [profile.release] # optimize file size
 lto = true

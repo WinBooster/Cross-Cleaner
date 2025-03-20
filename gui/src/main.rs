@@ -62,6 +62,7 @@ async fn work(
                 working: false,
                 path: String::new(),
                 program: String::new(),
+                category: String::new()
             }
         });
         tasks.push(task);

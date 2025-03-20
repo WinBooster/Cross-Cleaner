@@ -1,8 +1,24 @@
 use tabled::Tabled;
+use crate::utils;
 
 #[derive(PartialEq, Tabled)]
 pub struct Cleared {
+    #[tabled(rename = "Program")]
     pub Program: String,
+    #[tabled(display_with = "display_removed_bytes", rename = "Size")]
+    pub Removed_bytes: u64,
+    #[tabled(rename = "Files")]
+    pub Removed_files: u64,
+    #[tabled(rename = "Dirs")]
+    pub Removed_directories: u64,
+    #[tabled(display_with = "display_categories", rename = "Categories")]
+    pub Affected_categories: Vec<String>,
+}
+fn display_removed_bytes(size: &u64) -> String {
+    utils::get_file_size_string(*size)
+}
+fn display_categories(categories: &Vec<String>) -> String {
+    categories.join(", ")
 }
 impl PartialEq<Option<Cleared>> for &Cleared {
     fn eq(&self, other: &Option<Cleared>) -> bool {
@@ -33,4 +49,5 @@ pub struct CleanerResult {
     pub working: bool,
     pub path: String,
     pub program: String,
+    pub category: String,
 }

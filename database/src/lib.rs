@@ -8,5 +8,5 @@ mod registry_utils;
 mod minecraft_launchers_database;
 
 pub fn get_pcbooster_version() -> String {
-    String::from("1.9.2")
+    String::from("1.9.3")
 }

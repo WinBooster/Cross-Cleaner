@@ -17,7 +17,7 @@ use database::structures::{CleanerData, CleanerResult, Cleared};
 use database::utils::get_file_size_string;
 
 #[cfg(windows)]
-use std::io::{stdin};
+use std::io::stdin;
 use std::io::stdout;
 
 async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: Vec<CleanerData>) {
@@ -55,6 +55,7 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: V
                 working: false,
                 path: String::new(),
                 program: String::new(),
+                category: String::new(),
             }
         });
         tasks.push(task);
@@ -88,10 +89,21 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: V
                 removed_directories += result.folders;
                 bytes_cleared += result.bytes;
                 if result.working {
-                    let cleared = Cleared {
-                        Program: result.program,
-                    };
-                    if !cleared_programs.contains(&cleared) {
+                    if let Some(cleared) = cleared_programs.iter_mut().find(|c| c.Program == result.program) {
+                        cleared.Removed_bytes += result.bytes as u64;
+                        cleared.Removed_files += result.files as u64;
+                        cleared.Removed_directories += result.folders as u64;
+                        if !cleared.Affected_categories.contains(&result.category) {
+                            cleared.Affected_categories.push(result.category.clone());
+                        }
+                    } else {
+                        let cleared = Cleared {
+                            Program: result.program.clone(),
+                            Removed_bytes: result.bytes as u64,
+                            Removed_files: result.files as u64,
+                            Removed_directories: result.folders as u64,
+                            Affected_categories: vec![result.category.clone()],
+                        };
                         cleared_programs.push(cleared);
                     }
                 }
@@ -105,10 +117,10 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: V
     pb.set_message("done");
     pb.finish();
 
-    println!("Cleared programs:");
+    println!("Cleared result:");
     let table = Table::new(cleared_programs).to_string();
     println!("{}", table);
-    println!("Removed: {}", get_file_size_string(bytes_cleared));
+    println!("Removed size: {}", get_file_size_string(bytes_cleared));
     println!("Removed files: {}", removed_files);
     println!("Removed directories: {}", removed_directories);
 

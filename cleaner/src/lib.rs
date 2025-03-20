@@ -39,6 +39,7 @@ pub fn clear_data(data: &CleanerData) -> CleanerResult {
         working: false,
         program: data.program.clone(),
         path: data.path.clone(),
+        category: data.category.clone(),
     };
 
     // Use glob to search for files and directories
