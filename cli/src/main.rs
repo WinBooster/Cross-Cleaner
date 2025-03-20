@@ -1,4 +1,4 @@
-use clap::{Arg, Command};
+use clap::{Parser, ValueEnum};
 use std::collections::HashSet;
 use std::env;
 use std::sync::Arc;
