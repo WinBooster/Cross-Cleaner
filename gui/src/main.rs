@@ -7,7 +7,9 @@ use notify_rust::Notification;
 use tokio::sync::mpsc;
 use tokio::task;
 use cleaner::clear_data;
-use database::{get_pcbooster_version, registry_database};
+use database::get_pcbooster_version;
+#[cfg(windows)]
+use database::registry_database;
 use database::structures::{CleanerData, CleanerResult};
 use database::utils::get_file_size_string;
 

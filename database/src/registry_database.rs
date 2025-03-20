@@ -1,5 +1,5 @@
 #[cfg(windows)]
-use winreg::enums::{HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, KEY_ALL_ACCESS, KEY_READ, KEY_WRITE};
+use winreg::enums::{HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE};
 #[cfg(windows)]
 use winreg::RegKey;
 use std::io;
@@ -22,7 +22,7 @@ pub fn clear_last_activity() -> String {
     software_classes_local_settings_software_microsoft_windows_shell_mui_cache(hkcu_link);
     software_classes_local_settings_software_microsoft_windows_shell_bags(hkcu_link);
     software_classes_local_settings_software_microsoft_windows_shell_bag_mru(hkcu_link);
-    software_microsoft_windows_current_version_explorer_comDlg32(hkcu_link);
+    software_microsoft_windows_current_version_explorer_com_dlg32(hkcu_link);
     software_microsoft_windows_current_version_explorer_app_switched(hkcu_link);
     software_microsoft_windows_current_version_explorer_recent_docs(hkcu_link);
 
@@ -51,7 +51,7 @@ fn software_microsoft_windows_current_version_explorer_app_switched(hkcu: &RegKe
     remove_all_in_registry(hkcu, path);
 }
 #[cfg(windows)]
-fn software_microsoft_windows_current_version_explorer_comDlg32(hkcu: &RegKey) {
+fn software_microsoft_windows_current_version_explorer_com_dlg32(hkcu: &RegKey) {
     let path = String::from("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ComDlg32");
     remove_all_in_tree_in_registry(hkcu, path);
 }

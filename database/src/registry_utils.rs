@@ -1,5 +1,5 @@
 #[cfg(windows)]
-use winreg::enums::{HKEY_CURRENT_USER, KEY_ALL_ACCESS, KEY_READ, KEY_WRITE};
+use winreg::enums::{HKEY_CURRENT_USER, KEY_READ, KEY_WRITE};
 #[cfg(windows)]
 use winreg::RegKey;
 
@@ -19,7 +19,7 @@ pub fn get_steam_directory_from_registry() -> String {
 pub fn remove_all_in_tree_in_registry(key: &RegKey, path: String) {
     let mut keys = Vec::<String>::new();
 
-    let typed_path_read = key.open_subkey_with_flags(path.clone(), KEY_ALL_ACCESS);
+    let typed_path_read = key.open_subkey_with_flags(path.clone(), KEY_READ);
     match typed_path_read {
         Ok(typed_path_read) => {
             // Enumerate all values in the TypedPaths subkey
@@ -35,7 +35,7 @@ pub fn remove_all_in_tree_in_registry(key: &RegKey, path: String) {
         Err(e) => { }
     }
 
-    let typed_path_write = key.open_subkey_with_flags(path, KEY_ALL_ACCESS);
+    let typed_path_write = key.open_subkey_with_flags(path, KEY_WRITE);
     match typed_path_write {
         Ok(typed_path_write) => {
             for key in keys {
@@ -51,7 +51,7 @@ pub fn remove_all_in_registry(key: &RegKey, value: String) {
 
     let path = value;
 
-    let typed_path_read = key.open_subkey_with_flags(path.clone(), KEY_ALL_ACCESS);
+    let typed_path_read = key.open_subkey_with_flags(path.clone(), KEY_READ);
     match typed_path_read {
         Ok(typed_path_read) => {
             // Enumerate all values in the TypedPaths subkey
@@ -67,7 +67,7 @@ pub fn remove_all_in_registry(key: &RegKey, value: String) {
         Err(e) => { }
     }
 
-    let typed_path_write = key.open_subkey_with_flags(path, KEY_ALL_ACCESS);
+    let typed_path_write = key.open_subkey_with_flags(path, KEY_WRITE);
     match typed_path_write {
         Ok(typed_path_write) => {
             for key in keys {

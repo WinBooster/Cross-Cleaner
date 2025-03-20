@@ -89,20 +89,20 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: V
                 removed_directories += result.folders;
                 bytes_cleared += result.bytes;
                 if result.working {
-                    if let Some(cleared) = cleared_programs.iter_mut().find(|c| c.Program == result.program) {
-                        cleared.Removed_bytes += result.bytes as u64;
-                        cleared.Removed_files += result.files as u64;
-                        cleared.Removed_directories += result.folders as u64;
-                        if !cleared.Affected_categories.contains(&result.category) {
-                            cleared.Affected_categories.push(result.category.clone());
+                    if let Some(cleared) = cleared_programs.iter_mut().find(|c| c.program == result.program) {
+                        cleared.removed_bytes += result.bytes as u64;
+                        cleared.removed_files += result.files as u64;
+                        cleared.removed_directories += result.folders as u64;
+                        if !cleared.affected_categories.contains(&result.category) {
+                            cleared.affected_categories.push(result.category.clone());
                         }
                     } else {
                         let cleared = Cleared {
-                            Program: result.program.clone(),
-                            Removed_bytes: result.bytes as u64,
-                            Removed_files: result.files as u64,
-                            Removed_directories: result.folders as u64,
-                            Affected_categories: vec![result.category.clone()],
+                            program: result.program.clone(),
+                            removed_bytes: result.bytes as u64,
+                            removed_files: result.files as u64,
+                            removed_directories: result.folders as u64,
+                            affected_categories: vec![result.category.clone()],
                         };
                         cleared_programs.push(cleared);
                     }

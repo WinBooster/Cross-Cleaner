@@ -4,15 +4,15 @@ use crate::utils;
 #[derive(PartialEq, Tabled)]
 pub struct Cleared {
     #[tabled(rename = "Program")]
-    pub Program: String,
+    pub program: String,
     #[tabled(display_with = "display_removed_bytes", rename = "Size")]
-    pub Removed_bytes: u64,
+    pub removed_bytes: u64,
     #[tabled(rename = "Files")]
-    pub Removed_files: u64,
+    pub removed_files: u64,
     #[tabled(rename = "Dirs")]
-    pub Removed_directories: u64,
+    pub removed_directories: u64,
     #[tabled(display_with = "display_categories", rename = "Categories")]
-    pub Affected_categories: Vec<String>,
+    pub affected_categories: Vec<String>,
 }
 fn display_removed_bytes(size: &u64) -> String {
     utils::get_file_size_string(*size)

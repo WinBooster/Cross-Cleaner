@@ -1441,7 +1441,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_directory_after_clean: false
         };
         database.push(program_data_nvidia_corporation_nvstapisvr);
-        let program_data_nvidia_corporation_nvStereoInstaller = CleanerData {
+        let program_data_nvidia_corporation_nv_stereo_installer = CleanerData {
             path: drive.to_owned() + "ProgramData\\NVIDIA Corporation\\nvStereoInstaller\\*",
             program: "NVIDIA Corporation".parse().unwrap(),
             files_to_remove: vec![],
@@ -1452,7 +1452,7 @@ pub fn get_database() -> Vec<CleanerData> {
             remove_all_in_dir: false,
             remove_directory_after_clean: false
         };
-        database.push(program_data_nvidia_corporation_nvStereoInstaller);
+        database.push(program_data_nvidia_corporation_nv_stereo_installer);
         let program_data_nvidia_corporation = CleanerData {
             path: drive.to_owned() + "ProgramData\\NVIDIA Corporation\\*.log",
             program: "NVIDIA Corporation".parse().unwrap(),
@@ -4006,7 +4006,7 @@ pub fn get_database() -> Vec<CleanerData> {
         database.push(users_appdata_roaming_mclaunch_launcher_crashreports);
         //</editor-fold>
 
-        let mut mc_database = get_minecraft_database(&drive);
+        let mut mc_database = get_minecraft_database(&drive, username);
         database.append(&mut mc_database);
         //</editor-fold>
 
