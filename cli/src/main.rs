@@ -199,7 +199,7 @@ struct Args {
     #[arg(long, value_name = "PROGRAMS")]
     disabled: Option<String>,
 
-    /// Show progress bar during execution.
+    /// Show database statistic.
     /// Example: --show-database-info=true
     #[arg(long, value_name = "BOOL", default_value_t = false, action = ArgAction::Set)]
     show_database_info: bool,
