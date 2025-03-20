@@ -137,7 +137,7 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
 }
 
 #[derive(Parser, Debug)]
-#[command(1.0.0, None, long_about = None)]
+#[command("1.0.0", None, long_about = None)]
 struct Args {
     /// Specify categories to clear (comma-separated)
     #[arg(long, value_name = "CATEGORIES")]
