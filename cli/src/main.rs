@@ -55,12 +55,12 @@ async fn work(
     if has_last_activity {
         let progress_bar = pb.clone();
         let task = task::spawn(async move {
-            if let Some(pb) = progress_bar {
+            if let Some(ref pb) = progress_bar {
                 pb.set_message("LastActivity");
             }
             #[cfg(windows)]
             database::registry_database::clear_last_activity();
-            if let Some(pb) = progress_bar {
+            if let Some(ref pb) = progress_bar {
                 pb.inc(1);
             }
             CleanerResult {
@@ -92,11 +92,11 @@ async fn work(
         let cleared_programs = Arc::clone(&cleared_programs);
 
         let task = task::spawn(async move {
-            if let Some(pb) = &progress_bar {
+            if let Some(ref pb) = progress_bar {
                 pb.set_message(data.path.clone());
             }
             let result = clear_data(&data); // Убрали .await, если clear_data синхронная
-            if let Some(pb) = progress_bar {
+            if let Some(ref pb) = progress_bar {
                 pb.inc(1);
             }
 
@@ -138,7 +138,7 @@ async fn work(
         tasks.push(task);
     }
 
-    if let Some(pb) = &pb {
+    if let Some(ref pb) = &pb {
         pb.set_length(tasks.len() as u64);
     }
 
@@ -151,7 +151,7 @@ async fn work(
         }
     }
 
-    if let Some(pb) = &pb {
+    if let Some(ref pb) = &pb {
         pb.set_message("done");
         pb.finish();
     }
@@ -251,11 +251,13 @@ async fn main() {
 
     let clear_categories: HashSet<String> = args
         .clear
+        .as_ref()
         .map(|s| s.split(',').map(|x| x.trim().to_lowercase()).collect())
         .unwrap_or_default();
 
     let disabled_programs: HashSet<String> = args
         .disabled
+        .as_ref()
         .map(|s| s.split(',').map(|x| x.trim().to_lowercase()).collect())
         .unwrap_or_default();
 
