@@ -173,591 +173,591 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
 #[cfg(unix)]
 lazy_static! {
     static ref DATABASE: Vec<CleanerData> = {
-    let mut database: Vec<CleanerData> = Vec::new();
-    let username = &*whoami::username();
+        let mut database: Vec<CleanerData> = Vec::new();
+        let username = &*whoami::username();
 
-    //<editor-fold desc="System">
-    let home_cache_thumnails_normal = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.cache/thumbnails/normal/*"),
-        program: "System".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_cache_thumnails_normal);
-    let home_cache_thumnails_large = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.cache/thumbnails/large/*"),
-        program: "System".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_cache_thumnails_large);
-    let home_local_share_trash_files = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.local/share/Trash/files/*"),
-        program: "System".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Trash".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_local_share_trash_files);
-    //</editor-fold>
-    //<editor-fold desc="JetBrains">
-    let home_cache_librewolf_thumnails = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.cache/JetBrains/**/log/*"),
-        program: "JetBrains".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_cache_librewolf_thumnails);
-    //</editor-fold>
-    //<editor-fold desc="GitHub Desktop">
-    let home_config_github_desktop_logs = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/GitHub Desktop/logs/*"),
-        program: "GitHub Desktop".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_github_desktop_logs);
-    let home_config_github_desktop_logs = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/GitHub Desktop/Cache/*"),
-        program: "GitHub Desktop".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_github_desktop_logs);
-    //</editor-fold>
-    //<editor-fold desc="Steam">
-    let homo_local_share_steam_logs = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.local/share/Steam/logs/*"),
-        program: "Steam".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(homo_local_share_steam_logs);
-    let homo_local_share_steam_logs = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/..local/share/Steam/userdata/*"),
-        program: "Steam".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Accounts".parse().unwrap(),
-        remove_directories: true,
-        remove_files: false,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(homo_local_share_steam_logs);
-    let homo_local_share_steam_logs = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/Proton Hotfix"),
-        program: "Steam proton".parse().unwrap(),
-        files_to_remove: vec![
-            String::from("LICENSE"),
-            String::from("LICENSE.OFL")
-        ],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(homo_local_share_steam_logs);
-    //</editor-fold>
-    //<editor-fold desc="Ghidra">
-    let home_ghidra_logs = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.ghidra/**/*.log"),
-        program: "Ghidra".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_ghidra_logs);
-    //</editor-fold>
-    //<editor-fold desc="Thunderbird">
-    let home_ghidra_logs = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.cache/thunderbird/**/cache2/*.log"),
-        program: "Thunderbird".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_ghidra_logs);
-    //</editor-fold>
-    //<editor-fold desc="Exodus Crypto Wallet">
-    let home_config_exodus_wallet = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/Exodus"),
-        program: "Exodus Crypto Wallet".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Accounts".parse().unwrap(),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![
-            String::from("exodus.wallet")
-        ],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_exodus_wallet);
-    //</editor-fold>
+        //<editor-fold desc="System">
+        let home_cache_thumnails_normal = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.cache/thumbnails/normal/*"),
+            program: "System".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_cache_thumnails_normal);
+        let home_cache_thumnails_large = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.cache/thumbnails/large/*"),
+            program: "System".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_cache_thumnails_large);
+        let home_local_share_trash_files = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.local/share/Trash/files/*"),
+            program: "System".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Trash".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_local_share_trash_files);
+        //</editor-fold>
+        //<editor-fold desc="JetBrains">
+        let home_cache_librewolf_thumnails = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.cache/JetBrains/**/log/*"),
+            program: "JetBrains".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_cache_librewolf_thumnails);
+        //</editor-fold>
+        //<editor-fold desc="GitHub Desktop">
+        let home_config_github_desktop_logs = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/GitHub Desktop/logs/*"),
+            program: "GitHub Desktop".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+    	database.push(home_config_github_desktop_logs);
+        let home_config_github_desktop_logs = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/GitHub Desktop/Cache/*"),
+            program: "GitHub Desktop".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_config_github_desktop_logs);
+        //</editor-fold>
+        //<editor-fold desc="Steam">
+        let homo_local_share_steam_logs = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.local/share/Steam/logs/*"),
+            program: "Steam".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(homo_local_share_steam_logs);
+        let homo_local_share_steam_logs = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/..local/share/Steam/userdata/*"),
+            program: "Steam".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Accounts".parse().unwrap(),
+            remove_directories: true,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(homo_local_share_steam_logs);
+        let homo_local_share_steam_logs = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/Proton Hotfix"),
+            program: "Steam proton".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("LICENSE"),
+                String::from("LICENSE.OFL")
+            ],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(homo_local_share_steam_logs);
+        //</editor-fold>
+        //<editor-fold desc="Ghidra">
+        let home_ghidra_logs = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.ghidra/**/*.log"),
+            program: "Ghidra".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_ghidra_logs);
+        //</editor-fold>
+        //<editor-fold desc="Thunderbird">
+        let home_ghidra_logs = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.cache/thunderbird/**/cache2/*.log"),
+            program: "Thunderbird".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_ghidra_logs);
+        //</editor-fold>
+        //<editor-fold desc="Exodus Crypto Wallet">
+        let home_config_exodus_wallet = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/Exodus"),
+            program: "Exodus Crypto Wallet".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Accounts".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![
+                String::from("exodus.wallet")
+            ],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_config_exodus_wallet);
+        //</editor-fold>
 
-    //<editor-fold desc="Docs">
+        //<editor-fold desc="Docs">
 
-    //<editor-fold desc="Documents">
-    let usr_share_doc_documentation = CleanerData {
-        path: String::from("/usr/share/doc/"),
-        program: String::from("Documentation"),
-        files_to_remove: vec![],
-        category: String::from("Documentation"),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![
-            String::from("zstd"),
-            String::from("zmq"),
-            String::from("zix"),
-            String::from("zimg"),
-            String::from("zbar"),
-            String::from("xz"),
-            String::from("xorgproto"),
-            String::from("xmlsec1"),
-            String::from("xfsprogs"),
-            String::from("xapian-core"),
-            String::from("wireplumber"),
-            String::from("wiper"),
-            String::from("wavpack"),
-            String::from("vpnc"),
-            String::from("vlc"),
-            String::from("v4l-utils"),
-            String::from("userspace-rcu"),
-            String::from("usbutils"),
-            String::from("twolame"),
-            String::from("tor"),
-            String::from("thunar"),
-            String::from("systemd"),
-            String::from("sudo"),
-            String::from("stoken"),
-            String::from("sratom"),
-            String::from("sratom"),
-            String::from("speexdsp"),
-            String::from("speex"),
-            String::from("sntp"),
-            String::from("smartmontools"),
-            String::from("slsh"),
-            String::from("slang"),
-            String::from("serd"),
-            String::from("rubberband"),
-            String::from("rnnoise"),
-            String::from("ripgrep"),
-            String::from("procps-ng"),
-            String::from("portaudio"),
-            String::from("oniguruma"),
-            String::from("npth"),
-            String::from("ngtcp2"),
-            String::from("nftables"),
-            String::from("nfs-utils"),
-            String::from("NetworkManager"),
-            String::from("neon-0.34.0"),
-            String::from("nano"),
-            String::from("namcap"),
-            String::from("mujs"),
-            String::from("mtools"),
-            String::from("mpv"),
-            String::from("mpfr"),
-            String::from("mpdecimal"),
-            String::from("mariadb"),
-            String::from("man-db"),
-            String::from("lzo"),
-            String::from("lv2"),
-            String::from("lilv"),
-            String::from("libXrender"),
-            String::from("libxnvctrl-390xx"),
-            String::from("libxcb"),
-            String::from("libuv"),
-            String::from("libusb"),
-            String::from("libupnp"),
-            String::from("libunistring"),
-            String::from("libtiff"),
-            String::from("libtheora-1.1.1"),
-            String::from("libthai"),
-            String::from("libsndfile"),
-            String::from("libshout"),
-            String::from("libseccomp"),
-            String::from("libsamplerate"),
-            String::from("libplacebo"),
-            String::from("libopenmpt"),
-            String::from("libogg"),
-            String::from("libnsl"),
-            String::from("libnet"),
-            String::from("libmtp-1.1.22"),
-            String::from("libltc"),
-            String::from("liblrdf"),
-            String::from("liblc3"),
-            String::from("libjpeg-turbo"),
-            String::from("libinstpatch"),
-            String::from("libimobiledevice"),
-            String::from("libgusb"),
-            String::from("libgphoto2_port"),
-            String::from("libgphoto2"),
-            String::from("libffi"),
-            String::from("libexif"),
-            String::from("libelf"),
-            String::from("libedit"),
-            String::from("libdvdread"),
-            String::from("libdvdnav"),
-            String::from("libdc1394"),
-            String::from("libdaemon"),
-            String::from("libcap"),
-            String::from("libcaca-dev"),
-            String::from("libbpf"),
-            String::from("libavtp"),
-            String::from("accountsservice"),
-            String::from("acl"),
-            String::from("appstream"),
-            String::from("aribb24"),
-            String::from("attr"),
-            String::from("audit"),
-            String::from("bash"),
-            String::from("bison"),
-            String::from("blueman"),
-            String::from("bluez"),
-            String::from("c-ares"),
-            String::from("chromaprint"),
-            String::from("chrpath"),
-            String::from("cmake"),
-            String::from("crypt-setup"),
-            String::from("datrie"),
-            String::from("dav1d"),
-            String::from("ding-libs"),
-            String::from("dmidecode"),
-            String::from("dosfstools"),
-            String::from("ECM"),
-            String::from("efibootmgr"),
-            String::from("efitools"),
-            String::from("efivar"),
-            String::from("elfutils"),
-            String::from("enchant"),
-            String::from("expat"),
-            String::from("faac"),
-            String::from("faad2"),
-            String::from("fakeroot"),
-            String::from("ffmpeg"),
-            String::from("fftw"),
-            String::from("flex"),
-            String::from("fluidsynth"),
-            String::from("fontconfig"),
-            String::from("gc"),
-            String::from("gdbm"),
-            String::from("glances"),
-            String::from("gnupg"),
-            String::from("gnutls"),
-            String::from("grepftools"),
-            String::from("gprofng"),
-            String::from("gsmartcontrol"),
-            String::from("gtest"),
-            String::from("ImageMagick-7"),
-            String::from("iwd"),
-            String::from("jasper"),
-            String::from("jemalloc"),
-            String::from("jsoncpp"),
-            String::from("krb5"),
-            String::from("lame"),
-            String::from("libpcap"),
-            String::from("nfc-utils"),
-            String::from("libasyncns"),
-            String::from("libatasmart"),
-            String::from("libassuan"),
-            String::from("libaio"),
-            String::from("jq"),
-            String::from("gperftools"),
-            String::from("cryptsetup"),
-            String::from("sord"),
-            String::from("readline"),
-            String::from("raptor"),
-            String::from("pv"),
-            String::from("pkgconf"),
-            String::from("pkcs11-helper"),
-            String::from("pavucontrol"),
-            String::from("openjpeg"),
-            String::from("OpenEXR"),
-            String::from("opencore-amr"),
-            String::from("openconnect"),
-            String::from("openal"),
-            String::from("ocl-icd"),
-            String::from("oath-toolkit"),
-            String::from("ntp"),
-            String::from("ntfs-3g"),
-            String::from("nppth"),
-            String::from("openvpn"),
-            String::from("lua"),
-            String::from("Linux-PAM")
-        ],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(usr_share_doc_documentation);
-    //</editor-fold>
-    //<editor-fold desc="Steam">
-    let usr_share_doc_steam = CleanerData {
-        path: String::from("/usr/share/doc/"),
-        program: String::from("Steam"),
-        files_to_remove: vec![],
-        category: String::from("Documentation"),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![
-            String::from("steam")
-        ],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(usr_share_doc_steam);
-    //</editor-fold>
-    //<editor-fold desc="Alsa">
-    let usr_share_doc_alsa = CleanerData {
-        path: String::from("/usr/share/doc/"),
-        program: String::from("Alsa"),
-        files_to_remove: vec![],
-        category: String::from("Documentation"),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![
-            String::from("alsa-lib"),
-            String::from("alsa-plugins"),
-            String::from("alsa-topology-conf"),
-            String::from("alsa-ucm-conf"),
-            String::from("alsa-utils")
-        ],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(usr_share_doc_alsa);
-    //</editor-fold>
-    //<editor-fold desc="Github Desktop">
-    let usr_share_doc_github_desktop = CleanerData {
-        path: String::from("/usr/share/doc/"),
-        program: String::from("Github Desktop"),
-        files_to_remove: vec![],
-        category: String::from("Documentation"),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![
-            String::from("github-desktop")
-        ],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(usr_share_doc_github_desktop);
-    //</editor-fold>
-    //<editor-fold desc="Nvidia">
-    let usr_share_doc_nvidia = CleanerData {
-        path: String::from("/usr/share/doc/"),
-        program: String::from("Nvidia"),
-        files_to_remove: vec![
-            String::from("nvidia-utils")
-        ],
-        category: String::from("Documentation"),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![
-            String::from("nvidia"),
-            String::from("nvidia-utils")
-        ],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(usr_share_doc_nvidia);
-    //</editor-fold>
-    //<editor-fold desc="Pcre">
-    let usr_share_doc_pcre = CleanerData {
-        path: String::from("/usr/share/doc/"),
-        program: String::from("Pcre"),
-        files_to_remove: vec![],
-        category: String::from("Documentation"),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![
-            String::from("pcre"),
-            String::from("pcre2")
-        ],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(usr_share_doc_pcre);
-    //</editor-fold>
-    //<editor-fold desc="Powdertoy">
-    let usr_share_doc_powdertoy_bin = CleanerData {
-        path: String::from("/usr/share/doc/"),
-        program: String::from("Powdertoy"),
-        files_to_remove: vec![],
-        category: String::from("Documentation"),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![
-            String::from("powdertoy-bin")
-        ],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(usr_share_doc_powdertoy_bin);
-    //</editor-fold>
-    //<editor-fold desc="Python">
-    let usr_share_doc_pycurl = CleanerData {
-        path: String::from("/usr/share/doc/"),
-        program: String::from("Python"),
-        files_to_remove: vec![],
-        category: String::from("Documentation"),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![
-            String::from("pycurl"),
-            String::from("python-annotated-types"),
-            String::from("python-orjson"),
-            String::from("python-pathvalidate"),
-            String::from("python-pefile"),
-            String::from("python-pydantic-core"),
-            String::from("python-pyelftools"),
-            String::from("python-yaml")
-        ],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(usr_share_doc_pycurl);
-    //</editor-fold>
-    //<editor-fold desc="KeePassXC">
-    let usr_share_doc_keepassxc = CleanerData {
-        path: String::from("/usr/share/keepassxc/"),
-        program: String::from("KeePassXC"),
-        files_to_remove: vec![],
-        category: String::from("Documentation"),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![
-            String::from("docs")
-        ],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(usr_share_doc_keepassxc);
-    //</editor-fold>
-    //<editor-fold desc="Licenses">
-    let usr_share_licenses = CleanerData {
-        path: String::from("/usr/share/licenses/*"),
-        program: String::from("Licenses"),
-        files_to_remove: vec![],
-        category: String::from("Documentation"),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(usr_share_licenses);
-    //</editor-fold>
+        //<editor-fold desc="Documents">
+        let usr_share_doc_documentation = CleanerData {
+            path: String::from("/usr/share/doc/"),
+            program: String::from("Documentation"),
+            files_to_remove: vec![],
+            category: String::from("Documentation"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![
+                String::from("zstd"),
+                String::from("zmq"),
+                String::from("zix"),
+                String::from("zimg"),
+                String::from("zbar"),
+                String::from("xz"),
+                String::from("xorgproto"),
+                String::from("xmlsec1"),
+                String::from("xfsprogs"),
+                String::from("xapian-core"),
+                String::from("wireplumber"),
+                String::from("wiper"),
+                String::from("wavpack"),
+                String::from("vpnc"),
+                String::from("vlc"),
+                String::from("v4l-utils"),
+                String::from("userspace-rcu"),
+                String::from("usbutils"),
+                String::from("twolame"),
+                String::from("tor"),
+                String::from("thunar"),
+                String::from("systemd"),
+                String::from("sudo"),
+                String::from("stoken"),
+                String::from("sratom"),
+                String::from("sratom"),
+                String::from("speexdsp"),
+                String::from("speex"),
+                String::from("sntp"),
+                String::from("smartmontools"),
+                String::from("slsh"),
+                String::from("slang"),
+                String::from("serd"),
+                String::from("rubberband"),
+                String::from("rnnoise"),
+                String::from("ripgrep"),
+                String::from("procps-ng"),
+                String::from("portaudio"),
+                String::from("oniguruma"),
+                String::from("npth"),
+                String::from("ngtcp2"),
+                String::from("nftables"),
+                String::from("nfs-utils"),
+                String::from("NetworkManager"),
+                String::from("neon-0.34.0"),
+                String::from("nano"),
+                String::from("namcap"),
+                String::from("mujs"),
+                String::from("mtools"),
+                String::from("mpv"),
+                String::from("mpfr"),
+                String::from("mpdecimal"),
+                String::from("mariadb"),
+                String::from("man-db"),
+                String::from("lzo"),
+                String::from("lv2"),
+                String::from("lilv"),
+                String::from("libXrender"),
+                String::from("libxnvctrl-390xx"),
+                String::from("libxcb"),
+                String::from("libuv"),
+                String::from("libusb"),
+                String::from("libupnp"),
+                String::from("libunistring"),
+                String::from("libtiff"),
+                String::from("libtheora-1.1.1"),
+                String::from("libthai"),
+                String::from("libsndfile"),
+                String::from("libshout"),
+                String::from("libseccomp"),
+                String::from("libsamplerate"),
+                String::from("libplacebo"),
+                String::from("libopenmpt"),
+                String::from("libogg"),
+                String::from("libnsl"),
+                String::from("libnet"),
+                String::from("libmtp-1.1.22"),
+                String::from("libltc"),
+                String::from("liblrdf"),
+                String::from("liblc3"),
+                String::from("libjpeg-turbo"),
+                String::from("libinstpatch"),
+                String::from("libimobiledevice"),
+                String::from("libgusb"),
+                String::from("libgphoto2_port"),
+                String::from("libgphoto2"),
+                String::from("libffi"),
+                String::from("libexif"),
+                String::from("libelf"),
+                String::from("libedit"),
+                String::from("libdvdread"),
+                String::from("libdvdnav"),
+                String::from("libdc1394"),
+                String::from("libdaemon"),
+                String::from("libcap"),
+                String::from("libcaca-dev"),
+                String::from("libbpf"),
+                String::from("libavtp"),
+                String::from("accountsservice"),
+                String::from("acl"),
+                String::from("appstream"),
+                String::from("aribb24"),
+                String::from("attr"),
+                String::from("audit"),
+                String::from("bash"),
+                String::from("bison"),
+                String::from("blueman"),
+                String::from("bluez"),
+                String::from("c-ares"),
+                String::from("chromaprint"),
+                String::from("chrpath"),
+                String::from("cmake"),
+                String::from("crypt-setup"),
+                String::from("datrie"),
+                String::from("dav1d"),
+                String::from("ding-libs"),
+                String::from("dmidecode"),
+                String::from("dosfstools"),
+                String::from("ECM"),
+                String::from("efibootmgr"),
+                String::from("efitools"),
+                String::from("efivar"),
+                String::from("elfutils"),
+                String::from("enchant"),
+                String::from("expat"),
+                String::from("faac"),
+                String::from("faad2"),
+                String::from("fakeroot"),
+                String::from("ffmpeg"),
+                String::from("fftw"),
+                String::from("flex"),
+                String::from("fluidsynth"),
+                String::from("fontconfig"),
+                String::from("gc"),
+                String::from("gdbm"),
+                String::from("glances"),
+                String::from("gnupg"),
+                String::from("gnutls"),
+                String::from("grepftools"),
+                String::from("gprofng"),
+                String::from("gsmartcontrol"),
+                String::from("gtest"),
+                String::from("ImageMagick-7"),
+                String::from("iwd"),
+                String::from("jasper"),
+                String::from("jemalloc"),
+                String::from("jsoncpp"),
+                String::from("krb5"),
+                String::from("lame"),
+                String::from("libpcap"),
+                String::from("nfc-utils"),
+                String::from("libasyncns"),
+                String::from("libatasmart"),
+                String::from("libassuan"),
+                String::from("libaio"),
+                String::from("jq"),
+                String::from("gperftools"),
+                String::from("cryptsetup"),
+                String::from("sord"),
+                String::from("readline"),
+                String::from("raptor"),
+                String::from("pv"),
+                String::from("pkgconf"),
+                String::from("pkcs11-helper"),
+                String::from("pavucontrol"),
+                String::from("openjpeg"),
+                String::from("OpenEXR"),
+                String::from("opencore-amr"),
+                String::from("openconnect"),
+                String::from("openal"),
+                String::from("ocl-icd"),
+                String::from("oath-toolkit"),
+                String::from("ntp"),
+                String::from("ntfs-3g"),
+                String::from("nppth"),
+                String::from("openvpn"),
+                String::from("lua"),
+                String::from("Linux-PAM")
+            ],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(usr_share_doc_documentation);
+        //</editor-fold>
+        //<editor-fold desc="Steam">
+        let usr_share_doc_steam = CleanerData {
+            path: String::from("/usr/share/doc/"),
+            program: String::from("Steam"),
+            files_to_remove: vec![],
+            category: String::from("Documentation"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![
+                String::from("steam")
+            ],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(usr_share_doc_steam);
+        //</editor-fold>
+        //<editor-fold desc="Alsa">
+        let usr_share_doc_alsa = CleanerData {
+            path: String::from("/usr/share/doc/"),
+            program: String::from("Alsa"),
+            files_to_remove: vec![],
+            category: String::from("Documentation"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![
+                String::from("alsa-lib"),
+                String::from("alsa-plugins"),
+                String::from("alsa-topology-conf"),
+                String::from("alsa-ucm-conf"),
+                String::from("alsa-utils")
+            ],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(usr_share_doc_alsa);
+        //</editor-fold>
+        //<editor-fold desc="Github Desktop">
+        let usr_share_doc_github_desktop = CleanerData {
+            path: String::from("/usr/share/doc/"),
+            program: String::from("Github Desktop"),
+            files_to_remove: vec![],
+            category: String::from("Documentation"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![
+                String::from("github-desktop")
+            ],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(usr_share_doc_github_desktop);
+        //</editor-fold>
+        //<editor-fold desc="Nvidia">
+        let usr_share_doc_nvidia = CleanerData {
+            path: String::from("/usr/share/doc/"),
+            program: String::from("Nvidia"),
+            files_to_remove: vec![
+                String::from("nvidia-utils")
+            ],
+            category: String::from("Documentation"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![
+                String::from("nvidia"),
+                String::from("nvidia-utils")
+            ],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(usr_share_doc_nvidia);
+        //</editor-fold>
+        //<editor-fold desc="Pcre">
+        let usr_share_doc_pcre = CleanerData {
+            path: String::from("/usr/share/doc/"),
+            program: String::from("Pcre"),
+            files_to_remove: vec![],
+            category: String::from("Documentation"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![
+                String::from("pcre"),
+                String::from("pcre2")
+            ],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(usr_share_doc_pcre);
+        //</editor-fold>
+        //<editor-fold desc="Powdertoy">
+        let usr_share_doc_powdertoy_bin = CleanerData {
+            path: String::from("/usr/share/doc/"),
+            program: String::from("Powdertoy"),
+            files_to_remove: vec![],
+            category: String::from("Documentation"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![
+                String::from("powdertoy-bin")
+            ],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(usr_share_doc_powdertoy_bin);
+        //</editor-fold>
+        //<editor-fold desc="Python">
+        let usr_share_doc_pycurl = CleanerData {
+            path: String::from("/usr/share/doc/"),
+            program: String::from("Python"),
+            files_to_remove: vec![],
+            category: String::from("Documentation"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![
+                String::from("pycurl"),
+                String::from("python-annotated-types"),
+                String::from("python-orjson"),
+                String::from("python-pathvalidate"),
+                String::from("python-pefile"),
+                String::from("python-pydantic-core"),
+                String::from("python-pyelftools"),
+                String::from("python-yaml")
+            ],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(usr_share_doc_pycurl);
+        //</editor-fold>
+        //<editor-fold desc="KeePassXC">
+        let usr_share_doc_keepassxc = CleanerData {
+            path: String::from("/usr/share/keepassxc/"),
+            program: String::from("KeePassXC"),
+            files_to_remove: vec![],
+            category: String::from("Documentation"),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![
+                String::from("docs")
+            ],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(usr_share_doc_keepassxc);
+        //</editor-fold>
+        //<editor-fold desc="Licenses">
+        let usr_share_licenses = CleanerData {
+            path: String::from("/usr/share/licenses/*"),
+            program: String::from("Licenses"),
+            files_to_remove: vec![],
+            category: String::from("Documentation"),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(usr_share_licenses);
+        //</editor-fold>
 
-    //</editor-fold>
+        //</editor-fold>
 
-    //<editor-fold desc="Music clients">
+        //<editor-fold desc="Music clients">
 
-    //<editor-fold desc="Yandex Music">
-    let home_config_yandex_music_logs = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/yandex-music/logs/*"),
-        program: "Yandex Music".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_yandex_music_logs);
-    let home_config_yandex_music_cache = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/yandex-music/Cache/*"),
-        program: "Yandex Music".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_yandex_music_cache);
-    let home_config_yandex_music_code_cache = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/yandex-music/Code Cache/*"),
-        program: "Yandex Music".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_yandex_music_code_cache);
-    let home_config_yandex_music_dawn_graphite_cache = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/yandex-music/DawnGraphiteCache/*"),
-        program: "Yandex Music".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_yandex_music_dawn_graphite_cache);
-    let home_config_yandex_music_dawn_web_gpu_cache = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/yandex-music/DawnWebGPUCache/*"),
-        program: "Yandex Music".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_yandex_music_dawn_web_gpu_cache);
+        //<editor-fold desc="Yandex Music">
+        let home_config_yandex_music_logs = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/yandex-music/logs/*"),
+            program: "Yandex Music".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_config_yandex_music_logs);
+        let home_config_yandex_music_cache = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/yandex-music/Cache/*"),
+            program: "Yandex Music".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_config_yandex_music_cache);
+        let home_config_yandex_music_code_cache = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/yandex-music/Code Cache/*"),
+            program: "Yandex Music".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_config_yandex_music_code_cache);
+        let home_config_yandex_music_dawn_graphite_cache = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/yandex-music/DawnGraphiteCache/*"),
+            program: "Yandex Music".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_config_yandex_music_dawn_graphite_cache);
+        let home_config_yandex_music_dawn_web_gpu_cache = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/yandex-music/DawnWebGPUCache/*"),
+            program: "Yandex Music".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_config_yandex_music_dawn_web_gpu_cache);
         let home_config_yandex_music_gpu_cache = CleanerData {
             path: String::from("/home/".to_owned() + username + "/.config/yandex-music/GPUCache/*"),
             program: "Yandex Music".parse().unwrap(),
@@ -796,326 +796,326 @@ lazy_static! {
             remove_directory_after_clean: false
         };
         database.push(home_cache_cassettle);
-    //</editor-fold>
-    //<editor-fold desc="Spotify">
-    let home_cache_spotify = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.cache/spotify/*.log"),
-        program: String::from("Spotify"),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_cache_spotify);
-    //</editor-fold>
+        //</editor-fold>
+        //<editor-fold desc="Spotify">
+        let home_cache_spotify = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.cache/spotify/*.log"),
+            program: String::from("Spotify"),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_cache_spotify);
+        //</editor-fold>
 
-    //</editor-fold>
+        //</editor-fold>
 
-    //<editor-fold desc="Messangers">
+        //<editor-fold desc="Messangers">
 
-    //<editor-fold desc="Discord">
-    let home_config_discord_logs = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/discord/logs/*"),
-        program: "Discord".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_discord_logs);
-    let home_config_discord_cache = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/discord/Cache/*"),
-        program: "Discord".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_discord_cache);
-    let home_config_discord_code_cache = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/discord/Code Cache/*"),
-        program: "Discord".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_discord_code_cache);
-    let home_config_discord_dawn_graphite_cache = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/discord/DawnGraphiteCache/*"),
-        program: "Discord".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_discord_dawn_graphite_cache);
-    let home_config_discord_dawn_web_gpu_cache = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/discord/DawnWebGPUCache/*"),
-        program: "Discord".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_discord_dawn_web_gpu_cache);
-    let home_config_discord_gpu_cache = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.config/discord/GPUCache/*"),
-        program: "Discord".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_config_discord_gpu_cache);
-    //</editor-fold>
-    //<editor-fold desc="Telegram">
-    let home_local_share_telegram_desktop = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.local/share/TelegramDesktop/log*.txt"),
-        program: "Telegram".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_local_share_telegram_desktop);
-    let home_local_share_telegram_desktop = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.local/share/TelegramDesktop/tdata/*"),
-        program: "Telegram".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Accounts".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_local_share_telegram_desktop);
-    //</editor-fold>
+        //<editor-fold desc="Discord">
+        let home_config_discord_logs = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/discord/logs/*"),
+            program: "Discord".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_config_discord_logs);
+        let home_config_discord_cache = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/discord/Cache/*"),
+            program: "Discord".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_config_discord_cache);
+        let home_config_discord_code_cache = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/discord/Code Cache/*"),
+            program: "Discord".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_config_discord_code_cache);
+        let home_config_discord_dawn_graphite_cache = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/discord/DawnGraphiteCache/*"),
+            program: "Discord".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_config_discord_dawn_graphite_cache);
+        let home_config_discord_dawn_web_gpu_cache = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/discord/DawnWebGPUCache/*"),
+            program: "Discord".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_config_discord_dawn_web_gpu_cache);
+        let home_config_discord_gpu_cache = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.config/discord/GPUCache/*"),
+            program: "Discord".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_config_discord_gpu_cache);
+        //</editor-fold>
+        //<editor-fold desc="Telegram">
+        let home_local_share_telegram_desktop = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.local/share/TelegramDesktop/log*.txt"),
+            program: "Telegram".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_local_share_telegram_desktop);
+        let home_local_share_telegram_desktop = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.local/share/TelegramDesktop/tdata/*"),
+            program: "Telegram".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Accounts".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_local_share_telegram_desktop);
+        //</editor-fold>
 
-    //</editor-fold>
+        //</editor-fold>
 
-    //<editor-fold desc="Browsers">
+        //<editor-fold desc="Browsers">
 
-    //<editor-fold desc="FireFox">
-    let home_cache_firefox_thumbnails = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.cache/firefox/**/thumbnails/*"),
-        program: "FireFox".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
+        //<editor-fold desc="FireFox">
+        let home_cache_firefox_thumbnails = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.cache/firefox/**/thumbnails/*"),
+            program: "FireFox".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_cache_firefox_thumbnails);
+        let home_mozila_firefox_cookies = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.mozilla/firefox/**/"),
+            program: "FireFox".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("cookies.sqlite"),
+                String::from("cookies.sqlite-wal")
+            ],
+            category: "Browser cookies".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_mozila_firefox_cookies);
+        let home_mozila_firefox_cookies = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.mozilla/firefox/**/"),
+            program: "FireFox".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("formhistory.sqlite"),
+                String::from("favicons.sqlite"),
+                String::from("favicons.sqlite-wal")
+            ],
+            category: "LastActivity".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_mozila_firefox_cookies);
+        //</editor-fold>
+        //<editor-fold desc="LibreWolf">
+        let home_cache_librewolf_thumnails = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.cache/librewolf/**/thumbnails/*"),
+            program: "LibreWolf".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_cache_librewolf_thumnails);
+        let home_cache_librewolf_thumnails = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.librewolf/**/"),
+            program: "LibreWolf".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("favicons.sqlite"),
+                String::from("favicons.sqlite-wal"),
+                String::from("formhistory.sqlite")
+            ],
+            category: "LastActivity".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_cache_librewolf_thumnails);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Minecraft launchers">
+
+        let mut mc_database = get_minecraft_database("", username);
+        database.append(&mut mc_database);
+
+        //</editor-fold>
+
+        //<editor-fold desc="Games">
+
+        //<editor-fold desc="Terraria">
+        let home_local_share_terraria_worlds = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.local/share/Terraria/Worlds/*"),
+            program: "Terraria".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Game saves".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_local_share_terraria_worlds);
+        let home_local_share_terraria_playes = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.local/share/Terraria/Playes/*"),
+            program: "Terraria".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Game saves".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_local_share_terraria_playes);
+        let home_local_share_steam_steam_apps_common_terraria = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/Terraria/"),
+            program: "Terraria".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("changelog.txt")
+            ],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_local_share_steam_steam_apps_common_terraria);
+        let home_local_share_steam_steam_apps_common_terraria = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/Terraria/*.blob"),
+            program: "Terraria".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Crash reports".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_local_share_steam_steam_apps_common_terraria);
+        //</editor-fold>
+        //<editor-fold desc="Garry's mod">
+        let home_local_share_steam_steam_apps_common_garrys_mod = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/GarrysMod/"),
+            program: "Garry's mod".parse().unwrap(),
+            files_to_remove: vec![
+                String::from("chromium.log")
+            ],
+            category: "Logs".parse().unwrap(),
+            remove_directories: false,
+            remove_files: false,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_local_share_steam_steam_apps_common_garrys_mod);
+        let home_local_share_steam_steam_apps_common_garrys_mod = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/GarrysMod/crashes/*"),
+            program: "Garry's mod".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Crash reports".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_local_share_steam_steam_apps_common_garrys_mod);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Cheats">
+
+        //<editor-fold desc="Future Client">
+        let home_local_share_prism_launcher_logs = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/"),
+            program: "Future Client".parse().unwrap(),
+            files_to_remove: vec![],
+            category: "Cheats".parse().unwrap(),
+            remove_directories: true,
+            remove_files: true,
+            directories_to_remove: vec![
+                String::from("Future")
+            ],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_local_share_prism_launcher_logs);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        database.sort_by(|a, b| a.category.cmp(&b.category));
+
+        database
     };
-    database.push(home_cache_firefox_thumbnails);
-    let home_mozila_firefox_cookies = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.mozilla/firefox/**/"),
-        program: "FireFox".parse().unwrap(),
-        files_to_remove: vec![
-            String::from("cookies.sqlite"),
-            String::from("cookies.sqlite-wal")
-        ],
-        category: "Browser cookies".parse().unwrap(),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_mozila_firefox_cookies);
-    let home_mozila_firefox_cookies = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.mozilla/firefox/**/"),
-        program: "FireFox".parse().unwrap(),
-        files_to_remove: vec![
-            String::from("formhistory.sqlite"),
-            String::from("favicons.sqlite"),
-            String::from("favicons.sqlite-wal")
-        ],
-        category: "LastActivity".parse().unwrap(),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_mozila_firefox_cookies);
-    //</editor-fold>
-    //<editor-fold desc="LibreWolf">
-    let home_cache_librewolf_thumnails = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.cache/librewolf/**/thumbnails/*"),
-        program: "LibreWolf".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cache".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_cache_librewolf_thumnails);
-    let home_cache_librewolf_thumnails = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.librewolf/**/"),
-        program: "LibreWolf".parse().unwrap(),
-        files_to_remove: vec![
-            String::from("favicons.sqlite"),
-            String::from("favicons.sqlite-wal"),
-            String::from("formhistory.sqlite")
-        ],
-        category: "LastActivity".parse().unwrap(),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_cache_librewolf_thumnails);
-    //</editor-fold>
-
-    //</editor-fold>
-
-    //<editor-fold desc="Minecraft launchers">
-
-    let mut mc_database = get_minecraft_database("", username);
-    database.append(&mut mc_database);
-
-    //</editor-fold>
-
-    //<editor-fold desc="Games">
-
-    //<editor-fold desc="Terraria">
-    let home_local_share_terraria_worlds = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.local/share/Terraria/Worlds/*"),
-        program: "Terraria".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Game saves".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_local_share_terraria_worlds);
-    let home_local_share_terraria_playes = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.local/share/Terraria/Playes/*"),
-        program: "Terraria".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Game saves".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_local_share_terraria_playes);
-    let home_local_share_steam_steam_apps_common_terraria = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/Terraria/"),
-        program: "Terraria".parse().unwrap(),
-        files_to_remove: vec![
-            String::from("changelog.txt")
-        ],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_local_share_steam_steam_apps_common_terraria);
-    let home_local_share_steam_steam_apps_common_terraria = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/Terraria/*.blob"),
-        program: "Terraria".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Crash reports".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_local_share_steam_steam_apps_common_terraria);
-    //</editor-fold>
-    //<editor-fold desc="Garry's mod">
-    let home_local_share_steam_steam_apps_common_garrys_mod = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/GarrysMod/"),
-        program: "Garry's mod".parse().unwrap(),
-        files_to_remove: vec![
-            String::from("chromium.log")
-        ],
-        category: "Logs".parse().unwrap(),
-        remove_directories: false,
-        remove_files: false,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_local_share_steam_steam_apps_common_garrys_mod);
-    let home_local_share_steam_steam_apps_common_garrys_mod = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/.local/share/Steam/steamapps/common/GarrysMod/crashes/*"),
-        program: "Garry's mod".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Crash reports".parse().unwrap(),
-        remove_directories: false,
-        remove_files: true,
-        directories_to_remove: vec![],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_local_share_steam_steam_apps_common_garrys_mod);
-    //</editor-fold>
-
-    //</editor-fold>
-
-    //<editor-fold desc="Cheats">
-
-    //<editor-fold desc="Future Client">
-    let home_local_share_prism_launcher_logs = CleanerData {
-        path: String::from("/home/".to_owned() + username + "/"),
-        program: "Future Client".parse().unwrap(),
-        files_to_remove: vec![],
-        category: "Cheats".parse().unwrap(),
-        remove_directories: true,
-        remove_files: true,
-        directories_to_remove: vec![
-            String::from("Future")
-        ],
-        remove_all_in_dir: false,
-        remove_directory_after_clean: false
-    };
-    database.push(home_local_share_prism_launcher_logs);
-    //</editor-fold>
-
-    //</editor-fold>
-
-    database.sort_by(|a, b| a.category.cmp(&b.category));
-
-    database
-};
 }
 #[cfg(windows)]
 lazy_static! {
