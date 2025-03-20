@@ -1,6 +1,7 @@
-use clap::{Parser, ValueEnum};
+use clap::Parser;
 use std::collections::HashSet;
 use std::sync::Arc;
+use tokio::sync::Mutex;
 use crossterm::execute;
 use inquire::formatter::MultiOptionFormatter;
 use inquire::list_option::ListOption;
@@ -27,10 +28,10 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
         .progress_chars("##-")
         .tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
 
-    let mut bytes_cleared = 0;
-    let mut removed_files = 0;
-    let mut removed_directories = 0;
-    let mut cleared_programs: Vec<Cleared> = Vec::new();
+    let bytes_cleared = Arc::new(Mutex::new(0));
+    let removed_files = Arc::new(Mutex::new(0));
+    let removed_directories = Arc::new(Mutex::new(0));
+    let cleared_programs = Arc::new(Mutex::new(Vec::<Cleared>::new()));
 
     let pb = ProgressBar::new(0);
     pb.set_style(sty.clone());
@@ -70,10 +71,46 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
 
         let data = Arc::new(data.clone());
         let progress_bar = Arc::new(pb.clone());
+        let bytes_cleared = Arc::clone(&bytes_cleared);
+        let removed_files = Arc::clone(&removed_files);
+        let removed_directories = Arc::clone(&removed_directories);
+        let cleared_programs = Arc::clone(&cleared_programs);
+
         let task = task::spawn(async move {
             progress_bar.set_message(data.path.clone());
             let result = clear_data(&data);
             progress_bar.inc(1);
+
+            let mut bytes_cleared = bytes_cleared.lock().await;
+            *bytes_cleared += result.bytes;
+
+            let mut removed_files = removed_files.lock().await;
+            *removed_files += result.files;
+
+            let mut removed_directories = removed_directories.lock().await;
+            *removed_directories += result.folders;
+
+            if result.working {
+                let mut cleared_programs = cleared_programs.lock().await;
+                if let Some(cleared) = cleared_programs.iter_mut().find(|c| c.program == result.program) {
+                    cleared.removed_bytes += result.bytes as u64;
+                    cleared.removed_files += result.files as u64;
+                    cleared.removed_directories += result.folders as u64;
+                    if !cleared.affected_categories.contains(&result.category) {
+                        cleared.affected_categories.push(result.category.clone());
+                    }
+                } else {
+                    let cleared = Cleared {
+                        program: result.program.clone(),
+                        removed_bytes: result.bytes as u64,
+                        removed_files: result.files as u64,
+                        removed_directories: result.folders as u64,
+                        affected_categories: vec![result.category.clone()],
+                    };
+                    cleared_programs.push(cleared);
+                }
+            }
+
             result
         });
         tasks.push(task);
@@ -83,30 +120,7 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
 
     for task in tasks {
         match task.await {
-            Ok(result) => {
-                removed_files += result.files;
-                removed_directories += result.folders;
-                bytes_cleared += result.bytes;
-                if result.working {
-                    if let Some(cleared) = cleared_programs.iter_mut().find(|c| c.program == result.program) {
-                        cleared.removed_bytes += result.bytes as u64;
-                        cleared.removed_files += result.files as u64;
-                        cleared.removed_directories += result.folders as u64;
-                        if !cleared.affected_categories.contains(&result.category) {
-                            cleared.affected_categories.push(result.category.clone());
-                        }
-                    } else {
-                        let cleared = Cleared {
-                            program: result.program.clone(),
-                            removed_bytes: result.bytes as u64,
-                            removed_files: result.files as u64,
-                            removed_directories: result.folders as u64,
-                            affected_categories: vec![result.category.clone()],
-                        };
-                        cleared_programs.push(cleared);
-                    }
-                }
-            }
+            Ok(_) => {}
             Err(e) => {
                 eprintln!("Error waiting for task completion: {:?}", e);
             }
@@ -117,18 +131,23 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
     pb.finish();
 
     println!("Cleared result:");
-    let table = Table::new(cleared_programs).to_string();
+    let cleared_programs = cleared_programs.lock().await;
+    let table = Table::new(cleared_programs.iter()).to_string();
     println!("{}", table);
-    println!("Removed size: {}", get_file_size_string(bytes_cleared));
-    println!("Removed files: {}", removed_files);
-    println!("Removed directories: {}", removed_directories);
+
+    let bytes_cleared = bytes_cleared.lock().await;
+    let removed_files = removed_files.lock().await;
+    let removed_directories = removed_directories.lock().await;
+    println!("Removed size: {}", get_file_size_string(*bytes_cleared));
+    println!("Removed files: {}", *removed_files);
+    println!("Removed directories: {}", *removed_directories);
 
     if let Err(e) = Notification::new()
         .summary("Cross Cleaner CLI")
         .body(&format!(
             "Removed: {}\nFiles: {}",
-            get_file_size_string(bytes_cleared),
-            removed_files
+            get_file_size_string(*bytes_cleared.lock().await),
+            *removed_files.lock().await
         ))
         .show()
     {
@@ -147,7 +166,6 @@ struct Args {
     #[arg(long, value_name = "PROGRAMS")]
     disabled: Option<String>,
 }
-
 
 #[tokio::main]
 async fn main() {
@@ -202,7 +220,6 @@ async fn main() {
         })
         .unwrap_or_default();
 
-
     if clear_categories.is_empty() && disabled_programs.is_empty() {
         let formatter_categories: MultiOptionFormatter<'_, &str> =
             &|a| format!("{} selected categories", a.len());
@@ -236,15 +253,15 @@ async fn main() {
 
             if let Ok(ans_programs) = ans_programs {
                 work(
-                    ans_programs.iter().map(|data| data.to_lowercase()).collect().to_vec(),
-                    ans_categories.iter().map(|data| data.to_lowercase()).collect().to_vec(),
+                    ans_programs.iter().map(|s| s.to_lowercase()).collect(),
+                    ans_categories.iter().map(|s| s.to_lowercase()).collect(),
                     &database
                 ).await;
             }
         }
     } else {
-        let ans_categories: Vec<String> = clear_categories.iter().map(|data| data.to_lowercase()).collect().to_vec();
-        let ans_programs: Vec<String> = disabled_programs.iter().map(|data| data.to_lowercase()).collect().to_vec();
+        let ans_categories: Vec<String> = clear_categories.iter().map(|s| s.to_lowercase()).collect();
+        let ans_programs: Vec<String> = disabled_programs.iter().map(|s| s.to_lowercase()).collect();
 
         work(
             ans_programs.iter().map(|s| s.as_str()).collect(),
