@@ -137,6 +137,19 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
     }
 }
 
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct Args {
+    /// Specify categories to clear (comma-separated)
+    #[arg(long, value_name = "CATEGORIES")]
+    clear: Option<String>,
+
+    /// Specify programs to disable (comma-separated)
+    #[arg(long, value_name = "PROGRAMS")]
+    disabled: Option<String>,
+}
+
+
 #[tokio::main]
 async fn main() {
     execute!(
@@ -170,36 +183,19 @@ async fn main() {
         }
     };
 
-    let matches = Command::new("Cross Cleaner CLI")
-        .version("1.0")
-        .author("Neki_play")
-        .about("Cleans specified categories and disables specified programs")
-        .arg(
-            Arg::new("clear")
-                .long("clear")
-                .value_name("CATEGORIES")
-                .help("Specify categories to clear (comma-separated)")
-                .num_args(1),
-        )
-        .arg(
-            Arg::new("disabled")
-                .long("disabled")
-                .value_name("PROGRAMS")
-                .help("Specify programs to disable (comma-separated)")
-                .num_args(1),
-        )
-        .get_matches();
+    let args = Args::parse();
 
     // Получаем значения параметров
-    let clear_categories: HashSet<String> = matches
-        .value_of("clear")
+    let clear_categories: HashSet<String> = args
+        .clear
         .map(|s| s.split(',').map(|x| x.trim().to_string()).collect())
         .unwrap_or_default();
 
-    let disabled_programs: HashSet<String> = matches
-        .value_of("disabled")
+    let disabled_programs: HashSet<String> = args
+        .disabled
         .map(|s| s.split(',').map(|x| x.trim().to_string()).collect())
         .unwrap_or_default();
+
 
     if clear_categories.is_empty() && disabled_programs.is_empty() {
         let formatter_categories: MultiOptionFormatter<'_, &str> =
