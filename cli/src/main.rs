@@ -200,6 +200,11 @@ struct Args {
     disabled: Option<String>,
 
     /// Show progress bar during execution.
+    /// Example: --show-database-info (disabled by default)
+    #[arg(long, value_name = "database_info", default_value_t = false, action = ArgAction::Set)]
+    show_database_info: bool,
+
+    /// Show progress bar during execution.
     /// Example: --progress-bar (enabled by default)
     #[arg(long, value_name = "Progress_bar", default_value_t = true, action = ArgAction::Set)]
     show_progress_bar: bool,
@@ -241,11 +246,13 @@ async fn main() {
         programs.insert(program);
     }
 
-    println!(
-        "DataBase programs: {}, DataBase paths: {}",
-        programs.len(),
-        database.len()
-    );
+    if args.show_database_info {
+        println!(
+            "DataBase programs: {}, DataBase paths: {}",
+            programs.len(),
+            database.len()
+        );
+    }
 
     let validator = |a: &[ListOption<&&str>]| {
         if a.is_empty() {
