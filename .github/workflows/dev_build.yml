@@ -2,9 +2,9 @@ name: Rust compile and release
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "test" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "test" ]
 
 env:
   CARGO_TERM_COLOR: always

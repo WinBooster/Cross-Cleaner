@@ -1,6 +1,6 @@
+use clap::{Parser, ValueEnum};
 use std::collections::HashSet;
 use std::env;
-use std::fmt::Debug;
 use std::sync::Arc;
 use crossterm::execute;
 use inquire::formatter::MultiOptionFormatter;
@@ -137,6 +137,19 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
     }
 }
 
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct Args {
+    /// Specify categories to clear (comma-separated)
+    #[arg(long, value_name = "CATEGORIES")]
+    clear: Option<String>,
+
+    /// Specify programs to disable (comma-separated)
+    #[arg(long, value_name = "PROGRAMS")]
+    disabled: Option<String>,
+}
+
+
 #[tokio::main]
 async fn main() {
     execute!(
@@ -170,12 +183,21 @@ async fn main() {
         }
     };
 
-    let ans: Vec<String> = env::args()
-        .filter(|arg| options.contains(arg.as_str()))
-        .map(|arg| arg.to_owned())
-        .collect();
+    let args = Args::parse();
 
-    if ans.is_empty() {
+    // Получаем значения параметров
+    let clear_categories: HashSet<String> = args
+        .clear
+        .map(|s| s.split(',').map(|x| x.trim().to_string()).collect())
+        .unwrap_or_default();
+
+    let disabled_programs: HashSet<String> = args
+        .disabled
+        .map(|s| s.split(',').map(|x| x.trim().to_string()).collect())
+        .unwrap_or_default();
+
+
+    if clear_categories.is_empty() && disabled_programs.is_empty() {
         let formatter_categories: MultiOptionFormatter<'_, &str> =
             &|a| format!("{} selected categories", a.len());
 
@@ -207,11 +229,22 @@ async fn main() {
                 .prompt();
 
             if let Ok(ans_programs) = ans_programs {
-                work(ans_programs, ans_categories, &database).await;
+                work(
+                    ans_programs,
+                    ans_categories,
+                    &database
+                ).await;
             }
         }
     } else {
-        work(vec![], ans, &database).await;
+        let ans_categories: Vec<String> = clear_categories.into_iter().collect();
+        let ans_programs: Vec<String> = disabled_programs.into_iter().collect();
+
+        work(
+            ans_programs.iter().map(|s| s.as_str()).collect(),
+            ans_categories,
+            &database,
+        ).await;
     }
 
     #[cfg(windows)]

@@ -28,11 +28,11 @@ pub fn remove_all_in_tree_in_registry(key: &RegKey, path: String) {
                     Ok(name) => {
                         keys.push(name);
                     }
-                    Err(e) => {}
+                    Err(_) => {}
                 }
             }
         }
-        Err(e) => { }
+        Err(_) => { }
     }
 
     let typed_path_write = key.open_subkey_with_flags(path, KEY_WRITE);
@@ -60,11 +60,11 @@ pub fn remove_all_in_registry(key: &RegKey, value: String) {
                     Ok((name, reg_value)) => {
                         keys.push(name);
                     }
-                    Err(e) => {}
+                    Err(_) => {}
                 }
             }
         }
-        Err(e) => { }
+        Err(_) => { }
     }
 
     let typed_path_write = key.open_subkey_with_flags(path, KEY_WRITE);
