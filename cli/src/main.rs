@@ -1,4 +1,4 @@
-use clap::Parser;
+use clap::{ArgAction, Parser};
 use cleaner::clear_data;
 use crossterm::execute;
 use database::get_pcbooster_version;
@@ -20,34 +20,49 @@ use tokio::task;
 use std::io::stdin;
 use std::io::stdout;
 
-async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &Vec<CleanerData>) {
-    let sty = ProgressStyle::with_template(
-        "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
-    )
-        .unwrap()
-        .progress_chars("##-")
-        .tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
-
+async fn work(
+    args: &Args,
+    disabled_programs: Vec<&str>,
+    categories: Vec<String>,
+    database: &Vec<CleanerData>,
+) {
     let bytes_cleared = Arc::new(Mutex::new(0));
     let removed_files = Arc::new(Mutex::new(0));
     let removed_directories = Arc::new(Mutex::new(0));
     let cleared_programs = Arc::new(Mutex::new(Vec::<Cleared>::new()));
 
-    let pb = ProgressBar::new(0);
-    pb.set_style(sty.clone());
-    pb.set_prefix("Clearing");
+    // Создаем прогресс-бар только если он включен
+    let pb = if args.progress_bar {
+        let sty = ProgressStyle::with_template(
+            "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
+        )
+            .unwrap()
+            .progress_chars("##-")
+            .tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
+
+        let pb = ProgressBar::new(0);
+        pb.set_style(sty);
+        pb.set_prefix("Clearing");
+        Some(pb)
+    } else {
+        None
+    };
 
     let has_last_activity = categories.contains(&"LastActivity".to_string());
 
     let mut tasks = Vec::new();
 
     if has_last_activity {
-        let progress_bar = Arc::new(pb.clone());
+        let progress_bar = pb.clone();
         let task = task::spawn(async move {
-            progress_bar.set_message("LastActivity");
+            if let Some(ref pb) = progress_bar {
+                pb.set_message("LastActivity");
+            }
             #[cfg(windows)]
             database::registry_database::clear_last_activity();
-            progress_bar.inc(1);
+            if let Some(ref pb) = progress_bar {
+                pb.inc(1);
+            }
             CleanerResult {
                 files: 0,
                 folders: 0,
@@ -70,16 +85,20 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
         }
 
         let data = Arc::new(data.clone());
-        let progress_bar = Arc::new(pb.clone());
+        let progress_bar = pb.clone();
         let bytes_cleared = Arc::clone(&bytes_cleared);
         let removed_files = Arc::clone(&removed_files);
         let removed_directories = Arc::clone(&removed_directories);
         let cleared_programs = Arc::clone(&cleared_programs);
 
         let task = task::spawn(async move {
-            progress_bar.set_message(data.path.clone());
-            let result = clear_data(&data);
-            progress_bar.inc(1);
+            if let Some(ref pb) = progress_bar {
+                pb.set_message(data.path.clone());
+            }
+            let result = clear_data(&data); // Убрали .await, если clear_data синхронная
+            if let Some(ref pb) = progress_bar {
+                pb.inc(1);
+            }
 
             let mut bytes_cleared = bytes_cleared.lock().await;
             *bytes_cleared += result.bytes;
@@ -119,7 +138,9 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
         tasks.push(task);
     }
 
-    pb.set_length(tasks.len() as u64);
+    if let Some(ref pb) = &pb {
+        pb.set_length(tasks.len() as u64);
+    }
 
     for task in tasks {
         match task.await {
@@ -130,31 +151,38 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
         }
     }
 
-    pb.set_message("done");
-    pb.finish();
+    if let Some(ref pb) = &pb {
+        pb.set_message("done");
+        pb.finish();
+    }
 
-    println!("Cleared result:");
-    let cleared_programs = cleared_programs.lock().await;
-    let table = Table::new(cleared_programs.iter()).to_string();
-    println!("{}", table);
+    if args.result_table {
+        println!("Cleared result:");
+        let cleared_programs = cleared_programs.lock().await;
+        let table = Table::new(cleared_programs.iter()).to_string();
+        println!("{}", table);
+    }
+    if args.result_string {
+        let bytes_cleared = bytes_cleared.lock().await;
+        let removed_files = removed_files.lock().await;
+        let removed_directories = removed_directories.lock().await;
+        println!("Removed size: {}", get_file_size_string(*bytes_cleared));
+        println!("Removed files: {}", *removed_files);
+        println!("Removed directories: {}", *removed_directories);
+    }
 
-    let bytes_cleared = bytes_cleared.lock().await;
-    let removed_files = removed_files.lock().await;
-    let removed_directories = removed_directories.lock().await;
-    println!("Removed size: {}", get_file_size_string(*bytes_cleared));
-    println!("Removed files: {}", *removed_files);
-    println!("Removed directories: {}", *removed_directories);
-
-    if let Err(e) = Notification::new()
-        .summary("Cross Cleaner CLI")
-        .body(&format!(
-            "Removed: {}\nFiles: {}",
-            get_file_size_string(*bytes_cleared),
-            *removed_files
-        ))
-        .show()
-    {
-        eprintln!("Failed to show notification: {:?}", e);
+    if args.show_notification {
+        if let Err(e) = Notification::new()
+            .summary("Cross Cleaner CLI")
+            .body(&format!(
+                "Removed: {}\nFiles: {}",
+                get_file_size_string(*bytes_cleared.lock().await),
+                *removed_files.lock().await
+            ))
+            .show()
+        {
+            eprintln!("Failed to show notification: {:?}", e);
+        }
     }
 }
 
@@ -162,12 +190,28 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
 #[command(version, about, long_about = None)]
 struct Args {
     /// Specify categories to clear (comma-separated)
-    #[arg(long, value_name = "CATEGORIES")]
+    #[arg(long, value_name = "Categories")]
     clear: Option<String>,
 
     /// Specify programs to disable (comma-separated)
-    #[arg(long, value_name = "PROGRAMS")]
+    #[arg(long, value_name = "Programs")]
     disabled: Option<String>,
+
+    /// Show progress bar [default: true]
+    #[arg(long, value_name = "Progress_bar", default_value_t = true)]
+    progress_bar: bool,
+
+    /// Show result table \[default: true\]
+    #[arg(long, value_name = "Result_table", default_value_t = true)]
+    result_table: bool,
+
+    /// Show result string \[default: true\]
+    #[arg(long, value_name = "Result_strings", default_value_t = true)]
+    result_string: bool,
+
+    /// Show notification \[default: true\]
+    #[arg(long, value_name = "Notification", default_value_t = true)]
+    show_notification: bool,
 }
 
 #[tokio::main]
@@ -177,6 +221,8 @@ async fn main() {
         crossterm::terminal::SetTitle(format!("Cross Cleaner CLI v{}", get_pcbooster_version()))
     )
     .unwrap();
+
+    let args = Args::parse();
 
     let database: &Vec<CleanerData> = database::cleaner_database::get_database();
 
@@ -203,15 +249,15 @@ async fn main() {
         }
     };
 
-    let args = Args::parse();
-
     let clear_categories: HashSet<String> = args
         .clear
+        .as_ref()
         .map(|s| s.split(',').map(|x| x.trim().to_lowercase()).collect())
         .unwrap_or_default();
 
     let disabled_programs: HashSet<String> = args
         .disabled
+        .as_ref()
         .map(|s| s.split(',').map(|x| x.trim().to_lowercase()).collect())
         .unwrap_or_default();
 
@@ -244,6 +290,7 @@ async fn main() {
 
             if let Ok(ans_programs) = ans_programs {
                 work(
+                    &args,
                     ans_programs.iter().map(|s| &**s).collect(),
                     ans_categories.iter().map(|s| s.to_lowercase()).collect(),
                     &database,
@@ -258,6 +305,7 @@ async fn main() {
             disabled_programs.iter().map(|s| s.to_lowercase()).collect();
 
         work(
+            &args,
             ans_programs.iter().map(|s| s.as_str()).collect(),
             ans_categories,
             &database,
