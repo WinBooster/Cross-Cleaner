@@ -217,7 +217,7 @@ async fn main() {
             .prompt();
 
         if let Ok(ans_categories) = ans_categories {
-            let ans_categories: Vec<String> = ans_categories.into_iter().map(|s| s.to_lower().to_string()).collect();
+            let ans_categories: Vec<String> = ans_categories.into_iter().map(|s| s.to_string()).collect();
 
             let programs2: Vec<&str> = database
                 .iter()
