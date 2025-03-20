@@ -200,28 +200,28 @@ struct Args {
     disabled: Option<String>,
 
     /// Show progress bar during execution.
-    /// Example: --show-database-info (disabled by default)
-    #[arg(long, value_name = "database_info", default_value_t = false, action = ArgAction::Set)]
+    /// Example: --show-database-info=true (disabled by default)
+    #[arg(long, value_name = "BOOL", default_value_t = false, action = ArgAction::Set)]
     show_database_info: bool,
 
     /// Show progress bar during execution.
-    /// Example: --progress-bar (enabled by default)
-    #[arg(long, value_name = "Progress_bar", default_value_t = true, action = ArgAction::Set)]
+    /// Example: --progress-bar=false (enabled by default)
+    #[arg(long, value_name = "BOOL", default_value_t = true, action = ArgAction::Set)]
     show_progress_bar: bool,
 
     /// Show the result as a table after execution.
-    /// Example: --result-table (enabled by default)
-    #[arg(long, value_name = "Result_table", default_value_t = true, action = ArgAction::Set)]
+    /// Example: --result-table=false (enabled by default)
+    #[arg(long, value_name = "BOOL", default_value_t = true, action = ArgAction::Set)]
     show_result_table: bool,
 
     /// Show the result as a string after execution.
-    /// Example: --result-string (enabled by default)
-    #[arg(long, value_name = "Result_strings", default_value_t = true, action = ArgAction::Set)]
+    /// Example: --result-string=false (enabled by default)
+    #[arg(long, value_name = "BOOL", default_value_t = true, action = ArgAction::Set)]
     show_result_string: bool,
 
     /// Show a desktop notification after execution.
-    /// Example: --show-notification (enabled by default)
-    #[arg(long, value_name = "Notification", default_value_t = true, action = ArgAction::Set)]
+    /// Example: --show-notification=false (enabled by default)
+    #[arg(long, value_name = "BOOL", default_value_t = true, action = ArgAction::Set)]
     show_notification: bool,
 }
 
