@@ -162,7 +162,7 @@ async fn work(
         let table = Table::new(cleared_programs.iter()).to_string();
         println!("{}", table);
     }
-    if args.show_notification {
+    if args.result_string {
         let bytes_cleared = bytes_cleared.lock().await;
         let removed_files = removed_files.lock().await;
         let removed_directories = removed_directories.lock().await;
@@ -171,7 +171,7 @@ async fn work(
         println!("Removed directories: {}", *removed_directories);
     }
 
-    if args.result_string {
+    if args.show_notification {
         if let Err(e) = Notification::new()
             .summary("Cross Cleaner CLI")
             .body(&format!(
@@ -197,20 +197,20 @@ struct Args {
     #[arg(long, value_name = "Programs")]
     disabled: Option<String>,
 
-    /// Show progress bar
-    #[arg(long, value_name = "Progress bar", action = ArgAction::SetTrue, default_value_t = true)]
+    /// Show progress bar [default: true]
+    #[arg(long, value_name = "Progress_bar", default_value_t = true)]
     progress_bar: bool,
 
-    /// Show result table
-    #[arg(long, value_name = "Result table", action = ArgAction::SetTrue, default_value_t = true)]
+    /// Show result table \[default: true\]
+    #[arg(long, value_name = "Result_table", default_value_t = true)]
     result_table: bool,
 
-    /// Show result string
-    #[arg(long, value_name = "Result string", action = ArgAction::SetTrue, default_value_t = true)]
+    /// Show result string \[default: true\]
+    #[arg(long, value_name = "Result_strings", default_value_t = true)]
     result_string: bool,
 
-    /// Show notification
-    #[arg(long, value_name = "Is show notification", action = ArgAction::SetTrue, default_value_t = true)]
+    /// Show notification \[default: true\]
+    #[arg(long, value_name = "Notification", default_value_t = true)]
     show_notification: bool,
 }
 
@@ -221,6 +221,8 @@ async fn main() {
         crossterm::terminal::SetTitle(format!("Cross Cleaner CLI v{}", get_pcbooster_version()))
     )
     .unwrap();
+
+    let args = Args::parse();
 
     let database: &Vec<CleanerData> = database::cleaner_database::get_database();
 
@@ -246,8 +248,6 @@ async fn main() {
             Ok(Validation::Valid)
         }
     };
-
-    let args = Args::parse();
 
     let clear_categories: HashSet<String> = args
         .clear
