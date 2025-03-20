@@ -179,14 +179,14 @@ async fn main() {
                 .long("clear")
                 .value_name("CATEGORIES")
                 .help("Specify categories to clear (comma-separated)")
-                .takes_value(true),
+                .num_args(1),
         )
         .arg(
             Arg::new("disabled")
                 .long("disabled")
                 .value_name("PROGRAMS")
                 .help("Specify programs to disable (comma-separated)")
-                .takes_value(true),
+                .num_args(1),
         )
         .get_matches();
 
