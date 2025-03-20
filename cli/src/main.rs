@@ -201,7 +201,7 @@ struct Args {
 
     /// Show progress bar during execution.
     /// Example: --show-database-info=true
-    #[arg(long, value_name = "BOOL", default_value_t = false, action = ArgAction::Set)]
+    #[arg(long, value_name = "bool", default_value_t = false, action = ArgAction::Set)]
     show_database_info: bool,
 
     /// Show progress bar during execution.
