@@ -217,7 +217,7 @@ async fn main() {
             .prompt();
 
         if let Ok(ans_categories) = ans_categories {
-            let ans_categories: Vec<String> = ans_categories.into_iter().map(|s| s.to_string()).collect();
+            let ans_categories: Vec<String> = ans_categories.into_iter().map(|s| s.to_lower().to_string()).collect();
 
             let programs2: Vec<&str> = database
                 .iter()
@@ -236,15 +236,15 @@ async fn main() {
 
             if let Ok(ans_programs) = ans_programs {
                 work(
-                    ans_programs,
-                    ans_categories,
+                    ans_programs.iter().map(|data| data.to_lowercase()).collect(),
+                    ans_categories.iter().map(|data| data.to_lowercase()).collect(),
                     &database
                 ).await;
             }
         }
     } else {
-        let ans_categories: Vec<String> = clear_categories.into_iter().collect();
-        let ans_programs: Vec<String> = disabled_programs.into_iter().collect();
+        let ans_categories: Vec<String> = clear_categories.iter().map(|data| data.to_lowercase()).collect();
+        let ans_programs: Vec<String> = disabled_programs.iter().map(|data| data.to_lowercase()).collect();
 
         work(
             ans_programs.iter().map(|s| s.as_str()).collect(),

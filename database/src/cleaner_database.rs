@@ -17,9 +17,7 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
         let instance_logs = CleanerData {
             path: instance.0.clone() + "/logs/*",
             program: instance.1.clone(),
-            files_to_remove: vec![
-                String::from("minetweaker.log")
-            ],
+            files_to_remove: vec![],
             category: String::from("Logs"),
             remove_directories: true,
             remove_files: true,
