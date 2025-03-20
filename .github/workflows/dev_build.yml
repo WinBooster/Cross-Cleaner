@@ -1,4 +1,4 @@
-name: Rust
+name: Rust compile and release
 
 on:
   push:
@@ -8,11 +8,13 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  GITHUB_TOKEN: ${{ secrets.PAT }}
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    permissions: write-all
 
     steps:
     - uses: actions/checkout@v4
