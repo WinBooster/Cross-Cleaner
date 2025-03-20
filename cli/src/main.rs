@@ -236,15 +236,15 @@ async fn main() {
 
             if let Ok(ans_programs) = ans_programs {
                 work(
-                    ans_programs.iter().map(|data| data.to_lowercase()).collect(),
-                    ans_categories.iter().map(|data| data.to_lowercase()).collect(),
+                    ans_programs.iter().map(|data| data.to_lowercase()).collect().to_vec(),
+                    ans_categories.iter().map(|data| data.to_lowercase()).collect().to_vec(),
                     &database
                 ).await;
             }
         }
     } else {
-        let ans_categories: Vec<String> = clear_categories.iter().map(|data| data.to_lowercase()).collect();
-        let ans_programs: Vec<String> = disabled_programs.iter().map(|data| data.to_lowercase()).collect();
+        let ans_categories: Vec<String> = clear_categories.iter().map(|data| data.to_lowercase()).collect().to_vec();
+        let ans_programs: Vec<String> = disabled_programs.iter().map(|data| data.to_lowercase()).collect().to_vec();
 
         work(
             ans_programs.iter().map(|s| s.as_str()).collect(),
