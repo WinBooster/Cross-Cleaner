@@ -17,7 +17,9 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
         let instance_logs = CleanerData {
             path: instance.0.clone() + "/logs/*",
             program: instance.1.clone(),
-            files_to_remove: vec![],
+            files_to_remove: vec![
+                String::from("minetweaker.log")
+            ],
             category: String::from("Logs"),
             remove_directories: true,
             remove_files: true,
@@ -781,6 +783,18 @@ lazy_static! {
         remove_directory_after_clean: false
     };
     database.push(home_cache_cassettle);
+        let home_cache_cassettle = CleanerData {
+            path: String::from("/home/".to_owned() + username + "/.cache/audios/*"),
+            program: String::from("Cassettle"),
+            files_to_remove: vec![],
+            category: "Cache".parse().unwrap(),
+            remove_directories: false,
+            remove_files: true,
+            directories_to_remove: vec![],
+            remove_all_in_dir: false,
+            remove_directory_after_clean: false
+        };
+        database.push(home_cache_cassettle);
     //</editor-fold>
     //<editor-fold desc="Spotify">
     let home_cache_spotify = CleanerData {

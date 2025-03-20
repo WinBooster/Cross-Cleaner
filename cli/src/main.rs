@@ -170,12 +170,38 @@ async fn main() {
         }
     };
 
-    let ans: Vec<String> = env::args()
-        .filter(|arg| options.contains(arg.as_str()))
-        .map(|arg| arg.to_owned())
-        .collect();
+    let matches = Command::new("Cross Cleaner CLI")
+        .version("1.0")
+        .author("Neki_play")
+        .about("Cleans specified categories and disables specified programs")
+        .arg(
+            Arg::new("clear")
+                .long("clear")
+                .value_name("CATEGORIES")
+                .help("Specify categories to clear (comma-separated)")
+                .takes_value(true),
+        )
+        .arg(
+            Arg::new("disabled")
+                .long("disabled")
+                .value_name("PROGRAMS")
+                .help("Specify programs to disable (comma-separated)")
+                .takes_value(true),
+        )
+        .get_matches();
 
-    if ans.is_empty() {
+    // Получаем значения параметров
+    let clear_categories: HashSet<String> = matches
+        .value_of("clear")
+        .map(|s| s.split(',').map(|x| x.trim().to_string()).collect())
+        .unwrap_or_default();
+
+    let disabled_programs: HashSet<String> = matches
+        .value_of("disabled")
+        .map(|s| s.split(',').map(|x| x.trim().to_string()).collect())
+        .unwrap_or_default();
+
+    if clear_categories.is_empty() && disabled_programs.is_empty() {
         let formatter_categories: MultiOptionFormatter<'_, &str> =
             &|a| format!("{} selected categories", a.len());
 
@@ -207,11 +233,22 @@ async fn main() {
                 .prompt();
 
             if let Ok(ans_programs) = ans_programs {
-                work(ans_programs, ans_categories, &database).await;
+                work(
+                    ans_programs,
+                    ans_categories,
+                    &database
+                ).await;
             }
         }
     } else {
-        work(vec![], ans, &database).await;
+        let ans_categories: Vec<String> = clear_categories.into_iter().collect();
+        let ans_programs: Vec<String> = disabled_programs.into_iter().collect();
+
+        work(
+            ans_programs.iter().map(|s| s.as_str()).collect(),
+            ans_categories,
+            &database,
+        ).await;
     }
 
     #[cfg(windows)]

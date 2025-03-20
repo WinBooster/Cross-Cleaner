@@ -8,6 +8,7 @@ pub fn get_minecraft_launchers_instances_folders(username: &str) -> Vec<(String,
     database.push((String::from("/home/".to_owned() + username + "/.local/share/PrismLauncher/instances/**/minecraft"), String::from("Prism Launcher")));
     database.push((String::from("/home/".to_owned() + username + "/.lunarclient/offline/multiver"), String::from("Lunar Client")));
     database.push((String::from("/home/".to_owned() + username + "/.cristalix/updates/**"), String::from("Cristalix")));
+    database.push((String::from("/home/".to_owned() + username + "/cubixworld/updates/**"), String::from("CubixWorld")));
 
     database
 }

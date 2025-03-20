@@ -37,7 +37,6 @@ async fn main() -> eframe::Result {
 }
 
 async fn work(
-    disabled_programs: Vec<&str>,
     categories: Vec<String>,
     database: &Vec<CleanerData>,
     progress_sender: mpsc::Sender<String>,
@@ -69,18 +68,13 @@ async fn work(
         });
         tasks.push(task);
     }
-
-    let disabled_programs_set: HashSet<&str> = disabled_programs.into_iter().collect();
+    
     let categories_set: HashSet<String> = categories.into_iter().collect();
 
     for data in database.to_vec()
         .into_iter()
         .filter(|data| categories_set.contains(&data.category))
     {
-        if disabled_programs_set.contains(data.program.as_str()) {
-            continue;
-        }
-
         let data = Arc::new(data);
         let progress_sender = progress_sender.clone();
         let task = task::spawn(async move {
@@ -186,7 +180,7 @@ impl eframe::App for MyApp {
                     let (progress_sender, progress_receiver) = mpsc::channel(32);
                     self.progress_receiver = Some(progress_receiver);
 
-                    let handle = tokio::spawn(work(vec![], selected_options, database, progress_sender));
+                    let handle = tokio::spawn(work(selected_options, database, progress_sender));
                     self.task_handle = Some(handle);
 
                     for (checkbox, _) in &self.checked_boxes {
