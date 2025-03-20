@@ -32,7 +32,7 @@ async fn work(
     let cleared_programs = Arc::new(Mutex::new(Vec::<Cleared>::new()));
 
     // Создаем прогресс-бар только если он включен
-    let pb = if args.progress_bar {
+    let pb = if args.show_progress_bar {
         let sty = ProgressStyle::with_template(
             "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
         )
@@ -156,13 +156,13 @@ async fn work(
         pb.finish();
     }
 
-    if args.result_table {
+    if args.show_result_table {
         println!("Cleared result:");
         let cleared_programs = cleared_programs.lock().await;
         let table = Table::new(cleared_programs.iter()).to_string();
         println!("{}", table);
     }
-    if args.result_string {
+    if args.show_result_string {
         let bytes_cleared = bytes_cleared.lock().await;
         let removed_files = removed_files.lock().await;
         let removed_directories = removed_directories.lock().await;
@@ -201,22 +201,22 @@ struct Args {
 
     /// Show progress bar during execution.
     /// Example: --progress-bar (enabled by default)
-    #[arg(long, value_name = "Progress_bar", default_value_t = true)]
-    progress_bar: bool,
+    #[arg(long, value_name = "Progress_bar", default_value_t = true, action = ArgAction::Set)]
+    show_progress_bar: bool,
 
     /// Show the result as a table after execution.
     /// Example: --result-table (enabled by default)
-    #[arg(long, value_name = "Result_table", default_value_t = true)]
-    result_table: bool,
+    #[arg(long, value_name = "Result_table", default_value_t = true, action = ArgAction::Set)]
+    show_result_table: bool,
 
     /// Show the result as a string after execution.
     /// Example: --result-string (enabled by default)
-    #[arg(long, value_name = "Result_strings", default_value_t = true)]
-    result_string: bool,
+    #[arg(long, value_name = "Result_strings", default_value_t = true, action = ArgAction::Set)]
+    show_result_string: bool,
 
     /// Show a desktop notification after execution.
     /// Example: --show-notification (enabled by default)
-    #[arg(long, value_name = "Notification", default_value_t = true)]
+    #[arg(long, value_name = "Notification", default_value_t = true, action = ArgAction::Set)]
     show_notification: bool,
 }
 
