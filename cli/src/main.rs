@@ -1,6 +1,6 @@
+use clap::{Arg, Command};
 use std::collections::HashSet;
 use std::env;
-use std::fmt::Debug;
 use std::sync::Arc;
 use crossterm::execute;
 use inquire::formatter::MultiOptionFormatter;

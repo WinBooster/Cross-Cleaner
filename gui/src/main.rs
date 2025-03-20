@@ -68,7 +68,7 @@ async fn work(
         });
         tasks.push(task);
     }
-    
+
     let categories_set: HashSet<String> = categories.into_iter().collect();
 
     for data in database.to_vec()
