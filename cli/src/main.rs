@@ -200,27 +200,27 @@ struct Args {
     disabled: Option<String>,
 
     /// Show progress bar during execution.
-    /// Example: --show-database-info=true (disabled by default)
+    /// Example: --show-database-info=true
     #[arg(long, value_name = "BOOL", default_value_t = false, action = ArgAction::Set)]
     show_database_info: bool,
 
     /// Show progress bar during execution.
-    /// Example: --progress-bar=false (enabled by default)
+    /// Example: --progress-bar=false
     #[arg(long, value_name = "BOOL", default_value_t = true, action = ArgAction::Set)]
     show_progress_bar: bool,
 
     /// Show the result as a table after execution.
-    /// Example: --result-table=false (enabled by default)
+    /// Example: --result-table=false
     #[arg(long, value_name = "BOOL", default_value_t = true, action = ArgAction::Set)]
     show_result_table: bool,
 
     /// Show the result as a string after execution.
-    /// Example: --result-string=false (enabled by default)
+    /// Example: --result-string=false
     #[arg(long, value_name = "BOOL", default_value_t = true, action = ArgAction::Set)]
     show_result_string: bool,
 
     /// Show a desktop notification after execution.
-    /// Example: --show-notification=false (enabled by default)
+    /// Example: --show-notification=false
     #[arg(long, value_name = "BOOL", default_value_t = true, action = ArgAction::Set)]
     show_notification: bool,
 }
