@@ -18,13 +18,15 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build linux
       run: cargo build --release
+    - name: Setup windows target
+      run: rustup target add x86_64-pc-windows-gnu
     - name: Build windows
       run: cargo build --release --target=x86_64-pc-windows-gnu
     - name: Release
       uses: marvinpinto/action-automatic-releases@latest
       with:
         repo_token: '${{ secrets.GITHUB_TOKEN }}'
-        automatic_release_tag: "latest-1.8.9"
+        automatic_release_tag: "1.9.3"
         prerelease: true
         title: "1.9.3"
         files: |
