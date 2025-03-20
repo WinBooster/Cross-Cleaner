@@ -1,5 +1,6 @@
 #[cfg(windows)]
 use disk_name::get_letters;
+use lazy_static::lazy_static;
 use crate::CleanerData;
 use crate::minecraft_launchers_database::{get_minecraft_launchers_folders, get_minecraft_launchers_instances_folders};
 #[cfg(windows)]
@@ -167,7 +168,8 @@ fn get_minecraft_database(drive: &str, username: &str) -> Vec<CleanerData> {
 }
 
 #[cfg(unix)]
-pub fn get_database() -> Vec<CleanerData> {
+lazy_static! {
+    static ref DATABASE: Vec<CleanerData> = {
     let mut database: Vec<CleanerData> = Vec::new();
     let username = &*whoami::username();
 
@@ -1098,12 +1100,14 @@ pub fn get_database() -> Vec<CleanerData> {
     database.sort_by(|a, b| a.category.cmp(&b.category));
 
     database
+};
 }
 #[cfg(windows)]
-pub fn get_database() -> Vec<CleanerData> {
+lazy_static! {
+    static ref DATABASE: Vec<CleanerData> = {
     let mut database: Vec<CleanerData> = Vec::new();
     let username = &*whoami::username();
-    
+
     let steam_directory: String = get_steam_directory_from_registry();
 
     //<editor-fold desc="Windows">
@@ -4732,4 +4736,9 @@ pub fn get_database() -> Vec<CleanerData> {
     database.sort_by(|a, b| a.category.cmp(&b.category));
 
     database
+};
+}
+
+pub fn get_database() -> &'static Vec<CleanerData> {
+    &DATABASE
 }

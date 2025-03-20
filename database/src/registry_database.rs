@@ -2,7 +2,6 @@
 use winreg::enums::{HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE};
 #[cfg(windows)]
 use winreg::RegKey;
-use std::io;
 #[cfg(windows)]
 use crate::registry_utils::{remove_all_in_registry, remove_all_in_tree_in_registry};
 

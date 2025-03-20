@@ -15,8 +15,9 @@ fn remove_directory_recursive(path: &Path, cleaner_result: &mut CleanerResult) -
                 remove_file(&entry_path, cleaner_result)?;
             }
         }
-        fs::remove_dir(path)?;
-        cleaner_result.folders += 1;
+        if fs::remove_dir(path).is_ok() {
+            cleaner_result.folders += 1;
+        }
     }
     Ok(())
 }
@@ -24,9 +25,10 @@ fn remove_directory_recursive(path: &Path, cleaner_result: &mut CleanerResult) -
 /// Deletes the file and updates the counters in `cleaner_result`.
 fn remove_file(path: &Path, cleaner_result: &mut CleanerResult) -> std::io::Result<()> {
     let metadata = fs::metadata(path)?;
-    fs::remove_file(path)?;
-    cleaner_result.bytes += metadata.len();
-    cleaner_result.files += 1;
+    if fs::remove_file(path).is_ok() {
+        cleaner_result.bytes += metadata.len();
+        cleaner_result.files += 1;
+    }
     Ok(())
 }
 

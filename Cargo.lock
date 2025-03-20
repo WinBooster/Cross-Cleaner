@@ -910,6 +910,7 @@ name = "database"
 version = "0.1.0"
 dependencies = [
  "disk-name",
+ "lazy_static",
  "tabled",
  "whoami",
  "winreg",

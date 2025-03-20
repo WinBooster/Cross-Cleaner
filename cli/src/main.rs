@@ -20,7 +20,7 @@ use database::utils::get_file_size_string;
 use std::io::stdin;
 use std::io::stdout;
 
-async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: Vec<CleanerData>) {
+async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &Vec<CleanerData>) {
     let sty = ProgressStyle::with_template(
         "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
     )
@@ -145,14 +145,15 @@ async fn main() {
     )
         .unwrap();
 
-    let database: Vec<CleanerData> = database::cleaner_database::get_database();
+    let database: &Vec<CleanerData> = database::cleaner_database::get_database();
 
     let mut options: HashSet<String> = HashSet::new();
-    let mut programs: HashSet<&str> = HashSet::new();
+    let mut programs: HashSet<String> = HashSet::new();
 
-    for data in &database {
-        options.insert(String::from(&data.category));
-        programs.insert(&data.program);
+    for data in database.to_vec() {
+        let program = data.program.clone();
+        options.insert(String::from(data.category.clone()));
+        programs.insert(program);
     }
 
     println!(
@@ -206,11 +207,11 @@ async fn main() {
                 .prompt();
 
             if let Ok(ans_programs) = ans_programs {
-                work(ans_programs, ans_categories, database.clone()).await;
+                work(ans_programs, ans_categories, &database).await;
             }
         }
     } else {
-        work(vec![], ans, database).await;
+        work(vec![], ans, &database).await;
     }
 
     #[cfg(windows)]

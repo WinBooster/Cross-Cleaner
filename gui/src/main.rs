@@ -39,7 +39,7 @@ async fn main() -> eframe::Result {
 async fn work(
     disabled_programs: Vec<&str>,
     categories: Vec<String>,
-    database: Vec<CleanerData>,
+    database: &Vec<CleanerData>,
     progress_sender: mpsc::Sender<String>,
 ) {
     let mut bytes_cleared = 0;
@@ -73,7 +73,7 @@ async fn work(
     let disabled_programs_set: HashSet<&str> = disabled_programs.into_iter().collect();
     let categories_set: HashSet<String> = categories.into_iter().collect();
 
-    for data in database
+    for data in database.to_vec()
         .into_iter()
         .filter(|data| categories_set.contains(&data.category))
     {
@@ -123,7 +123,7 @@ struct MyApp {
 
 impl MyApp {
     pub(crate) fn new() -> Self {
-        let database: Vec<CleanerData> = database::cleaner_database::get_database();
+        let database: &Vec<CleanerData> = database::cleaner_database::get_database();
 
         let mut options: Vec<String> = vec![];
         for data in database.iter() {
@@ -181,7 +181,7 @@ impl eframe::App for MyApp {
                         .map(|(_, label)| label.clone())
                         .collect();
 
-                    let database: Vec<CleanerData> = database::cleaner_database::get_database();
+                    let database: &Vec<CleanerData> = database::cleaner_database::get_database();
 
                     let (progress_sender, progress_receiver) = mpsc::channel(32);
                     self.progress_receiver = Some(progress_receiver);
