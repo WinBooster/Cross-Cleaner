@@ -78,7 +78,7 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
 
         let task = task::spawn(async move {
             progress_bar.set_message(data.path.clone());
-            let result = clear_data(&data).await;
+            let result = clear_data(&data);
             progress_bar.inc(1);
 
             let mut bytes_cleared = bytes_cleared.lock().await;
@@ -253,7 +253,7 @@ async fn main() {
 
             if let Ok(ans_programs) = ans_programs {
                 work(
-                    ans_programs.iter().map(|s| s.as_str()).collect(),
+                    ans_programs.iter().map(|s| &**s).collect(),
                     ans_categories.iter().map(|s| s.to_lowercase()).collect(),
                     &database
                 ).await;
