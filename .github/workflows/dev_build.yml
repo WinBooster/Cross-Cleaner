@@ -19,9 +19,13 @@ jobs:
     - name: Build linux
       run: cargo build --release
     - name: Setup windows target
-      run: rustup target add x86_64-pc-windows-gnu
+      run: |
+        sudo apt install build-essential
+        sudo apt install gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64
+        rustup target add x86_64-pc-windows-gnu
     - name: Build windows
-      run: cargo build --release --target=x86_64-pc-windows-gnu
+      run: |
+        cargo build --release --target=x86_64-pc-windows-gnu
     - name: Release
       uses: marvinpinto/action-automatic-releases@latest
       with:
