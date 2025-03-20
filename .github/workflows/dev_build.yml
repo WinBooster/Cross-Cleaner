@@ -1,0 +1,33 @@
+name: Rust
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build linux
+      run: cargo build --release
+    - name: Build windows
+      run: cargo build --release --target=x86_64-pc-windows-gnu
+    - name: Release
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        repo_token: '${{ secrets.GITHUB_TOKEN }}'
+        automatic_release_tag: "latest-1.8.9"
+        prerelease: true
+        title: "1.9.3"
+        files: |
+            ./target/release/Cross_Cleaner_CLI
+            ./target/release/Cross_Cleaner_GUI
+            ./target/release/x86_64-pc-windows-gnu/*.exe
