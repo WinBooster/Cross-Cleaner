@@ -191,12 +191,12 @@ async fn work(
 struct Args {
     /// Specify categories to clear (comma-separated)
     /// /// Example: --clear=logs,cache
-    #[arg(long, value_name = "Categories")]
+    #[arg(long, value_name = "CATEGORIES")]
     clear: Option<String>,
 
     /// Specify programs to disable (comma-separated)
     /// Example: --disabled=minecraft,firefox
-    #[arg(long, value_name = "Programs")]
+    #[arg(long, value_name = "PROGRAMS")]
     disabled: Option<String>,
 
     /// Show progress bar during execution.
