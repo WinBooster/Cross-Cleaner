@@ -78,7 +78,7 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
 
         let task = task::spawn(async move {
             progress_bar.set_message(data.path.clone());
-            let result = clear_data(&data);
+            let result = clear_data(&data).await;
             progress_bar.inc(1);
 
             let mut bytes_cleared = bytes_cleared.lock().await;
@@ -146,8 +146,8 @@ async fn work(disabled_programs: Vec<&str>, categories: Vec<String>, database: &
         .summary("Cross Cleaner CLI")
         .body(&format!(
             "Removed: {}\nFiles: {}",
-            get_file_size_string(*bytes_cleared.lock().await),
-            *removed_files.lock().await
+            get_file_size_string(*bytes_cleared),
+            *removed_files
         ))
         .show()
     {
@@ -206,7 +206,7 @@ async fn main() {
         .clear
         .map(|s| {
             s.split(',')
-                .map(|x| x.trim().to_lowercase()) // Приводим к нижнему регистру
+                .map(|x| x.trim().to_lowercase())
                 .collect()
         })
         .unwrap_or_default();
@@ -215,7 +215,7 @@ async fn main() {
         .disabled
         .map(|s| {
             s.split(',')
-                .map(|x| x.trim().to_lowercase()) // Приводим к нижнему регистру
+                .map(|x| x.trim().to_lowercase())
                 .collect()
         })
         .unwrap_or_default();
@@ -253,7 +253,7 @@ async fn main() {
 
             if let Ok(ans_programs) = ans_programs {
                 work(
-                    ans_programs.iter().map(|s| s.to_lowercase()).collect(),
+                    ans_programs.iter().map(|s| s.as_str()).collect(),
                     ans_categories.iter().map(|s| s.to_lowercase()).collect(),
                     &database
                 ).await;
