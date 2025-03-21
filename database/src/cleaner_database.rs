@@ -9,9 +9,9 @@ use lazy_static::lazy_static;
 
 lazy_static! {
     static ref DATABASE: Vec<CleanerData> = {
-        #cfg!("unix")
+        #[cfg!("unix")]
         let data = include_str!("../linux_database.json");
-        #cfg!("windows")
+        #[cfg!("windows")]
         let data = include_str!("../windows_database.json");
 
         // Deserialization JSON to Vec<CleanerData>
