@@ -1,6 +1,6 @@
 [
   {
-    "path": "/home/{username}/..local/share/Steam/userdata/*",
+    "path": "/home/{username}/.local/share/Steam/userdata/*",
     "category": "Accounts",
     "program": "Steam",
     "files_to_remove": [],
