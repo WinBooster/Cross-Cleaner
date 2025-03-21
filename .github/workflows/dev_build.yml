@@ -41,9 +41,9 @@ jobs:
       uses: marvinpinto/action-automatic-releases@latest
       with:
         repo_token: '${{ secrets.GITHUB_TOKEN }}'
-        automatic_release_tag: "1.9.3"
-        prerelease: false
-        title: "1.9.3"
+        automatic_release_tag: "1.9.4"
+        prerelease: true
+        title: "1.9.4"
         files: |
             ./target/release/Cross_Cleaner_CLI
             ./target/release/Cross_Cleaner_GUI

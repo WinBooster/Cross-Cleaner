@@ -1,5 +1,6 @@
 use crate::utils;
 use tabled::Tabled;
+use serde::{Serialize, Deserialize};
 
 #[derive(PartialEq, Tabled)]
 pub struct Cleared {
@@ -28,7 +29,7 @@ impl PartialEq<Option<Cleared>> for &Cleared {
         }
     }
 }
-#[derive(Clone)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct CleanerData {
     pub path: String,
     pub category: String,

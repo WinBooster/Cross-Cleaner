@@ -237,6 +237,8 @@ async fn main() {
 
     let database: &Vec<CleanerData> = database::cleaner_database::get_database();
 
+    database::cleaner_database::save_database_json();
+
     let mut options: HashSet<String> = HashSet::new();
     let mut programs: HashSet<String> = HashSet::new();
 
