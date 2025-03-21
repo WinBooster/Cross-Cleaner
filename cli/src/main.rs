@@ -326,11 +326,11 @@ async fn main() {
         let ans_categories: Vec<String> =
             clear_categories.iter().map(|s| s.to_lowercase()).collect();
         let ans_programs: Vec<String> =
-            disabled_programs.iter().map(|s| s.to_lowercase().as_str()).collect();
+            disabled_programs.iter().map(|s| s.to_lowercase()).collect();
 
         work(
             &args,
-            ans_programs,
+            ans_programs.iter().map(|s| s.as_str()).collect(),
             ans_categories,
             &database,
         )
