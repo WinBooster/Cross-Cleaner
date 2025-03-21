@@ -3,7 +3,7 @@ use winreg::RegKey;
 #[cfg(windows)]
 use winreg::enums::{HKEY_CURRENT_USER, KEY_READ, KEY_WRITE};
 
-#[cfg(гтшч)]
+#[cfg(unix)]
 pub fn get_steam_directory_from_registry() -> String {
     String::new()
 }
