@@ -9,53 +9,45 @@ use lazy_static::lazy_static;
 
 lazy_static! {
     static ref DATABASE: Vec<CleanerData> = {
-        // Определяем путь к JSON-файлу в зависимости от ОС
-        let file_path = if cfg!(windows) {
-            "windows_database.json"
-        } else if cfg!(unix) {
-            "linux_database.json"
-        } else {
-            panic!("Unsupported OS");
-        };
+        #cfg!("unix")
+        let data = include_str!("../linux_database.json");
+        #cfg!("windows")
+        let data = include_str!("../windows_database.json");
 
-        // Чтение JSON-файла
-        let data = fs::read_to_string(file_path)
-            .expect(&format!("Failed to read {}", file_path));
-
-        // Десериализация JSON в Vec<CleanerData>
+        // Deserialization JSON to Vec<CleanerData>
         let database: Vec<CleanerData> = serde_json::from_str(&data)
-            .expect(&format!("Failed to parse {}", file_path));
+            .expect(&format!("Failed to parse database"));
 
-        // Получаем имя пользователя
+        // Get the username
         let username = whoami::username();
 
-        // Получаем список дисков (только для Windows)
+        // Getting a list of disks (Windows only)
         let drives = if cfg!(windows) {
             get_letters()
         } else {
-            vec![] // На Linux диски не используются
+            vec![] // Linux does not use disks
         };
 
-        // Получаем путь к Steam
+        // Get the path to Steam
         let steam_directory = if cfg!(windows) {
             get_steam_directory_from_registry()
         } else {
-            String::new() // На Linux не используются
+            String::new() // Not used on Linux
         };
 
-        // Создаем новую базу данных с заменой плейсхолдеров
+        // Create a new database with placeholders replacement
         let mut expanded_database = Vec::new();
 
         for entry in database {
             let mut new_entry = entry.clone();
 
-            // Заменяем {username}
+            // Replace {username}
             new_entry.path = new_entry.path.replace("{username}", &username);
 
-            // Заменяем {steam}
+            // Replace {steam}
             new_entry.path = new_entry.path.replace("{steam}", &steam_directory);
 
-            // Заменяем {drive} (только для Windows)
+            // Replace {drive} (Windows only)
             if cfg!(windows) && new_entry.path.contains("{drive}") {
                 for drive in &drives {
                     let mut drive_entry = new_entry.clone();
