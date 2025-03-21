@@ -3,6 +3,11 @@ use winreg::RegKey;
 #[cfg(windows)]
 use winreg::enums::{HKEY_CURRENT_USER, KEY_READ, KEY_WRITE};
 
+#[cfg(гтшч)]
+pub fn get_steam_directory_from_registry() -> String {
+    String::new()
+}
+
 #[cfg(windows)]
 pub fn get_steam_directory_from_registry() -> String {
     let hkcu = RegKey::predef(HKEY_CURRENT_USER);
