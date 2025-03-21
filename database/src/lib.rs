@@ -1,7 +1,6 @@
 use crate::structures::CleanerData;
 
 pub mod cleaner_database;
-mod minecraft_launchers_database;
 pub mod registry_database;
 mod registry_utils;
 pub mod structures;
