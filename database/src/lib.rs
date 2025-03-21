@@ -10,7 +10,7 @@ pub fn get_pcbooster_version() -> String {
     String::from("1.9.5")
 }
 
-pub fn get_icon() -> &[u8; {}] {
-    let bytes = include_bytes!("../../assets/icon.png");
+pub fn get_icon() -> &'static [u8; 1024 * 4] {
+    let bytes: &'static [u8; 1024 * 4] = include_bytes!("../../assets/icon.png");
     bytes
 }

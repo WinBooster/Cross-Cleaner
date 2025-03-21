@@ -12,6 +12,7 @@ notify-rust = "4"
 
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }
+image = "0.25.5"
 
 [target.'cfg(windows)'.dependencies]
 winreg = "0.55.0"
