@@ -1131,7 +1131,7 @@ lazy_static! {
 
         //<editor-fold desc="Windows">
         let drives = get_letters();
-        for drive in drives {
+        //for drive in drives {
 
             //<editor-fold desc="Windows">
             let c_windows_debug_wia = CleanerData {
@@ -4582,7 +4582,7 @@ lazy_static! {
             //</editor-fold>
 
             //</editor-fold>
-        }
+        //}
 
         //<editor-fold desc="Cheats">
 
