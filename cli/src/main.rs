@@ -190,7 +190,7 @@ async fn work(
 #[command(version, about, long_about = None)]
 struct Args {
     /// Specify categories to clear (comma-separated)
-    /// /// Example: --clear=logs,cache
+    /// Example: --clear=logs,cache
     #[arg(long, value_name = "categories")]
     clear: Option<String>,
 
