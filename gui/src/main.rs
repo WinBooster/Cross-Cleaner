@@ -115,7 +115,6 @@ async fn work(
 
 struct MyApp {
     pub(crate) checked_boxes: Vec<(Rc<RefCell<bool>>, String)>,
-    pub(crate) selected_options: Vec<String>,
     pub(crate) task_handle: Option<tokio::task::JoinHandle<()>>,
     pub(crate) progress_message: String,
     pub(crate) progress_receiver: Option<mpsc::Receiver<String>>,
@@ -139,7 +138,6 @@ impl MyApp {
 
         Self {
             checked_boxes,
-            selected_options: vec![],
             task_handle: None,
             progress_message: String::new(),
             progress_receiver: None,

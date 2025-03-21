@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "Cross_Cleaner_CLI"
-version = "1.9.4"
+version = "1.9.5"
 dependencies = [
  "clap",
  "cleaner",
@@ -20,7 +20,7 @@ dependencies = [
 
 [[package]]
 name = "Cross_Cleaner_GUI"
-version = "1.9.4"
+version = "1.9.5"
 dependencies = [
  "cleaner",
  "database",

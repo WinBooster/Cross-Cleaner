@@ -36,20 +36,20 @@ jobs:
           ./target/release/Cross_Cleaner_GUI
           ./target/x86_64-pc-windows-gnu/release/Cross_Cleaner_CLI.exe
           ./target/x86_64-pc-windows-gnu/release/Cross_Cleaner_GUI.exe
-          ./database/linux_database.json
-          ./database/windows_database.json
+          ./database/database/linux_database.json
+          ./database/database/windows_database.json
 
     - name: Release
       uses: marvinpinto/action-automatic-releases@latest
       with:
         repo_token: '${{ secrets.GITHUB_TOKEN }}'
-        automatic_release_tag: "1.9.4"
+        automatic_release_tag: "1.9.5"
         prerelease: true
-        title: "1.9.4"
+        title: "1.9.5"
         files: |
             ./target/release/Cross_Cleaner_CLI
             ./target/release/Cross_Cleaner_GUI
             ./target/x86_64-pc-windows-gnu/release/Cross_Cleaner_CLI.exe
             ./target/x86_64-pc-windows-gnu/release/Cross_Cleaner_GUI.exe
-            ./database/linux_database.json
-            ./database/windows_database.json
+            ./database/database/linux_database.json
+            ./database/database/windows_database.json
