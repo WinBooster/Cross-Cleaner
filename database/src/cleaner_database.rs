@@ -4588,7 +4588,7 @@ lazy_static! {
 
         //<editor-fold desc="Weave">
         let steam_common_counter_string_global_offensive_weave = CleanerData {
-            path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive\\weave",
+            path: "{steam}".to_owned() + "\\steamapps\\common\\Counter-Strike Global Offensive\\weave",
             program: "Weave".parse().unwrap(),
             files_to_remove: vec![],
             category: "Cheats".parse().unwrap(),
@@ -4602,7 +4602,7 @@ lazy_static! {
         //</editor-fold>
         //<editor-fold desc="Fatality">
         let steam_common_counter_string_global_offensive = CleanerData {
-            path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive",
+            path: "{steam}".to_owned() + "\\steamapps\\common\\Counter-Strike Global Offensive",
             program: "Fatality".parse().unwrap(),
             files_to_remove: vec![
                 "slot1".parse().unwrap(),
@@ -4621,7 +4621,7 @@ lazy_static! {
         };
         database.push(steam_common_counter_string_global_offensive);
         let steam_common_counter_string_global_offensive_fatality = CleanerData {
-            path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive\\fatality\\*",
+            path: "{steam}".to_owned() + "\\steamapps\\common\\Counter-Strike Global Offensive\\fatality\\*",
             program: "Fatality".parse().unwrap(),
             files_to_remove: vec![],
             category: "Cheats".parse().unwrap(),
@@ -4635,7 +4635,7 @@ lazy_static! {
         //</editor-fold>
         //<editor-fold desc="Pandora">
         let steam_common_counter_string_global_offensive_pdr = CleanerData {
-            path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive\\*.pdr",
+            path: "{steam}".to_owned() + "\\steamapps\\common\\Counter-Strike Global Offensive\\*.pdr",
             program: "Pandora".parse().unwrap(),
             files_to_remove: vec![],
             category: "Cheats".parse().unwrap(),
@@ -4647,7 +4647,7 @@ lazy_static! {
         };
         database.push(steam_common_counter_string_global_offensive_pdr);
         let steam_common_counter_string_global_offensive_pandora = CleanerData {
-            path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive\\Pandora",
+            path: "{steam}".to_owned() + "\\steamapps\\common\\Counter-Strike Global Offensive\\Pandora",
             program: "Pandora".parse().unwrap(),
             files_to_remove: vec![],
             category: "Cheats".parse().unwrap(),
@@ -4661,7 +4661,7 @@ lazy_static! {
         //</editor-fold>
         //<editor-fold desc="OneTap">
         let steam_common_counter_string_global_offensive_ot = CleanerData {
-            path: steam_directory.clone() + "\\steamapps\\common\\Counter-Strike Global Offensive\\ot",
+            path: "{steam}".to_owned() + "\\steamapps\\common\\Counter-Strike Global Offensive\\ot",
             program: "OneTap".parse().unwrap(),
             files_to_remove: vec![],
             category: "Cheats".parse().unwrap(),
@@ -4679,7 +4679,7 @@ lazy_static! {
 
         //<editor-fold desc="Counter-Strike Global Offensive">
         let steam_userdata_730_local_cfg = CleanerData {
-            path: steam_directory.clone() + "\\userdata\\**\\730\\local\\cfg\\*",
+            path: "{steam}".to_owned() + "\\userdata\\**\\730\\local\\cfg\\*",
             program: "Counter-Strike Global Offensive".parse().unwrap(),
             files_to_remove: vec![],
             category: "Game settings".parse().unwrap(),
@@ -4693,7 +4693,7 @@ lazy_static! {
         //</editor-fold>
         //<editor-fold desc="Dota 2">
         let steam_userdata_570_local_cfg = CleanerData {
-            path: steam_directory.clone() + "\\userdata\\**\\570\\local\\cfg\\*",
+            path: "{steam}".to_owned() + "\\userdata\\**\\570\\local\\cfg\\*",
             program: "Dota 2".parse().unwrap(),
             files_to_remove: vec![],
             category: "Game settings".parse().unwrap(),
@@ -4707,7 +4707,7 @@ lazy_static! {
         //</editor-fold>
         //<editor-fold desc="Rust">
         let steam_userdata_252490_local_cfg = CleanerData {
-            path: steam_directory.clone() + "\\userdata\\**\\252490\\local\\cfg\\*",
+            path: "{steam}".to_owned() + "\\userdata\\**\\252490\\local\\cfg\\*",
             program: "Rust".parse().unwrap(),
             files_to_remove: vec![],
             category: "Game settings".parse().unwrap(),
@@ -4721,7 +4721,7 @@ lazy_static! {
         //</editor-fold>
         //<editor-fold desc="Unturned">
         let steam_userdata_252490_local_cfg = CleanerData {
-            path: steam_directory.clone() + "\\userdata\\**\\304930\\local\\cfg\\*",
+            path: "{steam}".to_owned() + "\\userdata\\**\\304930\\local\\cfg\\*",
             program: "Unturned".parse().unwrap(),
             files_to_remove: vec![],
             category: "Game settings".parse().unwrap(),
@@ -4738,7 +4738,7 @@ lazy_static! {
 
         //<editor-fold desc="Steam">
         let steam_userdata = CleanerData {
-            path: steam_directory.clone() + "\\userdata\\**",
+            path: "{steam}".to_owned() + "\\userdata\\**",
             program: "Steam".parse().unwrap(),
             files_to_remove: vec![],
             category: "Accounts".parse().unwrap(),
