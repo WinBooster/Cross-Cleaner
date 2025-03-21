@@ -6,7 +6,7 @@
 </div>
 
 <div align="center">
-	<a href="https://github.com/WinBooster/WinBooster-DF/releases"><img src="https://github.com/user-attachments/assets/698ae5b4-e862-48bc-8ad7-7efecf0b1760" alt="Downloads"/></a>
-	<a href="https://github.com/WinBooster/WinBooster-DF/releases"><img src="https://i.ibb.co/jZbx0vm4/image.png" alt="Downloads"/></a>
+	<a href="https://github.com/WinBooster/WinBooster-DF/releases"><img src="https://i.ibb.co/qLj6B2WD/image.png" alt="Downloads"/></a>
+	<a href="https://github.com/WinBooster/WinBooster-DF/releases"><img src="https://i.ibb.co/m5zKdhjB/image1.png" alt="Downloads"/></a>
 	
 </div>
