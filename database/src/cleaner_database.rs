@@ -1205,7 +1205,7 @@ lazy_static! {
             };
             database.push(c_windows_logs);
             let c_windows_logs = CleanerData {
-                path: String::from(drive.clone() + "Windows\\*.log"),
+                path: String::from("{drive}".to_owned() + "Windows\\*.log"),
                 program: String::from("Windows"),
                 files_to_remove: vec![],
                 category: String::from("Logs"),
@@ -3298,7 +3298,7 @@ lazy_static! {
             //</editor-fold>
             //<editor-fold desc="Opera GX">
             let users_appdata_roaming_opera_software_opera_gx_stable = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Opera Software\\Opera GX Stable"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Opera Software\\Opera GX Stable"),
                 program: String::from("Opera GX"),
                 files_to_remove: vec![
                    String::from("Favicons"),
@@ -3316,7 +3316,7 @@ lazy_static! {
             };
             database.push(users_appdata_roaming_opera_software_opera_gx_stable);
             let users_appdata_roaming_opera_software_opera_gx_stable = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Opera Software\\Opera GX Stable"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Opera Software\\Opera GX Stable"),
                 program: String::from("Opera GX"),
                 files_to_remove: vec![
                     String::from("Login Data"),
@@ -3331,7 +3331,7 @@ lazy_static! {
             };
             database.push(users_appdata_roaming_opera_software_opera_gx_stable);
             let users_appdata_roaming_opera_software_opera_gx_stable = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Opera Software\\Opera GX Stable\\Network"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Opera Software\\Opera GX Stable\\Network"),
                 program: String::from("Opera GX"),
                 files_to_remove: vec![
                     String::from("Browser cookies"),
@@ -3348,7 +3348,7 @@ lazy_static! {
             //</editor-fold>
             //<editor-fold desc="Mozilla Firefox">
             let program_files_mozila_firefox = CleanerData {
-                path: String::from(drive.clone() + "Program Files\\Mozilla Firefox"),
+                path: String::from("{drive}".to_owned() + "Program Files\\Mozilla Firefox"),
                 program: String::from("Mozilla Firefox"),
                 files_to_remove: vec![
                     String::from("install.log"),
@@ -3362,7 +3362,7 @@ lazy_static! {
             };
             database.push(program_files_mozila_firefox);
             let users_appdata_roaming_mozila_firefox_profiles = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**"),
                 program: String::from("Mozilla Firefox"),
                 files_to_remove: vec![
                     String::from("favicons.sqlite"),
@@ -3378,7 +3378,7 @@ lazy_static! {
             };
             database.push(users_appdata_roaming_mozila_firefox_profiles);
             let users_appdata_roaming_mozila_firefox_profiles = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**"),
                 program: String::from("Mozilla Firefox"),
                 files_to_remove: vec![
                     String::from("cookies.sqlite"),
@@ -3394,7 +3394,7 @@ lazy_static! {
             };
             database.push(users_appdata_roaming_mozila_firefox_profiles);
             let users_appdata_roaming_mozila_firefox_profiles_shader_cache = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**\\shader-cache\\*"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**\\shader-cache\\*"),
                 program: String::from("Mozilla Firefox"),
                 files_to_remove: vec![],
                 category: String::from("Cache"),
@@ -3408,7 +3408,7 @@ lazy_static! {
             //</editor-fold>
             //<editor-fold desc="LibreWoolf">
             let users_appdata_roaming_librewolf_profiles_favicons = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\librewolf\\Profiles\\**"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Roaming\\librewolf\\Profiles\\**"),
                 program: String::from("LibreWolf"),
                 files_to_remove: vec![
                     String::from("favicons.sqlite"),
@@ -3424,7 +3424,7 @@ lazy_static! {
             };
             database.push(users_appdata_roaming_librewolf_profiles_favicons);
             let users_appdata_roaming_librewolf_profiles_cookies = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\librewolf\\Profiles\\**"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Roaming\\librewolf\\Profiles\\**"),
                 program: String::from("LibreWolf"),
                 files_to_remove: vec![
                     String::from("cookies.sqlite"),
@@ -3872,7 +3872,7 @@ lazy_static! {
             //</editor-fold>
             //<editor-fold desc="The Powder Toy">
             let c_users_appdata_local_roblox_logs = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\The Powder Toy\\Saves"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Roaming\\The Powder Toy\\Saves"),
                 program: String::from("The Powder Toy"),
                 files_to_remove: vec![],
                 category: String::from("Game saves"),
@@ -3886,7 +3886,7 @@ lazy_static! {
             //</editor-fold>
             //<editor-fold desc="Terraria">
             let users_documents_my_gam_terraria_players = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\Documents\\My Games\\Terraria\\Players"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\Documents\\My Games\\Terraria\\Players"),
                 program: String::from("Terraria"),
                 files_to_remove: vec![],
                 category: String::from("Game saves"),
@@ -3898,7 +3898,7 @@ lazy_static! {
             };
             database.push(users_documents_my_gam_terraria_players);
             let users_documents_my_gam_terraria_players = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\Documents\\My Games\\Terraria\\Worlds"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\Documents\\My Games\\Terraria\\Worlds"),
                 program: String::from("Terraria"),
                 files_to_remove: vec![],
                 category: String::from("Game saves"),
@@ -3910,7 +3910,7 @@ lazy_static! {
             };
             database.push(users_documents_my_gam_terraria_players);
             let users_documents_my_gam_terraria = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\Documents\\My Games\\Terraria"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\Documents\\My Games\\Terraria"),
                 program: String::from("Terraria"),
                 files_to_remove: vec![
                     String::from("favorites.json")
@@ -3924,7 +3924,7 @@ lazy_static! {
             };
             database.push(users_documents_my_gam_terraria);
             let users_documents_my_gam_terraria = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\Documents\\My Games\\Terraria"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\Documents\\My Games\\Terraria"),
                 program: String::from("Terraria"),
                 files_to_remove: vec![
                     String::from("config.json"),
@@ -3941,7 +3941,7 @@ lazy_static! {
             //</editor-fold>
             //<editor-fold desc="Arizona Games">
             let users_appdata_local_programs_arizona_games_launcher = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher"),
                 program: String::from("Arizona Games Launcher"),
                 files_to_remove: vec![
                     String::from("logs.log")
@@ -3955,7 +3955,7 @@ lazy_static! {
             };
             database.push(users_appdata_local_programs_arizona_games_launcher);
             let users_appdata_local_programs_arizona_games_launcher_bin_moonloader = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\moonloader"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\moonloader"),
                 program: String::from("Arizona Games Launcher"),
                 files_to_remove: vec![
                     String::from("moonloader.log")
@@ -3969,7 +3969,7 @@ lazy_static! {
             };
             database.push(users_appdata_local_programs_arizona_games_launcher_bin_moonloader);
             let users_appdata_local_programs_arizona_games_launcher_bin_sampfuncs = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\SAMPFUNCS"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\SAMPFUNCS"),
                 program: String::from("Arizona Games Launcher"),
                 files_to_remove: vec![
                     String::from("SAMPFUNCS.log")
@@ -3983,7 +3983,7 @@ lazy_static! {
             };
             database.push(users_appdata_local_programs_arizona_games_launcher_bin_sampfuncs);
             let users_appdata_local_programs_arizona_games_launcher_bin_crashlogs = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\crashlog\\*"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\crashlog\\*"),
                 program: String::from("Arizona Games Launcher"),
                 files_to_remove: vec![],
                 category: String::from("Crash reports"),
@@ -3995,7 +3995,7 @@ lazy_static! {
             };
             database.push(users_appdata_local_programs_arizona_games_launcher_bin_crashlogs);
             let users_appdata_local_programs_arizona_games_launcher_bin_crashlogs = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**"),
                 program: String::from("Arizona Games Launcher"),
                 files_to_remove: vec![
                     String::from("!GAMELOG.txt"),
@@ -4016,7 +4016,7 @@ lazy_static! {
 
             //<editor-fold desc="McLaunch">
             let users_appdata_roaming_mclaunch_launcher_crashreports = CleanerData {
-                path: String::from(drive.clone() + "Users\\" + username + "\\AppData\\Roaming\\.mclaunch\\launcher_crashreports\\*"),
+                path: String::from("{drive}".to_owned() + "Users\\" + username + "\\AppData\\Roaming\\.mclaunch\\launcher_crashreports\\*"),
                 program: String::from("McLaunch"),
                 files_to_remove: vec![],
                 category: String::from("Crash reports"),
