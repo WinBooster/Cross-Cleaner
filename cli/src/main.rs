@@ -96,16 +96,16 @@ async fn work(
                 pb.inc(1);
             }
 
-            let mut bytes_cleared = bytes_cleared.lock().await;
-            *bytes_cleared += result.bytes;
-
-            let mut removed_files = removed_files.lock().await;
-            *removed_files += result.files;
-
-            let mut removed_directories = removed_directories.lock().await;
-            *removed_directories += result.folders;
-
             if result.working {
+                let mut bytes_cleared = bytes_cleared.lock().await;
+                *bytes_cleared += result.bytes;
+
+                let mut removed_files = removed_files.lock().await;
+                *removed_files += result.files;
+
+                let mut removed_directories = removed_directories.lock().await;
+                *removed_directories += result.folders;
+
                 let mut cleared_programs = cleared_programs.lock().await;
                 if let Some(cleared) = cleared_programs
                     .iter_mut()
