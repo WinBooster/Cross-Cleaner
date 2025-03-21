@@ -11,9 +11,9 @@ use lazy_static::lazy_static;
 lazy_static! {
     static ref DATABASE: Vec<CleanerData> = {
         #[cfg(unix)]
-        let data = include_str!("../database/database/linux_database.json");
+        let data = include_str!("../database/linux_database.json");
         #[cfg(windows)]
-        let data = include_str!("../database/database/windows_database.json");
+        let data = include_str!("../database/windows_database.json");
 
         // Deserialization JSON to Vec<CleanerData>
         let database: Vec<CleanerData> = serde_json::from_str(&data)
