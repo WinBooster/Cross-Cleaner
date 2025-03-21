@@ -10,41 +10,25 @@ use std::cell::RefCell;
 use std::collections::HashSet;
 use std::rc::Rc;
 use std::sync::Arc;
+use egui::ViewportCommand::Icon;
+use image::ImageReader;
 use tokio::sync::mpsc;
 use tokio::task;
 
-fn load_icon_from_bytes(bytes: &[u8]) -> Result<eframe::IconData, image::ImageError> {
-    // Загружаем изображение из массива байтов
-    let img = ImageReader::new(Cursor::new(bytes))
-        .with_guessed_format()?
-        .decode()?;
-
-    // Преобразуем изображение в формат RGBA
-    let rgba = img.to_rgba8();
-    let (width, height) = rgba.dimensions();
-
-    // Создаем иконку для окна
-    Ok(eframe::IconData {
-        rgba: rgba.into_raw(),
-        width,
-        height,
-    })
-}
 #[tokio::main]
 async fn main() -> eframe::Result {
     env_logger::init();
 
-    let icon_data = load_icon_from_bytes(get_icon()).expect("Failed to load icon");
+    let icon_bytes = get_icon();
 
     let mut options = eframe::NativeOptions {
         run_and_return: true,
         #[cfg(windows)]
         viewport: egui::ViewportBuilder::default().with_inner_size([430.0, 150.0]),
         #[cfg(unix)]
-        viewport: egui::ViewportBuilder::default().with_inner_size([430.0, 125.0]),
+        viewport: egui::ViewportBuilder::default().with_icon(icon_bytes).with_inner_size([430.0, 125.0]),
         ..Default::default()
     };
-    options.viewport.icon = icon_data;
 
     eframe::run_native(
         &*("Cross Cleaner GUI v".to_owned() + &*get_pcbooster_version()),
