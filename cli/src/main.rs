@@ -223,6 +223,11 @@ struct Args {
     /// Example: --show-notification=false
     #[arg(long, value_name = "bool", default_value_t = true, action = ArgAction::Set)]
     show_notification: bool,
+
+    /// Specify a custom database file path.
+    /// Example: --database-path=custom_database.json
+    #[arg(long, value_name = "path")]
+    database_path: Option<String>,
 }
 
 #[tokio::main]
@@ -235,9 +240,17 @@ async fn main() {
 
     let args = Args::parse();
 
-    let database: &Vec<CleanerData> = database::cleaner_database::get_database();
-
-    database::cleaner_database::save_database_json();
+    let database: Vec<CleanerData> = if let Some(db_path) = &args.database_path {
+        match database::cleaner_database::get_database_from_file(db_path) {
+            Ok(db) => db,
+            Err(e) => {
+                eprintln!("Failed to load database from file: {}", e);
+                std::process::exit(1);
+            }
+        }
+    } else {
+        database::cleaner_database::get_default_database().clone()
+    };
 
     let mut options: HashSet<String> = HashSet::new();
     let mut programs: HashSet<String> = HashSet::new();
