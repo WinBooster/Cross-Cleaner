@@ -123,7 +123,7 @@ struct MyApp {
 
 impl MyApp {
     pub(crate) fn new() -> Self {
-        let database: &Vec<CleanerData> = database::cleaner_database::get_database();
+        let database: &Vec<CleanerData> = database::cleaner_database::get_default_database();
 
         let mut options: Vec<String> = vec![];
         for data in database.iter() {
