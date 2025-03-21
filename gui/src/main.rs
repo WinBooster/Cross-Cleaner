@@ -184,7 +184,8 @@ impl eframe::App for MyApp {
                         .map(|(_, label)| label.clone())
                         .collect();
 
-                    let database: &Vec<CleanerData> = database::cleaner_database::get_default_database();
+                    let database: &Vec<CleanerData> =
+                        database::cleaner_database::get_default_database();
 
                     let (progress_sender, progress_receiver) = mpsc::channel(32);
                     self.progress_receiver = Some(progress_receiver);

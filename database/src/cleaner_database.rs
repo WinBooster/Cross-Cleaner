@@ -1,12 +1,12 @@
-use std::error::Error;
 use crate::CleanerData;
-use serde_json;
-use std::fs;
-use std::fs::File;
-use std::io::Write;
 use crate::registry_utils::get_steam_directory_from_registry;
 use disk_name::get_letters;
 use lazy_static::lazy_static;
+use serde_json;
+use std::error::Error;
+use std::fs;
+use std::fs::File;
+use std::io::Write;
 
 lazy_static! {
     static ref DATABASE: Vec<CleanerData> = {

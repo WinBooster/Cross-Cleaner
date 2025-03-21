@@ -76,10 +76,10 @@ async fn work(
         tasks.push(task);
     }
 
-    for data in database
-        .iter()
-        .filter(|data| categories.contains(&data.category.to_lowercase()) && !disabled_programs.contains(&data.program.to_lowercase().as_str()))
-    {
+    for data in database.iter().filter(|data| {
+        categories.contains(&data.category.to_lowercase())
+            && !disabled_programs.contains(&data.program.to_lowercase().as_str())
+    }) {
         let data = Arc::new(data.clone());
         let progress_bar = pb.clone();
         let bytes_cleared = Arc::clone(&bytes_cleared);
@@ -155,16 +155,26 @@ async fn work(
     if args.show_result_table {
         println!("Cleared result:");
         let cleared_programs = cleared_programs.lock().await;
-        let table = Table::new(cleared_programs.iter()).to_string();
+
+        let filtered_programs: Vec<&Cleared> = cleared_programs
+            .iter()
+            .filter(|cleared| cleared.removed_files > 0 || cleared.removed_directories > 0)
+            .collect();
+
+        let table = Table::new(filtered_programs).to_string();
         println!("{}", table);
     }
     if args.show_result_string {
         let bytes_cleared = bytes_cleared.lock().await;
         let removed_files = removed_files.lock().await;
         let removed_directories = removed_directories.lock().await;
-        println!("Removed size: {}", get_file_size_string(*bytes_cleared));
-        println!("Removed files: {}", *removed_files);
-        println!("Removed directories: {}", *removed_directories);
+        println!(
+            "Removed size: {}, files: {}, dirs: {}, programs: {}",
+            get_file_size_string(*bytes_cleared),
+            *removed_files,
+            *removed_directories,
+            cleared_programs.lock().await.len()
+        );
     }
 
     if args.show_notification {

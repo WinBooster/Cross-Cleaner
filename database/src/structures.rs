@@ -1,6 +1,6 @@
 use crate::utils;
+use serde::{Deserialize, Serialize};
 use tabled::Tabled;
-use serde::{Serialize, Deserialize};
 
 #[derive(PartialEq, Tabled)]
 pub struct Cleared {
