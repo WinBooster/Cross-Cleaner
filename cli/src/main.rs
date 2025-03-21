@@ -78,7 +78,7 @@ async fn work(
 
     for data in database
         .iter()
-        .filter(|data| categories.contains(&data.category.to_lowercase()) && disabled_programs.contains(&data.program.to_lowercase().as_str()))
+        .filter(|data| categories.contains(&data.category.to_lowercase()) && !disabled_programs.contains(&data.program.to_lowercase().as_str()))
     {
         let data = Arc::new(data.clone());
         let progress_bar = pb.clone();
@@ -326,11 +326,11 @@ async fn main() {
         let ans_categories: Vec<String> =
             clear_categories.iter().map(|s| s.to_lowercase()).collect();
         let ans_programs: Vec<String> =
-            disabled_programs.iter().map(|s| s.to_lowercase()).collect();
+            disabled_programs.iter().map(|s| s.to_lowercase().as_str()).collect();
 
         work(
             &args,
-            ans_programs.iter().map(|s| s.as_str()).collect(),
+            ans_programs,
             ans_categories,
             &database,
         )
