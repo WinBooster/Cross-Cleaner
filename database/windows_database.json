@@ -1,0 +1,4810 @@
+[
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/",
+    "category": "Accounts",
+    "program": "Badlion Client",
+    "files_to_remove": [
+      "accounts.json",
+      "launcher_accounts.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher/",
+    "category": "Accounts",
+    "program": "Tecknix Client",
+    "files_to_remove": [
+      "accounts.json",
+      "launcher_accounts.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp/",
+    "category": "Accounts",
+    "program": "Modrinth",
+    "files_to_remove": [
+      "accounts.json",
+      "launcher_accounts.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\.lunarclient/",
+    "category": "Accounts",
+    "program": "Lunar Client",
+    "files_to_remove": [
+      "accounts.json",
+      "launcher_accounts.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC/",
+    "category": "Accounts",
+    "program": "MultiMC",
+    "files_to_remove": [
+      "accounts.json",
+      "launcher_accounts.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher/",
+    "category": "Accounts",
+    "program": "PrismLauncher",
+    "files_to_remove": [
+      "accounts.json",
+      "launcher_accounts.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC/",
+    "category": "Accounts",
+    "program": "PolyMC",
+    "files_to_remove": [
+      "accounts.json",
+      "launcher_accounts.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher/",
+    "category": "Accounts",
+    "program": "ATLauncher",
+    "files_to_remove": [
+      "accounts.json",
+      "launcher_accounts.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\bin/",
+    "category": "Accounts",
+    "program": "GribLand",
+    "files_to_remove": [
+      "accounts.json",
+      "launcher_accounts.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland/",
+    "category": "Accounts",
+    "program": "GribLand",
+    "files_to_remove": [
+      "accounts.json",
+      "launcher_accounts.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install/",
+    "category": "Accounts",
+    "program": "CurseForge",
+    "files_to_remove": [
+      "accounts.json",
+      "launcher_accounts.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Telegram Desktop\\tdata",
+    "category": "Accounts",
+    "program": "Telegram",
+    "files_to_remove": [
+      "key_datas"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{steam}\\userdata\\**",
+    "category": "Accounts",
+    "program": "Steam",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\ShareX\\Backup\\*",
+    "category": "Backups",
+    "program": "ShareX",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Code\\Network",
+    "category": "Browser cookies",
+    "program": "VS Code",
+    "files_to_remove": [
+      "Browser cookies",
+      "Cookies-journal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Network",
+    "category": "Browser cookies",
+    "program": "Brave Browser",
+    "files_to_remove": [
+      "Browser cookies",
+      "Cookies-journal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Network",
+    "category": "Browser cookies",
+    "program": "Google Chrome",
+    "files_to_remove": [
+      "Browser cookies",
+      "Cookies-journal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Vivaldi\\User Data\\Default\\Network",
+    "category": "Browser cookies",
+    "program": "Vivaldi",
+    "files_to_remove": [
+      "Browser cookies",
+      "Cookies-journal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera GX Stable\\Network",
+    "category": "Browser cookies",
+    "program": "Opera GX",
+    "files_to_remove": [
+      "Browser cookies",
+      "Cookies-journal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**",
+    "category": "Browser cookies",
+    "program": "Mozilla Firefox",
+    "files_to_remove": [
+      "cookies.sqlite",
+      "cookies.sqlite-shm",
+      "cookies.sqlite-wal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\librewolf\\Profiles\\**",
+    "category": "Browser cookies",
+    "program": "LibreWolf",
+    "files_to_remove": [
+      "cookies.sqlite",
+      "cookies.sqlite-shm",
+      "cookies.sqlite-wal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default",
+    "category": "Browser passwords",
+    "program": "Brave Browser",
+    "files_to_remove": [
+      "Login Data",
+      "Login Data For Account",
+      "Login Data For Account-journal",
+      "Login Data-journal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
+    "category": "Browser passwords",
+    "program": "Google Chrome",
+    "files_to_remove": [
+      "Login Data",
+      "Login Data For Account",
+      "Login Data For Account-journal",
+      "Login Data-journal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Vivaldi\\User Data\\Default",
+    "category": "Browser passwords",
+    "program": "Vivaldi",
+    "files_to_remove": [
+      "Login Data",
+      "Login Data For Account",
+      "Login Data For Account-journal",
+      "Login Data-journal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera GX Stable",
+    "category": "Browser passwords",
+    "program": "Opera GX",
+    "files_to_remove": [
+      "Login Data",
+      "Login Data-journal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\OneDrive\\cache\\qmlcache\\*.qmlc",
+    "category": "Cache",
+    "program": "OneDrive",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.jdks\\**",
+    "category": "Cache",
+    "program": "Java",
+    "files_to_remove": [
+      "javafx-src.zip",
+      "src.zip"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Hex-Rays\\IDA Pro\\*.lst",
+    "category": "Cache",
+    "program": "IDA Pro",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\DeepL_SE\\cache\\*",
+    "category": "Cache",
+    "program": "LGHUB",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Rave\\Cache\\*",
+    "category": "Cache",
+    "program": "Rave",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Rave\\Code Cache\\*",
+    "category": "Cache",
+    "program": "Rave",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Magpie\\cache\\*",
+    "category": "Cache",
+    "program": "Magpie",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\DawnCache",
+    "category": "Cache",
+    "program": "Brave Browser",
+    "files_to_remove": [
+      "data_0",
+      "data_1",
+      "data_2",
+      "data_3",
+      "index"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\GPUCache",
+    "category": "Cache",
+    "program": "Brave Browser",
+    "files_to_remove": [
+      "data_0",
+      "data_1",
+      "data_2",
+      "data_3",
+      "index"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**\\shader-cache\\*",
+    "category": "Cache",
+    "program": "Mozilla Firefox",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\GameGuard\\cache\\*.cache",
+    "category": "Cache",
+    "program": "GameGuard",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/game-cache/*",
+    "category": "Cache",
+    "program": "Badlion Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/cache/*",
+    "category": "Cache",
+    "program": "Badlion Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher/game-cache/*",
+    "category": "Cache",
+    "program": "Tecknix Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher/cache/*",
+    "category": "Cache",
+    "program": "Tecknix Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp/game-cache/*",
+    "category": "Cache",
+    "program": "Modrinth",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp/cache/*",
+    "category": "Cache",
+    "program": "Modrinth",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.lunarclient/game-cache/*",
+    "category": "Cache",
+    "program": "Lunar Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.lunarclient/cache/*",
+    "category": "Cache",
+    "program": "Lunar Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC/game-cache/*",
+    "category": "Cache",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC/cache/*",
+    "category": "Cache",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher/game-cache/*",
+    "category": "Cache",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher/cache/*",
+    "category": "Cache",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC/game-cache/*",
+    "category": "Cache",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC/cache/*",
+    "category": "Cache",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher/game-cache/*",
+    "category": "Cache",
+    "program": "ATLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher/cache/*",
+    "category": "Cache",
+    "program": "ATLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\bin/game-cache/*",
+    "category": "Cache",
+    "program": "GribLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\bin/cache/*",
+    "category": "Cache",
+    "program": "GribLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland/game-cache/*",
+    "category": "Cache",
+    "program": "GribLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland/cache/*",
+    "category": "Cache",
+    "program": "GribLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install/game-cache/*",
+    "category": "Cache",
+    "program": "CurseForge",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install/cache/*",
+    "category": "Cache",
+    "program": "CurseForge",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Telegram Desktop\\tdata\\emoji\\*cache_*",
+    "category": "Cache",
+    "program": "Telegram",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Telegram Desktop\\tdata\\user_data\\cache\\**\\*",
+    "category": "Cache",
+    "program": "Telegram",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Telegram Desktop\\tdata\\user_data\\media_cache\\**\\*",
+    "category": "Cache",
+    "program": "Telegram",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Signal\\update-cache\\*",
+    "category": "Cache",
+    "program": "Signal",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\PlanetVPN\\cache\\qmlcache\\*",
+    "category": "Cache",
+    "program": "PlanetVPN",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\iTop VPN",
+    "category": "Cache",
+    "program": "iTop VPN",
+    "files_to_remove": [
+      "iTop_setup.log",
+      "Setup.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\ImageGlass\\ThumbnailsCache\\*",
+    "category": "Cache",
+    "program": "ImageGlass",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\ImageGlass\\ThumbnailsCache\\*",
+    "category": "Cache",
+    "program": "ImageGlass",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft",
+    "category": "Cheats",
+    "program": "Minecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client",
+    "category": "Cheats",
+    "program": "Badlion Client",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp",
+    "category": "Cheats",
+    "program": "Modrinth",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft",
+    "category": "Cheats",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft",
+    "category": "Cheats",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft",
+    "category": "Cheats",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft",
+    "category": "Cheats",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft",
+    "category": "Cheats",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**",
+    "category": "Cheats",
+    "program": "ATLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\**",
+    "category": "Cheats",
+    "program": "CurseForge",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Weave",
+    "category": "Cheats",
+    "program": "Weave",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": true,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\INTERIUM",
+    "category": "Cheats",
+    "program": "INTERIUM",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": true,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Krnl",
+    "category": "Cheats",
+    "program": "Krnl",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": true,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}exechack",
+    "category": "Cheats",
+    "program": "Krnl",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": true,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.vapeclient",
+    "category": "Cheats",
+    "program": "Vape Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": true,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{steam}\\steamapps\\common\\Counter-Strike Global Offensive\\weave",
+    "category": "Cheats",
+    "program": "Weave",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": true,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{steam}\\steamapps\\common\\Counter-Strike Global Offensive",
+    "category": "Cheats",
+    "program": "Fatality",
+    "files_to_remove": [
+      "slot1",
+      "slot2",
+      "slot3",
+      "slot4",
+      "skins",
+      "flog.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{steam}\\steamapps\\common\\Counter-Strike Global Offensive\\fatality\\*",
+    "category": "Cheats",
+    "program": "Fatality",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": true,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{steam}\\steamapps\\common\\Counter-Strike Global Offensive\\*.pdr",
+    "category": "Cheats",
+    "program": "Pandora",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{steam}\\steamapps\\common\\Counter-Strike Global Offensive\\Pandora",
+    "category": "Cheats",
+    "program": "Pandora",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": true,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{steam}\\steamapps\\common\\Counter-Strike Global Offensive\\ot",
+    "category": "Cheats",
+    "program": "OneTap",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": true,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\CrashDumps\\*",
+    "category": "Crash reports",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\crashlog\\*",
+    "category": "Crash reports",
+    "program": "Arizona Games Launcher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.mclaunch\\launcher_crashreports\\*",
+    "category": "Crash reports",
+    "program": "McLaunch",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": true,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft/crash-reports/*",
+    "category": "Crash reports",
+    "program": "Minecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/crash-reports/*",
+    "category": "Crash reports",
+    "program": "Badlion Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher/crash-reports/*",
+    "category": "Crash reports",
+    "program": "Tecknix Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp/crash-reports/*",
+    "category": "Crash reports",
+    "program": "Modrinth",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft/crash-reports/*",
+    "category": "Crash reports",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft/crash-reports/*",
+    "category": "Crash reports",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft/crash-reports/*",
+    "category": "Crash reports",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft/crash-reports/*",
+    "category": "Crash reports",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft/crash-reports/*",
+    "category": "Crash reports",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**/crash-reports/*",
+    "category": "Crash reports",
+    "program": "ATLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}.loliland\\updates\\clients\\**/crash-reports/*",
+    "category": "Crash reports",
+    "program": "LoliLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.cristalix\\updates\\**/crash-reports/*",
+    "category": "Crash reports",
+    "program": "Cristalix",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\**/crash-reports/*",
+    "category": "Crash reports",
+    "program": "MCSkill",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\**/crash-reports/*",
+    "category": "Crash reports",
+    "program": "GribLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\**/crash-reports/*",
+    "category": "Crash reports",
+    "program": "CurseForge",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\Downloads\\*",
+    "category": "Downloads",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\The Powder Toy\\Saves",
+    "category": "Game saves",
+    "program": "The Powder Toy",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\My Games\\Terraria\\Players",
+    "category": "Game saves",
+    "program": "Terraria",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\My Games\\Terraria\\Worlds",
+    "category": "Game saves",
+    "program": "Terraria",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\My Games\\Terraria",
+    "category": "Game saves",
+    "program": "Terraria",
+    "files_to_remove": [
+      "favorites.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft/saves/*",
+    "category": "Game saves",
+    "program": "Minecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/saves/*",
+    "category": "Game saves",
+    "program": "Badlion Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher/saves/*",
+    "category": "Game saves",
+    "program": "Tecknix Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp/saves/*",
+    "category": "Game saves",
+    "program": "Modrinth",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft/saves/*",
+    "category": "Game saves",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft/saves/*",
+    "category": "Game saves",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft/saves/*",
+    "category": "Game saves",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft/saves/*",
+    "category": "Game saves",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft/saves/*",
+    "category": "Game saves",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**/saves/*",
+    "category": "Game saves",
+    "program": "ATLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}.loliland\\updates\\clients\\**/saves/*",
+    "category": "Game saves",
+    "program": "LoliLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.cristalix\\updates\\**/saves/*",
+    "category": "Game saves",
+    "program": "Cristalix",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\**/saves/*",
+    "category": "Game saves",
+    "program": "MCSkill",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\**/saves/*",
+    "category": "Game saves",
+    "program": "GribLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\**/saves/*",
+    "category": "Game saves",
+    "program": "CurseForge",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\My Games\\Terraria",
+    "category": "Game settings",
+    "program": "Terraria",
+    "files_to_remove": [
+      "config.json",
+      "input profiles.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{steam}\\userdata\\**\\730\\local\\cfg\\*",
+    "category": "Game settings",
+    "program": "Counter-Strike Global Offensive",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{steam}\\userdata\\**\\570\\local\\cfg\\*",
+    "category": "Game settings",
+    "program": "Dota 2",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{steam}\\userdata\\**\\252490\\local\\cfg\\*",
+    "category": "Game settings",
+    "program": "Rust",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{steam}\\userdata\\**\\304930\\local\\cfg\\*",
+    "category": "Game settings",
+    "program": "Unturned",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\Pictures\\Tonfotos Telegram Connector\\*",
+    "category": "Images",
+    "program": "Tonfotos Telegram Connector",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\Pictures\\Vivaldi Captures\\*",
+    "category": "Images",
+    "program": "Vivaldi",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\Pictures\\BlueStacks\\*.png",
+    "category": "Images",
+    "program": "BlueStacks 5",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft/screenshots/*",
+    "category": "Images",
+    "program": "Minecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/screenshots/*",
+    "category": "Images",
+    "program": "Badlion Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher/screenshots/*",
+    "category": "Images",
+    "program": "Tecknix Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp/screenshots/*",
+    "category": "Images",
+    "program": "Modrinth",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft/screenshots/*",
+    "category": "Images",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft/screenshots/*",
+    "category": "Images",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft/screenshots/*",
+    "category": "Images",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft/screenshots/*",
+    "category": "Images",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft/screenshots/*",
+    "category": "Images",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**/screenshots/*",
+    "category": "Images",
+    "program": "ATLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}.loliland\\updates\\clients\\**/screenshots/*",
+    "category": "Images",
+    "program": "LoliLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.cristalix\\updates\\**/screenshots/*",
+    "category": "Images",
+    "program": "Cristalix",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\**/screenshots/*",
+    "category": "Images",
+    "program": "MCSkill",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\**/screenshots/*",
+    "category": "Images",
+    "program": "GribLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\**/screenshots/*",
+    "category": "Images",
+    "program": "CurseForge",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\ShareX\\Screenshots\\**\\*.jpg",
+    "category": "Images",
+    "program": "ShareX",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\ShareX\\Screenshots\\**\\*.png",
+    "category": "Images",
+    "program": "ShareX",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\ConnectedDevicesPlatform\\*",
+    "category": "LastActivity",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default",
+    "category": "LastActivity",
+    "program": "Brave Browser",
+    "files_to_remove": [
+      "Favicons",
+      "Favicons-journal",
+      "History",
+      "History-journal",
+      "Visited Links"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
+    "category": "LastActivity",
+    "program": "Google Chrome",
+    "files_to_remove": [
+      "Favicons",
+      "Favicons-journal",
+      "History",
+      "History-journal",
+      "Visited Links"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Vivaldi\\User Data\\Default",
+    "category": "LastActivity",
+    "program": "Vivaldi",
+    "files_to_remove": [
+      "Favicons",
+      "Favicons-journal",
+      "History",
+      "History-journal",
+      "Visited Links"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera GX Stable",
+    "category": "LastActivity",
+    "program": "Opera GX",
+    "files_to_remove": [
+      "Favicons",
+      "Favicons-journal",
+      "History",
+      "History-journal",
+      "Visited Links"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**",
+    "category": "LastActivity",
+    "program": "Mozilla Firefox",
+    "files_to_remove": [
+      "favicons.sqlite",
+      "favicons.sqlite-shm",
+      "favicons.sqlite-wal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\librewolf\\Profiles\\**",
+    "category": "LastActivity",
+    "program": "LibreWolf",
+    "files_to_remove": [
+      "favicons.sqlite",
+      "favicons.sqlite-shm",
+      "favicons.sqlite-wal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Windows\\debug\\*",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Windows\\Prefetch\\*",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Windows\\Minidump\\*",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Windows\\security\\logs\\*.log",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Windows\\security\\database\\*.log",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Windows\\Logs\\**\\*",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Windows\\*.log",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Temp\\*",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Windows\\Panther",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Windows\\Temp\\*",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Windows\\Logs\\*",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Windows\\Logs\\WindowsUpdate\\*",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Temp\\*",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\USOShared\\Logs\\*",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Windows Defender",
+    "category": "Logs",
+    "program": "Windows Defender",
+    "files_to_remove": [
+      "ThirdPartyNotices.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\Windows Defender Advanced Threat Protection",
+    "category": "Logs",
+    "program": "Windows Defender",
+    "files_to_remove": [
+      "ThirdPartyNotice",
+      "SenseAp.ThirdPartyNotice.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\NVIDIA Corporation",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [
+      "license.txt",
+      "nvstlink.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\NVIDIA Corporation\\NVSMI",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [
+      "nvidia-smi.1.pdf"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\NVIDIA Corporation\\nvStereoInstaller",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [
+      "nvStInst.log",
+      "nvStInst.old"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\NVIDIA Corporation\\NvFBCPlugin",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [
+      "logPluginError.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\NVIDIA Corporation\\GfnRuntimeSdk\\*.log",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\nvstapisvr\\*",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\nvStereoInstaller\\*",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\*.log",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.jdks\\**",
+    "category": "Logs",
+    "program": "Java",
+    "files_to_remove": [
+      "NOTICE",
+      "COPYRIGHT",
+      "LICENSE",
+      "release",
+      "README",
+      "ADDITIONAL_LICENSE_INFO",
+      "ASSEMBLY_EXCEPTION",
+      "Welcome.html",
+      "THIRDPARTYLICENSEREADME-JAVAFX.txt",
+      "THIRDPARTYLICENSEREADME.txt",
+      "README.txt",
+      "DISCLAIMER",
+      "CHANGELOG.txt",
+      "THIRD_PARTY_README",
+      "version.txt",
+      "README.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\.jdks\\**",
+    "category": "Logs",
+    "program": "Java",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "sample",
+      "demo"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\Java\\**",
+    "category": "Logs",
+    "program": "Java",
+    "files_to_remove": [
+      "NOTICE",
+      "COPYRIGHT",
+      "LICENSE",
+      "release",
+      "README",
+      "ADDITIONAL_LICENSE_INFO",
+      "ASSEMBLY_EXCEPTION",
+      "Welcome.html",
+      "THIRDPARTYLICENSEREADME-JAVAFX.txt",
+      "THIRDPARTYLICENSEREADME.txt",
+      "README.txt",
+      "DISCLAIMER",
+      "CHANGELOG.txt",
+      "THIRD_PARTY_README",
+      "version.txt",
+      "README.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\Eclipse Adoptium\\**",
+    "category": "Logs",
+    "program": "Java",
+    "files_to_remove": [
+      "NOTICE",
+      "COPYRIGHT",
+      "LICENSE",
+      "release",
+      "README",
+      "ADDITIONAL_LICENSE_INFO",
+      "ASSEMBLY_EXCEPTION",
+      "Welcome.html",
+      "THIRDPARTYLICENSEREADME-JAVAFX.txt",
+      "THIRDPARTYLICENSEREADME.txt",
+      "README.txt",
+      "DISCLAIMER",
+      "CHANGELOG.txt",
+      "THIRD_PARTY_README",
+      "version.txt",
+      "README.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.loliland\\java",
+    "category": "Logs",
+    "program": "Java",
+    "files_to_remove": [
+      "NOTICE",
+      "COPYRIGHT",
+      "LICENSE",
+      "release",
+      "README",
+      "ADDITIONAL_LICENSE_INFO",
+      "ASSEMBLY_EXCEPTION",
+      "Welcome.html",
+      "THIRDPARTYLICENSEREADME-JAVAFX.txt",
+      "THIRDPARTYLICENSEREADME.txt",
+      "README.txt",
+      "DISCLAIMER",
+      "CHANGELOG.txt",
+      "THIRD_PARTY_README",
+      "version.txt",
+      "README.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\Android\\jdk\\**\\**",
+    "category": "Logs",
+    "program": "Java",
+    "files_to_remove": [
+      "NOTICE",
+      "COPYRIGHT",
+      "LICENSE",
+      "release",
+      "README",
+      "ADDITIONAL_LICENSE_INFO",
+      "ASSEMBLY_EXCEPTION",
+      "Welcome.html",
+      "THIRDPARTYLICENSEREADME-JAVAFX.txt",
+      "THIRDPARTYLICENSEREADME.txt",
+      "README.txt",
+      "DISCLAIMER",
+      "CHANGELOG.txt",
+      "THIRD_PARTY_README",
+      "version.txt",
+      "README.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\Android\\jdk\\**\\**",
+    "category": "Logs",
+    "program": "Java",
+    "files_to_remove": [
+      "javafx-src.zip",
+      "src.zip"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\Zulu\\**",
+    "category": "Logs",
+    "program": "Java",
+    "files_to_remove": [
+      "NOTICE",
+      "COPYRIGHT",
+      "LICENSE",
+      "release",
+      "README",
+      "ADDITIONAL_LICENSE_INFO",
+      "ASSEMBLY_EXCEPTION",
+      "Welcome.html",
+      "THIRDPARTYLICENSEREADME-JAVAFX.txt",
+      "THIRDPARTYLICENSEREADME.txt",
+      "README.txt",
+      "DISCLAIMER",
+      "CHANGELOG.txt",
+      "THIRD_PARTY_README",
+      "version.txt",
+      "README.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\.lunarclient\\jre\\**\\**",
+    "category": "Logs",
+    "program": "Java",
+    "files_to_remove": [
+      "NOTICE",
+      "COPYRIGHT",
+      "LICENSE",
+      "release",
+      "README",
+      "ADDITIONAL_LICENSE_INFO",
+      "ASSEMBLY_EXCEPTION",
+      "Welcome.html",
+      "THIRDPARTYLICENSEREADME-JAVAFX.txt",
+      "THIRDPARTYLICENSEREADME.txt",
+      "README.txt",
+      "DISCLAIMER",
+      "CHANGELOG.txt",
+      "THIRD_PARTY_README",
+      "version.txt",
+      "README.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixclient\\runtimes\\**",
+    "category": "Logs",
+    "program": "Java",
+    "files_to_remove": [
+      "NOTICE",
+      "COPYRIGHT",
+      "LICENSE",
+      "release",
+      "README",
+      "ADDITIONAL_LICENSE_INFO",
+      "ASSEMBLY_EXCEPTION",
+      "Welcome.html",
+      "THIRDPARTYLICENSEREADME-JAVAFX.txt",
+      "THIRDPARTYLICENSEREADME.txt",
+      "README.txt",
+      "DISCLAIMER",
+      "CHANGELOG.txt",
+      "THIRD_PARTY_README",
+      "version.txt",
+      "README.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\**",
+    "category": "Logs",
+    "program": "Java",
+    "files_to_remove": [
+      "NOTICE",
+      "COPYRIGHT",
+      "LICENSE",
+      "release",
+      "README",
+      "ADDITIONAL_LICENSE_INFO",
+      "ASSEMBLY_EXCEPTION",
+      "Welcome.html",
+      "THIRDPARTYLICENSEREADME-JAVAFX.txt",
+      "THIRDPARTYLICENSEREADME.txt",
+      "README.txt",
+      "DISCLAIMER",
+      "CHANGELOG.txt",
+      "THIRD_PARTY_README",
+      "version.txt",
+      "README.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}\\Program Files (x86)\\GribLand\\runtime\\**",
+    "category": "Logs",
+    "program": "Java",
+    "files_to_remove": [
+      "NOTICE",
+      "COPYRIGHT",
+      "LICENSE",
+      "release",
+      "README",
+      "ADDITIONAL_LICENSE_INFO",
+      "ASSEMBLY_EXCEPTION",
+      "Welcome.html",
+      "THIRDPARTYLICENSEREADME-JAVAFX.txt",
+      "THIRDPARTYLICENSEREADME.txt",
+      "README.txt",
+      "DISCLAIMER",
+      "CHANGELOG.txt",
+      "THIRD_PARTY_README",
+      "version.txt",
+      "README.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Tenorshare\\4uKey for Android\\Logs\\*",
+    "category": "Logs",
+    "program": "4uKey for Android",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\TSMonitor\\4uKey for Android\\logs\\*",
+    "category": "Logs",
+    "program": "4uKey for Android",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PostmanAgent\\logs\\*.log",
+    "category": "Logs",
+    "program": "Postman",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Postman-Agent\\*.log",
+    "category": "Logs",
+    "program": "4uKey for Android",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Xamarin\\Logs\\**\\*.log",
+    "category": "Logs",
+    "program": "Xamarin",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Windscribe\\Windscribe2\\*.txt",
+    "category": "Logs",
+    "program": "Windscribe",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\GitHub Desktop\\*.log",
+    "category": "Logs",
+    "program": "GitHub Desktop",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\GitHub Desktop\\logs\\*.log",
+    "category": "Logs",
+    "program": "GitHub Desktop",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\GitHubDesktop\\**\\*.log",
+    "category": "Logs",
+    "program": "GitHub Desktop",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\Panda Security\\PSLogs\\*.log",
+    "category": "Logs",
+    "program": "Panda Security",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\Locktime\\NetLimiter\\**\\logs\\*.log",
+    "category": "Logs",
+    "program": "NetLimiter",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\MiniBin\\*.txt",
+    "category": "Logs",
+    "program": "MiniBin",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Mem Reduct",
+    "category": "Logs",
+    "program": "Mem Reduct",
+    "files_to_remove": [
+      "History.txt",
+      "License.txt",
+      "Readme.txt",
+      "memreduct.exe.sig"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\qBittorrent\\*.pdb",
+    "category": "Logs",
+    "program": "qBittorrent",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\qBittorrent\\logs\\*.log",
+    "category": "Logs",
+    "program": "qBittorrent",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\CCleaner\\LOG\\*",
+    "category": "Logs",
+    "program": "ССleaner",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\IObit\\IObit Malware Fighter\\*.log",
+    "category": "Logs",
+    "program": "IObit Malware Fighter",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\IObit\\IObit Malware Fighter\\Homepage Advisor\\*.log",
+    "category": "Logs",
+    "program": "IObit Malware Fighter",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\IObit\\Driver Booster\\Logs\\*",
+    "category": "Logs",
+    "program": "IObit Driver Booster",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\IObit\\Driver Booster\\*.log",
+    "category": "Logs",
+    "program": "IObit Driver Booster",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\IObit\\Driver Booster\\*.txt",
+    "category": "Logs",
+    "program": "IObit Driver Booster",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\ProcessLasso\\logs\\*",
+    "category": "Logs",
+    "program": "Process Lasso",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\obs-studio\\bin\\64bit\\*.log",
+    "category": "Logs",
+    "program": "OBS Studio",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\obs-studio\\logs\\*txt",
+    "category": "Logs",
+    "program": "OBS Studio",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Unity Hub\\*.html",
+    "category": "Logs",
+    "program": "Unity Hub",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\KeePass Password Safe 2\\*.txt",
+    "category": "Logs",
+    "program": "KeePass 2",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\1Password\\logs\\setup\\*.log",
+    "category": "Logs",
+    "program": "1Password",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\LGHUB",
+    "category": "Logs",
+    "program": "LGHUB",
+    "files_to_remove": [
+      "LICENSE",
+      "LICENSES.chromium.html"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\DeepL_SE\\logs\\*",
+    "category": "Logs",
+    "program": "LGHUB",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Lobe\\logs\\*",
+    "category": "Logs",
+    "program": "Microsoft Lobe",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\dotnet\\*.txt",
+    "category": "Logs",
+    "program": "DotNet",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\dotnet\\*.txt",
+    "category": "Logs",
+    "program": "DotNet",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.dotnet\\TelemetryStorageService\\*",
+    "category": "Logs",
+    "program": "DotNet",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.mcreator\\logs\\*.log",
+    "category": "Logs",
+    "program": "MCCreator",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\7-Zip\\*.txt",
+    "category": "Logs",
+    "program": "7-Zip",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.Tribler\\*.log",
+    "category": "Logs",
+    "program": "Tribler",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy\\addressbook",
+    "category": "Logs",
+    "program": "I2P",
+    "files_to_remove": [
+      "log.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy",
+    "category": "Logs",
+    "program": "I2P",
+    "files_to_remove": [
+      "eventlog.txt",
+      "wrapper.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy\\logs\\*",
+    "category": "Logs",
+    "program": "I2P",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy\\licenses\\*",
+    "category": "Logs",
+    "program": "I2P",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\BoxedAppPacker",
+    "category": "Logs",
+    "program": "BoxedAppPacker",
+    "files_to_remove": [
+      "CHANGELOG.txt",
+      "HomePage.url",
+      "purchase.url"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Enigma Virtual Box",
+    "category": "Logs",
+    "program": "Enigma Virtual Box",
+    "files_to_remove": [
+      "help.chm",
+      "History.txt",
+      "License.txt",
+      "site.url",
+      "forum.url",
+      "support.url"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files (x86)\\GnuPG",
+    "category": "Logs",
+    "program": "GnuPG",
+    "files_to_remove": [
+      "README.txt",
+      "VERSION"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Gpg4win",
+    "category": "Logs",
+    "program": "Gpg4win",
+    "files_to_remove": [
+      "VERSION"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Inno Setup 6",
+    "category": "Logs",
+    "program": "Inno Setup 6",
+    "files_to_remove": [
+      "whatsnew.htm",
+      "isfaq.url",
+      "license.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Inno Setup 6\\Examples\\*.txt",
+    "category": "Logs",
+    "program": "Inno Setup 6",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\VirtualBox VMs\\**\\Logs\\*.log",
+    "category": "Logs",
+    "program": "VirtualBox",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Oracle\\VirtualBox\\*.rtf",
+    "category": "Logs",
+    "program": "VirtualBox",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Oracle\\VirtualBox\\doc\\*",
+    "category": "Logs",
+    "program": "VirtualBox",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Recaf\\*.log",
+    "category": "Logs",
+    "program": "Recaf",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Process Hacker 2",
+    "category": "Logs",
+    "program": "Process Hacker 2",
+    "files_to_remove": [
+      "CHANGELOG.txt",
+      "COPYRIGHT.txt",
+      "LICENSE.txt",
+      "README.txt",
+      "ProcessHacker.sig"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}ProgramData\\DockerDesktop\\*.txt",
+    "category": "Logs",
+    "program": "Docker",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Docker\\log\\**\\*",
+    "category": "Logs",
+    "program": "Docker",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Docker\\*.txt",
+    "category": "Logs",
+    "program": "Docker",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\HiAlgo\\Plugins\\BOOST",
+    "category": "Logs",
+    "program": "HiAlgo Boost",
+    "files_to_remove": [
+      "hialgo_eula.txt",
+      "Update Boost.log",
+      "UpdateListing.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files (x86)\\SoundWire Server",
+    "category": "Logs",
+    "program": "SoundWire Server",
+    "files_to_remove": [
+      "license.txt",
+      "opus_license.txt",
+      "readerwriterqueue_license.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\SystemInformer",
+    "category": "Logs",
+    "program": "SystemInformer",
+    "files_to_remove": [
+      "LICENSE.txt",
+      "README.txt",
+      "COPYRIGHT.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\Sandboxie-Plus",
+    "category": "Logs",
+    "program": "Sandboxie+",
+    "files_to_remove": [
+      "Manifest0.txt",
+      "Manifest1.txt",
+      "Manifest2.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\JetBrains\\**\\license",
+    "category": "Logs",
+    "program": "JetBrains",
+    "files_to_remove": [
+      "javahelp_license.txt",
+      "javolution_license.txt",
+      "launcher-third-party-libraries.html",
+      "saxon-conditions.html",
+      "third-party-libraries.html",
+      "yourkit-license-redist.txt",
+      "remote-dev-server.html"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\JetBrains\\**",
+    "category": "Logs",
+    "program": "JetBrains",
+    "files_to_remove": [
+      "LICENSE.txt",
+      "NOTICE.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\JetBrains\\**\\log\\*",
+    "category": "Logs",
+    "program": "JetBrains",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\AAFTweak",
+    "category": "Logs",
+    "program": "AAF Optimus DCH Audio",
+    "files_to_remove": [
+      "RT.pdb"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\Image-Line\\**",
+    "category": "Logs",
+    "program": "FL Studio",
+    "files_to_remove": [
+      "WhatsNew.rtf"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\Image-Line\\Shared\\Start\\**",
+    "category": "Logs",
+    "program": "FL Studio",
+    "files_to_remove": [
+      "What's new.lnk"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files (x86)\\ASIO4ALL v2",
+    "category": "Logs",
+    "program": "ASIO4ALL v2",
+    "files_to_remove": [
+      "ASIO4ALL Web Site.url"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Rave\\logs\\*.log",
+    "category": "Logs",
+    "program": "Rave",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Magpie\\logs\\*.log",
+    "category": "Logs",
+    "program": "Magpie",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\LibreOffice",
+    "category": "Logs",
+    "program": "LibreOffice",
+    "files_to_remove": [
+      "CREDITS.fodt",
+      "LICENSE.html",
+      "license.txt",
+      "NOTICE"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\LibreOffice\\readmes\\*",
+    "category": "Logs",
+    "program": "LibreOffice",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Cheat Engine 7.5\\*.txt",
+    "category": "Logs",
+    "program": "Cheat Engine",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\EpicGamesLauncher\\Saved\\Logs\\*.log",
+    "category": "Logs",
+    "program": "Epic Games",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\EpicOnlineServicesUIHelper\\Saved\\Logs\\*.log",
+    "category": "Logs",
+    "program": "Epic Games",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\GameCenter\\*.log",
+    "category": "Logs",
+    "program": "VK GameCenter",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Adobe\\**\\Legal\\**\\*.html",
+    "category": "Logs",
+    "program": "Adobe",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Git",
+    "category": "Logs",
+    "program": "Git",
+    "files_to_remove": [
+      "LICENSE.txt",
+      "ReleaseNotes.html"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\dotnet\\*.txt",
+    "category": "Logs",
+    "program": "DotNet",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\WinRAR",
+    "category": "Logs",
+    "program": "WinRaR",
+    "files_to_remove": [
+      "License.txt",
+      "Order.htm",
+      "Rar.txt",
+      "ReadMe.rus.txt",
+      "ReadMe.txt",
+      "WhatsNew.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Windows Kits\\**\\Licenses\\**\\*.rtf",
+    "category": "Logs",
+    "program": "Windows SDK",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\**",
+    "category": "Logs",
+    "program": "Electron App's",
+    "files_to_remove": [
+      "LICENSES.chromium.html",
+      "LICENSE.electron.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ow-electron\\**\\logs\\*",
+    "category": "Logs",
+    "program": "Electron App's",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\PowerToys",
+    "category": "Logs",
+    "program": "PowerToys",
+    "files_to_remove": [
+      "License.rtf",
+      "Notice.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\LM Studio\\logs\\*",
+    "category": "Logs",
+    "program": "LM Studio",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ImgBurn\\Log Files\\*",
+    "category": "Logs",
+    "program": "ImgBurn",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\ImgBurn",
+    "category": "Logs",
+    "program": "ImgBurn",
+    "files_to_remove": [
+      "ReadMe.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\Magic TXD\\licenses\\*",
+    "category": "Logs",
+    "program": "Magic TDX",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\VulkanRT\\**",
+    "category": "Logs",
+    "program": "VulcanRT",
+    "files_to_remove": [
+      "LICENSE.txt",
+      "VULKANRT_LICENSE.rtf"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\Git",
+    "category": "Logs",
+    "program": "Git",
+    "files_to_remove": [
+      "LICENSE.txt",
+      "ReleaseNotes.html"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\Sublime Text\\*.txt",
+    "category": "Logs",
+    "program": "Sublime Text",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Code\\logs",
+    "category": "Logs",
+    "program": "VS Code",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\BraveSoftware\\Brave-Browser\\Application\\*.log",
+    "category": "Logs",
+    "program": "Brave Browser",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Google\\GoogleUpdater\\*.log",
+    "category": "Logs",
+    "program": "Google Chrome",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Mozilla Firefox",
+    "category": "Logs",
+    "program": "Mozilla Firefox",
+    "files_to_remove": [
+      "install.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\HandBrake\\logs\\*.txt",
+    "category": "Logs",
+    "program": "HandBrake",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\HandBrake\\doc\\*",
+    "category": "Logs",
+    "program": "HandBrake",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\Topaz Labs LLC\\Topaz Video AI\\*.txt",
+    "category": "Logs",
+    "program": "Topaz Video AI",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\AVCLabs\\AVCLabs Video Enhancer AI\\*.txt",
+    "category": "Logs",
+    "program": "AVCLabs Video Enhancer AI",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\AVCLabs\\AVCLabs Video Enhancer AI\\*.html",
+    "category": "Logs",
+    "program": "AVCLabs Video Enhancer AI",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\AVCLabs Video Enhancer AI\\logs\\*.log",
+    "category": "Logs",
+    "program": "AVCLabs Video Enhancer AI",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\iTop Screen Recorder\\Logs\\*.log",
+    "category": "Logs",
+    "program": "iTop Screen Recorder",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\VideoLAN\\VLC",
+    "category": "Logs",
+    "program": "ASIO4ALL v2",
+    "files_to_remove": [
+      "AUTHORS.txt",
+      "COPYING.txt",
+      "NEWS.txt",
+      "README.txt",
+      "THANKS.txt",
+      "VideoLAN Website.url",
+      "Documentation.url",
+      "New_Skins.url"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\exodus\\*.log",
+    "category": "Logs",
+    "program": "Exodus Crypto Wallet",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\exodus\\**",
+    "category": "Logs",
+    "program": "Exodus Crypto Wallet",
+    "files_to_remove": [
+      "SquirrelSetup.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\exodus",
+    "category": "Logs",
+    "program": "Exodus Crypto Wallet",
+    "files_to_remove": [
+      "SquirrelSetup.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\WalletWasabi\\Client\\*.txt",
+    "category": "Logs",
+    "program": "Wasabi Wallet",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\bitmonero\\*.log",
+    "category": "Logs",
+    "program": "Bit Monero",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\FACEIT AC\\logs\\*.log",
+    "category": "Logs",
+    "program": "FACEIT AC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\EasyAntiCheat\\*.log",
+    "category": "Logs",
+    "program": "EasyAntiCheat",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\vmlogs\\*",
+    "category": "Logs",
+    "program": "Nox",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.BigNox\\*",
+    "category": "Logs",
+    "program": "Nox",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.MemuHyperv\\*log*",
+    "category": "Logs",
+    "program": "Memu",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\com.gametop.launcher\\logs\\*",
+    "category": "Logs",
+    "program": "Gameloop",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\BlueStacks_nxt\\Dumps\\*",
+    "category": "Logs",
+    "program": "BlueStacks 5",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\BlueStacks_nxt",
+    "category": "Logs",
+    "program": "BlueStacks 5",
+    "files_to_remove": [
+      "LICENSE.txt",
+      "NOTICE.html",
+      "ffmpeg_command_template.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}ProgramData\\BlueStacks_nxt\\Logs\\*.log",
+    "category": "Logs",
+    "program": "BlueStacks 5",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\MelissiaGamesLauncher\\GameFolder\\_logs\\*.log",
+    "category": "Logs",
+    "program": "Melissia Games Launcher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Melissia Games\\Melissia Games Launcher\\**",
+    "category": "Logs",
+    "program": "Melissia Games Launcher",
+    "files_to_remove": [
+      "THIRD_PARTY_NOTICES.md",
+      "LICENSE.rtf",
+      "InnoSetupHelper.pdb",
+      "Hi3Helper.Sophon.pdb",
+      "Hi3Helper.Http.pdb",
+      "Hi3Helper.Core.pdb",
+      "DiscordRPC.pdb",
+      "ColorThief.pdb"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\IGG\\Lords Mobile PC\\*.log",
+    "category": "Logs",
+    "program": "Lords Mobile",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\IGG\\Lords Mobile\\*.log",
+    "category": "Logs",
+    "program": "Lords Mobile",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Roblox\\logs",
+    "category": "Logs",
+    "program": "Roblox",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher",
+    "category": "Logs",
+    "program": "Arizona Games Launcher",
+    "files_to_remove": [
+      "logs.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\moonloader",
+    "category": "Logs",
+    "program": "Arizona Games Launcher",
+    "files_to_remove": [
+      "moonloader.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\SAMPFUNCS",
+    "category": "Logs",
+    "program": "Arizona Games Launcher",
+    "files_to_remove": [
+      "SAMPFUNCS.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**",
+    "category": "Logs",
+    "program": "Arizona Games Launcher",
+    "files_to_remove": [
+      "!GAMELOG.txt",
+      "fastman92limitAdjuster.log",
+      "libped.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft/logs/*",
+    "category": "Logs",
+    "program": "Minecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/logs/*",
+    "category": "Logs",
+    "program": "Badlion Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher/logs/*",
+    "category": "Logs",
+    "program": "Tecknix Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp/logs/*",
+    "category": "Logs",
+    "program": "Modrinth",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft/logs/*",
+    "category": "Logs",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft/logs/*",
+    "category": "Logs",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft/logs/*",
+    "category": "Logs",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft/logs/*",
+    "category": "Logs",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft/logs/*",
+    "category": "Logs",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**/logs/*",
+    "category": "Logs",
+    "program": "ATLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}.loliland\\updates\\clients\\**/logs/*",
+    "category": "Logs",
+    "program": "LoliLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.cristalix\\updates\\**/logs/*",
+    "category": "Logs",
+    "program": "Cristalix",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\**/logs/*",
+    "category": "Logs",
+    "program": "MCSkill",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\**/logs/*",
+    "category": "Logs",
+    "program": "GribLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\**/logs/*",
+    "category": "Logs",
+    "program": "CurseForge",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/licenses/*",
+    "category": "Logs",
+    "program": "Badlion Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/logs/*",
+    "category": "Logs",
+    "program": "Badlion Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/*log*",
+    "category": "Logs",
+    "program": "Badlion Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher/licenses/*",
+    "category": "Logs",
+    "program": "Tecknix Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher/logs/*",
+    "category": "Logs",
+    "program": "Tecknix Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher/*log*",
+    "category": "Logs",
+    "program": "Tecknix Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp/licenses/*",
+    "category": "Logs",
+    "program": "Modrinth",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp/logs/*",
+    "category": "Logs",
+    "program": "Modrinth",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp/*log*",
+    "category": "Logs",
+    "program": "Modrinth",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.lunarclient/licenses/*",
+    "category": "Logs",
+    "program": "Lunar Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.lunarclient/logs/*",
+    "category": "Logs",
+    "program": "Lunar Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.lunarclient/*log*",
+    "category": "Logs",
+    "program": "Lunar Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC/licenses/*",
+    "category": "Logs",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC/logs/*",
+    "category": "Logs",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC/*log*",
+    "category": "Logs",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher/licenses/*",
+    "category": "Logs",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher/logs/*",
+    "category": "Logs",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher/*log*",
+    "category": "Logs",
+    "program": "PrismLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC/licenses/*",
+    "category": "Logs",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC/logs/*",
+    "category": "Logs",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC/*log*",
+    "category": "Logs",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher/licenses/*",
+    "category": "Logs",
+    "program": "ATLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher/logs/*",
+    "category": "Logs",
+    "program": "ATLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher/*log*",
+    "category": "Logs",
+    "program": "ATLauncher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\bin/licenses/*",
+    "category": "Logs",
+    "program": "GribLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\bin/logs/*",
+    "category": "Logs",
+    "program": "GribLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\bin/*log*",
+    "category": "Logs",
+    "program": "GribLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland/licenses/*",
+    "category": "Logs",
+    "program": "GribLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland/logs/*",
+    "category": "Logs",
+    "program": "GribLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland/*log*",
+    "category": "Logs",
+    "program": "GribLand",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install/licenses/*",
+    "category": "Logs",
+    "program": "CurseForge",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install/logs/*",
+    "category": "Logs",
+    "program": "CurseForge",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install/*log*",
+    "category": "Logs",
+    "program": "CurseForge",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Discord\\*.log",
+    "category": "Logs",
+    "program": "Discord",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Discord\\*.log",
+    "category": "Logs",
+    "program": "Discord",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\discord\\logs\\*",
+    "category": "Logs",
+    "program": "Discord",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Guilded\\*.log",
+    "category": "Logs",
+    "program": "Guilded",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\element-desktop\\*.log",
+    "category": "Logs",
+    "program": "Element",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Telegram Desktop\\*.txt",
+    "category": "Logs",
+    "program": "Telegram",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Telegram Desktop\\*.log",
+    "category": "Logs",
+    "program": "Telegram",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Signal\\logs\\*",
+    "category": "Logs",
+    "program": "Signal",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\AmneziaVPN",
+    "category": "Logs",
+    "program": "Amnezia VPN",
+    "files_to_remove": [
+      "InstallationLog.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\AmneziaVPN\\tap",
+    "category": "Logs",
+    "program": "Amnezia VPN",
+    "files_to_remove": [
+      "license.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Radmin VPN\\CHATLOGS\\*",
+    "category": "Logs",
+    "program": "Radmin VPN",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\Famatech\\Radmin VPN\\*.txt",
+    "category": "Logs",
+    "program": "Radmin VPN",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\Famatech\\Radmin VPN\\*.log",
+    "category": "Logs",
+    "program": "Radmin VPN",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Radmin VPN",
+    "category": "Logs",
+    "program": "Radmin VPN",
+    "files_to_remove": [
+      "eula.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\UrbanVPN\\log\\*",
+    "category": "Logs",
+    "program": "UrbanVPN",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Cloudflare\\*.log",
+    "category": "Logs",
+    "program": "CloudFlare",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\ImageGlass",
+    "category": "Logs",
+    "program": "ImageGlass",
+    "files_to_remove": [
+      "ReadMe.rtf",
+      "CliWrap.xml",
+      "DotNetZip.pdb",
+      "DotNetZip.xml",
+      "ImageGlass.ImageBox.xml",
+      "ImageGlass.ImageListView.xml",
+      "LICENSE",
+      "Magick.NET.Core.xml",
+      "Magick.NET.SystemDrawing.xml",
+      "Magick.NET-Q16-HDRI-OpenMP-x64.xml",
+      "Microsoft.Bcl.AsyncInterfaces.xml",
+      "System.Buffers.xml",
+      "System.Memory.xml",
+      "System.Numerics.Vectors.xml",
+      "System.Runtime.CompilerServices.Unsafe.xml",
+      "System.Text.Encodings.Web.xml",
+      "System.Text.Json.xml",
+      "System.Threading.Tasks.Extensions.xml",
+      "System.ValueTuple.xml",
+      "",
+      "ImageGlass.WebP.pdb",
+      "Visit ImageGlass website.url",
+      "default.jpg"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\ImageGlass\\License\\*",
+    "category": "Logs",
+    "program": "ImageGlass",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Inkscape",
+    "category": "Logs",
+    "program": "InkSpace",
+    "files_to_remove": [
+      "NEWS.md",
+      "README.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\inkscape\\*.log",
+    "category": "Logs",
+    "program": "InkSpace",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\ShareX\\Logs\\*",
+    "category": "Logs",
+    "program": "ShareX",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  }
+]
