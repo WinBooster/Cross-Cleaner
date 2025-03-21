@@ -6,7 +6,6 @@ use serde_json;
 use std::error::Error;
 use std::fs;
 use std::fs::File;
-use std::io::Write;
 
 lazy_static! {
     static ref DATABASE: Vec<CleanerData> = {

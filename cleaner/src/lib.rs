@@ -1,13 +1,13 @@
 use database::structures::{CleanerData, CleanerResult};
 use glob::glob;
-use std::fs;
+use std::{fs, io};
 use std::path::Path;
 
 /// Recursively deletes the directory and updates the counters in `cleaner_result`.
 fn remove_directory_recursive(
     path: &Path,
     cleaner_result: &mut CleanerResult,
-) -> std::io::Result<()> {
+) -> io::Result<()> {
     if path.is_dir() {
         for entry in fs::read_dir(path)? {
             let entry = entry?;
@@ -18,20 +18,27 @@ fn remove_directory_recursive(
                 remove_file(&entry_path, cleaner_result)?;
             }
         }
-        if fs::remove_dir(path).is_ok() {
-            cleaner_result.folders += 1;
-        }
+
+        fs::remove_dir(path)?;
+        cleaner_result.folders += 1;
+    } else {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "The provided path is not a directory",
+        ));
     }
+
     Ok(())
 }
-
 /// Deletes the file and updates the counters in `cleaner_result`.
-fn remove_file(path: &Path, cleaner_result: &mut CleanerResult) -> std::io::Result<()> {
-    let metadata = fs::metadata(path)?;
-    if fs::remove_file(path).is_ok() {
-        cleaner_result.bytes += metadata.len();
-        cleaner_result.files += 1;
-    }
+fn remove_file(path: &Path, cleaner_result: &mut CleanerResult) -> io::Result<()> {
+    let metadata = fs::metadata(path)?; // Получаем метаданные файла
+    fs::remove_file(path)?; // Пытаемся удалить файл
+
+    // Если удаление прошло успешно, обновляем cleaner_result
+    cleaner_result.bytes += metadata.len();
+    cleaner_result.files += 1;
+
     Ok(())
 }
 

@@ -154,14 +154,9 @@ async fn work(
 
     if args.show_result_table {
         println!("Cleared result:");
-        let cleared_programs = cleared_programs.lock().await;
+        let cleared_programs = cleared_programs.lock().await.iter();
 
-        let filtered_programs: Vec<&Cleared> = cleared_programs
-            .iter()
-            .filter(|cleared| cleared.removed_files > 0 || cleared.removed_directories > 0)
-            .collect();
-
-        let table = Table::new(filtered_programs).to_string();
+        let table = Table::new(cleared_programs).to_string();
         println!("{}", table);
     }
     if args.show_result_string {

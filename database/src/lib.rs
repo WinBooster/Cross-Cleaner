@@ -9,3 +9,8 @@ pub mod utils;
 pub fn get_pcbooster_version() -> String {
     String::from("1.9.5")
 }
+
+pub fn get_icon() -> &[u8; {}] {
+    let bytes = include_bytes!("../../assets/icon.png");
+    bytes
+}
