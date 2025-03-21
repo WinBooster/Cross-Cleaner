@@ -154,9 +154,8 @@ async fn work(
 
     if args.show_result_table {
         println!("Cleared result:");
-        let cleared_programs = cleared_programs.lock().await.iter();
-
-        let table = Table::new(cleared_programs).to_string();
+        let cleared_programs = cleared_programs.lock().await;
+        let table = Table::new(cleared_programs.iter()).to_string();
         println!("{}", table);
     }
     if args.show_result_string {
