@@ -10,7 +10,7 @@ use std::cell::RefCell;
 use std::collections::HashSet;
 use std::rc::Rc;
 use std::sync::Arc;
-use egui::ViewportCommand::Icon;
+use egui::IconData;
 use image::ImageReader;
 use tokio::sync::mpsc;
 use tokio::task;
@@ -19,25 +19,44 @@ use tokio::task;
 async fn main() -> eframe::Result {
     env_logger::init();
 
+    // Загружаем иконку из массива байтов
     let icon_bytes = get_icon();
+    let icon = load_icon_from_bytes(icon_bytes).expect("Failed to load icon");
 
-    let mut options = eframe::NativeOptions {
-        run_and_return: true,
-        #[cfg(windows)]
-        viewport: egui::ViewportBuilder::default().with_inner_size([430.0, 150.0]),
-        #[cfg(unix)]
-        viewport: egui::ViewportBuilder::default().with_icon(icon_bytes).with_inner_size([430.0, 125.0]),
+    let options = eframe::NativeOptions {
+        viewport: egui::ViewportBuilder::default()
+            .with_inner_size([430.0, 150.0])
+            .with_icon(icon), // Устанавливаем иконку
         ..Default::default()
     };
 
     eframe::run_native(
         &*("Cross Cleaner GUI v".to_owned() + &*get_pcbooster_version()),
-        options.clone(),
+        options,
         Box::new(|_cc| {
             _cc.egui_ctx.set_visuals(egui::Visuals::dark());
             Ok(Box::new(MyApp::new()))
         }),
     )
+}
+
+/// Функция для загрузки иконки из массива байтов
+fn load_icon_from_bytes(bytes: &[u8]) -> Result<Arc<IconData>, image::ImageError> {
+    // Загружаем изображение из массива байтов
+    let img = ImageReader::new(std::io::Cursor::new(bytes))
+        .with_guessed_format()?
+        .decode()?;
+
+    // Преобразуем изображение в формат RGBA
+    let rgba = img.to_rgba8();
+    let (width, height) = rgba.dimensions();
+
+    // Создаем IconData
+    Ok(Arc::new(IconData {
+        rgba: rgba.into_raw(),
+        width,
+        height,
+    }))
 }
 
 async fn work(
