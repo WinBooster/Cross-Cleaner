@@ -4029,7 +4029,7 @@ lazy_static! {
             database.push(users_appdata_roaming_mclaunch_launcher_crashreports);
             //</editor-fold>
 
-            let mut mc_database = get_minecraft_database(&drive, username);
+            let mut mc_database = get_minecraft_database("{drive}", username);
             database.append(&mut mc_database);
             //</editor-fold>
 
