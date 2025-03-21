@@ -6,7 +6,6 @@ use std::io::Write;
 use crate::minecraft_launchers_database::{
     get_minecraft_launchers_folders, get_minecraft_launchers_instances_folders,
 };
-#[cfg(windows)]
 use crate::registry_utils::get_steam_directory_from_registry;
 use disk_name::get_letters;
 use lazy_static::lazy_static;
@@ -203,7 +202,11 @@ lazy_static! {
         };
 
         // Получаем путь к Steam
-        let steam_directory = get_steam_directory_from_registry();
+        let steam_directory = if cfg!(windows) {
+            get_steam_directory_from_registry()
+        } else {
+            String::new() // На Linux не используются
+        };
 
         // Создаем новую базу данных с заменой плейсхолдеров
         let mut expanded_database = Vec::new();
