@@ -2505,7 +2505,7 @@ lazy_static! {
             //<editor-fold desc="System Informer">
             let c_program_files_systeminformer = CleanerData {
                 path: drive.to_owned() + "Program Files\\SystemInformer",
-                program: "SoundWire Server".parse().unwrap(),
+                program: "SystemInformer".parse().unwrap(),
                 files_to_remove: vec![
                     "LICENSE.txt".parse().unwrap(),
                     "README.txt".parse().unwrap(),
@@ -2523,7 +2523,7 @@ lazy_static! {
             //<editor-fold desc="Sandboxie Plus">
             let c_program_files_sandboxie_plus = CleanerData {
                 path: drive.to_owned() + "Program Files\\Sandboxie-Plus",
-                program: "SoundWire Server".parse().unwrap(),
+                program: "Sandboxie+".parse().unwrap(),
                 files_to_remove: vec![
                     "Manifest0.txt".parse().unwrap(),
                     "Manifest1.txt".parse().unwrap(),
