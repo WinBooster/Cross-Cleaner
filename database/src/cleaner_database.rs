@@ -1,5 +1,6 @@
 use crate::CleanerData;
 use serde_json;
+use std::fs;
 use crate::minecraft_launchers_database::{
     get_minecraft_launchers_folders, get_minecraft_launchers_instances_folders,
 };
@@ -4760,7 +4761,7 @@ pub fn get_database() -> &'static Vec<CleanerData> {
 }
 
 pub fn save_database_json() -> String {
-    let text = serde_json::to_string(&*DATABASE).unwrap()
+    let text = serde_json::to_string(&*DATABASE).unwrap();
     let file_path = "database.json";  // файл для записи
     let mut output_file = File::create(file_path)?; // создаем файл
     output_file.write_all(text.as_bytes())?;     // записываем в файл текст
