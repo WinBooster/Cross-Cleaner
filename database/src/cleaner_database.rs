@@ -1,6 +1,7 @@
 use crate::CleanerData;
 use serde_json;
 use std::fs;
+use std::fs::File;
 use crate::minecraft_launchers_database::{
     get_minecraft_launchers_folders, get_minecraft_launchers_instances_folders,
 };
