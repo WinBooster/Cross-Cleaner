@@ -16,7 +16,7 @@ lazy_static! {
 
         // Deserialization JSON to Vec<CleanerData>
         let database: Vec<CleanerData> = serde_json::from_str(&data)
-            .expect(&format!("Failed to parse database"));
+            .expect(&"Failed to parse database".to_string());
 
         // Get the username
         let username = whoami::username();
@@ -65,12 +65,4 @@ lazy_static! {
 
 pub fn get_database() -> &'static Vec<CleanerData> {
     &DATABASE
-}
-
-pub fn save_database_json() -> Result<String, std::io::Error> {
-    let text = serde_json::to_string(&*DATABASE).unwrap();
-    let file_path = "database.json";  // файл для записи
-    let mut output_file = File::create(file_path)?; // создаем файл
-    output_file.write_all(text.as_bytes())?;     // записываем в файл текст
-    Ok(text)
 }
