@@ -3596,7 +3596,7 @@
     "remove_files": false
   },
   {
-    "path": "{drive}Program Files\\Git",
+    "path": "{drive}Program Files\\Git/",
     "category": "Logs",
     "program": "Git",
     "files_to_remove": [
