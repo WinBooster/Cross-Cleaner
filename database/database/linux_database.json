@@ -1642,7 +1642,7 @@
     "remove_files": false
   },
   {
-    "path": "/home/roman/.gradle/",
+    "path": "/home/{username}/.gradle/",
     "category": "Cache",
     "program": "Gradle",
     "files_to_remove": [],
@@ -1655,7 +1655,7 @@
     "remove_files": false
   },
   {
-    "path": "/home/roman/.rustup/toolchains/**/share/",
+    "path": "/home/{username}/.rustup/toolchains/**/share/",
     "category": "Documentation",
     "program": "Rust language",
     "files_to_remove": [],
@@ -1668,13 +1668,37 @@
     "remove_files": false
   },
   {
-    "path": "/home/roman/.cache/ModrinthApp/",
+    "path": "/home/{username}/.cache/ModrinthApp/",
     "category": "Cache",
     "program": "Modrith",
     "files_to_remove": [],
     "directories_to_remove": [
       "CacheStorage",
       "WebKitCache"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.vscode-oss/extensions/**/",
+    "category": "Documentation",
+    "program": "VS Code",
+    "files_to_remove": [
+      "CHANGELOG.md",
+      "changelog.md",
+      "LICENSE.txt",
+      "README.md",
+      "readme.md",
+      "SECURITY.md",
+      "SUPPORT.md",
+      "contributing.md",
+      "LICENSE-APACHE",
+      "LICENSE-MIT"
+    ],
+    "directories_to_remove": [
+      ".github"
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
