@@ -487,7 +487,35 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/game-cache/*",
+    "path": "{drive}Users\\{username}\\cubixworld\\updates\\**\\",
+    "category": "Game saves",
+    "program": "CubixWorld",
+    "files_to_remove": [],
+    "directories_to_remove": [
+		"saves"
+	],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\cubixworld\\updates\\**\\",
+    "category": "Logs",
+    "program": "CubixWorld",
+    "files_to_remove": [
+		"minetweaker.log"
+	],
+    "directories_to_remove": [
+		"logs"
+	],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\game-cache\\*",
     "category": "Cache",
     "program": "Badlion Client",
     "files_to_remove": [],
@@ -498,7 +526,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/cache/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\cache\\*",
     "category": "Cache",
     "program": "Badlion Client",
     "files_to_remove": [],
@@ -509,7 +537,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher/game-cache/*",
+    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher\\game-cache\\*",
     "category": "Cache",
     "program": "Tecknix Client",
     "files_to_remove": [],
@@ -520,7 +548,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher/cache/*",
+    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher\\cache\\*",
     "category": "Cache",
     "program": "Tecknix Client",
     "files_to_remove": [],
@@ -531,7 +559,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp/game-cache/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp\\game-cache\\*",
     "category": "Cache",
     "program": "Modrinth",
     "files_to_remove": [],
@@ -542,7 +570,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp/cache/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp\\cache\\*",
     "category": "Cache",
     "program": "Modrinth",
     "files_to_remove": [],
@@ -553,7 +581,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.lunarclient/game-cache/*",
+    "path": "{drive}Users\\{username}\\.lunarclient\\game-cache\\*",
     "category": "Cache",
     "program": "Lunar Client",
     "files_to_remove": [],
@@ -3415,7 +3443,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Program Files\\Git",
+    "path": "{drive}Program Files\\Git/",
     "category": "Logs",
     "program": "Git",
     "files_to_remove": [
@@ -3440,7 +3468,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Program Files\\WinRAR",
+    "path": "{drive}Program Files\\WinRAR/",
     "category": "Logs",
     "program": "WinRaR",
     "files_to_remove": [
@@ -3494,7 +3522,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Program Files\\PowerToys",
+    "path": "{drive}Program Files\\PowerToys/",
     "category": "Logs",
     "program": "PowerToys",
     "files_to_remove": [
