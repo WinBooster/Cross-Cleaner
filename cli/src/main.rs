@@ -1,7 +1,7 @@
 use clap::{ArgAction, Parser};
 use cleaner::clear_data;
 use crossterm::execute;
-use database::get_pcbooster_version;
+use database::{ get_pcbooster_version, get_icon };
 use database::structures::{CleanerData, CleanerResult, Cleared};
 use database::utils::get_file_size_string;
 use indicatif::{ProgressBar, ProgressStyle};
@@ -15,6 +15,8 @@ use std::sync::Arc;
 use tabled::Table;
 use tokio::sync::Mutex;
 use tokio::task;
+use tempfile::NamedTempFile;
+use std::io::Write;
 
 #[cfg(windows)]
 use std::io::stdin;
@@ -31,7 +33,6 @@ async fn work(
     let removed_directories = Arc::new(Mutex::new(0));
     let cleared_programs = Arc::new(Mutex::new(Vec::<Cleared>::new()));
 
-    // Создаем прогресс-бар только если он включен
     let pb = if args.show_progress_bar {
         let sty = ProgressStyle::with_template(
             "[{elapsed_precise}] {prefix:.bold.dim} {spinner:.green}\n[{elapsed_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} [{msg}]",
@@ -48,17 +49,18 @@ async fn work(
         None
     };
 
+    #[cfg(windows)]
     let has_last_activity = categories.contains(&"LastActivity".to_string());
 
     let mut tasks = Vec::new();
 
+    #[cfg(windows)]
     if has_last_activity {
         let progress_bar = pb.clone();
         let task = task::spawn(async move {
             if let Some(ref pb) = progress_bar {
                 pb.set_message("LastActivity");
             }
-            #[cfg(windows)]
             database::registry_database::clear_last_activity();
             if let Some(ref pb) = progress_bar {
                 pb.inc(1);
@@ -67,7 +69,7 @@ async fn work(
                 files: 0,
                 folders: 0,
                 bytes: 0,
-                working: false,
+                working: true,
                 path: String::new(),
                 program: String::new(),
                 category: String::new(),
@@ -159,9 +161,12 @@ async fn work(
         println!("{}", table);
     }
     if args.show_result_string {
-        let bytes_cleared = bytes_cleared.lock().await;
-        let removed_files = removed_files.lock().await;
-        let removed_directories = removed_directories.lock().await;
+        let (bytes_cleared, removed_files, removed_directories) = (
+            *bytes_cleared.lock().await,
+            *removed_files.lock().await,
+            *removed_directories.lock().await,
+        );
+    
         println!(
             "Removed size: {}, files: {}, dirs: {}, programs: {}",
             get_file_size_string(*bytes_cleared),
@@ -172,15 +177,30 @@ async fn work(
     }
 
     if args.show_notification {
-        if let Err(e) = Notification::new()
-            .summary("Cross Cleaner CLI")
-            .body(&format!(
-                "Removed: {}\nFiles: {}",
-                get_file_size_string(*bytes_cleared.lock().await),
-                *removed_files.lock().await
-            ))
-            .show()
-        {
+        let bytes_cleared = *bytes_cleared.lock().await;
+        let removed_files = *removed_files.lock().await;
+        let removed_directories = *removed_directories.lock().await;
+    
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all(get_icon()).unwrap();
+        let icon_path = temp_file.path().to_str().unwrap();
+        
+        let notification_body = format!(
+            "Removed: {}\nFiles: {}\nDirs: {}",
+            get_file_size_string(bytes_cleared), // Передаем u64
+            removed_files, // Передаем u64
+            removed_directories // Передаем u64
+        );
+    
+
+        let notification_result = Notification::new()
+        .summary("Cross Cleaner CLI")
+        .body(&notification_body)
+        .icon(icon_path)
+        .show();
+
+        temp_file.close().unwrap();
+        if let Err(e) = notification_result {
             eprintln!("Failed to show notification: {:?}", e);
         }
     }

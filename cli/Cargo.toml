@@ -12,6 +12,8 @@ indicatif = "0.17.7"
 notify-rust = "4"
 tabled = "0.17.0"
 clap = { version = "4.0", features = ["derive"] }
+tempfile = "3.3"
+
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }
 

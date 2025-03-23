@@ -14,19 +14,18 @@ use egui::IconData;
 use image::ImageReader;
 use tokio::sync::mpsc;
 use tokio::task;
+use tempfile::NamedTempFile;
+use std::io::Write;
 
 #[tokio::main]
 async fn main() -> eframe::Result {
-    env_logger::init();
-
-    // Загружаем иконку из массива байтов
     let icon_bytes = get_icon();
     let icon = load_icon_from_bytes(icon_bytes).expect("Failed to load icon");
 
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([430.0, 150.0])
-            .with_icon(icon), // Устанавливаем иконку
+            .with_icon(icon),
         ..Default::default()
     };
 
@@ -40,18 +39,14 @@ async fn main() -> eframe::Result {
     )
 }
 
-/// Функция для загрузки иконки из массива байтов
 fn load_icon_from_bytes(bytes: &[u8]) -> Result<Arc<IconData>, image::ImageError> {
-    // Загружаем изображение из массива байтов
     let img = ImageReader::new(std::io::Cursor::new(bytes))
         .with_guessed_format()?
         .decode()?;
 
-    // Преобразуем изображение в формат RGBA
     let rgba = img.to_rgba8();
     let (width, height) = rgba.dimensions();
 
-    // Создаем IconData
     Ok(Arc::new(IconData {
         rgba: rgba.into_raw(),
         width,
@@ -69,21 +64,22 @@ async fn work(
     let mut removed_directories = 0;
     let mut cleared_programs: HashSet<String> = HashSet::new();
 
+    #[cfg(windows)]
     let has_last_activity = categories.contains(&"LastActivity".to_string());
 
     let mut tasks = Vec::new();
 
+    #[cfg(windows)]
     if has_last_activity {
         let progress_sender = progress_sender.clone();
         let task = task::spawn(async move {
             let _ = progress_sender.send("LastActivity".to_string()).await;
-            #[cfg(windows)]
             registry_database::clear_last_activity();
             CleanerResult {
                 files: 0,
                 folders: 0,
                 bytes: 0,
-                working: false,
+                working: true,
                 path: String::new(),
                 program: String::new(),
                 category: String::new(),
@@ -125,15 +121,27 @@ async fn work(
         }
     }
 
-    let _ = Notification::new()
-        .summary("Cross Cleaner GUI")
-        .body(
-            &*("Removed: ".to_owned()
-                + &*get_file_size_string(bytes_cleared)
-                + "\nFiles: "
-                + &*removed_files.to_string()),
-        )
-        .show();
+    let mut temp_file = NamedTempFile::new().unwrap();
+    temp_file.write_all(get_icon()).unwrap();
+    let icon_path = temp_file.path().to_str().unwrap();
+        
+    let notification_result = Notification::new()
+    .summary("Cross Cleaner GUI")
+    .body(
+        &*("Removed: ".to_owned()
+            + &*get_file_size_string(bytes_cleared)
+            + "\nFiles: "
+            + &*removed_files.to_string()
+            + "\nDirs: "
+            + &*removed_directories.to_string()),
+    )
+    .icon(icon_path)
+    .show();
+
+    temp_file.close().unwrap();
+    if let Err(e) = notification_result {
+        eprintln!("Failed to show notification: {:?}", e);
+    }
 }
 
 struct MyApp {

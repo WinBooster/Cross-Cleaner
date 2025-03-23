@@ -68,10 +68,10 @@ pub fn get_default_database() -> &'static Vec<CleanerData> {
 }
 
 pub fn get_database_from_file(file_path: &str) -> Result<Vec<CleanerData>, Box<dyn Error>> {
-    // Чтение файла
+    // Read file
     let data = fs::read_to_string(file_path)?;
 
-    // Десериализация JSON в Vec<CleanerData>
+    // Deserialization JSON to Vec<CleanerData>
     let database: Vec<CleanerData> = serde_json::from_str(&data)?;
 
     Ok(database)
