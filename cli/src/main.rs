@@ -183,7 +183,6 @@ async fn work(
             *removed_directories.lock().await,
         );
     
-    
         let mut temp_file = NamedTempFile::new().unwrap();
         temp_file.write_all(get_icon()).unwrap();
         let icon_path = temp_file.path().to_str().unwrap();
