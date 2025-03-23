@@ -3596,20 +3596,6 @@
     "remove_files": false
   },
   {
-    "path": "{drive}Program Files\\Git/",
-    "category": "Logs",
-    "program": "Git",
-    "files_to_remove": [
-      "LICENSE.txt",
-      "ReleaseNotes.html"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": false
-  },
-  {
     "path": "{drive}Program Files\\Sublime Text\\*.txt",
     "category": "Logs",
     "program": "Sublime Text",
