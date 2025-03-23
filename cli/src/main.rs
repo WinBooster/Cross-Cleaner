@@ -162,10 +162,11 @@ async fn work(
     }
     if args.show_result_string {
         let (bytes_cleared, removed_files, removed_directories) = (
-            *bytes_cleared.lock().await,
-            *removed_files.lock().await,
-            *removed_directories.lock().await,
+            bytes_cleared.lock().await,
+            removed_files.lock().await,
+            removed_directories.lock().await,
         );
+    
         println!(
             "Removed size: {}, files: {}, dirs: {}, programs: {}",
             get_file_size_string(*bytes_cleared),
@@ -181,6 +182,7 @@ async fn work(
             *removed_files.lock().await,
             *removed_directories.lock().await,
         );
+    
     
         let mut temp_file = NamedTempFile::new().unwrap();
         temp_file.write_all(get_icon()).unwrap();
