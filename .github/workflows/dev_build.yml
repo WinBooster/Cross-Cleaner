@@ -70,7 +70,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: linux-binaries
-        p  ath: linux-binaries
+          path: linux-binaries
 
       - name: Download Windows artifacts
         uses: actions/download-artifact@v4
