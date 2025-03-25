@@ -99,6 +99,9 @@ jobs:
           - LibreOffice
           - Osu
 
+          #### 🐛 Bug Fixes
+          - Fixed false positives of Google Chrome, Ikarus antivirus for Windows
+
           ### 🙏 Special Thanks
           Special thanks to our contributors:
           @Nekiplay for their contribution to this release!
