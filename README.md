@@ -20,7 +20,7 @@
 
 🔹 **Secure** - no critical files are deleted 
 
-🔹 **Cross-platform** - works on Windows, Linux and macOS 
+🔹 **Cross-platform** - works on Windows and Linux 
 
 🔹 **Minimalistic interface** - simple and easy to use
 
