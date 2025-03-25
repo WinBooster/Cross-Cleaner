@@ -22,19 +22,14 @@ jobs:
       run: |
         mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI
         mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI
-    - name: Archive Artifacts
+    - name: Upload Linux artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: Linux build
+        name: linux-binaries
         path: |
           Cross_Cleaner_CLI
           Cross_Cleaner_GUI
-    - name: Upload release
-      uses: softprops/action-gh-release@v2
-      with:
-        files: |
-          Cross_Cleaner_CLI
-          Cross_Cleaner_GUI
+
   build_windows:
     runs-on: windows-latest
     permissions: write-all
@@ -45,18 +40,40 @@ jobs:
       run: cargo build --release
     - name: Move binary
       run: |
-        mv target/release/Cross_Cleaner_CLI.exe Cross_Cleaner_CLI.exe
-        mv target/release/Cross_Cleaner_GUI.exe Cross_Cleaner_GUI.exe
-    - name: Archive Artifacts
+        move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI.exe
+        move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI.exe
+    - name: Upload Windows artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: Windows build
+        name: windows-binaries
         path: |
           Cross_Cleaner_CLI.exe
           Cross_Cleaner_GUI.exe
-    - name: Upload release
+
+  create_release:
+    needs: [build_linux, build_windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Download Linux artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: linux-binaries
+        path: linux-binaries
+
+    - name: Download Windows artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: windows-binaries
+        path: windows-binaries
+
+    - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          Cross_Cleaner_CLI.exe
-          Cross_Cleaner_GUI.exe
+          linux-binaries/Cross_Cleaner_CLI
+          linux-binaries/Cross_Cleaner_GUI
+          windows-binaries/Cross_Cleaner_CLI.exe
+          windows-binaries/Cross_Cleaner_GUI.exe
