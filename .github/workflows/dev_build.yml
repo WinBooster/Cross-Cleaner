@@ -8,6 +8,8 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  # Указываем версию прямо здесь
+  APP_VERSION: "1.9.6"
 
 jobs:
   build_linux:
@@ -16,9 +18,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Get version
-      id: version
-      run: echo "version=$(cargo pkgid | cut -d'#' -f2)" >> $GITHUB_OUTPUT
+    - name: Update Cargo.toml version
+      run: |
+        sed -i 's/^version = .*/version = "${{ env.APP_VERSION }}"/' Cargo.toml
+        # Также обновляем версию в метаданных для Windows
+        sed -i 's/ProductVersion = .*/ProductVersion = "${{ env.APP_VERSION }}"/' Cargo.toml
     - name: Build linux
       run: cargo build --release
     - name: Move binary
@@ -39,6 +43,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Update Cargo.toml version
+      run: |
+        sed -i 's/^version = .*/version = "${{ env.APP_VERSION }}"/' Cargo.toml
+        sed -i 's/ProductVersion = .*/ProductVersion = "${{ env.APP_VERSION }}"/' Cargo.toml
     - name: Build windows
       run: cargo build --release
     - name: Move binary
@@ -61,9 +69,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Get version
-      id: version
-      run: echo "version=$(cargo pkgid | cut -d'#' -f2)" >> $GITHUB_OUTPUT
     - name: Download Linux artifacts
       uses: actions/download-artifact@v4
       with:
@@ -77,8 +82,8 @@ jobs:
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: v${{ steps.version.outputs.version }}
-        name: Cross Cleaner ${{ steps.version.outputs.version }}
+        tag_name: v${{ env.APP_VERSION }}
+        name: Cross Cleaner ${{ env.APP_VERSION }}
         files: |
           linux-binaries/Cross_Cleaner_CLI
           linux-binaries/Cross_Cleaner_GUI
