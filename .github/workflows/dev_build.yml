@@ -26,15 +26,15 @@ jobs:
       run: cargo build --release
     - name: Move binaries
       run: |
-        mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI
-        mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI
+        mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI-${{ env.APP_VERSION }}-linux
+        mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI-${{ env.APP_VERSION }}-linux
     - name: Upload Linux artifacts
       uses: actions/upload-artifact@v4
       with:
         name: linux-binaries
         path: |
-          Cross_Cleaner_CLI
-          Cross_Cleaner_GUI
+          Cross_Cleaner_CLI-${{ env.APP_VERSION }}-linux
+          Cross_Cleaner_GUI-${{ env.APP_VERSION }}-linux
 
   build_windows:
     runs-on: windows-latest
@@ -50,63 +50,88 @@ jobs:
       run: cargo build --release
     - name: Move binaries
       run: |
-        move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI.exe
-        move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI.exe
+        move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI-${{ env.APP_VERSION }}-windows.exe
+        move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI-${{ env.APP_VERSION }}-windows.exe
     - name: Upload Windows artifacts
       uses: actions/upload-artifact@v4
       with:
         name: windows-binaries
         path: |
-          Cross_Cleaner_CLI.exe
-          Cross_Cleaner_GUI.exe
+          Cross_Cleaner_CLI-${{ env.APP_VERSION }}-windows.exe
+          Cross_Cleaner_GUI-${{ env.APP_VERSION }}-windows.exe
 
-  virus_total_check:
-    needs: [build_linux, build_windows]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
+virus_total_check:
+  needs: [build_linux, build_windows]
+  runs-on: ubuntu-latest
+  permissions:
+    contents: read
+  steps:
+    - name: Set version
+      run: echo "APP_VERSION=${{ env.APP_VERSION }}" >> $GITHUB_ENV
 
-    steps:
-    - name: Download Linux artifacts
+    - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
         name: linux-binaries
         path: linux-binaries
+
     - name: Download Windows artifacts
       uses: actions/download-artifact@v4
       with:
         name: windows-binaries
         path: windows-binaries
-    - name: Upload to VirusTotal (Linux CLI)
-      id: vt_linux_cli
+
+    - name: Scan Linux CLI
+      id: scan_linux_cli
       uses: filipnavara/virustotal-action@v1
       with:
-        path: linux-binaries/Cross_Cleaner_CLI
+        path: linux-binaries/Cross_Cleaner_CLI-${{ env.APP_VERSION }}-linux
         api_key: ${{ env.VT_API_KEY }}
-    - name: Upload to VirusTotal (Linux GUI)
-      id: vt_linux_gui
+      continue-on-error: true
+
+    - name: Wait 60 seconds
+      if: always()
+      run: sleep 60
+
+    - name: Scan Linux GUI
+      id: scan_linux_gui
       uses: filipnavara/virustotal-action@v1
       with:
-        path: linux-binaries/Cross_Cleaner_GUI
+        path: linux-binaries/Cross_Cleaner_GUI-${{ env.APP_VERSION }}-linux
         api_key: ${{ env.VT_API_KEY }}
-    - name: Upload to VirusTotal (Windows CLI)
-      id: vt_win_cli
+      continue-on-error: true
+
+    - name: Wait 60 seconds
+      if: always()
+      run: sleep 60
+
+    - name: Scan Windows CLI
+      id: scan_win_cli
       uses: filipnavara/virustotal-action@v1
       with:
-        path: windows-binaries/Cross_Cleaner_CLI.exe
+        path: windows-binaries/Cross_Cleaner_CLI-${{ env.APP_VERSION }}-windows.exe
         api_key: ${{ env.VT_API_KEY }}
-    - name: Upload to VirusTotal (Windows GUI)
-      id: vt_win_gui
+      continue-on-error: true
+
+    - name: Wait 60 seconds
+      if: always()
+      run: sleep 60
+
+    - name: Scan Windows GUI
+      id: scan_win_gui
       uses: filipnavara/virustotal-action@v1
       with:
-        path: windows-binaries/Cross_Cleaner_GUI.exe
+        path: windows-binaries/Cross_Cleaner_GUI-${{ env.APP_VERSION }}-windows.exe
         api_key: ${{ env.VT_API_KEY }}
-    - name: Prepare VirusTotal report
+      continue-on-error: true
+
+    - name: Prepare report
       run: |
-        echo "LINUX_CLI_URL=${{ steps.vt_linux_cli.outputs.report_url }}" >> $GITHUB_ENV
-        echo "LINUX_GUI_URL=${{ steps.vt_linux_gui.outputs.report_url }}" >> $GITHUB_ENV
-        echo "WINDOWS_CLI_URL=${{ steps.vt_win_cli.outputs.report_url }}" >> $GITHUB_ENV
-        echo "WINDOWS_GUI_URL=${{ steps.vt_win_gui.outputs.report_url }}" >> $GITHUB_ENV
+        echo "REPORT_URLS=''" >> $GITHUB_ENV
+        [ -n "${{ steps.scan_linux_cli.outputs.report_url }}" ] && echo "REPORT_URLS+='- **Linux CLI**: [VirusTotal Report](${{ steps.scan_linux_cli.outputs.report_url }})\n'" >> $GITHUB_ENV
+        [ -n "${{ steps.scan_linux_gui.outputs.report_url }}" ] && echo "REPORT_URLS+='- **Linux GUI**: [VirusTotal Report](${{ steps.scan_linux_gui.outputs.report_url }})\n'" >> $GITHUB_ENV
+        [ -n "${{ steps.scan_win_cli.outputs.report_url }}" ] && echo "REPORT_URLS+='- **Windows CLI**: [VirusTotal Report](${{ steps.scan_win_cli.outputs.report_url }})\n'" >> $GITHUB_ENV
+        [ -n "${{ steps.scan_win_gui.outputs.report_url }}" ] && echo "REPORT_URLS+='- **Windows GUI**: [VirusTotal Report](${{ steps.scan_win_gui.outputs.report_url }})\n'" >> $GITHUB_ENV
 
   create_release:
     needs: [virus_total_check]
@@ -133,12 +158,15 @@ jobs:
         name: Cross Cleaner ${{ env.APP_VERSION }}
         body: |
           ### VirusTotal Scan Results:
-          - Linux CLI: [${{ env.APP_VERSION }}](${{ env.LINUX_CLI_URL }})
-          - Linux GUI: [${{ env.APP_VERSION }}](${{ env.LINUX_GUI_URL }})
-          - Windows CLI: [${{ env.APP_VERSION }}](${{ env.WINDOWS_CLI_URL }})
-          - Windows GUI: [${{ env.APP_VERSION }}](${{ env.WINDOWS_GUI_URL }})
+          ${{ env.REPORT_URLS }}
+          
+          ### Download Links:
+          - **Linux CLI**: Cross_Cleaner_CLI-${{ env.APP_VERSION }}-linux
+          - **Linux GUI**: Cross_Cleaner_GUI-${{ env.APP_VERSION }}-linux
+          - **Windows CLI**: Cross_Cleaner_CLI-${{ env.APP_VERSION }}-windows.exe
+          - **Windows GUI**: Cross_Cleaner_GUI-${{ env.APP_VERSION }}-windows.exe
         files: |
-          linux-binaries/Cross_Cleaner_CLI
-          linux-binaries/Cross_Cleaner_GUI
-          windows-binaries/Cross_Cleaner_CLI.exe
-          windows-binaries/Cross_Cleaner_GUI.exe
+          linux-binaries/Cross_Cleaner_CLI-${{ env.APP_VERSION }}-linux
+          linux-binaries/Cross_Cleaner_GUI-${{ env.APP_VERSION }}-linux
+          windows-binaries/Cross_Cleaner_CLI-${{ env.APP_VERSION }}-windows.exe
+          windows-binaries/Cross_Cleaner_GUI-${{ env.APP_VERSION }}-windows.exe
