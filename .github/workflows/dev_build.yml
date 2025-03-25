@@ -60,78 +60,78 @@ jobs:
           Cross_Cleaner_CLI-${{ env.APP_VERSION }}-windows.exe
           Cross_Cleaner_GUI-${{ env.APP_VERSION }}-windows.exe
 
-virus_total_check:
-  needs: [build_linux, build_windows]
-  runs-on: ubuntu-latest
-  permissions:
-    contents: read
-  steps:
-    - name: Set version
-      run: echo "APP_VERSION=${{ env.APP_VERSION }}" >> $GITHUB_ENV
+  virus_total_check:
+    needs: [build_linux, build_windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Set version
+        run: echo "APP_VERSION=${{ env.APP_VERSION }}" >> $GITHUB_ENV
 
-    - name: Download artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: linux-binaries
-        path: linux-binaries
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-binaries
+          path: linux-binaries
 
-    - name: Download Windows artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: windows-binaries
-        path: windows-binaries
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-binaries
+          path: windows-binaries
 
-    - name: Scan Linux CLI
-      id: scan_linux_cli
-      uses: filipnavara/virustotal-action@v1
-      with:
-        path: linux-binaries/Cross_Cleaner_CLI-${{ env.APP_VERSION }}-linux
-        api_key: ${{ env.VT_API_KEY }}
-      continue-on-error: true
+      - name: Scan Linux CLI
+        id: scan_linux_cli
+        uses: filipnavara/virustotal-action@v1
+        with:
+          path: linux-binaries/Cross_Cleaner_CLI-${{ env.APP_VERSION }}-linux
+          api_key: ${{ env.VT_API_KEY }}
+        continue-on-error: true
 
-    - name: Wait 60 seconds
-      if: always()
-      run: sleep 60
+      - name: Wait 60 seconds
+        if: always()
+        run: sleep 60
 
-    - name: Scan Linux GUI
-      id: scan_linux_gui
-      uses: filipnavara/virustotal-action@v1
-      with:
-        path: linux-binaries/Cross_Cleaner_GUI-${{ env.APP_VERSION }}-linux
-        api_key: ${{ env.VT_API_KEY }}
-      continue-on-error: true
+      - name: Scan Linux GUI
+        id: scan_linux_gui
+        uses: filipnavara/virustotal-action@v1
+        with:
+          path: linux-binaries/Cross_Cleaner_GUI-${{ env.APP_VERSION }}-linux
+          api_key: ${{ env.VT_API_KEY }}
+        continue-on-error: true
 
-    - name: Wait 60 seconds
-      if: always()
-      run: sleep 60
+      - name: Wait 60 seconds
+        if: always()
+        run: sleep 60
 
-    - name: Scan Windows CLI
-      id: scan_win_cli
-      uses: filipnavara/virustotal-action@v1
-      with:
-        path: windows-binaries/Cross_Cleaner_CLI-${{ env.APP_VERSION }}-windows.exe
-        api_key: ${{ env.VT_API_KEY }}
-      continue-on-error: true
+      - name: Scan Windows CLI
+        id: scan_win_cli
+        uses: filipnavara/virustotal-action@v1
+        with:
+          path: windows-binaries/Cross_Cleaner_CLI-${{ env.APP_VERSION }}-windows.exe
+          api_key: ${{ env.VT_API_KEY }}
+        continue-on-error: true
 
-    - name: Wait 60 seconds
-      if: always()
-      run: sleep 60
+      - name: Wait 60 seconds
+        if: always()
+        run: sleep 60
 
-    - name: Scan Windows GUI
-      id: scan_win_gui
-      uses: filipnavara/virustotal-action@v1
-      with:
-        path: windows-binaries/Cross_Cleaner_GUI-${{ env.APP_VERSION }}-windows.exe
-        api_key: ${{ env.VT_API_KEY }}
-      continue-on-error: true
+      - name: Scan Windows GUI
+        id: scan_win_gui
+        uses: filipnavara/virustotal-action@v1
+        with:
+          path: windows-binaries/Cross_Cleaner_GUI-${{ env.APP_VERSION }}-windows.exe
+          api_key: ${{ env.VT_API_KEY }}
+        continue-on-error: true
 
-    - name: Prepare report
-      run: |
-        echo "REPORT_URLS=''" >> $GITHUB_ENV
-        [ -n "${{ steps.scan_linux_cli.outputs.report_url }}" ] && echo "REPORT_URLS+='- **Linux CLI**: [VirusTotal Report](${{ steps.scan_linux_cli.outputs.report_url }})\n'" >> $GITHUB_ENV
-        [ -n "${{ steps.scan_linux_gui.outputs.report_url }}" ] && echo "REPORT_URLS+='- **Linux GUI**: [VirusTotal Report](${{ steps.scan_linux_gui.outputs.report_url }})\n'" >> $GITHUB_ENV
-        [ -n "${{ steps.scan_win_cli.outputs.report_url }}" ] && echo "REPORT_URLS+='- **Windows CLI**: [VirusTotal Report](${{ steps.scan_win_cli.outputs.report_url }})\n'" >> $GITHUB_ENV
-        [ -n "${{ steps.scan_win_gui.outputs.report_url }}" ] && echo "REPORT_URLS+='- **Windows GUI**: [VirusTotal Report](${{ steps.scan_win_gui.outputs.report_url }})\n'" >> $GITHUB_ENV
+      - name: Prepare report
+        run: |
+          echo "REPORT_URLS=''" >> $GITHUB_ENV
+          [ -n "${{ steps.scan_linux_cli.outputs.report_url }}" ] && echo "REPORT_URLS+='- **Linux CLI**: [VirusTotal Report](${{ steps.scan_linux_cli.outputs.report_url }})\n'" >> $GITHUB_ENV
+          [ -n "${{ steps.scan_linux_gui.outputs.report_url }}" ] && echo "REPORT_URLS+='- **Linux GUI**: [VirusTotal Report](${{ steps.scan_linux_gui.outputs.report_url }})\n'" >> $GITHUB_ENV
+          [ -n "${{ steps.scan_win_cli.outputs.report_url }}" ] && echo "REPORT_URLS+='- **Windows CLI**: [VirusTotal Report](${{ steps.scan_win_cli.outputs.report_url }})\n'" >> $GITHUB_ENV
+          [ -n "${{ steps.scan_win_gui.outputs.report_url }}" ] && echo "REPORT_URLS+='- **Windows GUI**: [VirusTotal Report](${{ steps.scan_win_gui.outputs.report_url }})\n'" >> $GITHUB_ENV
 
   create_release:
     needs: [virus_total_check]
