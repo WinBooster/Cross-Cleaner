@@ -60,40 +60,8 @@ jobs:
           Cross_Cleaner_CLI.exe
           Cross_Cleaner_GUI.exe
 
-  virus_total_check:
-    needs: [build_linux, build_windows]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    steps:
-    - name: Download Linux artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: linux-binaries
-        path: linux-binaries
-    - name: Download Windows artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: windows-binaries
-        path: windows-binaries
-    - name: VirusTotal Scan
-      uses: crazy-max/ghaction-virustotal@v4
-      with:
-        vt_api_key: ${{ env.VT_API_KEY }}
-        vt_monitor: true
-        monitor_path: /cross_cleaner
-        request_rate: 1
-        files: |
-          linux-binaries/Cross_Cleaner_CLI
-          linux-binaries/Cross_Cleaner_GUI
-          windows-binaries/Cross_Cleaner_CLI.exe
-          windows-binaries/Cross_Cleaner_GUI.exe
-        update_release_body: true
-        github_token: ${{ github.token }}
-
   create_release:
-    needs: [virus_total_check]
+    needs: [build_linux, build_windows]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -123,3 +91,32 @@ jobs:
           linux-binaries/Cross_Cleaner_GUI
           windows-binaries/Cross_Cleaner_CLI.exe
           windows-binaries/Cross_Cleaner_GUI.exe
+  virus_total_check:
+    needs: [create_release]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - name: Download Linux artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: linux-binaries
+        path: linux-binaries
+    - name: Download Windows artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: windows-binaries
+        path: windows-binaries
+    - name: VirusTotal Scan
+      uses: crazy-max/ghaction-virustotal@v4
+      with:
+        vt_api_key: ${{ env.VT_API_KEY }}
+        request_rate: 1
+        files: |
+          linux-binaries/Cross_Cleaner_CLI
+          linux-binaries/Cross_Cleaner_GUI
+          windows-binaries/Cross_Cleaner_CLI.exe
+          windows-binaries/Cross_Cleaner_GUI.exe
+        update_release_body: true
+        github_token: ${{ github.token }}
