@@ -8,8 +8,8 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  # Указываем версию прямо здесь
   APP_VERSION: "1.9.6"
+  VT_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
 
 jobs:
   build_linux:
@@ -21,11 +21,10 @@ jobs:
     - name: Update Cargo.toml version
       run: |
         sed -i 's/^version = .*/version = "${{ env.APP_VERSION }}"/' Cargo.toml
-        # Также обновляем версию в метаданных для Windows
         sed -i 's/ProductVersion = .*/ProductVersion = "${{ env.APP_VERSION }}"/' Cargo.toml
     - name: Build linux
       run: cargo build --release
-    - name: Move binary
+    - name: Move binaries
       run: |
         mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI
         mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI
@@ -49,7 +48,7 @@ jobs:
         sed -i 's/ProductVersion = .*/ProductVersion = "${{ env.APP_VERSION }}"/' Cargo.toml
     - name: Build windows
       run: cargo build --release
-    - name: Move binary
+    - name: Move binaries
       run: |
         move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI.exe
         move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI.exe
@@ -61,8 +60,56 @@ jobs:
           Cross_Cleaner_CLI.exe
           Cross_Cleaner_GUI.exe
 
-  create_release:
+  virus_total_check:
     needs: [build_linux, build_windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - name: Download Linux artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: linux-binaries
+        path: linux-binaries
+    - name: Download Windows artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: windows-binaries
+        path: windows-binaries
+    - name: Upload to VirusTotal (Linux CLI)
+      id: vt_linux_cli
+      uses: filipnavara/virustotal-action@v1
+      with:
+        path: linux-binaries/Cross_Cleaner_CLI
+        api_key: ${{ env.VT_API_KEY }}
+    - name: Upload to VirusTotal (Linux GUI)
+      id: vt_linux_gui
+      uses: filipnavara/virustotal-action@v1
+      with:
+        path: linux-binaries/Cross_Cleaner_GUI
+        api_key: ${{ env.VT_API_KEY }}
+    - name: Upload to VirusTotal (Windows CLI)
+      id: vt_win_cli
+      uses: filipnavara/virustotal-action@v1
+      with:
+        path: windows-binaries/Cross_Cleaner_CLI.exe
+        api_key: ${{ env.VT_API_KEY }}
+    - name: Upload to VirusTotal (Windows GUI)
+      id: vt_win_gui
+      uses: filipnavara/virustotal-action@v1
+      with:
+        path: windows-binaries/Cross_Cleaner_GUI.exe
+        api_key: ${{ env.VT_API_KEY }}
+    - name: Prepare VirusTotal report
+      run: |
+        echo "LINUX_CLI_URL=${{ steps.vt_linux_cli.outputs.report_url }}" >> $GITHUB_ENV
+        echo "LINUX_GUI_URL=${{ steps.vt_linux_gui.outputs.report_url }}" >> $GITHUB_ENV
+        echo "WINDOWS_CLI_URL=${{ steps.vt_win_cli.outputs.report_url }}" >> $GITHUB_ENV
+        echo "WINDOWS_GUI_URL=${{ steps.vt_win_gui.outputs.report_url }}" >> $GITHUB_ENV
+
+  create_release:
+    needs: [virus_total_check]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -84,6 +131,12 @@ jobs:
       with:
         tag_name: v${{ env.APP_VERSION }}
         name: Cross Cleaner ${{ env.APP_VERSION }}
+        body: |
+          ### VirusTotal Scan Results:
+          - Linux CLI: [${{ env.APP_VERSION }}](${{ env.LINUX_CLI_URL }})
+          - Linux GUI: [${{ env.APP_VERSION }}](${{ env.LINUX_GUI_URL }})
+          - Windows CLI: [${{ env.APP_VERSION }}](${{ env.WINDOWS_CLI_URL }})
+          - Windows GUI: [${{ env.APP_VERSION }}](${{ env.WINDOWS_GUI_URL }})
         files: |
           linux-binaries/Cross_Cleaner_CLI
           linux-binaries/Cross_Cleaner_GUI
