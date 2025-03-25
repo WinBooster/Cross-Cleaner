@@ -5,14 +5,13 @@ use lazy_static::lazy_static;
 use serde_json;
 use std::error::Error;
 use std::fs;
-use std::fs::File;
 
 lazy_static! {
     static ref DATABASE: Vec<CleanerData> = {
         #[cfg(unix)]
-        let data = include_str!("../database/linux_database.json");
+        let data = include_str!("../linux_database.json");
         #[cfg(windows)]
-        let data = include_str!("../database/windows_database.json");
+        let data = include_str!("../windows_database.json");
 
         // Deserialization JSON to Vec<CleanerData>
         let database: Vec<CleanerData> = serde_json::from_str(&data)

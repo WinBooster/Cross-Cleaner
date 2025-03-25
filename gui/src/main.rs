@@ -2,7 +2,9 @@ use cleaner::clear_data;
 use database::{get_icon, get_pcbooster_version};
 #[cfg(windows)]
 use database::registry_database;
-use database::structures::{CleanerData, CleanerResult};
+#[cfg(windows)]
+use database::structures::CleanerResult;
+use database::structures::CleanerData;
 use database::utils::get_file_size_string;
 use eframe::egui;
 use notify_rust::Notification;
@@ -29,6 +31,7 @@ async fn main() -> eframe::Result {
         ..Default::default()
     };
 
+	
     eframe::run_native(
         &*("Cross Cleaner GUI v".to_owned() + &*get_pcbooster_version()),
         options,

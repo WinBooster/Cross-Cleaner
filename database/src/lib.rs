@@ -7,7 +7,7 @@ pub mod structures;
 pub mod utils;
 
 pub fn get_pcbooster_version() -> String {
-    String::from("1.9.5")
+    String::from("1.9.6")
 }
 
 pub fn get_icon() -> &'static [u8; 3216] {

@@ -2,7 +2,9 @@ use clap::{ArgAction, Parser};
 use cleaner::clear_data;
 use crossterm::execute;
 use database::{ get_pcbooster_version, get_icon };
-use database::structures::{CleanerData, CleanerResult, Cleared};
+#[cfg(windows)]
+use database::structures::CleanerResult;
+use database::structures::{CleanerData, Cleared};
 use database::utils::get_file_size_string;
 use indicatif::{ProgressBar, ProgressStyle};
 use inquire::formatter::MultiOptionFormatter;

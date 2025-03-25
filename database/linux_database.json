@@ -1,5 +1,16 @@
 [
   {
+    "path": "/home/{username}/.local/share/TelegramDesktop/*.log",
+    "category": "Logs",
+    "program": "Telegram",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
     "path": "/home/{username}/.local/share/Steam/userdata/*",
     "category": "Accounts",
     "program": "Steam",
@@ -24,15 +35,17 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/.local/share/TelegramDesktop/tdata/*",
+    "path": "/home/{username}/.local/share/TelegramDesktop/",
     "category": "Accounts",
     "program": "Telegram",
     "files_to_remove": [],
-    "directories_to_remove": [],
+    "directories_to_remove": [
+      "tdata"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "/home/{username}/.minecraft/",
@@ -56,6 +69,46 @@
       "command_history.txt"
     ],
     "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/SIMPLEMINECRAFT/",
+    "category": "Logs",
+    "program": "SimpleMinecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "logs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/SIMPLEMINECRAFT/data/cache/",
+    "category": "Cache",
+    "program": "SimpleMinecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/SIMPLEMINECRAFT/client/**/",
+    "category": "Logs",
+    "program": "SimpleMinecraft",
+    "files_to_remove": [
+      "minetweaker.log",
+      "NBTEdit.log"
+    ],
+    "directories_to_remove": [
+      "logs"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
@@ -165,125 +218,52 @@
     "remove_files": true
   },
   {
-    "path": "/home/{username}/.config/yandex-music/Cache/*",
+    "path": "/home/{username}/.config/yandex-music/",
     "category": "Cache",
     "program": "Yandex Music",
     "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.config/yandex-music/Code Cache/*",
-    "category": "Cache",
-    "program": "Yandex Music",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.config/yandex-music/DawnGraphiteCache/*",
-    "category": "Cache",
-    "program": "Yandex Music",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.config/yandex-music/DawnWebGPUCache/*",
-    "category": "Cache",
-    "program": "Yandex Music",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.config/yandex-music/GPUCache/*",
-    "category": "Cache",
-    "program": "Yandex Music",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.cache/cassette/audios/*",
-    "category": "Cache",
-    "program": "Cassettle",
-    "files_to_remove": [],
-    "directories_to_remove": [],
+    "directories_to_remove": [
+      "Cache",
+      "Code Cache",
+      "DawnGraphiteCache",
+      "DawnWebGPUCache",
+      "GPUCache"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
-    "remove_files": true
+    "remove_files": false
   },
   {
-    "path": "/home/{username}/.config/discord/Cache/*",
+    "path": "/home/{username}/.cache/cassette/",
+    "category": "Cache",
+    "program": "Cassettle",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "audios",
+      "images"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.config/discord/",
     "category": "Cache",
     "program": "Discord",
     "files_to_remove": [],
-    "directories_to_remove": [],
+    "directories_to_remove": [
+      "Cache",
+      "Code Cache",
+      "DawnGraphiteCache",
+      "DawnWebGPUCache",
+      "GPUCache"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.config/discord/Code Cache/*",
-    "category": "Cache",
-    "program": "Discord",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.config/discord/DawnGraphiteCache/*",
-    "category": "Cache",
-    "program": "Discord",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.config/discord/DawnWebGPUCache/*",
-    "category": "Cache",
-    "program": "Discord",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.config/discord/GPUCache/*",
-    "category": "Cache",
-    "program": "Discord",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "/home/{username}/.cache/firefox/**/thumbnails/*",
@@ -1180,7 +1160,7 @@
   },
   {
     "path": "/home/{username}/.local/share/Steam/steamapps/common/Proton Hotfix",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Steam proton",
     "files_to_remove": [
       "LICENSE",
@@ -1348,7 +1328,7 @@
   },
   {
     "path": "/home/{username}/.minecraft/licenses/*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Minecraft",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1381,7 +1361,7 @@
   },
   {
     "path": "/home/{username}/.local/share/MultiMC/licenses/*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "MultiMC",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1414,7 +1394,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PolyMC/licenses/*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "PolyMC",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1447,7 +1427,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PrismLauncher/licenses/*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Prism Launcher",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1480,7 +1460,7 @@
   },
   {
     "path": "/home/{username}/.lunarclient/licenses/*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Lunar Client",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1538,15 +1518,18 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/.local/share/Trash/files/*",
+    "path": "/home/{username}/.local/share/Trash/",
     "category": "Trash",
     "program": "System",
     "files_to_remove": [],
-    "directories_to_remove": [],
+    "directories_to_remove": [
+      "files",
+      "info"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "/usr/share/efitools/",
@@ -1590,20 +1573,7 @@
     "remove_files": false
   },
   {
-    "path": "/usr/share/bison/",
-    "category": "Logs",
-    "program": "Git",
-    "files_to_remove": [
-      "README"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/usr/share/gperf",
+    "path": "/usr/share/gperf/",
     "category": "Documentation",
     "program": "Gperf",
     "files_to_remove": [],
@@ -1616,7 +1586,7 @@
     "remove_files": false
   },
   {
-    "path": "/usr/share",
+    "path": "/usr/share/",
     "category": "Documentation",
     "program": "GTK",
     "files_to_remove": [],
@@ -1629,7 +1599,7 @@
     "remove_files": false
   },
   {
-    "path": "/usr/share",
+    "path": "/usr/share/",
     "category": "Documentation",
     "program": "Info",
     "files_to_remove": [],
@@ -1699,6 +1669,19 @@
     ],
     "directories_to_remove": [
       ".github"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.config/libreoffice/**/",
+    "category": "Cache",
+    "program": "LibreOffice",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "cache"
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
