@@ -36,4 +36,7 @@ Latest version can be downloaded in [releases](https://github.com/WinBooster/Cro
    ```sh
    git clone https://github.com/WinBooster/Cross-Cleaner.git
    cd Cross-Cleaner
-   cargo build --release
+3. Build project for your operation system:
+  ```sh
+  cargo build --release
+
