@@ -11,7 +11,6 @@ env:
 
 jobs:
   build_linux:
-
     runs-on: ubuntu-latest
     permissions: write-all
 
@@ -26,27 +25,17 @@ jobs:
     - name: Archive Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: Artifacts
+        name: Linux build
         path: |
           Cross_Cleaner_CLI
           Cross_Cleaner_GUI
-          ./database/linux_database.json
-          ./database/windows_database.json
-
-    - name: Release
-      uses: marvinpinto/action-automatic-releases@latest
+    - name: Upload release
+      uses: softprops/action-gh-release@v2
       with:
-        repo_token: '${{ secrets.GITHUB_TOKEN }}'
-        automatic_release_tag: "1.9.6"
-        prerelease: true
-        title: "1.9.6"
         files: |
-            Cross_Cleaner_CLI
-            Cross_Cleaner_GUI
-            ./database/linux_database.json
-            ./database/windows_database.json
+          Cross_Cleaner_CLI
+          Cross_Cleaner_GUI
   build_windows:
-
     runs-on: windows-latest
     permissions: write-all
 
@@ -61,22 +50,13 @@ jobs:
     - name: Archive Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: Artifacts
+        name: Windows build
         path: |
           Cross_Cleaner_CLI.exe
           Cross_Cleaner_GUI.exe
-          ./database/linux_database.json
-          ./database/windows_database.json
-
-    - name: Release
-      uses: marvinpinto/action-automatic-releases@latest
+    - name: Upload release
+      uses: softprops/action-gh-release@v2
       with:
-        repo_token: '${{ secrets.GITHUB_TOKEN }}'
-        automatic_release_tag: "1.9.6"
-        prerelease: true
-        title: "1.9.6"
         files: |
-            Cross_Cleaner_CLI.exe
-            Cross_Cleaner_GUI.exe
-            ./database/linux_database.json
-            ./database/windows_database.json
+          Cross_Cleaner_CLI.exe
+          Cross_Cleaner_GUI.exe
