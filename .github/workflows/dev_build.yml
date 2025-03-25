@@ -66,14 +66,11 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Set version
-        run: echo "APP_VERSION=${{ env.APP_VERSION }}" >> $GITHUB_ENV
-
-      - name: Download artifacts
+      - name: Download Linux artifacts
         uses: actions/download-artifact@v4
         with:
           name: linux-binaries
-          path: linux-binaries
+        p  ath: linux-binaries
 
       - name: Download Windows artifacts
         uses: actions/download-artifact@v4
@@ -81,12 +78,19 @@ jobs:
           name: windows-binaries
           path: windows-binaries
 
+      - name: Install jq (JSON processor)
+        run: sudo apt-get install -y jq
+
       - name: Scan Linux CLI
         id: scan_linux_cli
-        uses: filipnavara/virustotal-action@v1
-        with:
-          path: linux-binaries/Cross_Cleaner_CLI-${{ env.APP_VERSION }}-linux
-          api_key: ${{ env.VT_API_KEY }}
+        run: |
+          RESPONSE=$(curl -sS -X POST https://www.virustotal.com/api/v3/files \
+            -H "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}" \
+            -H "accept: application/json" \
+            --form "file=@linux-binaries/Cross_Cleaner_CLI-${{ env.APP_VERSION }}-linux")
+          ANALYSIS_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+          echo "report_url=https://www.virustotal.com/gui/file/$ANALYSIS_ID" >> $GITHUB_OUTPUT
+          echo "ANALYSIS_ID=$ANALYSIS_ID" >> $GITHUB_ENV
         continue-on-error: true
 
       - name: Wait 60 seconds
@@ -95,10 +99,13 @@ jobs:
 
       - name: Scan Linux GUI
         id: scan_linux_gui
-        uses: filipnavara/virustotal-action@v1
-        with:
-          path: linux-binaries/Cross_Cleaner_GUI-${{ env.APP_VERSION }}-linux
-          api_key: ${{ env.VT_API_KEY }}
+        run: |
+          RESPONSE=$(curl -sS -X POST https://www.virustotal.com/api/v3/files \
+            -H "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}" \
+            -H "accept: application/json" \
+            --form "file=@linux-binaries/Cross_Cleaner_GUI-${{ env.APP_VERSION }}-linux")
+          ANALYSIS_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+          echo "report_url=https://www.virustotal.com/gui/file/$ANALYSIS_ID" >> $GITHUB_OUTPUT
         continue-on-error: true
 
       - name: Wait 60 seconds
@@ -107,10 +114,13 @@ jobs:
 
       - name: Scan Windows CLI
         id: scan_win_cli
-        uses: filipnavara/virustotal-action@v1
-        with:
-          path: windows-binaries/Cross_Cleaner_CLI-${{ env.APP_VERSION }}-windows.exe
-          api_key: ${{ env.VT_API_KEY }}
+        run: |
+          RESPONSE=$(curl -sS -X POST https://www.virustotal.com/api/v3/files \
+            -H "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}" \
+            -H "accept: application/json" \
+            --form "file=@windows-binaries/Cross_Cleaner_CLI-${{ env.APP_VERSION }}-windows.exe")
+          ANALYSIS_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+          echo "report_url=https://www.virustotal.com/gui/file/$ANALYSIS_ID" >> $GITHUB_OUTPUT
         continue-on-error: true
 
       - name: Wait 60 seconds
@@ -119,10 +129,13 @@ jobs:
 
       - name: Scan Windows GUI
         id: scan_win_gui
-        uses: filipnavara/virustotal-action@v1
-        with:
-          path: windows-binaries/Cross_Cleaner_GUI-${{ env.APP_VERSION }}-windows.exe
-          api_key: ${{ env.VT_API_KEY }}
+        run: |
+          RESPONSE=$(curl -sS -X POST https://www.virustotal.com/api/v3/files \
+            -H "x-apikey: ${{ secrets.VIRUSTOTAL_API_KEY }}" \
+            -H "accept: application/json" \
+            --form "file=@windows-binaries/Cross_Cleaner_GUI-${{ env.APP_VERSION }}-windows.exe")
+          ANALYSIS_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+          echo "report_url=https://www.virustotal.com/gui/file/$ANALYSIS_ID" >> $GITHUB_OUTPUT
         continue-on-error: true
 
       - name: Prepare report
