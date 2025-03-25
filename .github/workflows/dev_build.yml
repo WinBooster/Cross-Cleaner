@@ -2,14 +2,23 @@ name: Rust compile and release
 
 on:
   push:
-    branches: [ "main", "test" ]
+    branches: [ "main" ]
+    paths:
+      - '**/*.toml'
+      - '**/*.rs'
+      - '**/*.json'
+      - '.github/workflows/**' 
   pull_request:
     branches: [ "main", "test" ]
+    paths:
+      - '**/*.toml'
+      - '**/*.rs'
+      - '**/*.json'
+      - '.github/workflows/**'
 
 env:
   CARGO_TERM_COLOR: always
   APP_VERSION: "1.9.6"
-  VT_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
 
 jobs:
   build_linux:
@@ -84,39 +93,17 @@ jobs:
         tag_name: v${{ env.APP_VERSION }}
         name: Cross Cleaner ${{ env.APP_VERSION }}
         body: |
-          ### Release Notes
-          Version ${{ env.APP_VERSION }} of Cross Cleaner
-        files: |
-          linux-binaries/Cross_Cleaner_CLI
-          linux-binaries/Cross_Cleaner_GUI
-          windows-binaries/Cross_Cleaner_CLI.exe
-          windows-binaries/Cross_Cleaner_GUI.exe
-  virus_total_check:
-    needs: [create_release]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
+          ### 🚀 What's New in Version ${{ env.APP_VERSION }}
 
-    steps:
-    - name: Download Linux artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: linux-binaries
-        path: linux-binaries
-    - name: Download Windows artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: windows-binaries
-        path: windows-binaries
-    - name: VirusTotal Scan
-      uses: crazy-max/ghaction-virustotal@v4
-      with:
-        vt_api_key: ${{ env.VT_API_KEY }}
-        request_rate: 1
+          #### ✨ New cleaning paths in Linux
+          - LibreOffice
+          - Osu
+
+          ### 🙏 Special Thanks
+          Special thanks to our contributors:
+          @Nekiplay for their contribution to this release!
         files: |
           linux-binaries/Cross_Cleaner_CLI
           linux-binaries/Cross_Cleaner_GUI
           windows-binaries/Cross_Cleaner_CLI.exe
           windows-binaries/Cross_Cleaner_GUI.exe
-        update_release_body: true
-        github_token: ${{ github.token }}
