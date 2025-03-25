@@ -20,6 +20,9 @@ cleaner = { path = "../cleaner" }
 [target.'cfg(windows)'.dependencies]
 winreg = "0.55.0"
 
+[target.'cfg(windows)'.build-dependencies]
+winres = "0.1.12"
+
 [package.metadata.winres]
 FileDescription = "Garbage remover"
 OriginalFilename = "Cross Cleaner.exe"
