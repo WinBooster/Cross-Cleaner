@@ -7,7 +7,7 @@
 [![GitHub Issues](https://img.shields.io/github/issues/WinBooster/Cross-Cleaner)](https://github.com/WinBooster/Cross-Cleaner/issues)
 
 <div align="center">
-  <img src="assets/icon.png" alt="Cross Cleaner Logo" width="200"/>
+  <img src="assets/icon.png" alt="Cross Cleaner Logo" width="64"/>
   <h3>A powerful system cleanup tool written in Rust</h3>
 </div>
 
