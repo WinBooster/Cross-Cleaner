@@ -1,3 +1,11 @@
 /target
 /cleaner/target
 /database/target
+/Cross-Cleaner/hooks
+/Cross-Cleaner/objects
+Cross-Cleaner/packed-refs
+/Cross-Cleaner/info
+Cross-Cleaner/HEAD
+Cross-Cleaner/description
+Cross-Cleaner/config
+Cross-Cleaner/FETCH_HEAD

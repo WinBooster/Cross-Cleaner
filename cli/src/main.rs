@@ -191,9 +191,9 @@ async fn work(
         
         let notification_body = format!(
             "Removed: {}\nFiles: {}\nDirs: {}",
-            get_file_size_string(bytes_cleared), // Передаем u64
-            removed_files, // Передаем u64
-            removed_directories // Передаем u64
+            get_file_size_string(bytes_cleared),
+            removed_files,
+            removed_directories
         );
     
 

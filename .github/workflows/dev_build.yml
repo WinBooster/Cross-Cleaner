@@ -98,7 +98,8 @@ jobs:
           #### ✨ New cleaning paths in Linux
           - LibreOffice
           - Osu
-
+          - Cursor
+          
           #### 🐛 Bug Fixes
           - Fixed false positives of Google Chrome, Ikarus antivirus for Windows
 

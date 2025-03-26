@@ -1726,5 +1726,36 @@
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.config/Cursor/",
+    "category": "Logs",
+    "program": "Cursor",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "logs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.config/Cursor/",
+    "category": "Cache",
+    "program": "Cursor",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "cache",
+      "CachedData",
+      "Code Cache",
+      "DawnGraphiteCache",
+      "DawnWebGPUCache",
+      "GPUCache"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
   }
 ]
