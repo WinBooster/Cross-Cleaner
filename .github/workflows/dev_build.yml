@@ -24,7 +24,7 @@ jobs:
   build_linux:
     runs-on: ubuntu-latest
     permissions: write-all
-
+    name: Build Linux
     steps:
     - uses: actions/checkout@v4
     - name: Update Cargo.toml version
@@ -48,7 +48,7 @@ jobs:
   build_windows:
     runs-on: windows-latest
     permissions: write-all
-
+    name: Build Windows
     steps:
     - uses: actions/checkout@v4
     - name: Update Cargo.toml version
@@ -72,6 +72,7 @@ jobs:
   upload_databases:
     needs: [build_linux, build_windows]
     runs-on: ubuntu-latest
+    name: Upload Databases
     permissions: write-all
 
     steps:
@@ -91,6 +92,7 @@ jobs:
   create_release:
     needs: [build_linux, build_windows]
     runs-on: ubuntu-latest
+    name: Create Release
     permissions:
       contents: write
 
