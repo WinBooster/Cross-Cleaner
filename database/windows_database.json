@@ -4846,5 +4846,24 @@
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\.cursor\\extensions\\**/",
+    "category": "Documentation",
+    "program": "Cursor",
+    "files_to_remove": [
+      "LICENSE",
+      "LICENSE.txt",
+      "changelog.md",
+      "change.log",
+      "readme.txt",
+      "readme.md",
+      "walkthrough-setup-tips.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
   }
 ]
