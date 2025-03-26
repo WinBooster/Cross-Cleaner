@@ -6,6 +6,7 @@
 [![Download](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/total)](https://github.com/WinBooster/Cross-Cleaner/releases)
 [![GitHub Issues](https://img.shields.io/github/issues/WinBooster/Cross-Cleaner)](https://github.com/WinBooster/Cross-Cleaner/issues)
 [![GitHub Stars](https://img.shields.io/github/stars/WinBooster/Cross-Cleaner?style=social)](https://github.com/WinBooster/Cross-Cleaner/stargazers)
+[![Build Status](https://github.com/WinBooster/Cross-Cleaner/actions/workflows/dev_build.yml/badge.svg)](https://github.com/WinBooster/Cross-Cleaner/actions)
 
 <img src="assets/icon.png" alt="Cross Cleaner Logo" width="64"/>
 
