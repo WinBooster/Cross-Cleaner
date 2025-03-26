@@ -70,6 +70,7 @@ jobs:
           Cross_Cleaner_GUI.exe
 
   upload_databases:
+    needs: [build_linux, build_windows]
     runs-on: ubuntu-latest
     permissions: write-all
 
