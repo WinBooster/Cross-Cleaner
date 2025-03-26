@@ -6,13 +6,13 @@ use tabled::Tabled;
 pub struct Cleared {
     #[tabled(rename = "Program")]
     pub program: String,
-    #[tabled(display_with = "display_removed_bytes", rename = "Size")]
+    #[tabled(display = "display_removed_bytes", rename = "Size")]
     pub removed_bytes: u64,
     #[tabled(rename = "Files")]
     pub removed_files: u64,
     #[tabled(rename = "Dirs")]
     pub removed_directories: u64,
-    #[tabled(display_with = "display_categories", rename = "Categories")]
+    #[tabled(display = "display_categories", rename = "Categories")]
     pub affected_categories: Vec<String>,
 }
 fn display_removed_bytes(size: &u64) -> String {

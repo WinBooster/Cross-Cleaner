@@ -6,11 +6,11 @@ build = "build.rs"
 
 [dependencies]
 inquire = "0.7.5"
-crossterm = "0.27.0"
+crossterm = "0.28.1"
 tokio = { version = "1", features = ["full"] }
 indicatif = "0.17.7"
 notify-rust = "4"
-tabled = "0.17.0"
+tabled = "0.18.0"
 clap = { version = "4.0", features = ["derive"] }
 tempfile = "3.3"
 

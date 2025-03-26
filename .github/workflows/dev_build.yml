@@ -100,6 +100,9 @@ jobs:
           - Osu
           - Cursor
           
+          #### 📦 Dependencies
+          - Updated all libraries to their latest versions
+          
           #### 🐛 Bug Fixes
           - Fixed false positives of Google Chrome, Ikarus antivirus for Windows
 
