@@ -1854,7 +1854,7 @@
   },
   {
     "path": "/home/{username}/.local/share/Paradox Interactive/Hearts of Iron IV/",
-    "category": "Crashes",
+    "category": "Crash reports",
     "program": "Hearts of Iron IV",
     "files_to_remove": [],
     "directories_to_remove": [
