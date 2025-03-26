@@ -2148,7 +2148,7 @@
     "category": "Documentation",
     "program": "NVIDIA Corporation",
     "files_to_remove": [
-      "license.txt",
+      "license.txt"
     ],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
