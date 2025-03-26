@@ -363,7 +363,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.jdks\\**",
-    "category": "Cache",
+    "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
       "javafx-src.zip",
@@ -1189,7 +1189,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft/crash-reports/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft\\crash-reports/*",
     "category": "Crash reports",
     "program": "Minecraft",
     "files_to_remove": [],
@@ -1200,7 +1200,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/crash-reports/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\crash-reports/*",
     "category": "Crash reports",
     "program": "Badlion Client",
     "files_to_remove": [],
@@ -1211,7 +1211,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher/crash-reports/*",
+    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher\\crash-reports/*",
     "category": "Crash reports",
     "program": "Tecknix Client",
     "files_to_remove": [],
@@ -1222,7 +1222,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp/crash-reports/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp\\crash-reports/*",
     "category": "Crash reports",
     "program": "Modrinth",
     "files_to_remove": [],
@@ -1233,7 +1233,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft/crash-reports/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft\\crash-reports/*",
     "category": "Crash reports",
     "program": "MultiMC",
     "files_to_remove": [],
@@ -1244,7 +1244,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft/crash-reports/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\crash-reports/*",
     "category": "Crash reports",
     "program": "PrismLauncher",
     "files_to_remove": [],
@@ -1266,7 +1266,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft/crash-reports/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\crash-reports/*",
     "category": "Crash reports",
     "program": "PolyMC",
     "files_to_remove": [],
@@ -1277,7 +1277,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft/crash-reports/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft\\crash-reports/*",
     "category": "Crash reports",
     "program": "PolyMC",
     "files_to_remove": [],
@@ -1288,7 +1288,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**/crash-reports/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**\\crash-reports/*",
     "category": "Crash reports",
     "program": "ATLauncher",
     "files_to_remove": [],
@@ -1299,7 +1299,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}.loliland\\updates\\clients\\**/crash-reports/*",
+    "path": "{drive}.loliland\\updates\\clients\\**\\crash-reports/*",
     "category": "Crash reports",
     "program": "LoliLand",
     "files_to_remove": [],
@@ -1310,7 +1310,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.cristalix\\updates\\**/crash-reports/*",
+    "path": "{drive}Users\\{username}\\.cristalix\\updates\\**\\crash-reports/*",
     "category": "Crash reports",
     "program": "Cristalix",
     "files_to_remove": [],
@@ -1321,7 +1321,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\**/crash-reports/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\**\\crash-reports/*",
     "category": "Crash reports",
     "program": "MCSkill",
     "files_to_remove": [],
@@ -1332,7 +1332,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\**/crash-reports/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\**\\crash-reports/*",
     "category": "Crash reports",
     "program": "GribLand",
     "files_to_remove": [],
@@ -1343,7 +1343,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\**/crash-reports/*",
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\**\\crash-reports/*",
     "category": "Crash reports",
     "program": "CurseForge",
     "files_to_remove": [],
@@ -2119,7 +2119,7 @@
   {
     "path": "{drive}Program Files\\Windows Defender",
     "category": "Logs",
-    "program": "Windows Defender",
+    "program": "Documentation",
     "files_to_remove": [
       "ThirdPartyNotices.txt"
     ],
@@ -2132,7 +2132,7 @@
   {
     "path": "{drive}Program Files\\Windows Defender Advanced Threat Protection",
     "category": "Logs",
-    "program": "Windows Defender",
+    "program": "Documentation",
     "files_to_remove": [
       "ThirdPartyNotice",
       "SenseAp.ThirdPartyNotice.txt"
@@ -2145,10 +2145,22 @@
   },
   {
     "path": "{drive}Program Files\\NVIDIA Corporation",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "NVIDIA Corporation",
     "files_to_remove": [
       "license.txt",
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\NVIDIA Corporation",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [
       "nvstlink.log"
     ],
     "directories_to_remove": [],
@@ -2159,7 +2171,7 @@
   },
   {
     "path": "{drive}Program Files\\NVIDIA Corporation\\NVSMI",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "NVIDIA Corporation",
     "files_to_remove": [
       "nvidia-smi.1.pdf"
@@ -2243,7 +2255,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.jdks\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
       "NOTICE",
@@ -2271,7 +2283,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.jdks\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Java",
     "files_to_remove": [],
     "directories_to_remove": [
@@ -2285,7 +2297,7 @@
   },
   {
     "path": "{drive}Program Files\\Java\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
       "NOTICE",
@@ -2313,7 +2325,7 @@
   },
   {
     "path": "{drive}Program Files\\Eclipse Adoptium\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
       "NOTICE",
@@ -2341,7 +2353,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.loliland\\java",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
       "NOTICE",
@@ -2369,7 +2381,7 @@
   },
   {
     "path": "{drive}Program Files\\Android\\jdk\\**\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
       "NOTICE",
@@ -2397,7 +2409,7 @@
   },
   {
     "path": "{drive}Program Files\\Android\\jdk\\**\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
       "javafx-src.zip",
@@ -2411,7 +2423,7 @@
   },
   {
     "path": "{drive}Program Files\\Zulu\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
       "NOTICE",
@@ -2439,7 +2451,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.lunarclient\\jre\\**\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
       "NOTICE",
@@ -2467,7 +2479,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixclient\\runtimes\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
       "NOTICE",
@@ -2495,7 +2507,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
       "NOTICE",
@@ -2523,7 +2535,7 @@
   },
   {
     "path": "{drive}\\Program Files (x86)\\GribLand\\runtime\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
       "NOTICE",
@@ -2683,7 +2695,7 @@
   },
   {
     "path": "{drive}Program Files\\Mem Reduct",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Mem Reduct",
     "files_to_remove": [
       "History.txt",
@@ -2853,7 +2865,7 @@
   },
   {
     "path": "{drive}Program Files\\LGHUB",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "LGHUB",
     "files_to_remove": [
       "LICENSE",
@@ -3004,7 +3016,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\BoxedAppPacker",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "BoxedAppPacker",
     "files_to_remove": [
       "CHANGELOG.txt",
@@ -3019,7 +3031,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Enigma Virtual Box",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Enigma Virtual Box",
     "files_to_remove": [
       "help.chm",
@@ -3037,7 +3049,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\GnuPG",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "GnuPG",
     "files_to_remove": [
       "README.txt",
@@ -3051,7 +3063,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Gpg4win",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Gpg4win",
     "files_to_remove": [
       "VERSION"
@@ -3064,7 +3076,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Inno Setup 6",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Inno Setup 6",
     "files_to_remove": [
       "whatsnew.htm",
@@ -3134,7 +3146,7 @@
   },
   {
     "path": "{drive}Program Files\\Process Hacker 2",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Process Hacker 2",
     "files_to_remove": [
       "CHANGELOG.txt",
@@ -3199,7 +3211,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\SoundWire Server",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "SoundWire Server",
     "files_to_remove": [
       "license.txt",
@@ -3214,7 +3226,7 @@
   },
   {
     "path": "{drive}Program Files\\SystemInformer",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "SystemInformer",
     "files_to_remove": [
       "LICENSE.txt",
@@ -3229,7 +3241,7 @@
   },
   {
     "path": "{drive}Program Files\\Sandboxie-Plus",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Sandboxie+",
     "files_to_remove": [
       "Manifest0.txt",
@@ -3244,7 +3256,7 @@
   },
   {
     "path": "{drive}Program Files\\JetBrains\\**\\license",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "JetBrains",
     "files_to_remove": [
       "javahelp_license.txt",
@@ -3301,7 +3313,7 @@
   },
   {
     "path": "{drive}Program Files\\Image-Line\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "FL Studio",
     "files_to_remove": [
       "WhatsNew.rtf"
@@ -3314,7 +3326,7 @@
   },
   {
     "path": "{drive}Program Files\\Image-Line\\Shared\\Start\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "FL Studio",
     "files_to_remove": [
       "What's new.lnk"
@@ -3362,7 +3374,7 @@
   },
   {
     "path": "{drive}Program Files\\LibreOffice",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "LibreOffice",
     "files_to_remove": [
       "CREDITS.fodt",
@@ -3444,7 +3456,7 @@
   },
   {
     "path": "{drive}Program Files\\Git/",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Git",
     "files_to_remove": [
       "LICENSE.txt",
@@ -3469,7 +3481,7 @@
   },
   {
     "path": "{drive}Program Files\\WinRAR/",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "WinRaR",
     "files_to_remove": [
       "License.txt",
@@ -3498,7 +3510,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Electron App's",
     "files_to_remove": [
       "LICENSES.chromium.html",
@@ -3523,7 +3535,7 @@
   },
   {
     "path": "{drive}Program Files\\PowerToys/",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "PowerToys",
     "files_to_remove": [
       "License.rtf",
@@ -3559,7 +3571,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\ImgBurn/",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "ImgBurn",
     "files_to_remove": [
       "ReadMe.txt"
@@ -3583,7 +3595,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\VulkanRT\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "VulcanRT",
     "files_to_remove": [
       "LICENSE.txt",
@@ -3731,7 +3743,7 @@
   },
   {
     "path": "{drive}Program Files\\VideoLAN\\VLC/",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "VLC",
     "files_to_remove": [
       "AUTHORS.txt",
@@ -3924,7 +3936,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Melissia Games\\Melissia Games Launcher\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Melissia Games Launcher",
     "files_to_remove": [
       "THIRD_PARTY_NOTICES.md",
@@ -4196,7 +4208,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\licenses\\*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Badlion Client",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -4229,7 +4241,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher\\licenses\\*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Tecknix Client",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -4262,7 +4274,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp\\licenses\\*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Modrinth",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -4295,7 +4307,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.lunarclient\\licenses\\*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Lunar Client",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -4328,7 +4340,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\licenses\\*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "MultiMC",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -4361,7 +4373,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\licenses\\*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "PrismLauncher",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -4394,7 +4406,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\licenses\\*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "PolyMC",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -4427,7 +4439,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\licenses\\*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "ATLauncher",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -4460,7 +4472,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\bin\\licenses\\*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "GribLand",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -4493,7 +4505,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\licenses\\*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "GribLand",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -4526,7 +4538,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install\\licenses\\*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "CurseForge",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -4775,7 +4787,7 @@
   },
   {
     "path": "{drive}Program Files\\ImageGlass\\License\\*",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "ImageGlass",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -4786,7 +4798,7 @@
   },
   {
     "path": "{drive}Program Files\\Inkscape/",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "InkSpace",
     "files_to_remove": [
       "NEWS.md",
@@ -4822,7 +4834,7 @@
   },
   {
     "path": "{drive}Program Files\\Notepad++/",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Notepad++",
     "files_to_remove": [
       "LICENSE",

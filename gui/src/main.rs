@@ -77,15 +77,15 @@ async fn work(
         let progress_sender = progress_sender.clone();
         let task = task::spawn(async move {
             let _ = progress_sender.send("LastActivity".to_string()).await;
-            registry_database::clear_last_activity();
+            let bytes_cleared = registry_database::clear_last_activity();
             CleanerResult {
                 files: 0,
                 folders: 0,
-                bytes: 0,
+                bytes: bytes_cleared,
                 working: true,
                 path: String::new(),
-                program: String::new(),
-                category: String::new(),
+                program: String::from("Registry"),
+                category: String::from("LastActivity"),
             }
         });
         tasks.push(task);

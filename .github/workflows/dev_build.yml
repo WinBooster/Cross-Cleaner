@@ -9,7 +9,7 @@ on:
       - '**/*.json'
       - '.github/workflows/**' 
   pull_request:
-    branches: [ "main", "test" ]
+    branches: [ "main" ]
     paths:
       - '**/*.toml'
       - '**/*.rs'
@@ -33,7 +33,7 @@ jobs:
         sed -i 's/ProductVersion = .*/ProductVersion = "${{ env.APP_VERSION }}"/' Cargo.toml
     - name: Build linux
       run: cargo build --release
-    - name: Move binaries
+    - name: Move linux binaries
       run: |
         mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI
         mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI
@@ -57,7 +57,7 @@ jobs:
         sed -i 's/ProductVersion = .*/ProductVersion = "${{ env.APP_VERSION }}"/' Cargo.toml
     - name: Build windows
       run: cargo build --release
-    - name: Move binaries
+    - name: Move windows binaries
       run: |
         move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI.exe
         move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI.exe
@@ -68,6 +68,24 @@ jobs:
         path: |
           Cross_Cleaner_CLI.exe
           Cross_Cleaner_GUI.exe
+
+  upload_databases:
+    runs-on: ubuntu-latest
+    permissions: write-all
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Move databases
+      run: |
+        move database\linux_database.json linux_database.json
+        move database\windows_database.json windows_database.json
+    - name: Upload Windows artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: databases
+        path: |
+          linux_database.json
+          windows_database.json
 
   create_release:
     needs: [build_linux, build_windows]
@@ -105,6 +123,7 @@ jobs:
           
           #### 🐛 Bug Fixes
           - Fixed false positives of Google Chrome, Ikarus antivirus for Windows
+          - Improved LastActivity clearing
 
           ### 🙏 Special Thanks
           Special thanks to our contributors:

@@ -21,8 +21,9 @@ pub fn get_steam_directory_from_registry() -> String {
 }
 
 #[cfg(windows)]
-pub fn remove_all_in_tree_in_registry(key: &RegKey, path: String) {
+pub fn remove_all_in_tree_in_registry(key: &RegKey, path: String) -> u64 {
     let mut keys = Vec::<String>::new();
+    let mut total_bytes = 0;
 
     let typed_path_read = key.open_subkey_with_flags(path.clone(), KEY_READ);
     match typed_path_read {
@@ -31,6 +32,13 @@ pub fn remove_all_in_tree_in_registry(key: &RegKey, path: String) {
             for val in typed_path_read.enum_keys() {
                 match val {
                     Ok(name) => {
+                        // Get size of subkey before deletion
+                        if let Ok(subkey) = typed_path_read.open_subkey(&name) {
+                            if let Ok(info) = subkey.query_info() {
+                                total_bytes += info.max_value_name_len() as u64;
+                                total_bytes += info.max_value_len() as u64;
+                            }
+                        }
                         keys.push(name);
                     }
                     Err(_) => {}
@@ -49,10 +57,14 @@ pub fn remove_all_in_tree_in_registry(key: &RegKey, path: String) {
         }
         Err(_) => {}
     }
+
+    total_bytes
 }
+
 #[cfg(windows)]
-pub fn remove_all_in_registry(key: &RegKey, value: String) {
+pub fn remove_all_in_registry(key: &RegKey, value: String) -> u64 {
     let mut keys = Vec::<String>::new();
+    let mut total_bytes = 0;
 
     let path = value;
 
@@ -63,6 +75,9 @@ pub fn remove_all_in_registry(key: &RegKey, value: String) {
             for val in typed_path_read.enum_values() {
                 match val {
                     Ok((name, reg_value)) => {
+                        // Calculate size of the value
+                        total_bytes += name.len() as u64;
+                        total_bytes += reg_value.bytes().len() as u64;
                         keys.push(name);
                     }
                     Err(_) => {}
@@ -81,4 +96,6 @@ pub fn remove_all_in_registry(key: &RegKey, value: String) {
         }
         Err(_) => {}
     }
+
+    total_bytes
 }

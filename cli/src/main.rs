@@ -63,18 +63,18 @@ async fn work(
             if let Some(ref pb) = progress_bar {
                 pb.set_message("LastActivity");
             }
-            database::registry_database::clear_last_activity();
+            let bytes_cleared = database::registry_database::clear_last_activity();
             if let Some(ref pb) = progress_bar {
                 pb.inc(1);
             }
             CleanerResult {
                 files: 0,
                 folders: 0,
-                bytes: 0,
+                bytes: bytes_cleared,
                 working: true,
                 path: String::new(),
-                program: String::new(),
-                category: String::new(),
+                program: String::from("Registry"),
+                category: String::from("LastActivity"),
             }
         });
         tasks.push(task);

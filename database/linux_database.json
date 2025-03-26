@@ -1665,7 +1665,8 @@
       "SUPPORT.md",
       "contributing.md",
       "LICENSE-APACHE",
-      "LICENSE-MIT"
+      "LICENSE-MIT",
+      "walkthrough-setup-tips.md"
     ],
     "directories_to_remove": [
       ".github"
@@ -1752,6 +1753,31 @@
       "DawnGraphiteCache",
       "DawnWebGPUCache",
       "GPUCache"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.cursor/extensions/**/",
+    "category": "Documentation",
+    "program": "Cursor",
+    "files_to_remove": [
+      "CHANGELOG.md",
+      "changelog.md",
+      "LICENSE.txt",
+      "README.md",
+      "readme.md",
+      "SECURITY.md",
+      "SUPPORT.md",
+      "contributing.md",
+      "LICENSE-APACHE",
+      "LICENSE-MIT",
+      "walkthrough-setup-tips.md"
+    ],
+    "directories_to_remove": [
+      ".github"
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,

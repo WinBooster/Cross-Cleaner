@@ -58,6 +58,19 @@ lazy_static! {
             }
         }
 
+        // Sort database by type priority
+        expanded_database.sort_by(|a, b| {
+            let type_priority = |t: &str| match t.to_lowercase().as_str() {
+                "logs" => 0,
+                "crash reports" => 1,
+                "documentation" => 2,
+                "cache" => 3,
+                "accounts" => 4,
+                _ => 5,
+            };
+            type_priority(&a.type_name).cmp(&type_priority(&b.type_name))
+        });
+
         expanded_database
     };
 }
