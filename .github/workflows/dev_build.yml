@@ -127,6 +127,7 @@ jobs:
           - Osu
           - Cursor
           - JDK
+          - Hearts of Iron IV
 
           #### ✨ New cleaning paths in Windows
           - Cursor
