@@ -2118,8 +2118,8 @@
   },
   {
     "path": "{drive}Program Files\\Windows Defender",
-    "category": "Logs",
-    "program": "Documentation",
+    "category": "Documentation",
+    "program": "Windows Defender",
     "files_to_remove": [
       "ThirdPartyNotices.txt"
     ],
@@ -2131,8 +2131,8 @@
   },
   {
     "path": "{drive}Program Files\\Windows Defender Advanced Threat Protection",
-    "category": "Logs",
-    "program": "Documentation",
+    "category": "Documentation",
+    "program": "Windows Defender",
     "files_to_remove": [
       "ThirdPartyNotice",
       "SenseAp.ThirdPartyNotice.txt"
