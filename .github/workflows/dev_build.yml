@@ -120,7 +120,7 @@ jobs:
         tag_name: v${{ env.APP_VERSION }}
         name: Cross Cleaner ${{ env.APP_VERSION }}
         body: |
-          ### 🚀 What's New in Version ${{ env.APP_VERSION }} ![Downloads)](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }})
+          ### 🚀 What's New in Version ${{ env.APP_VERSION }} <span style="vertical-align: middle;">![Downloads)](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }})</span>
 
           #### ✨ New cleaning paths in Linux
           - LibreOffice
