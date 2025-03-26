@@ -120,7 +120,7 @@ jobs:
           - LibreOffice
           - Osu
           - Cursor
-		  - JDK
+          - JDK
           
           #### 📦 Dependencies
           - Updated all libraries to their latest versions
