@@ -121,6 +121,9 @@ jobs:
           - Osu
           - Cursor
           - JDK
+
+          #### ✨ New cleaning paths in Linux
+          - Cursor
           
           #### 📦 Dependencies
           - Updated all libraries to their latest versions
