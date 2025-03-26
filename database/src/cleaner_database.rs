@@ -61,14 +61,15 @@ lazy_static! {
         // Sort database by type priority
         expanded_database.sort_by(|a, b| {
             let type_priority = |t: &str| match t.to_lowercase().as_str() {
-                "logs" => 0,
-                "crash reports" => 1,
-                "documentation" => 2,
-                "cache" => 3,
-                "accounts" => 4,
-                _ => 5,
+                "logs" | "log" => 0,
+                "documentation" | "docs" => 1,
+                "cache" | "cached" => 2,
+                "crash reports" | "crash" | "crashes" | "crash_reports" => 3,
+                "accounts" | "account" => 4,
+                _ => 5
             };
-            type_priority(&a.category).cmp(&type_priority(&b.category))
+            type_priority(&a.category.to_lowercase())
+                .cmp(&type_priority(&b.category.to_lowercase()))
         });
 
         expanded_database
