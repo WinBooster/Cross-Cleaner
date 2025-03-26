@@ -124,6 +124,7 @@ jobs:
 
           #### ✨ New cleaning paths in Windows
           - Cursor
+          - Osu
           
           #### 📦 Dependencies
           - Updated all libraries to their latest versions
