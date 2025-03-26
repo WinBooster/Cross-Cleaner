@@ -7,99 +7,37 @@ use winreg::enums::{HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE};
 
 #[cfg(windows)]
 pub fn clear_last_activity() -> u64 {
-    let mut total_bytes = 0u64;
+    let mut total_bytes = 0;
     let hkcu = RegKey::predef(HKEY_CURRENT_USER);
     let hklm = RegKey::predef(HKEY_LOCAL_MACHINE);
 
-    let hkcu_link = &hkcu;
-    let hklm_link = &hklm;
+    // HKEY_CURRENT_USER paths
+    let hkcu_paths = [
+        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TypedPaths", false),
+        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FeatureUsage\\ShowJumpView", false),
+        ("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Compatibility Assistant\\Store", false),
+        ("SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache", false),
+        ("SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags", true),
+        ("SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU", false),
+        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ComDlg32", true),
+        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FeatureUsage\\AppSwitched", false),
+        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RecentDocs", false),
+    ];
 
-    total_bytes += software_microsoft_windows_current_version_explorer_type_paths(hkcu_link);
-    total_bytes += software_microsoft_windows_current_version_explorer_feature_usage_show_jump_view(hkcu_link);
-    total_bytes += software_microsoft_windows_nt_current_version_app_compat_flags_compatibility_assistant_store(
-        hkcu_link,
+    // Process HKEY_CURRENT_USER paths
+    for (path, is_tree) in hkcu_paths {
+        total_bytes += if is_tree {
+            remove_all_in_tree_in_registry(&hkcu, path.to_string())
+        } else {
+            remove_all_in_registry(&hkcu, path.to_string())
+        };
+    }
+
+    // Process HKEY_LOCAL_MACHINE path
+    total_bytes += remove_all_in_tree_in_registry(
+        &hklm, 
+        "SYSTEM\\ControlSet001\\Services\\bam\\State\\UserSettings".to_string()
     );
-    total_bytes += software_classes_local_settings_software_microsoft_windows_shell_mui_cache(hkcu_link);
-    total_bytes += software_classes_local_settings_software_microsoft_windows_shell_bags(hkcu_link);
-    total_bytes += software_classes_local_settings_software_microsoft_windows_shell_bag_mru(hkcu_link);
-    total_bytes += software_microsoft_windows_current_version_explorer_com_dlg32(hkcu_link);
-    total_bytes += software_microsoft_windows_current_version_explorer_app_switched(hkcu_link);
-    total_bytes += software_microsoft_windows_current_version_explorer_recent_docs(hkcu_link);
-    total_bytes += system_contolset_services_bam_state_user_settings(hklm_link);
 
     total_bytes
-}
-
-#[cfg(windows)]
-fn system_contolset_services_bam_state_user_settings(hkcu: &RegKey) -> u64 {
-    let path = String::from("SYSTEM\\ControlSet001\\Services\\bam\\State\\UserSettings");
-    remove_all_in_tree_in_registry(hkcu, path)
-}
-
-#[cfg(windows)]
-fn software_microsoft_windows_current_version_explorer_recent_docs(hkcu: &RegKey) -> u64 {
-    let path = String::from("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RecentDocs");
-    remove_all_in_registry(hkcu, path)
-}
-
-#[cfg(windows)]
-fn software_microsoft_windows_current_version_explorer_app_switched(hkcu: &RegKey) -> u64 {
-    let path = String::from(
-        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FeatureUsage\\AppSwitched",
-    );
-    remove_all_in_registry(hkcu, path)
-}
-
-#[cfg(windows)]
-fn software_microsoft_windows_current_version_explorer_com_dlg32(hkcu: &RegKey) -> u64 {
-    let path = String::from("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ComDlg32");
-    remove_all_in_tree_in_registry(hkcu, path)
-}
-
-#[cfg(windows)]
-fn software_classes_local_settings_software_microsoft_windows_shell_bag_mru(hkcu: &RegKey) -> u64 {
-    let path = String::from(
-        "SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU",
-    );
-    remove_all_in_registry(hkcu, path)
-}
-
-#[cfg(windows)]
-fn software_classes_local_settings_software_microsoft_windows_shell_bags(hkcu: &RegKey) -> u64 {
-    let path = String::from(
-        "SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags",
-    );
-    remove_all_in_tree_in_registry(hkcu, path)
-}
-
-#[cfg(windows)]
-fn software_classes_local_settings_software_microsoft_windows_shell_mui_cache(hkcu: &RegKey) -> u64 {
-    let path = String::from(
-        "SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache",
-    );
-    remove_all_in_registry(hkcu, path)
-}
-
-#[cfg(windows)]
-fn software_microsoft_windows_nt_current_version_app_compat_flags_compatibility_assistant_store(
-    hkcu: &RegKey,
-) -> u64 {
-    let path = String::from(
-        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Compatibility Assistant\\Store",
-    );
-    remove_all_in_registry(hkcu, path)
-}
-
-#[cfg(windows)]
-fn software_microsoft_windows_current_version_explorer_feature_usage_show_jump_view(hkcu: &RegKey) -> u64 {
-    let path = String::from(
-        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FeatureUsage\\ShowJumpView",
-    );
-    remove_all_in_registry(hkcu, path)
-}
-
-#[cfg(windows)]
-fn software_microsoft_windows_current_version_explorer_type_paths(hkcu: &RegKey) -> u64 {
-    let path = String::from("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TypedPaths");
-    remove_all_in_registry(hkcu, path)
 }
