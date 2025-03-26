@@ -77,8 +77,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: Move databases
       run: |
-        mv database\linux_database.json linux_database.json
-        mv database\windows_database.json windows_database.json
+        mv database/linux_database.json linux_database.json
+        mv database/windows_database.json windows_database.json
     - name: Upload Windows artifacts
       uses: actions/upload-artifact@v4
       with:
