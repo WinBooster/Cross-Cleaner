@@ -21,16 +21,26 @@ env:
   APP_VERSION: "1.9.6"
 
 jobs:
-  build_linux:
+  formating_code:
     runs-on: ubuntu-latest
     permissions: write-all
-    name: Build Linux
+    name: Formating code
     steps:
     - uses: actions/checkout@v4
     - name: Update Cargo.toml version
       run: |
         sed -i 's/^version = .*/version = "${{ env.APP_VERSION }}"/' Cargo.toml
         sed -i 's/ProductVersion = .*/ProductVersion = "${{ env.APP_VERSION }}"/' Cargo.toml
+    - name: Formating code
+      run: cargo fmt
+
+  build_linux:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    name: Build Linux
+    needs: [formating_code]
+    steps:
+    - uses: actions/checkout@v4
     - name: Build linux
       run: cargo build --release
     - name: Move linux binaries
@@ -49,12 +59,9 @@ jobs:
     runs-on: windows-latest
     permissions: write-all
     name: Build Windows
+    needs: [formating_code]
     steps:
     - uses: actions/checkout@v4
-    - name: Update Cargo.toml version
-      run: |
-        sed -i 's/^version = .*/version = "${{ env.APP_VERSION }}"/' Cargo.toml
-        sed -i 's/ProductVersion = .*/ProductVersion = "${{ env.APP_VERSION }}"/' Cargo.toml
     - name: Build windows
       run: cargo build --release
     - name: Move windows binaries
