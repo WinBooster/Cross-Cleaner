@@ -59,7 +59,6 @@ jobs:
     name: Build Linux
     needs: [formating_code]
     steps:
-    - uses: actions/checkout@v4
     - name: Build linux
       run: cargo build --release
     - name: Move linux binaries
@@ -80,7 +79,6 @@ jobs:
     name: Build Windows
     needs: [formating_code]
     steps:
-    - uses: actions/checkout@v4
     - name: Build windows
       run: cargo build --release
     - name: Move windows binaries
@@ -103,7 +101,6 @@ jobs:
       contents: write
 
     steps:
-    - uses: actions/checkout@v4
     - name: Download Linux artifacts
       uses: actions/download-artifact@v4
       with:
@@ -120,7 +117,7 @@ jobs:
         tag_name: v${{ env.APP_VERSION }}
         name: Cross Cleaner ${{ env.APP_VERSION }}
         body: |
-          ### 🚀 What's New in Version ${{ env.APP_VERSION }} <span style="vertical-align: middle;">![Downloads)](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }})</span>
+          ### 🚀 What's New in Version ${{ env.APP_VERSION }} <span style="vertical-align: middle;"> ![Downloads)](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}) </span>
 
           #### ✨ New cleaning paths in Linux
           - LibreOffice
