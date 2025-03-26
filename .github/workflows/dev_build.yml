@@ -34,6 +34,25 @@ jobs:
     - name: Formating code
       run: cargo fmt
 
+  upload_databases:
+    runs-on: ubuntu-latest
+    name: Archive databases
+    permissions: write-all
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Move databases
+      run: |
+        mv database/linux_database.json linux_database.json
+        mv database/windows_database.json windows_database.json
+    - name: Upload databases to artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: databases
+        path: |
+          linux_database.json
+          windows_database.json
+
   build_linux:
     runs-on: ubuntu-latest
     permissions: write-all
@@ -76,26 +95,6 @@ jobs:
           Cross_Cleaner_CLI.exe
           Cross_Cleaner_GUI.exe
 
-  upload_databases:
-    needs: [build_linux, build_windows]
-    runs-on: ubuntu-latest
-    name: Upload Databases
-    permissions: write-all
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Move databases
-      run: |
-        mv database/linux_database.json linux_database.json
-        mv database/windows_database.json windows_database.json
-    - name: Upload Windows artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: databases
-        path: |
-          linux_database.json
-          windows_database.json
-
   create_release:
     needs: [build_linux, build_windows]
     runs-on: ubuntu-latest
@@ -121,7 +120,7 @@ jobs:
         tag_name: v${{ env.APP_VERSION }}
         name: Cross Cleaner ${{ env.APP_VERSION }}
         body: |
-          ### 🚀 What's New in Version ${{ env.APP_VERSION }}
+          ### 🚀 What's New in Version ${{ env.APP_VERSION }} ![Downloads)](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }})
 
           #### ✨ New cleaning paths in Linux
           - LibreOffice
