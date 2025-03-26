@@ -122,7 +122,7 @@ jobs:
           - Cursor
           - JDK
 
-          #### ✨ New cleaning paths in Linux
+          #### ✨ New cleaning paths in Windows
           - Cursor
           
           #### 📦 Dependencies
