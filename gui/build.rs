@@ -3,9 +3,6 @@ extern crate winres;
 
 #[cfg(windows)]
 fn main() {
-    println!("cargo:rustc-link-arg=/SUBSYSTEM:WINDOWS");
-    println!("cargo:rustc-link-arg=/ENTRY:mainCRTStartup");
-
     let mut res = winres::WindowsResource::new();
     res.set_icon("../assets\\icon.ico");
 

@@ -1,3 +1,8 @@
+#![cfg_attr(
+    all(not(debug_assertions), target_os = "windows"),
+    windows_subsystem = "windows"
+)]
+
 use cleaner::clear_data;
 use database::{get_icon, get_pcbooster_version};
 #[cfg(windows)]
