@@ -27,5 +27,26 @@
 
 ## 📥 Installation
 
-### Download Pre-built Binary
+### Option 1: Download Pre-built Binary
 Get the latest release from our [releases page](https://github.com/WinBooster/Cross-Cleaner/releases).
+
+### Option 2: Build from Source
+
+1. Make sure you have [Rust](https://www.rust-lang.org/) installed (version 1.70 or higher):
+```bash
+rustc --version
+```
+
+2. Clone the repository:
+```bash
+git clone https://github.com/WinBooster/Cross-Cleaner.git
+cd Cross-Cleaner
+```
+
+3. Build the project:
+```bash
+cargo build --release
+```
+
+4. The compiled binary will be located in `target/release`
+
