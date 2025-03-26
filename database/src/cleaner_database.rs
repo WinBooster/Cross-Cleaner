@@ -68,7 +68,7 @@ lazy_static! {
                 "accounts" => 4,
                 _ => 5,
             };
-            type_priority(&a.type_name).cmp(&type_priority(&b.type_name))
+            type_priority(&a.category).cmp(&type_priority(&b.category))
         });
 
         expanded_database
