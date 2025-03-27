@@ -4662,7 +4662,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Program Files\\AmneziaVPN",
+    "path": "{drive}Program Files\\AmneziaVPN/",
     "category": "Logs",
     "program": "Amnezia VPN",
     "files_to_remove": [
@@ -4952,6 +4952,32 @@
     "files_to_remove": [],
     "directories_to_remove": [
       "screenshots"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\npm-cache/",
+    "category": "Logs",
+    "program": "Node JS",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "_logs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\npm-cache/",
+    "category": "Cache",
+    "program": "Node JS",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "_cacache"
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
