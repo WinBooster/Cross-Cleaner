@@ -20,6 +20,9 @@ fn main() {
     "#,
     );
 
+    // Hide console window
+    res.set("NO_CONSOLE", "1");
+
     res.compile().unwrap();
 }
 
