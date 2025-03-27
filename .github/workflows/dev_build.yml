@@ -132,13 +132,14 @@ jobs:
           #### ✨ New cleaning paths in Windows
           - Cursor
           - Osu
+          - Improved VS Code extensions cleaning
+          - Improved LastActivity clearing
           
           #### 📦 Dependencies
           - Updated all libraries to their latest versions
           
           #### 🐛 Bug Fixes
           - Fixed false positives of Google Chrome, Ikarus antivirus for Windows
-          - Improved LastActivity clearing
 
           ### 🙏 Special Thanks
           Special thanks to our contributors:

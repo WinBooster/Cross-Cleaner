@@ -4867,6 +4867,25 @@
     "remove_files": false
   },
   {
+    "path": "{drive}Users\\{username}\\.vscode\\extensions\\**/",
+    "category": "Documentation",
+    "program": "VS Code",
+    "files_to_remove": [
+      "LICENSE",
+      "LICENSE.txt",
+      "changelog.md",
+      "change.log",
+      "readme.txt",
+      "readme.md",
+      "walkthrough-setup-tips.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Cursor/",
     "category": "Logs",
     "program": "Cursor",
