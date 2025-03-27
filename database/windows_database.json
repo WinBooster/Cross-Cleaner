@@ -389,7 +389,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\DeepL_SE\\cache\\*",
     "category": "Cache",
-    "program": "LGHUB",
+    "program": "DeepL",
     "files_to_remove": [],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -2871,7 +2871,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\DeepL_SE\\logs\\*",
     "category": "Logs",
-    "program": "LGHUB",
+    "program": "DeepL",
     "files_to_remove": [],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -4804,7 +4804,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Radmin VPN/",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Radmin VPN",
     "files_to_remove": [
       "eula.txt"
