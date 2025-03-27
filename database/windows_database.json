@@ -4983,5 +4983,21 @@
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\nodejs\\node_modules\\npm/",
+    "category": "Documentation",
+    "program": "Node JS",
+    "files_to_remove": [
+      "README.md",
+      "LICENSE"
+    ],
+    "directories_to_remove": [
+      "docs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
   }
 ]

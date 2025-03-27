@@ -124,17 +124,17 @@ jobs:
 
           #### ✨ New cleaning paths in Linux
           - LibreOffice
-          - Osu logs, screenshots
+          - Osu
           - Cursor extensions
           - JDK documentation
-          - Hearts of Iron IV logs, crash reports
+          - Hearts of Iron IV
 
           #### ✨ New cleaning paths in Windows
           - Cursor
           - Osu
           - Node JS
           - Improved VS Code
-          - Improved LastActivity clearing
+          - Improved LastActivity
           
           #### 📦 Dependencies
           - Updated all libraries to their latest versions
