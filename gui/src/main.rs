@@ -10,7 +10,7 @@ use database::structures::CleanerData;
 #[cfg(windows)]
 use database::structures::CleanerResult;
 use database::utils::get_file_size_string;
-use database::{get_icon, get_pcbooster_version};
+use database::{get_icon, get_version};
 use eframe::egui;
 use egui::IconData;
 use image::ImageReader;
@@ -37,7 +37,7 @@ async fn main() -> eframe::Result {
     };
 
     eframe::run_native(
-        &*("Cross Cleaner GUI v".to_owned() + &*get_pcbooster_version()),
+        &*("Cross Cleaner GUI v".to_owned() + &*get_version()),
         options,
         Box::new(|_cc| {
             _cc.egui_ctx.set_visuals(egui::Visuals::dark());

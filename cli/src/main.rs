@@ -272,7 +272,7 @@ async fn main() {
             }
         }
     } else {
-        database::cleaner_database::get_default_database().clone()
+        database::cleaner_database::get_default_database()
     };
 
     let mut options: HashSet<String> = HashSet::new();

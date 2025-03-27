@@ -7,7 +7,7 @@ mod registry_utils;
 pub mod structures;
 pub mod utils;
 
-pub fn get_pcbooster_version() -> String {
+pub fn get_version() -> String {
     env::var("APP_VERSION").unwrap_or_else(|_| String::from("1.9.6"))
 }
 
