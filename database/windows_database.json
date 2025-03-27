@@ -1376,35 +1376,16 @@
     "remove_files": false
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\My Games\\Terraria\\Players",
-    "category": "Game saves",
-    "program": "Terraria",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": true,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Users\\{username}\\Documents\\My Games\\Terraria\\Worlds",
-    "category": "Game saves",
-    "program": "Terraria",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": true,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Users\\{username}\\Documents\\My Games\\Terraria",
+    "path": "{drive}Users\\{username}\\Documents\\My Games\\Terraria/",
     "category": "Game saves",
     "program": "Terraria",
     "files_to_remove": [
       "favorites.json"
     ],
-    "directories_to_remove": [],
+    "directories_to_remove": [
+      "Players",
+      "Worlds"
+    ],
     "remove_all_in_dir": true,
     "remove_directory_after_clean": false,
     "remove_directories": false,
