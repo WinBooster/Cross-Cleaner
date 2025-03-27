@@ -130,11 +130,11 @@ jobs:
           - Hearts of Iron IV logs, crash reports
 
           #### ✨ New cleaning paths in Windows
-          - Cursor extensions
-          - Osu logs, screenshots
-          - Improved VS Code extensions cleaning
+          - Cursor
+          - Osu
+          - Improved VS Code
           - Improved LastActivity clearing
-          - Node JS cache, logs
+          - Node JS
           
           #### 📦 Dependencies
           - Updated all libraries to their latest versions
