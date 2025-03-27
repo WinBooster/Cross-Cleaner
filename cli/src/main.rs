@@ -5,7 +5,7 @@ use crossterm::execute;
 use database::structures::CleanerResult;
 use database::structures::{CleanerData, Cleared};
 use database::utils::get_file_size_string;
-use database::{get_icon, get_pcbooster_version};
+use database::{get_icon, get_version};
 use indicatif::{ProgressBar, ProgressStyle};
 use inquire::formatter::MultiOptionFormatter;
 use inquire::list_option::ListOption;
@@ -257,7 +257,7 @@ struct Args {
 async fn main() {
     execute!(
         stdout(),
-        crossterm::terminal::SetTitle(format!("Cross Cleaner CLI v{}", get_pcbooster_version()))
+        crossterm::terminal::SetTitle(format!("Cross Cleaner CLI v{}", get_version()))
     )
     .unwrap();
 
@@ -272,7 +272,7 @@ async fn main() {
             }
         }
     } else {
-        database::cleaner_database::get_default_database()
+        database::cleaner_database::get_default_database().clone()
     };
 
     let mut options: HashSet<String> = HashSet::new();
