@@ -3619,11 +3619,13 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Code\\logs",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Code/",
     "category": "Logs",
     "program": "VS Code",
     "files_to_remove": [],
-    "directories_to_remove": [],
+    "directories_to_remove": [
+      "logs"
+    ],
     "remove_all_in_dir": true,
     "remove_directory_after_clean": false,
     "remove_directories": false,
@@ -4086,7 +4088,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft/logs/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft\\logs/*",
     "category": "Logs",
     "program": "MultiMC",
     "files_to_remove": [],
@@ -4097,7 +4099,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft/logs/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\logs/*",
     "category": "Logs",
     "program": "PrismLauncher",
     "files_to_remove": [],
@@ -4108,7 +4110,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft/logs/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft\\logs/*",
     "category": "Logs",
     "program": "PrismLauncher",
     "files_to_remove": [],
@@ -4119,7 +4121,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft/logs/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\logs/*",
     "category": "Logs",
     "program": "PolyMC",
     "files_to_remove": [],
@@ -4130,7 +4132,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft/logs/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft\\logs/*",
     "category": "Logs",
     "program": "PolyMC",
     "files_to_remove": [],
@@ -4152,7 +4154,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}.loliland\\updates\\clients\\**/logs/*",
+    "path": "{drive}.loliland\\updates\\clients\\**\\logs/*",
     "category": "Logs",
     "program": "LoliLand",
     "files_to_remove": [],
@@ -4537,11 +4539,13 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install\\licenses\\*",
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install/",
     "category": "Documentation",
     "program": "CurseForge",
     "files_to_remove": [],
-    "directories_to_remove": [],
+    "directories_to_remove": [
+      "licenses"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": true,
