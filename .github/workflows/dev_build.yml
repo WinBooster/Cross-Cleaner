@@ -132,9 +132,9 @@ jobs:
           #### ✨ New cleaning paths in Windows
           - Cursor
           - Osu
+          - Node JS
           - Improved VS Code
           - Improved LastActivity clearing
-          - Node JS
           
           #### 📦 Dependencies
           - Updated all libraries to their latest versions
