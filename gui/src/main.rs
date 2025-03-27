@@ -4,25 +4,25 @@
 )]
 
 use cleaner::clear_data;
-use database::{get_icon, get_pcbooster_version};
 #[cfg(windows)]
 use database::registry_database;
+use database::structures::CleanerData;
 #[cfg(windows)]
 use database::structures::CleanerResult;
-use database::structures::CleanerData;
 use database::utils::get_file_size_string;
+use database::{get_icon, get_pcbooster_version};
 use eframe::egui;
+use egui::IconData;
+use image::ImageReader;
 use notify_rust::Notification;
 use std::cell::RefCell;
 use std::collections::HashSet;
+use std::io::Write;
 use std::rc::Rc;
 use std::sync::Arc;
-use egui::IconData;
-use image::ImageReader;
+use tempfile::NamedTempFile;
 use tokio::sync::mpsc;
 use tokio::task;
-use tempfile::NamedTempFile;
-use std::io::Write;
 
 #[tokio::main]
 async fn main() -> eframe::Result {
@@ -36,7 +36,6 @@ async fn main() -> eframe::Result {
         ..Default::default()
     };
 
-	
     eframe::run_native(
         &*("Cross Cleaner GUI v".to_owned() + &*get_pcbooster_version()),
         options,
@@ -132,19 +131,19 @@ async fn work(
     let mut temp_file = NamedTempFile::new().unwrap();
     temp_file.write_all(get_icon()).unwrap();
     let icon_path = temp_file.path().to_str().unwrap();
-        
+
     let notification_result = Notification::new()
-    .summary("Cross Cleaner GUI")
-    .body(
-        &*("Removed: ".to_owned()
-            + &*get_file_size_string(bytes_cleared)
-            + "\nFiles: "
-            + &*removed_files.to_string()
-            + "\nDirs: "
-            + &*removed_directories.to_string()),
-    )
-    .icon(icon_path)
-    .show();
+        .summary("Cross Cleaner GUI")
+        .body(
+            &*("Removed: ".to_owned()
+                + &*get_file_size_string(bytes_cleared)
+                + "\nFiles: "
+                + &*removed_files.to_string()
+                + "\nDirs: "
+                + &*removed_directories.to_string()),
+        )
+        .icon(icon_path)
+        .show();
 
     temp_file.close().unwrap();
     if let Err(e) = notification_result {

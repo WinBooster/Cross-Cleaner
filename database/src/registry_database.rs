@@ -13,15 +13,42 @@ pub fn clear_last_activity() -> u64 {
 
     // HKEY_CURRENT_USER paths
     let hkcu_paths = [
-        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TypedPaths", false),
-        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FeatureUsage\\ShowJumpView", false),
-        ("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Compatibility Assistant\\Store", false),
-        ("SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache", false),
-        ("SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags", true),
-        ("SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU", false),
-        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ComDlg32", true),
-        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FeatureUsage\\AppSwitched", false),
-        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RecentDocs", false),
+        (
+            "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TypedPaths",
+            false,
+        ),
+        (
+            "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FeatureUsage\\ShowJumpView",
+            false,
+        ),
+        (
+            "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Compatibility Assistant\\Store",
+            false,
+        ),
+        (
+            "SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache",
+            false,
+        ),
+        (
+            "SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags",
+            true,
+        ),
+        (
+            "SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU",
+            false,
+        ),
+        (
+            "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ComDlg32",
+            true,
+        ),
+        (
+            "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FeatureUsage\\AppSwitched",
+            false,
+        ),
+        (
+            "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RecentDocs",
+            false,
+        ),
     ];
 
     // Process HKEY_CURRENT_USER paths
@@ -35,8 +62,8 @@ pub fn clear_last_activity() -> u64 {
 
     // Process HKEY_LOCAL_MACHINE path
     total_bytes += remove_all_in_tree_in_registry(
-        &hklm, 
-        "SYSTEM\\ControlSet001\\Services\\bam\\State\\UserSettings".to_string()
+        &hklm,
+        "SYSTEM\\ControlSet001\\Services\\bam\\State\\UserSettings".to_string(),
     );
 
     total_bytes
