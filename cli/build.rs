@@ -3,8 +3,8 @@ use winres::WindowsResource;
 #[cfg(windows)]
 fn main() {
     let mut res = WindowsResource::new();
-    res.set_icon("src/icon.ico")
-        .set("AppId", "com.crosscleaner.cli");
+    res.set_icon("../assets\\icon.ico");
+    res.set("AppId", "com.crosscleaner.cli");
 
     res.set_manifest(
         r#"
