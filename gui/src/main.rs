@@ -141,9 +141,9 @@ async fn work(
 
     let mut notification = Notification::new();
     let mut notification = notification
-            .summary("Cross Cleaner GUI")
-            .body(&notification_body)
-            .icon(icon_path);
+        .summary("Cross Cleaner GUI")
+        .body(&notification_body)
+        .icon(icon_path);
 
     #[cfg(target_os = "windows")]
     {
