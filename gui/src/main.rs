@@ -132,22 +132,23 @@ async fn work(
     temp_file.write_all(get_icon()).unwrap();
     let icon_path = temp_file.path().to_str().unwrap();
 
+    let notification_body = format!(
+        "Removed: {}\nFiles: {}\nDirs: {}",
+        get_file_size_string(bytes_cleared),
+        removed_files,
+        removed_directories
+    );
 
     let mut notification = Notification::new();
-    
-    notification.summary("Cross Cleaner GUI");
-    notification.body(
-            &*("Removed: ".to_owned()
-                + &*get_file_size_string(bytes_cleared)
-                + "\nFiles: "
-                + &*removed_files.to_string()
-                + "\nDirs: "
-                + &*removed_directories.to_string()),
-        );
-        notification.icon(icon_path);
+    let mut notification = notification
+        .summary("Cross Cleaner GUI")
+        .body(&notification_body)
+        .icon(icon_path);
 
     #[cfg(target_os = "windows")]
-    let notification = notification.app_id("com.crosscleaner.gui");
+    {
+        notification = notification.app_id("com.crosscleaner.gui");
+    }
 
     let notification_result = notification.show();
 
