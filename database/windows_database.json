@@ -2091,15 +2091,17 @@
     "remove_files": true
   },
   {
-    "path": "{drive}ProgramData\\USOShared\\Logs\\*",
+    "path": "{drive}ProgramData\\USOShared/",
     "category": "Logs",
     "program": "Windows",
     "files_to_remove": [],
-    "directories_to_remove": [],
+    "directories_to_remove": [
+      "Logs"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Program Files\\Windows Defender/",
