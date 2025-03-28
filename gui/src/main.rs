@@ -149,7 +149,6 @@ async fn work(
         .body(&notification_body)
         .icon(icon_path);
 
-
     let notification_result = notification.show();
 
     temp_file.close().unwrap();
