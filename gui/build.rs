@@ -5,6 +5,7 @@ extern crate winres;
 fn main() {
     let mut res = winres::WindowsResource::new();
     res.set_icon("../assets\\icon.ico");
+    res.set("AppId", "com.crosscleaner.cli");
 
     res.set_manifest(
         r#"
@@ -23,7 +24,10 @@ fn main() {
     // Hide console window
     res.set("NO_CONSOLE", "1");
 
-    res.compile().unwrap();
+    if let Err(e) = res.compile() {
+        eprintln!("Error: {}", e);
+        std::process::exit(1);
+    }
 }
 
 #[cfg(unix)]

@@ -1,10 +1,10 @@
-#[cfg(windows)]
-extern crate winres;
+use winres::WindowsResource;
 
 #[cfg(windows)]
 fn main() {
-    let mut res = winres::WindowsResource::new();
-    res.set_icon("../assets\\icon.ico");
+    let mut res = WindowsResource::new();
+    res.set_icon("src/icon.ico")
+        .set("AppId", "com.crosscleaner.cli");
 
     res.set_manifest(
         r#"
@@ -20,7 +20,10 @@ fn main() {
     "#,
     );
 
-    res.compile().unwrap();
+    if let Err(e) = res.compile() {
+        eprintln!("Error: {}", e);
+        std::process::exit(1);
+    }
 }
 
 #[cfg(unix)]

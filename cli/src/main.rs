@@ -200,6 +200,7 @@ async fn work(
             .summary("Cross Cleaner CLI")
             .body(&notification_body)
             .icon(icon_path)
+            .app_id("com.crosscleaner.cli")
             .show();
 
         temp_file.close().unwrap();

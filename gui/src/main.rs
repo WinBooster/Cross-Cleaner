@@ -142,6 +142,7 @@ async fn work(
                 + "\nDirs: "
                 + &*removed_directories.to_string()),
         )
+        .app_id("com.crosscleaner.cli")
         .icon(icon_path)
         .show();
 
