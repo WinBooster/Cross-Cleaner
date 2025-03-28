@@ -8,7 +8,7 @@ use std::sync::OnceLock;
 
 static DATABASE: OnceLock<Vec<CleanerData>> = OnceLock::new();
 
-fn get_default_database() -> &'static Vec<CleanerData> {
+pub fn get_default_database() -> &'static Vec<CleanerData> {
     DATABASE.get_or_init(|| {
         #[cfg(unix)]
         let data = include_str!("../linux_database.json");
