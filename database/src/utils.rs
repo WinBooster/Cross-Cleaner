@@ -8,7 +8,7 @@ pub fn get_file_size_string(size: u64) -> String {
 
     let mut size_u = size;
     let mut group = 0;
-    
+
     while size_u >= SCALE && group < UNITS.len() - 1 {
         size_u /= SCALE;
         group += 1;
