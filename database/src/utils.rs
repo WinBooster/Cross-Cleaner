@@ -1,6 +1,6 @@
 pub fn get_file_size_string(size: u64) -> String {
-    if size <= 0 {
-        return "0 B".to_string();
+    if size == 0 {
+        return String::from("0 B");
     }
 
     let units = ["B", "KB", "MB", "GB", "TB"];
