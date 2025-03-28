@@ -142,6 +142,7 @@ async fn work(
                 + "\nDirs: "
                 + &*removed_directories.to_string()),
         )
+        #[cfg(windows)]
         .app_id("com.crosscleaner.gui")
         .icon(icon_path)
         .show();
