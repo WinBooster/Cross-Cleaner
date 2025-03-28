@@ -4,8 +4,7 @@ use winres::WindowsResource;
 #[cfg(windows)]
 fn main() {
     let mut res = WindowsResource::new();
-    res.set_icon("../assets\\icon.ico")
-    .set("AppId", "{9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3}");
+    res.set_icon("../assets\\icon.ico");
 
     res.set_manifest(
         r#"

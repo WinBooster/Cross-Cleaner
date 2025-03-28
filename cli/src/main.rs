@@ -202,9 +202,6 @@ async fn work(
         notification.body(&notification_body);
         notification.icon(icon_path);
 
-        #[cfg(target_os = "windows")]
-        let notification = notification.app_id("com.crosscleaner.cli");
-
         let notification_result = notification.show();
 
         temp_file.close().unwrap();
