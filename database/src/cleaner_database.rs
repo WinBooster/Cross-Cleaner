@@ -16,8 +16,8 @@ fn get_default_database() -> &'static Vec<CleanerData> {
         let data = include_str!("../windows_database.json");
 
         // Deserialization JSON to Vec<CleanerData>
-        let database: Vec<CleanerData> = serde_json::from_str(&data)
-            .expect(&"Failed to parse database".to_string());
+        let database: Vec<CleanerData> =
+            serde_json::from_str(&data).expect(&"Failed to parse database".to_string());
 
         // Get the username
         let username = whoami::username();
