@@ -196,13 +196,17 @@ async fn work(
             removed_directories
         );
 
-        let notification_result = Notification::new()
+        let mut notification = Notification::new()
             .summary("Cross Cleaner CLI")
             .body(&notification_body)
-            .icon(icon_path)
-            #[cfg(windows)]
-            .app_id("com.crosscleaner.cli")
-            .show();
+            .icon(icon_path);
+
+        #[cfg(target_os = "windows")]
+        {
+            notification = notification.app_id("com.crosscleaner.cli");
+        }
+
+        let notification_result = notification.show();
 
         temp_file.close().unwrap();
         if let Err(e) = notification_result {
