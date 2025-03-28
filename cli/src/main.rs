@@ -197,10 +197,10 @@ async fn work(
         );
 
         let mut notification = Notification::new();
-    
-        notification = notification.summary("Cross Cleaner CLI");
-        notification = notification.body(&notification_body);
-        notification = notification.icon(icon_path);
+
+        notification.summary("Cross Cleaner CLI");
+        notification.body(&notification_body);
+        notification.icon(icon_path);
 
         #[cfg(target_os = "windows")]
         let notification = notification.app_id("com.crosscleaner.cli");
