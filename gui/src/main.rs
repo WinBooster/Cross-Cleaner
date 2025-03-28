@@ -29,9 +29,13 @@ async fn main() -> eframe::Result {
     let icon_bytes = get_icon();
     let icon = load_icon_from_bytes(icon_bytes).expect("Failed to load icon");
 
+    let size = egui::vec2(430.0, 150.0);
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
-            .with_inner_size([430.0, 150.0])
+            .with_inner_size(size)
+            .with_min_inner_size(size)
+            .with_max_inner_size(size)
+            .with_resizable(false)
             .with_icon(icon),
         ..Default::default()
     };
@@ -69,12 +73,12 @@ async fn work(
     let mut bytes_cleared = 0;
     let mut removed_files = 0;
     let mut removed_directories = 0;
-    let mut cleared_programs: HashSet<String> = HashSet::new();
+    let mut cleared_programs: HashSet<String> = HashSet::with_capacity(database.len());
 
     #[cfg(windows)]
     let has_last_activity = categories.contains(&"LastActivity".to_string());
 
-    let mut tasks = Vec::new();
+    let mut tasks = Vec::with_capacity(database.len() + 1);
 
     #[cfg(windows)]
     if has_last_activity {
@@ -133,14 +137,14 @@ async fn work(
     let icon_path = temp_file.path().to_str().unwrap();
 
     let notification_body = format!(
-        "Removed: {}\nFiles: {}\nDirs: {}",
+        "Removed: {}, Files: {}, Dirs: {}",
         get_file_size_string(bytes_cleared),
         removed_files,
         removed_directories
     );
 
     let mut notification = Notification::new();
-    let mut notification = notification
+    let notification = notification
         .summary("Cross Cleaner GUI")
         .body(&notification_body)
         .icon(icon_path);
@@ -165,7 +169,7 @@ impl MyApp {
     pub(crate) fn new() -> Self {
         let database: &Vec<CleanerData> = database::cleaner_database::get_default_database();
 
-        let mut options: Vec<String> = vec![];
+        let mut options: Vec<String> = Vec::with_capacity(database.len());
         for data in database.iter() {
             if !options.contains(&data.category) {
                 options.push(data.category.clone());

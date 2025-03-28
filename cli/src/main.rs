@@ -33,7 +33,7 @@ async fn work(
     let bytes_cleared = Arc::new(Mutex::new(0));
     let removed_files = Arc::new(Mutex::new(0));
     let removed_directories = Arc::new(Mutex::new(0));
-    let cleared_programs = Arc::new(Mutex::new(Vec::<Cleared>::new()));
+    let cleared_programs = Arc::new(Mutex::new(Vec::<Cleared>::with_capacity(database.len())));
 
     let pb = if args.show_progress_bar {
         let sty = ProgressStyle::with_template(
@@ -54,7 +54,7 @@ async fn work(
     #[cfg(windows)]
     let has_last_activity = categories.contains(&"LastActivity".to_string());
 
-    let mut tasks = Vec::new();
+    let mut tasks = Vec::with_capacity(database.len() + 1);
 
     #[cfg(windows)]
     if has_last_activity {
@@ -196,13 +196,11 @@ async fn work(
             removed_directories
         );
 
-        let mut notification = Notification::new();
-
-        notification.summary("Cross Cleaner CLI");
-        notification.body(&notification_body);
-        notification.icon(icon_path);
-
-        let notification_result = notification.show();
+        let notification_result = Notification::new()
+            .summary("Cross Cleaner CLI")
+            .body(&notification_body)
+            .icon(icon_path)
+            .show();
 
         temp_file.close().unwrap();
         if let Err(e) = notification_result {

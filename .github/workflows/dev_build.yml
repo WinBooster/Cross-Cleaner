@@ -127,9 +127,7 @@ jobs:
         body: |
           # 🌟 Cross Cleaner ${{ env.APP_VERSION }} - Cleaner & Better! 🌟
 
-          ![Downloads](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}/total)
-          ![Version](https://img.shields.io/badge/version-${{ env.APP_VERSION }}-blue)
-          ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux-orange)
+          ![Downloads](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}/total) ![Version](https://img.shields.io/badge/version-${{ env.APP_VERSION }}-blue) ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux-orange)
 
           ## ✨ What's New
 
@@ -145,7 +143,8 @@ jobs:
           - **Osu! Game**: Improved cleaning routines
           - **Node.js**: Clear npm cache and temp files
           - **VS Code**: Better extension and workspace cleanup
-          - **LastActivity**: Enhanced system activity cleaning
+          - **LastActivity**: Enhanced system activity cleaningъ
+          - **Thunderbird**: Clean crashes
 
           ### 🛠️ Technical Updates
           - **Dependencies**: All libraries updated to latest versions

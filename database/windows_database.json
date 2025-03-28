@@ -4684,7 +4684,7 @@
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
-    "remove_files": true
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Guilded\\*.log",
@@ -4740,8 +4740,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Program Files\\AmneziaVPN/",
@@ -4753,7 +4753,7 @@
     "directories_to_remove": [],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
+    "remove_directories": false,
     "remove_files": false
   },
   {
@@ -4766,7 +4766,7 @@
     "directories_to_remove": [],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
+    "remove_directories": false,
     "remove_files": false
   },
   {
@@ -4779,8 +4779,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}ProgramData\\Famatech\\Radmin VPN\\*.txt",
@@ -4815,7 +4815,7 @@
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
-    "remove_files": true
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\UrbanVPN/",
@@ -4827,8 +4827,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Cloudflare\\*.log",
@@ -4886,7 +4886,7 @@
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
-    "remove_files": true
+    "remove_files": false
   },
   {
     "path": "{drive}Program Files\\Inkscape/",
@@ -4924,7 +4924,7 @@
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
-    "remove_files": true
+    "remove_files": false
   },
   {
     "path": "{drive}Program Files\\Notepad++/",
@@ -5084,6 +5084,32 @@
     ],
     "directories_to_remove": [
       "docs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}\\Program Files (x86)\\Mozilla Maintenance Service/",
+    "category": "Logs",
+    "program": "Mozilla Maintenance Service",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "logs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\thunderbird\\Profiles\\**/",
+    "category": "Crashes",
+    "program": "Thunderbird",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "crashes"
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
