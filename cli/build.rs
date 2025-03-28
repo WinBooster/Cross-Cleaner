@@ -1,3 +1,4 @@
+#[cfg(windows)]
 use winres::WindowsResource;
 
 #[cfg(windows)]
