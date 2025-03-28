@@ -197,7 +197,7 @@ async fn work(
         );
 
         let mut notification = Notification::new();
-    
+
         notification.summary("Cross Cleaner CLI");
         notification.body(&notification_body);
         notification.icon(icon_path);
