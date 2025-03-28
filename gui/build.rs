@@ -5,7 +5,7 @@ extern crate winres;
 fn main() {
     let mut res = winres::WindowsResource::new();
     res.set_icon("../assets\\icon.ico");
-    res.set("AppId", "com.crosscleaner.cli");
+    res.set("AppId", "com.crosscleaner.gui");
 
     res.set_manifest(
         r#"
