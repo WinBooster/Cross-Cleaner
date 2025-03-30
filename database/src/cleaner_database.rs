@@ -1,21 +1,23 @@
 use crate::CleanerData;
 use crate::registry_utils::get_steam_directory_from_registry;
 use disk_name::get_letters;
-use lazy_static::lazy_static;
 use serde_json;
 use std::error::Error;
 use std::fs;
+use std::sync::OnceLock;
 
-lazy_static! {
-    static ref DATABASE: Vec<CleanerData> = {
+static DATABASE: OnceLock<Vec<CleanerData>> = OnceLock::new();
+
+pub fn get_default_database() -> &'static Vec<CleanerData> {
+    DATABASE.get_or_init(|| {
         #[cfg(unix)]
         let data = include_str!("../linux_database.json");
         #[cfg(windows)]
         let data = include_str!("../windows_database.json");
 
         // Deserialization JSON to Vec<CleanerData>
-        let database: Vec<CleanerData> = serde_json::from_str(&data)
-            .expect(&"Failed to parse database".to_string());
+        let database: Vec<CleanerData> =
+            serde_json::from_str(&data).expect(&"Failed to parse database".to_string());
 
         // Get the username
         let username = whoami::username();
@@ -58,26 +60,8 @@ lazy_static! {
             }
         }
 
-        // Sort database by type priority
-        expanded_database.sort_by(|a, b| {
-            let type_priority = |t: &str| match t.to_lowercase().as_str() {
-                "logs" | "log" => 0,
-                "documentation" | "docs" => 1,
-                "cache" | "cached" => 2,
-                "crash reports" | "crash" | "crashes" | "crash_reports" => 3,
-                "accounts" | "account" => 4,
-                _ => 5
-            };
-            type_priority(&a.category.to_lowercase())
-                .cmp(&type_priority(&b.category.to_lowercase()))
-        });
-
         expanded_database
-    };
-}
-
-pub fn get_default_database() -> &'static Vec<CleanerData> {
-    &DATABASE
+    })
 }
 
 pub fn get_database_from_file(file_path: &str) -> Result<Vec<CleanerData>, Box<dyn Error>> {

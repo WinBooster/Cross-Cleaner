@@ -21,16 +21,51 @@ env:
   APP_VERSION: "1.9.6"
 
 jobs:
-  build_linux:
+  formating_code:
     runs-on: ubuntu-latest
     permissions: write-all
-    name: Build Linux
+    name: Formating code
     steps:
     - uses: actions/checkout@v4
     - name: Update Cargo.toml version
       run: |
         sed -i 's/^version = .*/version = "${{ env.APP_VERSION }}"/' Cargo.toml
         sed -i 's/ProductVersion = .*/ProductVersion = "${{ env.APP_VERSION }}"/' Cargo.toml
+    - name: Formating code
+      run: cargo fmt
+    - name: Commit changes
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add .
+        git commit -m "Auto format code" || echo "No changes to commit"
+        git push || echo "No changes to push"
+
+  upload_databases:
+    runs-on: ubuntu-latest
+    name: Archive databases
+    permissions: write-all
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Move databases
+      run: |
+        mv database/linux_database.json linux_database.json
+        mv database/windows_database.json windows_database.json
+    - name: Upload databases to artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: databases
+        path: |
+          linux_database.json
+          windows_database.json
+
+  build_linux:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    name: Build Linux
+    steps:
+    - uses: actions/checkout@v4
     - name: Build linux
       run: cargo build --release
     - name: Move linux binaries
@@ -51,10 +86,6 @@ jobs:
     name: Build Windows
     steps:
     - uses: actions/checkout@v4
-    - name: Update Cargo.toml version
-      run: |
-        sed -i 's/^version = .*/version = "${{ env.APP_VERSION }}"/' Cargo.toml
-        sed -i 's/ProductVersion = .*/ProductVersion = "${{ env.APP_VERSION }}"/' Cargo.toml
     - name: Build windows
       run: cargo build --release
     - name: Move windows binaries
@@ -68,26 +99,6 @@ jobs:
         path: |
           Cross_Cleaner_CLI.exe
           Cross_Cleaner_GUI.exe
-
-  upload_databases:
-    needs: [build_linux, build_windows]
-    runs-on: ubuntu-latest
-    name: Upload Databases
-    permissions: write-all
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Move databases
-      run: |
-        mv database/linux_database.json linux_database.json
-        mv database/windows_database.json windows_database.json
-    - name: Upload Windows artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: databases
-        path: |
-          linux_database.json
-          windows_database.json
 
   create_release:
     needs: [build_linux, build_windows]
@@ -114,26 +125,38 @@ jobs:
         tag_name: v${{ env.APP_VERSION }}
         name: Cross Cleaner ${{ env.APP_VERSION }}
         body: |
-          ### 🚀 What's New in Version ${{ env.APP_VERSION }}
+          # 🌟 Cross Cleaner ${{ env.APP_VERSION }} - Cleaner & Better! 🌟
 
-          #### ✨ New cleaning paths in Linux
-          - LibreOffice
-          - Osu
-          - Cursor
-          - JDK
-          - GOG Games
-          - Dead Cells
-          
-          #### 📦 Dependencies
-          - Updated all libraries to their latest versions
-          
-          #### 🐛 Bug Fixes
-          - Fixed false positives of Google Chrome, Ikarus antivirus for Windows
-          - Improved LastActivity clearing
+          ![Downloads](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}/total) ![Version](https://img.shields.io/badge/version-${{ env.APP_VERSION }}-blue) ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux-orange)
 
-          ### 🙏 Special Thanks
-          Special thanks to our contributors:
-          @Nekiplay for their contribution to this release!
+          ## ✨ What's New
+
+          ### 🐧 Linux Improvements
+          - **LibreOffice**: Clean temporary and cache files
+          - **Osu!**: Remove unnecessary game data
+          - **Cursor**: Manage cursor themes and cache
+          - **JDK**: Clear local documentation
+          - **Hearts of Iron IV**: Clean game cache and logs and crashes
+
+          ### 🪟 Windows Enhancements
+          - **Cursor**: Enhanced cursor cleanup
+          - **Osu! Game**: Improved cleaning routines
+          - **Node.js**: Clear npm cache and temp files
+          - **VS Code**: Better extension and workspace cleanup
+          - **LastActivity**: Enhanced system activity cleaningъ
+          - **Thunderbird**: Clean crashes
+
+          ### 🛠️ Technical Updates
+          - **Dependencies**: All libraries updated to latest versions
+          - **Security**: Fixed false positives with Google Chrome and Ikarus antivirus
+          - **Performance**: Overall optimization improvements
+
+          ## 👏 Contributors Hall of Fame
+          Special thanks to our amazing contributors who made this release possible:
+          - **@Nekiplay** - Core improvements and feature implementations
+
+          ---
+          *Thank you for using Cross Cleaner! Your system, cleaner than ever.*
         files: |
           linux-binaries/Cross_Cleaner_CLI
           linux-binaries/Cross_Cleaner_GUI

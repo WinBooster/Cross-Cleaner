@@ -1827,12 +1827,12 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/GOG Games/**/",
-    "category": "Documentation",
-    "program": "GOG Games",
+    "path": "/home/{username}/.local/share/Paradox Interactive/Hearts of Iron IV/",
+    "category": "Logs",
+    "program": "Hearts of Iron IV",
     "files_to_remove": [],
     "directories_to_remove": [
-	    "docs"
+	    "logs"
 	  ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
@@ -1840,12 +1840,25 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/GOG Games/Dead Cells/game/",
-    "category": "Game saves",
-    "program": "Dead Cells",
+    "path": "/home/{username}/.local/share/Paradox Interactive/Hearts of Iron IV/",
+    "category": "Cache",
+    "program": "Hearts of Iron IV",
     "files_to_remove": [],
     "directories_to_remove": [
-	    "save"
+	    "cache"
+	  ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/Paradox Interactive/Hearts of Iron IV/",
+    "category": "Crash reports",
+    "program": "Hearts of Iron IV",
+    "files_to_remove": [],
+    "directories_to_remove": [
+	    "crashes"
 	  ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,

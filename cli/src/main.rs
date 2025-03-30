@@ -1,11 +1,11 @@
 use clap::{ArgAction, Parser};
 use cleaner::clear_data;
 use crossterm::execute;
-use database::{ get_pcbooster_version, get_icon };
 #[cfg(windows)]
 use database::structures::CleanerResult;
 use database::structures::{CleanerData, Cleared};
 use database::utils::get_file_size_string;
+use database::{get_icon, get_version};
 use indicatif::{ProgressBar, ProgressStyle};
 use inquire::formatter::MultiOptionFormatter;
 use inquire::list_option::ListOption;
@@ -13,12 +13,12 @@ use inquire::validator::Validation;
 use inquire::MultiSelect;
 use notify_rust::Notification;
 use std::collections::HashSet;
+use std::io::Write;
 use std::sync::Arc;
 use tabled::Table;
+use tempfile::NamedTempFile;
 use tokio::sync::Mutex;
 use tokio::task;
-use tempfile::NamedTempFile;
-use std::io::Write;
 
 #[cfg(windows)]
 use std::io::stdin;
@@ -33,7 +33,7 @@ async fn work(
     let bytes_cleared = Arc::new(Mutex::new(0));
     let removed_files = Arc::new(Mutex::new(0));
     let removed_directories = Arc::new(Mutex::new(0));
-    let cleared_programs = Arc::new(Mutex::new(Vec::<Cleared>::new()));
+    let cleared_programs = Arc::new(Mutex::new(Vec::<Cleared>::with_capacity(database.len())));
 
     let pb = if args.show_progress_bar {
         let sty = ProgressStyle::with_template(
@@ -54,7 +54,7 @@ async fn work(
     #[cfg(windows)]
     let has_last_activity = categories.contains(&"LastActivity".to_string());
 
-    let mut tasks = Vec::new();
+    let mut tasks = Vec::with_capacity(database.len() + 1);
 
     #[cfg(windows)]
     if has_last_activity {
@@ -168,7 +168,7 @@ async fn work(
             removed_files.lock().await,
             removed_directories.lock().await,
         );
-    
+
         println!(
             "Removed size: {}, files: {}, dirs: {}, programs: {}",
             get_file_size_string(*bytes_cleared),
@@ -184,24 +184,23 @@ async fn work(
             *removed_files.lock().await,
             *removed_directories.lock().await,
         );
-    
+
         let mut temp_file = NamedTempFile::new().unwrap();
         temp_file.write_all(get_icon()).unwrap();
         let icon_path = temp_file.path().to_str().unwrap();
-        
+
         let notification_body = format!(
             "Removed: {}\nFiles: {}\nDirs: {}",
             get_file_size_string(bytes_cleared),
             removed_files,
             removed_directories
         );
-    
 
         let notification_result = Notification::new()
-        .summary("Cross Cleaner CLI")
-        .body(&notification_body)
-        .icon(icon_path)
-        .show();
+            .summary("Cross Cleaner CLI")
+            .body(&notification_body)
+            .icon(icon_path)
+            .show();
 
         temp_file.close().unwrap();
         if let Err(e) = notification_result {
@@ -258,7 +257,7 @@ struct Args {
 async fn main() {
     execute!(
         stdout(),
-        crossterm::terminal::SetTitle(format!("Cross Cleaner CLI v{}", get_pcbooster_version()))
+        crossterm::terminal::SetTitle(format!("Cross Cleaner CLI v{}", get_version()))
     )
     .unwrap();
 
@@ -280,9 +279,8 @@ async fn main() {
     let mut programs: HashSet<String> = HashSet::new();
 
     for data in database.to_vec() {
-        let program = data.program.clone();
         options.insert(String::from(data.category.clone()));
-        programs.insert(program);
+        programs.insert(data.program.clone());
     }
 
     if args.show_database_info {
@@ -321,6 +319,7 @@ async fn main() {
         let ans_categories = MultiSelect::new("Select the clearing categories:", options_str)
             .with_validator(validator)
             .with_formatter(formatter_categories)
+            .with_page_size(10)
             .prompt();
 
         if let Ok(ans_categories) = ans_categories {

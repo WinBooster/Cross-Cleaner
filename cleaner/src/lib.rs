@@ -29,10 +29,9 @@ fn remove_directory_recursive(path: &Path, cleaner_result: &mut CleanerResult) -
 }
 /// Deletes the file and updates the counters in `cleaner_result`.
 fn remove_file(path: &Path, cleaner_result: &mut CleanerResult) -> io::Result<()> {
-    let metadata = fs::metadata(path)?; // Получаем метаданные файла
-    fs::remove_file(path)?; // Пытаемся удалить файл
+    let metadata = fs::metadata(path)?;
+    fs::remove_file(path)?;
 
-    // Если удаление прошло успешно, обновляем cleaner_result
     cleaner_result.bytes += metadata.len();
     cleaner_result.files += 1;
 

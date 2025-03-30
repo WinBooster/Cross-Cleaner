@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "Cross_Cleaner_CLI"
-version = "1.9.6"
+version = "1.0.0"
 dependencies = [
  "clap",
  "cleaner",
@@ -1064,10 +1064,9 @@ checksum = "96a6ac251f4a2aca6b3f91340350eab87ae57c3f127ffeb585e92bd336717991"
 
 [[package]]
 name = "database"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "disk-name",
- "lazy_static",
  "serde",
  "serde_json",
  "tabled",

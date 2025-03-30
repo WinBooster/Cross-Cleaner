@@ -3,9 +3,6 @@ extern crate winres;
 
 #[cfg(windows)]
 fn main() {
-    println!("cargo:rustc-link-arg=/SUBSYSTEM:WINDOWS");
-    println!("cargo:rustc-link-arg=/ENTRY:mainCRTStartup");
-
     let mut res = winres::WindowsResource::new();
     res.set_icon("../assets\\icon.ico");
 
@@ -23,7 +20,13 @@ fn main() {
     "#,
     );
 
-    res.compile().unwrap();
+    // Hide console window
+    res.set("NO_CONSOLE", "1");
+
+    if let Err(e) = res.compile() {
+        eprintln!("Error: {}", e);
+        std::process::exit(1);
+    }
 }
 
 #[cfg(unix)]
