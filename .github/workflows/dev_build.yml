@@ -15,6 +15,7 @@ on:
       - '**/*.rs'
       - '**/*.json'
       - '.github/workflows/**'
+on: workflow_call
 
 env:
   CARGO_TERM_COLOR: always
