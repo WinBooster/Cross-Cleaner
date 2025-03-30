@@ -1825,5 +1825,31 @@
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
+  },
+  {
+    "path": "/home/{username}/GOG Games/**/",
+    "category": "Documentation",
+    "program": "GOG Games",
+    "files_to_remove": [],
+    "directories_to_remove": [
+	    "docs"
+	  ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/GOG Games/Dead Cells/game/",
+    "category": "Game saves",
+    "program": "Dead Cells",
+    "files_to_remove": [],
+    "directories_to_remove": [
+	    "save"
+	  ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
   }
 ]

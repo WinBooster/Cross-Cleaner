@@ -121,6 +121,8 @@ jobs:
           - Osu
           - Cursor
           - JDK
+          - GOG Games
+          - Dead Cells
           
           #### 📦 Dependencies
           - Updated all libraries to their latest versions
