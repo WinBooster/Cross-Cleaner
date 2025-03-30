@@ -1,6 +1,7 @@
 name: Rust compile and release
 
 on:
+  workflow_call
   push:
     branches: [ "main" ]
     paths:
@@ -15,7 +16,6 @@ on:
       - '**/*.rs'
       - '**/*.json'
       - '.github/workflows/**'
-on: workflow_call
 
 env:
   CARGO_TERM_COLOR: always
