@@ -4070,8 +4070,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/",
@@ -4083,8 +4083,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher/",
@@ -4096,8 +4096,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp/",
@@ -4109,8 +4109,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft/",
@@ -4122,8 +4122,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft/",
@@ -4161,8 +4161,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft/",
@@ -4174,8 +4174,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**/",
@@ -4187,8 +4187,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}.loliland\\updates\\clients\\**/",
@@ -4200,8 +4200,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\.cristalix\\updates\\**/",
@@ -4213,8 +4213,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\**/",
@@ -4226,8 +4226,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\**/",
@@ -4239,8 +4239,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\**/",
@@ -4252,8 +4252,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Clien/",
@@ -4265,8 +4265,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/",
@@ -4278,8 +4278,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\*log*",
