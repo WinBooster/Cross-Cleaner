@@ -4135,8 +4135,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft/",
@@ -4148,8 +4148,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft/",
@@ -4450,8 +4450,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher/",
@@ -4463,8 +4463,8 @@
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\*log*",
