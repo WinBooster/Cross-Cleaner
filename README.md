@@ -2,7 +2,7 @@
 <h1>Cross Cleaner 🚀</h1>
   
 [![Rustlang](https://img.shields.io/static/v1?label=Made%20with&message=Rust&logo=rust&labelColor=e82833&color=b11522)](https://www.rust-lang.org)
-[![Github License](https://img.shields.io/github/license/WinBooster/Cross-Cleaner?logo=mdBook)](https://github.com/KirillkoTankisto/WinBooster/blob/main/LICENSE)
+[![Github License](https://img.shields.io/github/license/WinBooster/Cross-Cleaner?logo=mdBook)](https://github.com/WinBooster/Cross-Cleaner/blob/main/LICENSE)
 [![Build Status](https://github.com/WinBooster/Cross-Cleaner/actions/workflows/dev_build.yml/badge.svg)](https://github.com/WinBooster/Cross-Cleaner/actions)
 [![Download](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/total)](https://github.com/WinBooster/Cross-Cleaner/releases)
 [![GitHub Issues](https://img.shields.io/github/issues/WinBooster/Cross-Cleaner)](https://github.com/WinBooster/Cross-Cleaner/issues)
