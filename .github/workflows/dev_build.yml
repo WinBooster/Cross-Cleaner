@@ -134,17 +134,7 @@ jobs:
           ## ✨ What's New
 
           ### 🪟 Windows Enhancements
-          - **Cursor**: Enhanced cursor cleanup
-          - **Osu! Game**: Improved cleaning routines
-          - **Node.js**: Clear npm cache and temp files
-          - **VS Code**: Better extension and workspace cleanup
-          - **LastActivity**: Enhanced system activity cleaningъ
-          - **Thunderbird**: Clean crashes
-
-          ### 🛠️ Technical Updates
-          - **Dependencies**: All libraries updated to latest versions
-          - **Security**: Fixed false positives with Google Chrome and Ikarus antivirus
-          - **Performance**: Overall optimization improvements
+          - **Windows**: Enhanced windows cleanup
 
           ## 👏 Contributors Hall of Fame
           Special thanks to our amazing contributors who made this release possible:
