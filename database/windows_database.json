@@ -1,5 +1,38 @@
 [
   {
+    "path": "{drive}Windows\\System32\\Licenses/*",
+    "category": "Documentation",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Windows\\System32\\LogFiles/*",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Windows\\System32\\Logs/*",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/",
     "category": "Accounts",
     "program": "Badlion Client",

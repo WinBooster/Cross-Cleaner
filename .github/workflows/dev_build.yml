@@ -20,7 +20,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  APP_VERSION: "1.9.6"
+  APP_VERSION: "1.9.7"
 
 jobs:
   formating_code:
@@ -132,13 +132,6 @@ jobs:
           ![Downloads](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}/total) ![Version](https://img.shields.io/badge/version-${{ env.APP_VERSION }}-blue) ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux-orange)
 
           ## ✨ What's New
-
-          ### 🐧 Linux Improvements
-          - **LibreOffice**: Clean temporary and cache files
-          - **Osu!**: Remove unnecessary game data
-          - **Cursor**: Manage cursor themes and cache
-          - **JDK**: Clear local documentation
-          - **Hearts of Iron IV**: Clean game cache and logs and crashes
 
           ### 🪟 Windows Enhancements
           - **Cursor**: Enhanced cursor cleanup
