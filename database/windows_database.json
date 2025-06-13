@@ -3297,7 +3297,8 @@
       "saxon-conditions.html",
       "third-party-libraries.html",
       "yourkit-license-redist.txt",
-      "remote-dev-server.html"
+      "remote-dev-server.html",
+	  "third-party-libraries.json"
     ],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
