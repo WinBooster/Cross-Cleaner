@@ -135,6 +135,7 @@ jobs:
 
           ### 🪟 Windows Enhancements
           - **Windows**: Enhanced windows cleanup
+          - **JetBrains**: Enhanced documentation (licenses) cleanup
 
           ## 👏 Contributors Hall of Fame
           Special thanks to our amazing contributors who made this release possible:
