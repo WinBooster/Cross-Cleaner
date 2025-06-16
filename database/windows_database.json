@@ -230,7 +230,7 @@
       "Cookies-journal"
     ],
     "directories_to_remove": [],
-    "remove_all_in_dir": true,
+    "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
@@ -1209,10 +1209,10 @@
     "program": "Arizona Games Launcher",
     "files_to_remove": [],
     "directories_to_remove": [],
-    "remove_all_in_dir": true,
+    "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    "remove_directories": true,
+    "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.mclaunch\\launcher_crashreports\\*",
@@ -1423,7 +1423,7 @@
       "Players",
       "Worlds"
     ],
-    "remove_all_in_dir": true,
+    "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
@@ -1602,7 +1602,7 @@
       "input profiles.json"
     ],
     "directories_to_remove": [],
-    "remove_all_in_dir": true,
+    "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
@@ -3669,7 +3669,7 @@
     "directories_to_remove": [
       "logs"
     ],
-    "remove_all_in_dir": true,
+    "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
@@ -4035,7 +4035,7 @@
     "directories_to_remove": [
       "logs"
     ],
-    "remove_all_in_dir": true,
+    "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
