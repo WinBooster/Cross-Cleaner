@@ -1,5 +1,4 @@
 use crate::structures::CleanerData;
-use std::env;
 
 pub mod cleaner_database;
 pub mod registry_database;
@@ -7,8 +6,8 @@ mod registry_utils;
 pub mod structures;
 pub mod utils;
 
-pub fn get_version() -> String {
-    env::var("APP_VERSION").unwrap_or_else(|_| String::from("1.9.8"))
+pub fn get_version() -> &'static str {
+    option_env!("APP_VERSION").unwrap_or("1.9.8")
 }
 
 pub fn get_icon() -> &'static [u8; 3216] {
