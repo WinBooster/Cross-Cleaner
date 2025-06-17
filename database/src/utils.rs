@@ -1,3 +1,4 @@
+// PERF: Fully optimized
 pub fn get_file_size_string(size: u64) -> String {
     if size == 0 {
         return String::from("0 B");

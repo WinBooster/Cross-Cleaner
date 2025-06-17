@@ -51,11 +51,14 @@ async fn work(
         None
     };
 
+    // INFO: Check if LastActivity enabled
+    // WARN: Windows only
     #[cfg(windows)]
     let has_last_activity = categories.contains(&"LastActivity".to_string());
 
     let mut tasks = Vec::with_capacity(database.len() + 1);
-
+    // INFO: Clear LastActivity from Registry
+    // WARN: Windiws only
     #[cfg(windows)]
     if has_last_activity {
         let progress_bar = pb.clone();
@@ -278,10 +281,10 @@ async fn main() {
     let mut options: HashSet<String> = HashSet::new();
     let mut programs: HashSet<String> = HashSet::new();
 
-    for data in database.to_vec() {
-        options.insert(String::from(data.category.clone()));
+    database.iter().cloned().for_each(|data| {
+        options.insert(data.category.clone());
         programs.insert(data.program.clone());
-    }
+    });
 
     if args.show_database_info {
         println!(
@@ -364,6 +367,7 @@ async fn main() {
         .await;
     }
 
+    // WARN: Windows only
     #[cfg(windows)]
     {
         let mut s = String::new();
