@@ -41,7 +41,7 @@ async fn main() -> eframe::Result {
     };
 
     eframe::run_native(
-        &*("Cross Cleaner GUI v".to_owned() + &*get_version()),
+        &format!("Cross Cleaner GUI v{}", get_version()),
         options,
         Box::new(|_cc| {
             _cc.egui_ctx.set_visuals(egui::Visuals::dark());
@@ -75,11 +75,15 @@ async fn work(
     let mut removed_directories = 0;
     let mut cleared_programs: HashSet<String> = HashSet::with_capacity(database.len());
 
+    // INFO: Check if LastActivity enabled
+    // WARN: Windows only
     #[cfg(windows)]
     let has_last_activity = categories.contains(&"LastActivity".to_string());
 
     let mut tasks = Vec::with_capacity(database.len() + 1);
 
+    // INFO: Clear LastActivity from Registry
+    // WARN: Windiws only
     #[cfg(windows)]
     if has_last_activity {
         let progress_sender = progress_sender.clone();
@@ -102,16 +106,15 @@ async fn work(
     let categories_set: HashSet<String> = categories.into_iter().collect();
 
     for data in database
-        .to_vec()
-        .into_iter()
-        .filter(|data| categories_set.contains(&data.category))
+        .iter()
+        .filter(|&data| categories_set.contains(&data.category))
+        .cloned()
     {
         let data = Arc::new(data);
         let progress_sender = progress_sender.clone();
         let task = task::spawn(async move {
-            let _ = progress_sender.send(format!("{}", data.path)).await;
-            let result = clear_data(&data);
-            result
+            let _ = progress_sender.send(data.path.to_string()).await;
+            clear_data(&data)
         });
         tasks.push(task);
     }

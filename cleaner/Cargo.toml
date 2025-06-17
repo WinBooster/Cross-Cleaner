@@ -4,5 +4,5 @@ version = "0.2.0"
 edition = "2024"
 
 [dependencies]
-glob = "0.3.1"
+glob = "0.3.2"
 database = { path = "../database" }
