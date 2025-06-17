@@ -24,18 +24,16 @@ pub fn get_default_database() -> &'static Vec<CleanerData> {
         // NOTE: Get the username
         let username = whoami::username();
 
-        // NOTE: Getting a list of disks (Windows only)
-        let drives = if cfg!(windows) {
-            get_letters()
-        } else {
-            vec![] // WARN: Linux does not use disks
-        };
+        // NOTE: Getting a list of disks
+        // WARN: Windows only
+        let drives = if cfg!(windows) { get_letters() } else { vec![] };
 
         // NOTE: Get the path to Steam
+        // WARN: Windows only
         let steam_directory = if cfg!(windows) {
             get_steam_directory_from_registry()
         } else {
-            String::new() // WARN: Linux does not use registry
+            String::new()
         };
 
         // NOTE: Create a new database with placeholders replacement
@@ -78,18 +76,16 @@ pub fn get_database_from_file(file_path: &str) -> Result<Vec<CleanerData>, Box<d
     // INFO: Get the username
     let username = whoami::username();
 
-    // INFO: Getting a list of disks (Windows only)
-    let drives = if cfg!(windows) {
-        get_letters()
-    } else {
-        vec![] // WARN: Linux does not use disks
-    };
+    // INFO: Getting a list of disks
+    // WARN: Windows only
+    let drives = if cfg!(windows) { get_letters() } else { vec![] };
 
     // INFO: Get the path to Steam
+    // WARN: Windows only
     let steam_directory = if cfg!(windows) {
         get_steam_directory_from_registry()
     } else {
-        String::new() // WARN: Linux does not use registry
+        String::new()
     };
 
     let mut expanded_database = Vec::new();
