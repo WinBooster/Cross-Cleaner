@@ -135,6 +135,7 @@ jobs:
           - **Zapret**: Added logs cleanup
           - **Chocolatey**: Added logs and documentation cleanup
           - **Scoop**: Added cache and documentation cleanup
+          - **Mingw64**: Added documentation cleanup
           - **NeoVim**: Added logs and documentation cleanup
           - **LazyVim**: Added documentation cleanup
       

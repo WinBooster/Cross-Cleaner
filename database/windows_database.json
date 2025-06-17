@@ -1,5 +1,18 @@
 [
   {
+    "path": "{drive}ProgramData\\mingw64\\mingw64",
+    "category": "Documentation",
+    "program": "MinGW",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "licenses"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
     "path": "{drive}ProgramData\\Zapret",
     "category": "Logs",
     "program": "Zapret",
