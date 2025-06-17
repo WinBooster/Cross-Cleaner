@@ -1815,12 +1815,12 @@
     "category": "Documentation",
     "program": "Jdk",
     "files_to_remove": [
-	    "LICENSE",
-	    "README.md"
-	  ],
+      "LICENSE",
+      "README.md"
+    ],
     "directories_to_remove": [
-	    "man"
-	  ],
+      "man"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
@@ -1832,8 +1832,8 @@
     "program": "Hearts of Iron IV",
     "files_to_remove": [],
     "directories_to_remove": [
-	    "logs"
-	  ],
+      "logs"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
@@ -1845,8 +1845,8 @@
     "program": "Hearts of Iron IV",
     "files_to_remove": [],
     "directories_to_remove": [
-	    "cache"
-	  ],
+      "cache"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
@@ -1858,8 +1858,8 @@
     "program": "Hearts of Iron IV",
     "files_to_remove": [],
     "directories_to_remove": [
-	    "crashes"
-	  ],
+      "crashes"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
