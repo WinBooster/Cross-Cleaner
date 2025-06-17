@@ -1,5 +1,61 @@
 [
   {
+    "path": "{drive}ProgramData\\Zapret",
+    "category": "Logs",
+    "program": "Zapret",
+    "files_to_remove": [
+      "connection_test.log",
+      "zapret_log.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}ProgramData\\chocolatey",
+    "category": "Logs",
+    "program": "Chocolatey",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "logs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}ProgramData\\chocolatey",
+    "category": "Documentation",
+    "program": "Chocolatey",
+    "files_to_remove"&: [
+      "CREDITS.txt",
+      "LICENSE.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}ProgramData\\chocolatey\\tools",
+    "category": "Documentation",
+    "program": "Chocolatey",
+    "files_to_remove": [
+      "7zip.license.txt",
+      "checksum.license.txt",
+      "shimgen.license.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
     "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim",
     "category": "Documentation",
     "program": "NeoVim",
