@@ -26,7 +26,7 @@
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
-  }
+  },
   {
     "path": "{drive}Windows\\System32\\Licenses/*",
     "category": "Documentation",
