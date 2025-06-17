@@ -19,7 +19,7 @@ pub fn get_default_database() -> &'static Vec<CleanerData> {
 
         // NOTE: Deserialization JSON to Vec<CleanerData>
         let database: Vec<CleanerData> =
-            serde_json::from_str(&data).expect(&"Failed to parse database".to_string());
+            serde_json::from_str::<Vec<CleanerData>>(data).expect("Failed to parse database");
 
         // NOTE: Get the username
         let username = whoami::username();

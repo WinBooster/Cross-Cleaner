@@ -125,9 +125,12 @@ jobs:
           ## ✨ What's New
 
           ### 🪟 Windows Enhancements
+          - **Zapret**: Added logs cleanup
+          - **Chocolatey**: Added logs and documentation cleanup
           - **Scoop**: Added cache and documentation cleanup
+          - **Mingw64**: Added documentation cleanup
           - **NeoVim**: Added logs and documentation cleanup
-          - **LazyVim**: Added documentation cleaner
+          - **LazyVim**: Added documentation cleanup
       
           ## 👏 Contributors Hall of Fame
           Special thanks to our amazing contributors who made this release possible:
