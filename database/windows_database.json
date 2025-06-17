@@ -43,7 +43,7 @@
     "path": "{drive}ProgramData\\chocolatey",
     "category": "Documentation",
     "program": "Chocolatey",
-    "files_to_remove"&: [
+    "files_to_remove": [
       "CREDITS.txt",
       "LICENSE.txt"
     ],
