@@ -20,7 +20,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  APP_VERSION: "1.9.7"
+  APP_VERSION: "1.9.8"
 
 jobs:
   formating_code:
@@ -132,9 +132,8 @@ jobs:
           ## ✨ What's New
 
           ### 🪟 Windows Enhancements
-          - **Windows**: Enhanced windows cleanup
-          - **JetBrains**: Enhanced documentation (licenses) cleanup
-
+          - **Scoop**: Added cache and documentation cleanup
+      
           ## 👏 Contributors Hall of Fame
           Special thanks to our amazing contributors who made this release possible:
           - **@Nekiplay** - Core improvements and feature implementations
