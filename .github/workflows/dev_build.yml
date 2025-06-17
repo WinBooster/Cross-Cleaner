@@ -133,6 +133,8 @@ jobs:
 
           ### 🪟 Windows Enhancements
           - **Scoop**: Added cache and documentation cleanup
+          - **NeoVim**: Added logs and documentation cleanup
+          - **LazyVim**: Added documentation cleaner
       
           ## 👏 Contributors Hall of Fame
           Special thanks to our amazing contributors who made this release possible:
