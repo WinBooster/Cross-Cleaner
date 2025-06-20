@@ -133,6 +133,7 @@ jobs:
 
           ### 🪟 Windows Enhancements
           - **Rust Language** - Added documentation clearing
+          - **Python** - Added documentation clearing
       
           ## 👏 Contributors Hall of Fame
           Special thanks to our amazing contributors who made this release possible:
