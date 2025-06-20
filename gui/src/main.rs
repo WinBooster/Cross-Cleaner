@@ -29,6 +29,7 @@ async fn main() -> eframe::Result {
     let icon_bytes = get_icon();
     let icon = load_icon_from_bytes(icon_bytes).expect("Failed to load icon");
 
+    // TODO: Dynamic size by database programs count
     let size = egui::vec2(430.0, 150.0);
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
