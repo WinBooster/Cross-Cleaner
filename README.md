@@ -25,6 +25,11 @@
 - 💻 **Cross-Platform**: Full support for Windows and Linux
 - 🎯 **User-Friendly**: Clean, minimalist interface for easy operation
 
+### Demo
+![Linux Terminal](https://github.com/user-attachments/assets/2938d58b-83eb-44d8-a43c-9ad223434666)
+![Windows Terminal](https://github.com/user-attachments/assets/45b0792b-357f-405b-b91e-3496caee41a5)
+![Linux GUI](https://github.com/user-attachments/assets/18cbad40-5c31-4ab5-ab5c-c0fc6014535f)
+
 ## 📥 Installation
 
 ### Option 1: Download Pre-built Binary
