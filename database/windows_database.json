@@ -15,7 +15,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Python\\**\\share",
     "category": "Documentation",
-    "program": "Rust Language",
+    "program": "Python",
     "files_to_remove": [],
     "directories_to_remove": [
       "doc"
