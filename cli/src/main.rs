@@ -23,6 +23,34 @@ use tokio::task;
 #[cfg(windows)]
 use std::io::stdin;
 use std::io::stdout;
+#[cfg(windows)]
+use winapi::um::processthreadsapi::OpenProcessToken;
+
+#[cfg(windows)]
+fn is_admin() -> bool {
+    unsafe {
+        let mut token = std::ptr::null_mut();
+        if OpenProcessToken(
+            winapi::um::processthreadsapi::GetCurrentProcess(),
+            winapi::um::winnt::TOKEN_QUERY,
+            &mut token,
+        ) == 0
+        {
+            return false;
+        }
+        let mut elevation = winapi::um::winnt::TOKEN_ELEVATION::default();
+        let mut size = std::mem::size_of::<winapi::um::winnt::TOKEN_ELEVATION>() as u32;
+        let ret = winapi::um::securitybaseapi::GetTokenInformation(
+            token,
+            winapi::um::winnt::TokenElevation,
+            &mut elevation as *mut _ as *mut _,
+            size,
+            &mut size,
+        );
+        winapi::um::handleapi::CloseHandle(token);
+        ret != 0 && elevation.TokenIsElevated != 0
+    }
+}
 
 async fn work(
     args: &Args,
@@ -265,6 +293,13 @@ async fn main() {
     .unwrap();
 
     let args = Args::parse();
+
+    #[cfg(windows)]
+    if !is_admin() {
+        eprintln!(
+            "The application is not launched with administrator rights, functionality is limited"
+        );
+    }
 
     let database: Vec<CleanerData> = if let Some(db_path) = &args.database_path {
         match database::cleaner_database::get_database_from_file(db_path) {
