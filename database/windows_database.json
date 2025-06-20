@@ -1,5 +1,31 @@
 [
   {
+    "path": "{drive}Users\\{username}",
+    "category": "Cheats",
+    "program": "RusherHack",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      ".rusherhack"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\Appdata\\Local",
+    "category": "Cheats",
+    "program": "RusherHack",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "rusherhack"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
     "path": "{drive}ProgramData\\mingw64\\mingw64",
     "category": "Documentation",
     "program": "MinGW",
@@ -129,7 +155,7 @@
     "remove_directories": false,
     "remove_files": false
   },
-  {    
+  {
     "path": "{drive}Users\\{username}\\scoop\\apps\\**\\**",
     "category": "Documentation",
     "program": "Scoop",
@@ -670,8 +696,8 @@
     "program": "CubixWorld",
     "files_to_remove": [],
     "directories_to_remove": [
-		"saves"
-	],
+      "saves"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
@@ -682,11 +708,11 @@
     "category": "Logs",
     "program": "CubixWorld",
     "files_to_remove": [
-		"minetweaker.log"
-	],
+      "minetweaker.log"
+    ],
     "directories_to_remove": [
-		"logs"
-	],
+      "logs"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
@@ -3432,34 +3458,16 @@
     "remove_files": false
   },
   {
-    "path": "{drive}Program Files\\JetBrains\\**\\license",
-    "category": "Documentation",
-    "program": "JetBrains",
-    "files_to_remove": [
-      "javahelp_license.txt",
-      "javolution_license.txt",
-      "launcher-third-party-libraries.html",
-      "saxon-conditions.html",
-      "third-party-libraries.html",
-      "yourkit-license-redist.txt",
-      "remote-dev-server.html",
-	  "third-party-libraries.json"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
     "path": "{drive}Program Files\\JetBrains\\**",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "JetBrains",
     "files_to_remove": [
       "LICENSE.txt",
       "NOTICE.txt"
     ],
-    "directories_to_remove": [],
+    "directories_to_remove": [
+      "license"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
@@ -3480,7 +3488,7 @@
   },
   {
     "path": "{drive}Program Files\\AAFTweak/",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "AAF Optimus DCH Audio",
     "files_to_remove": [
       "RT.pdb"
@@ -3519,7 +3527,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\ASIO4ALL v2/",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "ASIO4ALL v2",
     "files_to_remove": [
       "ASIO4ALL Web Site.url"
@@ -3580,7 +3588,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Program Files\\Cheat Engine 7.5\\*.txt",
+    "path": "{drive}Program Files\\Cheat Engine\\*.txt",
     "category": "Logs",
     "program": "Cheat Engine",
     "files_to_remove": [],
@@ -5022,7 +5030,7 @@
   },
   {
     "path": "{drive}Program Files\\ImageGlass/",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "ImageGlass",
     "files_to_remove": [
       "ReadMe.rtf",
@@ -5046,7 +5054,15 @@
       "System.ValueTuple.xml",
       "ImageGlass.WebP.pdb",
       "Visit ImageGlass website.url",
-      "default.jpg"
+      "default.jpg",
+      "igcmd.pdb",
+      "ImageGlass.Base.pdb",
+      "ImageGlass.Gallery.pdb",
+      "ImageGlass.pdb",
+      "ImageGlass.Settings.pdb",
+      "ImageGlass.UI.pdb",
+      "ImageGlass.Viewer.pdb",
+      "ImageGlass.WinTouch.pdb"
     ],
     "directories_to_remove": [],
     "remove_all_in_dir": false,

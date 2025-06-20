@@ -19,6 +19,12 @@ cleaner = { path = "../cleaner" }
 
 [target.'cfg(windows)'.dependencies]
 winreg = "0.55.0"
+winapi = { version = "0.3", features = [
+  "winnt",
+  "securitybaseapi",
+  "processthreadsapi",
+  "handleapi",
+] }
 
 [target.'cfg(windows)'.build-dependencies]
 winres = "0.1.12"
@@ -37,4 +43,3 @@ opt-level = "z"
 strip = true
 panic = "abort"
 debug = false
-

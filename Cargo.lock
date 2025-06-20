@@ -16,6 +16,7 @@ dependencies = [
  "tabled",
  "tempfile",
  "tokio",
+ "winapi",
  "winreg",
  "winres",
 ]

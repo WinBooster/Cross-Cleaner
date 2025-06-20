@@ -13,7 +13,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  APP_VERSION: "1.9.8"
+  APP_VERSION: "1.9.9"
 
 jobs:
   formating_code:
@@ -125,12 +125,7 @@ jobs:
           ## ✨ What's New
 
           ### 🪟 Windows Enhancements
-          - **Zapret**: Added logs cleanup
-          - **Chocolatey**: Added logs and documentation cleanup
-          - **Scoop**: Added cache and documentation cleanup
-          - **Mingw64**: Added documentation cleanup
-          - **NeoVim**: Added logs and documentation cleanup
-          - **LazyVim**: Added documentation cleanup
+          - **RusherHack** - Added cheat clearing
       
           ## 👏 Contributors Hall of Fame
           Special thanks to our amazing contributors who made this release possible:
