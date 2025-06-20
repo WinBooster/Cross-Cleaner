@@ -1,5 +1,18 @@
 [
   {
+    "path": "{drive}Program Files\\AmneziaWG\\Data",
+    "category": "Logs",
+    "program": "Amnezia WG",
+    "files_to_remove": [
+      "log.bin"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
     "path": "{drive}Users\\{username}",
     "category": "Cheats",
     "program": "RusherHack",
@@ -4159,6 +4172,19 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Lords Mobile PC",
+    "category": "Logs",
+    "program": "Lords Mobile",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "Logs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\LocalLow\\IGG\\Lords Mobile PC\\*.log",
     "category": "Logs",
     "program": "Lords Mobile",
@@ -4944,8 +4970,34 @@
     "remove_files": false
   },
   {
-    "path": "{drive}Program Files\\AmneziaVPN\\tap/",
-    "category": "Logs",
+    "path": "{drive}Program Files\\AmneziaVPN\\ss",
+    "category": "Documentation",
+    "program": "Amnezia VPN",
+    "files_to_remove": [
+      "LICENSE"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\AmneziaVPN\\openvpn",
+    "category": "Documentation",
+    "program": "Amnezia VPN",
+    "files_to_remove": [
+      "license.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\AmneziaVPN\\tap",
+    "category": "Documentation",
     "program": "Amnezia VPN",
     "files_to_remove": [
       "license.txt"
@@ -5270,12 +5322,32 @@
     "remove_files": false
   },
   {
+    "path": "{drive}Users\\{username}\\node_modules",
+    "category": "Documentation",
+    "program": "Node JS",
+    "files_to_remove": [
+      "README.md",
+      "LICENSE",
+      "CODEOWNERS",
+      "readme.markdown"
+    ],
+    "directories_to_remove": [
+      "docs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
     "path": "{drive}Program Files\\nodejs\\node_modules\\npm/",
     "category": "Documentation",
     "program": "Node JS",
     "files_to_remove": [
       "README.md",
-      "LICENSE"
+      "LICENSE",
+      "CODEOWNERS",
+      "readme.markdown"
     ],
     "directories_to_remove": [
       "docs"

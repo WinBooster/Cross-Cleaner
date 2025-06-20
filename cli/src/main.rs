@@ -23,11 +23,10 @@ use tokio::task;
 #[cfg(windows)]
 use std::io::stdin;
 use std::io::stdout;
-#[cfg(windows)]
-use winapi::um::processthreadsapi::OpenProcessToken;
 
 #[cfg(windows)]
 fn is_admin() -> bool {
+    use winapi::um::processthreadsapi::OpenProcessToken;
     unsafe {
         let mut token = std::ptr::null_mut();
         if OpenProcessToken(
