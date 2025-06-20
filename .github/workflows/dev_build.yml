@@ -20,7 +20,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  APP_VERSION: "1.9.9"
+  APP_VERSION: "2.0.0"
 
 jobs:
   formating_code:
@@ -132,10 +132,7 @@ jobs:
           ## ✨ What's New
 
           ### 🪟 Windows Enhancements
-          - **RusherHack** - Added cheat clearing
-          - **Node JS** - Improved documentation clearing
-          - **Lords Mobile** - Improved logs clearing
-          - **Amnezia WG** - Added log clearing
+          - **Rust Language** - Added documentation clearing
       
           ## 👏 Contributors Hall of Fame
           Special thanks to our amazing contributors who made this release possible:
