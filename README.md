@@ -26,7 +26,7 @@
 - 🎯 **User-Friendly**: Clean, minimalist interface for easy operation
 
 ### Demo
-![demo](https://github.com/user-attachments/assets/e52af806-13e2-4907-8970-496249781626)
+![demo](https://github.com/user-attachments/assets/7d28a763-97ee-45b9-9ad5-2ed0fb8886c0)
 ![Linux GUI](https://github.com/user-attachments/assets/18cbad40-5c31-4ab5-ab5c-c0fc6014535f)
 
 ## 📥 Installation
