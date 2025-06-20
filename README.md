@@ -1,5 +1,5 @@
 <div align="center">
-<h1>Cross Cleaner 🚀</h1>
+<h1>🌟 Cross Cleaner 🌟</h1>
   
 [![Rustlang](https://img.shields.io/static/v1?label=Made%20with&message=Rust&logo=rust&labelColor=e82833&color=b11522)](https://www.rust-lang.org)
 [![Github License](https://img.shields.io/github/license/WinBooster/Cross-Cleaner?logo=mdBook)](https://github.com/WinBooster/Cross-Cleaner/blob/main/LICENSE)
@@ -24,10 +24,10 @@
 - 🔒 **Secure**: Carefully preserves critical system files
 - 💻 **Cross-Platform**: Full support for Windows and Linux
 - 🎯 **User-Friendly**: Clean, minimalist interface for easy operation
+- 📄 **Custom-DataBase**: Ability to use custom cleanup database
 
 ### Demo
-![Linux Terminal](https://github.com/user-attachments/assets/2938d58b-83eb-44d8-a43c-9ad223434666)
-![Windows Terminal](https://github.com/user-attachments/assets/45b0792b-357f-405b-b91e-3496caee41a5)
+![demo](https://github.com/user-attachments/assets/7d28a763-97ee-45b9-9ad5-2ed0fb8886c0)
 ![Linux GUI](https://github.com/user-attachments/assets/18cbad40-5c31-4ab5-ab5c-c0fc6014535f)
 
 ## 📥 Installation

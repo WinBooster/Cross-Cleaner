@@ -358,9 +358,8 @@ async fn main() {
 				"Cache" => 0,
 				"Logs" => 1,
 				"Crashes" => 2,
-				"Crashe reports" => 3,
-				"Documentation" => 4,
-				"Backups" => 5,
+				"Documentation" => 3,
+				"Backups" => 4,
 				"LastActivity" => 5,
 				_ => 6,
 			};
