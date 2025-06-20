@@ -126,6 +126,9 @@ jobs:
 
           ### 🪟 Windows Enhancements
           - **RusherHack** - Added cheat clearing
+          - **Node JS** - Improved documentation clearing
+          - **Lords Mobile** - Improved logs clearing
+          - **Amnezia WG** - Added log clearing
       
           ## 👏 Contributors Hall of Fame
           Special thanks to our amazing contributors who made this release possible:
