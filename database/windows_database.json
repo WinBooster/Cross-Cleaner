@@ -1391,7 +1391,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\CrashDumps\\*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "Windows",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1402,7 +1402,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\crashlog\\*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "Arizona Games Launcher",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1413,7 +1413,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.mclaunch\\launcher_crashreports\\*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "McLaunch",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1424,7 +1424,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "Minecraft",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1435,7 +1435,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "Badlion Client",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1446,7 +1446,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "Tecknix Client",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1457,7 +1457,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "Modrinth",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1468,7 +1468,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "MultiMC",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1479,7 +1479,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "PrismLauncher",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1490,7 +1490,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "PrismLauncher",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1501,7 +1501,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "PolyMC",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1512,7 +1512,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "PolyMC",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1523,7 +1523,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "ATLauncher",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1534,7 +1534,7 @@
   },
   {
     "path": "{drive}.loliland\\updates\\clients\\**\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "LoliLand",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1545,7 +1545,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.cristalix\\updates\\**\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "Cristalix",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1556,7 +1556,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\**\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "MCSkill",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1567,7 +1567,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\**\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "GribLand",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1578,7 +1578,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\**\\crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "CurseForge",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -2256,7 +2256,7 @@
   },
   {
     "path": "{drive}Temp\\*",
-    "category": "Logs",
+    "category": "Cache",
     "program": "Windows",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -2278,7 +2278,7 @@
   },
   {
     "path": "{drive}Windows\\Temp\\*",
-    "category": "Logs",
+    "category": "Cache",
     "program": "Windows",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -2311,7 +2311,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Temp\\*",
-    "category": "Logs",
+    "category": "Cache",
     "program": "Windows",
     "files_to_remove": [],
     "directories_to_remove": [],
