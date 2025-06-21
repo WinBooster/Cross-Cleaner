@@ -1,5 +1,5 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 16:10:39 UTC
+**Last updated:** 2025-06-21 16:15:26 UTC
 ## AntiCheat
 
 | № | Program | Categories |
@@ -74,20 +74,21 @@
 | 1 | BoxedAppPacker | Documentation |
 | 2 | Docker | Logs |
 | 3 | DotNet | Logs |
-| 4 | Git | Documentation |
-| 5 | GitHub Desktop | Logs |
-| 6 | IDA Pro | Cache |
-| 7 | Inno Setup 6 | Documentation, Logs |
-| 8 | Java | Documentation |
-| 9 | MCCreator | Logs |
-| 10 | MinGW | Documentation |
-| 11 | Node JS | Cache, Documentation, Logs |
-| 12 | Postman | Logs |
-| 13 | Python | Documentation |
-| 14 | Rust Language | Documentation |
-| 15 | Unity Hub | Documentation |
-| 16 | Windows Kits | Documentation |
-| 17 | Xamarin | Logs |
+| 4 | Enigma Virtual Box | Documentation |
+| 5 | Git | Documentation |
+| 6 | GitHub Desktop | Logs |
+| 7 | IDA Pro | Cache |
+| 8 | Inno Setup 6 | Documentation, Logs |
+| 9 | Java | Documentation |
+| 10 | MCCreator | Logs |
+| 11 | MinGW | Documentation |
+| 12 | Node JS | Cache, Documentation, Logs |
+| 13 | Postman | Logs |
+| 14 | Python | Documentation |
+| 15 | Rust Language | Documentation |
+| 16 | Unity Hub | Documentation |
+| 17 | Windows Kits | Documentation |
+| 18 | Xamarin | Logs |
 
 
 ## Driver
@@ -148,9 +149,11 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | Discord | Logs |
-| 2 | Guilded | Logs |
-| 3 | Signal | Cache, Logs |
-| 4 | Telegram | Accounts, Cache, Logs |
+| 2 | Element | Logs |
+| 3 | Guilded | Logs |
+| 4 | Signal | Cache, Logs |
+| 5 | Telegram | Accounts, Cache, Logs |
+| 6 | Thunderbird | Crashes |
 
 
 ## Minecraft Launcher
@@ -282,15 +285,12 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | 4uKey for Android | Logs |
-| 2 | Adobe | Logs |
+| 2 | Adobe | Documentation |
 | 3 | Electron App's | Documentation, Logs |
-| 4 | Element | Logs |
-| 5 | Enigma Virtual Box | Documentation |
-| 6 | ImgBurn | Documentation, Logs |
-| 7 | Mozilla Maintenance Service | Logs |
-| 8 | OneDrive | Cache |
-| 9 | PowerToys | Documentation |
-| 10 | Recaf | Logs |
-| 11 | Thunderbird | Crashes |
-| 12 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
-| 13 | Windows Defender | Documentation |
+| 4 | ImgBurn | Documentation, Logs |
+| 5 | Mozilla Maintenance Service | Logs |
+| 6 | OneDrive | Cache |
+| 7 | PowerToys | Documentation |
+| 8 | Recaf | Logs |
+| 9 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
+| 10 | Windows Defender | Documentation |
