@@ -506,7 +506,7 @@
   },
   {
     "path": "{drive}ProgramData\\chocolatey",
-	"class": "Packet manager",
+    "class": "Packet manager",
     "category": "Logs",
     "program": "Chocolatey",
     "directories_to_remove": [
@@ -3226,7 +3226,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\scoop",
-	"class": "Packet manager",
+    "class": "Packet manager",
     "category": "Cache",
     "program": "Scoop",
     "directories_to_remove": [
@@ -3235,7 +3235,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\scoop\\apps\\**\\**",
-	"class": "Packet manager",
+    "class": "Packet manager",
     "category": "Documentation",
     "program": "Scoop",
     "files_to_remove": [
@@ -3871,7 +3871,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
-	"class": "Packet manager",
+    "class": "Packet manager",
     "category": "Documentation",
     "program": "WinGet",
     "files_to_remove": [

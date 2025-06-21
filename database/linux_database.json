@@ -1,7 +1,7 @@
 [
   {
     "path": "/usr/share/doc/",
-	"class": "Audio",
+    "class": "Audio",
     "category": "Documentation",
     "program": "Alsa",
     "directories_to_remove": [
@@ -14,7 +14,7 @@
   },
   {
     "path": "/usr/share/automake-1.17/",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Logs",
     "program": "Auto make",
     "files_to_remove": [
@@ -24,7 +24,7 @@
   },
   {
     "path": "/usr/share/bison/",
-	"class": "Text",
+    "class": "Text",
     "category": "Logs",
     "program": "Bison",
     "files_to_remove": [
@@ -478,7 +478,7 @@
   },
   {
     "path": "/usr/share/gperf/",
-	"class": "Text",
+    "class": "Text",
     "category": "Documentation",
     "program": "Gperf",
     "directories_to_remove": [
@@ -496,7 +496,7 @@
   },
   {
     "path": "/usr/share/",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "GTK",
     "directories_to_remove": [
@@ -911,7 +911,7 @@
   },
   {
     "path": "/usr/share/doc/",
-	"class": "Driver",
+    "class": "Driver",
     "category": "Documentation",
     "program": "Nvidia",
     "files_to_remove": [
@@ -955,7 +955,7 @@
   },
   {
     "path": "/usr/share/doc/",
-	"class": "Text",
+    "class": "Text",
     "category": "Documentation",
     "program": "Pcre",
     "directories_to_remove": [
@@ -1396,7 +1396,7 @@
   },
   {
     "path": "/home/{username}/.cache/",
-	"class": "Packet manager",
+    "class": "Packet manager",
     "category": "Cache",
     "program": "Yay",
     "files_to_remove": [],
