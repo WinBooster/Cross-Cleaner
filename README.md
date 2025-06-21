@@ -22,7 +22,7 @@
 
 - 🚀 **Fast Cleanup**: Leverages multi-threading for maximum performance
 - 🔒 **Secure**: Carefully preserves critical system files
-- 💻 **Cross-Platform**: Full support for Windows and Linux
+- 💻 **Cross-Platform**: Full support for ![Windows](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_WINDOWS.md) and ![Linux](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_LINUX.md)
 - 🎯 **User-Friendly**: Clean, minimalist interface for easy operation
 - 📄 **Custom-DataBase**: Ability to use custom cleanup database
 
