@@ -1311,7 +1311,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy/",
-	"class": "Security",
+    "class": "Security",
     "category": "Logs",
     "program": "I2P",
     "files_to_remove": [
@@ -1324,7 +1324,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy/",
-	"class": "Security",
+    "class": "Security",
     "category": "Documentation",
     "program": "I2P",
     "files_to_remove": [],
@@ -1334,7 +1334,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Hex-Rays\\IDA Pro\\*.lst",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Cache",
     "program": "IDA Pro",
     "remove_files": true
@@ -1430,7 +1430,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Inno Setup 6/",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Inno Setup 6",
     "files_to_remove": [
@@ -1441,7 +1441,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Inno Setup 6\\Examples\\*.txt",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Logs",
     "program": "Inno Setup 6",
     "remove_files": true
@@ -1508,7 +1508,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.jdks\\**",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1518,7 +1518,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.jdks\\**",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1542,7 +1542,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.jdks\\**",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "directories_to_remove": [
@@ -1552,7 +1552,7 @@
   },
   {
     "path": "{drive}Program Files\\Java\\**",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1576,7 +1576,7 @@
   },
   {
     "path": "{drive}Program Files\\Eclipse Adoptium\\**",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1600,7 +1600,7 @@
   },
   {
     "path": "{drive}Program Files\\Android\\jdk\\**\\**",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1624,7 +1624,7 @@
   },
   {
     "path": "{drive}Program Files\\Android\\jdk\\**\\**",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1634,7 +1634,7 @@
   },
   {
     "path": "{drive}Program Files\\Zulu\\**",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1658,7 +1658,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.lunarclient\\jre\\**\\**",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1682,7 +1682,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixclient\\runtimes\\**",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [

@@ -1,5 +1,5 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 14:55:18 UTC
+**Last updated:** 2025-06-21 15:05:56 UTC
 ## AntiCheat
 
 | № | Program | Categories |
@@ -64,14 +64,17 @@
 | 2 | DotNet | Logs |
 | 3 | Git | Documentation |
 | 4 | GitHub Desktop | Logs |
-| 5 | MCCreator | Logs |
-| 6 | MinGW | Documentation |
-| 7 | Node JS | Cache, Documentation, Logs |
-| 8 | Python | Documentation |
-| 9 | Rust Language | Documentation |
-| 10 | Unity Hub | Documentation |
-| 11 | Windows Kits | Documentation |
-| 12 | Xamarin | Logs |
+| 5 | IDA Pro | Cache |
+| 6 | Inno Setup 6 | Documentation, Logs |
+| 7 | Java | Documentation |
+| 8 | MCCreator | Logs |
+| 9 | MinGW | Documentation |
+| 10 | Node JS | Cache, Documentation, Logs |
+| 11 | Python | Documentation |
+| 12 | Rust Language | Documentation |
+| 13 | Unity Hub | Documentation |
+| 14 | Windows Kits | Documentation |
+| 15 | Xamarin | Logs |
 
 
 ## Driver
@@ -233,33 +236,30 @@
 | 8 | Element | Logs |
 | 9 | Enigma Virtual Box | Documentation |
 | 10 | HiAlgo Boost | Documentation |
-| 11 | IDA Pro | Cache |
-| 12 | IObit Driver Booster | Logs |
-| 13 | IObit Malware Fighter | Logs |
-| 14 | ImgBurn | Documentation, Logs |
-| 15 | Inno Setup 6 | Documentation, Logs |
-| 16 | Java | Documentation |
-| 17 | Magic TDX | Documentation |
-| 18 | Mem Reduct | Documentation |
-| 19 | MiniBin | Logs |
-| 20 | Mozilla Maintenance Service | Logs |
-| 21 | NetLimiter | Logs |
-| 22 | OneDrive | Cache |
-| 23 | Panda Security | Logs |
-| 24 | Postman | Logs |
-| 25 | PowerToys | Documentation |
-| 26 | Process Hacker 2 | Documentation |
-| 27 | Process Lasso | Logs |
-| 28 | Recaf | Logs |
-| 29 | Sandboxie+ | Documentation |
-| 30 | Scoop | Cache, Documentation |
-| 31 | SystemInformer | Documentation |
-| 32 | Thunderbird | Crashes |
-| 33 | Tribler | Logs |
-| 34 | VirtualBox | Documentation, Logs |
-| 35 | WinGet | Documentation |
-| 36 | WinRaR | Documentation |
-| 37 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
-| 38 | Windows Defender | Documentation |
-| 39 | qBittorrent | Logs |
-| 40 | ССleaner | Logs |
+| 11 | IObit Driver Booster | Logs |
+| 12 | IObit Malware Fighter | Logs |
+| 13 | ImgBurn | Documentation, Logs |
+| 14 | Magic TDX | Documentation |
+| 15 | Mem Reduct | Documentation |
+| 16 | MiniBin | Logs |
+| 17 | Mozilla Maintenance Service | Logs |
+| 18 | NetLimiter | Logs |
+| 19 | OneDrive | Cache |
+| 20 | Panda Security | Logs |
+| 21 | Postman | Logs |
+| 22 | PowerToys | Documentation |
+| 23 | Process Hacker 2 | Documentation |
+| 24 | Process Lasso | Logs |
+| 25 | Recaf | Logs |
+| 26 | Sandboxie+ | Documentation |
+| 27 | Scoop | Cache, Documentation |
+| 28 | SystemInformer | Documentation |
+| 29 | Thunderbird | Crashes |
+| 30 | Tribler | Logs |
+| 31 | VirtualBox | Documentation, Logs |
+| 32 | WinGet | Documentation |
+| 33 | WinRaR | Documentation |
+| 34 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
+| 35 | Windows Defender | Documentation |
+| 36 | qBittorrent | Logs |
+| 37 | ССleaner | Logs |
