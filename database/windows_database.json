@@ -878,8 +878,6 @@
     "directories_to_remove": [
       "logs"
     ]
-    "remove_directories": true,
-    "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\element-desktop\\*.log",
