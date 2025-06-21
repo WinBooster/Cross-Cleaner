@@ -84,6 +84,7 @@ jobs:
 
   generate-lists:
     runs-on: ubuntu-latest
+    name: Generating clearing programms list
     needs: [sort_json]
     permissions:
       contents: write
