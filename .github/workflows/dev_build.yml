@@ -146,10 +146,10 @@ jobs:
     - name: Process Linux data
       run: |
         # Header
-        echo "# Windows Clearing Programs Catalog" > LIST_LINUX.md
+        echo "# Linux Clearing Programs Catalog" > LIST_LINUX.md
         echo "**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> LIST_LINUX.md
         
-        jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/windows_database.json | while IFS= read -r class; do
+        jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/linux_database.json | while IFS= read -r class; do
           echo -e "## $class\n" >> LIST_LINUX.md
           
           # Get programs for this class
