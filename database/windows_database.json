@@ -3480,7 +3480,7 @@
     "program": "Vape Client",
     "files_to_remove": [],
     "remove_all_in_dir": true,
-    "remove_directory_after_clean": true,
+    "remove_directory_after_clean": true
   },
   {
     "path": "{drive}Users\\{username}\\VirtualBox VMs\\**\\Logs\\*.log",
