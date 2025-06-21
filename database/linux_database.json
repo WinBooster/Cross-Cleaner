@@ -40,14 +40,14 @@
   },
   {
     "path": "/home/{username}/.cache/cassette/*.log",
-	"class": "Audio",
+    "class": "Audio",
     "category": "Logs",
     "program": "Cassettle",
     "remove_files": true
   },
   {
     "path": "/home/{username}/.cristalix/updates/**/crash-reports/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "Cristalix",
     "remove_directories": true,
@@ -55,7 +55,7 @@
   },
   {
     "path": "/home/{username}/.cristalix/updates/**/saves/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Game saves",
     "program": "Cristalix",
     "remove_directories": true,
@@ -63,7 +63,7 @@
   },
   {
     "path": "/home/{username}/.cristalix/updates/**/screenshots/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Images",
     "program": "Cristalix",
     "remove_directories": true,
@@ -71,7 +71,7 @@
   },
   {
     "path": "/home/{username}/.cristalix/updates/**/logs/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Cristalix",
     "remove_directories": true,
@@ -79,7 +79,7 @@
   },
   {
     "path": "/home/{username}/cubixworld/updates/**/crash-reports/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "CubixWorld",
     "remove_directories": true,
@@ -87,7 +87,7 @@
   },
   {
     "path": "/home/{username}/cubixworld/updates/**/saves/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Game saves",
     "program": "CubixWorld",
     "remove_directories": true,
@@ -95,7 +95,7 @@
   },
   {
     "path": "/home/{username}/cubixworld/updates/**/screenshots/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Images",
     "program": "CubixWorld",
     "remove_directories": true,
@@ -103,7 +103,7 @@
   },
   {
     "path": "/home/{username}/cubixworld/updates/**/logs/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "CubixWorld",
     "remove_directories": true,
@@ -111,7 +111,7 @@
   },
   {
     "path": "/home/{username}/cubixworld/updates/**/",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "CubixWorld",
     "files_to_remove": [
@@ -120,7 +120,7 @@
   },
   {
     "path": "/home/{username}/.config/Cursor/",
-	"class": "Text",
+    "class": "Text",
     "category": "Logs",
     "program": "Cursor",
     "directories_to_remove": [
@@ -129,7 +129,7 @@
   },
   {
     "path": "/home/{username}/.config/Cursor/",
-	"class": "Text",
+    "class": "Text",
     "category": "Cache",
     "program": "Cursor",
     "directories_to_remove": [
@@ -143,7 +143,7 @@
   },
   {
     "path": "/home/{username}/.cursor/extensions/**/",
-	"class": "Text",
+    "class": "Text",
     "category": "Documentation",
     "program": "Cursor",
     "files_to_remove": [
@@ -165,7 +165,7 @@
   },
   {
     "path": "/home/{username}/.config/discord/",
-	"class": "Messanger",
+    "class": "Messanger",
     "category": "Cache",
     "program": "Discord",
     "directories_to_remove": [
@@ -178,7 +178,7 @@
   },
   {
     "path": "/home/{username}/.config/discord/logs/*",
-	"class": "Messanger",
+    "class": "Messanger",
     "category": "Logs",
     "program": "Discord",
     "remove_files": true
@@ -379,7 +379,7 @@
   },
   {
     "path": "/home/{username}/.config/Exodus",
-	"class": "Crypto Wallet",
+    "class": "Crypto Wallet",
     "category": "Accounts",
     "program": "Exodus Crypto Wallet",
     "files_to_remove": [],
@@ -389,7 +389,7 @@
   },
   {
     "path": "/home/{username}/.mozilla/firefox/**/",
-	"class": "Browser",
+    "class": "Browser",
     "category": "Browser cookies",
     "program": "FireFox",
     "files_to_remove": [
@@ -399,7 +399,7 @@
   },
   {
     "path": "/home/{username}/.cache/firefox/**/thumbnails/*",
-	"class": "Browser",
+    "class": "Browser",
     "category": "Cache",
     "program": "FireFox",
     "remove_directories": true,
@@ -407,7 +407,7 @@
   },
   {
     "path": "/home/{username}/.mozilla/firefox/**/",
-	"class": "Browser",
+    "class": "Browser",
     "category": "LastActivity",
     "program": "FireFox",
     "files_to_remove": [
@@ -418,7 +418,7 @@
   },
   {
     "path": "/home/{username}/",
-	"class": "Cheat",
+    "class": "Cheat",
     "category": "Cheats",
     "program": "Future Client",
     "directories_to_remove": [
@@ -427,14 +427,14 @@
   },
   {
     "path": "/home/{username}/.local/share/Steam/steamapps/common/GarrysMod/crashes/*",
-	"class": "Game",
+    "class": "Game",
     "category": "Crashes",
     "program": "Garry's mod",
     "remove_files": true
   },
   {
     "path": "/home/{username}/.local/share/Steam/steamapps/common/GarrysMod/",
-	"class": "Game",
+    "class": "Game",
     "category": "Logs",
     "program": "Garry's mod",
     "files_to_remove": [
@@ -443,14 +443,14 @@
   },
   {
     "path": "/home/{username}/.ghidra/**/*.log",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Logs",
     "program": "Ghidra",
     "remove_files": true
   },
   {
     "path": "/home/{username}/.config/GitHub Desktop/Cache/*",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Cache",
     "program": "GitHub Desktop",
     "remove_directories": true,
@@ -458,14 +458,14 @@
   },
   {
     "path": "/home/{username}/.config/GitHub Desktop/logs/*",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Logs",
     "program": "GitHub Desktop",
     "remove_files": true
   },
   {
     "path": "/usr/share/doc/",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Github Desktop",
     "directories_to_remove": [
@@ -482,7 +482,7 @@
   },
   {
     "path": "/home/{username}/.gradle/",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Cache",
     "program": "Gradle",
     "directories_to_remove": [
@@ -499,7 +499,7 @@
   },
   {
     "path": "/home/{username}/.local/share/Paradox Interactive/Hearts of Iron IV/",
-	"class": "Game",
+    "class": "Game",
     "category": "Logs",
     "program": "Hearts of Iron IV",
     "directories_to_remove": [
@@ -508,7 +508,7 @@
   },
   {
     "path": "/home/{username}/.local/share/Paradox Interactive/Hearts of Iron IV/",
-	"class": "Game",
+    "class": "Game",
     "category": "Cache",
     "program": "Hearts of Iron IV",
     "directories_to_remove": [
@@ -517,7 +517,7 @@
   },
   {
     "path": "/home/{username}/.local/share/Paradox Interactive/Hearts of Iron IV/",
-	"class": "Game",
+    "class": "Game",
     "category": "Crashes",
     "program": "Hearts of Iron IV",
     "directories_to_remove": [
@@ -534,7 +534,7 @@
   },
   {
     "path": "/home/{username}/.jdk/**/",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Jdk",
     "files_to_remove": [
@@ -547,7 +547,7 @@
   },
   {
     "path": "/home/{username}/.cache/JetBrains/**/log/*",
-	"class": "Text",
+    "class": "Text",
     "category": "Logs",
     "program": "JetBrains",
     "remove_directories": true,
@@ -555,7 +555,7 @@
   },
   {
     "path": "/usr/share/keepassxc/",
-	"class": "Password Manager",
+    "class": "Password Manager",
     "category": "Documentation",
     "program": "KeePassXC",
     "directories_to_remove": [
@@ -564,7 +564,7 @@
   },
   {
     "path": "/home/{username}/.config/libreoffice/**/",
-	"class": "Text",
+    "class": "Text",
     "category": "Cache",
     "program": "LibreOffice",
     "directories_to_remove": [
@@ -573,7 +573,7 @@
   },
   {
     "path": "/home/{username}/.cache/librewolf/**/thumbnails/*",
-	"class": "Browser",
+    "class": "Browser",
     "category": "Cache",
     "program": "LibreWolf",
     "remove_directories": true,
@@ -581,7 +581,7 @@
   },
   {
     "path": "/home/{username}/.librewolf/**/",
-	"class": "Browser",
+    "class": "Browser",
     "category": "LastActivity",
     "program": "LibreWolf",
     "files_to_remove": [
@@ -599,7 +599,7 @@
   },
   {
     "path": "/home/{username}/.lunarclient/",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "Lunar Client",
     "files_to_remove": [
@@ -609,7 +609,7 @@
   },
   {
     "path": "/home/{username}/.lunarclient/game-cache/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Lunar Client",
     "remove_directories": true,
@@ -617,7 +617,7 @@
   },
   {
     "path": "/home/{username}/.lunarclient/cache/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Lunar Client",
     "remove_directories": true,
@@ -625,7 +625,7 @@
   },
   {
     "path": "/home/{username}/.lunarclient/offline/multiver",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "Lunar Client",
     "directories_to_remove": [
@@ -639,7 +639,7 @@
   },
   {
     "path": "/home/{username}/.lunarclient/offline/multiver/crash-reports/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "Lunar Client",
     "remove_directories": true,
@@ -647,7 +647,7 @@
   },
   {
     "path": "/home/{username}/.lunarclient/offline/multiver/saves/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Game saves",
     "program": "Lunar Client",
     "remove_directories": true,
@@ -655,7 +655,7 @@
   },
   {
     "path": "/home/{username}/.lunarclient/offline/multiver/screenshots/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Images",
     "program": "Lunar Client",
     "remove_directories": true,
@@ -663,7 +663,7 @@
   },
   {
     "path": "/home/{username}/.lunarclient/offline/multiver/logs/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Lunar Client",
     "remove_directories": true,
@@ -671,7 +671,7 @@
   },
   {
     "path": "/home/{username}/.lunarclient/licenses/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Documentation",
     "program": "Lunar Client",
     "remove_directories": true,
@@ -679,7 +679,7 @@
   },
   {
     "path": "/home/{username}/.lunarclient/logs/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Lunar Client",
     "remove_directories": true,
@@ -687,14 +687,14 @@
   },
   {
     "path": "/home/{username}/.lunarclient/*log*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Lunar Client",
     "remove_files": true
   },
   {
     "path": "/home/{username}/.minecraft/",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "Minecraft",
     "files_to_remove": [
@@ -704,7 +704,7 @@
   },
   {
     "path": "/home/{username}/.minecraft/",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "LastActivity",
     "program": "Minecraft",
     "files_to_remove": [
@@ -713,7 +713,7 @@
   },
   {
     "path": "/home/{username}/.minecraft/game-cache/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Minecraft",
     "remove_directories": true,
@@ -721,7 +721,7 @@
   },
   {
     "path": "/home/{username}/.minecraft/cache/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Minecraft",
     "remove_directories": true,
@@ -729,7 +729,7 @@
   },
   {
     "path": "/home/{username}/.minecraft",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "Minecraft",
     "directories_to_remove": [
@@ -743,7 +743,7 @@
   },
   {
     "path": "/home/{username}/.minecraft/crash-reports/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "Minecraft",
     "remove_directories": true,
@@ -751,7 +751,7 @@
   },
   {
     "path": "/home/{username}/.minecraft/saves/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Game saves",
     "program": "Minecraft",
     "remove_directories": true,
@@ -759,7 +759,7 @@
   },
   {
     "path": "/home/{username}/.minecraft/screenshots/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Images",
     "program": "Minecraft",
     "remove_directories": true,
@@ -767,7 +767,7 @@
   },
   {
     "path": "/home/{username}/.minecraft/logs/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Minecraft",
     "remove_directories": true,
@@ -775,7 +775,7 @@
   },
   {
     "path": "/home/{username}/.minecraft/licenses/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Documentation",
     "program": "Minecraft",
     "remove_directories": true,
@@ -783,7 +783,7 @@
   },
   {
     "path": "/home/{username}/.minecraft/logs/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Minecraft",
     "remove_directories": true,
@@ -791,7 +791,7 @@
   },
   {
     "path": "/home/{username}/.minecraft/*log*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Minecraft",
     "remove_directories": false,
@@ -799,7 +799,7 @@
   },
   {
     "path": "/home/{username}/.cache/ModrinthApp/",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Modrith",
     "directories_to_remove": [
@@ -809,7 +809,7 @@
   },
   {
     "path": "/home/{username}/.local/share/MultiMC/",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "MultiMC",
     "files_to_remove": [
@@ -819,7 +819,7 @@
   },
   {
     "path": "/home/{username}/.local/share/MultiMC/game-cache/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "MultiMC",
     "remove_directories": true,
@@ -827,7 +827,7 @@
   },
   {
     "path": "/home/{username}/.local/share/MultiMC/cache/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "MultiMC",
     "remove_directories": true,
@@ -835,7 +835,7 @@
   },
   {
     "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "MultiMC",
     "directories_to_remove": [
@@ -849,7 +849,7 @@
   },
   {
     "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft/crash-reports/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "MultiMC",
     "remove_directories": true,
@@ -857,7 +857,7 @@
   },
   {
     "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft/saves/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Game saves",
     "program": "MultiMC",
     "remove_directories": true,
@@ -865,7 +865,7 @@
   },
   {
     "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft/screenshots/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Images",
     "program": "MultiMC",
     "remove_directories": true,
@@ -873,7 +873,7 @@
   },
   {
     "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft/logs/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "MultiMC",
     "remove_directories": true,
@@ -881,7 +881,7 @@
   },
   {
     "path": "/home/{username}/.local/share/MultiMC/licenses/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Documentation",
     "program": "MultiMC",
     "remove_directories": true,
@@ -889,7 +889,7 @@
   },
   {
     "path": "/home/{username}/.local/share/MultiMC/logs/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "MultiMC",
     "remove_directories": true,
@@ -897,7 +897,7 @@
   },
   {
     "path": "/home/{username}/.local/share/MultiMC/*log*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "MultiMC",
     "remove_directories": false,
@@ -921,7 +921,7 @@
   },
   {
     "path": "/home/{username}/.local/share/osu/",
-	"class": "Game",
+    "class": "Game",
     "category": "Logs",
     "program": "Osu",
     "directories_to_remove": [
@@ -930,7 +930,7 @@
   },
   {
     "path": "/home/{username}/.local/share/osu/",
-	"class": "Game",
+    "class": "Game",
     "category": "Cache",
     "program": "Osu",
     "directories_to_remove": [
@@ -939,7 +939,7 @@
   },
   {
     "path": "/home/{username}/.local/share/osu/",
-	"class": "Game",
+    "class": "Game",
     "category": "Images",
     "program": "Osu",
     "directories_to_remove": [
@@ -957,7 +957,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PolyMC/",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "PolyMC",
     "files_to_remove": [
@@ -967,7 +967,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PolyMC/game-cache/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "PolyMC",
     "remove_directories": true,
@@ -975,7 +975,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PolyMC/cache/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "PolyMC",
     "remove_directories": true,
@@ -983,7 +983,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "PolyMC",
     "directories_to_remove": [
@@ -997,7 +997,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft/crash-reports/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "PolyMC",
     "remove_directories": true,
@@ -1005,7 +1005,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft/saves/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Game saves",
     "program": "PolyMC",
     "remove_directories": true,
@@ -1013,7 +1013,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft/screenshots/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Images",
     "program": "PolyMC",
     "remove_directories": true,
@@ -1021,7 +1021,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft/logs/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "PolyMC",
     "remove_directories": true,
@@ -1029,7 +1029,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PolyMC/licenses/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Documentation",
     "program": "PolyMC",
     "remove_directories": true,
@@ -1037,7 +1037,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PolyMC/logs/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "PolyMC",
     "remove_directories": true,
@@ -1045,14 +1045,14 @@
   },
   {
     "path": "/home/{username}/.local/share/PolyMC/*log*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "PolyMC",
     "remove_files": true
   },
   {
     "path": "/usr/share/doc/",
-	"class": "Game",
+    "class": "Game",
     "category": "Documentation",
     "program": "Powdertoy",
     "directories_to_remove": [
@@ -1061,7 +1061,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PrismLauncher/",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "Prism Launcher",
     "files_to_remove": [
@@ -1071,7 +1071,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PrismLauncher/game-cache/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Prism Launcher",
     "remove_directories": true,
@@ -1079,7 +1079,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PrismLauncher/cache/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Prism Launcher",
     "remove_directories": true,
@@ -1087,7 +1087,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "Prism Launcher",
     "directories_to_remove": [
@@ -1101,7 +1101,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/crash-reports/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "Prism Launcher",
     "remove_directories": true,
@@ -1109,7 +1109,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/saves/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Game saves",
     "program": "Prism Launcher",
     "remove_directories": true,
@@ -1117,7 +1117,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/screenshots/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Images",
     "program": "Prism Launcher",
     "remove_directories": true,
@@ -1125,7 +1125,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/logs/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Prism Launcher",
     "remove_directories": true,
@@ -1133,7 +1133,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PrismLauncher/licenses/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Documentation",
     "program": "Prism Launcher",
     "remove_directories": true,
@@ -1141,7 +1141,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PrismLauncher/logs/*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Prism Launcher",
     "remove_directories": true,
@@ -1149,14 +1149,14 @@
   },
   {
     "path": "/home/{username}/.local/share/PrismLauncher/*log*",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Prism Launcher",
     "remove_files": true
   },
   {
     "path": "/usr/share/doc/",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Python",
     "directories_to_remove": [
@@ -1172,7 +1172,7 @@
   },
   {
     "path": "/home/{username}/.rustup/toolchains/**/share/",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Rust language",
     "directories_to_remove": [
@@ -1181,7 +1181,7 @@
   },
   {
     "path": "/home/{username}/SIMPLEMINECRAFT/",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "SimpleMinecraft",
     "directories_to_remove": [
@@ -1190,14 +1190,14 @@
   },
   {
     "path": "/home/{username}/SIMPLEMINECRAFT/data/cache/",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "SimpleMinecraft",
     "remove_all_in_dir": true
   },
   {
     "path": "/home/{username}/SIMPLEMINECRAFT/client/**/",
-	"class": "Minecraft Launcher",
+    "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "SimpleMinecraft",
     "files_to_remove": [
@@ -1210,21 +1210,21 @@
   },
   {
     "path": "/home/{username}/.cache/spotify/*.log",
-	"class": "Audio",
+    "class": "Audio",
     "category": "Logs",
     "program": "Spotify",
     "remove_files": true
   },
   {
     "path": "/home/{username}/.local/share/Steam/userdata/*",
-	"class": "Game",
+    "class": "Game",
     "category": "Accounts",
     "program": "Steam",
     "remove_directories": true
   },
   {
     "path": "/usr/share/doc/",
-	"class": "Game",
+    "class": "Game",
     "category": "Documentation",
     "program": "Steam",
     "directories_to_remove": [
@@ -1233,14 +1233,14 @@
   },
   {
     "path": "/home/{username}/.local/share/Steam/logs/*",
-	"class": "Game",
+    "class": "Game",
     "category": "Logs",
     "program": "Steam",
     "remove_files": true
   },
   {
     "path": "/home/{username}/.local/share/Steam/steamapps/common/Proton Hotfix",
-	"class": "Game",
+    "class": "Game",
     "category": "Documentation",
     "program": "Steam proton",
     "files_to_remove": [
@@ -1286,14 +1286,14 @@
   },
   {
     "path": "/home/{username}/.local/share/TelegramDesktop/*.log",
-	"class": "Messanger",
+    "class": "Messanger",
     "category": "Logs",
     "program": "Telegram",
     "remove_files": true
   },
   {
     "path": "/home/{username}/.local/share/TelegramDesktop/",
-	"class": "Messanger",
+    "class": "Messanger",
     "category": "Accounts",
     "program": "Telegram",
     "directories_to_remove": [
@@ -1302,35 +1302,35 @@
   },
   {
     "path": "/home/{username}/.local/share/TelegramDesktop/log*.txt",
-	"class": "Messanger",
+    "class": "Messanger",
     "category": "Logs",
     "program": "Telegram",
     "remove_files": true
   },
   {
     "path": "/home/{username}/.local/share/Steam/steamapps/common/Terraria/*.blob",
-	"class": "Game",
+    "class": "Game",
     "category": "Crashes",
     "program": "Terraria",
     "remove_files": true
   },
   {
     "path": "/home/{username}/.local/share/Terraria/Worlds/*",
-	"class": "Game",
+    "class": "Game",
     "category": "Game saves",
     "program": "Terraria",
     "remove_files": true
   },
   {
     "path": "/home/{username}/.local/share/Terraria/Playes/*",
-	"class": "Game",
+    "class": "Game",
     "category": "Game saves",
     "program": "Terraria",
     "remove_files": true
   },
   {
     "path": "/home/{username}/.local/share/Steam/steamapps/common/Terraria/",
-	"class": "Game",
+    "class": "Game",
     "category": "Logs",
     "program": "Terraria",
     "files_to_remove": [
@@ -1345,7 +1345,7 @@
   },
   {
     "path": "/home/{username}/.vscode-oss/extensions/**/",
-	"class": "Text",
+    "class": "Text",
     "category": "Documentation",
     "program": "VS Code",
     "files_to_remove": [
@@ -1367,7 +1367,7 @@
   },
   {
     "path": "/home/{username}/.config/yandex-music/",
-	"class": "Audio",
+    "class": "Audio",
     "category": "Cache",
     "program": "Yandex Music",
     "files_to_remove": [],
@@ -1381,7 +1381,7 @@
   },
   {
     "path": "/home/{username}/.config/yandex-music/logs/*",
-	"class": "Audio",
+    "class": "Audio",
     "category": "Logs",
     "program": "Yandex Music",
     "remove_files": true
