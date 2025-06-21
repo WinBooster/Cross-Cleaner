@@ -33,7 +33,8 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add .
-        git diff --quiet && git diff --staged --quiet || (git pull --rebase && git commit -m "Auto format code" && git push
+        git commit -m "Auto format code" || echo "No changes to commit"
+        git push || echo "No changes to push"
 
   sort_json:
     runs-on: ubuntu-latest
@@ -77,8 +78,8 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add "${JSON_FILES[@]}"
-        git diff --quiet && git diff --staged --quiet || git commit -m "Auto-sorted JSON files by program field"
-        git push
+        git commit -m "Auto-sorted JSON files by program field" || echo "No changes to commit"
+        git push || echo "No changes to push"
 
   generate-lists:
     runs-on: ubuntu-latest
@@ -133,10 +134,9 @@ jobs:
         git config --local user.name "github-actions[bot]"
         git add LIST_*.md
         if ! git diff --quiet --staged; then
-          git pull --rebase
           git commit -m "Auto-updated program catalogs"
           git push
-        fi
+        fi 
 
   upload_databases:
     needs: [sort_json]
