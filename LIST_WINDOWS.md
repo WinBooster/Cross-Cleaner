@@ -1,5 +1,5 @@
 # Windows Clearing Programs Catalog v2.0.1
-**Total categories in database:** 16
+**Total categories in database:** 15
 
 **Total programs in database:** 160
 
@@ -51,10 +51,10 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Cheat Engine | Cheat, Logs |
+| 1 | Cheat Engine | Cheats, Logs |
 | 2 | ExecHack | Cheats |
 | 3 | Fatality | Cheats |
-| 4 | INTERIUM | Cheat |
+| 4 | INTERIUM | Cheats |
 | 5 | Krnl | Cheats |
 | 6 | OneTap | Cheats |
 | 7 | Pandora | Cheats |
