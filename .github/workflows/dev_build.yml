@@ -33,8 +33,7 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add .
-        git commit -m "Auto format code" || echo "No changes to commit"
-        git push || echo "No changes to push"
+        git diff --quiet && git diff --staged --quiet || (git pull --rebase && git commit -m "Auto format code" && git push
 
   sort_json:
     runs-on: ubuntu-latest
@@ -134,9 +133,10 @@ jobs:
         git config --local user.name "github-actions[bot]"
         git add LIST_*.md
         if ! git diff --quiet --staged; then
+          git pull --rebase
           git commit -m "Auto-updated program catalogs"
           git push
-        fi 
+        fi
 
   upload_databases:
     needs: [sort_json]
