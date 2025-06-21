@@ -147,6 +147,7 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add LIST_*.md
+        git pull || echo "No pull"
         git commit -m "Auto-updated program catalogs" || echo "No changes to commit"
         git push || echo "No changes to push"
 
