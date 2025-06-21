@@ -88,7 +88,7 @@ jobs:
     - name: Process Windows data
       run: |
         # Header
-        echo "# Windows Clearing Programs Catalog" > LIST_WINDOWS.md
+        echo "# Windows Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_WINDOWS.md
         total_categories=$(jq -r 'map(.category) | unique | length' database/windows_database.json)
         total_programs=$(jq -r 'map(.program) | unique | length' database/windows_database.json)
         total_pathes=$(jq -r 'map(.path) | unique | length' database/windows_database.json)
@@ -109,7 +109,7 @@ jobs:
     - name: Process Linux data
       run: |
         # Header
-        echo "# Linux Clearing Programs Catalog" > LIST_LINUX.md
+        echo "# Linux Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_LINUX.md
         total_categories=$(jq -r 'map(.category) | unique | length' database/linux_database.json)
         total_programs=$(jq -r 'map(.program) | unique | length' database/linux_database.json)
         total_pathes=$(jq -r 'map(.path) | unique | length' database/linux_database.json)
