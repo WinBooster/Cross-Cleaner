@@ -1,6 +1,5 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 02:58:35 UTC
-## Program Categories\n
+**Last updated:** 2025-06-21 03:03:05 UTC
 | № | Program | Categories |
 |---|---------|------------|
 | 1 | 1Password | Logs |
