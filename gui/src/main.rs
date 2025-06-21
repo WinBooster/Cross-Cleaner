@@ -206,6 +206,27 @@ impl MyApp {
             }
         }
 
+        options.sort_by(|a, b| {
+            let priority = |s: &str| match s {
+                "Cache" => 0,
+                "Logs" => 1,
+                "Crashes" => 2,
+                "Documentation" => 3,
+                "Backups" => 4,
+                "LastActivity" => 5,
+                _ => 6,
+            };
+
+            let a_prio = priority(a);
+            let b_prio = priority(b);
+
+            if a_prio == b_prio {
+                a.cmp(b)
+            } else {
+                a_prio.cmp(&b_prio)
+            }
+        });
+
         let mut checked_boxes = vec![];
         for option in options {
             checked_boxes.push((Rc::new(RefCell::new(false)), option));

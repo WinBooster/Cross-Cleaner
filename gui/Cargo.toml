@@ -27,7 +27,6 @@ FileDescription = "Garbage remover"
 OriginalFilename = "Cross Cleaner.exe"
 LegalCopyright = "Copyright Monolith Development © 2025"
 ProductName = "Cross Cleaner"
-ProductVersion = "1.9.6"
 
 [profile.release] # optimize file size
 lto = true
@@ -36,4 +35,3 @@ opt-level = "z"
 strip = true
 panic = "abort"
 debug = false
-

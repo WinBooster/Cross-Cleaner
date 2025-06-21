@@ -1328,7 +1328,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\exodus\\*.log",
     "category": "Logs",
-    "program": "Exodus",
+    "program": "Exodus Crypto Wallet",
     "files_to_remove": [],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -1339,7 +1339,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\exodus\\**",
     "category": "Logs",
-    "program": "Exodus",
+    "program": "Exodus Crypto Wallet",
     "files_to_remove": [
       "SquirrelSetup.log"
     ],
@@ -1352,7 +1352,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\exodus/",
     "category": "Logs",
-    "program": "Exodus",
+    "program": "Exodus Crypto Wallet",
     "files_to_remove": [
       "SquirrelSetup.log"
     ],
@@ -5435,15 +5435,17 @@
     "remove_files": false
   },
   {
-    "path": "{drive}Program Files (x86)\\Windows Kits\\**\\Licenses\\**\\*.rtf",
-    "category": "Logs",
-    "program": "Windows SDK",
+    "path": "{drive}Program Files (x86)\\Windows Kits\\**",
+    "category": "Documentation",
+    "program": "Windows Kits",
     "files_to_remove": [],
-    "directories_to_remove": [],
+    "directories_to_remove": [
+      "Licenses"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
-    "remove_files": true
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Windscribe\\Windscribe2\\*.txt",
