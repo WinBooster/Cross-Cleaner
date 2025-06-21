@@ -1193,7 +1193,7 @@
 	"class": "Minecraft Launcher",
     "category": "Cache",
     "program": "SimpleMinecraft",
-    "remove_all_in_dir": true,
+    "remove_all_in_dir": true
   },
   {
     "path": "/home/{username}/SIMPLEMINECRAFT/client/**/",
