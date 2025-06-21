@@ -30,6 +30,7 @@
   },
   {
     "path": "/home/{username}/.cache/cassette/",
+	"class": "Audio",
     "category": "Cache",
     "program": "Cassettle",
     "files_to_remove": [],
