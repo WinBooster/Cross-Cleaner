@@ -134,7 +134,11 @@ jobs:
           ### 🪟 Windows Enhancements
           - **Rust Language** - Added documentation clearing
           - **Python** - Added documentation clearing
+          - **WinGet** - Added documentation clearing
       
+          ### 🛠️ Technical Updates
+          - **GUI** - Now has argument for custom database, now has dynamic gui height
+
           ## 👏 Contributors Hall of Fame
           Special thanks to our amazing contributors who made this release possible:
           - **@Nekiplay** - Core improvements and feature implementations
