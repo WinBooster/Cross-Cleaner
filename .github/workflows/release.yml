@@ -71,39 +71,6 @@ jobs:
         git commit -m "Auto-sorted JSON files by program field" || echo "No changes to commit"
         git push || echo "No changes to push"
 
-  compress_json:
-    runs-on: ubuntu-latest
-    name: Compress JSON
-    needs: [sort_json]
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Compress JSON files to single line
-      run: |
-        sudo apt-get -y install jq
-        
-        JSON_FILES=("database/linux_database.json" "database/windows_database.json")
-        for JSON_FILE in "${JSON_FILES[@]}"; do
-          echo "Compressing $JSON_FILE..."
-          
-          if [ ! -f "$JSON_FILE" ]; then
-            echo "Error: JSON file not found at $JSON_FILE"
-            exit 1
-          fi
-          
-          jq -c '.' "$JSON_FILE" > "${JSON_FILE}.tmp"
-          
-          if [ $? -eq 0 ]; then
-            mv "${JSON_FILE}.tmp" "$JSON_FILE"
-            echo "Successfully compressed $JSON_FILE"
-          else
-            echo "Error: Failed to compress $JSON_FILE"
-            exit 1
-          fi
-        done
-
-
   generate-lists:
     runs-on: ubuntu-latest
     name: Generating clearing programs list
@@ -261,6 +228,13 @@ jobs:
     name: Build Linux
     steps:
     - uses: actions/checkout@v4
+    - name: Compress JSON files temporarily
+      run: |
+        sudo apt-get -y install jq
+        jq -c '.' database/linux_database.json > database/linux_database_compressed.json
+        jq -c '.' database/windows_database.json > database/windows_database_compressed.json
+        mv database/linux_database_compressed.json database/linux_database.json
+        mv database/windows_database_compressed.json database/windows_database.json
     - name: Build linux
       run: cargo build --release
     - name: Move linux binaries
@@ -282,6 +256,13 @@ jobs:
     name: Build Windows
     steps:
     - uses: actions/checkout@v4
+    - name: Compress JSON files temporarily
+      run: |
+        choco install jq -y
+        jq -c '.' database/linux_database.json > database/linux_database_compressed.json
+        jq -c '.' database/windows_database.json > database/windows_database_compressed.json
+        move /Y database/linux_database_compressed.json database/linux_database.json
+        move /Y database/windows_database_compressed.json database/windows_database.json
     - name: Build windows
       run: cargo build --release
     - name: Move windows binaries
