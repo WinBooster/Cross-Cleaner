@@ -3,7 +3,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\1Password\\logs\\setup\\*.log",
     "category": "Logs",
     "program": "1Password",
-	"class": "Password manager",
+    "class": "Password manager",
     "remove_files": true
   },
   {
@@ -2268,7 +2268,7 @@
   {
     "path": "{drive}Program Files\\KeePass Password Safe 2\\*.txt",
     "category": "Logs",
-	"class": "Password manager",
+    "class": "Password manager",
     "program": "KeePass 2",
     "remove_files": true
   },
