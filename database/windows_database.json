@@ -3,55 +3,31 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\1Password\\logs\\setup\\*.log",
     "category": "Logs",
     "program": "1Password",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
+	"class": "Password manager",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files (x86)\\Tenorshare\\4uKey for Android\\Logs\\*",
     "category": "Logs",
     "program": "4uKey for Android",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\TSMonitor\\4uKey for Android\\logs\\*",
     "category": "Logs",
     "program": "4uKey for Android",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Postman-Agent\\*.log",
     "category": "Logs",
     "program": "4uKey for Android",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
     "path": "{drive}Program Files\\7-Zip\\*.txt",
     "category": "Logs",
     "program": "7-Zip",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
@@ -60,22 +36,12 @@
     "program": "AAF Optimus DCH Audio",
     "files_to_remove": [
       "RT.pdb"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Program Files\\Adobe\\**\\Legal\\**\\*.html",
     "category": "Logs",
     "program": "Adobe",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
@@ -84,12 +50,7 @@
     "program": "Amnezia VPN",
     "files_to_remove": [
       "InstallationLog.txt"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Program Files\\AmneziaVPN\\ss",
@@ -97,12 +58,7 @@
     "program": "Amnezia VPN",
     "files_to_remove": [
       "LICENSE"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Program Files\\AmneziaVPN\\openvpn",
@@ -110,12 +66,7 @@
     "program": "Amnezia VPN",
     "files_to_remove": [
       "license.txt"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Program Files\\AmneziaVPN\\tap",
@@ -123,12 +74,7 @@
     "program": "Amnezia VPN",
     "files_to_remove": [
       "license.txt"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Program Files\\AmneziaWG\\Data",
@@ -136,21 +82,12 @@
     "program": "Amnezia WG",
     "files_to_remove": [
       "log.bin"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\crashlog\\*",
     "category": "Crashes",
     "program": "Arizona Games Launcher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
@@ -160,12 +97,7 @@
     "program": "Arizona Games Launcher",
     "files_to_remove": [
       "logs.log"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\moonloader/",
@@ -173,12 +105,7 @@
     "program": "Arizona Games Launcher",
     "files_to_remove": [
       "moonloader.log"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\SAMPFUNCS/",
@@ -186,12 +113,7 @@
     "program": "Arizona Games Launcher",
     "files_to_remove": [
       "SAMPFUNCS.log"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**",
@@ -201,12 +123,7 @@
       "!GAMELOG.txt",
       "fastman92limitAdjuster.log",
       "libped.log"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Program Files (x86)\\ASIO4ALL v2/",
@@ -214,12 +131,7 @@
     "program": "ASIO4ALL v2",
     "files_to_remove": [
       "ASIO4ALL Web Site.url"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher/",
@@ -228,21 +140,12 @@
     "files_to_remove": [
       "accounts.json",
       "launcher_accounts.json"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\game-cache/*",
     "category": "Cache",
     "program": "ATLauncher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
@@ -250,10 +153,6 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\cache/*",
     "category": "Cache",
     "program": "ATLauncher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
@@ -261,7 +160,6 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**",
     "category": "Cheats",
     "program": "ATLauncher",
-    "files_to_remove": [],
     "directories_to_remove": [
       "meteor-client",
       "LiquidBounce",
@@ -269,42 +167,26 @@
       "Wurst",
       "Nodus",
       "Aristois"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**\\crash-reports/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**\\crash-reports\\*",
     "category": "Crashes",
     "program": "ATLauncher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**\\saves/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**\\saves\\*",
     "category": "Game saves",
     "program": "ATLauncher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**\\screenshots/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**\\screenshots\\*",
     "category": "Images",
     "program": "ATLauncher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
@@ -312,25 +194,18 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\**/",
     "category": "Logs",
     "program": "ATLauncher",
-    "files_to_remove": [],
     "directories_to_remove": [
       "logs"
     ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher/",
     "category": "Documentation",
     "program": "ATLauncher",
-    "files_to_remove": [],
     "directories_to_remove": [
       "licenses"
     ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
@@ -338,12 +213,9 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher/",
     "category": "Logs",
     "program": "ATLauncher",
-    "files_to_remove": [],
     "directories_to_remove": [
       "logs"
     ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
@@ -351,44 +223,24 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\*log*",
     "category": "Logs",
     "program": "ATLauncher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
     "path": "{drive}Program Files (x86)\\AVCLabs\\AVCLabs Video Enhancer AI\\*.txt",
     "category": "Logs",
     "program": "AVCLabs Video Enhancer AI",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
     "path": "{drive}Program Files (x86)\\AVCLabs\\AVCLabs Video Enhancer AI\\*.html",
     "category": "Logs",
     "program": "AVCLabs Video Enhancer AI",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\AVCLabs Video Enhancer AI\\logs\\*.log",
     "category": "Logs",
     "program": "AVCLabs Video Enhancer AI",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
@@ -399,20 +251,12 @@
       "accounts.json",
       "launcher_accounts.json"
     ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\game-cache\\*",
     "category": "Cache",
     "program": "Badlion Client",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
@@ -420,10 +264,6 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\cache\\*",
     "category": "Cache",
     "program": "Badlion Client",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
@@ -431,7 +271,6 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/",
     "category": "Cheats",
     "program": "Badlion Client",
-    "files_to_remove": [],
     "directories_to_remove": [
       "meteor-client",
       "LiquidBounce",
@@ -439,20 +278,12 @@
       "Wurst",
       "Nodus",
       "Aristois"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\crash-reports/*",
     "category": "Crashes",
     "program": "Badlion Client",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
@@ -460,10 +291,6 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\saves/*",
     "category": "Game saves",
     "program": "Badlion Client",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
@@ -471,10 +298,6 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\screenshots/*",
     "category": "Images",
     "program": "Badlion Client",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
@@ -482,73 +305,45 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/",
     "category": "Logs",
     "program": "Badlion Client",
-    "files_to_remove": [],
     "directories_to_remove": [
       "logs"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Clien/",
     "category": "Documentation",
     "program": "Badlion Client",
-    "files_to_remove": [],
     "directories_to_remove": [
       "licenses"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/",
     "category": "Logs",
     "program": "Badlion Client",
-    "files_to_remove": [],
     "directories_to_remove": [
       "logs"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\*log*",
     "category": "Logs",
     "program": "Badlion Client",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
     "path": "{drive}ProgramData\\bitmonero\\*.log",
     "category": "Logs",
     "program": "Bit Monero",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
     "path": "{drive}ProgramData\\BlueStacks_nxt/",
     "category": "Logs",
     "program": "BlueStacks",
-    "files_to_remove": [],
     "directories_to_remove": [
       "Dumps"
     ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
@@ -560,33 +355,18 @@
       "LICENSE.txt",
       "NOTICE.html",
       "ffmpeg_command_template.txt"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}ProgramData\\BlueStacks_nxt\\Logs\\*.log",
     "category": "Logs",
     "program": "BlueStacks",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\Pictures\\BlueStacks\\*.png",
     "category": "Images",
     "program": "BlueStacks 5",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
@@ -597,12 +377,7 @@
       "CHANGELOG.txt",
       "HomePage.url",
       "purchase.url"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Network/",
@@ -2493,12 +2268,8 @@
   {
     "path": "{drive}Program Files\\KeePass Password Safe 2\\*.txt",
     "category": "Logs",
+	"class": "Password manager",
     "program": "KeePass 2",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {

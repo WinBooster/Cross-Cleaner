@@ -15,12 +15,15 @@ pub struct Cleared {
     #[tabled(display = "display_categories", rename = "Categories")]
     pub affected_categories: Vec<String>,
 }
+
 fn display_removed_bytes(size: &u64) -> String {
     utils::get_file_size_string(*size)
 }
+
 fn display_categories(categories: &Vec<String>) -> String {
     categories.join(", ")
 }
+
 impl PartialEq<Option<Cleared>> for &Cleared {
     fn eq(&self, other: &Option<Cleared>) -> bool {
         match other {
@@ -29,22 +32,34 @@ impl PartialEq<Option<Cleared>> for &Cleared {
         }
     }
 }
+
 #[derive(Serialize, Deserialize, Clone)]
 pub struct CleanerData {
     pub path: String,
     pub category: String,
     pub program: String,
-    #[serde(default = "Other")]
-    pub class: String,
+	#[serde(default = "default_class")]
+	pub class: String,
 
+	#[serde(default)]
     pub files_to_remove: Vec<String>,
+	#[serde(default)]
     pub directories_to_remove: Vec<String>,
 
+	#[serde(default)]
     pub remove_all_in_dir: bool,
+	#[serde(default)]
     pub remove_directory_after_clean: bool,
+	#[serde(default)]
     pub remove_directories: bool,
+	#[serde(default)]
     pub remove_files: bool,
 }
+
+fn default_class() -> String {
+    String::from("Other")
+}
+
 pub struct CleanerResult {
     pub files: u64,
     pub folders: u64,

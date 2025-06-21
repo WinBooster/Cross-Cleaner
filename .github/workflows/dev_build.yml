@@ -100,15 +100,22 @@ jobs:
         echo "# Windows Clearing Programs Catalog" > LIST_WINDOWS.md
         echo "**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> LIST_WINDOWS.md
         
-        # Categories table with better formatting
-        echo "| № | Program | Categories |" >> LIST_WINDOWS.md
-        echo "|---|---------|------------|" >> LIST_WINDOWS.md
-        i=0
-        while IFS= read -r line; do
-          program=$(echo "$line" | jq -r '.[0].program')
-          categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-          echo "| $((++i)) | $program | $categories |" >> LIST_WINDOWS.md
-        done < <(jq -c 'group_by(.program)[] | select(.[0].program != null)' database/windows_database.json)
+        # Get all unique classes
+        classes=$(jq -r '.[].class' database/windows_database.json | sort -u)
+        
+        # Process each class
+        for class in $classes; do
+          echo -e "## $class" >> LIST_WINDOWS.md
+          echo "| № | Program | Categories |" >> LIST_WINDOWS.md
+          echo "|---|---------|------------|" >> LIST_WINDOWS.md
+          
+          i=0
+          while IFS= read -r line; do
+            program=$(echo "$line" | jq -r '.[0].program')
+            categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+            echo "| $((++i)) | $program | $categories |" >> LIST_WINDOWS.md
+          done < <(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/windows_database.json)
+        done
 
     - name: Process Linux data
       run: |
@@ -116,15 +123,23 @@ jobs:
         echo "# Linux Clearing Programs Catalog" > LIST_LINUX.md
         echo "**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> LIST_LINUX.md
         
-        # Categories table with better formatting
-        echo "| № | Program | Categories |" >> LIST_LINUX.md
-        echo "|---|---------|------------|" >> LIST_LINUX.md
-        i=0
-        while IFS= read -r line; do
-          program=$(echo "$line" | jq -r '.[0].program')
-          categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-          echo "| $((++i)) | $program | $categories |" >> LIST_LINUX.md
-        done < <(jq -c 'group_by(.program)[] | select(.[0].program != null)' database/linux_database.json)
+        # Get all unique classes
+        classes=$(jq -r '.[].class' database/linux_database.json | sort -u)
+        
+        # Process each class
+        for class in $classes; do
+          echo -e "## $class" >> LIST_LINUX.md
+          echo "| № | Program | Categories |" >> LIST_LINUX.md
+          echo "|---|---------|------------|" >> LIST_LINUX.md
+          
+          i=0
+          while IFS= read -r line; do
+            program=$(echo "$line" | jq -r '.[0].program')
+            categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+            echo "| $((++i)) | $program | $categories |" >> LIST_LINUX.md
+          done < <(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/linux_database.json)
+        done
+
           
 
     - name: Commit changes
