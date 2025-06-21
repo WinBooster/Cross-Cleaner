@@ -1,9 +1,9 @@
 # Windows Clearing Programs Catalog
 **Total categories in database:** 16
 
-**Total programs in database:** 158
+**Total programs in database:** 159
 
-**Total pathes in database:** 371
+**Total pathes in database:** 372
 
 ## AntiCheat
 
@@ -200,6 +200,7 @@
 | 1 | Chocolatey | Documentation, Logs |
 | 2 | Scoop | Cache, Documentation |
 | 3 | WinGet | Documentation |
+| 4 | pipx | Logs |
 
 
 ## Password Manager
@@ -214,18 +215,19 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | GnuPG | Documentation |
-| 2 | Gpg4win | Documentation |
-| 3 | I2P | Documentation, Logs |
-| 4 | IObit Malware Fighter | Logs |
-| 5 | NetLimiter | Logs |
-| 6 | Panda Security | Logs |
-| 7 | Process Hacker 2 | Documentation |
-| 8 | Process Lasso | Logs |
-| 9 | Sandboxie+ | Documentation |
-| 10 | SystemInformer | Documentation |
-| 11 | VirtualBox | Documentation, Logs |
-| 12 | Zapret | Logs |
+| 1 | 4uKey for Android | Logs |
+| 2 | GnuPG | Documentation |
+| 3 | Gpg4win | Documentation |
+| 4 | I2P | Documentation, Logs |
+| 5 | IObit Malware Fighter | Logs |
+| 6 | NetLimiter | Logs |
+| 7 | Panda Security | Logs |
+| 8 | Process Hacker 2 | Documentation |
+| 9 | Process Lasso | Logs |
+| 10 | Sandboxie+ | Documentation |
+| 11 | SystemInformer | Documentation |
+| 12 | VirtualBox | Documentation, Logs |
+| 13 | Zapret | Logs |
 
 
 ## System
@@ -300,8 +302,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | 4uKey for Android | Logs |
-| 2 | Adobe | Documentation |
-| 3 | Electron App's | Documentation, Logs |
-| 4 | ImgBurn | Documentation, Logs |
-| 5 | Mozilla Maintenance Service | Logs |
+| 1 | Adobe | Documentation |
+| 2 | Electron App's | Documentation, Logs |
+| 3 | ImgBurn | Documentation, Logs |
+| 4 | Mozilla Maintenance Service | Logs |
