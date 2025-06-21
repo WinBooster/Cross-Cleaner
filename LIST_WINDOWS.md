@@ -1,13 +1,11 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 13:12:42 UTC
-## Password
+**Last updated:** 2025-06-21 13:15:30 UTC
+## Password manager
 
-*No programs found for this class*
-
-
-## manager
-
-*No programs found for this class*
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | 1Password | Logs |
+| 2 | KeePass 2 | Logs |
 
 
 ## Uncategorized
