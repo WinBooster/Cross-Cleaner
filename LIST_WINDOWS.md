@@ -1,5 +1,5 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 13:15:30 UTC
+**Last updated:** 2025-06-21 13:21:02 UTC
 ## Password manager
 
 | № | Program | Categories |
