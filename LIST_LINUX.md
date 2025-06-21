@@ -1,5 +1,101 @@
 # Linux Clearing Programs Catalog
-**Last updated:** 2025-06-21 15:05:57 UTC
+**Last updated:** 2025-06-21 15:30:10 UTC
+## Audio
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Spotify | Logs |
+| 2 | Yandex Music | Cache, Logs |
+
+
+## Browser
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | FireFox | Browser cookies, Cache, LastActivity |
+| 2 | LibreWolf | Cache, LastActivity |
+
+
+## Cheat
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Future Client | Cheats |
+
+
+## Crypto Wallet
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Exodus Crypto Wallet | Accounts |
+
+
+## Developing
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Ghidra | Logs |
+| 2 | GitHub Desktop | Cache, Logs |
+| 3 | Github Desktop | Documentation |
+| 4 | Gradle | Cache |
+| 5 | Jdk | Documentation |
+| 6 | Python | Documentation |
+| 7 | Rust language | Documentation |
+
+
+## Game
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Garry's mod | Crashes, Logs |
+| 2 | Hearts of Iron IV | Cache, Crashes, Logs |
+| 3 | Osu | Cache, Images, Logs |
+| 4 | Powdertoy | Documentation |
+| 5 | Steam | Accounts, Documentation, Logs |
+| 6 | Steam proton | Documentation |
+| 7 | Terraria | Crashes, Game saves, Logs |
+
+
+## Messanger
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Discord | Cache, Logs |
+| 2 | Telegram | Accounts, Logs |
+
+
+## Minecraft Launcher
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Cristalix | Crashes, Game saves, Images, Logs |
+| 2 | CubixWorld | Crashes, Game saves, Images, Logs |
+| 3 | Lunar Client | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 4 | Minecraft | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, LastActivity, Logs |
+| 5 | Modrith | Cache |
+| 6 | MultiMC | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 7 | PolyMC | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 8 | Prism Launcher | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 9 | SimpleMinecraft | Cache, Logs |
+
+
+## Password Manager
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | KeePassXC | Documentation |
+
+
+## Text
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Cursor | Cache, Documentation, Logs |
+| 2 | JetBrains | Logs |
+| 3 | LibreOffice | Cache |
+| 4 | VS Code | Documentation |
+
+
 ## Uncategorized
 
 | № | Program | Categories |
@@ -8,50 +104,14 @@
 | 2 | Auto make | Logs |
 | 3 | Bison | Logs |
 | 4 | Cassettle | Cache, Logs |
-| 5 | Cristalix | Crashes, Game saves, Images, Logs |
-| 6 | CubixWorld | Crashes, Game saves, Images, Logs |
-| 7 | Cursor | Cache, Documentation, Logs |
-| 8 | Discord | Cache, Logs |
-| 9 | Documentation | Documentation |
-| 10 | EFI tools | Logs |
-| 11 | Exodus Crypto Wallet | Accounts |
-| 12 | FireFox | Browser cookies, Cache, LastActivity |
-| 13 | Future Client | Cheats |
-| 14 | GTK | Documentation |
-| 15 | Garry's mod | Crashes, Logs |
-| 16 | Ghidra | Logs |
-| 17 | GitHub Desktop | Cache, Logs |
-| 18 | Github Desktop | Documentation |
-| 19 | Gperf | Documentation |
-| 20 | Gradle | Cache |
-| 21 | Hearts of Iron IV | Cache, Crashes, Logs |
-| 22 | Info | Documentation |
-| 23 | Jdk | Documentation |
-| 24 | JetBrains | Logs |
-| 25 | KeePassXC | Documentation |
-| 26 | LibreOffice | Cache |
-| 27 | LibreWolf | Cache, LastActivity |
-| 28 | Licenses | Documentation |
-| 29 | Lunar Client | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 30 | Minecraft | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, LastActivity, Logs |
-| 31 | Modrith | Cache |
-| 32 | MultiMC | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 33 | Nvidia | Documentation |
-| 34 | Osu | Cache, Images, Logs |
-| 35 | Pcre | Documentation |
-| 36 | PolyMC | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 37 | Powdertoy | Documentation |
-| 38 | Prism Launcher | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 39 | Python | Documentation |
-| 40 | Rust language | Documentation |
-| 41 | SimpleMinecraft | Cache, Logs |
-| 42 | Spotify | Logs |
-| 43 | Steam | Accounts, Documentation, Logs |
-| 44 | Steam proton | Documentation |
-| 45 | System | Cache, Trash |
-| 46 | Telegram | Accounts, Logs |
-| 47 | Terraria | Crashes, Game saves, Logs |
-| 48 | Thunderbird | Logs |
-| 49 | VS Code | Documentation |
-| 50 | Yandex Music | Cache, Logs |
-| 51 | Yay | Cache |
+| 5 | Documentation | Documentation |
+| 6 | EFI tools | Logs |
+| 7 | GTK | Documentation |
+| 8 | Gperf | Documentation |
+| 9 | Info | Documentation |
+| 10 | Licenses | Documentation |
+| 11 | Nvidia | Documentation |
+| 12 | Pcre | Documentation |
+| 13 | System | Cache, Trash |
+| 14 | Thunderbird | Logs |
+| 15 | Yay | Cache |
