@@ -905,14 +905,14 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\element-desktop\\*.log",
-	"class": "Messanger",
+    "class": "Messanger",
     "category": "Logs",
     "program": "Element",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files (x86)\\Enigma Virtual Box/",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Enigma Virtual Box",
     "files_to_remove": [
@@ -3512,7 +3512,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\thunderbird\\Profiles\\**/",
-	"class": "Messanger",
+    "class": "Messanger",
     "category": "Crashes",
     "program": "Thunderbird",
     "directories_to_remove": [
