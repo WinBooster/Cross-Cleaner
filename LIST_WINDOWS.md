@@ -1,5 +1,5 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 14:18:33 UTC
+**Last updated:** 2025-06-21 14:21:32 UTC
 ## AntiCheat
 
 | № | Program | Categories |
@@ -37,18 +37,12 @@
 | 1 | ExecHack | Cheats |
 | 2 | Fatality | Cheats |
 | 3 | INTERIUM | Cheat |
-| 4 | OneTap | Cheats |
-| 5 | Pandora | Cheats |
-| 6 | RusherHack | Cheats |
-| 7 | Vape Client | Cheats |
-| 8 | Weave | Cheats |
-
-
-## Cheats
-
-| № | Program | Categories |
-| --- | --- | --- |
-| 1 | Krnl | Cheats |
+| 4 | Krnl | Cheats |
+| 5 | OneTap | Cheats |
+| 6 | Pandora | Cheats |
+| 7 | RusherHack | Cheats |
+| 8 | Vape Client | Cheats |
+| 9 | Weave | Cheats |
 
 
 ## Crypto Wallet
