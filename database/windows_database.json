@@ -1,5 +1,37 @@
 [
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Packages\\*.Yandex.Music_*",
+    "category": "Cache",
+    "program": "Yandex Music",
+    "class": "Audio",
+	"directories_to_remove": [
+		"LocalCache",
+		"TempState"
+	]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\YandexMusic",
+    "category": "Logs",
+    "program": "Yandex Music",
+    "class": "Audio",
+	"directories_to_remove": [
+		"logs"
+	]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\YandexMusic",
+    "category": "Cache",
+    "program": "Yandex Music",
+    "class": "Audio",
+	"directories_to_remove": [
+		"Cache",
+		"Code Cache",
+		"DawnGraphiteCache",
+		"DawnWebGPUCache",
+		"GPUCache"
+	]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Local\\1Password\\logs\\setup\\*.log",
     "category": "Logs",
     "program": "1Password",
@@ -26,6 +58,7 @@
   },
   {
     "path": "{drive}Program Files\\7-Zip\\*.txt",
+	"class": "Archive",
     "category": "Logs",
     "program": "7-Zip",
     "remove_files": true
@@ -138,6 +171,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\ASIO4ALL v2/",
+	"class": "Audio",
     "category": "Documentation",
     "program": "ASIO4ALL v2",
     "files_to_remove": [
@@ -1294,6 +1328,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\HiAlgo\\Plugins\\BOOST/",
+	"class": "Optimization",
     "category": "Documentation",
     "program": "HiAlgo Boost",
     "files_to_remove": [
@@ -2025,6 +2060,7 @@
   },
   {
     "path": "{drive}Program Files\\Magic TXD/",
+	"class": "Archive",
     "category": "Documentation",
     "program": "Magic TDX",
     "directories_to_remove": [
@@ -2119,6 +2155,7 @@
   },
   {
     "path": "{drive}Program Files\\Mem Reduct/",
+	"class": "Utility",
     "category": "Documentation",
     "program": "Mem Reduct",
     "files_to_remove": [
@@ -2201,6 +2238,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\MiniBin\\*.txt",
+	"class": "Utility",
     "category": "Logs",
     "program": "MiniBin",
     "remove_files": true
@@ -2735,6 +2773,7 @@
   },
   {
     "path": "{drive}ProgramData\\Panda Security\\PSLogs\\*.log",
+	"class": "Security",
     "category": "Logs",
     "program": "Panda Security",
     "remove_files": true
@@ -2908,6 +2947,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PostmanAgent\\logs\\*.log",
+	"class": "Developing",
     "category": "Logs",
     "program": "Postman",
     "remove_files": true
@@ -3109,12 +3149,14 @@
   },
   {
     "path": "{drive}Program Files\\qBittorrent\\*.pdb",
+	"class": "Torrent",
     "category": "Logs",
     "program": "qBittorrent",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files\\qBittorrent\\logs\\*.log",
+	"class": "Torrent",
     "category": "Logs",
     "program": "qBittorrent",
     "remove_files": true
@@ -3223,6 +3265,7 @@
   },
   {
     "path": "{drive}Program Files\\Sandboxie-Plus/",
+	"class": "Security",
     "category": "Documentation",
     "program": "Sandboxie+",
     "files_to_remove": [
@@ -3522,6 +3565,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.Tribler\\*.log",
+	"class": "Torrent",
     "category": "Logs",
     "program": "Tribler",
     "remove_files": true
@@ -3898,6 +3942,7 @@
   },
   {
     "path": "{drive}Program Files\\WinRAR/",
+	"class": "Archive",
     "category": "Documentation",
     "program": "WinRaR",
     "files_to_remove": [
@@ -3928,6 +3973,7 @@
   },
   {
     "path": "{drive}Program Files\\CCleaner/",
+	"class": "Optimization",
     "category": "Logs",
     "program": "ССleaner",
     "files_to_remove": [],
