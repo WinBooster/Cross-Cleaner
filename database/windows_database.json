@@ -3624,7 +3624,7 @@
     "category": "Cheats",
     "program": "Weave",
     "remove_all_in_dir": true,
-    "remove_directory_after_clean": true,
+    "remove_directory_after_clean": true
   },
   {
     "path": "{steam}\\steamapps\\common\\Counter-Strike Global Offensive\\weave",
@@ -3632,7 +3632,7 @@
     "category": "Cheats",
     "program": "Weave",
     "remove_all_in_dir": true,
-    "remove_directory_after_clean": true,
+    "remove_directory_after_clean": true
   },
   {
     "path": "{drive}Windows\\System32\\Licenses/*",
