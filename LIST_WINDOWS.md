@@ -1,5 +1,5 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 14:20:21 UTC
+**Last updated:** 2025-06-21 14:44:16 UTC
 ## AntiCheat
 
 | № | Program | Categories |
@@ -14,7 +14,8 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | AAF Optimus DCH Audio | Documentation |
-| 2 | SoundWire Server | Documentation |
+| 2 | FL Studio | Documentation |
+| 3 | SoundWire Server | Documentation |
 
 
 ## Browser
@@ -34,15 +35,16 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | ExecHack | Cheats |
-| 2 | Fatality | Cheats |
-| 3 | INTERIUM | Cheat |
-| 4 | Krnl | Cheats |
-| 5 | OneTap | Cheats |
-| 6 | Pandora | Cheats |
-| 7 | RusherHack | Cheats |
-| 8 | Vape Client | Cheats |
-| 9 | Weave | Cheats |
+| 1 | Cheat Engine | Cheat, Logs |
+| 2 | ExecHack | Cheats |
+| 3 | Fatality | Cheats |
+| 4 | INTERIUM | Cheat |
+| 5 | Krnl | Cheats |
+| 6 | OneTap | Cheats |
+| 7 | Pandora | Cheats |
+| 8 | RusherHack | Cheats |
+| 9 | Vape Client | Cheats |
+| 10 | Weave | Cheats |
 
 
 ## Crypto Wallet
@@ -52,6 +54,31 @@
 | 1 | Bit Monero | Logs |
 | 2 | Exodus Crypto Wallet | Logs |
 | 3 | Wasabi Wallet | Logs |
+
+
+## Developing
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Docker | Logs |
+| 2 | DotNet | Logs |
+| 3 | Git | Documentation |
+| 4 | GitHub Desktop | Logs |
+| 5 | MCCreator | Logs |
+| 6 | Node JS | Cache, Documentation, Logs |
+| 7 | Python | Documentation |
+| 8 | Rust Language | Documentation |
+| 9 | Unity Hub | Documentation |
+| 10 | Windows Kits | Documentation |
+| 11 | Xamarin | Logs |
+
+
+## Driver
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | NVIDIA Corporation | Documentation, Logs |
+| 2 | VulcanRT | Documentation |
 
 
 ## Emulator
@@ -137,16 +164,28 @@
 | 2 | KeePass 2 | Logs |
 
 
+## Security
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | GnuPG | Documentation |
+| 2 | Gpg4win | Documentation |
+| 3 | Zapret | Logs |
+
+
 ## Text
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | LazyVim | Documentation |
-| 2 | LibreOffice | Documentation, Logs |
-| 3 | NeoVim | Documentation, Logs |
-| 4 | Notepad++ | Documentation |
-| 5 | Sublime Text | Logs |
-| 6 | VS Code | Browser cookies, Documentation, Logs |
+| 1 | Cursor | Cache, Documentation, Logs |
+| 2 | JetBrains | Documentation, Logs |
+| 3 | LM Studio | Logs |
+| 4 | LazyVim | Documentation |
+| 5 | LibreOffice | Documentation, Logs |
+| 6 | NeoVim | Documentation, Logs |
+| 7 | Notepad++ | Documentation |
+| 8 | Sublime Text | Logs |
+| 9 | VS Code | Browser cookies, Documentation, Logs |
 
 
 ## VPN
@@ -185,63 +224,42 @@
 | 3 | ASIO4ALL v2 | Documentation |
 | 4 | Adobe | Logs |
 | 5 | BoxedAppPacker | Documentation |
-| 6 | Cheat Engine | Logs |
-| 7 | Chocolatey | Documentation, Logs |
-| 8 | Cursor | Cache, Documentation, Logs |
-| 9 | DeepL | Cache, Logs |
-| 10 | Docker | Logs |
-| 11 | DotNet | Logs |
-| 12 | Electron App's | Documentation, Logs |
-| 13 | Element | Logs |
-| 14 | Enigma Virtual Box | Documentation |
-| 15 | FL Studio | Documentation |
-| 16 | Git | Documentation |
-| 17 | GitHub Desktop | Logs |
-| 18 | GnuPG | Documentation |
-| 19 | Gpg4win | Documentation |
-| 20 | HiAlgo Boost | Documentation |
-| 21 | I2P | Documentation, Logs |
-| 22 | IDA Pro | Cache |
-| 23 | IObit Driver Booster | Logs |
-| 24 | IObit Malware Fighter | Logs |
-| 25 | ImgBurn | Documentation, Logs |
-| 26 | Inno Setup 6 | Documentation, Logs |
-| 27 | Java | Documentation |
-| 28 | JetBrains | Documentation, Logs |
-| 29 | LGHUB | Documentation |
-| 30 | LM Studio | Logs |
-| 31 | MCCreator | Logs |
-| 32 | Magic TDX | Documentation |
-| 33 | Mem Reduct | Documentation |
-| 34 | MinGW | Documentation |
-| 35 | MiniBin | Logs |
-| 36 | Mozilla Maintenance Service | Logs |
-| 37 | NVIDIA Corporation | Documentation, Logs |
-| 38 | NetLimiter | Logs |
-| 39 | Node JS | Cache, Documentation, Logs |
-| 40 | OneDrive | Cache |
-| 41 | Panda Security | Logs |
-| 42 | Postman | Logs |
-| 43 | PowerToys | Documentation |
-| 44 | Process Hacker 2 | Documentation |
-| 45 | Process Lasso | Logs |
-| 46 | Python | Documentation |
-| 47 | Recaf | Logs |
-| 48 | Rust Language | Documentation |
-| 49 | Sandboxie+ | Documentation |
-| 50 | Scoop | Cache, Documentation |
-| 51 | SystemInformer | Documentation |
-| 52 | Thunderbird | Crashes |
-| 53 | Tribler | Logs |
-| 54 | Unity Hub | Logs |
-| 55 | VirtualBox | Documentation, Logs |
-| 56 | VulcanRT | Documentation |
-| 57 | WinGet | Documentation |
-| 58 | WinRaR | Documentation |
-| 59 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
-| 60 | Windows Defender | Documentation |
-| 61 | Windows Kits | Documentation |
-| 62 | Xamarin | Logs |
-| 63 | Zapret | Logs |
-| 64 | qBittorrent | Logs |
-| 65 | ССleaner | Logs |
+| 6 | Chocolatey | Documentation, Logs |
+| 7 | DeepL | Cache, Logs |
+| 8 | Electron App's | Documentation, Logs |
+| 9 | Element | Logs |
+| 10 | Enigma Virtual Box | Documentation |
+| 11 | HiAlgo Boost | Documentation |
+| 12 | I2P | Documentation, Logs |
+| 13 | IDA Pro | Cache |
+| 14 | IObit Driver Booster | Logs |
+| 15 | IObit Malware Fighter | Logs |
+| 16 | ImgBurn | Documentation, Logs |
+| 17 | Inno Setup 6 | Documentation, Logs |
+| 18 | Java | Documentation |
+| 19 | LGHUB | Documentation |
+| 20 | Magic TDX | Documentation |
+| 21 | Mem Reduct | Documentation |
+| 22 | MinGW | Documentation |
+| 23 | MiniBin | Logs |
+| 24 | Mozilla Maintenance Service | Logs |
+| 25 | NetLimiter | Logs |
+| 26 | OneDrive | Cache |
+| 27 | Panda Security | Logs |
+| 28 | Postman | Logs |
+| 29 | PowerToys | Documentation |
+| 30 | Process Hacker 2 | Documentation |
+| 31 | Process Lasso | Logs |
+| 32 | Recaf | Logs |
+| 33 | Sandboxie+ | Documentation |
+| 34 | Scoop | Cache, Documentation |
+| 35 | SystemInformer | Documentation |
+| 36 | Thunderbird | Crashes |
+| 37 | Tribler | Logs |
+| 38 | VirtualBox | Documentation, Logs |
+| 39 | WinGet | Documentation |
+| 40 | WinRaR | Documentation |
+| 41 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
+| 42 | Windows Defender | Documentation |
+| 43 | qBittorrent | Logs |
+| 44 | ССleaner | Logs |
