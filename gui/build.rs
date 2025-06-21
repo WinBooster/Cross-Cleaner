@@ -4,7 +4,7 @@ use std::env;
 
 #[cfg(windows)]
 fn main() {
-    let version_str = env::var("PRODUCT_VERSION").unwrap_or_else(|_| "1.0.0".to_string());
+    let version_str = env::var("APP_VERSION").unwrap_or_else(|_| "1.0.0".to_string());
 
     let version_numbers: Vec<u64> = version_str
         .split('.')
