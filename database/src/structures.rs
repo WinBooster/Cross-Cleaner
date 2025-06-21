@@ -38,21 +38,21 @@ pub struct CleanerData {
     pub path: String,
     pub category: String,
     pub program: String,
-	#[serde(default = "default_class")]
-	pub class: String,
+    #[serde(default = "default_class")]
+    pub class: String,
 
-	#[serde(default)]
+    #[serde(default)]
     pub files_to_remove: Vec<String>,
-	#[serde(default)]
+    #[serde(default)]
     pub directories_to_remove: Vec<String>,
 
-	#[serde(default)]
+    #[serde(default)]
     pub remove_all_in_dir: bool,
-	#[serde(default)]
+    #[serde(default)]
     pub remove_directory_after_clean: bool,
-	#[serde(default)]
+    #[serde(default)]
     pub remove_directories: bool,
-	#[serde(default)]
+    #[serde(default)]
     pub remove_files: bool,
 }
 
