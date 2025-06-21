@@ -1,7 +1,10 @@
 # Linux Clearing Programs Catalog
+**Total categories in database:** 12
+
 **Total programs in database:** 51
 
 **Total pathes in database:** 118
+
 ## Audio
 
 | № | Program | Categories |
