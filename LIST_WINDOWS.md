@@ -1,0 +1,159 @@
+# Clearing Windows Programs
+\n**Last updated:** 2025-06-21 02:41:12 UTC\n
+- 1Password
+- 4uKey for Android
+- 7-Zip
+- AAF Optimus DCH Audio
+- ASIO4ALL v2
+- ATLauncher
+- AVCLabs Video Enhancer AI
+- Adobe
+- Amnezia VPN
+- Amnezia WG
+- Arizona Games Launcher
+- Badlion Client
+- Bit Monero
+- BlueStacks
+- BlueStacks 5
+- BoxedAppPacker
+- Brave Browser
+- Cheat Engine
+- Chocolatey
+- CloudFlare
+- Counter-Strike Global Offensive
+- Cristalix
+- CubixWorld
+- CurseForge
+- Cursor
+- DeepL
+- Discord
+- Docker
+- DotNet
+- Dota 2
+- EasyAntiCheat
+- Edge
+- Electron App's
+- Element
+- Enigma Virtual Box
+- Epic Games
+- ExecHack
+- Exodus
+- FACEIT AC
+- FL Studio
+- Fatality
+- GameGuard
+- Gameloop
+- Git
+- GitHub Desktop
+- GnuPG
+- Google Chrome
+- Gpg4win
+- GribLand
+- Guilded
+- HandBrake
+- HiAlgo Boost
+- I2P
+- IDA Pro
+- INTERIUM
+- IObit Driver Booster
+- IObit Malware Fighter
+- ImageGlass
+- ImgBurn
+- InkSpace
+- Inno Setup 6
+- Java
+- JetBrains
+- KeePass 2
+- Krnl
+- LGHUB
+- LM Studio
+- LazyVim
+- LibreOffice
+- LibreWolf
+- LoliLand
+- Lords Mobile
+- Lunar Client
+- MCCreator
+- MCSkill
+- Magic TDX
+- Magpie
+- McLaunch
+- Melissia Games Launcher
+- Mem Reduct
+- Memu
+- Microsoft Lobe
+- MinGW
+- Minecraft
+- MiniBin
+- Modrinth
+- Mozilla Firefox
+- Mozilla Maintenance Service
+- MultiMC
+- NVIDIA Corporation
+- NeoVim
+- NetLimiter
+- Node JS
+- Notepad++
+- Nox
+- OBS Studio
+- OneDrive
+- OneTap
+- Opera GX
+- Osu
+- Panda Security
+- Pandora
+- PlanetVPN
+- PolyMC
+- Postman
+- PowerToys
+- PrismLauncher
+- Process Hacker 2
+- Process Lasso
+- Python
+- Radmin VPN
+- Rave
+- Recaf
+- Roblox
+- RusherHack
+- Rust
+- Rust Language
+- Sandboxie+
+- Scoop
+- ShareX
+- Signal
+- SoundWire Server
+- Steam
+- Sublime Text
+- SystemInformer
+- Tecknix Client
+- Telegram
+- Terraria
+- The Powder Toy
+- Thunderbird
+- Tonfotos Telegram Connector
+- Topaz Video AI
+- Tribler
+- Unity Hub
+- Unturned
+- UrbanVPN
+- VK GameCenter
+- VLC
+- VS Code
+- Vape Client
+- VirtualBox
+- Vivaldi
+- VulcanRT
+- Wasabi Wallet
+- Weave
+- WinGet
+- WinRaR
+- Windows
+- Windows Defender
+- Windows SDK
+- Windscribe
+- Xamarin
+- Zapret
+- iTop Screen Recorder
+- iTop VPN
+- qBittorrent
+- ССleaner

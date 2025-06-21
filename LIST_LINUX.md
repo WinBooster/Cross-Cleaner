@@ -1,0 +1,53 @@
+# Clearing Linux Programs
+\n**Last updated:** 2025-06-21 02:41:12 UTC\n
+- Alsa
+- Auto make
+- Bison
+- Cassettle
+- Cristalix
+- CubixWorld
+- Cursor
+- Discord
+- Documentation
+- EFI tools
+- Exodus Crypto Wallet
+- FireFox
+- Future Client
+- GTK
+- Garry's mod
+- Ghidra
+- GitHub Desktop
+- Github Desktop
+- Gperf
+- Gradle
+- Hearts of Iron IV
+- Info
+- Jdk
+- JetBrains
+- KeePassXC
+- LibreOffice
+- LibreWolf
+- Licenses
+- Lunar Client
+- Minecraft
+- Modrith
+- MultiMC
+- Nvidia
+- Osu
+- Pcre
+- PolyMC
+- Powdertoy
+- Prism Launcher
+- Python
+- Rust language
+- SimpleMinecraft
+- Spotify
+- Steam
+- Steam proton
+- System
+- Telegram
+- Terraria
+- Thunderbird
+- VS Code
+- Yandex Music
+- Yay
