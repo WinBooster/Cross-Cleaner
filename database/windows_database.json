@@ -1311,6 +1311,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy/",
+	"class": "Security",
     "category": "Logs",
     "program": "I2P",
     "files_to_remove": [
@@ -1323,6 +1324,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy/",
+	"class": "Security",
     "category": "Documentation",
     "program": "I2P",
     "files_to_remove": [],
@@ -1332,6 +1334,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Hex-Rays\\IDA Pro\\*.lst",
+	"class": "Developing",
     "category": "Cache",
     "program": "IDA Pro",
     "remove_files": true
