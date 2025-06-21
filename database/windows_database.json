@@ -3420,7 +3420,7 @@
     "category": "Game saves",
     "program": "The Powder Toy",
     "files_to_remove": [],
-    "remove_all_in_dir": true,
+    "remove_all_in_dir": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\thunderbird\\Profiles\\**/",
