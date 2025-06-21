@@ -3,6 +3,7 @@
     windows_subsystem = "windows"
 )]
 
+use clap::{Parser, command};
 use cleaner::clear_data;
 #[cfg(windows)]
 use database::registry_database;
@@ -24,12 +25,41 @@ use tempfile::NamedTempFile;
 use tokio::sync::mpsc;
 use tokio::task;
 
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct Args {
+    /// Specify a custom database file path.
+    /// Example: --database-path=custom_database.json
+    #[arg(long, value_name = "path")]
+    database_path: Option<String>,
+}
+
 #[tokio::main]
 async fn main() -> eframe::Result {
     let icon_bytes = get_icon();
     let icon = load_icon_from_bytes(icon_bytes).expect("Failed to load icon");
 
-    let size = egui::vec2(430.0, 150.0);
+    let args = Args::parse();
+
+    let database: Vec<CleanerData> = if let Some(db_path) = &args.database_path {
+        match database::cleaner_database::get_database_from_file(db_path) {
+            Ok(db) => db,
+            Err(e) => {
+                eprintln!("Failed to load database from file: {}", e);
+                std::process::exit(1);
+            }
+        }
+    } else {
+        database::cleaner_database::get_default_database().clone()
+    };
+
+    let app = MyApp::from_database(&database);
+    let checkbox_count = app.checked_boxes.len();
+    let rows = checkbox_count.div_ceil(3);
+    // INFO: 20px for 1 checkbox, 60px for button
+    let height = (rows * 20) + 45;
+
+    let size = egui::vec2(430.0, height as f32);
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size(size)
@@ -45,7 +75,7 @@ async fn main() -> eframe::Result {
         options,
         Box::new(|_cc| {
             _cc.egui_ctx.set_visuals(egui::Visuals::dark());
-            Ok(Box::new(MyApp::new()))
+            Ok(Box::new(app))
         }),
     )
 }
@@ -67,8 +97,8 @@ fn load_icon_from_bytes(bytes: &[u8]) -> Result<Arc<IconData>, image::ImageError
 
 async fn work(
     categories: Vec<String>,
-    database: &Vec<CleanerData>,
     progress_sender: mpsc::Sender<String>,
+    database: &[CleanerData],
 ) {
     let mut bytes_cleared = 0;
     let mut removed_files = 0;
@@ -168,9 +198,7 @@ struct MyApp {
 }
 
 impl MyApp {
-    pub(crate) fn new() -> Self {
-        let database: &Vec<CleanerData> = database::cleaner_database::get_default_database();
-
+    pub(crate) fn from_database(database: &[CleanerData]) -> Self {
         let mut options: Vec<String> = Vec::with_capacity(database.len());
         for data in database.iter() {
             if !options.contains(&data.category) {
@@ -237,7 +265,7 @@ impl eframe::App for MyApp {
                     let (progress_sender, progress_receiver) = mpsc::channel(32);
                     self.progress_receiver = Some(progress_receiver);
 
-                    let handle = tokio::spawn(work(selected_options, database, progress_sender));
+                    let handle = tokio::spawn(work(selected_options, progress_sender, database));
                     self.task_handle = Some(handle);
 
                     for (checkbox, _) in &self.checked_boxes {

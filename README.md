@@ -24,6 +24,7 @@
 - 🔒 **Secure**: Carefully preserves critical system files
 - 💻 **Cross-Platform**: Full support for Windows and Linux
 - 🎯 **User-Friendly**: Clean, minimalist interface for easy operation
+- 📄 **Custom-DataBase**: Ability to use custom cleanup database
 
 ### Demo
 ![demo](https://github.com/user-attachments/assets/7d28a763-97ee-45b9-9ad5-2ed0fb8886c0)

@@ -36,7 +36,53 @@ jobs:
         git commit -m "Auto format code" || echo "No changes to commit"
         git push || echo "No changes to push"
 
+  sort_json:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Sort JSON files by program field
+      run: |
+        # Установка jq (если не установлен)
+        sudo apt-get -y install jq
+        
+        # Массив файлов для сортировки
+        JSON_FILES=("database/linux_database.json" "database/windows_database")  # Замените на ваши файлы
+        
+        for JSON_FILE in "${JSON_FILES[@]}"; do
+          echo "Processing $JSON_FILE..."
+          
+          # Проверяем, существует ли файл
+          if [ ! -f "$JSON_FILE" ]; then
+            echo "Error: JSON file not found at $JSON_FILE"
+            exit 1
+          fi
+          
+          # Сортируем JSON по полю program и сохраняем во временный файл
+          jq 'sort_by(.program)' "$JSON_FILE" > "${JSON_FILE}.tmp"
+          
+          # Проверяем успешность сортировки
+          if [ $? -eq 0 ]; then
+            # Заменяем исходный файл отсортированным
+            mv "${JSON_FILE}.tmp" "$JSON_FILE"
+            echo "Successfully sorted $JSON_FILE"
+          else
+            echo "Error: Failed to sort $JSON_FILE"
+            exit 1
+          fi
+        done
+        
+        # Коммитим изменения (если файлы изменились)
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add "${JSON_FILES[@]}"
+        git diff --quiet && git diff --staged --quiet || git commit -m "Auto-sorted JSON files by program field"
+        git push
+
   upload_databases:
+    needs: [sort_json]
     runs-on: ubuntu-latest
     name: Archive databases
     permissions: write-all
@@ -126,7 +172,15 @@ jobs:
 
           ### 🪟 Windows Enhancements
           - **Rust Language** - Added documentation clearing
+          - **Python** - Added documentation clearing
+          - **WinGet** - Added documentation clearing
+          - **FireFox** - Added LastActivity clearing
+          - **LibreWorlf** - Added LastActivity clearing
+          - **Edge** - Added LastActivity, Logs and Browser Cookies clearing
       
+          ### 🛠️ Technical Updates
+          - **GUI** - Now has argument for custom database, now has dynamic gui height
+
           ## 👏 Contributors Hall of Fame
           Special thanks to our amazing contributors who made this release possible:
           - **@Nekiplay** - Core improvements and feature implementations

@@ -3,7 +3,7 @@ use glob::glob;
 use std::path::Path;
 use std::{fs, io};
 
-// NOTE:Recursively deletes the directory and updates the counters in `cleaner_result`.
+// NOTE: Recursively deletes the directory and updates the counters in `cleaner_result`.
 // PERF: Fully optimized
 fn remove_directory_recursive(path: &Path, cleaner_result: &mut CleanerResult) -> io::Result<()> {
     if path.is_dir() {

@@ -502,7 +502,7 @@
   },
   {
     "path": "/home/{username}/.minecraft/crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "Minecraft",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -513,7 +513,7 @@
   },
   {
     "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft/crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "MultiMC",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -524,7 +524,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft/crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "PolyMC",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -535,7 +535,7 @@
   },
   {
     "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "Prism Launcher",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -546,7 +546,7 @@
   },
   {
     "path": "/home/{username}/.lunarclient/offline/multiver/crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "Lunar Client",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -557,7 +557,7 @@
   },
   {
     "path": "/home/{username}/.cristalix/updates/**/crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "Cristalix",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -568,7 +568,7 @@
   },
   {
     "path": "/home/{username}/cubixworld/updates/**/crash-reports/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "CubixWorld",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -579,7 +579,7 @@
   },
   {
     "path": "/home/{username}/.local/share/Steam/steamapps/common/Terraria/*.blob",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "Terraria",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -590,7 +590,7 @@
   },
   {
     "path": "/home/{username}/.local/share/Steam/steamapps/common/GarrysMod/crashes/*",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "Garry's mod",
     "files_to_remove": [],
     "directories_to_remove": [],
@@ -1854,7 +1854,7 @@
   },
   {
     "path": "/home/{username}/.local/share/Paradox Interactive/Hearts of Iron IV/",
-    "category": "Crash reports",
+    "category": "Crashes",
     "program": "Hearts of Iron IV",
     "files_to_remove": [],
     "directories_to_remove": [
