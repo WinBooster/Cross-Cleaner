@@ -38,7 +38,8 @@ jobs:
 
   sort_json:
     runs-on: ubuntu-latest
-    name: Sorting json 
+    name: Sorting json
+    permissions: write-all
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
