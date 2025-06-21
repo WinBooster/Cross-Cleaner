@@ -1220,7 +1220,7 @@
 	"class": "Game",
     "category": "Accounts",
     "program": "Steam",
-    "remove_directories": true,
+    "remove_directories": true
   },
   {
     "path": "/usr/share/doc/",
