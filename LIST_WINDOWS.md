@@ -1,5 +1,5 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 16:19:32 UTC
+**Last updated:** 2025-06-21 16:20:25 UTC
 ## AntiCheat
 
 | № | Program | Categories |
@@ -184,7 +184,8 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | HiAlgo Boost | Documentation |
-| 2 | ССleaner | Logs |
+| 2 | Mem Reduct | Documentation |
+| 3 | ССleaner | Logs |
 
 
 ## Packet Manager
@@ -259,9 +260,8 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Mem Reduct | Documentation |
-| 2 | MiniBin | Logs |
-| 3 | PowerToys | Documentation |
+| 1 | MiniBin | Logs |
+| 2 | PowerToys | Documentation |
 
 
 ## VPN
