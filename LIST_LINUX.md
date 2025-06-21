@@ -1,10 +1,5 @@
-# Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 13:21:04 UTC
-## Password manager
-
-*No programs found for this class*
-
-
+# Linux Clearing Programs Catalog
+**Last updated:** 2025-06-21 13:22:45 UTC
 ## Uncategorized
 
 | № | Program | Categories |
