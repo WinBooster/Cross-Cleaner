@@ -56,7 +56,7 @@ jobs:
         sudo apt-get -y install jq
         
         # Массив файлов для сортировки
-        JSON_FILES=("database/linux_database.json" "database/windows_database")  # Замените на ваши файлы
+        JSON_FILES=("database/linux_database.json" "database/windows_database.json")  # Замените на ваши файлы
         
         for JSON_FILE in "${JSON_FILES[@]}"; do
           echo "Processing $JSON_FILE..."
