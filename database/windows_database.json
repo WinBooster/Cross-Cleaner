@@ -1290,7 +1290,7 @@
     ],
 	"directories_to_remove": [
       "logs"
-    ],
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy/",
