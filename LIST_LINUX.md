@@ -1,11 +1,12 @@
 # Linux Clearing Programs Catalog
-**Last updated:** 2025-06-21 15:30:10 UTC
+**Last updated:** 2025-06-21 15:32:04 UTC
 ## Audio
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Spotify | Logs |
-| 2 | Yandex Music | Cache, Logs |
+| 1 | Cassettle | Cache, Logs |
+| 2 | Spotify | Logs |
+| 3 | Yandex Music | Cache, Logs |
 
 
 ## Browser
@@ -103,15 +104,14 @@
 | 1 | Alsa | Documentation |
 | 2 | Auto make | Logs |
 | 3 | Bison | Logs |
-| 4 | Cassettle | Cache, Logs |
-| 5 | Documentation | Documentation |
-| 6 | EFI tools | Logs |
-| 7 | GTK | Documentation |
-| 8 | Gperf | Documentation |
-| 9 | Info | Documentation |
-| 10 | Licenses | Documentation |
-| 11 | Nvidia | Documentation |
-| 12 | Pcre | Documentation |
-| 13 | System | Cache, Trash |
-| 14 | Thunderbird | Logs |
-| 15 | Yay | Cache |
+| 4 | Documentation | Documentation |
+| 5 | EFI tools | Logs |
+| 6 | GTK | Documentation |
+| 7 | Gperf | Documentation |
+| 8 | Info | Documentation |
+| 9 | Licenses | Documentation |
+| 10 | Nvidia | Documentation |
+| 11 | Pcre | Documentation |
+| 12 | System | Cache, Trash |
+| 13 | Thunderbird | Logs |
+| 14 | Yay | Cache |
