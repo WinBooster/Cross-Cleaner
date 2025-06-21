@@ -12,10 +12,10 @@ fn main() {
         .map(|s| s.parse().unwrap_or(0))
         .collect();
 
-    let version_num = version_numbers.get(0).copied().unwrap_or(0) << 48 |
-                     version_numbers.get(1).copied().unwrap_or(0) << 32 |
-                     version_numbers.get(2).copied().unwrap_or(0) << 16 |
-                     version_numbers.get(3).copied().unwrap_or(0);
+    let version_num = version_numbers.get(0).copied().unwrap_or(0) << 48
+        | version_numbers.get(1).copied().unwrap_or(0) << 32
+        | version_numbers.get(2).copied().unwrap_or(0) << 16
+        | version_numbers.get(3).copied().unwrap_or(0);
 
     let mut res = WindowsResource::new();
     res.set_icon("../assets\\icon.ico");
