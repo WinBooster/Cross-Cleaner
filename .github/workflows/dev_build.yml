@@ -101,7 +101,7 @@ jobs:
         echo "**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> LIST_WINDOWS.md
         
         # Get all unique classes, filtering out null values
-        classes=$(jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/windows_database.json | jq)
+        classes=$(jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/windows_database.json)
         
         # Process each class
         for class in $classes; do
