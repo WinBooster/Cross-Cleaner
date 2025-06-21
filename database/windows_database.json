@@ -1,13 +1,4 @@
 [
-	{
-    "path": "{drive}Users\\{username}\\pipx",
-    "category": "Logs",
-    "program": "pipx",
-    "class": "Packet Manager",
-	"directories_to_remove": [
-		"logs"
-	]
-  },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\1Password\\logs\\setup\\*.log",
     "category": "Logs",
@@ -17,14 +8,14 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Tenorshare\\4uKey for Android\\Logs\\*",
-	"class": "Security",
+    "class": "Security",
     "category": "Logs",
     "program": "4uKey for Android",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\TSMonitor\\4uKey for Android\\logs\\*",
-	"class": "Security",
+    "class": "Security",
     "category": "Logs",
     "program": "4uKey for Android",
     "remove_files": true
@@ -2774,6 +2765,15 @@
     "program": "Pandora",
     "remove_directories": true,
     "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\pipx",
+    "category": "Logs",
+    "program": "pipx",
+    "class": "Packet Manager",
+    "directories_to_remove": [
+      "logs"
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\PlanetVPN\\cache\\qmlcache\\*",
