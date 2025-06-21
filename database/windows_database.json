@@ -1740,7 +1740,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming/",
-    "class": "Cheats",
+    "class": "Cheat",
     "category": "Cheats",
     "program": "Krnl",
     "files_to_remove": [],
