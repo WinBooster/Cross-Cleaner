@@ -1,5 +1,6 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 14:22:40 UTC
+**Total programs in database:** 158
+**Total pathes in database:** 371
 ## AntiCheat
 
 | № | Program | Categories |
@@ -33,13 +34,13 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Brave Browser | Browser cookies, Browser passwords, Cache, LastActivity, Logs |
-| 2 | Edge | Browser cookies, Cache, LastActivity |
-| 3 | Google Chrome | Browser cookies, Browser passwords, LastActivity, Logs |
-| 4 | LibreWolf | Browser cookies, LastActivity |
-| 5 | Mozilla Firefox | Browser cookies, Cache, LastActivity, Logs |
-| 6 | Opera GX | Browser cookies, Browser passwords, LastActivity |
-| 7 | Vivaldi | Browser cookies, Browser passwords, Images, LastActivity |
+| 1 | Brave Browser | Browser cookies, Browser history, Browser passwords, Cache, Logs |
+| 2 | Edge | Browser cookies, Browser history, Cache |
+| 3 | Google Chrome | Browser cookies, Browser history, Browser passwords, Logs |
+| 4 | LibreWolf | Browser cookies, Browser history |
+| 5 | Mozilla Firefox | Browser cookies, Browser history, Cache, Logs |
+| 6 | Opera GX | Browser cookies, Browser history, Browser passwords |
+| 7 | Vivaldi | Browser cookies, Browser history, Browser passwords, Images |
 
 
 ## Cheat
