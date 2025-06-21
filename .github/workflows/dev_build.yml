@@ -100,7 +100,7 @@ jobs:
         echo "# Windows Clearing Programs Catalog" > LIST_WINDOWS.md
         total_programs=$(jq -r 'map(.program) | unique | length' database/windows_database.json)
         total_pathes=$(jq -r 'map(.path) | unique | length' database/windows_database.json)
-        echo "**Total programs in database:** $total_programs\n" >> LIST_WINDOWS.md
+        echo -e "**Total programs in database:** $total_programs\n" >> LIST_WINDOWS.md
         echo "**Total pathes in database:** $total_pathes" >> LIST_WINDOWS.md
         
         jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/windows_database.json | while IFS= read -r class; do
@@ -152,7 +152,7 @@ jobs:
         echo "# Linux Clearing Programs Catalog" > LIST_LINUX.md
         total_programs=$(jq -r 'map(.program) | unique | length' database/linux_database.json)
         total_pathes=$(jq -r 'map(.path) | unique | length' database/linux_database.json)
-        echo "**Total programs in database:** $total_programs\n" >> LIST_LINUX.md
+        echo -e "**Total programs in database:** $total_programs\n" >> LIST_LINUX.md
         echo "**Total pathes in database:** $total_pathes" >> LIST_LINUX.md
         
         jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/linux_database.json | while IFS= read -r class; do
