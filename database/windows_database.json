@@ -2664,7 +2664,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\OneDrive\\cache\\qmlcache\\*.qmlc",
-	"class": "System",
+    "class": "System",
     "category": "Cache",
     "program": "OneDrive",
     "remove_files": true
@@ -2925,7 +2925,7 @@
   },
   {
     "path": "{drive}Program Files\\PowerToys/",
-	"class": "Utility",
+    "class": "Utility",
     "category": "Documentation",
     "program": "PowerToys",
     "files_to_remove": [
@@ -3188,7 +3188,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Recaf\\*.log",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Logs",
     "program": "Recaf",
     "remove_files": true
@@ -3734,7 +3734,7 @@
   },
   {
     "path": "{drive}Windows\\System32\\Licenses/*",
-	"class": "System",
+    "class": "System",
     "category": "Documentation",
     "program": "Windows",
     "remove_directories": true,
@@ -3742,7 +3742,7 @@
   },
   {
     "path": "{drive}Windows\\System32\\LogFiles/*",
-	"class": "System",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_directories": true,
@@ -3750,14 +3750,14 @@
   },
   {
     "path": "{drive}Windows\\System32\\Logs/*",
-	"class": "System",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\CrashDumps\\*",
-	"class": "System",
+    "class": "System",
     "category": "Crashes",
     "program": "Windows",
     "remove_directories": true,
@@ -3765,7 +3765,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\Downloads\\*",
-	"class": "System",
+    "class": "System",
     "category": "Downloads",
     "program": "Windows",
     "remove_directories": true,
@@ -3773,7 +3773,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\ConnectedDevicesPlatform\\*",
-	"class": "System",
+    "class": "System",
     "category": "LastActivity",
     "program": "Windows",
     "remove_directories": true,
@@ -3781,7 +3781,7 @@
   },
   {
     "path": "{drive}Windows\\debug\\*",
-	"class": "System",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_directories": true,
@@ -3789,49 +3789,49 @@
   },
   {
     "path": "{drive}Windows\\Prefetch\\*",
-	"class": "System",
+    "class": "System",
     "category": "LastActivity",
     "program": "Windows",
     "remove_files": true
   },
   {
     "path": "{drive}Windows\\Minidump\\*",
-	"class": "System",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_files": true
   },
   {
     "path": "{drive}Windows\\security\\logs\\*.log",
-	"class": "System",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_files": true
   },
   {
     "path": "{drive}Windows\\security\\database\\*.log",
-	"class": "System",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_files": true
   },
   {
     "path": "{drive}Windows\\Logs\\**\\*",
-	"class": "System",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_files": true
   },
   {
     "path": "{drive}Windows\\*.log",
-	"class": "System",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_files": true
   },
   {
     "path": "{drive}Temp\\*",
-	"class": "System",
+    "class": "System",
     "category": "Cache",
     "program": "Windows",
     "remove_directories": true,
@@ -3839,14 +3839,14 @@
   },
   {
     "path": "{drive}Windows\\Panther/",
-	"class": "System",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_all_in_dir": true
   },
   {
     "path": "{drive}Windows\\Temp\\*",
-	"class": "System",
+    "class": "System",
     "category": "Cache",
     "program": "Windows",
     "remove_directories": true,
@@ -3854,7 +3854,7 @@
   },
   {
     "path": "{drive}Windows\\Logs\\*",
-	"class": "System",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_directories": true,
@@ -3862,7 +3862,7 @@
   },
   {
     "path": "{drive}Windows\\Logs\\WindowsUpdate\\*",
-	"class": "System",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_directories": true,
@@ -3870,7 +3870,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Temp\\*",
-	"class": "System",
+    "class": "System",
     "category": "Cache",
     "program": "Windows",
     "remove_directories": true,
@@ -3878,7 +3878,7 @@
   },
   {
     "path": "{drive}ProgramData\\USOShared/",
-	"class": "System",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "directories_to_remove": [
@@ -3887,7 +3887,7 @@
   },
   {
     "path": "{drive}Program Files\\Windows Defender/",
-	"class": "System",
+    "class": "System",
     "category": "Documentation",
     "program": "Windows Defender",
     "files_to_remove": [
@@ -3896,7 +3896,7 @@
   },
   {
     "path": "{drive}Program Files\\Windows Defender Advanced Threat Protection/",
-	"class": "System",
+    "class": "System",
     "category": "Documentation",
     "program": "Windows Defender",
     "files_to_remove": [
