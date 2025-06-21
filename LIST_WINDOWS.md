@@ -1,5 +1,5 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 03:03:05 UTC
+**Last updated:** 2025-06-21 11:37:57 UTC
 | № | Program | Categories |
 |---|---------|------------|
 | 1 | 1Password | Logs |
@@ -39,7 +39,7 @@
 | 35 | Enigma Virtual Box | Documentation |
 | 36 | Epic Games | Logs |
 | 37 | ExecHack | Cheats |
-| 38 | Exodus | Logs |
+| 38 | Exodus Crypto Wallet | Logs |
 | 39 | FACEIT AC | Logs |
 | 40 | FL Studio | Documentation |
 | 41 | Fatality | Cheats |
@@ -151,7 +151,7 @@
 | 147 | WinRaR | Documentation |
 | 148 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
 | 149 | Windows Defender | Documentation |
-| 150 | Windows SDK | Logs |
+| 150 | Windows Kits | Documentation |
 | 151 | Windscribe | Logs |
 | 152 | Xamarin | Logs |
 | 153 | Zapret | Logs |
