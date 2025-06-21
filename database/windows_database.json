@@ -506,11 +506,7 @@
   },
   {
     "path": "{drive}ProgramData\\chocolatey",
-<<<<<<< Updated upstream
-    "class": "Packet manager",
-=======
 	"class": "Packet Manager",
->>>>>>> Stashed changes
     "category": "Logs",
     "program": "Chocolatey",
     "directories_to_remove": [
@@ -3230,11 +3226,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\scoop",
-<<<<<<< Updated upstream
-    "class": "Packet manager",
-=======
 	"class": "Packet Manager",
->>>>>>> Stashed changes
     "category": "Cache",
     "program": "Scoop",
     "directories_to_remove": [
@@ -3243,11 +3235,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\scoop\\apps\\**\\**",
-<<<<<<< Updated upstream
-    "class": "Packet manager",
-=======
 	"class": "Packet Manager",
->>>>>>> Stashed changes
     "category": "Documentation",
     "program": "Scoop",
     "files_to_remove": [
@@ -3883,11 +3871,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
-<<<<<<< Updated upstream
-    "class": "Packet manager",
-=======
 	"class": "Packet Manager",
->>>>>>> Stashed changes
     "category": "Documentation",
     "program": "WinGet",
     "files_to_remove": [

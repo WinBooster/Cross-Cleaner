@@ -1396,11 +1396,7 @@
   },
   {
     "path": "/home/{username}/.cache/",
-<<<<<<< Updated upstream
-    "class": "Packet manager",
-=======
 	"class": "Packet Manager",
->>>>>>> Stashed changes
     "category": "Cache",
     "program": "Yay",
     "files_to_remove": [],
