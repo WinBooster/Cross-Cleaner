@@ -1,5 +1,5 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 16:20:25 UTC
+**Last updated:** 2025-06-21 14:22:40 UTC
 ## AntiCheat
 
 | № | Program | Categories |
