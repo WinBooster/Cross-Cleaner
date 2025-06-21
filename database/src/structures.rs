@@ -34,8 +34,8 @@ pub struct CleanerData {
     pub path: String,
     pub category: String,
     pub program: String,
-	#[serde(default = "Other")]
-	pub class: String,
+    #[serde(default = "Other")]
+    pub class: String,
 
     pub files_to_remove: Vec<String>,
     pub directories_to_remove: Vec<String>,
