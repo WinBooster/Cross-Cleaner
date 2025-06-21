@@ -1,5 +1,5 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 15:48:05 UTC
+**Last updated:** 2025-06-21 16:10:39 UTC
 ## AntiCheat
 
 | № | Program | Categories |
@@ -9,13 +9,24 @@
 | 3 | GameGuard | Cache |
 
 
+## Archive
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | 7-Zip | Logs |
+| 2 | Magic TDX | Documentation |
+| 3 | WinRaR | Documentation |
+
+
 ## Audio
 
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | AAF Optimus DCH Audio | Documentation |
-| 2 | FL Studio | Documentation |
-| 3 | SoundWire Server | Documentation |
+| 2 | ASIO4ALL v2 | Documentation |
+| 3 | FL Studio | Documentation |
+| 4 | SoundWire Server | Documentation |
+| 5 | Yandex Music | Cache, Logs |
 
 
 ## Browser
@@ -71,11 +82,12 @@
 | 9 | MCCreator | Logs |
 | 10 | MinGW | Documentation |
 | 11 | Node JS | Cache, Documentation, Logs |
-| 12 | Python | Documentation |
-| 13 | Rust Language | Documentation |
-| 14 | Unity Hub | Documentation |
-| 15 | Windows Kits | Documentation |
-| 16 | Xamarin | Logs |
+| 12 | Postman | Logs |
+| 13 | Python | Documentation |
+| 14 | Rust Language | Documentation |
+| 15 | Unity Hub | Documentation |
+| 16 | Windows Kits | Documentation |
+| 17 | Xamarin | Logs |
 
 
 ## Driver
@@ -163,6 +175,14 @@
 | 16 | Tecknix Client | Accounts, Cache, Crashes, Documentation, Game saves, Images, Logs |
 
 
+## Optimization
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | HiAlgo Boost | Documentation |
+| 2 | ССleaner | Logs |
+
+
 ## Packet Manager
 
 | № | Program | Categories |
@@ -189,11 +209,13 @@
 | 3 | I2P | Documentation, Logs |
 | 4 | IObit Malware Fighter | Logs |
 | 5 | NetLimiter | Logs |
-| 6 | Process Hacker 2 | Documentation |
-| 7 | Process Lasso | Logs |
-| 8 | SystemInformer | Documentation |
-| 9 | VirtualBox | Documentation, Logs |
-| 10 | Zapret | Logs |
+| 6 | Panda Security | Logs |
+| 7 | Process Hacker 2 | Documentation |
+| 8 | Process Lasso | Logs |
+| 9 | Sandboxie+ | Documentation |
+| 10 | SystemInformer | Documentation |
+| 11 | VirtualBox | Documentation, Logs |
+| 12 | Zapret | Logs |
 
 
 ## Text
@@ -210,6 +232,22 @@
 | 8 | Notepad++ | Documentation |
 | 9 | Sublime Text | Logs |
 | 10 | VS Code | Browser cookies, Documentation, Logs |
+
+
+## Torrent
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Tribler | Logs |
+| 2 | qBittorrent | Logs |
+
+
+## Utility
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Mem Reduct | Documentation |
+| 2 | MiniBin | Logs |
 
 
 ## VPN
@@ -244,28 +282,15 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | 4uKey for Android | Logs |
-| 2 | 7-Zip | Logs |
-| 3 | ASIO4ALL v2 | Documentation |
-| 4 | Adobe | Logs |
-| 5 | Electron App's | Documentation, Logs |
-| 6 | Element | Logs |
-| 7 | Enigma Virtual Box | Documentation |
-| 8 | HiAlgo Boost | Documentation |
-| 9 | ImgBurn | Documentation, Logs |
-| 10 | Magic TDX | Documentation |
-| 11 | Mem Reduct | Documentation |
-| 12 | MiniBin | Logs |
-| 13 | Mozilla Maintenance Service | Logs |
-| 14 | OneDrive | Cache |
-| 15 | Panda Security | Logs |
-| 16 | Postman | Logs |
-| 17 | PowerToys | Documentation |
-| 18 | Recaf | Logs |
-| 19 | Sandboxie+ | Documentation |
-| 20 | Thunderbird | Crashes |
-| 21 | Tribler | Logs |
-| 22 | WinRaR | Documentation |
-| 23 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
-| 24 | Windows Defender | Documentation |
-| 25 | qBittorrent | Logs |
-| 26 | ССleaner | Logs |
+| 2 | Adobe | Logs |
+| 3 | Electron App's | Documentation, Logs |
+| 4 | Element | Logs |
+| 5 | Enigma Virtual Box | Documentation |
+| 6 | ImgBurn | Documentation, Logs |
+| 7 | Mozilla Maintenance Service | Logs |
+| 8 | OneDrive | Cache |
+| 9 | PowerToys | Documentation |
+| 10 | Recaf | Logs |
+| 11 | Thunderbird | Crashes |
+| 12 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
+| 13 | Windows Defender | Documentation |
