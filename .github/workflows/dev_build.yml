@@ -89,13 +89,13 @@ jobs:
       contents: write
 
     steps:
-    - name: Checkout repository
+    - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Install jq
+    - name: Install dependencies
       run: sudo apt-get -y install jq
 
-    - name: Generate Windows list
+    - name: Process Windows data
       run: |
         # Header
         echo "# Windows Clearing Programs Catalog" > LIST_WINDOWS.md
@@ -114,9 +114,24 @@ jobs:
           .[0].program as $name | 
           map(.category) | unique | join(", ") as $cats | 
           "| \(input_line_number) | \($name) | \($cats) |"' \
+
+        # Generate unique programs list
+        echo "# Windows Clearing Programs Catalog" > LIST_WINDOWS.md
+        echo "**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> LIST_WINDOWS.md
+        
+        echo "## Unique Programs" >> LIST_WINDOWS.md
+        jq -r '.[].program | select(. != null)' database/windows_database.json | sort -u | awk '{print "- " $0}' >> LIST_WINDOWS.md
+        
+        # Generate categories table
+        echo "\n## Program Categories\n" >> LIST_WINDOWS.md
+        echo "| Program | Categories |" >> LIST_WINDOWS.md
+        echo "|---------|------------|" >> LIST_WINDOWS.md
+        jq -r 'group_by(.program)[] | 
+          select(.[0].program != null) | 
+          "| \(.[0].program) | \(map(.category) | unique | join(", ")) |"' \
           database/windows_database.json >> LIST_WINDOWS.md
 
-    - name: Generate Linux list
+    - name: Process Linux data
       run: |
         # Header
         echo "# Linux Clearing Programs Catalog" > LIST_LINUX.md
@@ -135,18 +150,32 @@ jobs:
           map(.category) | unique | join(", ") as $cats | 
           "| \(input_line_number) | \($name) | \($cats) |"' \
           database/linux_database.json >> LIST_LINUX.md 
+          
+        # Generate unique programs list
+        echo "# Linux Clearing Programs Catalog" > LIST_LINUX.md
+        echo "**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> LIST_LINUX.md
+        
+        echo "## Unique Programs" >> LIST_LINUX.md
+        jq -r '.[].program | select(. != null)' database/linux_database.json | sort -u | awk '{print "- " $0}' >> LIST_LINUX.md
+        
+        # Generate categories table
+        echo "\n## Program Categories\n" >> LIST_LINUX.md
+        echo "| Program | Categories |" >> LIST_LINUX.md
+        echo "|---------|------------|" >> LIST_LINUX.md
+        jq -r 'group_by(.program)[] | 
+          select(.[0].program != null) | 
+          "| \(.[0].program) | \(map(.category) | unique | join(", ")) |"' \
+          database/linux_database.json >> LIST_LINUX.md
 
-    - name: Commit and push changes
+    - name: Commit changes
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git add LIST_WINDOWS.md LIST_LINUX.md
+        git add LIST_*.md
         if ! git diff --quiet --staged; then
-          git commit -m "Auto-updated program lists"
+          git commit -m "Auto-updated program catalogs"
           git push
-        else
-          echo "No changes to commit."
-        fi
+        fi 
 
   upload_databases:
     needs: [sort_json]
