@@ -474,7 +474,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default/",
     "class": "Browser",
-    "category": "LastActivity",
+    "category": "Browser history",
     "program": "Brave Browser",
     "files_to_remove": [
       "Favicons",
@@ -876,7 +876,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\Edge\\User Data\\Default",
     "class": "Browser",
-    "category": "LastActivity",
+    "category": "Browser history",
     "program": "Edge",
     "files_to_remove": [
       "History",
@@ -1105,7 +1105,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Google\\Chrome\\User Data\\Default/",
     "class": "Browser",
-    "category": "LastActivity",
+    "category": "Browser history",
     "program": "Google Chrome",
     "files_to_remove": [
       "Favicons",
@@ -1849,7 +1849,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\librewolf\\Profiles\\**",
     "class": "Browser",
-    "category": "LastActivity",
+    "category": "Browser history",
     "program": "LibreWolf",
     "files_to_remove": [
       "places.sqlite",
@@ -1871,7 +1871,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\librewolf\\Profiles\\**",
     "class": "Browser",
-    "category": "LastActivity",
+    "category": "Browser history",
     "program": "LibreWolf",
     "files_to_remove": [
       "favicons.sqlite",
@@ -2316,7 +2316,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**",
     "class": "Browser",
-    "category": "LastActivity",
+    "category": "Browser history",
     "program": "Mozilla Firefox",
     "files_to_remove": [
       "places.sqlite",
@@ -2345,7 +2345,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**",
     "class": "Browser",
-    "category": "LastActivity",
+    "category": "Browser history",
     "program": "Mozilla Firefox",
     "files_to_remove": [
       "favicons.sqlite",
@@ -2702,7 +2702,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera GX Stable/",
     "class": "Browser",
-    "category": "LastActivity",
+    "category": "Browser history",
     "program": "Opera GX",
     "files_to_remove": [
       "Favicons",
@@ -3631,7 +3631,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Vivaldi\\User Data\\Default/",
     "class": "Browser",
-    "category": "LastActivity",
+    "category": "Browser history",
     "program": "Vivaldi",
     "files_to_remove": [
       "Favicons",
