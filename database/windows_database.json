@@ -42,7 +42,7 @@
   },
   {
     "path": "{drive}Program Files\\Adobe\\**\\Legal\\**\\*.html",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Adobe",
     "remove_files": true
   },
@@ -905,12 +905,14 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\element-desktop\\*.log",
+	"class": "Messanger",
     "category": "Logs",
     "program": "Element",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files (x86)\\Enigma Virtual Box/",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Enigma Virtual Box",
     "files_to_remove": [
@@ -3510,6 +3512,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\thunderbird\\Profiles\\**/",
+	"class": "Messanger",
     "category": "Crashes",
     "program": "Thunderbird",
     "directories_to_remove": [
