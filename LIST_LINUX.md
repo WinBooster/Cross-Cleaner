@@ -1,12 +1,13 @@
 # Linux Clearing Programs Catalog
-**Last updated:** 2025-06-21 15:32:04 UTC
+**Last updated:** 2025-06-21 15:40:47 UTC
 ## Audio
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Cassettle | Cache, Logs |
-| 2 | Spotify | Logs |
-| 3 | Yandex Music | Cache, Logs |
+| 1 | Alsa | Documentation |
+| 2 | Cassettle | Cache, Logs |
+| 3 | Spotify | Logs |
+| 4 | Yandex Music | Cache, Logs |
 
 
 ## Browser
@@ -35,13 +36,22 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Ghidra | Logs |
-| 2 | GitHub Desktop | Cache, Logs |
-| 3 | Github Desktop | Documentation |
-| 4 | Gradle | Cache |
-| 5 | Jdk | Documentation |
-| 6 | Python | Documentation |
-| 7 | Rust language | Documentation |
+| 1 | Auto make | Logs |
+| 2 | GTK | Documentation |
+| 3 | Ghidra | Logs |
+| 4 | GitHub Desktop | Cache, Logs |
+| 5 | Github Desktop | Documentation |
+| 6 | Gradle | Cache |
+| 7 | Jdk | Documentation |
+| 8 | Python | Documentation |
+| 9 | Rust language | Documentation |
+
+
+## Driver
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Nvidia | Documentation |
 
 
 ## Game
@@ -80,6 +90,13 @@
 | 9 | SimpleMinecraft | Cache, Logs |
 
 
+## Packet manager
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Yay | Cache |
+
+
 ## Password Manager
 
 | № | Program | Categories |
@@ -91,27 +108,22 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Cursor | Cache, Documentation, Logs |
-| 2 | JetBrains | Logs |
-| 3 | LibreOffice | Cache |
-| 4 | VS Code | Documentation |
+| 1 | Bison | Logs |
+| 2 | Cursor | Cache, Documentation, Logs |
+| 3 | Gperf | Documentation |
+| 4 | JetBrains | Logs |
+| 5 | LibreOffice | Cache |
+| 6 | Pcre | Documentation |
+| 7 | VS Code | Documentation |
 
 
 ## Uncategorized
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Alsa | Documentation |
-| 2 | Auto make | Logs |
-| 3 | Bison | Logs |
-| 4 | Documentation | Documentation |
-| 5 | EFI tools | Logs |
-| 6 | GTK | Documentation |
-| 7 | Gperf | Documentation |
-| 8 | Info | Documentation |
-| 9 | Licenses | Documentation |
-| 10 | Nvidia | Documentation |
-| 11 | Pcre | Documentation |
-| 12 | System | Cache, Trash |
-| 13 | Thunderbird | Logs |
-| 14 | Yay | Cache |
+| 1 | Documentation | Documentation |
+| 2 | EFI tools | Logs |
+| 3 | Info | Documentation |
+| 4 | Licenses | Documentation |
+| 5 | System | Cache, Trash |
+| 6 | Thunderbird | Logs |
