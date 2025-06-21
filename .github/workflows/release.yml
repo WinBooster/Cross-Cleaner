@@ -261,8 +261,8 @@ jobs:
         choco install jq -y
         jq -c '.' database/linux_database.json > database/linux_database_compressed.json
         jq -c '.' database/windows_database.json > database/windows_database_compressed.json
-        move database/linux_database_compressed.json database/linux_database.json
-        move database/windows_database_compressed.json database/windows_database.json
+        move -Force database/linux_database_compressed.json database/linux_database.json
+        move -Force database/windows_database_compressed.json database/windows_database.json
     - name: Build windows
       run: cargo build --release
     - name: Move windows binaries
