@@ -82,6 +82,43 @@ jobs:
         git diff --quiet && git diff --staged --quiet || git commit -m "Auto-sorted JSON files by program field"
         git push
 
+  generate-lists:
+    runs-on: ubuntu-latest
+    needs: [sort_json]
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install jq
+      run: sudo apt-get -y install jq
+
+    - name: Generate Windows list
+      run: |
+        echo "# Clearing Windows Programs" > LIST_WINDOWS.md
+        echo "\n**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')\n" >> LIST_WINDOWS.md
+        jq -r '.[].program | select(. != null)' database/windows_database.json | sort -u | awk '{print "- " $0}' >> LIST_WINDOWS.md
+
+    - name: Generate Linux list
+      run: |
+        echo "# Clearing Linux Programs" > LIST_LINUX.md
+        echo "\n**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')\n" >> LIST_LINUX.md
+        jq -r '.[].program | select(. != null)' database/linux_database.json | sort -u | awk '{print "- " $0}' >> LIST_LINUX.md
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add LIST_WINDOWS.md LIST_LINUX.md
+        if ! git diff --quiet --staged; then
+          git commit -m "Auto-updated program lists"
+          git push
+        else
+          echo "No changes to commit."
+        fi
+
   upload_databases:
     needs: [sort_json]
     runs-on: ubuntu-latest
