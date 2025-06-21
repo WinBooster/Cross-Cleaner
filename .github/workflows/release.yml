@@ -235,7 +235,7 @@ jobs:
         git push || echo "No changes to push"
 
   upload_databases:
-    needs: [sort_json]
+    needs: [sort_json, compress_json]
     runs-on: ubuntu-latest
     name: Archive databases
     permissions: write-all
