@@ -1,5 +1,5 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 16:15:26 UTC
+**Last updated:** 2025-06-21 16:19:32 UTC
 ## AntiCheat
 
 | № | Program | Categories |
@@ -85,10 +85,11 @@
 | 12 | Node JS | Cache, Documentation, Logs |
 | 13 | Postman | Logs |
 | 14 | Python | Documentation |
-| 15 | Rust Language | Documentation |
-| 16 | Unity Hub | Documentation |
-| 17 | Windows Kits | Documentation |
-| 18 | Xamarin | Logs |
+| 15 | Recaf | Logs |
+| 16 | Rust Language | Documentation |
+| 17 | Unity Hub | Documentation |
+| 18 | Windows Kits | Documentation |
+| 19 | Xamarin | Logs |
 
 
 ## Driver
@@ -221,6 +222,15 @@
 | 12 | Zapret | Logs |
 
 
+## System
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | OneDrive | Cache |
+| 2 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
+| 3 | Windows Defender | Documentation |
+
+
 ## Text
 
 | № | Program | Categories |
@@ -251,6 +261,7 @@
 | --- | --- | --- |
 | 1 | Mem Reduct | Documentation |
 | 2 | MiniBin | Logs |
+| 3 | PowerToys | Documentation |
 
 
 ## VPN
@@ -289,8 +300,3 @@
 | 3 | Electron App's | Documentation, Logs |
 | 4 | ImgBurn | Documentation, Logs |
 | 5 | Mozilla Maintenance Service | Logs |
-| 6 | OneDrive | Cache |
-| 7 | PowerToys | Documentation |
-| 8 | Recaf | Logs |
-| 9 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
-| 10 | Windows Defender | Documentation |
