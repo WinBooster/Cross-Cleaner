@@ -1083,6 +1083,23 @@
     ]
   },
   {
+    "path": "{drive}Program Files\\Go",
+    "category": "Documentation",
+    "program": "Go Language",
+    "class": "Developing",
+    "files_to_remove": [
+      "CONTRIBUTING.md",
+      "LICENSE",
+      "PATENTS",
+      "README.md",
+      "SECURITY.md"
+    ],
+    "directories_to_remove": [
+      "doc",
+      "test"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Network/",
     "class": "Browser",
     "category": "Browser cookies",
@@ -3827,11 +3844,13 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Windows\\Logs\\**\\*",
+    "path": "{drive}Windows",
     "class": "System",
     "category": "Logs",
     "program": "Windows",
-    "remove_files": true
+    "directories_to_remove": [
+      "Logs"
+    ]
   },
   {
     "path": "{drive}Windows\\*.log",
