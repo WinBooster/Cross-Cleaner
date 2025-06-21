@@ -1427,6 +1427,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Inno Setup 6/",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Inno Setup 6",
     "files_to_remove": [
@@ -1437,6 +1438,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Inno Setup 6\\Examples\\*.txt",
+	"class": "Developing",
     "category": "Logs",
     "program": "Inno Setup 6",
     "remove_files": true
@@ -1503,6 +1505,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.jdks\\**",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1512,6 +1515,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.jdks\\**",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1535,6 +1539,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.jdks\\**",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "directories_to_remove": [
@@ -1544,6 +1549,7 @@
   },
   {
     "path": "{drive}Program Files\\Java\\**",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1567,6 +1573,7 @@
   },
   {
     "path": "{drive}Program Files\\Eclipse Adoptium\\**",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1590,6 +1597,7 @@
   },
   {
     "path": "{drive}Program Files\\Android\\jdk\\**\\**",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1613,6 +1621,7 @@
   },
   {
     "path": "{drive}Program Files\\Android\\jdk\\**\\**",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1622,6 +1631,7 @@
   },
   {
     "path": "{drive}Program Files\\Zulu\\**",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1645,7 +1655,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.lunarclient\\jre\\**\\**",
-    "class": "Minecraft Launcher",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1669,7 +1679,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixclient\\runtimes\\**",
-    "class": "Minecraft Launcher",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1693,7 +1703,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\**",
-    "class": "Minecraft Launcher",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1717,7 +1727,7 @@
   },
   {
     "path": "{drive}\\Program Files (x86)\\GribLand\\runtime\\**",
-    "class": "Minecraft Launcher",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
