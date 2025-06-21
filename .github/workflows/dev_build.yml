@@ -117,7 +117,7 @@ jobs:
         echo "# Linux Clearing Programs Catalog" > LIST_LINUX.md
         echo "**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> LIST_LINUX.md
         
-        echo "## Program Categories\n" >> LIST_LINUX.md
+        # Categories table with better formatting
         echo "| № | Program | Categories |" >> LIST_LINUX.md
         echo "|---|---------|------------|" >> LIST_LINUX.md
         i=0
