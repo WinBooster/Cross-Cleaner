@@ -229,6 +229,7 @@ jobs:
 
           ### 🪟 Windows Enhancements
           - **Yandex Music** - Added logs, cache clearing
+          - **PipX** - Added logs clearing
 
           ## 👏 Contributors Hall of Fame
           Special thanks to our amazing contributors who made this release possible:
