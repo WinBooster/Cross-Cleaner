@@ -1,59 +1,28 @@
 [
   {
-    "path": "/home/{username}/.local/share/TelegramDesktop/*.log",
+    "path": "/usr/share/doc/",
+    "category": "Documentation",
+    "program": "Alsa",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "alsa-lib",
+      "alsa-plugins",
+      "alsa-topology-conf",
+      "alsa-ucm-conf",
+      "alsa-utils"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/usr/share/automake-1.17/",
     "category": "Logs",
-    "program": "Telegram",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/Steam/userdata/*",
-    "category": "Accounts",
-    "program": "Steam",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.config/Exodus",
-    "category": "Accounts",
-    "program": "Exodus Crypto Wallet",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "exodus.wallet"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.local/share/TelegramDesktop/",
-    "category": "Accounts",
-    "program": "Telegram",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "tdata"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.minecraft/",
-    "category": "Accounts",
-    "program": "Minecraft",
+    "program": "Auto make",
     "files_to_remove": [
-      "accounts.json",
-      "launcher_accounts.json"
+      "COPYING",
+      "INSTALL"
     ],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -62,173 +31,13 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/.minecraft/",
-    "category": "LastActivity",
-    "program": "Minecraft",
-    "files_to_remove": [
-      "command_history.txt"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/SIMPLEMINECRAFT/",
+    "path": "/usr/share/bison/",
     "category": "Logs",
-    "program": "SimpleMinecraft",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "logs"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/SIMPLEMINECRAFT/data/cache/",
-    "category": "Cache",
-    "program": "SimpleMinecraft",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": true,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/SIMPLEMINECRAFT/client/**/",
-    "category": "Logs",
-    "program": "SimpleMinecraft",
+    "program": "Bison",
     "files_to_remove": [
-      "minetweaker.log",
-      "NBTEdit.log"
-    ],
-    "directories_to_remove": [
-      "logs"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.local/share/MultiMC/",
-    "category": "Accounts",
-    "program": "MultiMC",
-    "files_to_remove": [
-      "accounts.json",
-      "launcher_accounts.json"
+      "README.md"
     ],
     "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.local/share/PolyMC/",
-    "category": "Accounts",
-    "program": "PolyMC",
-    "files_to_remove": [
-      "accounts.json",
-      "launcher_accounts.json"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.local/share/PrismLauncher/",
-    "category": "Accounts",
-    "program": "Prism Launcher",
-    "files_to_remove": [
-      "accounts.json",
-      "launcher_accounts.json"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.lunarclient/",
-    "category": "Accounts",
-    "program": "Lunar Client",
-    "files_to_remove": [
-      "accounts.json",
-      "launcher_accounts.json"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.mozilla/firefox/**/",
-    "category": "Browser cookies",
-    "program": "FireFox",
-    "files_to_remove": [
-      "cookies.sqlite",
-      "cookies.sqlite-wal"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.cache/thumbnails/normal/*",
-    "category": "Cache",
-    "program": "System",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.cache/thumbnails/large/*",
-    "category": "Cache",
-    "program": "System",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.config/GitHub Desktop/Cache/*",
-    "category": "Cache",
-    "program": "GitHub Desktop",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.config/yandex-music/",
-    "category": "Cache",
-    "program": "Yandex Music",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "Cache",
-      "Code Cache",
-      "DawnGraphiteCache",
-      "DawnWebGPUCache",
-      "GPUCache"
-    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
@@ -242,6 +51,174 @@
     "directories_to_remove": [
       "audios",
       "images"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.cache/cassette/*.log",
+    "category": "Logs",
+    "program": "Cassettle",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.cristalix/updates/**/crash-reports/*",
+    "category": "Crashes",
+    "program": "Cristalix",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.cristalix/updates/**/saves/*",
+    "category": "Game saves",
+    "program": "Cristalix",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.cristalix/updates/**/screenshots/*",
+    "category": "Images",
+    "program": "Cristalix",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.cristalix/updates/**/logs/*",
+    "category": "Logs",
+    "program": "Cristalix",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/cubixworld/updates/**/crash-reports/*",
+    "category": "Crashes",
+    "program": "CubixWorld",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/cubixworld/updates/**/saves/*",
+    "category": "Game saves",
+    "program": "CubixWorld",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/cubixworld/updates/**/screenshots/*",
+    "category": "Images",
+    "program": "CubixWorld",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/cubixworld/updates/**/logs/*",
+    "category": "Logs",
+    "program": "CubixWorld",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/cubixworld/updates/**/",
+    "category": "Logs",
+    "program": "CubixWorld",
+    "files_to_remove": [
+      "minetweaker.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.config/Cursor/",
+    "category": "Logs",
+    "program": "Cursor",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "logs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.config/Cursor/",
+    "category": "Cache",
+    "program": "Cursor",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "cache",
+      "CachedData",
+      "Code Cache",
+      "DawnGraphiteCache",
+      "DawnWebGPUCache",
+      "GPUCache"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.cursor/extensions/**/",
+    "category": "Documentation",
+    "program": "Cursor",
+    "files_to_remove": [
+      "CHANGELOG.md",
+      "changelog.md",
+      "LICENSE.txt",
+      "README.md",
+      "readme.md",
+      "SECURITY.md",
+      "SUPPORT.md",
+      "contributing.md",
+      "LICENSE-APACHE",
+      "LICENSE-MIT",
+      "walkthrough-setup-tips.md"
+    ],
+    "directories_to_remove": [
+      ".github"
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
@@ -266,332 +243,9 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/.cache/firefox/**/thumbnails/*",
-    "category": "Cache",
-    "program": "FireFox",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.cache/librewolf/**/thumbnails/*",
-    "category": "Cache",
-    "program": "LibreWolf",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.minecraft/game-cache/*",
-    "category": "Cache",
-    "program": "Minecraft",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.minecraft/cache/*",
-    "category": "Cache",
-    "program": "Minecraft",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/MultiMC/game-cache/*",
-    "category": "Cache",
-    "program": "MultiMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/MultiMC/cache/*",
-    "category": "Cache",
-    "program": "MultiMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PolyMC/game-cache/*",
-    "category": "Cache",
-    "program": "PolyMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PolyMC/cache/*",
-    "category": "Cache",
-    "program": "PolyMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PrismLauncher/game-cache/*",
-    "category": "Cache",
-    "program": "Prism Launcher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PrismLauncher/cache/*",
-    "category": "Cache",
-    "program": "Prism Launcher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.lunarclient/game-cache/*",
-    "category": "Cache",
-    "program": "Lunar Client",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.lunarclient/cache/*",
-    "category": "Cache",
-    "program": "Lunar Client",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.minecraft",
-    "category": "Cheats",
-    "program": "Minecraft",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "meteor-client",
-      "LiquidBounce",
-      "Impact",
-      "Wurst",
-      "Nodus",
-      "Aristois"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft",
-    "category": "Cheats",
-    "program": "MultiMC",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "meteor-client",
-      "LiquidBounce",
-      "Impact",
-      "Wurst",
-      "Nodus",
-      "Aristois"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft",
-    "category": "Cheats",
-    "program": "PolyMC",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "meteor-client",
-      "LiquidBounce",
-      "Impact",
-      "Wurst",
-      "Nodus",
-      "Aristois"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft",
-    "category": "Cheats",
-    "program": "Prism Launcher",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "meteor-client",
-      "LiquidBounce",
-      "Impact",
-      "Wurst",
-      "Nodus",
-      "Aristois"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.lunarclient/offline/multiver",
-    "category": "Cheats",
-    "program": "Lunar Client",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "meteor-client",
-      "LiquidBounce",
-      "Impact",
-      "Wurst",
-      "Nodus",
-      "Aristois"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/",
-    "category": "Cheats",
-    "program": "Future Client",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "Future"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.minecraft/crash-reports/*",
-    "category": "Crashes",
-    "program": "Minecraft",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft/crash-reports/*",
-    "category": "Crashes",
-    "program": "MultiMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft/crash-reports/*",
-    "category": "Crashes",
-    "program": "PolyMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/crash-reports/*",
-    "category": "Crashes",
-    "program": "Prism Launcher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.lunarclient/offline/multiver/crash-reports/*",
-    "category": "Crashes",
-    "program": "Lunar Client",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.cristalix/updates/**/crash-reports/*",
-    "category": "Crashes",
-    "program": "Cristalix",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/cubixworld/updates/**/crash-reports/*",
-    "category": "Crashes",
-    "program": "CubixWorld",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/Steam/steamapps/common/Terraria/*.blob",
-    "category": "Crashes",
-    "program": "Terraria",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/Steam/steamapps/common/GarrysMod/crashes/*",
-    "category": "Crashes",
-    "program": "Garry's mod",
+    "path": "/home/{username}/.config/discord/logs/*",
+    "category": "Logs",
+    "program": "Discord",
     "files_to_remove": [],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -790,58 +444,26 @@
     "remove_files": false
   },
   {
-    "path": "/usr/share/doc/",
-    "category": "Documentation",
-    "program": "Steam",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "steam"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/usr/share/doc/",
-    "category": "Documentation",
-    "program": "Alsa",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "alsa-lib",
-      "alsa-plugins",
-      "alsa-topology-conf",
-      "alsa-ucm-conf",
-      "alsa-utils"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/usr/share/doc/",
-    "category": "Documentation",
-    "program": "Github Desktop",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "github-desktop"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/usr/share/doc/",
-    "category": "Documentation",
-    "program": "Nvidia",
+    "path": "/usr/share/efitools/",
+    "category": "Logs",
+    "program": "EFI tools",
     "files_to_remove": [
-      "nvidia-utils"
+      "COPYING",
+      "README"
     ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.config/Exodus",
+    "category": "Accounts",
+    "program": "Exodus Crypto Wallet",
+    "files_to_remove": [],
     "directories_to_remove": [
-      "nvidia",
-      "nvidia-utils"
+      "exodus.wallet"
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
@@ -849,245 +471,23 @@
     "remove_files": false
   },
   {
-    "path": "/usr/share/doc/",
-    "category": "Documentation",
-    "program": "Pcre",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "pcre",
-      "pcre2"
+    "path": "/home/{username}/.mozilla/firefox/**/",
+    "category": "Browser cookies",
+    "program": "FireFox",
+    "files_to_remove": [
+      "cookies.sqlite",
+      "cookies.sqlite-wal"
     ],
+    "directories_to_remove": [],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
   },
   {
-    "path": "/usr/share/doc/",
-    "category": "Documentation",
-    "program": "Powdertoy",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "powdertoy-bin"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/usr/share/doc/",
-    "category": "Documentation",
-    "program": "Python",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "pycurl",
-      "python-annotated-types",
-      "python-orjson",
-      "python-pathvalidate",
-      "python-pefile",
-      "python-pydantic-core",
-      "python-pyelftools",
-      "python-yaml"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/usr/share/keepassxc/",
-    "category": "Documentation",
-    "program": "KeePassXC",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "docs"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/usr/share/licenses/*",
-    "category": "Documentation",
-    "program": "Licenses",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.minecraft/saves/*",
-    "category": "Game saves",
-    "program": "Minecraft",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft/saves/*",
-    "category": "Game saves",
-    "program": "MultiMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft/saves/*",
-    "category": "Game saves",
-    "program": "PolyMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/saves/*",
-    "category": "Game saves",
-    "program": "Prism Launcher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.lunarclient/offline/multiver/saves/*",
-    "category": "Game saves",
-    "program": "Lunar Client",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.cristalix/updates/**/saves/*",
-    "category": "Game saves",
-    "program": "Cristalix",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/cubixworld/updates/**/saves/*",
-    "category": "Game saves",
-    "program": "CubixWorld",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/Terraria/Worlds/*",
-    "category": "Game saves",
-    "program": "Terraria",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/Terraria/Playes/*",
-    "category": "Game saves",
-    "program": "Terraria",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.minecraft/screenshots/*",
-    "category": "Images",
-    "program": "Minecraft",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft/screenshots/*",
-    "category": "Images",
-    "program": "MultiMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft/screenshots/*",
-    "category": "Images",
-    "program": "PolyMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/screenshots/*",
-    "category": "Images",
-    "program": "Prism Launcher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.lunarclient/offline/multiver/screenshots/*",
-    "category": "Images",
-    "program": "Lunar Client",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.cristalix/updates/**/screenshots/*",
-    "category": "Images",
-    "program": "Cristalix",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/cubixworld/updates/**/screenshots/*",
-    "category": "Images",
-    "program": "CubixWorld",
+    "path": "/home/{username}/.cache/firefox/**/thumbnails/*",
+    "category": "Cache",
+    "program": "FireFox",
     "files_to_remove": [],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -1111,60 +511,48 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/.librewolf/**/",
-    "category": "LastActivity",
-    "program": "LibreWolf",
-    "files_to_remove": [
-      "favicons.sqlite",
-      "favicons.sqlite-wal",
-      "formhistory.sqlite"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.cache/JetBrains/**/log/*",
-    "category": "Logs",
-    "program": "JetBrains",
+    "path": "/home/{username}/",
+    "category": "Cheats",
+    "program": "Future Client",
     "files_to_remove": [],
-    "directories_to_remove": [],
+    "directories_to_remove": [
+      "Future"
+    ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": true,
     "remove_files": true
   },
   {
-    "path": "/home/{username}/.config/GitHub Desktop/logs/*",
-    "category": "Logs",
-    "program": "GitHub Desktop",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/Steam/logs/*",
-    "category": "Logs",
-    "program": "Steam",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/Steam/steamapps/common/Proton Hotfix",
+    "path": "/usr/share/",
     "category": "Documentation",
-    "program": "Steam proton",
+    "program": "GTK",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "gtk-doc"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/Steam/steamapps/common/GarrysMod/crashes/*",
+    "category": "Crashes",
+    "program": "Garry's mod",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/Steam/steamapps/common/GarrysMod/",
+    "category": "Logs",
+    "program": "Garry's mod",
     "files_to_remove": [
-      "LICENSE",
-      "LICENSE.OFL"
+      "chromium.log"
     ],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -1184,75 +572,9 @@
     "remove_files": true
   },
   {
-    "path": "/home/{username}/.cache/thunderbird/**/cache2/*.log",
-    "category": "Logs",
-    "program": "Thunderbird",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.config/yandex-music/logs/*",
-    "category": "Logs",
-    "program": "Yandex Music",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.cache/cassette/*.log",
-    "category": "Logs",
-    "program": "Cassettle",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.cache/spotify/*.log",
-    "category": "Logs",
-    "program": "Spotify",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.config/discord/logs/*",
-    "category": "Logs",
-    "program": "Discord",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/TelegramDesktop/log*.txt",
-    "category": "Logs",
-    "program": "Telegram",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.minecraft/logs/*",
-    "category": "Logs",
-    "program": "Minecraft",
+    "path": "/home/{username}/.config/GitHub Desktop/Cache/*",
+    "category": "Cache",
+    "program": "GitHub Desktop",
     "files_to_remove": [],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -1261,9 +583,127 @@
     "remove_files": true
   },
   {
-    "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft/logs/*",
+    "path": "/home/{username}/.config/GitHub Desktop/logs/*",
     "category": "Logs",
-    "program": "MultiMC",
+    "program": "GitHub Desktop",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/usr/share/doc/",
+    "category": "Documentation",
+    "program": "Github Desktop",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "github-desktop"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/usr/share/gperf/",
+    "category": "Documentation",
+    "program": "Gperf",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "doc"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.gradle/",
+    "category": "Cache",
+    "program": "Gradle",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "caches"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/Paradox Interactive/Hearts of Iron IV/",
+    "category": "Logs",
+    "program": "Hearts of Iron IV",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "logs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/Paradox Interactive/Hearts of Iron IV/",
+    "category": "Cache",
+    "program": "Hearts of Iron IV",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "cache"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/Paradox Interactive/Hearts of Iron IV/",
+    "category": "Crashes",
+    "program": "Hearts of Iron IV",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "crashes"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/usr/share/",
+    "category": "Documentation",
+    "program": "Info",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "info"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.jdk/**/",
+    "category": "Documentation",
+    "program": "Jdk",
+    "files_to_remove": [
+      "LICENSE",
+      "README.md"
+    ],
+    "directories_to_remove": [
+      "man"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.cache/JetBrains/**/log/*",
+    "category": "Logs",
+    "program": "JetBrains",
     "files_to_remove": [],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -1272,9 +712,35 @@
     "remove_files": true
   },
   {
-    "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft/logs/*",
-    "category": "Logs",
-    "program": "PolyMC",
+    "path": "/usr/share/keepassxc/",
+    "category": "Documentation",
+    "program": "KeePassXC",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "docs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.config/libreoffice/**/",
+    "category": "Cache",
+    "program": "LibreOffice",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "cache"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.cache/librewolf/**/thumbnails/*",
+    "category": "Cache",
+    "program": "LibreWolf",
     "files_to_remove": [],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -1283,9 +749,111 @@
     "remove_files": true
   },
   {
-    "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/logs/*",
-    "category": "Logs",
-    "program": "Prism Launcher",
+    "path": "/home/{username}/.librewolf/**/",
+    "category": "LastActivity",
+    "program": "LibreWolf",
+    "files_to_remove": [
+      "favicons.sqlite",
+      "favicons.sqlite-wal",
+      "formhistory.sqlite"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/usr/share/licenses/*",
+    "category": "Documentation",
+    "program": "Licenses",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.lunarclient/",
+    "category": "Accounts",
+    "program": "Lunar Client",
+    "files_to_remove": [
+      "accounts.json",
+      "launcher_accounts.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.lunarclient/game-cache/*",
+    "category": "Cache",
+    "program": "Lunar Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.lunarclient/cache/*",
+    "category": "Cache",
+    "program": "Lunar Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.lunarclient/offline/multiver",
+    "category": "Cheats",
+    "program": "Lunar Client",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.lunarclient/offline/multiver/crash-reports/*",
+    "category": "Crashes",
+    "program": "Lunar Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.lunarclient/offline/multiver/saves/*",
+    "category": "Game saves",
+    "program": "Lunar Client",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.lunarclient/offline/multiver/screenshots/*",
+    "category": "Images",
+    "program": "Lunar Client",
     "files_to_remove": [],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -1302,173 +870,6 @@
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.cristalix/updates/**/logs/*",
-    "category": "Logs",
-    "program": "Cristalix",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/cubixworld/updates/**/logs/*",
-    "category": "Logs",
-    "program": "CubixWorld",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/cubixworld/updates/**/",
-    "category": "Logs",
-    "program": "CubixWorld",
-    "files_to_remove": [
-      "minetweaker.log"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.minecraft/licenses/*",
-    "category": "Documentation",
-    "program": "Minecraft",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.minecraft/logs/*",
-    "category": "Logs",
-    "program": "Minecraft",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.minecraft/*log*",
-    "category": "Logs",
-    "program": "Minecraft",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/MultiMC/licenses/*",
-    "category": "Documentation",
-    "program": "MultiMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/MultiMC/logs/*",
-    "category": "Logs",
-    "program": "MultiMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/MultiMC/*log*",
-    "category": "Logs",
-    "program": "MultiMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PolyMC/licenses/*",
-    "category": "Documentation",
-    "program": "PolyMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PolyMC/logs/*",
-    "category": "Logs",
-    "program": "PolyMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PolyMC/*log*",
-    "category": "Logs",
-    "program": "PolyMC",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PrismLauncher/licenses/*",
-    "category": "Documentation",
-    "program": "Prism Launcher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PrismLauncher/logs/*",
-    "category": "Logs",
-    "program": "Prism Launcher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/PrismLauncher/*log*",
-    "category": "Logs",
-    "program": "Prism Launcher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
@@ -1505,11 +906,12 @@
     "remove_files": true
   },
   {
-    "path": "/home/{username}/.local/share/Steam/steamapps/common/Terraria/",
-    "category": "Logs",
-    "program": "Terraria",
+    "path": "/home/{username}/.minecraft/",
+    "category": "Accounts",
+    "program": "Minecraft",
     "files_to_remove": [
-      "changelog.txt"
+      "accounts.json",
+      "launcher_accounts.json"
     ],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -1518,11 +920,11 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/.local/share/Steam/steamapps/common/GarrysMod/",
-    "category": "Logs",
-    "program": "Garry's mod",
+    "path": "/home/{username}/.minecraft/",
+    "category": "LastActivity",
+    "program": "Minecraft",
     "files_to_remove": [
-      "chromium.log"
+      "command_history.txt"
     ],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -1531,106 +933,39 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/.local/share/Trash/",
-    "category": "Trash",
-    "program": "System",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "files",
-      "info"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/usr/share/efitools/",
-    "category": "Logs",
-    "program": "EFI tools",
-    "files_to_remove": [
-      "COPYING",
-      "README"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/usr/share/automake-1.17/",
-    "category": "Logs",
-    "program": "Auto make",
-    "files_to_remove": [
-      "COPYING",
-      "INSTALL"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/usr/share/bison/",
-    "category": "Logs",
-    "program": "Bison",
-    "files_to_remove": [
-      "README.md"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/usr/share/gperf/",
-    "category": "Documentation",
-    "program": "Gperf",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "doc"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/usr/share/",
-    "category": "Documentation",
-    "program": "GTK",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "gtk-doc"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/usr/share/",
-    "category": "Documentation",
-    "program": "Info",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "info"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.gradle/",
+    "path": "/home/{username}/.minecraft/game-cache/*",
     "category": "Cache",
-    "program": "Gradle",
+    "program": "Minecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.minecraft/cache/*",
+    "category": "Cache",
+    "program": "Minecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.minecraft",
+    "category": "Cheats",
+    "program": "Minecraft",
     "files_to_remove": [],
     "directories_to_remove": [
-      "caches"
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
@@ -1638,17 +973,81 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/.rustup/toolchains/**/share/",
-    "category": "Documentation",
-    "program": "Rust language",
+    "path": "/home/{username}/.minecraft/crash-reports/*",
+    "category": "Crashes",
+    "program": "Minecraft",
     "files_to_remove": [],
-    "directories_to_remove": [
-      "doc"
-    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.minecraft/saves/*",
+    "category": "Game saves",
+    "program": "Minecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.minecraft/screenshots/*",
+    "category": "Images",
+    "program": "Minecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.minecraft/logs/*",
+    "category": "Logs",
+    "program": "Minecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.minecraft/licenses/*",
+    "category": "Documentation",
+    "program": "Minecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.minecraft/logs/*",
+    "category": "Logs",
+    "program": "Minecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.minecraft/*log*",
+    "category": "Logs",
+    "program": "Minecraft",
+    "files_to_remove": [],
+    "directories_to_remove": [],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
-    "remove_files": false
+    "remove_files": true
   },
   {
     "path": "/home/{username}/.cache/ModrinthApp/",
@@ -1665,24 +1064,53 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/.vscode-oss/extensions/**/",
-    "category": "Documentation",
-    "program": "VS Code",
+    "path": "/home/{username}/.local/share/MultiMC/",
+    "category": "Accounts",
+    "program": "MultiMC",
     "files_to_remove": [
-      "CHANGELOG.md",
-      "changelog.md",
-      "LICENSE.txt",
-      "README.md",
-      "readme.md",
-      "SECURITY.md",
-      "SUPPORT.md",
-      "contributing.md",
-      "LICENSE-APACHE",
-      "LICENSE-MIT",
-      "walkthrough-setup-tips.md"
+      "accounts.json",
+      "launcher_accounts.json"
     ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/MultiMC/game-cache/*",
+    "category": "Cache",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/MultiMC/cache/*",
+    "category": "Cache",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft",
+    "category": "Cheats",
+    "program": "MultiMC",
+    "files_to_remove": [],
     "directories_to_remove": [
-      ".github"
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
@@ -1690,12 +1118,92 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/.config/libreoffice/**/",
-    "category": "Cache",
-    "program": "LibreOffice",
+    "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft/crash-reports/*",
+    "category": "Crashes",
+    "program": "MultiMC",
     "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft/saves/*",
+    "category": "Game saves",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft/screenshots/*",
+    "category": "Images",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/MultiMC/instances/**/.minecraft/logs/*",
+    "category": "Logs",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/MultiMC/licenses/*",
+    "category": "Documentation",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/MultiMC/logs/*",
+    "category": "Logs",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/MultiMC/*log*",
+    "category": "Logs",
+    "program": "MultiMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/usr/share/doc/",
+    "category": "Documentation",
+    "program": "Nvidia",
+    "files_to_remove": [
+      "nvidia-utils"
+    ],
     "directories_to_remove": [
-      "cache"
+      "nvidia",
+      "nvidia-utils"
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
@@ -1742,9 +1250,331 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/.config/Cursor/",
+    "path": "/usr/share/doc/",
+    "category": "Documentation",
+    "program": "Pcre",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "pcre",
+      "pcre2"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/PolyMC/",
+    "category": "Accounts",
+    "program": "PolyMC",
+    "files_to_remove": [
+      "accounts.json",
+      "launcher_accounts.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/PolyMC/game-cache/*",
+    "category": "Cache",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PolyMC/cache/*",
+    "category": "Cache",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft",
+    "category": "Cheats",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft/crash-reports/*",
+    "category": "Crashes",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft/saves/*",
+    "category": "Game saves",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft/screenshots/*",
+    "category": "Images",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PolyMC/instances/**/.minecraft/logs/*",
     "category": "Logs",
-    "program": "Cursor",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PolyMC/licenses/*",
+    "category": "Documentation",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PolyMC/logs/*",
+    "category": "Logs",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PolyMC/*log*",
+    "category": "Logs",
+    "program": "PolyMC",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/usr/share/doc/",
+    "category": "Documentation",
+    "program": "Powdertoy",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "powdertoy-bin"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/PrismLauncher/",
+    "category": "Accounts",
+    "program": "Prism Launcher",
+    "files_to_remove": [
+      "accounts.json",
+      "launcher_accounts.json"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/PrismLauncher/game-cache/*",
+    "category": "Cache",
+    "program": "Prism Launcher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PrismLauncher/cache/*",
+    "category": "Cache",
+    "program": "Prism Launcher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft",
+    "category": "Cheats",
+    "program": "Prism Launcher",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "meteor-client",
+      "LiquidBounce",
+      "Impact",
+      "Wurst",
+      "Nodus",
+      "Aristois"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/crash-reports/*",
+    "category": "Crashes",
+    "program": "Prism Launcher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/saves/*",
+    "category": "Game saves",
+    "program": "Prism Launcher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/screenshots/*",
+    "category": "Images",
+    "program": "Prism Launcher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/logs/*",
+    "category": "Logs",
+    "program": "Prism Launcher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PrismLauncher/licenses/*",
+    "category": "Documentation",
+    "program": "Prism Launcher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PrismLauncher/logs/*",
+    "category": "Logs",
+    "program": "Prism Launcher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/PrismLauncher/*log*",
+    "category": "Logs",
+    "program": "Prism Launcher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/usr/share/doc/",
+    "category": "Documentation",
+    "program": "Python",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "pycurl",
+      "python-annotated-types",
+      "python-orjson",
+      "python-pathvalidate",
+      "python-pefile",
+      "python-pydantic-core",
+      "python-pyelftools",
+      "python-yaml"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.rustup/toolchains/**/share/",
+    "category": "Documentation",
+    "program": "Rust language",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "doc"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/SIMPLEMINECRAFT/",
+    "category": "Logs",
+    "program": "SimpleMinecraft",
     "files_to_remove": [],
     "directories_to_remove": [
       "logs"
@@ -1755,17 +1585,26 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/.config/Cursor/",
+    "path": "/home/{username}/SIMPLEMINECRAFT/data/cache/",
     "category": "Cache",
-    "program": "Cursor",
+    "program": "SimpleMinecraft",
     "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/SIMPLEMINECRAFT/client/**/",
+    "category": "Logs",
+    "program": "SimpleMinecraft",
+    "files_to_remove": [
+      "minetweaker.log",
+      "NBTEdit.log"
+    ],
     "directories_to_remove": [
-      "cache",
-      "CachedData",
-      "Code Cache",
-      "DawnGraphiteCache",
-      "DawnWebGPUCache",
-      "GPUCache"
+      "logs"
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
@@ -1773,9 +1612,197 @@
     "remove_files": false
   },
   {
-    "path": "/home/{username}/.cursor/extensions/**/",
+    "path": "/home/{username}/.cache/spotify/*.log",
+    "category": "Logs",
+    "program": "Spotify",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/Steam/userdata/*",
+    "category": "Accounts",
+    "program": "Steam",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": false
+  },
+  {
+    "path": "/usr/share/doc/",
     "category": "Documentation",
-    "program": "Cursor",
+    "program": "Steam",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "steam"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/Steam/logs/*",
+    "category": "Logs",
+    "program": "Steam",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/Steam/steamapps/common/Proton Hotfix",
+    "category": "Documentation",
+    "program": "Steam proton",
+    "files_to_remove": [
+      "LICENSE",
+      "LICENSE.OFL"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.cache/thumbnails/normal/*",
+    "category": "Cache",
+    "program": "System",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.cache/thumbnails/large/*",
+    "category": "Cache",
+    "program": "System",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/Trash/",
+    "category": "Trash",
+    "program": "System",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "files",
+      "info"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/TelegramDesktop/*.log",
+    "category": "Logs",
+    "program": "Telegram",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/TelegramDesktop/",
+    "category": "Accounts",
+    "program": "Telegram",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "tdata"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.local/share/TelegramDesktop/log*.txt",
+    "category": "Logs",
+    "program": "Telegram",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/Steam/steamapps/common/Terraria/*.blob",
+    "category": "Crashes",
+    "program": "Terraria",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/Terraria/Worlds/*",
+    "category": "Game saves",
+    "program": "Terraria",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/Terraria/Playes/*",
+    "category": "Game saves",
+    "program": "Terraria",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/Steam/steamapps/common/Terraria/",
+    "category": "Logs",
+    "program": "Terraria",
+    "files_to_remove": [
+      "changelog.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.cache/thunderbird/**/cache2/*.log",
+    "category": "Logs",
+    "program": "Thunderbird",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.vscode-oss/extensions/**/",
+    "category": "Documentation",
+    "program": "VS Code",
     "files_to_remove": [
       "CHANGELOG.md",
       "changelog.md",
@@ -1798,67 +1825,40 @@
     "remove_files": false
   },
   {
+    "path": "/home/{username}/.config/yandex-music/",
+    "category": "Cache",
+    "program": "Yandex Music",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "Cache",
+      "Code Cache",
+      "DawnGraphiteCache",
+      "DawnWebGPUCache",
+      "GPUCache"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/home/{username}/.config/yandex-music/logs/*",
+    "category": "Logs",
+    "program": "Yandex Music",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
     "path": "/home/{username}/.cache/",
     "category": "Cache",
     "program": "Yay",
     "files_to_remove": [],
     "directories_to_remove": [
       "yay"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.jdk/**/",
-    "category": "Documentation",
-    "program": "Jdk",
-    "files_to_remove": [
-      "LICENSE",
-      "README.md"
-    ],
-    "directories_to_remove": [
-      "man"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.local/share/Paradox Interactive/Hearts of Iron IV/",
-    "category": "Logs",
-    "program": "Hearts of Iron IV",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "logs"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.local/share/Paradox Interactive/Hearts of Iron IV/",
-    "category": "Cache",
-    "program": "Hearts of Iron IV",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "cache"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "/home/{username}/.local/share/Paradox Interactive/Hearts of Iron IV/",
-    "category": "Crashes",
-    "program": "Hearts of Iron IV",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "crashes"
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
