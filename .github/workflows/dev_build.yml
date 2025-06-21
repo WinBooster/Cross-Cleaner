@@ -69,7 +69,7 @@ jobs:
           fi
           
           # Сортируем JSON по полю program и сохраняем во временный файл
-          jq 'sort_by(.program)' "$JSON_FILE" > "${JSON_FILE}.tmp"
+          jq 'sort_by(.program | ascii_downcase)' "$JSON_FILE" > "${JSON_FILE}.tmp"
           
           # Проверяем успешность сортировки
           if [ $? -eq 0 ]; then
