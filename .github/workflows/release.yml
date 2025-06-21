@@ -202,7 +202,7 @@ jobs:
         git push || echo "No changes to push"
 
   upload_databases:
-    needs: [sort_json, compress_json]
+    needs: [sort_json]
     runs-on: ubuntu-latest
     name: Archive databases
     permissions: write-all
@@ -223,7 +223,7 @@ jobs:
 
   build_linux:
     runs-on: ubuntu-latest
-    needs: [sort_json, compress_json]
+    needs: [sort_json]
     permissions: write-all
     name: Build Linux
     steps:
@@ -251,7 +251,7 @@ jobs:
 
   build_windows:
     runs-on: windows-latest
-    needs: [sort_json, compress_json]
+    needs: [sort_json]
     permissions: write-all
     name: Build Windows
     steps:
