@@ -100,11 +100,7 @@ jobs:
         echo "# Windows Clearing Programs Catalog" > LIST_WINDOWS.md
         echo "**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> LIST_WINDOWS.md
         
-        # Get all unique classes, filtering out null values
-        classes=$(jq -r '.[].class | select(. != null)' database/windows_database.json)
-        
-        # Process each class
-        for class in $classes; do
+        jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/windows_database.json | while IFS= read -r class; do
           echo -e "## $class\n" >> LIST_WINDOWS.md
           
           # Get programs for this class
@@ -153,22 +149,48 @@ jobs:
         echo "# Linux Clearing Programs Catalog" > LIST_LINUX.md
         echo "**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> LIST_LINUX.md
         
-        # Get all unique classes
-        classes=$(jq -r '.[].class' database/linux_database.json | sort -u)
-        
-        # Process each class
-        for class in $classes; do
-          echo -e "## $class" >> LIST_LINUX.md
-          echo "| № | Program | Categories |" >> LIST_LINUX.md
-          echo "|---|---------|------------|" >> LIST_LINUX.md
+        jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/linux_database.json | while IFS= read -r class; do
+          echo -e "## $class\n" >> LIST_LINUX.md
           
-          i=0
-          while IFS= read -r line; do
-            program=$(echo "$line" | jq -r '.[0].program')
-            categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-            echo "| $((++i)) | $program | $categories |" >> LIST_LINUX.md
-          done < <(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/linux_database.json)
+          # Get programs for this class
+          programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/linux_database.json)
+          
+          if [ -n "$programs" ]; then
+            echo "| № | Program | Categories |" >> LIST_LINUX.md
+            echo "| --- | --- | --- |" >> LIST_LINUX.md
+            
+            i=0
+            while IFS= read -r line; do
+              program=$(echo "$line" | jq -r '.[0].program')
+              categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+              echo "| $((++i)) | $program | $categories |" >> LIST_LINUX.md
+            done <<< "$programs"
+          else
+            echo "*No programs found for this class*" >> LIST_LINUX.md
+          fi
+          
+          echo -e "\n" >> LIST_LINUX.md
         done
+
+        # Handle null class separately if needed
+        if jq -e '.[] | select(.class == null)' database/linux_database.json >/dev/null; then
+          echo -e "## Uncategorized\n" >> LIST_LINUX.md
+          programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/linux_database.json)
+          
+          if [ -n "$programs" ]; then
+            echo "| № | Program | Categories |" >> LIST_LINUX.md
+            echo "| --- | --- | --- |" >> LIST_LINUX.md
+            
+            i=0
+            while IFS= read -r line; do
+              program=$(echo "$line" | jq -r '.[0].program')
+              categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+              echo "| $((++i)) | $program | $categories |" >> LIST_LINUX.md
+            done <<< "$programs"
+          else
+            echo "*No uncategorized programs found*" >> LIST_LINUX.md
+          fi
+        fi
 
           
 
