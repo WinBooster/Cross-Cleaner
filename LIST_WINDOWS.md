@@ -9,12 +9,24 @@
 | 3 | GameGuard | Cache |
 
 
+## Archive
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | 7-Zip | Logs |
+| 2 | Magic TDX | Documentation |
+| 3 | WinRaR | Documentation |
+
+
 ## Audio
 
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | AAF Optimus DCH Audio | Documentation |
-| 2 | SoundWire Server | Documentation |
+| 2 | ASIO4ALL v2 | Documentation |
+| 3 | FL Studio | Documentation |
+| 4 | SoundWire Server | Documentation |
+| 5 | Yandex Music | Cache, Logs |
 
 
 ## Browser
@@ -34,15 +46,16 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | ExecHack | Cheats |
-| 2 | Fatality | Cheats |
-| 3 | INTERIUM | Cheat |
-| 4 | Krnl | Cheats |
-| 5 | OneTap | Cheats |
-| 6 | Pandora | Cheats |
-| 7 | RusherHack | Cheats |
-| 8 | Vape Client | Cheats |
-| 9 | Weave | Cheats |
+| 1 | Cheat Engine | Cheat, Logs |
+| 2 | ExecHack | Cheats |
+| 3 | Fatality | Cheats |
+| 4 | INTERIUM | Cheat |
+| 5 | Krnl | Cheats |
+| 6 | OneTap | Cheats |
+| 7 | Pandora | Cheats |
+| 8 | RusherHack | Cheats |
+| 9 | Vape Client | Cheats |
+| 10 | Weave | Cheats |
 
 
 ## Crypto Wallet
@@ -52,6 +65,41 @@
 | 1 | Bit Monero | Logs |
 | 2 | Exodus Crypto Wallet | Logs |
 | 3 | Wasabi Wallet | Logs |
+
+
+## Developing
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | BoxedAppPacker | Documentation |
+| 2 | Docker | Logs |
+| 3 | DotNet | Logs |
+| 4 | Enigma Virtual Box | Documentation |
+| 5 | Git | Documentation |
+| 6 | GitHub Desktop | Logs |
+| 7 | IDA Pro | Cache |
+| 8 | Inno Setup 6 | Documentation, Logs |
+| 9 | Java | Documentation |
+| 10 | MCCreator | Logs |
+| 11 | MinGW | Documentation |
+| 12 | Node JS | Cache, Documentation, Logs |
+| 13 | Postman | Logs |
+| 14 | Python | Documentation |
+| 15 | Recaf | Logs |
+| 16 | Rust Language | Documentation |
+| 17 | Unity Hub | Documentation |
+| 18 | Windows Kits | Documentation |
+| 19 | Xamarin | Logs |
+
+
+## Driver
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | IObit Driver Booster | Logs |
+| 2 | LGHUB | Documentation |
+| 3 | NVIDIA Corporation | Documentation, Logs |
+| 4 | VulcanRT | Documentation |
 
 
 ## Emulator
@@ -102,9 +150,11 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | Discord | Logs |
-| 2 | Guilded | Logs |
-| 3 | Signal | Cache, Logs |
-| 4 | Telegram | Accounts, Cache, Logs |
+| 2 | Element | Logs |
+| 3 | Guilded | Logs |
+| 4 | Signal | Cache, Logs |
+| 5 | Telegram | Accounts, Cache, Logs |
+| 6 | Thunderbird | Crashes |
 
 
 ## Minecraft Launcher
@@ -129,7 +179,25 @@
 | 16 | Tecknix Client | Accounts, Cache, Crashes, Documentation, Game saves, Images, Logs |
 
 
-## Password manager
+## Optimization
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | HiAlgo Boost | Documentation |
+| 2 | Mem Reduct | Documentation |
+| 3 | ССleaner | Logs |
+
+
+## Packet Manager
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Chocolatey | Documentation, Logs |
+| 2 | Scoop | Cache, Documentation |
+| 3 | WinGet | Documentation |
+
+
+## Password Manager
 
 | № | Program | Categories |
 | --- | --- | --- |
@@ -137,16 +205,63 @@
 | 2 | KeePass 2 | Logs |
 
 
+## Security
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | GnuPG | Documentation |
+| 2 | Gpg4win | Documentation |
+| 3 | I2P | Documentation, Logs |
+| 4 | IObit Malware Fighter | Logs |
+| 5 | NetLimiter | Logs |
+| 6 | Panda Security | Logs |
+| 7 | Process Hacker 2 | Documentation |
+| 8 | Process Lasso | Logs |
+| 9 | Sandboxie+ | Documentation |
+| 10 | SystemInformer | Documentation |
+| 11 | VirtualBox | Documentation, Logs |
+| 12 | Zapret | Logs |
+
+
+## System
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | OneDrive | Cache |
+| 2 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
+| 3 | Windows Defender | Documentation |
+
+
 ## Text
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | LazyVim | Documentation |
-| 2 | LibreOffice | Documentation, Logs |
-| 3 | NeoVim | Documentation, Logs |
-| 4 | Notepad++ | Documentation |
-| 5 | Sublime Text | Logs |
-| 6 | VS Code | Browser cookies, Documentation, Logs |
+| 1 | Cursor | Cache, Documentation, Logs |
+| 2 | DeepL | Cache, Logs |
+| 3 | JetBrains | Documentation, Logs |
+| 4 | LM Studio | Logs |
+| 5 | LazyVim | Documentation |
+| 6 | LibreOffice | Documentation, Logs |
+| 7 | NeoVim | Documentation, Logs |
+| 8 | Notepad++ | Documentation |
+| 9 | Sublime Text | Logs |
+| 10 | VS Code | Browser cookies, Documentation, Logs |
+
+
+## Torrent
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Tribler | Logs |
+| 2 | qBittorrent | Logs |
+
+
+## Utility
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | MiniBin | Logs |
+| 2 | PowerToys | Documentation |
 
 
 ## VPN
@@ -181,67 +296,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | 4uKey for Android | Logs |
-| 2 | 7-Zip | Logs |
-| 3 | ASIO4ALL v2 | Documentation |
-| 4 | Adobe | Logs |
-| 5 | BoxedAppPacker | Documentation |
-| 6 | Cheat Engine | Logs |
-| 7 | Chocolatey | Documentation, Logs |
-| 8 | Cursor | Cache, Documentation, Logs |
-| 9 | DeepL | Cache, Logs |
-| 10 | Docker | Logs |
-| 11 | DotNet | Logs |
-| 12 | Electron App's | Documentation, Logs |
-| 13 | Element | Logs |
-| 14 | Enigma Virtual Box | Documentation |
-| 15 | FL Studio | Documentation |
-| 16 | Git | Documentation |
-| 17 | GitHub Desktop | Logs |
-| 18 | GnuPG | Documentation |
-| 19 | Gpg4win | Documentation |
-| 20 | HiAlgo Boost | Documentation |
-| 21 | I2P | Documentation, Logs |
-| 22 | IDA Pro | Cache |
-| 23 | IObit Driver Booster | Logs |
-| 24 | IObit Malware Fighter | Logs |
-| 25 | ImgBurn | Documentation, Logs |
-| 26 | Inno Setup 6 | Documentation, Logs |
-| 27 | Java | Documentation |
-| 28 | JetBrains | Documentation, Logs |
-| 29 | LGHUB | Documentation |
-| 30 | LM Studio | Logs |
-| 31 | MCCreator | Logs |
-| 32 | Magic TDX | Documentation |
-| 33 | Mem Reduct | Documentation |
-| 34 | MinGW | Documentation |
-| 35 | MiniBin | Logs |
-| 36 | Mozilla Maintenance Service | Logs |
-| 37 | NVIDIA Corporation | Documentation, Logs |
-| 38 | NetLimiter | Logs |
-| 39 | Node JS | Cache, Documentation, Logs |
-| 40 | OneDrive | Cache |
-| 41 | Panda Security | Logs |
-| 42 | Postman | Logs |
-| 43 | PowerToys | Documentation |
-| 44 | Process Hacker 2 | Documentation |
-| 45 | Process Lasso | Logs |
-| 46 | Python | Documentation |
-| 47 | Recaf | Logs |
-| 48 | Rust Language | Documentation |
-| 49 | Sandboxie+ | Documentation |
-| 50 | Scoop | Cache, Documentation |
-| 51 | SystemInformer | Documentation |
-| 52 | Thunderbird | Crashes |
-| 53 | Tribler | Logs |
-| 54 | Unity Hub | Logs |
-| 55 | VirtualBox | Documentation, Logs |
-| 56 | VulcanRT | Documentation |
-| 57 | WinGet | Documentation |
-| 58 | WinRaR | Documentation |
-| 59 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
-| 60 | Windows Defender | Documentation |
-| 61 | Windows Kits | Documentation |
-| 62 | Xamarin | Logs |
-| 63 | Zapret | Logs |
-| 64 | qBittorrent | Logs |
-| 65 | ССleaner | Logs |
+| 2 | Adobe | Documentation |
+| 3 | Electron App's | Documentation, Logs |
+| 4 | ImgBurn | Documentation, Logs |
+| 5 | Mozilla Maintenance Service | Logs |

@@ -3,7 +3,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\1Password\\logs\\setup\\*.log",
     "category": "Logs",
     "program": "1Password",
-    "class": "Password manager",
+    "class": "Password Manager",
     "remove_files": true
   },
   {
@@ -26,6 +26,7 @@
   },
   {
     "path": "{drive}Program Files\\7-Zip\\*.txt",
+    "class": "Archive",
     "category": "Logs",
     "program": "7-Zip",
     "remove_files": true
@@ -41,7 +42,7 @@
   },
   {
     "path": "{drive}Program Files\\Adobe\\**\\Legal\\**\\*.html",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Adobe",
     "remove_files": true
   },
@@ -138,6 +139,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\ASIO4ALL v2/",
+    "class": "Audio",
     "category": "Documentation",
     "program": "ASIO4ALL v2",
     "files_to_remove": [
@@ -412,6 +414,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\BoxedAppPacker/",
+    "class": "Developing",
     "category": "Documentation",
     "program": "BoxedAppPacker",
     "files_to_remove": [
@@ -490,12 +493,23 @@
   },
   {
     "path": "{drive}Program Files\\Cheat Engine\\*.txt",
+    "class": "Cheat",
     "category": "Logs",
     "program": "Cheat Engine",
     "remove_files": true
   },
   {
+    "path": "{drive}Program Files\\",
+    "class": "Cheat",
+    "category": "Cheat",
+    "program": "Cheat Engine",
+    "directories_to_remove": [
+      "Cheat Engine"
+    ]
+  },
+  {
     "path": "{drive}ProgramData\\chocolatey",
+    "class": "Packet Manager",
     "category": "Logs",
     "program": "Chocolatey",
     "directories_to_remove": [
@@ -696,6 +710,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.cursor\\extensions\\**/",
+    "class": "Text",
     "category": "Documentation",
     "program": "Cursor",
     "files_to_remove": [
@@ -732,12 +747,14 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\DeepL_SE\\cache\\*",
+    "class": "Text",
     "category": "Cache",
     "program": "DeepL",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\DeepL_SE\\logs\\*",
+    "class": "Text",
     "category": "Logs",
     "program": "DeepL",
     "remove_files": true
@@ -760,12 +777,14 @@
   },
   {
     "path": "{drive}ProgramData\\DockerDesktop\\*.txt",
+    "class": "Developing",
     "category": "Logs",
     "program": "Docker",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Docker\\log\\**\\*",
+    "class": "Developing",
     "category": "Logs",
     "program": "Docker",
     "remove_directories": true,
@@ -773,6 +792,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Docker\\*.txt",
+    "class": "Developing",
     "category": "Logs",
     "program": "Docker",
     "remove_files": true
@@ -786,24 +806,28 @@
   },
   {
     "path": "{drive}Program Files\\dotnet\\*.txt",
+    "class": "Developing",
     "category": "Logs",
     "program": "DotNet",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files (x86)\\dotnet\\*.txt",
+    "class": "Developing",
     "category": "Logs",
     "program": "DotNet",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\.dotnet\\TelemetryStorageService\\*",
+    "class": "Developing",
     "category": "Logs",
     "program": "DotNet",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files\\dotnet\\*.txt",
+    "class": "Developing",
     "category": "Logs",
     "program": "DotNet",
     "remove_files": true
@@ -881,12 +905,14 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\element-desktop\\*.log",
+    "class": "Messanger",
     "category": "Logs",
     "program": "Element",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files (x86)\\Enigma Virtual Box/",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Enigma Virtual Box",
     "files_to_remove": [
@@ -980,6 +1006,7 @@
   },
   {
     "path": "{drive}Program Files\\Image-Line\\**",
+    "class": "Audio",
     "category": "Documentation",
     "program": "FL Studio",
     "files_to_remove": [
@@ -988,6 +1015,7 @@
   },
   {
     "path": "{drive}Program Files\\Image-Line\\Shared\\Start\\**",
+    "class": "Audio",
     "category": "Documentation",
     "program": "FL Studio",
     "files_to_remove": [
@@ -1013,6 +1041,7 @@
   },
   {
     "path": "{drive}Program Files\\Git/",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Git",
     "files_to_remove": [
@@ -1022,24 +1051,28 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\GitHub Desktop\\*.log",
+    "class": "Developing",
     "category": "Logs",
     "program": "GitHub Desktop",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\GitHub Desktop\\logs\\*.log",
+    "class": "Developing",
     "category": "Logs",
     "program": "GitHub Desktop",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\GitHubDesktop\\**\\*.log",
+    "class": "Developing",
     "category": "Logs",
     "program": "GitHub Desktop",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files (x86)\\GnuPG/",
+    "class": "Security",
     "category": "Documentation",
     "program": "GnuPG",
     "files_to_remove": [
@@ -1091,6 +1124,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Gpg4win/",
+    "class": "Security",
     "category": "Documentation",
     "program": "Gpg4win",
     "files_to_remove": [
@@ -1264,6 +1298,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\HiAlgo\\Plugins\\BOOST/",
+    "class": "Optimization",
     "category": "Documentation",
     "program": "HiAlgo Boost",
     "files_to_remove": [
@@ -1274,6 +1309,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy\\addressbook/",
+    "class": "Security",
     "category": "Logs",
     "program": "I2P",
     "files_to_remove": [
@@ -1282,6 +1318,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy/",
+    "class": "Security",
     "category": "Logs",
     "program": "I2P",
     "files_to_remove": [
@@ -1294,6 +1331,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy/",
+    "class": "Security",
     "category": "Documentation",
     "program": "I2P",
     "files_to_remove": [],
@@ -1303,6 +1341,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Hex-Rays\\IDA Pro\\*.lst",
+    "class": "Developing",
     "category": "Cache",
     "program": "IDA Pro",
     "remove_files": true
@@ -1398,6 +1437,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Inno Setup 6/",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Inno Setup 6",
     "files_to_remove": [
@@ -1408,6 +1448,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Inno Setup 6\\Examples\\*.txt",
+    "class": "Developing",
     "category": "Logs",
     "program": "Inno Setup 6",
     "remove_files": true
@@ -1424,6 +1465,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\IObit\\Driver Booster/",
+    "class": "Driver",
     "category": "Logs",
     "program": "IObit Driver Booster",
     "files_to_remove": [],
@@ -1445,12 +1487,14 @@
   },
   {
     "path": "{drive}ProgramData\\IObit\\IObit Malware Fighter\\*.log",
+    "class": "Security",
     "category": "Logs",
     "program": "IObit Malware Fighter",
     "remove_files": true
   },
   {
     "path": "{drive}ProgramData\\IObit\\IObit Malware Fighter\\Homepage Advisor\\*.log",
+    "class": "Security",
     "category": "Logs",
     "program": "IObit Malware Fighter",
     "remove_files": true
@@ -1474,6 +1518,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.jdks\\**",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1483,6 +1528,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.jdks\\**",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1506,6 +1552,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.jdks\\**",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "directories_to_remove": [
@@ -1515,6 +1562,7 @@
   },
   {
     "path": "{drive}Program Files\\Java\\**",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1538,6 +1586,7 @@
   },
   {
     "path": "{drive}Program Files\\Eclipse Adoptium\\**",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1561,6 +1610,7 @@
   },
   {
     "path": "{drive}Program Files\\Android\\jdk\\**\\**",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1584,6 +1634,7 @@
   },
   {
     "path": "{drive}Program Files\\Android\\jdk\\**\\**",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1593,6 +1644,7 @@
   },
   {
     "path": "{drive}Program Files\\Zulu\\**",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1616,7 +1668,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.lunarclient\\jre\\**\\**",
-    "class": "Minecraft Launcher",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1640,7 +1692,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixclient\\runtimes\\**",
-    "class": "Minecraft Launcher",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1664,7 +1716,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\**",
-    "class": "Minecraft Launcher",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1688,7 +1740,7 @@
   },
   {
     "path": "{drive}\\Program Files (x86)\\GribLand\\runtime\\**",
-    "class": "Minecraft Launcher",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Java",
     "files_to_remove": [
@@ -1712,6 +1764,7 @@
   },
   {
     "path": "{drive}Program Files\\JetBrains\\**",
+    "class": "Text",
     "category": "Documentation",
     "program": "JetBrains",
     "files_to_remove": [
@@ -1724,6 +1777,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\JetBrains\\**",
+    "class": "Text",
     "category": "Logs",
     "program": "JetBrains",
     "files_to_remove": [],
@@ -1734,7 +1788,7 @@
   {
     "path": "{drive}Program Files\\KeePass Password Safe 2\\*.txt",
     "category": "Logs",
-    "class": "Password manager",
+    "class": "Password Manager",
     "program": "KeePass 2",
     "remove_files": true
   },
@@ -1764,6 +1818,7 @@
   },
   {
     "path": "{drive}Program Files\\LGHUB/",
+    "class": "Driver",
     "category": "Documentation",
     "program": "LGHUB",
     "files_to_remove": [
@@ -1826,6 +1881,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\LM Studio/",
+    "class": "Text",
     "category": "Logs",
     "program": "LM Studio",
     "files_to_remove": [],
@@ -1974,6 +2030,7 @@
   },
   {
     "path": "{drive}Program Files\\Magic TXD/",
+    "class": "Archive",
     "category": "Documentation",
     "program": "Magic TDX",
     "directories_to_remove": [
@@ -1997,6 +2054,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.mcreator\\logs\\*.log",
+    "class": "Developing",
     "category": "Logs",
     "program": "MCCreator",
     "remove_files": true
@@ -2067,6 +2125,7 @@
   },
   {
     "path": "{drive}Program Files\\Mem Reduct/",
+    "class": "Optimization",
     "category": "Documentation",
     "program": "Mem Reduct",
     "files_to_remove": [
@@ -2140,6 +2199,7 @@
   },
   {
     "path": "{drive}ProgramData\\mingw64\\mingw64",
+    "class": "Developing",
     "category": "Documentation",
     "program": "MinGW",
     "directories_to_remove": [
@@ -2148,6 +2208,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\MiniBin\\*.txt",
+    "class": "Utility",
     "category": "Logs",
     "program": "MiniBin",
     "remove_files": true
@@ -2435,12 +2496,14 @@
   },
   {
     "path": "{drive}ProgramData\\Locktime\\NetLimiter\\**\\logs\\*.log",
+    "class": "Security",
     "category": "Logs",
     "program": "NetLimiter",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\npm-cache/",
+    "class": "Developing",
     "category": "Logs",
     "program": "Node JS",
     "directories_to_remove": [
@@ -2449,6 +2512,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\npm-cache/",
+    "class": "Developing",
     "category": "Cache",
     "program": "Node JS",
     "directories_to_remove": [
@@ -2457,6 +2521,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\node_modules",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Node JS",
     "files_to_remove": [
@@ -2471,6 +2536,7 @@
   },
   {
     "path": "{drive}Program Files\\nodejs\\node_modules\\npm/",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Node JS",
     "files_to_remove": [
@@ -2510,6 +2576,7 @@
   },
   {
     "path": "{drive}Program Files\\NVIDIA Corporation/",
+    "class": "Driver",
     "category": "Documentation",
     "program": "NVIDIA Corporation",
     "files_to_remove": [
@@ -2518,6 +2585,7 @@
   },
   {
     "path": "{drive}Program Files\\NVIDIA Corporation/",
+    "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA Corporation",
     "files_to_remove": [
@@ -2526,6 +2594,7 @@
   },
   {
     "path": "{drive}Program Files\\NVIDIA Corporation\\NVSMI/",
+    "class": "Driver",
     "category": "Documentation",
     "program": "NVIDIA Corporation",
     "files_to_remove": [
@@ -2534,6 +2603,7 @@
   },
   {
     "path": "{drive}Program Files\\NVIDIA Corporation\\nvStereoInstaller/",
+    "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA Corporation",
     "files_to_remove": [
@@ -2543,6 +2613,7 @@
   },
   {
     "path": "{drive}Program Files\\NVIDIA Corporation\\NvFBCPlugin/",
+    "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA Corporation",
     "files_to_remove": [
@@ -2551,24 +2622,28 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\NVIDIA Corporation\\GfnRuntimeSdk\\*.log",
+    "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA Corporation",
     "remove_files": true
   },
   {
     "path": "{drive}ProgramData\\NVIDIA Corporation\\nvstapisvr\\*",
+    "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA Corporation",
     "remove_files": true
   },
   {
     "path": "{drive}ProgramData\\NVIDIA Corporation\\nvStereoInstaller\\*",
+    "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA Corporation",
     "remove_files": true
   },
   {
     "path": "{drive}ProgramData\\NVIDIA Corporation\\*.log",
+    "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA Corporation",
     "remove_files": true
@@ -2589,6 +2664,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\OneDrive\\cache\\qmlcache\\*.qmlc",
+    "class": "System",
     "category": "Cache",
     "program": "OneDrive",
     "remove_files": true
@@ -2668,6 +2744,7 @@
   },
   {
     "path": "{drive}ProgramData\\Panda Security\\PSLogs\\*.log",
+    "class": "Security",
     "category": "Logs",
     "program": "Panda Security",
     "remove_files": true
@@ -2841,12 +2918,14 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PostmanAgent\\logs\\*.log",
+    "class": "Developing",
     "category": "Logs",
     "program": "Postman",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files\\PowerToys/",
+    "class": "Utility",
     "category": "Documentation",
     "program": "PowerToys",
     "files_to_remove": [
@@ -3002,6 +3081,7 @@
   },
   {
     "path": "{drive}Program Files\\Process Hacker 2/",
+    "class": "Security",
     "category": "Documentation",
     "program": "Process Hacker 2",
     "files_to_remove": [
@@ -3014,6 +3094,7 @@
   },
   {
     "path": "{drive}ProgramData\\ProcessLasso/",
+    "class": "Security",
     "category": "Logs",
     "program": "Process Lasso",
     "directories_to_remove": [
@@ -3022,6 +3103,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Python\\**",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Python",
     "directories_to_remove": [
@@ -3030,6 +3112,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Python\\**\\share",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Python",
     "directories_to_remove": [
@@ -3038,12 +3121,14 @@
   },
   {
     "path": "{drive}Program Files\\qBittorrent\\*.pdb",
+    "class": "Torrent",
     "category": "Logs",
     "program": "qBittorrent",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files\\qBittorrent\\logs\\*.log",
+    "class": "Torrent",
     "category": "Logs",
     "program": "qBittorrent",
     "remove_files": true
@@ -3103,6 +3188,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Recaf\\*.log",
+    "class": "Developing",
     "category": "Logs",
     "program": "Recaf",
     "remove_files": true
@@ -3143,6 +3229,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.rustup\\toolchains\\**\\share",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Rust Language",
     "directories_to_remove": [
@@ -3151,6 +3238,7 @@
   },
   {
     "path": "{drive}Program Files\\Sandboxie-Plus/",
+    "class": "Security",
     "category": "Documentation",
     "program": "Sandboxie+",
     "files_to_remove": [
@@ -3161,6 +3249,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\scoop",
+    "class": "Packet Manager",
     "category": "Cache",
     "program": "Scoop",
     "directories_to_remove": [
@@ -3169,6 +3258,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\scoop\\apps\\**\\**",
+    "class": "Packet Manager",
     "category": "Documentation",
     "program": "Scoop",
     "files_to_remove": [
@@ -3252,6 +3342,7 @@
   },
   {
     "path": "{drive}Program Files\\SystemInformer/",
+    "class": "Security",
     "category": "Documentation",
     "program": "SystemInformer",
     "files_to_remove": [
@@ -3424,6 +3515,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\thunderbird\\Profiles\\**/",
+    "class": "Messanger",
     "category": "Crashes",
     "program": "Thunderbird",
     "directories_to_remove": [
@@ -3447,13 +3539,15 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.Tribler\\*.log",
+    "class": "Torrent",
     "category": "Logs",
     "program": "Tribler",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files\\Unity Hub\\*.html",
-    "category": "Logs",
+    "class": "Developing",
+    "category": "Documentation",
     "program": "Unity Hub",
     "remove_files": true
   },
@@ -3484,18 +3578,21 @@
   },
   {
     "path": "{drive}Users\\{username}\\VirtualBox VMs\\**\\Logs\\*.log",
+    "class": "Security",
     "category": "Logs",
     "program": "VirtualBox",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files\\Oracle\\VirtualBox\\*.rtf",
+    "class": "Security",
     "category": "Logs",
     "program": "VirtualBox",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files\\Oracle\\VirtualBox/",
+    "class": "Security",
     "category": "Documentation",
     "program": "VirtualBox",
     "directories_to_remove": [
@@ -3604,6 +3701,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\VulkanRT\\**",
+    "class": "Driver",
     "category": "Documentation",
     "program": "VulcanRT",
     "files_to_remove": [
@@ -3636,6 +3734,7 @@
   },
   {
     "path": "{drive}Windows\\System32\\Licenses/*",
+    "class": "System",
     "category": "Documentation",
     "program": "Windows",
     "remove_directories": true,
@@ -3643,6 +3742,7 @@
   },
   {
     "path": "{drive}Windows\\System32\\LogFiles/*",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_directories": true,
@@ -3650,12 +3750,14 @@
   },
   {
     "path": "{drive}Windows\\System32\\Logs/*",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\CrashDumps\\*",
+    "class": "System",
     "category": "Crashes",
     "program": "Windows",
     "remove_directories": true,
@@ -3663,6 +3765,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\Downloads\\*",
+    "class": "System",
     "category": "Downloads",
     "program": "Windows",
     "remove_directories": true,
@@ -3670,6 +3773,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\ConnectedDevicesPlatform\\*",
+    "class": "System",
     "category": "LastActivity",
     "program": "Windows",
     "remove_directories": true,
@@ -3677,6 +3781,7 @@
   },
   {
     "path": "{drive}Windows\\debug\\*",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_directories": true,
@@ -3684,42 +3789,49 @@
   },
   {
     "path": "{drive}Windows\\Prefetch\\*",
+    "class": "System",
     "category": "LastActivity",
     "program": "Windows",
     "remove_files": true
   },
   {
     "path": "{drive}Windows\\Minidump\\*",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_files": true
   },
   {
     "path": "{drive}Windows\\security\\logs\\*.log",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_files": true
   },
   {
     "path": "{drive}Windows\\security\\database\\*.log",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_files": true
   },
   {
     "path": "{drive}Windows\\Logs\\**\\*",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_files": true
   },
   {
     "path": "{drive}Windows\\*.log",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_files": true
   },
   {
     "path": "{drive}Temp\\*",
+    "class": "System",
     "category": "Cache",
     "program": "Windows",
     "remove_directories": true,
@@ -3727,12 +3839,14 @@
   },
   {
     "path": "{drive}Windows\\Panther/",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_all_in_dir": true
   },
   {
     "path": "{drive}Windows\\Temp\\*",
+    "class": "System",
     "category": "Cache",
     "program": "Windows",
     "remove_directories": true,
@@ -3740,6 +3854,7 @@
   },
   {
     "path": "{drive}Windows\\Logs\\*",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_directories": true,
@@ -3747,6 +3862,7 @@
   },
   {
     "path": "{drive}Windows\\Logs\\WindowsUpdate\\*",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_directories": true,
@@ -3754,6 +3870,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Temp\\*",
+    "class": "System",
     "category": "Cache",
     "program": "Windows",
     "remove_directories": true,
@@ -3761,6 +3878,7 @@
   },
   {
     "path": "{drive}ProgramData\\USOShared/",
+    "class": "System",
     "category": "Logs",
     "program": "Windows",
     "directories_to_remove": [
@@ -3769,6 +3887,7 @@
   },
   {
     "path": "{drive}Program Files\\Windows Defender/",
+    "class": "System",
     "category": "Documentation",
     "program": "Windows Defender",
     "files_to_remove": [
@@ -3777,6 +3896,7 @@
   },
   {
     "path": "{drive}Program Files\\Windows Defender Advanced Threat Protection/",
+    "class": "System",
     "category": "Documentation",
     "program": "Windows Defender",
     "files_to_remove": [
@@ -3786,6 +3906,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Windows Kits\\**",
+    "class": "Developing",
     "category": "Documentation",
     "program": "Windows Kits",
     "directories_to_remove": [
@@ -3801,6 +3922,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
+    "class": "Packet Manager",
     "category": "Documentation",
     "program": "WinGet",
     "files_to_remove": [
@@ -3816,6 +3938,7 @@
   },
   {
     "path": "{drive}Program Files\\WinRAR/",
+    "class": "Archive",
     "category": "Documentation",
     "program": "WinRaR",
     "files_to_remove": [
@@ -3829,12 +3952,46 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Xamarin\\Logs\\**\\*.log",
+    "class": "Developing",
     "category": "Logs",
     "program": "Xamarin",
     "remove_files": true
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Packages\\*.Yandex.Music_*",
+    "category": "Cache",
+    "program": "Yandex Music",
+    "class": "Audio",
+    "directories_to_remove": [
+      "LocalCache",
+      "TempState"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\YandexMusic",
+    "category": "Logs",
+    "program": "Yandex Music",
+    "class": "Audio",
+    "directories_to_remove": [
+      "logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\YandexMusic",
+    "category": "Cache",
+    "program": "Yandex Music",
+    "class": "Audio",
+    "directories_to_remove": [
+      "Cache",
+      "Code Cache",
+      "DawnGraphiteCache",
+      "DawnWebGPUCache",
+      "GPUCache"
+    ]
+  },
+  {
     "path": "{drive}ProgramData\\Zapret",
+    "class": "Security",
     "category": "Logs",
     "program": "Zapret",
     "files_to_remove": [
@@ -3844,6 +4001,7 @@
   },
   {
     "path": "{drive}Program Files\\CCleaner/",
+    "class": "Optimization",
     "category": "Logs",
     "program": "ССleaner",
     "files_to_remove": [],
