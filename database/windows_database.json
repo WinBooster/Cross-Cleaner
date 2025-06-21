@@ -743,14 +743,14 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\DeepL_SE\\cache\\*",
-	"class": "Text",
+    "class": "Text",
     "category": "Cache",
     "program": "DeepL",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\DeepL_SE\\logs\\*",
-	"class": "Text",
+    "class": "Text",
     "category": "Logs",
     "program": "DeepL",
     "remove_files": true
@@ -1302,7 +1302,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy\\addressbook/",
-	"class": "Security",
+    "class": "Security",
     "category": "Logs",
     "program": "I2P",
     "files_to_remove": [
@@ -1795,7 +1795,7 @@
   },
   {
     "path": "{drive}Program Files\\LGHUB/",
-	"class": "Driver",
+    "class": "Driver",
     "category": "Documentation",
     "program": "LGHUB",
     "files_to_remove": [
@@ -2174,7 +2174,7 @@
   },
   {
     "path": "{drive}ProgramData\\mingw64\\mingw64",
-	"class": "Developing",
+    "class": "Developing",
     "category": "Documentation",
     "program": "MinGW",
     "directories_to_remove": [
