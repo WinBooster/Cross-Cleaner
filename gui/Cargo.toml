@@ -22,6 +22,12 @@ winreg = "0.55.0"
 [target.'cfg(windows)'.build-dependencies]
 winres = "0.1.12"
 
+[package.metadata.winres]
+FileDescription = "Garbage remover"
+OriginalFilename = "Cross Cleaner.exe"
+LegalCopyright = "Copyright Monolith Development © 2025"
+ProductName = "Cross Cleaner"
+
 [profile.release] # optimize file size
 lto = true
 codegen-units = 1
