@@ -1,5 +1,6 @@
 # Windows Clearing Programs Catalog
-**Total programs in database:** 158\n
+**Total programs in database:** 158
+
 **Total pathes in database:** 371
 ## AntiCheat
 
