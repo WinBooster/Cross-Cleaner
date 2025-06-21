@@ -1,5 +1,5 @@
 # Linux Clearing Programs Catalog
-**Last updated:** 2025-06-21 15:40:47 UTC
+**Last updated:** 2025-06-21 15:43:13 UTC
 ## Audio
 
 | № | Program | Categories |
@@ -90,7 +90,7 @@
 | 9 | SimpleMinecraft | Cache, Logs |
 
 
-## Packet manager
+## Packet Manager
 
 | № | Program | Categories |
 | --- | --- | --- |

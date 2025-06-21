@@ -1,5 +1,5 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 15:40:46 UTC
+**Last updated:** 2025-06-21 15:43:12 UTC
 ## AntiCheat
 
 | № | Program | Categories |
@@ -161,7 +161,7 @@
 | 16 | Tecknix Client | Accounts, Cache, Crashes, Documentation, Game saves, Images, Logs |
 
 
-## Packet manager
+## Packet Manager
 
 | № | Program | Categories |
 | --- | --- | --- |
@@ -170,7 +170,7 @@
 | 3 | WinGet | Documentation |
 
 
-## Password manager
+## Password Manager
 
 | № | Program | Categories |
 | --- | --- | --- |
