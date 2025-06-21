@@ -102,7 +102,6 @@ jobs:
         echo "**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> LIST_WINDOWS.md
         
         # Categories table with better formatting
-        echo "## Program Categories\n" >> LIST_WINDOWS.md
         echo "| № | Program | Categories |" >> LIST_WINDOWS.md
         echo "|---|---------|------------|" >> LIST_WINDOWS.md
         i=0
