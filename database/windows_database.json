@@ -1,5 +1,35 @@
 [
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\Edge\\User Data\\Default\\Network",
+    "category": "Browser cookies",
+    "program": "Edge",
+    "files_to_remove": [
+      "Cookies",
+      "Cookies-journal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\Edge\\User Data\\Default",
+    "category": "LastActivity",
+    "program": "Edge",
+    "files_to_remove": [
+      "History",
+      "History-journal",
+      "Favicons",
+      "Favicons-journal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
     "category": "Documentation",
     "program": "WinGet",
@@ -535,12 +565,42 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**",
+    "category": "LastActivity",
+    "program": "Mozilla Firefox",
+    "files_to_remove": [
+      "places.sqlite",
+      "places.sqlite-shm",
+      "places.sqlite-wal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**",
     "category": "Browser cookies",
     "program": "Mozilla Firefox",
     "files_to_remove": [
       "cookies.sqlite",
       "cookies.sqlite-shm",
       "cookies.sqlite-wal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\librewolf\\Profiles\\**",
+    "category": "LastActivity",
+    "program": "LibreWolf",
+    "files_to_remove": [
+      "places.sqlite",
+      "places.sqlite-shm",
+      "places.sqlite-wal"
     ],
     "directories_to_remove": [],
     "remove_all_in_dir": false,

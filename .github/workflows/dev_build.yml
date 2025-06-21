@@ -135,6 +135,9 @@ jobs:
           - **Rust Language** - Added documentation clearing
           - **Python** - Added documentation clearing
           - **WinGet** - Added documentation clearing
+          - **FireFox** - Added LastActivity clearing
+          - **LibreWorlf** - Added LastActivity clearing
+          - **Edge** - Added LastActivity and Browser Cookies clearing
       
           ### 🛠️ Technical Updates
           - **GUI** - Now has argument for custom database, now has dynamic gui height
