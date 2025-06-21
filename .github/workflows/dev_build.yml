@@ -100,30 +100,25 @@ jobs:
         echo "# Windows Clearing Programs Catalog" > LIST_WINDOWS.md
         echo "**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> LIST_WINDOWS.md
         
-        # Получаем уникальные классы как массив JSON
-        classes=$(jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/windows_database.json | jq -R -s -c 'split("\n")[:-1]')
+        # Get all unique classes, filtering out null values
+        classes=$(jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/windows_database.json | jq -R -s -c 'split(" ")[:-1]')
         
-        # Обрабатываем каждый класс
-        for class in $(echo "$classes" | jq -r '.[]'); do
-          # Экранируем кавычки для использования в jq фильтре
-          escaped_class=$(echo "$class" | jq -R -s '.')
-          
+        # Process each class
+        for class in $classes; do
           echo -e "## $class\n" >> LIST_WINDOWS.md
           
-          # Получаем программы для этого класса
-          programs=$(jq -c --argjson class "$escaped_class" 'group_by(.program)[] | select(.[0].program != null and (.[0].class == $class))' database/windows_database.json)
+          # Get programs for this class
+          programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/windows_database.json)
           
           if [ -n "$programs" ]; then
-            echo "| № | Program | Categories | File Patterns | Cleanup Action |" >> LIST_WINDOWS.md
-            echo "| --- | --- | --- | --- | --- |" >> LIST_WINDOWS.md
+            echo "| № | Program | Categories |" >> LIST_WINDOWS.md
+            echo "| --- | --- | --- |" >> LIST_WINDOWS.md
             
             i=0
             while IFS= read -r line; do
               program=$(echo "$line" | jq -r '.[0].program')
               categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-              paths=$(echo "$line" | jq -r 'map(.path) | unique | join("<br>")')
-              actions=$(echo "$line" | jq -r 'map(if .remove_files then "Remove files" elif .remove_registry then "Remove registry" else "Unknown" end) | unique | join(", ")')
-              echo "| $((++i)) | $program | $categories | $paths | $actions |" >> LIST_WINDOWS.md
+              echo "| $((++i)) | $program | $categories |" >> LIST_WINDOWS.md
             done <<< "$programs"
           else
             echo "*No programs found for this class*" >> LIST_WINDOWS.md
@@ -132,22 +127,20 @@ jobs:
           echo -e "\n" >> LIST_WINDOWS.md
         done
 
-        # Обработка null класса
+        # Handle null class separately if needed
         if jq -e '.[] | select(.class == null)' database/windows_database.json >/dev/null; then
           echo -e "## Uncategorized\n" >> LIST_WINDOWS.md
           programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/windows_database.json)
           
           if [ -n "$programs" ]; then
-            echo "| № | Program | Categories | File Patterns | Cleanup Action |" >> LIST_WINDOWS.md
-            echo "| --- | --- | --- | --- | --- |" >> LIST_WINDOWS.md
+            echo "| № | Program | Categories |" >> LIST_WINDOWS.md
+            echo "| --- | --- | --- |" >> LIST_WINDOWS.md
             
             i=0
             while IFS= read -r line; do
               program=$(echo "$line" | jq -r '.[0].program')
               categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-              paths=$(echo "$line" | jq -r 'map(.path) | unique | join("<br>")')
-              actions=$(echo "$line" | jq -r 'map(if .remove_files then "Remove files" elif .remove_registry then "Remove registry" else "Unknown" end) | unique | join(", ")')
-              echo "| $((++i)) | $program | $categories | $paths | $actions |" >> LIST_WINDOWS.md
+              echo "| $((++i)) | $program | $categories |" >> LIST_WINDOWS.md
             done <<< "$programs"
           else
             echo "*No uncategorized programs found*" >> LIST_WINDOWS.md
