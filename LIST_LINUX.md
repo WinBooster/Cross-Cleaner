@@ -1,5 +1,10 @@
 # Linux Clearing Programs Catalog
-**Last updated:** 2025-06-21 16:22:47 UTC
+**Total categories in database:** 12
+
+**Total programs in database:** 51
+
+**Total pathes in database:** 118
+
 ## Audio
 
 | № | Program | Categories |
@@ -14,8 +19,8 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | FireFox | Browser cookies, Cache, LastActivity |
-| 2 | LibreWolf | Cache, LastActivity |
+| 1 | FireFox | Browser cookies, Browser history, Cache |
+| 2 | LibreWolf | Browser history, Cache |
 
 
 ## Cheat

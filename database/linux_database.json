@@ -412,7 +412,7 @@
   {
     "path": "/home/{username}/.mozilla/firefox/**/",
     "class": "Browser",
-    "category": "LastActivity",
+    "category": "Browser history",
     "program": "FireFox",
     "files_to_remove": [
       "formhistory.sqlite",
@@ -588,7 +588,7 @@
   {
     "path": "/home/{username}/.librewolf/**/",
     "class": "Browser",
-    "category": "LastActivity",
+    "category": "Browser history",
     "program": "LibreWolf",
     "files_to_remove": [
       "favicons.sqlite",
