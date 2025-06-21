@@ -1396,7 +1396,7 @@
   },
   {
     "path": "/home/{username}/.cache/",
-	"class": "Packet Manager",
+    "class": "Packet Manager",
     "category": "Cache",
     "program": "Yay",
     "files_to_remove": [],
