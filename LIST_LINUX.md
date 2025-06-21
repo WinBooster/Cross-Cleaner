@@ -1,5 +1,5 @@
 # Linux Clearing Programs Catalog
-**Last updated:** 2025-06-21 11:43:48 UTC
+**Last updated:** 2025-06-21 12:17:10 UTC
 | № | Program | Categories |
 |---|---------|------------|
 | 1 | Alsa | Documentation |
