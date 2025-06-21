@@ -490,9 +490,19 @@
   },
   {
     "path": "{drive}Program Files\\Cheat Engine\\*.txt",
+	"class": "Cheat",
     "category": "Logs",
     "program": "Cheat Engine",
     "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\",
+	"class": "Cheat",
+    "category": "Cheat",
+    "program": "Cheat Engine",
+    "directories_to_remove": [
+      "Cheat Engine"
+    ]
   },
   {
     "path": "{drive}ProgramData\\chocolatey",
@@ -696,6 +706,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.cursor\\extensions\\**/",
+	"class": "Text",
     "category": "Documentation",
     "program": "Cursor",
     "files_to_remove": [
@@ -760,12 +771,14 @@
   },
   {
     "path": "{drive}ProgramData\\DockerDesktop\\*.txt",
+	"class": "Developing",
     "category": "Logs",
     "program": "Docker",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Docker\\log\\**\\*",
+	"class": "Developing",
     "category": "Logs",
     "program": "Docker",
     "remove_directories": true,
@@ -773,6 +786,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Docker\\*.txt",
+	"class": "Developing",
     "category": "Logs",
     "program": "Docker",
     "remove_files": true
@@ -786,24 +800,28 @@
   },
   {
     "path": "{drive}Program Files\\dotnet\\*.txt",
+	"class": "Developing",
     "category": "Logs",
     "program": "DotNet",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files (x86)\\dotnet\\*.txt",
+	"class": "Developing",
     "category": "Logs",
     "program": "DotNet",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\.dotnet\\TelemetryStorageService\\*",
+	"class": "Developing",
     "category": "Logs",
     "program": "DotNet",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files\\dotnet\\*.txt",
+	"class": "Developing",
     "category": "Logs",
     "program": "DotNet",
     "remove_files": true
@@ -980,6 +998,7 @@
   },
   {
     "path": "{drive}Program Files\\Image-Line\\**",
+	"class": "Audio",
     "category": "Documentation",
     "program": "FL Studio",
     "files_to_remove": [
@@ -988,6 +1007,7 @@
   },
   {
     "path": "{drive}Program Files\\Image-Line\\Shared\\Start\\**",
+	"class": "Audio",
     "category": "Documentation",
     "program": "FL Studio",
     "files_to_remove": [
@@ -1013,6 +1033,7 @@
   },
   {
     "path": "{drive}Program Files\\Git/",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Git",
     "files_to_remove": [
@@ -1022,24 +1043,28 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\GitHub Desktop\\*.log",
+	"class": "Developing",
     "category": "Logs",
     "program": "GitHub Desktop",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\GitHub Desktop\\logs\\*.log",
+	"class": "Developing",
     "category": "Logs",
     "program": "GitHub Desktop",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\GitHubDesktop\\**\\*.log",
+	"class": "Developing",
     "category": "Logs",
     "program": "GitHub Desktop",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files (x86)\\GnuPG/",
+	"class": "Security",
     "category": "Documentation",
     "program": "GnuPG",
     "files_to_remove": [
@@ -1091,6 +1116,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Gpg4win/",
+	"class": "Security",
     "category": "Documentation",
     "program": "Gpg4win",
     "files_to_remove": [
@@ -1712,6 +1738,7 @@
   },
   {
     "path": "{drive}Program Files\\JetBrains\\**",
+	"class": "Text",
     "category": "Documentation",
     "program": "JetBrains",
     "files_to_remove": [
@@ -1724,6 +1751,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\JetBrains\\**",
+	"class": "Text",
     "category": "Logs",
     "program": "JetBrains",
     "files_to_remove": [],
@@ -1826,6 +1854,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\LM Studio/",
+	"class": "Text",
     "category": "Logs",
     "program": "LM Studio",
     "files_to_remove": [],
@@ -1997,6 +2026,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.mcreator\\logs\\*.log",
+	"class": "Developing",
     "category": "Logs",
     "program": "MCCreator",
     "remove_files": true
@@ -2441,6 +2471,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\npm-cache/",
+	"class": "Developing",
     "category": "Logs",
     "program": "Node JS",
     "directories_to_remove": [
@@ -2449,6 +2480,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\npm-cache/",
+	"class": "Developing",
     "category": "Cache",
     "program": "Node JS",
     "directories_to_remove": [
@@ -2457,6 +2489,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\node_modules",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Node JS",
     "files_to_remove": [
@@ -2471,6 +2504,7 @@
   },
   {
     "path": "{drive}Program Files\\nodejs\\node_modules\\npm/",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Node JS",
     "files_to_remove": [
@@ -2510,6 +2544,7 @@
   },
   {
     "path": "{drive}Program Files\\NVIDIA Corporation/",
+	"class": "Driver",
     "category": "Documentation",
     "program": "NVIDIA Corporation",
     "files_to_remove": [
@@ -2518,6 +2553,7 @@
   },
   {
     "path": "{drive}Program Files\\NVIDIA Corporation/",
+	"class": "Driver",
     "category": "Logs",
     "program": "NVIDIA Corporation",
     "files_to_remove": [
@@ -2526,6 +2562,7 @@
   },
   {
     "path": "{drive}Program Files\\NVIDIA Corporation\\NVSMI/",
+	"class": "Driver",
     "category": "Documentation",
     "program": "NVIDIA Corporation",
     "files_to_remove": [
@@ -2534,6 +2571,7 @@
   },
   {
     "path": "{drive}Program Files\\NVIDIA Corporation\\nvStereoInstaller/",
+	"class": "Driver",
     "category": "Logs",
     "program": "NVIDIA Corporation",
     "files_to_remove": [
@@ -2543,6 +2581,7 @@
   },
   {
     "path": "{drive}Program Files\\NVIDIA Corporation\\NvFBCPlugin/",
+	"class": "Driver",
     "category": "Logs",
     "program": "NVIDIA Corporation",
     "files_to_remove": [
@@ -2551,24 +2590,28 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\NVIDIA Corporation\\GfnRuntimeSdk\\*.log",
+	"class": "Driver",
     "category": "Logs",
     "program": "NVIDIA Corporation",
     "remove_files": true
   },
   {
     "path": "{drive}ProgramData\\NVIDIA Corporation\\nvstapisvr\\*",
+	"class": "Driver",
     "category": "Logs",
     "program": "NVIDIA Corporation",
     "remove_files": true
   },
   {
     "path": "{drive}ProgramData\\NVIDIA Corporation\\nvStereoInstaller\\*",
+	"class": "Driver",
     "category": "Logs",
     "program": "NVIDIA Corporation",
     "remove_files": true
   },
   {
     "path": "{drive}ProgramData\\NVIDIA Corporation\\*.log",
+	"class": "Driver",
     "category": "Logs",
     "program": "NVIDIA Corporation",
     "remove_files": true
@@ -3022,6 +3065,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Python\\**",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Python",
     "directories_to_remove": [
@@ -3030,6 +3074,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Python\\**\\share",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Python",
     "directories_to_remove": [
@@ -3143,6 +3188,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\.rustup\\toolchains\\**\\share",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Rust Language",
     "directories_to_remove": [
@@ -3453,7 +3499,8 @@
   },
   {
     "path": "{drive}Program Files\\Unity Hub\\*.html",
-    "category": "Logs",
+	"class": "Developing",
+    "category": "Documentation",
     "program": "Unity Hub",
     "remove_files": true
   },
@@ -3604,6 +3651,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\VulkanRT\\**",
+	"class": "Driver",
     "category": "Documentation",
     "program": "VulcanRT",
     "files_to_remove": [
@@ -3786,6 +3834,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\Windows Kits\\**",
+	"class": "Developing",
     "category": "Documentation",
     "program": "Windows Kits",
     "directories_to_remove": [
@@ -3829,12 +3878,14 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Xamarin\\Logs\\**\\*.log",
+	"class": "Developing",
     "category": "Logs",
     "program": "Xamarin",
     "remove_files": true
   },
   {
     "path": "{drive}ProgramData\\Zapret",
+	"class": "Security",
     "category": "Logs",
     "program": "Zapret",
     "files_to_remove": [
