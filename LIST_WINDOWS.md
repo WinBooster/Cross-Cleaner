@@ -1,5 +1,5 @@
 # Windows Clearing Programs Catalog
-**Last updated:** 2025-06-21 15:43:12 UTC
+**Last updated:** 2025-06-21 15:48:05 UTC
 ## AntiCheat
 
 | № | Program | Categories |
@@ -60,30 +60,32 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Docker | Logs |
-| 2 | DotNet | Logs |
-| 3 | Git | Documentation |
-| 4 | GitHub Desktop | Logs |
-| 5 | IDA Pro | Cache |
-| 6 | Inno Setup 6 | Documentation, Logs |
-| 7 | Java | Documentation |
-| 8 | MCCreator | Logs |
-| 9 | MinGW | Documentation |
-| 10 | Node JS | Cache, Documentation, Logs |
-| 11 | Python | Documentation |
-| 12 | Rust Language | Documentation |
-| 13 | Unity Hub | Documentation |
-| 14 | Windows Kits | Documentation |
-| 15 | Xamarin | Logs |
+| 1 | BoxedAppPacker | Documentation |
+| 2 | Docker | Logs |
+| 3 | DotNet | Logs |
+| 4 | Git | Documentation |
+| 5 | GitHub Desktop | Logs |
+| 6 | IDA Pro | Cache |
+| 7 | Inno Setup 6 | Documentation, Logs |
+| 8 | Java | Documentation |
+| 9 | MCCreator | Logs |
+| 10 | MinGW | Documentation |
+| 11 | Node JS | Cache, Documentation, Logs |
+| 12 | Python | Documentation |
+| 13 | Rust Language | Documentation |
+| 14 | Unity Hub | Documentation |
+| 15 | Windows Kits | Documentation |
+| 16 | Xamarin | Logs |
 
 
 ## Driver
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | LGHUB | Documentation |
-| 2 | NVIDIA Corporation | Documentation, Logs |
-| 3 | VulcanRT | Documentation |
+| 1 | IObit Driver Booster | Logs |
+| 2 | LGHUB | Documentation |
+| 3 | NVIDIA Corporation | Documentation, Logs |
+| 4 | VulcanRT | Documentation |
 
 
 ## Emulator
@@ -185,7 +187,13 @@
 | 1 | GnuPG | Documentation |
 | 2 | Gpg4win | Documentation |
 | 3 | I2P | Documentation, Logs |
-| 4 | Zapret | Logs |
+| 4 | IObit Malware Fighter | Logs |
+| 5 | NetLimiter | Logs |
+| 6 | Process Hacker 2 | Documentation |
+| 7 | Process Lasso | Logs |
+| 8 | SystemInformer | Documentation |
+| 9 | VirtualBox | Documentation, Logs |
+| 10 | Zapret | Logs |
 
 
 ## Text
@@ -239,33 +247,25 @@
 | 2 | 7-Zip | Logs |
 | 3 | ASIO4ALL v2 | Documentation |
 | 4 | Adobe | Logs |
-| 5 | BoxedAppPacker | Documentation |
-| 6 | Electron App's | Documentation, Logs |
-| 7 | Element | Logs |
-| 8 | Enigma Virtual Box | Documentation |
-| 9 | HiAlgo Boost | Documentation |
-| 10 | IObit Driver Booster | Logs |
-| 11 | IObit Malware Fighter | Logs |
-| 12 | ImgBurn | Documentation, Logs |
-| 13 | Magic TDX | Documentation |
-| 14 | Mem Reduct | Documentation |
-| 15 | MiniBin | Logs |
-| 16 | Mozilla Maintenance Service | Logs |
-| 17 | NetLimiter | Logs |
-| 18 | OneDrive | Cache |
-| 19 | Panda Security | Logs |
-| 20 | Postman | Logs |
-| 21 | PowerToys | Documentation |
-| 22 | Process Hacker 2 | Documentation |
-| 23 | Process Lasso | Logs |
-| 24 | Recaf | Logs |
-| 25 | Sandboxie+ | Documentation |
-| 26 | SystemInformer | Documentation |
-| 27 | Thunderbird | Crashes |
-| 28 | Tribler | Logs |
-| 29 | VirtualBox | Documentation, Logs |
-| 30 | WinRaR | Documentation |
-| 31 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
-| 32 | Windows Defender | Documentation |
-| 33 | qBittorrent | Logs |
-| 34 | ССleaner | Logs |
+| 5 | Electron App's | Documentation, Logs |
+| 6 | Element | Logs |
+| 7 | Enigma Virtual Box | Documentation |
+| 8 | HiAlgo Boost | Documentation |
+| 9 | ImgBurn | Documentation, Logs |
+| 10 | Magic TDX | Documentation |
+| 11 | Mem Reduct | Documentation |
+| 12 | MiniBin | Logs |
+| 13 | Mozilla Maintenance Service | Logs |
+| 14 | OneDrive | Cache |
+| 15 | Panda Security | Logs |
+| 16 | Postman | Logs |
+| 17 | PowerToys | Documentation |
+| 18 | Recaf | Logs |
+| 19 | Sandboxie+ | Documentation |
+| 20 | Thunderbird | Crashes |
+| 21 | Tribler | Logs |
+| 22 | WinRaR | Documentation |
+| 23 | Windows | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
+| 24 | Windows Defender | Documentation |
+| 25 | qBittorrent | Logs |
+| 26 | ССleaner | Logs |
