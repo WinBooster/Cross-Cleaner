@@ -1,5 +1,35 @@
 [
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\Edge\\User Data",
+    "category": "Cache",
+    "program": "Edge",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "GraphiteDawnCache",
+      "GrShaderCache",
+      "ShaderCache"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\Edge\\User Data\\Default",
+    "category": "Cache",
+    "program": "Edge",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "Cache",
+      "Code Cache",
+      "GPUCache"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\Edge\\User Data\\Default\\Network",
     "category": "Browser cookies",
     "program": "Edge",
