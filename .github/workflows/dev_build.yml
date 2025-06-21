@@ -1,4 +1,4 @@
-name: Rust compile and release
+name: Development Build and Formating
 
 on:
   workflow_dispatch:
