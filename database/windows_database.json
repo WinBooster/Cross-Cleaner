@@ -2125,7 +2125,7 @@
   },
   {
     "path": "{drive}Program Files\\Mem Reduct/",
-    "class": "Utility",
+    "class": "Optimization",
     "category": "Documentation",
     "program": "Mem Reduct",
     "files_to_remove": [
