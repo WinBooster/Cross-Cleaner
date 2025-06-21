@@ -524,19 +524,6 @@
     "remove_files": true
   },
   {
-    "path": "/usr/share/",
-    "category": "Documentation",
-    "program": "GTK",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "gtk-doc"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
     "path": "/home/{username}/.local/share/Steam/steamapps/common/GarrysMod/crashes/*",
     "category": "Crashes",
     "program": "Garry's mod",
@@ -626,6 +613,19 @@
     "files_to_remove": [],
     "directories_to_remove": [
       "caches"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "/usr/share/",
+    "category": "Documentation",
+    "program": "GTK",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "gtk-doc"
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,

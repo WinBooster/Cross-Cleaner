@@ -68,6 +68,147 @@
     "remove_files": false
   },
   {
+    "path": "{drive}Program Files\\Adobe\\**\\Legal\\**\\*.html",
+    "category": "Logs",
+    "program": "Adobe",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\AmneziaVPN/",
+    "category": "Logs",
+    "program": "Amnezia VPN",
+    "files_to_remove": [
+      "InstallationLog.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\AmneziaVPN\\ss",
+    "category": "Documentation",
+    "program": "Amnezia VPN",
+    "files_to_remove": [
+      "LICENSE"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\AmneziaVPN\\openvpn",
+    "category": "Documentation",
+    "program": "Amnezia VPN",
+    "files_to_remove": [
+      "license.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\AmneziaVPN\\tap",
+    "category": "Documentation",
+    "program": "Amnezia VPN",
+    "files_to_remove": [
+      "license.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\AmneziaWG\\Data",
+    "category": "Logs",
+    "program": "Amnezia WG",
+    "files_to_remove": [
+      "log.bin"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\crashlog\\*",
+    "category": "Crashes",
+    "program": "Arizona Games Launcher",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher/",
+    "category": "Logs",
+    "program": "Arizona Games Launcher",
+    "files_to_remove": [
+      "logs.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\moonloader/",
+    "category": "Logs",
+    "program": "Arizona Games Launcher",
+    "files_to_remove": [
+      "moonloader.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\SAMPFUNCS/",
+    "category": "Logs",
+    "program": "Arizona Games Launcher",
+    "files_to_remove": [
+      "SAMPFUNCS.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**",
+    "category": "Logs",
+    "program": "Arizona Games Launcher",
+    "files_to_remove": [
+      "!GAMELOG.txt",
+      "fastman92limitAdjuster.log",
+      "libped.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
     "path": "{drive}Program Files (x86)\\ASIO4ALL v2/",
     "category": "Documentation",
     "program": "ASIO4ALL v2",
@@ -249,147 +390,6 @@
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": true
-  },
-  {
-    "path": "{drive}Program Files\\Adobe\\**\\Legal\\**\\*.html",
-    "category": "Logs",
-    "program": "Adobe",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}Program Files\\AmneziaVPN/",
-    "category": "Logs",
-    "program": "Amnezia VPN",
-    "files_to_remove": [
-      "InstallationLog.txt"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Program Files\\AmneziaVPN\\ss",
-    "category": "Documentation",
-    "program": "Amnezia VPN",
-    "files_to_remove": [
-      "LICENSE"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Program Files\\AmneziaVPN\\openvpn",
-    "category": "Documentation",
-    "program": "Amnezia VPN",
-    "files_to_remove": [
-      "license.txt"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Program Files\\AmneziaVPN\\tap",
-    "category": "Documentation",
-    "program": "Amnezia VPN",
-    "files_to_remove": [
-      "license.txt"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Program Files\\AmneziaWG\\Data",
-    "category": "Logs",
-    "program": "Amnezia WG",
-    "files_to_remove": [
-      "log.bin"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\crashlog\\*",
-    "category": "Crashes",
-    "program": "Arizona Games Launcher",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher/",
-    "category": "Logs",
-    "program": "Arizona Games Launcher",
-    "files_to_remove": [
-      "logs.log"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\moonloader/",
-    "category": "Logs",
-    "program": "Arizona Games Launcher",
-    "files_to_remove": [
-      "moonloader.log"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**\\SAMPFUNCS/",
-    "category": "Logs",
-    "program": "Arizona Games Launcher",
-    "files_to_remove": [
-      "SAMPFUNCS.log"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**",
-    "category": "Logs",
-    "program": "Arizona Games Launcher",
-    "files_to_remove": [
-      "!GAMELOG.txt",
-      "fastman92limitAdjuster.log",
-      "libped.log"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client/",
@@ -1111,6 +1111,17 @@
     "remove_files": true
   },
   {
+    "path": "{steam}\\userdata\\**\\570\\local\\cfg\\*",
+    "category": "Game settings",
+    "program": "Dota 2",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
     "path": "{drive}Program Files\\dotnet\\*.txt",
     "category": "Logs",
     "program": "DotNet",
@@ -1147,17 +1158,6 @@
     "path": "{drive}Program Files\\dotnet\\*.txt",
     "category": "Logs",
     "program": "DotNet",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "{steam}\\userdata\\**\\570\\local\\cfg\\*",
-    "category": "Game settings",
-    "program": "Dota 2",
     "files_to_remove": [],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -1374,32 +1374,6 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Program Files\\Image-Line\\**",
-    "category": "Documentation",
-    "program": "FL Studio",
-    "files_to_remove": [
-      "WhatsNew.rtf"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Program Files\\Image-Line\\Shared\\Start\\**",
-    "category": "Documentation",
-    "program": "FL Studio",
-    "files_to_remove": [
-      "What's new.lnk"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
     "path": "{steam}\\steamapps\\common\\Counter-Strike Global Offensive",
     "category": "Cheats",
     "program": "Fatality",
@@ -1427,6 +1401,32 @@
     "remove_directory_after_clean": true,
     "remove_directories": true,
     "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Image-Line\\**",
+    "category": "Documentation",
+    "program": "FL Studio",
+    "files_to_remove": [
+      "WhatsNew.rtf"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\Image-Line\\Shared\\Start\\**",
+    "category": "Documentation",
+    "program": "FL Studio",
+    "files_to_remove": [
+      "What's new.lnk"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Program Files (x86)\\GameGuard\\cache\\*.cache",
@@ -1891,76 +1891,6 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming/",
-    "category": "Cheats",
-    "program": "INTERIUM",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "INTERIUM"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\IObit\\Driver Booster/",
-    "category": "Logs",
-    "program": "IObit Driver Booster",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "Logs"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}Program Files (x86)\\IObit\\Driver Booster\\*.log",
-    "category": "Logs",
-    "program": "IObit Driver Booster",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}Program Files (x86)\\IObit\\Driver Booster\\*.txt",
-    "category": "Logs",
-    "program": "IObit Driver Booster",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}ProgramData\\IObit\\IObit Malware Fighter\\*.log",
-    "category": "Logs",
-    "program": "IObit Malware Fighter",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}ProgramData\\IObit\\IObit Malware Fighter\\Homepage Advisor\\*.log",
-    "category": "Logs",
-    "program": "IObit Malware Fighter",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
     "path": "{drive}Users\\{username}\\AppData\\Local\\ImageGlass\\ThumbnailsCache\\*",
     "category": "Cache",
     "program": "ImageGlass",
@@ -2113,6 +2043,101 @@
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming/",
+    "category": "Cheats",
+    "program": "INTERIUM",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "INTERIUM"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\IObit\\Driver Booster/",
+    "category": "Logs",
+    "program": "IObit Driver Booster",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "Logs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\IObit\\Driver Booster\\*.log",
+    "category": "Logs",
+    "program": "IObit Driver Booster",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files (x86)\\IObit\\Driver Booster\\*.txt",
+    "category": "Logs",
+    "program": "IObit Driver Booster",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\IObit\\IObit Malware Fighter\\*.log",
+    "category": "Logs",
+    "program": "IObit Malware Fighter",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\IObit\\IObit Malware Fighter\\Homepage Advisor\\*.log",
+    "category": "Logs",
+    "program": "IObit Malware Fighter",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\iTop Screen Recorder\\Logs\\*.log",
+    "category": "Logs",
+    "program": "iTop Screen Recorder",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\iTop VPN/",
+    "category": "Cache",
+    "program": "iTop VPN",
+    "files_to_remove": [
+      "iTop_setup.log",
+      "Setup.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
   },
   {
     "path": "{drive}Users\\{username}\\.jdks\\**",
@@ -2490,33 +2515,6 @@
     "remove_files": false
   },
   {
-    "path": "{drive}Program Files\\LGHUB/",
-    "category": "Documentation",
-    "program": "LGHUB",
-    "files_to_remove": [
-      "LICENSE",
-      "LICENSES.chromium.html"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\LM Studio/",
-    "category": "Logs",
-    "program": "LM Studio",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "logs"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
     "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim-data\\lazy\\**",
     "category": "Documentation",
     "program": "LazyVim",
@@ -2528,6 +2526,20 @@
     "directories_to_remove": [
       "doc"
     ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\LGHUB/",
+    "category": "Documentation",
+    "program": "LGHUB",
+    "files_to_remove": [
+      "LICENSE",
+      "LICENSES.chromium.html"
+    ],
+    "directories_to_remove": [],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
     "remove_directories": false,
@@ -2604,6 +2616,19 @@
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\LM Studio/",
+    "category": "Logs",
+    "program": "LM Studio",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "logs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
   },
   {
     "path": "{drive}.loliland\\updates\\clients\\**\\crash-reports/*",
@@ -2760,6 +2785,41 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Program Files\\Magic TXD/",
+    "category": "Documentation",
+    "program": "Magic TDX",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "licenses"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Magpie\\cache\\*",
+    "category": "Cache",
+    "program": "Magpie",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\Magpie\\logs\\*.log",
+    "category": "Logs",
+    "program": "Magpie",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
     "path": "{drive}Users\\{username}\\.mcreator\\logs\\*.log",
     "category": "Logs",
     "program": "MCCreator",
@@ -2767,6 +2827,17 @@
     "directories_to_remove": [],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.mclaunch\\launcher_crashreports\\*",
+    "category": "Crashes",
+    "program": "McLaunch",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": true,
     "remove_directories": false,
     "remove_files": true
   },
@@ -2815,52 +2886,6 @@
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
-  },
-  {
-    "path": "{drive}Program Files\\Magic TXD/",
-    "category": "Documentation",
-    "program": "Magic TDX",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "licenses"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}Program Files\\Magpie\\cache\\*",
-    "category": "Cache",
-    "program": "Magpie",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}Program Files\\Magpie\\logs\\*.log",
-    "category": "Logs",
-    "program": "Magpie",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.mclaunch\\launcher_crashreports\\*",
-    "category": "Crashes",
-    "program": "McLaunch",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": true,
-    "remove_directories": false,
-    "remove_files": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\LocalLow\\MelissiaGamesLauncher\\GameFolder\\_logs\\*.log",
@@ -2932,19 +2957,6 @@
     "remove_files": true
   },
   {
-    "path": "{drive}ProgramData\\mingw64\\mingw64",
-    "category": "Documentation",
-    "program": "MinGW",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "licenses"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft/",
     "category": "Cheats",
     "program": "Minecraft",
@@ -3002,6 +3014,19 @@
     "files_to_remove": [],
     "directories_to_remove": [
       "logs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}ProgramData\\mingw64\\mingw64",
+    "category": "Documentation",
+    "program": "MinGW",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "licenses"
     ],
     "remove_all_in_dir": false,
     "remove_directory_after_clean": false,
@@ -3376,116 +3401,6 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Program Files\\NVIDIA Corporation/",
-    "category": "Documentation",
-    "program": "NVIDIA Corporation",
-    "files_to_remove": [
-      "license.txt"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Program Files\\NVIDIA Corporation/",
-    "category": "Logs",
-    "program": "NVIDIA Corporation",
-    "files_to_remove": [
-      "nvstlink.log"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Program Files\\NVIDIA Corporation\\NVSMI/",
-    "category": "Documentation",
-    "program": "NVIDIA Corporation",
-    "files_to_remove": [
-      "nvidia-smi.1.pdf"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Program Files\\NVIDIA Corporation\\nvStereoInstaller/",
-    "category": "Logs",
-    "program": "NVIDIA Corporation",
-    "files_to_remove": [
-      "nvStInst.log",
-      "nvStInst.old"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Program Files\\NVIDIA Corporation\\NvFBCPlugin/",
-    "category": "Logs",
-    "program": "NVIDIA Corporation",
-    "files_to_remove": [
-      "logPluginError.txt"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\NVIDIA Corporation\\GfnRuntimeSdk\\*.log",
-    "category": "Logs",
-    "program": "NVIDIA Corporation",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}ProgramData\\NVIDIA Corporation\\nvstapisvr\\*",
-    "category": "Logs",
-    "program": "NVIDIA Corporation",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}ProgramData\\NVIDIA Corporation\\nvStereoInstaller\\*",
-    "category": "Logs",
-    "program": "NVIDIA Corporation",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}ProgramData\\NVIDIA Corporation\\*.log",
-    "category": "Logs",
-    "program": "NVIDIA Corporation",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
     "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim",
     "category": "Documentation",
     "program": "NeoVim",
@@ -3619,6 +3534,116 @@
     "path": "{drive}Users\\{username}\\.BigNox\\*",
     "category": "Logs",
     "program": "Nox",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\NVIDIA Corporation/",
+    "category": "Documentation",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [
+      "license.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\NVIDIA Corporation/",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [
+      "nvstlink.log"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\NVIDIA Corporation\\NVSMI/",
+    "category": "Documentation",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [
+      "nvidia-smi.1.pdf"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\NVIDIA Corporation\\nvStereoInstaller/",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [
+      "nvStInst.log",
+      "nvStInst.old"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\NVIDIA Corporation\\NvFBCPlugin/",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [
+      "logPluginError.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\NVIDIA Corporation\\GfnRuntimeSdk\\*.log",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\nvstapisvr\\*",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\nvStereoInstaller\\*",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\*.log",
+    "category": "Logs",
+    "program": "NVIDIA Corporation",
     "files_to_remove": [],
     "directories_to_remove": [],
     "remove_all_in_dir": false,
@@ -4282,6 +4307,28 @@
     "remove_files": false
   },
   {
+    "path": "{drive}Program Files\\qBittorrent\\*.pdb",
+    "category": "Logs",
+    "program": "qBittorrent",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\qBittorrent\\logs\\*.log",
+    "category": "Logs",
+    "program": "qBittorrent",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
     "path": "{drive}Program Files (x86)\\Radmin VPN/",
     "category": "Logs",
     "program": "Radmin VPN",
@@ -4911,83 +4958,6 @@
     "remove_files": false
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\GameCenter\\*.log",
-    "category": "Logs",
-    "program": "VK GameCenter",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}Program Files\\VideoLAN\\VLC/",
-    "category": "Documentation",
-    "program": "VLC",
-    "files_to_remove": [
-      "AUTHORS.txt",
-      "COPYING.txt",
-      "NEWS.txt",
-      "README.txt",
-      "THANKS.txt",
-      "VideoLAN Website.url",
-      "Documentation.url",
-      "New_Skins.url"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Code\\Network/",
-    "category": "Browser cookies",
-    "program": "VS Code",
-    "files_to_remove": [
-      "Browser cookies",
-      "Cookies-journal"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Code/",
-    "category": "Logs",
-    "program": "VS Code",
-    "files_to_remove": [],
-    "directories_to_remove": [
-      "logs"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Users\\{username}\\.vscode\\extensions\\**/",
-    "category": "Documentation",
-    "program": "VS Code",
-    "files_to_remove": [
-      "LICENSE",
-      "LICENSE.txt",
-      "changelog.md",
-      "change.log",
-      "readme.txt",
-      "readme.md",
-      "walkthrough-setup-tips.md"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.vapeclient",
     "category": "Cheats",
     "program": "Vape Client",
@@ -5092,6 +5062,83 @@
     "remove_files": false
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\GameCenter\\*.log",
+    "category": "Logs",
+    "program": "VK GameCenter",
+    "files_to_remove": [],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\VideoLAN\\VLC/",
+    "category": "Documentation",
+    "program": "VLC",
+    "files_to_remove": [
+      "AUTHORS.txt",
+      "COPYING.txt",
+      "NEWS.txt",
+      "README.txt",
+      "THANKS.txt",
+      "VideoLAN Website.url",
+      "Documentation.url",
+      "New_Skins.url"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Code\\Network/",
+    "category": "Browser cookies",
+    "program": "VS Code",
+    "files_to_remove": [
+      "Browser cookies",
+      "Cookies-journal"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Code/",
+    "category": "Logs",
+    "program": "VS Code",
+    "files_to_remove": [],
+    "directories_to_remove": [
+      "logs"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Users\\{username}\\.vscode\\extensions\\**/",
+    "category": "Documentation",
+    "program": "VS Code",
+    "files_to_remove": [
+      "LICENSE",
+      "LICENSE.txt",
+      "changelog.md",
+      "change.log",
+      "readme.txt",
+      "readme.md",
+      "walkthrough-setup-tips.md"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
     "path": "{drive}Program Files (x86)\\VulkanRT\\**",
     "category": "Documentation",
     "program": "VulcanRT",
@@ -5135,43 +5182,6 @@
     "directories_to_remove": [],
     "remove_all_in_dir": true,
     "remove_directory_after_clean": true,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
-    "category": "Documentation",
-    "program": "WinGet",
-    "files_to_remove": [
-      "CHANGELOG.md",
-      "LICENSE",
-      "LICENSE-APACHE",
-      "LICENSE-MIT",
-      "README.md"
-    ],
-    "directories_to_remove": [
-      "doc"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Program Files\\WinRAR/",
-    "category": "Documentation",
-    "program": "WinRaR",
-    "files_to_remove": [
-      "License.txt",
-      "Order.htm",
-      "Rar.txt",
-      "ReadMe.rus.txt",
-      "ReadMe.txt",
-      "WhatsNew.txt"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
   },
@@ -5447,6 +5457,43 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
+    "category": "Documentation",
+    "program": "WinGet",
+    "files_to_remove": [
+      "CHANGELOG.md",
+      "LICENSE",
+      "LICENSE-APACHE",
+      "LICENSE-MIT",
+      "README.md"
+    ],
+    "directories_to_remove": [
+      "doc"
+    ],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
+    "path": "{drive}Program Files\\WinRAR/",
+    "category": "Documentation",
+    "program": "WinRaR",
+    "files_to_remove": [
+      "License.txt",
+      "Order.htm",
+      "Rar.txt",
+      "ReadMe.rus.txt",
+      "ReadMe.txt",
+      "WhatsNew.txt"
+    ],
+    "directories_to_remove": [],
+    "remove_all_in_dir": false,
+    "remove_directory_after_clean": false,
+    "remove_directories": false,
+    "remove_files": false
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Xamarin\\Logs\\**\\*.log",
     "category": "Logs",
     "program": "Xamarin",
@@ -5470,53 +5517,6 @@
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\iTop Screen Recorder\\Logs\\*.log",
-    "category": "Logs",
-    "program": "iTop Screen Recorder",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}ProgramData\\iTop VPN/",
-    "category": "Cache",
-    "program": "iTop VPN",
-    "files_to_remove": [
-      "iTop_setup.log",
-      "Setup.log"
-    ],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
-  },
-  {
-    "path": "{drive}Program Files\\qBittorrent\\*.pdb",
-    "category": "Logs",
-    "program": "qBittorrent",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}Program Files\\qBittorrent\\logs\\*.log",
-    "category": "Logs",
-    "program": "qBittorrent",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": true
   },
   {
     "path": "{drive}Program Files\\CCleaner/",
