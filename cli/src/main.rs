@@ -55,7 +55,7 @@ async fn work(
     args: &Args,
     disabled_programs: Vec<&str>,
     categories: Vec<String>,
-    database: &Vec<CleanerData>,
+    database: &[CleanerData],
 ) {
     let bytes_cleared = Arc::new(Mutex::new(0));
     let removed_files = Arc::new(Mutex::new(0));
@@ -353,26 +353,26 @@ async fn main() {
             &|a| format!("{} selected categories", a.len());
 
         let mut options_str: Vec<&str> = options.iter().map(|s| s.as_str()).collect();
-		options_str.sort_by(|a, b| {
-		let priority = |s: &str| match s {
-				"Cache" => 0,
-				"Logs" => 1,
-				"Crashes" => 2,
-				"Documentation" => 3,
-				"Backups" => 4,
-				"LastActivity" => 5,
-				_ => 6,
-			};
-			
-			let a_prio = priority(a);
-			let b_prio = priority(b);
-			
-			if a_prio == b_prio {
-				a.cmp(b)
-			} else {
-				a_prio.cmp(&b_prio)
-			}
-		});
+        options_str.sort_by(|a, b| {
+            let priority = |s: &str| match s {
+                "Cache" => 0,
+                "Logs" => 1,
+                "Crashes" => 2,
+                "Documentation" => 3,
+                "Backups" => 4,
+                "LastActivity" => 5,
+                _ => 6,
+            };
+
+            let a_prio = priority(a);
+            let b_prio = priority(b);
+
+            if a_prio == b_prio {
+                a.cmp(b)
+            } else {
+                a_prio.cmp(&b_prio)
+            }
+        });
 
         let ans_categories = MultiSelect::new("Select the clearing categories:", options_str)
             .with_validator(validator)
@@ -391,7 +391,7 @@ async fn main() {
                 .collect::<HashSet<_>>()
                 .into_iter()
                 .collect();
-			programs2.sort();
+            programs2.sort();
 
             let ans_programs =
                 MultiSelect::new("Select the disabled programs for clearing:", programs2)

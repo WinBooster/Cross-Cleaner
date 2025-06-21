@@ -11,6 +11,7 @@ tokio = { version = "1", features = ["full"] }
 notify-rust = "4"
 image = "0.25.5"
 tempfile = "3.3"
+clap = { version = "4.0", features = ["derive"] }
 
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }
@@ -34,4 +35,5 @@ codegen-units = 1
 opt-level = "z"
 strip = true
 panic = "abort"
-debug  = false
+debug = false
+

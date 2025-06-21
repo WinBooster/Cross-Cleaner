@@ -25,6 +25,7 @@ dependencies = [
 name = "Cross_Cleaner_GUI"
 version = "1.9.6"
 dependencies = [
+ "clap",
  "cleaner",
  "database",
  "eframe",
