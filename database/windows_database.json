@@ -503,7 +503,7 @@
   {
     "path": "{drive}Program Files\\",
     "class": "Cheat",
-    "category": "Cheat",
+    "category": "Cheats",
     "program": "Cheat Engine",
     "directories_to_remove": [
       "Cheat Engine"
@@ -1475,7 +1475,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming/",
     "class": "Cheat",
-    "category": "Cheat",
+    "category": "Cheats",
     "program": "INTERIUM",
     "files_to_remove": [],
     "directories_to_remove": [
