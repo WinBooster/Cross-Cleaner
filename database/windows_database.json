@@ -412,6 +412,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\BoxedAppPacker/",
+	"class": "Developing",
     "category": "Documentation",
     "program": "BoxedAppPacker",
     "files_to_remove": [
@@ -1459,6 +1460,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\IObit\\Driver Booster/",
+	"class": "Driver",
     "category": "Logs",
     "program": "IObit Driver Booster",
     "files_to_remove": [],
@@ -1480,12 +1482,14 @@
   },
   {
     "path": "{drive}ProgramData\\IObit\\IObit Malware Fighter\\*.log",
+	"class": "Security",
     "category": "Logs",
     "program": "IObit Malware Fighter",
     "remove_files": true
   },
   {
     "path": "{drive}ProgramData\\IObit\\IObit Malware Fighter\\Homepage Advisor\\*.log",
+	"class": "Security",
     "category": "Logs",
     "program": "IObit Malware Fighter",
     "remove_files": true
@@ -2484,6 +2488,7 @@
   },
   {
     "path": "{drive}ProgramData\\Locktime\\NetLimiter\\**\\logs\\*.log",
+	"class": "Security",
     "category": "Logs",
     "program": "NetLimiter",
     "remove_files": true
@@ -3064,6 +3069,7 @@
   },
   {
     "path": "{drive}Program Files\\Process Hacker 2/",
+	"class": "Security",
     "category": "Documentation",
     "program": "Process Hacker 2",
     "files_to_remove": [
@@ -3076,6 +3082,7 @@
   },
   {
     "path": "{drive}ProgramData\\ProcessLasso/",
+	"class": "Security",
     "category": "Logs",
     "program": "Process Lasso",
     "directories_to_remove": [
@@ -3319,6 +3326,7 @@
   },
   {
     "path": "{drive}Program Files\\SystemInformer/",
+	"class": "Security",
     "category": "Documentation",
     "program": "SystemInformer",
     "files_to_remove": [
@@ -3552,18 +3560,21 @@
   },
   {
     "path": "{drive}Users\\{username}\\VirtualBox VMs\\**\\Logs\\*.log",
+	"class": "Security",
     "category": "Logs",
     "program": "VirtualBox",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files\\Oracle\\VirtualBox\\*.rtf",
+	"class": "Security",
     "category": "Logs",
     "program": "VirtualBox",
     "remove_files": true
   },
   {
     "path": "{drive}Program Files\\Oracle\\VirtualBox/",
+	"class": "Security",
     "category": "Documentation",
     "program": "VirtualBox",
     "directories_to_remove": [
