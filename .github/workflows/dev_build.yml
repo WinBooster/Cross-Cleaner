@@ -97,15 +97,44 @@ jobs:
 
     - name: Generate Windows list
       run: |
-        echo "# Clearing Windows Programs" > LIST_WINDOWS.md
+        # Header
+        echo "# Windows Clearing Programs Catalog" > LIST_WINDOWS.md
         echo "\n**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')\n" >> LIST_WINDOWS.md
-        jq -r '.[].program | select(. != null)' database/windows_database.json | sort -u | awk '{print "- " $0}' >> LIST_WINDOWS.md
+        
+        # Unique programs list
+        echo "## Unique Programs\n" >> LIST_WINDOWS.md
+        jq -r '.[].program | select(. != null)' database/windows_database.json | sort -u | awk '{print NR ". " $0}' >> LIST_WINDOWS.md
+        
+        # Categories table with better formatting
+        echo "\n## Program Categories\n" >> LIST_WINDOWS.md
+        echo "| № | Program | Categories |" >> LIST_WINDOWS.md
+        echo "|---|---------|------------|" >> LIST_WINDOWS.md
+        jq -r 'group_by(.program)[] | 
+          select(.[0].program != null) | 
+          .[0].program as $name | 
+          map(.category) | unique | join(", ") as $cats | 
+          "| \(input_line_number) | \($name) | \($cats) |"' \
+          database/windows_database.json >> LIST_WINDOWS.md
 
     - name: Generate Linux list
       run: |
-        echo "# Clearing Linux Programs" > LIST_LINUX.md
+        # Header
+        echo "# Linux Clearing Programs Catalog" > LIST_LINUX.md
         echo "\n**Last updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')\n" >> LIST_LINUX.md
-        jq -r '.[].program | select(. != null)' database/linux_database.json | sort -u | awk '{print "- " $0}' >> LIST_LINUX.md
+        
+        # Unique programs list
+        echo "## Unique Programs\n" >> LIST_LINUX.md
+        jq -r '.[].program | select(. != null)' database/linux_database.json | sort -u | awk '{print NR ". " $0}' >> LIST_LINUX.md
+        
+        echo "\n## Program Categories\n" >> LIST_LINUX.md
+        echo "| № | Program | Categories |" >> LIST_LINUX.md
+        echo "|---|---------|------------|" >> LIST_LINUX.md
+        jq -r 'group_by(.program)[] | 
+          select(.[0].program != null) | 
+          .[0].program as $name | 
+          map(.category) | unique | join(", ") as $cats | 
+          "| \(input_line_number) | \($name) | \($cats) |"' \
+          database/linux_database.json >> LIST_LINUX.md 
 
     - name: Commit and push changes
       run: |
