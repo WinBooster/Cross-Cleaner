@@ -1182,7 +1182,7 @@
     "path": "/home/{username}/.rustup/toolchains/**/share/",
     "class": "Developing",
     "category": "Documentation",
-    "program": "Rust language",
+    "program": "Rust Language",
     "directories_to_remove": [
       "doc"
     ]

@@ -7,7 +7,14 @@
   "Telegram": "https://desktop.telegram.org",
   "Thunderbird": "https://www.thunderbird.net",
   
+  "7-Zip": "https://www.7-zip.org/download.html",
+  "WinRaR": "https://www.win-rar.com/predownload.html",
+  
+  "AAF Optimus DCH Audio": "https://github.com/AAFOptimus/AAFFamilyDCHAudio",
+  "ASIO4ALL v2": "https://asio4all.org/about/download-asio4all",
   "Alsa": "https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture",
+  "FL Studio": "https://www.image-line.com/fl-studio-download",
+  "SoundWire Server": "https://georgielabs.net",
   "Cassettle": "https://gitlab.gnome.org/Rirusha/Cassette",
   "Spotify": "https://open.spotify.com/download",
   "Yandex Music": "https://music.yandex.ru/download",
@@ -45,6 +52,7 @@
   
   "1Password": "https://1password.com/",
   "KeePass 2": "https://keepass.info/download.html",
+  "KeePassXC": "https://keepassxc.org/download",
   
   "Cheat Engine": "https://www.cheatengine.org/downloads.php",
   "ExecHack": "https://c.exechack.cc",
