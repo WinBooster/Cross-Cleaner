@@ -775,10 +775,10 @@
     "program": "Discord",
     "directories_to_remove": [
       "Cache",
-	  "Code Cache",
-	  "DawnGraphiteCache",
-	  "DawnWebGPUCache",
-	  "GPUCache"
+      "Code Cache",
+      "DawnGraphiteCache",
+      "DawnWebGPUCache",
+      "GPUCache"
     ]
   },
   {
@@ -797,51 +797,6 @@
     "program": "Discord",
     "directories_to_remove": [
       "crashlogs"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\winutil",
-    "class": "Utility",
-    "category": "Logs",
-    "program": "Winutil",
-    "directories_to_remove": [
-      "logs"
-    ]
-  },
-  {
-    "path": "{drive}Windows",
-    "class": "System",
-    "category": "Cache",
-    "program": "Windows",
-    "directories_to_remove": [
-      "SystemTemp"
-    ]
-  },
-  {
-    "path": "{drive}Windows\\System32\\DriverStorage",
-    "class": "System",
-    "category": "Cache",
-    "program": "Windows",
-    "directories_to_remove": [
-      "Temp"
-    ]
-  },
-  {
-    "path": "{drive}ProgramData\\hp\\HP Touchpoint Analytics Client",
-    "class": "Spyware",
-    "category": "Logs",
-    "program": "HP Touchpoint Analytics Client",
-    "directories_to_remove": [
-      "Logs"
-    ]
-  },
-  {
-    "path": "{drive}ProgramData\\hp",
-    "class": "Spyware",
-    "category": "Logs",
-    "program": "HP Touchpoint Analytics Client",
-    "directories_to_remove": [
-      "logs"
     ]
   },
   {
@@ -973,6 +928,24 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Electronic Arts\\EA Desktop",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Electronic Arts Desktop",
+    "directories_to_remove": [
+      "Logs"
+    ]
+  },
+  {
+    "path": "{drive}ProgramData\\EA Desktop",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Electronic Arts Desktop",
+    "directories_to_remove": [
+      "Logs"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Local\\element-desktop\\*.log",
     "class": "Messanger",
     "category": "Logs",
@@ -999,8 +972,8 @@
     "category": "Logs",
     "program": "Epic Games Launcher",
     "directories_to_remove": [
-		"Logs"
-	]
+      "Logs"
+    ]
   },
   {
     "path": "{drive}ProgramData\\Epic\\EpicOnlineServices\\EOSInstaller",
@@ -1008,8 +981,8 @@
     "category": "Logs",
     "program": "Epic Games Launcher",
     "directories_to_remove": [
-		"Logs"
-	]
+      "Logs"
+    ]
   },
   {
     "path": "{drive}ProgramData\\Epic\\EpicGamesLauncher",
@@ -1017,8 +990,8 @@
     "category": "Logs",
     "program": "Epic Games Launcher",
     "directories_to_remove": [
-		"Logs"
-	]
+      "Logs"
+    ]
   },
   {
     "path": "{drive}AppData\\Local\\Epic Games\\Epic Online Services\\UserHelper",
@@ -1026,8 +999,8 @@
     "category": "Logs",
     "program": "Epic Games Launcher",
     "directories_to_remove": [
-		"Logs"
-	]
+      "Logs"
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\EpicGamesLauncher\\Saved",
@@ -1035,8 +1008,8 @@
     "category": "Logs",
     "program": "Epic Games Launcher",
     "directories_to_remove": [
-		"Logs"
-	]
+      "Logs"
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\EpicOnlineServicesUIHelper\\Saved",
@@ -1044,8 +1017,8 @@
     "category": "Logs",
     "program": "Epic Games Launcher",
     "directories_to_remove": [
-		"Logs"
-	]
+      "Logs"
+    ]
   },
   {
     "path": "{drive}Windows\\System32\\config\\systemprofile\\AppData\\Local\\EpicGamesLauncher\\Saved",
@@ -1053,62 +1026,8 @@
     "category": "Logs",
     "program": "Epic Games Launcher",
     "directories_to_remove": [
-		"Logs"
-	]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Electronic Arts\\EA Desktop",
-    "class": "Game",
-    "category": "Logs",
-    "program": "Electronic Arts Desktop",
-    "directories_to_remove": [
-		"Logs"
-	]
-  },
-  {
-    "path": "{drive}ProgramData\\EA Desktop",
-    "class": "Game",
-    "category": "Logs",
-    "program": "Electronic Arts Desktop",
-    "directories_to_remove": [
-		"Logs"
-	]
-  },
-  {
-    "path": "{drive}Windows\\ServiceProfiles\\LocalService\\AppData\\Local",
-    "class": "System",
-    "category": "Logs",
-    "program": "Windows",
-    "directories_to_remove": [
-		"Temp"
-	]
-  },
-  {
-    "path": "{drive}Windows\\ServiceProfiles\\NetworkService\\AppData\\Local",
-    "class": "System",
-    "category": "Logs",
-    "program": "Windows",
-    "directories_to_remove": [
-		"Temp"
-	]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local",
-    "class": "System",
-    "category": "Cache",
-    "program": "Windows",
-    "directories_to_remove": [
-		"SquirrelTemp"
-	]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\OONI Probe",
-    "class": "Security",
-    "category": "Logs",
-    "program": "OONI Probe",
-    "directories_to_remove": [
-		"logs"
-	]
+      "Logs"
+    ]
   },
   {
     "path": "{drive}exechack",
@@ -1494,6 +1413,24 @@
       "hialgo_eula.txt",
       "Update Boost.log",
       "UpdateListing.txt"
+    ]
+  },
+  {
+    "path": "{drive}ProgramData\\hp\\HP Touchpoint Analytics Client",
+    "class": "Spyware",
+    "category": "Logs",
+    "program": "HP Touchpoint Analytics Client",
+    "directories_to_remove": [
+      "Logs"
+    ]
+  },
+  {
+    "path": "{drive}ProgramData\\hp",
+    "class": "Spyware",
+    "category": "Logs",
+    "program": "HP Touchpoint Analytics Client",
+    "directories_to_remove": [
+      "logs"
     ]
   },
   {
@@ -2762,6 +2699,25 @@
     "remove_files": true
   },
   {
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\NVIDIA app",
+    "class": "Driver",
+    "category": "Logs",
+    "program": "NVIDIA App",
+    "directories_to_remove": [
+      "Logs",
+      "SessionLogs"
+    ]
+  },
+  {
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\NVIDIA app\\Installer",
+    "class": "Driver",
+    "category": "Logs",
+    "program": "NVIDIA App",
+    "directories_to_remove": [
+      "Logs"
+    ]
+  },
+  {
     "path": "{drive}Program Files\\NVIDIA Corporation",
     "class": "Driver",
     "category": "Documentation",
@@ -2776,8 +2732,8 @@
     "category": "Cache",
     "program": "NVIDIA Corporation",
     "directories_to_remove": [
-		"GLCache"
-	]
+      "GLCache"
+    ]
   },
   {
     "path": "{drive}Program Files\\NVIDIA Corporation",
@@ -2845,25 +2801,6 @@
     "remove_files": true
   },
   {
-    "path": "{drive}ProgramData\\NVIDIA Corporation\\NVIDIA app",
-    "class": "Driver",
-    "category": "Logs",
-    "program": "NVIDIA App",
-    "directories_to_remove": [
-		"Logs",
-		"SessionLogs"
-	]
-  },
-  {
-    "path": "{drive}ProgramData\\NVIDIA Corporation\\NVIDIA app\\Installer",
-    "class": "Driver",
-    "category": "Logs",
-    "program": "NVIDIA App",
-    "directories_to_remove": [
-		"Logs"
-	]
-  },
-  {
     "path": "{drive}Program Files\\obs-studio\\bin\\64bit\\*.log",
     "class": "Video",
     "category": "Logs",
@@ -2890,17 +2827,8 @@
     "category": "Cache",
     "program": "OneDrive",
     "directories_to_remove": [
-		"logs"
-	]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Rockstar Games\\Launcher",
-    "class": "Game",
-    "category": "Crashes",
-    "program": "Rockstar Games",
-    "directories_to_remove": [
-		"CrashLogs"
-	]
+      "logs"
+    ]
   },
   {
     "path": "{steam}\\steamapps\\common\\Counter-Strike Global Offensive\\ot",
@@ -2911,6 +2839,15 @@
     "directories_to_remove": [],
     "remove_all_in_dir": true,
     "remove_directory_after_clean": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\OONI Probe",
+    "class": "Security",
+    "category": "Logs",
+    "program": "OONI Probe",
+    "directories_to_remove": [
+      "logs"
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera GX Stable\\Network",
@@ -3445,6 +3382,15 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Rockstar Games\\Launcher",
+    "class": "Game",
+    "category": "Crashes",
+    "program": "Rockstar Games",
+    "directories_to_remove": [
+      "CrashLogs"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}",
     "class": "Cheat",
     "category": "Cheats",
@@ -3975,6 +3921,51 @@
     "remove_directory_after_clean": true
   },
   {
+    "path": "{drive}Windows",
+    "class": "System",
+    "category": "Cache",
+    "program": "Windows",
+    "directories_to_remove": [
+      "SystemTemp"
+    ]
+  },
+  {
+    "path": "{drive}Windows\\System32\\DriverStorage",
+    "class": "System",
+    "category": "Cache",
+    "program": "Windows",
+    "directories_to_remove": [
+      "Temp"
+    ]
+  },
+  {
+    "path": "{drive}Windows\\ServiceProfiles\\LocalService\\AppData\\Local",
+    "class": "System",
+    "category": "Logs",
+    "program": "Windows",
+    "directories_to_remove": [
+      "Temp"
+    ]
+  },
+  {
+    "path": "{drive}Windows\\ServiceProfiles\\NetworkService\\AppData\\Local",
+    "class": "System",
+    "category": "Logs",
+    "program": "Windows",
+    "directories_to_remove": [
+      "Temp"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local",
+    "class": "System",
+    "category": "Cache",
+    "program": "Windows",
+    "directories_to_remove": [
+      "SquirrelTemp"
+    ]
+  },
+  {
     "path": "{drive}Windows\\System32\\Licenses/*",
     "class": "System",
     "category": "Documentation",
@@ -4049,8 +4040,8 @@
     "category": "Logs",
     "program": "Windows",
     "directories_to_remove": [
-		"logs"
-	]
+      "logs"
+    ]
   },
   {
     "path": "{drive}Windows\\security\\database\\*.log",
@@ -4194,6 +4185,15 @@
       "ReadMe.rus.txt",
       "ReadMe.txt",
       "WhatsNew.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\winutil",
+    "class": "Utility",
+    "category": "Logs",
+    "program": "Winutil",
+    "directories_to_remove": [
+      "logs"
     ]
   },
   {
