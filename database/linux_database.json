@@ -392,35 +392,6 @@
     ]
   },
   {
-    "path": "/home/{username}/.mozilla/firefox/**/",
-    "class": "Browser",
-    "category": "Browser cookies",
-    "program": "Mozilla Firefox",
-    "files_to_remove": [
-      "cookies.sqlite",
-      "cookies.sqlite-wal"
-    ]
-  },
-  {
-    "path": "/home/{username}/.cache/firefox/**/thumbnails/*",
-    "class": "Browser",
-    "category": "Cache",
-    "program": "Mozilla Firefox",
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.mozilla/firefox/**/",
-    "class": "Browser",
-    "category": "Browser history",
-    "program": "Mozilla Firefox",
-    "files_to_remove": [
-      "formhistory.sqlite",
-      "favicons.sqlite",
-      "favicons.sqlite-wal"
-    ]
-  },
-  {
     "path": "/home/{username}/",
     "class": "Cheat",
     "category": "Cheats",
@@ -811,6 +782,35 @@
     "directories_to_remove": [
       "CacheStorage",
       "WebKitCache"
+    ]
+  },
+  {
+    "path": "/home/{username}/.mozilla/firefox/**/",
+    "class": "Browser",
+    "category": "Browser cookies",
+    "program": "Mozilla Firefox",
+    "files_to_remove": [
+      "cookies.sqlite",
+      "cookies.sqlite-wal"
+    ]
+  },
+  {
+    "path": "/home/{username}/.cache/firefox/**/thumbnails/*",
+    "class": "Browser",
+    "category": "Cache",
+    "program": "Mozilla Firefox",
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.mozilla/firefox/**/",
+    "class": "Browser",
+    "category": "Browser history",
+    "program": "Mozilla Firefox",
+    "files_to_remove": [
+      "formhistory.sqlite",
+      "favicons.sqlite",
+      "favicons.sqlite-wal"
     ]
   },
   {
@@ -1347,7 +1347,7 @@
   },
   {
     "path": "/home/{username}/.cache/thunderbird/**/cache2/*.log",
-	"class": "Text",
+    "class": "Text",
     "category": "Logs",
     "program": "Thunderbird",
     "remove_files": true
