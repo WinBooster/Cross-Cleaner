@@ -1,13 +1,10 @@
 [workspace]
 resolver = "3"
-members = [
-    "cli",
-    "gui",
-]
+members = ["cli", "gui"]
 [profile.release] # optimize file size
 lto = true
 codegen-units = 1
 opt-level = "z"
 strip = true
 panic = "abort"
-debug  = false
+debug = false

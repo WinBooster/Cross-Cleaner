@@ -87,6 +87,13 @@ jobs:
 
     - name: Process Windows data
       run: |
+        # Load program links into a variable
+        if [ -f "database/program_links.json" ]; then
+          program_links=$(jq -r '.' database/program_links.json)
+        else
+          program_links="{}"
+        fi
+
         # Header
         echo "# Windows Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_WINDOWS.md
         total_categories=$(jq -r 'map(.category) | unique | length' database/windows_database.json)
@@ -109,8 +116,15 @@ jobs:
             i=0
             while IFS= read -r line; do
               program=$(echo "$line" | jq -r '.[0].program')
+              # Check if program has a link
+              program_link=$(echo "$program_links" | jq -r --arg program "$program" '.[$program] // empty')
+              if [ -n "$program_link" ]; then
+                displayed_program="[$program]($program_link)"
+              else
+                displayed_program="$program"
+              fi
               categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-              echo "| $((++i)) | $program | $categories |" >> LIST_WINDOWS.md
+              echo "| $((++i)) | $displayed_program | $categories |" >> LIST_WINDOWS.md
             done <<< "$programs"
           else
             echo "*No programs found for this class*" >> LIST_WINDOWS.md
@@ -131,8 +145,15 @@ jobs:
             i=0
             while IFS= read -r line; do
               program=$(echo "$line" | jq -r '.[0].program')
+              # Check if program has a link
+              program_link=$(echo "$program_links" | jq -r --arg program "$program" '.[$program] // empty')
+              if [ -n "$program_link" ]; then
+                displayed_program="[$program]($program_link)"
+              else
+                displayed_program="$program"
+              fi
               categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-              echo "| $((++i)) | $program | $categories |" >> LIST_WINDOWS.md
+              echo "| $((++i)) | $displayed_program | $categories |" >> LIST_WINDOWS.md
             done <<< "$programs"
           else
             echo "*No uncategorized programs found*" >> LIST_WINDOWS.md
@@ -141,6 +162,13 @@ jobs:
 
     - name: Process Linux data
       run: |
+        # Load program links into a variable
+        if [ -f "database/program_links.json" ]; then
+          program_links=$(jq -r '.' database/program_links.json)
+        else
+          program_links="{}"
+        fi
+
         # Header
         echo "# Linux Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_LINUX.md
         total_categories=$(jq -r 'map(.category) | unique | length' database/linux_database.json)
@@ -154,7 +182,7 @@ jobs:
           echo -e "## $class\n" >> LIST_LINUX.md
           
           # Get programs for this class
-          programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/linux_database.json)
+          programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/windows_database.json)
           
           if [ -n "$programs" ]; then
             echo "| № | Program | Categories |" >> LIST_LINUX.md
@@ -163,8 +191,15 @@ jobs:
             i=0
             while IFS= read -r line; do
               program=$(echo "$line" | jq -r '.[0].program')
+              # Check if program has a link
+              program_link=$(echo "$program_links" | jq -r --arg program "$program" '.[$program] // empty')
+              if [ -n "$program_link" ]; then
+                displayed_program="[$program]($program_link)"
+              else
+                displayed_program="$program"
+              fi
               categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-              echo "| $((++i)) | $program | $categories |" >> LIST_LINUX.md
+              echo "| $((++i)) | $displayed_program | $categories |" >> LIST_LINUX.md
             done <<< "$programs"
           else
             echo "*No programs found for this class*" >> LIST_LINUX.md
@@ -185,8 +220,15 @@ jobs:
             i=0
             while IFS= read -r line; do
               program=$(echo "$line" | jq -r '.[0].program')
+              # Check if program has a link
+              program_link=$(echo "$program_links" | jq -r --arg program "$program" '.[$program] // empty')
+              if [ -n "$program_link" ]; then
+                displayed_program="[$program]($program_link)"
+              else
+                displayed_program="$program"
+              fi
               categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-              echo "| $((++i)) | $program | $categories |" >> LIST_LINUX.md
+              echo "| $((++i)) | $displayed_program | $categories |" >> LIST_LINUX.md
             done <<< "$programs"
           else
             echo "*No uncategorized programs found*" >> LIST_LINUX.md
