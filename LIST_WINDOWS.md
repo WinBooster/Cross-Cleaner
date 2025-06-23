@@ -158,7 +158,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Discord | Cache, Crashes, Logs |
+| 1 | [Discord](https://discord.com) | Cache, Crashes, Logs |
 | 2 | Element | Logs |
 | 3 | Guilded | Logs |
 | 4 | Signal | Cache, Logs |
@@ -257,7 +257,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | Cursor | Cache, Documentation, Logs |
-| 2 | DeepL | Cache, Logs |
+| 2 | [DeepL](https://www.deepl.com) | Cache, Logs |
 | 3 | JetBrains | Documentation, Logs |
 | 4 | LM Studio | Logs |
 | 5 | LazyVim | Documentation |
