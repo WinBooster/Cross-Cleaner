@@ -51,49 +51,49 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Cheat Engine | Cheats, Logs |
-| 2 | ExecHack | Cheats |
-| 3 | Fatality | Cheats |
-| 4 | INTERIUM | Cheats |
-| 5 | Krnl | Cheats |
-| 6 | OneTap | Cheats |
+| 1 | [Cheat Engine](https://www.cheatengine.org/downloads.php) | Cheats, Logs |
+| 2 | [ExecHack](https://c.exechack.cc) | Cheats |
+| 3 | [Fatality](https://fatality.win) | Cheats |
+| 4 | [INTERIUM](https://ru.interium.ooo) | Cheats |
+| 5 | [Krnl](https://wearedevs.net/d/Krnl) | Cheats |
+| 6 | [OneTap](https://www.onetap.com) | Cheats |
 | 7 | Pandora | Cheats |
-| 8 | RusherHack | Cheats |
-| 9 | Vape Client | Cheats |
-| 10 | Weave | Cheats |
+| 8 | [RusherHack](https://rusherhack.org) | Cheats |
+| 9 | [Vape Client](https://www.vape.gg) | Cheats |
+| 10 | [Weave](https://weave.su) | Cheats |
 
 
 ## Crypto Wallet
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Bit Monero | Logs |
-| 2 | Exodus Crypto Wallet | Logs |
-| 3 | Wasabi Wallet | Logs |
+| 1 | [Bit Monero](https://www.getmonero.org/downloads) | Logs |
+| 2 | [Exodus Crypto Wallet](https://www.exodus.com/download) | Logs |
+| 3 | [Wasabi Wallet](https://wasabiwallet.io) | Logs |
 
 
 ## Developing
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | BoxedAppPacker | Documentation |
-| 2 | Docker | Logs |
-| 3 | DotNet | Logs |
-| 4 | Enigma Virtual Box | Documentation |
-| 5 | Git | Documentation |
-| 6 | GitHub Desktop | Logs |
-| 7 | Go Language | Documentation |
-| 8 | IDA Pro | Cache |
-| 9 | Inno Setup 6 | Documentation, Logs |
-| 10 | Java | Documentation |
-| 11 | MCCreator | Logs |
-| 12 | MinGW | Documentation |
-| 13 | Node JS | Cache, Documentation, Logs |
-| 14 | Postman | Logs |
-| 15 | Python | Documentation |
-| 16 | Recaf | Logs |
-| 17 | Rust Language | Documentation |
-| 18 | Unity Hub | Documentation |
+| 1 | [BoxedAppPacker](https://www.boxedapp.com/boxedapppacker/download.html) | Documentation |
+| 2 | [Docker](https://www.docker.com/products/docker-desktop) | Logs |
+| 3 | [DotNet](https://dotnet.microsoft.com/en-us/download) | Logs |
+| 4 | [Enigma Virtual Box](https://enigmaprotector.com/en/downloads.html) | Documentation |
+| 5 | [Git](https://git-scm.com/downloads) | Documentation |
+| 6 | [GitHub Desktop](https://desktop.github.com/download) | Logs |
+| 7 | [Go Language](https://go.dev/doc/install) | Documentation |
+| 8 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
+| 9 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
+| 10 | [Java](https://www.java.com/download) | Documentation |
+| 11 | [MCCreator](https://mcreator.net/download) | Logs |
+| 12 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
+| 13 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
+| 14 | [Postman](https://www.postman.com/downloads) | Logs |
+| 15 | [Python](https://www.python.org/downloads) | Documentation |
+| 16 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
+| 17 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
+| 18 | [Unity Hub](https://unity.com/download) | Documentation |
 | 19 | Windows Kits | Documentation |
 | 20 | Xamarin | Logs |
 
@@ -102,56 +102,56 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | IObit Driver Booster | Logs |
-| 2 | LGHUB | Documentation |
-| 3 | NVIDIA App | Logs |
+| 1 | [IObit Driver Booster](https://ru.iobit.com/driver-booster.php) | Logs |
+| 2 | [LGHUB](https://www.logitechg.com/en-us/innovation/g-hub.html) | Documentation |
+| 3 | [NVIDIA App](https://www.nvidia.com/en-us/software/nvidia-app/) | Logs |
 | 4 | NVIDIA Corporation | Cache, Documentation, Logs |
-| 5 | VulcanRT | Documentation |
+| 5 | [VulcanRT](https://vulkan.lunarg.com/sdk/home) | Documentation |
 
 
 ## Emulator
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | BlueStacks | Logs |
-| 2 | BlueStacks 5 | Images |
-| 3 | Gameloop | Logs |
-| 4 | Memu | Logs |
-| 5 | Nox | Logs |
+| 1 | [BlueStacks](https://www.bluestacks.com) | Logs |
+| 2 | [BlueStacks 5](https://www.bluestacks.com) | Images |
+| 3 | [Gameloop](https://www.gameloop.com) | Logs |
+| 4 | [Memu](https://www.memuplay.com/download.html) | Logs |
+| 5 | [Nox](https://bignox.com/nox-app-player) | Logs |
 
 
 ## Game
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Arizona Games Launcher | Crashes, Logs |
-| 2 | Counter-Strike Global Offensive | Game settings |
-| 3 | Dota 2 | Game settings |
-| 4 | Electronic Arts Desktop | Logs |
-| 5 | Epic Games Launcher | Logs |
-| 6 | Lords Mobile | Logs |
-| 7 | Melissia Games Launcher | Documentation, Logs |
-| 8 | Osu | Cache, Images, Logs |
-| 9 | Roblox | Logs |
+| 1 | [Arizona Games Launcher](https://arizona-rp.com/#how-to-play) | Crashes, Logs |
+| 2 | [Counter-Strike Global Offensive](https://store.steampowered.com/app/730/CounterStrike_2) | Game settings |
+| 3 | [Dota 2](https://www.dota2.com/home) | Game settings |
+| 4 | [Electronic Arts Desktop](https://www.ea.com/ea-app) | Logs |
+| 5 | [Epic Games Launcher](https://store.epicgames.com/en-US/download) | Logs |
+| 6 | [Lords Mobile](https://lordsmobile.igg.com/pc) | Logs |
+| 7 | [Melissia Games Launcher](https://melissia.games) | Documentation, Logs |
+| 8 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
+| 9 | [Roblox](https://www.roblox.com/download) | Logs |
 | 10 | Rockstar Games | Crashes |
-| 11 | Rust | Game settings |
-| 12 | Steam | Accounts |
-| 13 | Terraria | Game saves, Game settings |
-| 14 | The Powder Toy | Game saves |
-| 15 | Unturned | Game settings |
-| 16 | VK GameCenter | Logs |
+| 11 | [Rust](https://store.steampowered.com/app/252490/Rust) | Game settings |
+| 12 | [Steam](https://store.steampowered.com/about) | Accounts |
+| 13 | [Terraria](https://terraria.org) | Game saves, Game settings |
+| 14 | [The Powder Toy](https://powdertoy.co.uk) | Game saves |
+| 15 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game settings |
+| 16 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
 
 
 ## Image
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | ImageGlass | Cache, Documentation |
-| 2 | InkSpace | Documentation, Logs |
-| 3 | Magpie | Cache, Logs |
-| 4 | Microsoft Lobe | Logs |
-| 5 | ShareX | Backups, Images, Logs |
-| 6 | Tonfotos Telegram Connector | Images |
+| 1 | [ImageGlass](https://imageglass.org) | Cache, Documentation |
+| 2 | [InkSpace](https://inkscape.org) | Documentation, Logs |
+| 3 | [Magpie](https://github.com/Blinue/Magpie) | Cache, Logs |
+| 4 | [Microsoft Lobe](https://github.com/orgs/lobe) | Logs |
+| 5 | [ShareX](https://getsharex.com/downloads) | Backups, Images, Logs |
+| 6 | [Tonfotos Telegram Connector](https://tonfotos.com) | Images |
 
 
 ## Messanger
@@ -159,43 +159,43 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [Discord](https://discord.com) | Cache, Crashes, Logs |
-| 2 | Element | Logs |
-| 3 | Guilded | Logs |
-| 4 | Signal | Cache, Logs |
-| 5 | Telegram | Accounts, Cache, Logs |
-| 6 | Thunderbird | Crashes |
+| 2 | [Element](https://element.io) | Logs |
+| 3 | [Guilded](https://www.guilded.gg) | Logs |
+| 4 | [Signal](https://signal.org) | Cache, Logs |
+| 5 | [Telegram](https://desktop.telegram.org) | Accounts, Cache, Logs |
+| 6 | [Thunderbird](https://www.thunderbird.net) | Crashes |
 
 
 ## Minecraft Launcher
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | ATLauncher | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 2 | Badlion Client | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 3 | Cristalix | Crashes, Game saves, Images, Logs |
-| 4 | CubixWorld | Game saves, Logs |
-| 5 | CurseForge | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 6 | GribLand | Accounts, Cache, Crashes, Documentation, Game saves, Images, Logs |
-| 7 | LoliLand | Crashes, Documentation, Game saves, Images, Logs |
-| 8 | Lunar Client | Accounts, Cache, Documentation, Logs |
-| 9 | MCSkill | Crashes, Game saves, Images, Logs |
-| 10 | McLaunch | Crashes |
-| 11 | Minecraft | Cheats, Crashes, Game saves, Images, Logs |
-| 12 | Modrinth | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 13 | MultiMC | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 14 | PolyMC | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 15 | PrismLauncher | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 16 | Tecknix Client | Accounts, Cache, Crashes, Documentation, Game saves, Images, Logs |
+| 1 | [ATLauncher](https://atlauncher.com/downloads) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 2 | [Badlion Client](https://www.badlion.net/minecraft-client) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 3 | [Cristalix](https://cristalix.gg) | Crashes, Game saves, Images, Logs |
+| 4 | [CubixWorld](https://cubixworld.net/start) | Game saves, Logs |
+| 5 | [CurseForge](https://www.curseforge.com/download/app) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 6 | [GribLand](https://gribland.net/#start) | Accounts, Cache, Crashes, Documentation, Game saves, Images, Logs |
+| 7 | [LoliLand](https://loliland.ru/ru/start) | Crashes, Documentation, Game saves, Images, Logs |
+| 8 | [Lunar Client](https://www.lunarclient.com/download) | Accounts, Cache, Documentation, Logs |
+| 9 | [MCSkill](https://mcskill.net/start) | Crashes, Game saves, Images, Logs |
+| 10 | [McLaunch](https://github.com/mclaunch/mclaunch) | Crashes |
+| 11 | [Minecraft](https://www.minecraft.net/ru-ru/about-minecraft) | Cheats, Crashes, Game saves, Images, Logs |
+| 12 | [Modrinth](https://modrinth.com/app) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 13 | [MultiMC](https://multimc.org/#Download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 14 | [PolyMC](https://polymc.org/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 15 | [PrismLauncher](https://prismlauncher.org/download/windows/) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 16 | [Tecknix Client](https://tecknix.com/download.html) | Accounts, Cache, Crashes, Documentation, Game saves, Images, Logs |
 
 
 ## Optimization
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | HiAlgo Boost | Documentation |
-| 2 | Mem Reduct | Documentation |
-| 3 | Winutil | Logs |
-| 4 | ССleaner | Logs |
+| 1 | [HiAlgo Boost](https://www.hialgo.com) | Documentation |
+| 2 | [Mem Reduct](https://github.com/henrypp/memreduct) | Documentation |
+| 3 | [Winutil](https://github.com/ChrisTitusTech/winutil) | Logs |
+| 4 | [ССleaner](https://www.ccleaner.com) | Logs |
 
 
 ## Packet Manager
@@ -212,8 +212,8 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | 1Password | Logs |
-| 2 | KeePass 2 | Logs |
+| 1 | [1Password](https://1password.com/) | Logs |
+| 2 | [KeePass 2](https://keepass.info/download.html) | Logs |
 
 
 ## Security
@@ -222,18 +222,18 @@
 | --- | --- | --- |
 | 1 | 4uKey for Android | Logs |
 | 2 | GnuPG | Documentation |
-| 3 | Gpg4win | Documentation |
-| 4 | I2P | Documentation, Logs |
-| 5 | IObit Malware Fighter | Logs |
-| 6 | NetLimiter | Logs |
-| 7 | OONI Probe | Logs |
-| 8 | Panda Security | Logs |
-| 9 | Process Hacker 2 | Documentation |
-| 10 | Process Lasso | Logs |
-| 11 | Sandboxie+ | Documentation |
-| 12 | SystemInformer | Documentation |
-| 13 | VirtualBox | Documentation, Logs |
-| 14 | Zapret | Logs |
+| 3 | [Gpg4win](https://www.gpg4win.org) | Documentation |
+| 4 | [I2P](https://geti2p.net/download) | Documentation, Logs |
+| 5 | [IObit Malware Fighter](https://www.iobit.com/en/malware-fighter.php) | Logs |
+| 6 | [NetLimiter](https://www.netlimiter.com/download) | Logs |
+| 7 | [OONI Probe](https://ooni.org/install) | Logs |
+| 8 | [Panda Security](https://www.pandasecurity.com) | Logs |
+| 9 | [Process Hacker 2](https://systeminformer.sourceforge.io/downloads) | Documentation |
+| 10 | [Process Lasso](https://bitsum.com) | Logs |
+| 11 | [Sandboxie+](https://sandboxie-plus.com) | Documentation |
+| 12 | [SystemInformer](https://systeminformer.com/downloads) | Documentation |
+| 13 | [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | Documentation, Logs |
+| 14 | [Zapret](https://github.com/bol-van/zapret) | Logs |
 
 
 ## Spyware
@@ -256,59 +256,59 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Cursor | Cache, Documentation, Logs |
+| 1 | [Cursor](https://www.cursor.com/downloads) | Cache, Documentation, Logs |
 | 2 | [DeepL](https://www.deepl.com) | Cache, Logs |
-| 3 | JetBrains | Documentation, Logs |
-| 4 | LM Studio | Logs |
-| 5 | LazyVim | Documentation |
-| 6 | LibreOffice | Documentation, Logs |
-| 7 | NeoVim | Documentation, Logs |
-| 8 | Notepad++ | Documentation |
-| 9 | Sublime Text | Logs |
-| 10 | VS Code | Browser cookies, Documentation, Logs |
+| 3 | [JetBrains](https://www.jetbrains.com/?var=1) | Documentation, Logs |
+| 4 | [LM Studio](https://lmstudio.ai/download) | Logs |
+| 5 | [LazyVim](https://www.lazyvim.org/installation) | Documentation |
+| 6 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Documentation, Logs |
+| 7 | [NeoVim](https://github.com/neovim/neovim/blob/master/INSTALL.md) | Documentation, Logs |
+| 8 | [Notepad++](https://notepad-plus-plus.org/downloads) | Documentation |
+| 9 | [Sublime Text](https://www.sublimetext.com/download) | Logs |
+| 10 | [VS Code](https://code.visualstudio.com/download) | Browser cookies, Documentation, Logs |
 
 
 ## Torrent
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Tribler | Logs |
-| 2 | qBittorrent | Logs |
+| 1 | [Tribler](https://www.tribler.org/download.html) | Logs |
+| 2 | [qBittorrent](https://www.qbittorrent.org/download) | Logs |
 
 
 ## Utility
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | MiniBin | Logs |
-| 2 | PowerToys | Documentation |
+| 1 | [MiniBin](https://github.com/king-tri-ton/minibin) | Logs |
+| 2 | [PowerToys](https://github.com/microsoft/PowerToys) | Documentation |
 
 
 ## VPN
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Amnezia VPN | Documentation, Logs |
-| 2 | Amnezia WG | Logs |
-| 3 | CloudFlare | Logs |
-| 4 | PlanetVPN | Cache |
-| 5 | Radmin VPN | Documentation, Logs |
-| 6 | UrbanVPN | Logs |
-| 7 | Windscribe | Logs |
-| 8 | iTop VPN | Logs |
+| 1 | [Amnezia VPN](https://github.com/amnezia-vpn/amnezia-client) | Documentation, Logs |
+| 2 | [Amnezia WG](https://docs.amnezia.org/ru/documentation/amnezia-wg) | Logs |
+| 3 | [CloudFlare](https://one.one.one.one) | Logs |
+| 4 | [PlanetVPN](https://freevpnplanet.com) | Cache |
+| 5 | [Radmin VPN](https://www.radmin-vpn.com/help/code56) | Documentation, Logs |
+| 6 | [UrbanVPN](https://www.urban-vpn.com) | Logs |
+| 7 | [Windscribe](https://windscribe.com/features/windows) | Logs |
+| 8 | [iTop VPN](https://www.itopvpn.com) | Logs |
 
 
 ## Video
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | AVCLabs Video Enhancer AI | Logs |
-| 2 | HandBrake | Documentation, Logs |
-| 3 | OBS Studio | Logs |
-| 4 | Rave | Cache, Logs |
-| 5 | Topaz Video AI | Logs |
-| 6 | VLC | Documentation |
-| 7 | iTop Screen Recorder | Logs |
+| 1 | [AVCLabs Video Enhancer AI](https://www.avclabs.com/video-enhancer-ai.html) | Logs |
+| 2 | [HandBrake](https://handbrake.fr/downloads.php) | Documentation, Logs |
+| 3 | [OBS Studio](https://obsproject.com/download) | Logs |
+| 4 | [Rave](https://rave.io) | Cache, Logs |
+| 5 | [Topaz Video AI](https://www.topazlabs.com/topaz-video-ai) | Logs |
+| 6 | [VLC](https://www.videolan.org/vlc) | Documentation |
+| 7 | [iTop Screen Recorder](https://recorder.itopvpn.com) | Logs |
 
 
 ## Uncategorized
