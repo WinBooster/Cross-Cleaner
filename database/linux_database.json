@@ -1059,15 +1059,6 @@
     "remove_files": true
   },
   {
-    "path": "/usr/share/doc/",
-    "class": "Game",
-    "category": "Documentation",
-    "program": "The Powder Toy",
-    "directories_to_remove": [
-      "powdertoy-bin"
-    ]
-  },
-  {
     "path": "/home/{username}/.local/share/PrismLauncher/",
     "class": "Minecraft Launcher",
     "category": "Accounts",
@@ -1343,6 +1334,15 @@
     "program": "Terraria",
     "files_to_remove": [
       "changelog.txt"
+    ]
+  },
+  {
+    "path": "/usr/share/doc/",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "The Powder Toy",
+    "directories_to_remove": [
+      "powdertoy-bin"
     ]
   },
   {
