@@ -4060,11 +4060,38 @@
     ]
   },
   {
-    "path": "{drive}Windows\\security\\database\\*.log",
+    "path": "{drive}Windows\\security",
+    "class": "System",
+    "category": "Logs",
+    "program": "Windows",
+    "directories_to_remove": [
+      "logs"
+    ]
+  },
+  {
+    "path": "{drive}Windows\\SoftwareDistribution\\Download",
+    "class": "System",
+    "category": "Cache",
+    "program": "Windows",
+    "directories_to_remove": [
+		"SharedFileCache"
+	]
+  },
+  {
+    "path": "{drive}Windows\\SoftwareDistribution\\DataStore\\Logs\\*.log",
     "class": "System",
     "category": "Logs",
     "program": "Windows",
     "remove_files": true
+  },
+  {
+    "path": "{drive}Windows\\SoftwareDistribution",
+    "class": "System",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [
+		"ReportingEvents.log"
+	]
   },
   {
     "path": "{drive}Windows",
@@ -4227,6 +4254,15 @@
     "directories_to_remove": [
       "LocalCache",
       "TempState"
+    ]
+  },
+  {
+    "path": "{drive}Windows\\Performance\\WinSAT",
+    "category": "Logs",
+    "program": "Windows",
+    "class": "System",
+    "files_to_remove": [
+      "winsat.log"
     ]
   },
   {
