@@ -48,7 +48,7 @@
 | 5 | Gradle | Cache |
 | 6 | Jdk | Documentation |
 | 7 | [Python](https://www.python.org/downloads) | Documentation |
-| 8 | Rust language | Documentation |
+| 8 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
 
 
 ## Driver
@@ -105,7 +105,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | KeePassXC | Documentation |
+| 1 | [KeePassXC](https://keepassxc.org/download) | Documentation |
 
 
 ## Text

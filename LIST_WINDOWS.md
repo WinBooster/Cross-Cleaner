@@ -18,19 +18,19 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | 7-Zip | Logs |
+| 1 | [7-Zip](https://www.7-zip.org/download.html) | Logs |
 | 2 | Magic TDX | Documentation |
-| 3 | WinRaR | Documentation |
+| 3 | [WinRaR](https://www.win-rar.com/predownload.html) | Documentation |
 
 
 ## Audio
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | AAF Optimus DCH Audio | Documentation |
-| 2 | ASIO4ALL v2 | Documentation |
-| 3 | FL Studio | Documentation |
-| 4 | SoundWire Server | Documentation |
+| 1 | [AAF Optimus DCH Audio](https://github.com/AAFOptimus/AAFFamilyDCHAudio) | Documentation |
+| 2 | [ASIO4ALL v2](https://asio4all.org/about/download-asio4all) | Documentation |
+| 3 | [FL Studio](https://www.image-line.com/fl-studio-download) | Documentation |
+| 4 | [SoundWire Server](https://georgielabs.net) | Documentation |
 | 5 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
 
 
