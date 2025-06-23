@@ -1,7 +1,7 @@
 # Windows Clearing Programs Catalog v2.0.1.1
 **Total categories in database:** 15
 
-**Total programs in database:** 166
+**Total programs in database:** 165
 
 **Total pathes in database:** 395
 
@@ -113,11 +113,10 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [BlueStacks](https://www.bluestacks.com) | Logs |
-| 2 | [BlueStacks 5](https://www.bluestacks.com) | Images |
-| 3 | [Gameloop](https://www.gameloop.com) | Logs |
-| 4 | [Memu](https://www.memuplay.com/download.html) | Logs |
-| 5 | [Nox](https://bignox.com/nox-app-player) | Logs |
+| 1 | [BlueStacks 5](https://www.bluestacks.com) | Images, Logs |
+| 2 | [Gameloop](https://www.gameloop.com) | Logs |
+| 3 | [Memu](https://www.memuplay.com/download.html) | Logs |
+| 4 | [Nox](https://bignox.com/nox-app-player) | Logs |
 
 
 ## Game
@@ -317,5 +316,5 @@
 | --- | --- | --- |
 | 1 | Adobe | Documentation |
 | 2 | Electron App's | Documentation, Logs |
-| 3 | ImgBurn | Documentation, Logs |
+| 3 | [ImgBurn](https://www.imgburn.com/index.php?act=download) | Documentation, Logs |
 | 4 | Mozilla Maintenance Service | Logs |

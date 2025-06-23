@@ -27,7 +27,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Future Client | Cheats |
+| 1 | [Future Client](https://futureclient.net) | Cheats |
 
 
 ## Crypto Wallet
@@ -42,11 +42,11 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | Auto make | Logs |
-| 2 | GTK | Documentation |
-| 3 | Ghidra | Logs |
+| 2 | [GTK](https://www.gtk.org) | Documentation |
+| 3 | [Ghidra](https://github.com/NationalSecurityAgency/ghidra) | Logs |
 | 4 | [GitHub Desktop](https://desktop.github.com/download) | Cache, Documentation, Logs |
-| 5 | Gradle | Cache |
-| 6 | Jdk | Documentation |
+| 5 | [Gradle](https://gradle.org) | Cache |
+| 6 | [Jdk](https://www.oracle.com/java/technologies/downloads) | Documentation |
 | 7 | [Python](https://www.python.org/downloads) | Documentation |
 | 8 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
 
@@ -62,13 +62,13 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Garry's mod | Crashes, Logs |
-| 2 | Hearts of Iron IV | Cache, Crashes, Logs |
+| 1 | [Garry's mod](https://store.steampowered.com/app/4000/Garrys_Mod) | Crashes, Logs |
+| 2 | [Hearts of Iron IV](https://store.steampowered.com/app/394360/Hearts_of_Iron_IV) | Cache, Crashes, Logs |
 | 3 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
-| 4 | Powdertoy | Documentation |
-| 5 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
-| 6 | Steam proton | Documentation |
-| 7 | [Terraria](https://terraria.org) | Crashes, Game saves, Logs |
+| 4 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
+| 5 | [Steam proton](https://github.com/ValveSoftware/Proton) | Documentation |
+| 6 | [Terraria](https://terraria.org) | Crashes, Game saves, Logs |
+| 7 | [The Powder Toy](https://powdertoy.co.uk) | Documentation |
 
 
 ## Messanger
@@ -98,7 +98,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Yay | Cache |
+| 1 | [Yay](https://github.com/Jguer/yay) | Cache |
 
 
 ## Password Manager
@@ -114,10 +114,10 @@
 | --- | --- | --- |
 | 1 | Bison | Logs |
 | 2 | [Cursor](https://www.cursor.com/downloads) | Cache, Documentation, Logs |
-| 3 | Gperf | Documentation |
+| 3 | [Gperf](https://github.com/jwinarske/gperf) | Documentation |
 | 4 | [JetBrains](https://www.jetbrains.com/?var=1) | Logs |
 | 5 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Cache |
-| 6 | Pcre | Documentation |
+| 6 | [Pcre](https://www.pcre.org) | Documentation |
 | 7 | [Thunderbird](https://www.thunderbird.net) | Logs |
 | 8 | [VS Code](https://code.visualstudio.com/download) | Documentation |
 
