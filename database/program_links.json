@@ -7,6 +7,19 @@
   "Telegram": "https://desktop.telegram.org",
   "Thunderbird": "https://www.thunderbird.net",
   
+  "Alsa": "https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture",
+  "Cassettle": "https://gitlab.gnome.org/Rirusha/Cassette",
+  "Spotify": "https://open.spotify.com/download",
+  "Yandex Music": "https://music.yandex.ru/download",
+  
+  "Brave Browser": "https://brave.com/download",
+  "Edge": "https://www.microsoft.com/edge",
+  "Google Chrome": "https://www.google.com/intl/en/chrome",
+  "LibreWolf": "https://librewolf.net/installation",
+  "Mozilla Firefox": "https://www.mozilla.org/firefox/new",
+  "Opera GX": "https://www.opera.com/download",
+  "Vivaldi": "https://vivaldi.com/download",
+  
   "ATLauncher": "https://atlauncher.com/downloads",
   "Badlion Client": "https://www.badlion.net/minecraft-client",
   "Cristalix": "https://cristalix.gg",
@@ -23,6 +36,7 @@
   "PolyMC": "https://polymc.org/download",
   "PrismLauncher": "https://prismlauncher.org/download/windows/",
   "Tecknix Client": "https://tecknix.com/download.html",
+  "SimpleMinecraft": "https://simpleminecraft.ru/start.html"
   
   "HiAlgo Boost": "https://www.hialgo.com",
   "Mem Reduct": "https://github.com/henrypp/memreduct",
@@ -99,6 +113,7 @@
   "ShareX": "https://getsharex.com/downloads",
   "Tonfotos Telegram Connector": "https://tonfotos.com",
   
+  "4uKey for Android": "https://www.tenorshare.ru/products/android-password-reset-tool.html",
   "Gpg4win": "https://www.gpg4win.org",
   "I2P": "https://geti2p.net/download",
   "IObit Malware Fighter": "https://www.iobit.com/en/malware-fighter.php",
@@ -143,5 +158,10 @@
   "Rave": "https://rave.io",
   "Topaz Video AI": "https://www.topazlabs.com/topaz-video-ai",
   "VLC": "https://www.videolan.org/vlc",
-  "iTop Screen Recorder": "https://recorder.itopvpn.com"
+  "iTop Screen Recorder": "https://recorder.itopvpn.com",
+  
+  "Chocolatey": "https://chocolatey.org/install",
+  "Scoop": "https://scoop.sh",
+  "WinGet": "https://github.com/microsoft/winget-cli",
+  "pipx": "https://github.com/pypa/pipx"
 }
