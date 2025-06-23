@@ -170,7 +170,7 @@ async fn work(
     let icon_path = temp_file.path().to_str().unwrap();
 
     let notification_body = format!(
-        "Removed: {}, Files: {}, Dirs: {}",
+        "Removed: {}\nFiles: {}\nDirs: {}",
         get_file_size_string(bytes_cleared),
         removed_files,
         removed_directories
