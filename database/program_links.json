@@ -54,6 +54,7 @@
   "KeePass 2": "https://keepass.info/download.html",
   "KeePassXC": "https://keepassxc.org/download",
   
+  "Future Client": "https://futureclient.net",
   "Cheat Engine": "https://www.cheatengine.org/downloads.php",
   "ExecHack": "https://c.exechack.cc",
   "Fatality": "https://fatality.win",
@@ -68,6 +69,10 @@
   "Exodus Crypto Wallet": "https://www.exodus.com/download",
   "Wasabi Wallet": "https://wasabiwallet.io",
   
+  "Jdk": "https://www.oracle.com/java/technologies/downloads",
+  "GTK": "https://www.gtk.org",
+  "Ghidra": "https://github.com/NationalSecurityAgency/ghidra",
+  "Gradle": "https://gradle.org",
   "BoxedAppPacker": "https://www.boxedapp.com/boxedapppacker/download.html",
   "Docker": "https://www.docker.com/products/docker-desktop",
   "DotNet": "https://dotnet.microsoft.com/en-us/download",
@@ -98,6 +103,8 @@
   "Memu": "https://www.memuplay.com/download.html",
   "Nox": "https://bignox.com/nox-app-player",
   
+  "Garry's mod": "https://store.steampowered.com/app/4000/Garrys_Mod",
+  "Hearts of Iron IV": "https://store.steampowered.com/app/394360/Hearts_of_Iron_IV",
   "Arizona Games Launcher": "https://arizona-rp.com/#how-to-play",
   "Counter-Strike Global Offensive": "https://store.steampowered.com/app/730/CounterStrike_2",
   "Dota 2": "https://www.dota2.com/home",
@@ -113,6 +120,7 @@
   "The Powder Toy": "https://powdertoy.co.uk",
   "Unturned": "https://store.steampowered.com/app/304930/Unturned",
   "VK GameCenter": "https://vkplay.ru/about/?from=gamecenter",
+  "Steam proton": "https://github.com/ValveSoftware/Proton",
   
   "ImageGlass": "https://imageglass.org",
   "InkSpace": "https://inkscape.org",
@@ -144,6 +152,8 @@
   "Notepad++": "https://notepad-plus-plus.org/downloads",
   "Sublime Text": "https://www.sublimetext.com/download",
   "VS Code": "https://code.visualstudio.com/download",
+  "Gperf": "https://github.com/jwinarske/gperf",
+  "Pcre": "https://www.pcre.org",
   
   "Tribler": "https://www.tribler.org/download.html",
   "qBittorrent": "https://www.qbittorrent.org/download",
@@ -168,8 +178,11 @@
   "VLC": "https://www.videolan.org/vlc",
   "iTop Screen Recorder": "https://recorder.itopvpn.com",
   
+  "Yay": "https://github.com/Jguer/yay",
   "Chocolatey": "https://chocolatey.org/install",
   "Scoop": "https://scoop.sh",
   "WinGet": "https://github.com/microsoft/winget-cli",
-  "pipx": "https://github.com/pypa/pipx"
+  "pipx": "https://github.com/pypa/pipx",
+  
+  "ImgBurn": "https://www.imgburn.com/index.php?act=download"
 }

@@ -382,7 +382,7 @@
     "path": "{drive}ProgramData\\BlueStacks_nxt",
     "class": "Emulator",
     "category": "Logs",
-    "program": "BlueStacks",
+    "program": "BlueStacks 5",
     "directories_to_remove": [
       "Dumps"
     ],
@@ -393,7 +393,7 @@
     "path": "{drive}Program Files\\BlueStacks_nxt",
     "class": "Emulator",
     "category": "Logs",
-    "program": "BlueStacks",
+    "program": "BlueStacks 5",
     "files_to_remove": [
       "LICENSE.txt",
       "NOTICE.html",
@@ -404,7 +404,7 @@
     "path": "{drive}ProgramData\\BlueStacks_nxt\\Logs\\*.log",
     "class": "Emulator",
     "category": "Logs",
-    "program": "BlueStacks",
+    "program": "BlueStacks 5",
     "remove_files": true
   },
   {

@@ -1062,7 +1062,7 @@
     "path": "/usr/share/doc/",
     "class": "Game",
     "category": "Documentation",
-    "program": "Powdertoy",
+    "program": "The Powder Toy",
     "directories_to_remove": [
       "powdertoy-bin"
     ]
