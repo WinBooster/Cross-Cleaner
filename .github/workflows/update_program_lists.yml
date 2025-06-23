@@ -162,7 +162,7 @@ jobs:
           echo -e "## $class\n" >> LIST_LINUX.md
           
           # Get programs for this class
-          programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/windows_database.json)
+          programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/linux_database.json)
           
           if [ -n "$programs" ]; then
             echo "| № | Program | Categories |" >> LIST_LINUX.md
