@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.1
+# Windows Clearing Programs Catalog v2.0.1.1
 **Total categories in database:** 15
 
-**Total programs in database:** 160
+**Total programs in database:** 166
 
-**Total pathes in database:** 373
+**Total pathes in database:** 395
 
 ## AntiCheat
 
@@ -104,8 +104,9 @@
 | --- | --- | --- |
 | 1 | IObit Driver Booster | Logs |
 | 2 | LGHUB | Documentation |
-| 3 | NVIDIA Corporation | Documentation, Logs |
-| 4 | VulcanRT | Documentation |
+| 3 | NVIDIA App | Logs |
+| 4 | NVIDIA Corporation | Cache, Documentation, Logs |
+| 5 | VulcanRT | Documentation |
 
 
 ## Emulator
@@ -126,17 +127,19 @@
 | 1 | Arizona Games Launcher | Crashes, Logs |
 | 2 | Counter-Strike Global Offensive | Game settings |
 | 3 | Dota 2 | Game settings |
-| 4 | Epic Games | Logs |
-| 5 | Lords Mobile | Logs |
-| 6 | Melissia Games Launcher | Documentation, Logs |
-| 7 | Osu | Cache, Images, Logs |
-| 8 | Roblox | Logs |
-| 9 | Rust | Game settings |
-| 10 | Steam | Accounts |
-| 11 | Terraria | Game saves, Game settings |
-| 12 | The Powder Toy | Game saves |
-| 13 | Unturned | Game settings |
-| 14 | VK GameCenter | Logs |
+| 4 | Electronic Arts Desktop | Logs |
+| 5 | Epic Games Launcher | Logs |
+| 6 | Lords Mobile | Logs |
+| 7 | Melissia Games Launcher | Documentation, Logs |
+| 8 | Osu | Cache, Images, Logs |
+| 9 | Roblox | Logs |
+| 10 | Rockstar Games | Crashes |
+| 11 | Rust | Game settings |
+| 12 | Steam | Accounts |
+| 13 | Terraria | Game saves, Game settings |
+| 14 | The Powder Toy | Game saves |
+| 15 | Unturned | Game settings |
+| 16 | VK GameCenter | Logs |
 
 
 ## Image
@@ -155,7 +158,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Discord | Logs |
+| 1 | Discord | Cache, Crashes, Logs |
 | 2 | Element | Logs |
 | 3 | Guilded | Logs |
 | 4 | Signal | Cache, Logs |
@@ -191,7 +194,8 @@
 | --- | --- | --- |
 | 1 | HiAlgo Boost | Documentation |
 | 2 | Mem Reduct | Documentation |
-| 3 | ССleaner | Logs |
+| 3 | Winutil | Logs |
+| 4 | ССleaner | Logs |
 
 
 ## Packet Manager
@@ -222,13 +226,21 @@
 | 4 | I2P | Documentation, Logs |
 | 5 | IObit Malware Fighter | Logs |
 | 6 | NetLimiter | Logs |
-| 7 | Panda Security | Logs |
-| 8 | Process Hacker 2 | Documentation |
-| 9 | Process Lasso | Logs |
-| 10 | Sandboxie+ | Documentation |
-| 11 | SystemInformer | Documentation |
-| 12 | VirtualBox | Documentation, Logs |
-| 13 | Zapret | Logs |
+| 7 | OONI Probe | Logs |
+| 8 | Panda Security | Logs |
+| 9 | Process Hacker 2 | Documentation |
+| 10 | Process Lasso | Logs |
+| 11 | Sandboxie+ | Documentation |
+| 12 | SystemInformer | Documentation |
+| 13 | VirtualBox | Documentation, Logs |
+| 14 | Zapret | Logs |
+
+
+## Spyware
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | HP Touchpoint Analytics Client | Logs |
 
 
 ## System
