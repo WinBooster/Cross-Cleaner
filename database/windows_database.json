@@ -3921,6 +3921,22 @@
     "remove_directory_after_clean": true
   },
   {
+    "path": "{drive}Windows\\System32\\DriverStore",
+    "class": "System",
+    "category": "Cache",
+    "program": "Windows",
+    "directories_to_remove": [
+		"Temp"
+	]
+  },
+  {
+    "path": "{drive}Windows\\System32\\config\\systemprofile\\AppData\\Local\\DataSharing\\Storage\\*.log",
+    "class": "System",
+    "category": "Logs",
+    "program": "Windows",
+    "remove_files": true
+  },
+  {
     "path": "{drive}Windows",
     "class": "System",
     "category": "Cache",
