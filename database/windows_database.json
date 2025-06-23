@@ -3926,8 +3926,8 @@
     "category": "Cache",
     "program": "Windows",
     "directories_to_remove": [
-      "Temp"
-    ]
+		"Temp"
+	]
   },
   {
     "path": "{drive}Windows\\System32\\config\\systemprofile\\AppData\\Local\\DataSharing\\Storage\\*.log",
@@ -4205,7 +4205,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\winutil",
-    "class": "Utility",
+    "class": "Optimization",
     "category": "Logs",
     "program": "Winutil",
     "directories_to_remove": [
