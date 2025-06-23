@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.1.1
+# Windows Clearing Programs Catalog v2.0.1
 **Total categories in database:** 15
 
 **Total programs in database:** 160
 
-**Total pathes in database:** 369
+**Total pathes in database:** 373
 
 ## AntiCheat
 
