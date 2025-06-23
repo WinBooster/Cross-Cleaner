@@ -1,7 +1,7 @@
 # Linux Clearing Programs Catalog v2.0.1.1
 **Total categories in database:** 12
 
-**Total programs in database:** 51
+**Total programs in database:** 50
 
 **Total pathes in database:** 118
 
@@ -9,18 +9,18 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Alsa | Documentation |
-| 2 | Cassettle | Cache, Logs |
-| 3 | Spotify | Logs |
-| 4 | Yandex Music | Cache, Logs |
+| 1 | [Alsa](https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture) | Documentation |
+| 2 | [Cassettle](https://gitlab.gnome.org/Rirusha/Cassette) | Cache, Logs |
+| 3 | [Spotify](https://open.spotify.com/download) | Logs |
+| 4 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
 
 
 ## Browser
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | FireFox | Browser cookies, Browser history, Cache |
-| 2 | LibreWolf | Browser history, Cache |
+| 1 | [LibreWolf](https://librewolf.net/installation) | Browser history, Cache |
+| 2 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser cookies, Browser history, Cache |
 
 
 ## Cheat
@@ -44,12 +44,11 @@
 | 1 | Auto make | Logs |
 | 2 | GTK | Documentation |
 | 3 | Ghidra | Logs |
-| 4 | [GitHub Desktop](https://desktop.github.com/download) | Cache, Logs |
-| 5 | Github Desktop | Documentation |
-| 6 | Gradle | Cache |
-| 7 | Jdk | Documentation |
-| 8 | [Python](https://www.python.org/downloads) | Documentation |
-| 9 | Rust language | Documentation |
+| 4 | [GitHub Desktop](https://desktop.github.com/download) | Cache, Documentation, Logs |
+| 5 | Gradle | Cache |
+| 6 | Jdk | Documentation |
+| 7 | [Python](https://www.python.org/downloads) | Documentation |
+| 8 | Rust language | Documentation |
 
 
 ## Driver
@@ -88,11 +87,11 @@
 | 2 | [CubixWorld](https://cubixworld.net/start) | Crashes, Game saves, Images, Logs |
 | 3 | [Lunar Client](https://www.lunarclient.com/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
 | 4 | [Minecraft](https://www.minecraft.net/ru-ru/about-minecraft) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, LastActivity, Logs |
-| 5 | Modrith | Cache |
+| 5 | [Modrinth](https://modrinth.com/app) | Cache |
 | 6 | [MultiMC](https://multimc.org/#Download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
 | 7 | [PolyMC](https://polymc.org/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 8 | Prism Launcher | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 9 | SimpleMinecraft | Cache, Logs |
+| 8 | [PrismLauncher](https://prismlauncher.org/download/windows/) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 9 | [SimpleMinecraft](https://simpleminecraft.ru/start.html) | Cache, Logs |
 
 
 ## Packet Manager
@@ -119,7 +118,8 @@
 | 4 | [JetBrains](https://www.jetbrains.com/?var=1) | Logs |
 | 5 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Cache |
 | 6 | Pcre | Documentation |
-| 7 | [VS Code](https://code.visualstudio.com/download) | Documentation |
+| 7 | [Thunderbird](https://www.thunderbird.net) | Logs |
+| 8 | [VS Code](https://code.visualstudio.com/download) | Documentation |
 
 
 ## Uncategorized
@@ -131,4 +131,3 @@
 | 3 | Info | Documentation |
 | 4 | Licenses | Documentation |
 | 5 | System | Cache, Trash |
-| 6 | [Thunderbird](https://www.thunderbird.net) | Logs |

@@ -31,20 +31,20 @@
 | 2 | ASIO4ALL v2 | Documentation |
 | 3 | FL Studio | Documentation |
 | 4 | SoundWire Server | Documentation |
-| 5 | Yandex Music | Cache, Logs |
+| 5 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
 
 
 ## Browser
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Brave Browser | Browser cookies, Browser history, Browser passwords, Cache, Logs |
-| 2 | Edge | Browser cookies, Browser history, Cache |
-| 3 | Google Chrome | Browser cookies, Browser history, Browser passwords, Logs |
-| 4 | LibreWolf | Browser cookies, Browser history |
-| 5 | Mozilla Firefox | Browser cookies, Browser history, Cache, Logs |
-| 6 | Opera GX | Browser cookies, Browser history, Browser passwords |
-| 7 | Vivaldi | Browser cookies, Browser history, Browser passwords, Images |
+| 1 | [Brave Browser](https://brave.com/download) | Browser cookies, Browser history, Browser passwords, Cache, Logs |
+| 2 | [Edge](https://www.microsoft.com/edge) | Browser cookies, Browser history, Cache |
+| 3 | [Google Chrome](https://www.google.com/intl/en/chrome) | Browser cookies, Browser history, Browser passwords, Logs |
+| 4 | [LibreWolf](https://librewolf.net/installation) | Browser cookies, Browser history |
+| 5 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser cookies, Browser history, Cache, Logs |
+| 6 | [Opera GX](https://www.opera.com/download) | Browser cookies, Browser history, Browser passwords |
+| 7 | [Vivaldi](https://vivaldi.com/download) | Browser cookies, Browser history, Browser passwords, Images |
 
 
 ## Cheat
@@ -202,10 +202,10 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Chocolatey | Documentation, Logs |
-| 2 | Scoop | Cache, Documentation |
-| 3 | WinGet | Documentation |
-| 4 | pipx | Logs |
+| 1 | [Chocolatey](https://chocolatey.org/install) | Documentation, Logs |
+| 2 | [Scoop](https://scoop.sh) | Cache, Documentation |
+| 3 | [WinGet](https://github.com/microsoft/winget-cli) | Documentation |
+| 4 | [pipx](https://github.com/pypa/pipx) | Logs |
 
 
 ## Password Manager
@@ -220,7 +220,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | 4uKey for Android | Logs |
+| 1 | [4uKey for Android](https://www.tenorshare.ru/products/android-password-reset-tool.html) | Logs |
 | 2 | GnuPG | Documentation |
 | 3 | [Gpg4win](https://www.gpg4win.org) | Documentation |
 | 4 | [I2P](https://geti2p.net/download) | Documentation, Logs |
