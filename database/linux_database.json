@@ -392,35 +392,6 @@
     ]
   },
   {
-    "path": "/home/{username}/.mozilla/firefox/**/",
-    "class": "Browser",
-    "category": "Browser cookies",
-    "program": "FireFox",
-    "files_to_remove": [
-      "cookies.sqlite",
-      "cookies.sqlite-wal"
-    ]
-  },
-  {
-    "path": "/home/{username}/.cache/firefox/**/thumbnails/*",
-    "class": "Browser",
-    "category": "Cache",
-    "program": "FireFox",
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.mozilla/firefox/**/",
-    "class": "Browser",
-    "category": "Browser history",
-    "program": "FireFox",
-    "files_to_remove": [
-      "formhistory.sqlite",
-      "favicons.sqlite",
-      "favicons.sqlite-wal"
-    ]
-  },
-  {
     "path": "/home/{username}/",
     "class": "Cheat",
     "category": "Cheats",
@@ -471,7 +442,7 @@
     "path": "/usr/share/doc/",
     "class": "Developing",
     "category": "Documentation",
-    "program": "Github Desktop",
+    "program": "GitHub Desktop",
     "directories_to_remove": [
       "github-desktop"
     ]
@@ -807,10 +778,39 @@
     "path": "/home/{username}/.cache/ModrinthApp/",
     "class": "Minecraft Launcher",
     "category": "Cache",
-    "program": "Modrith",
+    "program": "Modrinth",
     "directories_to_remove": [
       "CacheStorage",
       "WebKitCache"
+    ]
+  },
+  {
+    "path": "/home/{username}/.mozilla/firefox/**/",
+    "class": "Browser",
+    "category": "Browser cookies",
+    "program": "Mozilla Firefox",
+    "files_to_remove": [
+      "cookies.sqlite",
+      "cookies.sqlite-wal"
+    ]
+  },
+  {
+    "path": "/home/{username}/.cache/firefox/**/thumbnails/*",
+    "class": "Browser",
+    "category": "Cache",
+    "program": "Mozilla Firefox",
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.mozilla/firefox/**/",
+    "class": "Browser",
+    "category": "Browser history",
+    "program": "Mozilla Firefox",
+    "files_to_remove": [
+      "formhistory.sqlite",
+      "favicons.sqlite",
+      "favicons.sqlite-wal"
     ]
   },
   {
@@ -1071,7 +1071,7 @@
     "path": "/home/{username}/.local/share/PrismLauncher/",
     "class": "Minecraft Launcher",
     "category": "Accounts",
-    "program": "Prism Launcher",
+    "program": "PrismLauncher",
     "files_to_remove": [
       "accounts.json",
       "launcher_accounts.json"
@@ -1081,7 +1081,7 @@
     "path": "/home/{username}/.local/share/PrismLauncher/game-cache/*",
     "class": "Minecraft Launcher",
     "category": "Cache",
-    "program": "Prism Launcher",
+    "program": "PrismLauncher",
     "remove_directories": true,
     "remove_files": true
   },
@@ -1089,7 +1089,7 @@
     "path": "/home/{username}/.local/share/PrismLauncher/cache/*",
     "class": "Minecraft Launcher",
     "category": "Cache",
-    "program": "Prism Launcher",
+    "program": "PrismLauncher",
     "remove_directories": true,
     "remove_files": true
   },
@@ -1097,7 +1097,7 @@
     "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft",
     "class": "Minecraft Launcher",
     "category": "Cheats",
-    "program": "Prism Launcher",
+    "program": "PrismLauncher",
     "directories_to_remove": [
       "meteor-client",
       "LiquidBounce",
@@ -1111,7 +1111,7 @@
     "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/crash-reports/*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
-    "program": "Prism Launcher",
+    "program": "PrismLauncher",
     "remove_directories": true,
     "remove_files": true
   },
@@ -1119,7 +1119,7 @@
     "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/saves/*",
     "class": "Minecraft Launcher",
     "category": "Game saves",
-    "program": "Prism Launcher",
+    "program": "PrismLauncher",
     "remove_directories": true,
     "remove_files": true
   },
@@ -1127,7 +1127,7 @@
     "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/screenshots/*",
     "class": "Minecraft Launcher",
     "category": "Images",
-    "program": "Prism Launcher",
+    "program": "PrismLauncher",
     "remove_directories": true,
     "remove_files": true
   },
@@ -1135,7 +1135,7 @@
     "path": "/home/{username}/.local/share/PrismLauncher/instances/**/minecraft/logs/*",
     "class": "Minecraft Launcher",
     "category": "Logs",
-    "program": "Prism Launcher",
+    "program": "PrismLauncher",
     "remove_directories": true,
     "remove_files": true
   },
@@ -1143,7 +1143,7 @@
     "path": "/home/{username}/.local/share/PrismLauncher/licenses/*",
     "class": "Minecraft Launcher",
     "category": "Documentation",
-    "program": "Prism Launcher",
+    "program": "PrismLauncher",
     "remove_directories": true,
     "remove_files": true
   },
@@ -1151,7 +1151,7 @@
     "path": "/home/{username}/.local/share/PrismLauncher/logs/*",
     "class": "Minecraft Launcher",
     "category": "Logs",
-    "program": "Prism Launcher",
+    "program": "PrismLauncher",
     "remove_directories": true,
     "remove_files": true
   },
@@ -1159,7 +1159,7 @@
     "path": "/home/{username}/.local/share/PrismLauncher/*log*",
     "class": "Minecraft Launcher",
     "category": "Logs",
-    "program": "Prism Launcher",
+    "program": "PrismLauncher",
     "remove_files": true
   },
   {
@@ -1347,6 +1347,7 @@
   },
   {
     "path": "/home/{username}/.cache/thunderbird/**/cache2/*.log",
+    "class": "Text",
     "category": "Logs",
     "program": "Thunderbird",
     "remove_files": true
