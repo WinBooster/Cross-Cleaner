@@ -1131,6 +1131,13 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ghidra\\ghidra*\\*.log",
+    "class": "Developing",
+    "category": "Logs",
+    "program": "Ghidra",
+    "remove_files": true
+  },
+  {
     "path": "{drive}Program Files\\Git",
     "class": "Developing",
     "category": "Documentation",
@@ -1910,20 +1917,20 @@
     ]
   },
   {
-    "path": "{drive}Program Files\\KeePassXC\\share",
-    "category": "Documentation",
-    "class": "Password Manager",
-    "program": "KeePassXC",
-    "directories_to_remove": [
-		"docs"
-	]
-  },
-  {
     "path": "{drive}Program Files\\KeePass Password Safe 2\\*.txt",
     "category": "Logs",
     "class": "Password Manager",
     "program": "KeePass 2",
     "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\KeePassXC\\share",
+    "category": "Documentation",
+    "class": "Password Manager",
+    "program": "KeePassXC",
+    "directories_to_remove": [
+      "docs"
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming",
@@ -2186,11 +2193,13 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ghidra\\ghidra*\\*.log",
-    "class": "Developing",
-    "category": "Logs",
-    "program": "Ghidra",
-    "remove_files": true
+    "path": "{drive}Users\\{username}\\AppData\\Local\\max",
+    "class": "Messanger",
+    "category": "Cache",
+    "program": "MAX",
+    "directories_to_remove": [
+      "cache"
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\.mcreator\\logs\\*.log",
@@ -3502,15 +3511,6 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\max",
-    "class": "Messanger",
-    "category": "Cache",
-    "program": "MAX",
-    "directories_to_remove": [
-		"cache"
-	]
-  },
-  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Signal\\update-cache\\*",
     "class": "Messanger",
     "category": "Cache",
@@ -3525,6 +3525,17 @@
     "program": "Signal",
     "directories_to_remove": [
       "logs"
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\SoundWire Server",
+    "class": "Audio",
+    "category": "Documentation",
+    "program": "SoundWire Server",
+    "files_to_remove": [
+      "license.txt",
+      "opus_license.txt",
+      "readerwriterqueue_license.txt"
     ]
   },
   {
@@ -3543,17 +3554,6 @@
     "program": "Spotify",
     "files_to_remove": [
       "chrome_debug.log"
-    ]
-  },
-  {
-    "path": "{drive}Program Files (x86)\\SoundWire Server",
-    "class": "Audio",
-    "category": "Documentation",
-    "program": "SoundWire Server",
-    "files_to_remove": [
-      "license.txt",
-      "opus_license.txt",
-      "readerwriterqueue_license.txt"
     ]
   },
   {
