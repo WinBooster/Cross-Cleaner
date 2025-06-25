@@ -1910,6 +1910,15 @@
     ]
   },
   {
+    "path": "{drive}Program Files\\KeePassXC\\share",
+    "category": "Documentation",
+    "class": "Password Manager",
+    "program": "KeePassXC",
+    "directories_to_remove": [
+		"docs"
+	]
+  },
+  {
     "path": "{drive}Program Files\\KeePass Password Safe 2\\*.txt",
     "category": "Logs",
     "class": "Password Manager",
@@ -2174,6 +2183,13 @@
     "class": "Image",
     "category": "Logs",
     "program": "Magpie",
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ghidra\\ghidra*\\*.log",
+    "class": "Developing",
+    "category": "Logs",
+    "program": "Ghidra",
     "remove_files": true
   },
   {
@@ -3486,6 +3502,15 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\max",
+    "class": "Messanger",
+    "category": "Cache",
+    "program": "MAX",
+    "directories_to_remove": [
+		"cache"
+	]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Signal\\update-cache\\*",
     "class": "Messanger",
     "category": "Cache",
@@ -3500,6 +3525,24 @@
     "program": "Signal",
     "directories_to_remove": [
       "logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Spotify",
+    "class": "Audio",
+    "category": "Cache",
+    "program": "Spotify",
+    "directories_to_remove": [
+      "ShaderCache"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Spotify",
+    "class": "Audio",
+    "category": "Logs",
+    "program": "Spotify",
+    "files_to_remove": [
+      "chrome_debug.log"
     ]
   },
   {

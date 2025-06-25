@@ -1,4 +1,8 @@
 {
+  "EasyAntiCheat": "https://www.easy.ac/en-US",
+  "FACEIT AC": "https://www.faceit.com/en/anti-cheat",
+  "GameGuard": "https://gameguard.ac",
+  
   "Discord": "https://discord.com",
   "DeepL": "https://www.deepl.com",
   "Element": "https://element.io",
@@ -6,6 +10,7 @@
   "Signal": "https://signal.org",
   "Telegram": "https://desktop.telegram.org",
   "Thunderbird": "https://www.thunderbird.net",
+  "MAX": "https://max.ru",
   
   "7-Zip": "https://www.7-zip.org/download.html",
   "WinRaR": "https://www.win-rar.com/predownload.html",
