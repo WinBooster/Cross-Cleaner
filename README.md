@@ -27,8 +27,9 @@
 - 📄 **Custom-DataBase**: Ability to use custom cleanup database
 
 ### Demo
-![demo](https://github.com/user-attachments/assets/7d28a763-97ee-45b9-9ad5-2ed0fb8886c0)
-![Linux GUI](https://github.com/user-attachments/assets/18cbad40-5c31-4ab5-ab5c-c0fc6014535f)
+![CLI](https://github.com/user-attachments/assets/7d28a763-97ee-45b9-9ad5-2ed0fb8886c0)
+![GUI](https://github.com/user-attachments/assets/bc1e3880-89de-44bd-8155-af81febad8bd)
+
 
 ## 📥 Installation
 
