@@ -13,6 +13,40 @@
     ]
   },
   {
+    "path": "/home/{username}",
+    "class": "System",
+    "category": "Cache",
+    "program": "System",
+    "directories_to_remove": [
+      "tmp"
+    ]
+  },
+  {
+    "path": "/home/{username}/zapret-configs",
+    "class": "Security",
+    "category": "Cache",
+    "program": "Zapret",
+    "directories_to_remove": [
+      ".git"
+    ]
+  },
+  {
+    "path": "/home/{username}/.cache/nvim",
+    "class": "Developing",
+    "category": "Logs",
+    "program": "Neovim",
+    "files_to_remove": [
+      "log"
+    ]
+  },
+  {
+    "path": "/home/{username}/.cache/lutris/*.log",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Lutris",
+    "remove_files": true
+  },
+  {
     "path": "/usr/share/automake-1.17/",
     "class": "Developing",
     "category": "Logs",
