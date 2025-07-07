@@ -1,23 +1,5 @@
 [
   {
-    "path": "/home/{username}/.var/app/com.jetbrains.IntelliJ-IDEA-Community/cache/JetBrains/**/",
-    "class": "Text",
-    "category": "Logs",
-    "program": "JetBrains",
-    "directories_to_remove": [
-      "log"
-    ]
-  },
-  {
-    "path": "/home/{username}/.var/app/com.jetbrains.IntelliJ-IDEA-Community/config/JetBrains/**/",
-    "class": "Text",
-    "category": "Cache",
-    "program": "JetBrains",
-    "files_to_remove": [
-      ".lock"
-    ]
-  },
-  {
     "path": "/usr/share/doc/",
     "class": "Audio",
     "category": "Documentation",
@@ -538,6 +520,24 @@
     ],
     "directories_to_remove": [
       "man"
+    ]
+  },
+  {
+    "path": "/home/{username}/.var/app/com.jetbrains.IntelliJ-IDEA-Community/cache/JetBrains/**/",
+    "class": "Text",
+    "category": "Logs",
+    "program": "JetBrains",
+    "directories_to_remove": [
+      "log"
+    ]
+  },
+  {
+    "path": "/home/{username}/.var/app/com.jetbrains.IntelliJ-IDEA-Community/config/JetBrains/**/",
+    "class": "Text",
+    "category": "Cache",
+    "program": "JetBrains",
+    "files_to_remove": [
+      ".lock"
     ]
   },
   {
