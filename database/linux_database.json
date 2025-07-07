@@ -1,5 +1,23 @@
 [
   {
+    "path": "/home/{username}/.var/app/com.jetbrains.IntelliJ-IDEA-Community/cache/JetBrains/**/",
+    "class": "Text",
+    "category": "Logs",
+    "program": "JetBrains",
+    "directories_to_remove": [
+      "log"
+    ]
+  },
+  {
+    "path": "/home/{username}/.var/app/com.jetbrains.IntelliJ-IDEA-Community/config/JetBrains/**/",
+    "class": "Text",
+    "category": "Cache",
+    "program": "JetBrains",
+    "files_to_remove": [
+      ".lock"
+    ]
+  },
+  {
     "path": "/usr/share/doc/",
     "class": "Audio",
     "category": "Documentation",
@@ -917,7 +935,7 @@
     "remove_files": true
   },
   {
-    "path": "/home/{username}/.cache/nvim",
+    "path": "/home/{username}/.cache/nvim/",
     "class": "Developing",
     "category": "Logs",
     "program": "Neovim",
