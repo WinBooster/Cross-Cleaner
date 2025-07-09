@@ -13,24 +13,6 @@
     ]
   },
   {
-    "path": "/home/{username}/.minecraftx/instances/**/",
-    "class": "Minecraft Launcher",
-    "category": "Logs",
-    "program": "X Minecraft Launcher",
-    "directories_to_remove": [
-      "logs"
-    ]
-  },
-  {
-    "path": "/home/{username}/.minecraftx/instances/**/",
-    "class": "Minecraft Launcher",
-    "category": "Game saves",
-    "program": "X Minecraft Launcher",
-    "directories_to_remove": [
-      "saves"
-    ]
-  },
-  {
     "path": "/usr/share/automake-1.17/",
     "class": "Developing",
     "category": "Logs",
@@ -1433,6 +1415,24 @@
     ],
     "directories_to_remove": [
       ".github"
+    ]
+  },
+  {
+    "path": "/home/{username}/.minecraftx/instances/**/",
+    "class": "Minecraft Launcher",
+    "category": "Logs",
+    "program": "X Minecraft Launcher",
+    "directories_to_remove": [
+      "logs"
+    ]
+  },
+  {
+    "path": "/home/{username}/.minecraftx/instances/**/",
+    "class": "Minecraft Launcher",
+    "category": "Game saves",
+    "program": "X Minecraft Launcher",
+    "directories_to_remove": [
+      "saves"
     ]
   },
   {
