@@ -7,9 +7,9 @@ use clap::{Parser, command};
 use cleaner::clear_data;
 #[cfg(windows)]
 use database::registry_database;
-use database::structures::{CleanerData, Cleared};
 #[cfg(windows)]
 use database::structures::CleanerResult;
+use database::structures::{CleanerData, Cleared};
 use database::utils::get_file_size_string;
 use database::{get_icon, get_version};
 use eframe::egui;
@@ -21,10 +21,10 @@ use std::collections::HashSet;
 use std::io::Write;
 use std::rc::Rc;
 use std::sync::Arc;
+use tabled::Table;
 use tempfile::NamedTempFile;
 use tokio::sync::mpsc;
 use tokio::task;
-use tabled::Table;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -199,7 +199,7 @@ async fn work(
                     0 => "Backups".to_string(),
                     1 => "Documentation".to_string(),
                     _ => "Crashes".to_string(),
-                }
+                },
             ],
         });
     }
@@ -228,7 +228,12 @@ async fn work(
         eprintln!("Failed to show notification: {:?}", e);
     }
 
-    (bytes_cleared, removed_files, removed_directories, cleared_programs)
+    (
+        bytes_cleared,
+        removed_files,
+        removed_directories,
+        cleared_programs,
+    )
 }
 
 struct MyApp {
@@ -241,7 +246,7 @@ struct MyApp {
 
     pub result_sender: Option<mpsc::Sender<(u64, u64, u64, Vec<Cleared>)>>,
     pub result_receiver: Option<mpsc::Receiver<(u64, u64, u64, Vec<Cleared>)>>,
-    pub database: Arc<[CleanerData]>
+    pub database: Arc<[CleanerData]>,
 }
 
 impl MyApp {
@@ -344,9 +349,10 @@ impl eframe::App for MyApp {
                     let total_width = column_widths.iter().sum::<f32>() + 100.0;
                     let total_height = 400.0;
 
-                    ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(
-                        egui::Vec2::new(total_width, total_height)
-                    ));
+                    ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
+                        total_width,
+                        total_height,
+                    )));
 
                     // Общий контейнер для таблицы
                     ui.vertical(|ui| {
@@ -357,32 +363,37 @@ impl eframe::App for MyApp {
                             // Колонка Program
                             ui.add_sized(
                                 egui::vec2(column_widths[0], 20.0),
-                                egui::Label::new(egui::RichText::new("Program").heading())
-                            ).on_hover_text("Program name");
+                                egui::Label::new(egui::RichText::new("Program").heading()),
+                            )
+                            .on_hover_text("Program name");
 
                             // Колонка Size
                             ui.add_sized(
                                 egui::vec2(column_widths[1], 20.0),
-                                egui::Label::new(egui::RichText::new("Size").heading())
-                            ).on_hover_text("Deleted data Size");
+                                egui::Label::new(egui::RichText::new("Size").heading()),
+                            )
+                            .on_hover_text("Deleted data Size");
 
                             // Колонка Files
                             ui.add_sized(
                                 egui::vec2(column_widths[2], 20.0),
-                                egui::Label::new(egui::RichText::new("Files").heading())
-                            ).on_hover_text("Number of files");
+                                egui::Label::new(egui::RichText::new("Files").heading()),
+                            )
+                            .on_hover_text("Number of files");
 
                             // Колонка Dirs
                             ui.add_sized(
                                 egui::vec2(column_widths[2], 20.0),
-                                egui::Label::new(egui::RichText::new("Dirs").heading())
-                            ).on_hover_text("Number of folders");
+                                egui::Label::new(egui::RichText::new("Dirs").heading()),
+                            )
+                            .on_hover_text("Number of folders");
 
                             // Колонка Categories
                             ui.add_sized(
                                 egui::vec2(column_widths[3], 20.0),
-                                egui::Label::new(egui::RichText::new("Categories").heading())
-                            ).on_hover_text("Data categories");
+                                egui::Label::new(egui::RichText::new("Categories").heading()),
+                            )
+                            .on_hover_text("Data categories");
                         });
 
                         // Прокручиваемое содержимое таблицы
@@ -396,31 +407,41 @@ impl eframe::App for MyApp {
                                         // Колонка Program
                                         ui.add_sized(
                                             egui::vec2(column_widths[0], 20.0),
-                                            egui::Label::new(&cleared.program).truncate()
+                                            egui::Label::new(&cleared.program).truncate(),
                                         );
 
                                         // Колонка Size
                                         ui.add_sized(
                                             egui::vec2(column_widths[1], 20.0),
-                                            egui::Label::new(get_file_size_string(cleared.removed_bytes)).truncate()
+                                            egui::Label::new(get_file_size_string(
+                                                cleared.removed_bytes,
+                                            ))
+                                            .truncate(),
                                         );
 
                                         // Колонка Files
                                         ui.add_sized(
                                             egui::vec2(column_widths[2], 20.0),
-                                            egui::Label::new(cleared.removed_files.to_string()).truncate()
+                                            egui::Label::new(cleared.removed_files.to_string())
+                                                .truncate(),
                                         );
 
                                         // Колонка Dirs
                                         ui.add_sized(
                                             egui::vec2(column_widths[2], 20.0),
-                                            egui::Label::new(cleared.removed_directories.to_string()).truncate()
+                                            egui::Label::new(
+                                                cleared.removed_directories.to_string(),
+                                            )
+                                            .truncate(),
                                         );
 
                                         // Колонка Categories
                                         ui.add_sized(
                                             egui::vec2(column_widths[3], 20.0),
-                                            egui::Label::new(cleared.affected_categories.join(", ")).wrap()
+                                            egui::Label::new(
+                                                cleared.affected_categories.join(", "),
+                                            )
+                                            .wrap(),
                                         );
                                     });
                                     ui.separator();
@@ -430,7 +451,6 @@ impl eframe::App for MyApp {
                     return;
                 }
             }
-
 
             ui.columns(3, |columns| {
                 for (i, (checkbox, label)) in self.checked_boxes.iter().enumerate() {
@@ -455,7 +475,6 @@ impl eframe::App for MyApp {
 
                 let (progress_sender, progress_receiver) = mpsc::channel(32);
                 self.progress_receiver = Some(progress_receiver);
-
 
                 let database = Arc::clone(&self.database);
                 let handle = tokio::spawn(async move {
