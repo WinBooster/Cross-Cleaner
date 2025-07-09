@@ -12,7 +12,6 @@ notify-rust = "4"
 image = "0.25.5"
 tempfile = "3.3"
 clap = { version = "4.0", features = ["derive"] }
-tabled = "0.20.0"
 
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }

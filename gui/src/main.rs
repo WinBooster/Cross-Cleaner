@@ -24,7 +24,6 @@ use std::sync::Arc;
 use tempfile::NamedTempFile;
 use tokio::sync::mpsc;
 use tokio::task;
-use tabled::Table;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]

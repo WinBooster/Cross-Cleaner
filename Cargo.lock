@@ -33,7 +33,6 @@ dependencies = [
  "env_logger",
  "image",
  "notify-rust",
- "tabled",
  "tempfile",
  "tokio",
  "winreg",
