@@ -335,16 +335,20 @@ jobs:
           ## ✨ What's New
 
           ### 🪟 Windows Enhancements
+          - **KeePassXC** - Added documentation clearing
+          - **Gridra** - Added logs clearing
+          - **MAX** - Added cache clearing
+          - **Spotify** - Added cache, logs clearing
+          
+          
+          ### 🐧 Linux Enhancements
           - **System** - Improved cache, logs clearing
-          - **HP Touchpoint Analytics Client** - Added logs clearing
-          - **Epic Games Launcher** - Imorived logs clearing
-          - **OONI Probe** - Added lgos clearing
-          - **NVIDIA Corporation** - Improved cache clearing
-          - **NVIDIA App** - Added logs clearing
-          - **OneDrive** - Improved cache clearing
-          - **Rockstar Games** - Added crashes clearing
-          - **Electronic Arts Desktop** - Added logs clearing
-          - **Winutil** - Added logs clearing
+          - **NeoVim** - Added logs clearing
+          - **Lutris** - Added logs clearing
+          - **JetBrains** - Added cache, logs clearing
+
+          ### 🛠 Technical Updates
+          - GUI - now shows programs that have been cleaned
 
           ## 👏 Contributors Hall of Fame
           Special thanks to our amazing contributors who made this release possible:
