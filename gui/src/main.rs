@@ -7,9 +7,9 @@ use clap::{Parser, command};
 use cleaner::clear_data;
 #[cfg(windows)]
 use database::registry_database;
-use database::structures::CleanerData;
 #[cfg(windows)]
 use database::structures::CleanerResult;
+use database::structures::{CleanerData, Cleared};
 use database::utils::get_file_size_string;
 use database::{get_icon, get_version};
 use eframe::egui;
@@ -53,7 +53,7 @@ async fn main() -> eframe::Result {
         database::cleaner_database::get_default_database().clone()
     };
 
-    let app = MyApp::from_database(&database);
+    let app = MyApp::from_database(Arc::from(database));
     let checkbox_count = app.checked_boxes.len();
     let rows = checkbox_count.div_ceil(3);
     // INFO: 20px for 1 checkbox, 60px for button
@@ -99,11 +99,11 @@ async fn work(
     categories: Vec<String>,
     progress_sender: mpsc::Sender<String>,
     database: &[CleanerData],
-) {
+) -> (u64, u64, u64, Vec<Cleared>) {
     let mut bytes_cleared = 0;
     let mut removed_files = 0;
     let mut removed_directories = 0;
-    let mut cleared_programs: HashSet<String> = HashSet::with_capacity(database.len());
+    let mut cleared_programs = Vec::<Cleared>::with_capacity(database.len());
 
     // INFO: Check if LastActivity enabled
     // WARN: Windows only
@@ -152,11 +152,31 @@ async fn work(
     for task in tasks {
         match task.await {
             Ok(result) => {
-                removed_files += result.files;
-                removed_directories += result.folders;
-                bytes_cleared += result.bytes;
                 if result.working {
-                    cleared_programs.insert(result.program);
+                    bytes_cleared += result.bytes;
+                    removed_files += result.files;
+                    removed_directories += result.folders;
+
+                    if let Some(cleared) = cleared_programs
+                        .iter_mut()
+                        .find(|c| c.program == result.program)
+                    {
+                        cleared.removed_bytes += result.bytes as u64;
+                        cleared.removed_files += result.files as u64;
+                        cleared.removed_directories += result.folders as u64;
+                        if !cleared.affected_categories.contains(&result.category) {
+                            cleared.affected_categories.push(result.category.clone());
+                        }
+                    } else {
+                        let cleared = Cleared {
+                            program: result.program.clone(),
+                            removed_bytes: result.bytes as u64,
+                            removed_files: result.files as u64,
+                            removed_directories: result.folders as u64,
+                            affected_categories: vec![result.category.clone()],
+                        };
+                        cleared_programs.push(cleared);
+                    }
                 }
             }
             Err(_) => {
@@ -188,17 +208,30 @@ async fn work(
     if let Err(e) = notification_result {
         eprintln!("Failed to show notification: {:?}", e);
     }
+
+    (
+        bytes_cleared,
+        removed_files,
+        removed_directories,
+        cleared_programs,
+    )
 }
 
 struct MyApp {
-    pub(crate) checked_boxes: Vec<(Rc<RefCell<bool>>, String)>,
-    pub(crate) task_handle: Option<tokio::task::JoinHandle<()>>,
-    pub(crate) progress_message: String,
-    pub(crate) progress_receiver: Option<mpsc::Receiver<String>>,
+    pub checked_boxes: Vec<(Rc<RefCell<bool>>, String)>,
+    pub task_handle: Option<tokio::task::JoinHandle<(u64, u64, u64, Vec<Cleared>)>>,
+    pub progress_message: String,
+    pub progress_receiver: Option<mpsc::Receiver<String>>,
+    pub cleared_data: Option<(u64, u64, u64, Vec<Cleared>)>,
+    pub show_results: bool,
+
+    pub result_sender: Option<mpsc::Sender<(u64, u64, u64, Vec<Cleared>)>>,
+    pub result_receiver: Option<mpsc::Receiver<(u64, u64, u64, Vec<Cleared>)>>,
+    pub database: Arc<[CleanerData]>,
 }
 
 impl MyApp {
-    pub(crate) fn from_database(database: &[CleanerData]) -> Self {
+    pub(crate) fn from_database(database: Arc<[CleanerData]>) -> Self {
         let mut options: Vec<String> = Vec::with_capacity(database.len());
         for data in database.iter() {
             if !options.contains(&data.category) {
@@ -232,17 +265,25 @@ impl MyApp {
             checked_boxes.push((Rc::new(RefCell::new(false)), option));
         }
 
+        let (result_sender, result_receiver) = mpsc::channel(1);
+
         Self {
+            database,
             checked_boxes,
             task_handle: None,
             progress_message: String::new(),
             progress_receiver: None,
+            cleared_data: None,
+            show_results: false,
+
+            result_sender: Some(result_sender),
+            result_receiver: Some(result_receiver),
         }
     }
 }
 
 impl eframe::App for MyApp {
-    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
         if let Some(receiver) = &mut self.progress_receiver {
             if let Ok(message) = receiver.try_recv() {
                 self.progress_message = message;
@@ -250,7 +291,148 @@ impl eframe::App for MyApp {
             }
         }
 
+        if let Some(receiver) = &mut self.result_receiver {
+            if let Ok(result) = receiver.try_recv() {
+                self.cleared_data = Some(result);
+                self.show_results = true;
+                ctx.request_repaint();
+            }
+        }
+
+        if let Some(handle) = &mut self.task_handle {
+            if handle.is_finished() {
+                let handle = self.task_handle.take().unwrap();
+                let sender = self.result_sender.take().unwrap();
+                tokio::spawn(async move {
+                    match handle.await {
+                        Ok(result) => {
+                            let _ = sender.send(result).await;
+                        }
+                        Err(e) => eprintln!("Task failed: {:?}", e),
+                    }
+                });
+            }
+        }
+
         egui::CentralPanel::default().show(ctx, |ui| {
+            if self.task_handle.is_some() {
+                ui.label(&self.progress_message);
+                return;
+            }
+
+            if self.show_results {
+                if let Some((bytes, files, dirs, cleared)) = &self.cleared_data {
+                    ui.heading("Cleaning Results");
+                    ui.separator();
+
+                    // Фиксированные размеры для колонок
+                    let column_widths = [150.0, 100.0, 80.0, 170.0];
+                    let total_width = column_widths.iter().sum::<f32>() + 100.0;
+                    let total_height = 400.0;
+
+                    ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
+                        total_width,
+                        total_height,
+                    )));
+
+                    // Общий контейнер для таблицы
+                    ui.vertical(|ui| {
+                        // Заголовки таблицы
+                        ui.horizontal(|ui| {
+                            ui.style_mut().spacing.item_spacing = egui::vec2(0.0, 0.0);
+
+                            // Колонка Program
+                            ui.add_sized(
+                                egui::vec2(column_widths[0], 20.0),
+                                egui::Label::new(egui::RichText::new("Program").heading()),
+                            )
+                            .on_hover_text("Program name");
+
+                            // Колонка Size
+                            ui.add_sized(
+                                egui::vec2(column_widths[1], 20.0),
+                                egui::Label::new(egui::RichText::new("Size").heading()),
+                            )
+                            .on_hover_text("Deleted data Size");
+
+                            // Колонка Files
+                            ui.add_sized(
+                                egui::vec2(column_widths[2], 20.0),
+                                egui::Label::new(egui::RichText::new("Files").heading()),
+                            )
+                            .on_hover_text("Number of files");
+
+                            // Колонка Dirs
+                            ui.add_sized(
+                                egui::vec2(column_widths[2], 20.0),
+                                egui::Label::new(egui::RichText::new("Dirs").heading()),
+                            )
+                            .on_hover_text("Number of folders");
+
+                            // Колонка Categories
+                            ui.add_sized(
+                                egui::vec2(column_widths[3], 20.0),
+                                egui::Label::new(egui::RichText::new("Categories").heading()),
+                            )
+                            .on_hover_text("Data categories");
+                        });
+
+                        // Прокручиваемое содержимое таблицы
+                        egui::ScrollArea::vertical()
+                            .max_height(total_height - 50.0)
+                            .show(ui, |ui| {
+                                for cleared in cleared {
+                                    ui.horizontal(|ui| {
+                                        ui.style_mut().spacing.item_spacing = egui::vec2(0.0, 0.0);
+
+                                        // Колонка Program
+                                        ui.add_sized(
+                                            egui::vec2(column_widths[0], 20.0),
+                                            egui::Label::new(&cleared.program).truncate(),
+                                        );
+
+                                        // Колонка Size
+                                        ui.add_sized(
+                                            egui::vec2(column_widths[1], 20.0),
+                                            egui::Label::new(get_file_size_string(
+                                                cleared.removed_bytes,
+                                            ))
+                                            .truncate(),
+                                        );
+
+                                        // Колонка Files
+                                        ui.add_sized(
+                                            egui::vec2(column_widths[2], 20.0),
+                                            egui::Label::new(cleared.removed_files.to_string())
+                                                .truncate(),
+                                        );
+
+                                        // Колонка Dirs
+                                        ui.add_sized(
+                                            egui::vec2(column_widths[2], 20.0),
+                                            egui::Label::new(
+                                                cleared.removed_directories.to_string(),
+                                            )
+                                            .truncate(),
+                                        );
+
+                                        // Колонка Categories
+                                        ui.add_sized(
+                                            egui::vec2(column_widths[3], 20.0),
+                                            egui::Label::new(
+                                                cleared.affected_categories.join(", "),
+                                            )
+                                            .wrap(),
+                                        );
+                                    });
+                                    ui.separator();
+                                }
+                            });
+                    });
+                    return;
+                }
+            }
+
             ui.columns(3, |columns| {
                 for (i, (checkbox, label)) in self.checked_boxes.iter().enumerate() {
                     let column_index = i % 3;
@@ -259,39 +441,30 @@ impl eframe::App for MyApp {
                 }
             });
 
-            if let Some(handle) = &self.task_handle {
-                ui.label(&self.progress_message);
-                if handle.is_finished() {
-                    self.task_handle = None;
-                }
-            }
+            let available_width = ui.available_width();
 
-            if self.task_handle.is_none() {
-                let available_width = ui.available_width();
+            if ui
+                .add_sized([available_width, 25.0], egui::Button::new("Clear"))
+                .clicked()
+            {
+                let selected_options: Vec<String> = self
+                    .checked_boxes
+                    .iter()
+                    .filter(|(checkbox, _)| *checkbox.borrow())
+                    .map(|(_, label)| label.clone())
+                    .collect();
 
-                if ui
-                    .add_sized([available_width, 25.0], egui::Button::new("Clear"))
-                    .clicked()
-                {
-                    let selected_options: Vec<String> = self
-                        .checked_boxes
-                        .iter()
-                        .filter(|(checkbox, _)| *checkbox.borrow())
-                        .map(|(_, label)| label.clone())
-                        .collect();
+                let (progress_sender, progress_receiver) = mpsc::channel(32);
+                self.progress_receiver = Some(progress_receiver);
 
-                    let database: &Vec<CleanerData> =
-                        database::cleaner_database::get_default_database();
+                let database = Arc::clone(&self.database);
+                let handle = tokio::spawn(async move {
+                    work(selected_options, progress_sender, &database).await
+                });
+                self.task_handle = Some(handle);
 
-                    let (progress_sender, progress_receiver) = mpsc::channel(32);
-                    self.progress_receiver = Some(progress_receiver);
-
-                    let handle = tokio::spawn(work(selected_options, progress_sender, database));
-                    self.task_handle = Some(handle);
-
-                    for (checkbox, _) in &self.checked_boxes {
-                        *checkbox.borrow_mut() = false;
-                    }
+                for (checkbox, _) in &self.checked_boxes {
+                    *checkbox.borrow_mut() = false;
                 }
             }
         });
