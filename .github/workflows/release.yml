@@ -336,7 +336,19 @@ jobs:
 
           ### 🪟 Windows Enhancements
           - **KeePassXC** - Added documentation clearing
-          - **Ghidra** - Added logs clearing
+          - **Gridra** - Added logs clearing
+          - **MAX** - Added cache clearing
+          - **Spotify** - Added cache, logs clearing
+          
+          
+          ### 🐧 Linux Enhancements
+          - **System** - Improved cache, logs clearing
+          - **NeoVim** - Added logs clearing
+          - **Lutris** - Added logs clearing
+          - **JetBrains** - Added cache, logs clearing
+
+          ### 🛠 Technical Updates
+          - GUI - now shows programs that have been cleaned
 
           ## 👏 Contributors Hall of Fame
           Special thanks to our amazing contributors who made this release possible:
