@@ -1,17 +1,17 @@
-# Windows Clearing Programs Catalog v2.0.1.1
+# Windows Clearing Programs Catalog v2.0.1.2
 **Total categories in database:** 15
 
-**Total programs in database:** 165
+**Total programs in database:** 169
 
-**Total pathes in database:** 395
+**Total pathes in database:** 399
 
 ## AntiCheat
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | EasyAntiCheat | Logs |
-| 2 | FACEIT AC | Logs |
-| 3 | GameGuard | Cache |
+| 1 | [EasyAntiCheat](https://www.easy.ac/en-US) | Logs |
+| 2 | [FACEIT AC](https://www.faceit.com/en/anti-cheat) | Logs |
+| 3 | [GameGuard](https://gameguard.ac) | Cache |
 
 
 ## Archive
@@ -31,7 +31,8 @@
 | 2 | [ASIO4ALL v2](https://asio4all.org/about/download-asio4all) | Documentation |
 | 3 | [FL Studio](https://www.image-line.com/fl-studio-download) | Documentation |
 | 4 | [SoundWire Server](https://georgielabs.net) | Documentation |
-| 5 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
+| 5 | [Spotify](https://open.spotify.com/download) | Cache, Logs |
+| 6 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
 
 
 ## Browser
@@ -80,22 +81,23 @@
 | 2 | [Docker](https://www.docker.com/products/docker-desktop) | Logs |
 | 3 | [DotNet](https://dotnet.microsoft.com/en-us/download) | Logs |
 | 4 | [Enigma Virtual Box](https://enigmaprotector.com/en/downloads.html) | Documentation |
-| 5 | [Git](https://git-scm.com/downloads) | Documentation |
-| 6 | [GitHub Desktop](https://desktop.github.com/download) | Logs |
-| 7 | [Go Language](https://go.dev/doc/install) | Documentation |
-| 8 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
-| 9 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
-| 10 | [Java](https://www.java.com/download) | Documentation |
-| 11 | [MCCreator](https://mcreator.net/download) | Logs |
-| 12 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
-| 13 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
-| 14 | [Postman](https://www.postman.com/downloads) | Logs |
-| 15 | [Python](https://www.python.org/downloads) | Documentation |
-| 16 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
-| 17 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
-| 18 | [Unity Hub](https://unity.com/download) | Documentation |
-| 19 | Windows Kits | Documentation |
-| 20 | Xamarin | Logs |
+| 5 | [Ghidra](https://github.com/NationalSecurityAgency/ghidra) | Logs |
+| 6 | [Git](https://git-scm.com/downloads) | Documentation |
+| 7 | [GitHub Desktop](https://desktop.github.com/download) | Logs |
+| 8 | [Go Language](https://go.dev/doc/install) | Documentation |
+| 9 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
+| 10 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
+| 11 | [Java](https://www.java.com/download) | Documentation |
+| 12 | [MCCreator](https://mcreator.net/download) | Logs |
+| 13 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
+| 14 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
+| 15 | [Postman](https://www.postman.com/downloads) | Logs |
+| 16 | [Python](https://www.python.org/downloads) | Documentation |
+| 17 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
+| 18 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
+| 19 | [Unity Hub](https://unity.com/download) | Documentation |
+| 20 | Windows Kits | Documentation |
+| 21 | Xamarin | Logs |
 
 
 ## Driver
@@ -160,9 +162,10 @@
 | 1 | [Discord](https://discord.com) | Cache, Crashes, Logs |
 | 2 | [Element](https://element.io) | Logs |
 | 3 | [Guilded](https://www.guilded.gg) | Logs |
-| 4 | [Signal](https://signal.org) | Cache, Logs |
-| 5 | [Telegram](https://desktop.telegram.org) | Accounts, Cache, Logs |
-| 6 | [Thunderbird](https://www.thunderbird.net) | Crashes |
+| 4 | [MAX](https://max.ru) | Cache |
+| 5 | [Signal](https://signal.org) | Cache, Logs |
+| 6 | [Telegram](https://desktop.telegram.org) | Accounts, Cache, Logs |
+| 7 | [Thunderbird](https://www.thunderbird.net) | Crashes |
 
 
 ## Minecraft Launcher
@@ -213,6 +216,7 @@
 | --- | --- | --- |
 | 1 | [1Password](https://1password.com/) | Logs |
 | 2 | [KeePass 2](https://keepass.info/download.html) | Logs |
+| 3 | [KeePassXC](https://keepassxc.org/download) | Documentation |
 
 
 ## Security
