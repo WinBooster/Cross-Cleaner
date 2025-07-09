@@ -21,7 +21,6 @@ use std::collections::HashSet;
 use std::io::Write;
 use std::rc::Rc;
 use std::sync::Arc;
-use tabled::Table;
 use tempfile::NamedTempFile;
 use tokio::sync::mpsc;
 use tokio::task;
