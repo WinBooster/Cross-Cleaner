@@ -185,24 +185,6 @@ async fn work(
         }
     }
 
-    for i in 1..=30 {
-        cleared_programs.push(Cleared {
-            program: format!("Test Program {}", i),
-            removed_bytes: (i * 1024 * 1024) as u64,
-            removed_files: i as u64,
-            removed_directories: (i % 5) as u64,
-            affected_categories: vec![
-                "Cache".to_string(),
-                "Logs".to_string(),
-                match i % 3 {
-                    0 => "Backups".to_string(),
-                    1 => "Documentation".to_string(),
-                    _ => "Crashes".to_string(),
-                },
-            ],
-        });
-    }
-
     let mut temp_file = NamedTempFile::new().unwrap();
     temp_file.write_all(get_icon()).unwrap();
     let icon_path = temp_file.path().to_str().unwrap();

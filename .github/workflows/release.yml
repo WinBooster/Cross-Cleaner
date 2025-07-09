@@ -340,7 +340,6 @@ jobs:
           - **MAX** - Added cache clearing
           - **Spotify** - Added cache, logs clearing
           
-          
           ### 🐧 Linux Enhancements
           - **System** - Improved cache, logs clearing
           - **NeoVim** - Added logs clearing
