@@ -1,9 +1,9 @@
-# Linux Clearing Programs Catalog v2.0.1.1
+# Linux Clearing Programs Catalog v2.0.1.2
 **Total categories in database:** 12
 
-**Total programs in database:** 50
+**Total programs in database:** 53
 
-**Total pathes in database:** 118
+**Total pathes in database:** 124
 
 ## Audio
 
@@ -47,8 +47,9 @@
 | 4 | [GitHub Desktop](https://desktop.github.com/download) | Cache, Documentation, Logs |
 | 5 | [Gradle](https://gradle.org) | Cache |
 | 6 | [Jdk](https://www.oracle.com/java/technologies/downloads) | Documentation |
-| 7 | [Python](https://www.python.org/downloads) | Documentation |
-| 8 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
+| 7 | Neovim | Logs |
+| 8 | [Python](https://www.python.org/downloads) | Documentation |
+| 9 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
 
 
 ## Driver
@@ -64,11 +65,12 @@
 | --- | --- | --- |
 | 1 | [Garry's mod](https://store.steampowered.com/app/4000/Garrys_Mod) | Crashes, Logs |
 | 2 | [Hearts of Iron IV](https://store.steampowered.com/app/394360/Hearts_of_Iron_IV) | Cache, Crashes, Logs |
-| 3 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
-| 4 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
-| 5 | [Steam proton](https://github.com/ValveSoftware/Proton) | Documentation |
-| 6 | [Terraria](https://terraria.org) | Crashes, Game saves, Logs |
-| 7 | [The Powder Toy](https://powdertoy.co.uk) | Documentation |
+| 3 | [Lutris](https://lutris.net/downloads) | Logs |
+| 4 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
+| 5 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
+| 6 | [Steam proton](https://github.com/ValveSoftware/Proton) | Documentation |
+| 7 | [Terraria](https://terraria.org) | Crashes, Game saves, Logs |
+| 8 | [The Powder Toy](https://powdertoy.co.uk) | Documentation |
 
 
 ## Messanger
@@ -108,6 +110,20 @@
 | 1 | [KeePassXC](https://keepassxc.org/download) | Documentation |
 
 
+## Security
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | [Zapret](https://github.com/bol-van/zapret) | Cache |
+
+
+## System
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | System | Cache, Trash |
+
+
 ## Text
 
 | № | Program | Categories |
@@ -115,7 +131,7 @@
 | 1 | Bison | Logs |
 | 2 | [Cursor](https://www.cursor.com/downloads) | Cache, Documentation, Logs |
 | 3 | [Gperf](https://github.com/jwinarske/gperf) | Documentation |
-| 4 | [JetBrains](https://www.jetbrains.com/?var=1) | Logs |
+| 4 | [JetBrains](https://www.jetbrains.com/?var=1) | Cache, Logs |
 | 5 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Cache |
 | 6 | [Pcre](https://www.pcre.org) | Documentation |
 | 7 | [Thunderbird](https://www.thunderbird.net) | Logs |
@@ -130,4 +146,3 @@
 | 2 | EFI tools | Logs |
 | 3 | Info | Documentation |
 | 4 | Licenses | Documentation |
-| 5 | System | Cache, Trash |

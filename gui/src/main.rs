@@ -21,6 +21,7 @@ use std::collections::HashSet;
 use std::io::Write;
 use std::rc::Rc;
 use std::sync::Arc;
+use tabled::Table;
 use tempfile::NamedTempFile;
 use tokio::sync::mpsc;
 use tokio::task;
@@ -183,6 +184,24 @@ async fn work(
                 eprintln!("Error waiting for task completion");
             }
         }
+    }
+
+    for i in 1..=30 {
+        cleared_programs.push(Cleared {
+            program: format!("Test Program {}", i),
+            removed_bytes: (i * 1024 * 1024) as u64,
+            removed_files: i as u64,
+            removed_directories: (i % 5) as u64,
+            affected_categories: vec![
+                "Cache".to_string(),
+                "Logs".to_string(),
+                match i % 3 {
+                    0 => "Backups".to_string(),
+                    1 => "Documentation".to_string(),
+                    _ => "Crashes".to_string(),
+                },
+            ],
+        });
     }
 
     let mut temp_file = NamedTempFile::new().unwrap();

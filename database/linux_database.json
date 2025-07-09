@@ -523,6 +523,24 @@
     ]
   },
   {
+    "path": "/home/{username}/.var/app/com.jetbrains.IntelliJ-IDEA-Community/cache/JetBrains/**/",
+    "class": "Text",
+    "category": "Logs",
+    "program": "JetBrains",
+    "directories_to_remove": [
+      "log"
+    ]
+  },
+  {
+    "path": "/home/{username}/.var/app/com.jetbrains.IntelliJ-IDEA-Community/config/JetBrains/**/",
+    "class": "Text",
+    "category": "Cache",
+    "program": "JetBrains",
+    "files_to_remove": [
+      ".lock"
+    ]
+  },
+  {
     "path": "/home/{username}/.cache/JetBrains/**/log/*",
     "class": "Text",
     "category": "Logs",
@@ -667,6 +685,13 @@
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Lunar Client",
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.cache/lutris/*.log",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Lutris",
     "remove_files": true
   },
   {
@@ -908,6 +933,15 @@
     "program": "MultiMC",
     "remove_directories": false,
     "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.cache/nvim/",
+    "class": "Developing",
+    "category": "Logs",
+    "program": "Neovim",
+    "files_to_remove": [
+      "log"
+    ]
   },
   {
     "path": "/usr/share/doc/",
@@ -1248,6 +1282,15 @@
     ]
   },
   {
+    "path": "/home/{username}",
+    "class": "System",
+    "category": "Cache",
+    "program": "System",
+    "directories_to_remove": [
+      "tmp"
+    ]
+  },
+  {
     "path": "/home/{username}/.cache/thumbnails/normal/*",
     "category": "Cache",
     "program": "System",
@@ -1408,5 +1451,14 @@
     "remove_directory_after_clean": false,
     "remove_directories": false,
     "remove_files": false
+  },
+  {
+    "path": "/home/{username}/zapret-configs",
+    "class": "Security",
+    "category": "Cache",
+    "program": "Zapret",
+    "directories_to_remove": [
+      ".git"
+    ]
   }
 ]
