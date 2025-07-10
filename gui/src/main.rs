@@ -324,7 +324,12 @@ impl eframe::App for MyApp {
                 if let Some((bytes, files, dirs, cleared)) = &self.cleared_data {
                     ui.with_layout(egui::Layout::top_down(egui::Align::Center), |ui| {
                         ui.heading("Cleaning Results");
-                        ui.heading(format!("Size: {}, Files: {}, Dirs: {}", get_file_size_string(*bytes), files, dirs));
+                        ui.heading(format!(
+                            "Size: {}, Files: {}, Dirs: {}",
+                            get_file_size_string(*bytes),
+                            files,
+                            dirs
+                        ));
                     });
                     ui.separator();
 
