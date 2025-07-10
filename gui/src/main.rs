@@ -283,7 +283,7 @@ impl MyApp {
 }
 
 impl eframe::App for MyApp {
-    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
+    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if let Some(receiver) = &mut self.progress_receiver {
             if let Ok(message) = receiver.try_recv() {
                 self.progress_message = message;
@@ -322,7 +322,10 @@ impl eframe::App for MyApp {
 
             if self.show_results {
                 if let Some((bytes, files, dirs, cleared)) = &self.cleared_data {
-                    ui.heading("Cleaning Results");
+                    ui.with_layout(egui::Layout::top_down(egui::Align::Center), |ui| {
+                        ui.heading("Cleaning Results");
+                        ui.heading(format!("Size: {}, Files: {}, Dirs: {}", get_file_size_string(*bytes), files, dirs));
+                    });
                     ui.separator();
 
                     // Фиксированные размеры для колонок
@@ -353,7 +356,7 @@ impl eframe::App for MyApp {
                                 egui::vec2(column_widths[1], 20.0),
                                 egui::Label::new(egui::RichText::new("Size").heading()),
                             )
-                            .on_hover_text("Deleted data Size");
+                            .on_hover_text("Deleted data size");
 
                             // Колонка Files
                             ui.add_sized(
@@ -376,6 +379,7 @@ impl eframe::App for MyApp {
                             )
                             .on_hover_text("Data categories");
                         });
+                        ui.separator();
 
                         // Прокручиваемое содержимое таблицы
                         egui::ScrollArea::vertical()
