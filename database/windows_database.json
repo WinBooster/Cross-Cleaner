@@ -2724,7 +2724,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}ProgramData\\NVIDIA\\NVIDIA app",
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\NVIDIA app",
     "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA App",
@@ -2734,7 +2734,7 @@
     ]
   },
   {
-    "path": "{drive}ProgramData\\NVIDIA\\NVIDIA app\\Installer",
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\NVIDIA app\\Installer",
     "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA App",
@@ -2743,7 +2743,7 @@
     ]
   },
   {
-    "path": "{drive}Program Files\\NVIDIA",
+    "path": "{drive}Program Files\\NVIDIA Corporation",
     "class": "Driver",
     "category": "Documentation",
     "program": "NVIDIA",
@@ -2761,7 +2761,7 @@
     ]
   },
   {
-    "path": "{drive}Program Files\\NVIDIA",
+    "path": "{drive}Program Files\\NVIDIA Corporation",
     "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA",
@@ -2770,7 +2770,7 @@
     ]
   },
   {
-    "path": "{drive}Program Files\\NVIDIA\\NVSMI",
+    "path": "{drive}Program Files\\NVIDIA Corporation\\NVSMI",
     "class": "Driver",
     "category": "Documentation",
     "program": "NVIDIA",
@@ -2779,7 +2779,7 @@
     ]
   },
   {
-    "path": "{drive}Program Files\\NVIDIA\\nvStereoInstaller",
+    "path": "{drive}Program Files\\NVIDIA Corporation\\nvStereoInstaller",
     "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA",
@@ -2789,7 +2789,7 @@
     ]
   },
   {
-    "path": "{drive}Program Files\\NVIDIA\\NvFBCPlugin",
+    "path": "{drive}Program Files\\NVIDIA Corporation\\NvFBCPlugin",
     "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA",
@@ -2798,28 +2798,28 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\NVIDIA\\GfnRuntimeSdk\\*.log",
+    "path": "{drive}Users\\{username}\\AppData\\Local\\NVIDIA Corporation\\GfnRuntimeSdk\\*.log",
     "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA",
     "remove_files": true
   },
   {
-    "path": "{drive}ProgramData\\NVIDIA\\nvstapisvr\\*",
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\nvstapisvr\\*",
     "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA",
     "remove_files": true
   },
   {
-    "path": "{drive}ProgramData\\NVIDIA\\nvStereoInstaller\\*",
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\nvStereoInstaller\\*",
     "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA",
     "remove_files": true
   },
   {
-    "path": "{drive}ProgramData\\NVIDIA\\*.log",
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\*.log",
     "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA",
