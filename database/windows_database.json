@@ -2724,25 +2724,6 @@
     "remove_files": true
   },
   {
-    "path": "{drive}ProgramData\\NVIDIA Corporation\\NVIDIA app",
-    "class": "Driver",
-    "category": "Logs",
-    "program": "NVIDIA App",
-    "directories_to_remove": [
-      "Logs",
-      "SessionLogs"
-    ]
-  },
-  {
-    "path": "{drive}ProgramData\\NVIDIA Corporation\\NVIDIA app\\Installer",
-    "class": "Driver",
-    "category": "Logs",
-    "program": "NVIDIA App",
-    "directories_to_remove": [
-      "Logs"
-    ]
-  },
-  {
     "path": "{drive}Program Files\\NVIDIA Corporation",
     "class": "Driver",
     "category": "Documentation",
@@ -2824,6 +2805,25 @@
     "category": "Logs",
     "program": "NVIDIA",
     "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\NVIDIA app",
+    "class": "Driver",
+    "category": "Logs",
+    "program": "NVIDIA App",
+    "directories_to_remove": [
+      "Logs",
+      "SessionLogs"
+    ]
+  },
+  {
+    "path": "{drive}ProgramData\\NVIDIA Corporation\\NVIDIA app\\Installer",
+    "class": "Driver",
+    "category": "Logs",
+    "program": "NVIDIA App",
+    "directories_to_remove": [
+      "Logs"
+    ]
   },
   {
     "path": "{drive}Program Files\\obs-studio\\bin\\64bit\\*.log",
