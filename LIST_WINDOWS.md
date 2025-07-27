@@ -106,8 +106,8 @@
 | --- | --- | --- |
 | 1 | [IObit Driver Booster](https://ru.iobit.com/driver-booster.php) | Logs |
 | 2 | [LGHUB](https://www.logitechg.com/en-us/innovation/g-hub.html) | Documentation |
-| 3 | [NVIDIA App](https://www.nvidia.com/en-us/software/nvidia-app/) | Logs |
-| 4 | NVIDIA Corporation | Cache, Documentation, Logs |
+| 3 | [NVIDIA](https://www.nvidia.com/) | Cache, Documentation, Logs |
+| 4 | [NVIDIA App](https://www.nvidia.com/en-us/software/nvidia-app/) | Logs |
 | 5 | [VulcanRT](https://vulkan.lunarg.com/sdk/home) | Documentation |
 
 

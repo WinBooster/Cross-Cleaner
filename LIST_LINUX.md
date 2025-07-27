@@ -1,9 +1,9 @@
 # Linux Clearing Programs Catalog v2.0.1.2
 **Total categories in database:** 12
 
-**Total programs in database:** 53
+**Total programs in database:** 54
 
-**Total pathes in database:** 124
+**Total pathes in database:** 125
 
 ## Audio
 
@@ -47,7 +47,7 @@
 | 4 | [GitHub Desktop](https://desktop.github.com/download) | Cache, Documentation, Logs |
 | 5 | [Gradle](https://gradle.org) | Cache |
 | 6 | [Jdk](https://www.oracle.com/java/technologies/downloads) | Documentation |
-| 7 | Neovim | Logs |
+| 7 | [NeoVim](https://github.com/neovim/neovim/blob/master/INSTALL.md) | Logs |
 | 8 | [Python](https://www.python.org/downloads) | Documentation |
 | 9 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
 
@@ -56,7 +56,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Nvidia | Documentation |
+| 1 | [NVIDIA](https://www.nvidia.com/) | Documentation |
 
 
 ## Game
@@ -94,6 +94,7 @@
 | 7 | [PolyMC](https://polymc.org/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
 | 8 | [PrismLauncher](https://prismlauncher.org/download/windows/) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
 | 9 | [SimpleMinecraft](https://simpleminecraft.ru/start.html) | Cache, Logs |
+| 10 | X Minecraft Launcher | Game saves, Logs |
 
 
 ## Packet Manager
