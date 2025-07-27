@@ -938,7 +938,7 @@
     "path": "/home/{username}/.cache/nvim/",
     "class": "Developing",
     "category": "Logs",
-    "program": "Neovim",
+    "program": "NeoVim",
     "files_to_remove": [
       "log"
     ]
@@ -947,7 +947,7 @@
     "path": "/usr/share/doc/",
     "class": "Driver",
     "category": "Documentation",
-    "program": "Nvidia",
+    "program": "NVIDIA",
     "files_to_remove": [
       "nvidia-utils"
     ],
