@@ -56,7 +56,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [NVIDIA](https://www.nvidia.com/) | Documentation |
+| 1 | [NVIDIA](https://www.nvidia.com) | Documentation |
 
 
 ## Game
@@ -92,9 +92,9 @@
 | 5 | [Modrinth](https://modrinth.com/app) | Cache |
 | 6 | [MultiMC](https://multimc.org/#Download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
 | 7 | [PolyMC](https://polymc.org/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 8 | [PrismLauncher](https://prismlauncher.org/download/windows/) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 8 | [PrismLauncher](https://prismlauncher.org/download/windows) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
 | 9 | [SimpleMinecraft](https://simpleminecraft.ru/start.html) | Cache, Logs |
-| 10 | X Minecraft Launcher | Game saves, Logs |
+| 10 | [X Minecraft Launcher](https://xmcl.app) | Game saves, Logs |
 
 
 ## Packet Manager

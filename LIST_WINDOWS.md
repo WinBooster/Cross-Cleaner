@@ -106,8 +106,8 @@
 | --- | --- | --- |
 | 1 | [IObit Driver Booster](https://ru.iobit.com/driver-booster.php) | Logs |
 | 2 | [LGHUB](https://www.logitechg.com/en-us/innovation/g-hub.html) | Documentation |
-| 3 | [NVIDIA](https://www.nvidia.com/) | Cache, Documentation, Logs |
-| 4 | [NVIDIA App](https://www.nvidia.com/en-us/software/nvidia-app/) | Logs |
+| 3 | [NVIDIA](https://www.nvidia.com) | Cache, Documentation, Logs |
+| 4 | [NVIDIA App](https://www.nvidia.com/en-us/software/nvidia-app) | Logs |
 | 5 | [VulcanRT](https://vulkan.lunarg.com/sdk/home) | Documentation |
 
 
@@ -186,7 +186,7 @@
 | 12 | [Modrinth](https://modrinth.com/app) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
 | 13 | [MultiMC](https://multimc.org/#Download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
 | 14 | [PolyMC](https://polymc.org/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 15 | [PrismLauncher](https://prismlauncher.org/download/windows/) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 15 | [PrismLauncher](https://prismlauncher.org/download/windows) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
 | 16 | [Tecknix Client](https://tecknix.com/download.html) | Accounts, Cache, Crashes, Documentation, Game saves, Images, Logs |
 
 
