@@ -36,7 +36,6 @@
     "class": "Audio",
     "category": "Cache",
     "program": "Cassettle",
-    "files_to_remove": [],
     "directories_to_remove": [
       "audios",
       "images"
@@ -386,7 +385,6 @@
     "class": "Crypto Wallet",
     "category": "Accounts",
     "program": "Exodus Crypto Wallet",
-    "files_to_remove": [],
     "directories_to_remove": [
       "exodus.wallet"
     ]
@@ -931,7 +929,6 @@
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "MultiMC",
-    "remove_directories": false,
     "remove_files": true
   },
   {
@@ -954,11 +951,7 @@
     "directories_to_remove": [
       "nvidia",
       "nvidia-utils"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "/home/{username}/.local/share/osu/",
@@ -1294,37 +1287,22 @@
     "path": "/home/{username}/.cache/thumbnails/normal/*",
     "category": "Cache",
     "program": "System",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
     "path": "/home/{username}/.cache/thumbnails/large/*",
     "category": "Cache",
     "program": "System",
-    "files_to_remove": [],
-    "directories_to_remove": [],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
     "remove_files": true
   },
   {
     "path": "/home/{username}/.local/share/Trash/",
     "category": "Trash",
     "program": "System",
-    "files_to_remove": [],
     "directories_to_remove": [
       "files",
       "info"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "/home/{username}/.local/share/TelegramDesktop/*.log",
@@ -1440,7 +1418,6 @@
     "class": "Audio",
     "category": "Cache",
     "program": "Yandex Music",
-    "files_to_remove": [],
     "directories_to_remove": [
       "Cache",
       "Code Cache",
@@ -1461,7 +1438,6 @@
     "class": "Packet Manager",
     "category": "Cache",
     "program": "Yay",
-    "files_to_remove": [],
     "directories_to_remove": [
       "yay"
     ],
