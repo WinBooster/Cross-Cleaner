@@ -794,7 +794,6 @@
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Minecraft",
-    "remove_directories": false,
     "remove_files": true
   },
   {
@@ -1440,11 +1439,7 @@
     "program": "Yay",
     "directories_to_remove": [
       "yay"
-    ],
-    "remove_all_in_dir": false,
-    "remove_directory_after_clean": false,
-    "remove_directories": false,
-    "remove_files": false
+    ]
   },
   {
     "path": "/home/{username}/zapret-configs",

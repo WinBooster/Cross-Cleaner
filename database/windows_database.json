@@ -3620,7 +3620,6 @@
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Tecknix Client",
-    "remove_directories": false,
     "remove_files": true
   },
   {
