@@ -28,7 +28,8 @@
 
 ### Demo
 ![CLI](https://github.com/user-attachments/assets/7d28a763-97ee-45b9-9ad5-2ed0fb8886c0)
-![GUI](https://github.com/user-attachments/assets/bc1e3880-89de-44bd-8155-af81febad8bd)
+<img width="430" height="168" alt="изображение" src="https://github.com/user-attachments/assets/4d4caa7c-15d7-4e8a-b547-f845d84dcea7" />
+
 
 
 ## 📥 Installation
