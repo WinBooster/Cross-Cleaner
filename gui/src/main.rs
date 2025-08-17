@@ -322,7 +322,7 @@ impl eframe::App for MyApp {
 
             if self.show_results {
                 if let Some((bytes, files, dirs, cleared)) = &self.cleared_data {
-                    ui.with_layout(egui::Layout::top_down(egui::Align::Center), |ui| {
+                    ui.vertical_centered(|ui| {
                         ui.heading("Cleaning Results");
                         ui.heading(format!(
                             "Size: {}, Files: {}, Dirs: {}",
