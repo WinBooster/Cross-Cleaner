@@ -446,6 +446,15 @@
     ]
   },
   {
+    "path": "/home/{username}/.cache",
+    "class": "Developing",
+    "category": "Cache",
+    "program": "Go Language",
+    "directories_to_remove": [
+      "go-build"
+    ]
+  },
+  {
     "path": "/usr/share/gperf/",
     "class": "Text",
     "category": "Documentation",
@@ -1463,15 +1472,6 @@
     "program": "Zapret",
     "directories_to_remove": [
       ".git"
-    ]
-  },
-  {
-    "path": "/home/{username}/.cache",
-    "class": "Developing",
-    "category": "Cache",
-    "program": "Go Language",
-    "directories_to_remove": [
-      "go-build"
     ]
   }
 ]
