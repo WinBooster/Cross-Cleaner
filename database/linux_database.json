@@ -1205,6 +1205,14 @@
     ]
   },
   {
+    "path": "/home/{username}/.rusherhack",
+    "class": "Cheat",
+    "category": "Cheats",
+    "program": "RusherHack",
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": true
+  },
+  {
     "path": "/home/{username}/.rustup/toolchains/**/share/",
     "class": "Developing",
     "category": "Documentation",
@@ -1473,13 +1481,5 @@
     "directories_to_remove": [
       ".git"
     ]
-  },
-  {
-    "path": "/home/{username}/.rusherhack",
-    "class": "Cheat",
-    "category": "Cheats",
-    "program": "RusherHack",
-    "remove_all_in_dir": true,
-    "remove_directory_after_clean": true
   }
 ]
