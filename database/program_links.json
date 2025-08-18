@@ -193,5 +193,6 @@
   "WinGet": "https://github.com/microsoft/winget-cli",
   "pipx": "https://github.com/pypa/pipx",
   
-  "ImgBurn": "https://www.imgburn.com/index.php?act=download"
+  "ImgBurn": "https://www.imgburn.com/index.php?act=download",
+  "CachyOS": "https://cachyos.org"
 }

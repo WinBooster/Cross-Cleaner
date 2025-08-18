@@ -1300,6 +1300,15 @@
     ]
   },
   {
+    "path": "/home/{username}.config/cachyos/cachyos-hello",
+    "class": "System",
+    "category": "Logs",
+    "program": "CachyOS",
+    "files_to_remove": [
+      "cachyos-hello.log"
+    ]
+  },
+  {
     "path": "/home/{username}/.cache/thumbnails/small/*",
     "category": "Cache",
     "program": "System",
@@ -1422,6 +1431,15 @@
     "class": "Text",
     "category": "Logs",
     "program": "VS Code",
+    "directories_to_remove": [
+      "logs"
+    ]
+  },
+  {
+    "path": "/home/{username}/.config/xmcl",
+    "class": "Minecraft Launcher",
+    "category": "Logs",
+    "program": "X Minecraft Launcher",
     "directories_to_remove": [
       "logs"
     ]
