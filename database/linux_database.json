@@ -32,6 +32,15 @@
     ]
   },
   {
+    "path": "/home/{username}.config/cachyos/cachyos-hello",
+    "class": "System",
+    "category": "Logs",
+    "program": "CachyOS",
+    "files_to_remove": [
+      "cachyos-hello.log"
+    ]
+  },
+  {
     "path": "/home/{username}/.cache/cassette/",
     "class": "Audio",
     "category": "Cache",
@@ -1297,15 +1306,6 @@
     "program": "System",
     "directories_to_remove": [
       "tmp"
-    ]
-  },
-  {
-    "path": "/home/{username}.config/cachyos/cachyos-hello",
-    "class": "System",
-    "category": "Logs",
-    "program": "CachyOS",
-    "files_to_remove": [
-      "cachyos-hello.log"
     ]
   },
   {
