@@ -334,7 +334,7 @@ impl eframe::App for MyApp {
                     ui.separator();
 
                     // Фиксированные размеры для колонок
-                    let column_widths = [150.0, 100.0, 80.0, 170.0];
+                    let column_widths = [150.0, 80.0, 80.0, 170.0];
                     let total_width = column_widths.iter().sum::<f32>() + 100.0;
                     let total_height = 400.0;
 

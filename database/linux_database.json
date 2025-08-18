@@ -932,7 +932,7 @@
   },
   {
     "path": "/home/{username}/.cache/nvim/",
-    "class": "Developing",
+    "class": "Text",
     "category": "Logs",
     "program": "NeoVim",
     "files_to_remove": [
@@ -1283,6 +1283,12 @@
     ]
   },
   {
+    "path": "/home/{username}/.cache/thumbnails/small/*",
+    "category": "Cache",
+    "program": "System",
+    "remove_files": true
+  },
+  {
     "path": "/home/{username}/.cache/thumbnails/normal/*",
     "category": "Cache",
     "program": "System",
@@ -1395,6 +1401,15 @@
     ]
   },
   {
+    "path": "/home/{username}/.config/Code - OSS",
+    "class": "Text",
+    "category": "Logs",
+    "program": "VS Code",
+    "directories_to_remove": [
+      "logs"
+    ]
+  },
+  {
     "path": "/home/{username}/.minecraftx/instances/**/",
     "class": "Minecraft Launcher",
     "category": "Logs",
@@ -1448,6 +1463,15 @@
     "program": "Zapret",
     "directories_to_remove": [
       ".git"
+    ]
+  },
+  {
+    "path": "/home/{username}/.cache",
+    "class": "Developing",
+    "category": "Cache",
+    "program": "Go Language",
+    "directories_to_remove": [
+      "go-build"
     ]
   }
 ]
