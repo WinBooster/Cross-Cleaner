@@ -194,5 +194,9 @@
   "pipx": "https://github.com/pypa/pipx",
   
   "ImgBurn": "https://www.imgburn.com/index.php?act=download",
-  "CachyOS": "https://cachyos.org"
+  "CachyOS": "https://cachyos.org",
+  "Linux": "https://www.kernel.org",
+  "OneDrive": "https://www.microsoft.com/microsoft-365/onedrive/online-cloud-storage",
+  "Windows": "https://www.microsoft.com/download/windows",
+  "Windows Defender": "https://www.microsoft.com/download/windows"
 }

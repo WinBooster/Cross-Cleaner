@@ -1303,7 +1303,7 @@
     "path": "/home/{username}",
     "class": "System",
     "category": "Cache",
-    "program": "System",
+    "program": "Linux",
     "directories_to_remove": [
       "tmp"
     ]
@@ -1311,25 +1311,29 @@
   {
     "path": "/home/{username}/.cache/thumbnails/small/*",
     "category": "Cache",
-    "program": "System",
+    "class": "System",
+    "program": "Linux",
     "remove_files": true
   },
   {
     "path": "/home/{username}/.cache/thumbnails/normal/*",
     "category": "Cache",
-    "program": "System",
+    "class": "System",
+    "program": "Linux",
     "remove_files": true
   },
   {
     "path": "/home/{username}/.cache/thumbnails/large/*",
     "category": "Cache",
-    "program": "System",
+    "class": "System",
+    "program": "Linux",
     "remove_files": true
   },
   {
     "path": "/home/{username}/.local/share/Trash/",
     "category": "Trash",
-    "program": "System",
+    "class": "System",
+    "program": "Linux",
     "directories_to_remove": [
       "files",
       "info"
