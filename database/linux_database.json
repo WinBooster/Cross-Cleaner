@@ -609,6 +609,46 @@
     "remove_files": true
   },
   {
+    "path": "/home/{username}",
+    "class": "System",
+    "category": "Cache",
+    "program": "Linux",
+    "directories_to_remove": [
+      "tmp"
+    ]
+  },
+  {
+    "path": "/home/{username}/.cache/thumbnails/small/*",
+    "category": "Cache",
+    "class": "System",
+    "program": "Linux",
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.cache/thumbnails/normal/*",
+    "category": "Cache",
+    "class": "System",
+    "program": "Linux",
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.cache/thumbnails/large/*",
+    "category": "Cache",
+    "class": "System",
+    "program": "Linux",
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/share/Trash/",
+    "category": "Trash",
+    "class": "System",
+    "program": "Linux",
+    "directories_to_remove": [
+      "files",
+      "info"
+    ]
+  },
+  {
     "path": "/home/{username}/.lunarclient/",
     "class": "Minecraft Launcher",
     "category": "Accounts",
@@ -1297,46 +1337,6 @@
     "files_to_remove": [
       "LICENSE",
       "LICENSE.OFL"
-    ]
-  },
-  {
-    "path": "/home/{username}",
-    "class": "System",
-    "category": "Cache",
-    "program": "Linux",
-    "directories_to_remove": [
-      "tmp"
-    ]
-  },
-  {
-    "path": "/home/{username}/.cache/thumbnails/small/*",
-    "category": "Cache",
-    "class": "System",
-    "program": "Linux",
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.cache/thumbnails/normal/*",
-    "category": "Cache",
-    "class": "System",
-    "program": "Linux",
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.cache/thumbnails/large/*",
-    "category": "Cache",
-    "class": "System",
-    "program": "Linux",
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/share/Trash/",
-    "category": "Trash",
-    "class": "System",
-    "program": "Linux",
-    "directories_to_remove": [
-      "files",
-      "info"
     ]
   },
   {
