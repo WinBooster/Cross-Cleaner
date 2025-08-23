@@ -390,6 +390,27 @@
     ]
   },
   {
+    "path": "/home/{username}/.wine",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Winetricks",
+    "files_to_remove": [
+      "winetricks.log"
+    ]
+  },
+  {
+    "path": "/home/{username}/.wine/drive_c/RimWorld",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "RimWorld (Wine)",
+    "files_to_remove": [
+      "EULA.txt",
+      "Licenses.txt",
+      "Readme.txt",
+      "ModUpdating.txt"
+    ]
+  },
+  {
     "path": "/home/{username}/.config/Exodus",
     "class": "Crypto Wallet",
     "category": "Accounts",
@@ -1333,7 +1354,7 @@
     "path": "/home/{username}/.local/share/Steam/steamapps/common/Proton Hotfix",
     "class": "Game",
     "category": "Documentation",
-    "program": "Steam proton",
+    "program": "Steam Proton",
     "files_to_remove": [
       "LICENSE",
       "LICENSE.OFL"

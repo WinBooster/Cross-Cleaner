@@ -117,7 +117,8 @@ jobs:
             while IFS= read -r line; do
               program=$(echo "$line" | jq -r '.[0].program')
               # Check if program has a link
-              program_link=$(echo "$program_links" | jq -r --arg program "$program" '.[$program] // empty')
+              program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+              program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
               if [ -n "$program_link" ]; then
                 displayed_program="[$program]($program_link)"
               else
@@ -146,7 +147,8 @@ jobs:
             while IFS= read -r line; do
               program=$(echo "$line" | jq -r '.[0].program')
               # Check if program has a link
-              program_link=$(echo "$program_links" | jq -r --arg program "$program" '.[$program] // empty')
+              program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+              program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
               if [ -n "$program_link" ]; then
                 displayed_program="[$program]($program_link)"
               else
@@ -192,7 +194,8 @@ jobs:
             while IFS= read -r line; do
               program=$(echo "$line" | jq -r '.[0].program')
               # Check if program has a link
-              program_link=$(echo "$program_links" | jq -r --arg program "$program" '.[$program] // empty')
+              program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+              program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
               if [ -n "$program_link" ]; then
                 displayed_program="[$program]($program_link)"
               else
@@ -221,7 +224,8 @@ jobs:
             while IFS= read -r line; do
               program=$(echo "$line" | jq -r '.[0].program')
               # Check if program has a link
-              program_link=$(echo "$program_links" | jq -r --arg program "$program" '.[$program] // empty')
+              program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+              program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
               if [ -n "$program_link" ]; then
                 displayed_program="[$program]($program_link)"
               else
