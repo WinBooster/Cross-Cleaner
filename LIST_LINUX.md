@@ -1,9 +1,9 @@
-# Linux Clearing Programs Catalog v2.0.1.2
+# Linux Clearing Programs Catalog v2.0.1.3
 **Total categories in database:** 12
 
-**Total programs in database:** 54
+**Total programs in database:** 60
 
-**Total pathes in database:** 125
+**Total pathes in database:** 134
 
 ## Audio
 
@@ -28,6 +28,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [Future Client](https://futureclient.net) | Cheats |
+| 2 | [RusherHack](https://rusherhack.org) | Cheats |
 
 
 ## Crypto Wallet
@@ -45,9 +46,9 @@
 | 2 | [GTK](https://www.gtk.org) | Documentation |
 | 3 | [Ghidra](https://github.com/NationalSecurityAgency/ghidra) | Logs |
 | 4 | [GitHub Desktop](https://desktop.github.com/download) | Cache, Documentation, Logs |
-| 5 | [Gradle](https://gradle.org) | Cache |
-| 6 | [Jdk](https://www.oracle.com/java/technologies/downloads) | Documentation |
-| 7 | [NeoVim](https://github.com/neovim/neovim/blob/master/INSTALL.md) | Logs |
+| 5 | [Go Language](https://go.dev/doc/install) | Cache |
+| 6 | [Gradle](https://gradle.org) | Cache |
+| 7 | [Jdk](https://www.oracle.com/java/technologies/downloads) | Documentation |
 | 8 | [Python](https://www.python.org/downloads) | Documentation |
 | 9 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
 
@@ -67,10 +68,12 @@
 | 2 | [Hearts of Iron IV](https://store.steampowered.com/app/394360/Hearts_of_Iron_IV) | Cache, Crashes, Logs |
 | 3 | [Lutris](https://lutris.net/downloads) | Logs |
 | 4 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
-| 5 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
-| 6 | [Steam proton](https://github.com/ValveSoftware/Proton) | Documentation |
-| 7 | [Terraria](https://terraria.org) | Crashes, Game saves, Logs |
-| 8 | [The Powder Toy](https://powdertoy.co.uk) | Documentation |
+| 5 | [RimWorld (Wine)](https://store.steampowered.com/app/294100/RimWorld) | Documentation |
+| 6 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
+| 7 | [Steam Proton](https://github.com/ValveSoftware/Proton) | Documentation |
+| 8 | [Terraria](https://terraria.org) | Crashes, Game saves, Logs |
+| 9 | [The Powder Toy](https://powdertoy.co.uk) | Documentation |
+| 10 | Winetricks | Logs |
 
 
 ## Messanger
@@ -87,14 +90,15 @@
 | --- | --- | --- |
 | 1 | [Cristalix](https://cristalix.gg) | Crashes, Game saves, Images, Logs |
 | 2 | [CubixWorld](https://cubixworld.net/start) | Crashes, Game saves, Images, Logs |
-| 3 | [Lunar Client](https://www.lunarclient.com/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 4 | [Minecraft](https://www.minecraft.net/ru-ru/about-minecraft) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, LastActivity, Logs |
-| 5 | [Modrinth](https://modrinth.com/app) | Cache |
-| 6 | [MultiMC](https://multimc.org/#Download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 7 | [PolyMC](https://polymc.org/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 8 | [PrismLauncher](https://prismlauncher.org/download/windows) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 9 | [SimpleMinecraft](https://simpleminecraft.ru/start.html) | Cache, Logs |
-| 10 | [X Minecraft Launcher](https://xmcl.app) | Game saves, Logs |
+| 3 | [LoliLand (Wine)](https://loliland.ru/ru/start) | Logs |
+| 4 | [Lunar Client](https://www.lunarclient.com/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 5 | [Minecraft](https://www.minecraft.net/ru-ru/about-minecraft) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, LastActivity, Logs |
+| 6 | [Modrinth](https://modrinth.com/app) | Cache |
+| 7 | [MultiMC](https://multimc.org/#Download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 8 | [PolyMC](https://polymc.org/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 9 | [PrismLauncher](https://prismlauncher.org/download/windows) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 10 | [SimpleMinecraft](https://simpleminecraft.ru/start.html) | Cache, Logs |
+| 11 | [X Minecraft Launcher](https://xmcl.app) | Game saves, Logs |
 
 
 ## Packet Manager
@@ -122,7 +126,8 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | System | Cache, Trash |
+| 1 | [CachyOS](https://cachyos.org) | Logs |
+| 2 | [Linux](https://www.kernel.org) | Cache, Trash |
 
 
 ## Text
@@ -134,9 +139,10 @@
 | 3 | [Gperf](https://github.com/jwinarske/gperf) | Documentation |
 | 4 | [JetBrains](https://www.jetbrains.com/?var=1) | Cache, Logs |
 | 5 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Cache |
-| 6 | [Pcre](https://www.pcre.org) | Documentation |
-| 7 | [Thunderbird](https://www.thunderbird.net) | Logs |
-| 8 | [VS Code](https://code.visualstudio.com/download) | Documentation |
+| 6 | [NeoVim](https://github.com/neovim/neovim/blob/master/INSTALL.md) | Logs |
+| 7 | [Pcre](https://www.pcre.org) | Documentation |
+| 8 | [Thunderbird](https://www.thunderbird.net) | Logs |
+| 9 | [VS Code](https://code.visualstudio.com/download) | Documentation, Logs |
 
 
 ## Uncategorized
