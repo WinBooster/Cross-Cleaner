@@ -1286,7 +1286,7 @@
     ]
   },
   {
-    "path": "/home/{username}/.wine/drive_c/users/roman/AppData/LocalLow/Ludeon Studios/RimWorld by Ludeon Studios",
+    "path": "/home/{username}/.wine/drive_c/users/{username}/AppData/LocalLow/Ludeon Studios/RimWorld by Ludeon Studios",
     "class": "Game",
     "category": "Logs",
     "program": "RimWorld (Wine)",
@@ -1296,7 +1296,7 @@
     ]
   },
   {
-    "path": "/home/{username}/.wine/drive_c/users/roman/AppData/LocalLow/Ludeon Studios/RimWorld by Ludeon Studios/Saves/*",
+    "path": "/home/{username}/.wine/drive_c/users/{username}/AppData/LocalLow/Ludeon Studios/RimWorld by Ludeon Studios/Saves/*",
     "class": "Game",
     "category": "Game saves",
     "program": "RimWorld (Wine)",
@@ -1501,7 +1501,7 @@
     ]
   },
   {
-    "path": "/home/{username}/.wine/drive_c/users/roman/AppData/Local/Temp",
+    "path": "/home/{username}/.wine/drive_c/users/{username}/AppData/Local/Temp",
     "class": "Game",
     "category": "Cache",
     "program": "Windows (Wine)",
