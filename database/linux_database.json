@@ -1266,6 +1266,27 @@
     ]
   },
   {
+    "path": "/home/{username}/.wine/drive_c/RimWorld",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "RimWorld (Wine)",
+    "files_to_remove": [
+      "EULA.txt",
+      "Licenses.txt",
+      "Readme.txt",
+      "ModUpdating.txt"
+    ]
+  },
+  {
+    "path": "/home/{username}/.wine/drive_c/users/roman/loliland/updates/clients/**",
+    "class": "Minecraft Launcher",
+    "category": "Logs",
+    "program": "LoliLand (Wine)",
+    "directories_to_remove": [
+      "logs"
+    ]
+  },
+  {
     "path": "/home/{username}/.rusherhack",
     "class": "Cheat",
     "category": "Cheats",
