@@ -1286,14 +1286,6 @@
     ]
   },
   {
-    "path": "/home/{username}/.wine/drive_c/users/roman/AppData/Local/Temp",
-    "class": "Game",
-    "category": "Cache",
-    "program": "Windows (Wine)",
-    "remove_files": true,
-    "remove_directories": true
-  },
-  {
     "path": "/home/{username}/.wine/drive_c/users/roman/AppData/LocalLow/Ludeon Studios/RimWorld by Ludeon Studios",
     "class": "Game",
     "category": "Logs",
@@ -1507,6 +1499,14 @@
     "directories_to_remove": [
       "logs"
     ]
+  },
+  {
+    "path": "/home/{username}/.wine/drive_c/users/roman/AppData/Local/Temp",
+    "class": "Game",
+    "category": "Cache",
+    "program": "Windows (Wine)",
+    "remove_files": true,
+    "remove_directories": true
   },
   {
     "path": "/home/{username}/.wine",
