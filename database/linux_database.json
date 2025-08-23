@@ -390,27 +390,6 @@
     ]
   },
   {
-    "path": "/home/{username}/.wine",
-    "class": "Game",
-    "category": "Logs",
-    "program": "Winetricks",
-    "files_to_remove": [
-      "winetricks.log"
-    ]
-  },
-  {
-    "path": "/home/{username}/.wine/drive_c/RimWorld",
-    "class": "Game",
-    "category": "Documentation",
-    "program": "RimWorld (Wine)",
-    "files_to_remove": [
-      "EULA.txt",
-      "Licenses.txt",
-      "Readme.txt",
-      "ModUpdating.txt"
-    ]
-  },
-  {
     "path": "/home/{username}/.config/Exodus",
     "class": "Crypto Wallet",
     "category": "Accounts",
@@ -1275,6 +1254,18 @@
     ]
   },
   {
+    "path": "/home/{username}/.wine/drive_c/RimWorld",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "RimWorld (Wine)",
+    "files_to_remove": [
+      "EULA.txt",
+      "Licenses.txt",
+      "Readme.txt",
+      "ModUpdating.txt"
+    ]
+  },
+  {
     "path": "/home/{username}/.rusherhack",
     "class": "Cheat",
     "category": "Cheats",
@@ -1458,6 +1449,15 @@
     "program": "VS Code",
     "directories_to_remove": [
       "logs"
+    ]
+  },
+  {
+    "path": "/home/{username}/.wine",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Winetricks",
+    "files_to_remove": [
+      "winetricks.log"
     ]
   },
   {
