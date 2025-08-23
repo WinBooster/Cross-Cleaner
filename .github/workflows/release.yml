@@ -338,17 +338,15 @@ jobs:
 
           ## ✨ What's New
 
-          ### 🪟 Windows Enhancements
-          - **KeePassXC** - Added documentation clearing
-          - **Gridra** - Added logs clearing
-          - **MAX** - Added cache clearing
-          - **Spotify** - Added cache, logs clearing
-          
           ### 🐧 Linux Enhancements
-          - **System** - Improved cache, logs clearing
-          - **NeoVim** - Added logs clearing
-          - **Lutris** - Added logs clearing
-          - **JetBrains** - Added cache, logs clearing
+          - **RimWorld (Wine)** - Added documentation clearing
+          - **LoliLand (Wine)** - Added logs clearing
+          - **Winetricks** - Added logs clearing
+          - **CachyOS** - Added logs clearing
+          - **Go Language** - Added documentation clearing
+          - **RusherHack** - Added cheat clearing
+          - **X Minecraft Launcher** - Improved logs clearing
+          - **VS Code** - Improved logs clearing
 
           ### 🛠 Technical Updates
           - GUI - now shows programs that have been cleaned
