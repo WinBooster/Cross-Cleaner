@@ -181,7 +181,7 @@ jobs:
           windows-binaries/Cross_Cleaner_CLI.exe
           windows-binaries/Cross_Cleaner_GUI.exe
 
-generate-lists:
+  generate-lists:
     runs-on: ubuntu-latest
     name: Generating clearing programs list
     needs: [create_release]

@@ -1501,6 +1501,16 @@
     ]
   },
   {
+    "path": "/home/{username}/.wine/drive_c/users/{username}/AppData/LocalLow/Klei/Oxygen Not Included",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Oxygen Not Included (Wine)",
+    "files_to_remove": [
+      "Player.log",
+      "Player-prev.log"
+    ]
+  },
+  {
     "path": "/home/{username}/.wine/drive_c/users/{username}/AppData/Local/Temp",
     "class": "Game",
     "category": "Cache",
