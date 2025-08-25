@@ -1070,6 +1070,16 @@
     ]
   },
   {
+    "path": "/home/{username}/.wine/drive_c/users/{username}/AppData/LocalLow/Klei/Oxygen Not Included",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Oxygen Not Included (Wine)",
+    "files_to_remove": [
+      "Player.log",
+      "Player-prev.log"
+    ]
+  },
+  {
     "path": "/usr/share/doc/",
     "class": "Text",
     "category": "Documentation",
@@ -1498,16 +1508,6 @@
     "program": "VS Code",
     "directories_to_remove": [
       "logs"
-    ]
-  },
-  {
-    "path": "/home/{username}/.wine/drive_c/users/{username}/AppData/LocalLow/Klei/Oxygen Not Included",
-    "class": "Game",
-    "category": "Logs",
-    "program": "Oxygen Not Included (Wine)",
-    "files_to_remove": [
-      "Player.log",
-      "Player-prev.log"
     ]
   },
   {
