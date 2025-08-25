@@ -1,9 +1,9 @@
 # Linux Clearing Programs Catalog v2.0.1.3
 **Total categories in database:** 12
 
-**Total programs in database:** 60
+**Total programs in database:** 62
 
-**Total pathes in database:** 134
+**Total pathes in database:** 140
 
 ## Audio
 
@@ -68,12 +68,14 @@
 | 2 | [Hearts of Iron IV](https://store.steampowered.com/app/394360/Hearts_of_Iron_IV) | Cache, Crashes, Logs |
 | 3 | [Lutris](https://lutris.net/downloads) | Logs |
 | 4 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
-| 5 | [RimWorld (Wine)](https://store.steampowered.com/app/294100/RimWorld) | Documentation |
-| 6 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
-| 7 | [Steam Proton](https://github.com/ValveSoftware/Proton) | Documentation |
-| 8 | [Terraria](https://terraria.org) | Crashes, Game saves, Logs |
-| 9 | [The Powder Toy](https://powdertoy.co.uk) | Documentation |
-| 10 | Winetricks | Logs |
+| 5 | [Oxygen Not Included (Wine)](https://store.steampowered.com/app/457140/Oxygen_Not_Included) | Logs |
+| 6 | [RimWorld (Wine)](https://store.steampowered.com/app/294100/RimWorld) | Documentation, Game saves, Logs |
+| 7 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
+| 8 | [Steam Proton](https://github.com/ValveSoftware/Proton) | Documentation |
+| 9 | [Terraria](https://terraria.org) | Crashes, Game saves, Logs |
+| 10 | [The Powder Toy](https://powdertoy.co.uk) | Documentation |
+| 11 | [Windows (Wine)](https://www.microsoft.com/download/windows) | Cache |
+| 12 | [Winetricks](https://github.com/Winetricks/winetricks) | Logs |
 
 
 ## Messanger
@@ -90,7 +92,7 @@
 | --- | --- | --- |
 | 1 | [Cristalix](https://cristalix.gg) | Crashes, Game saves, Images, Logs |
 | 2 | [CubixWorld](https://cubixworld.net/start) | Crashes, Game saves, Images, Logs |
-| 3 | [LoliLand (Wine)](https://loliland.ru/ru/start) | Logs |
+| 3 | [LoliLand (Wine)](https://loliland.ru/ru/start) | Accounts, Documentation, Logs |
 | 4 | [Lunar Client](https://www.lunarclient.com/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
 | 5 | [Minecraft](https://www.minecraft.net/ru-ru/about-minecraft) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, LastActivity, Logs |
 | 6 | [Modrinth](https://modrinth.com/app) | Cache |
