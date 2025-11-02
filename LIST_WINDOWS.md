@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.1.5
+# Windows Clearing Programs Catalog v2.0.1.6
 **Total categories in database:** 15
 
-**Total programs in database:** 170
+**Total programs in database:** 171
 
-**Total pathes in database:** 400
+**Total pathes in database:** 401
 
 ## AntiCheat
 
@@ -85,19 +85,20 @@
 | 6 | [Git](https://git-scm.com/downloads) | Documentation |
 | 7 | [GitHub Desktop](https://desktop.github.com/download) | Logs |
 | 8 | [Go Language](https://go.dev/doc/install) | Documentation |
-| 9 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
-| 10 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
-| 11 | [Java](https://www.java.com/download) | Documentation |
-| 12 | [MCCreator](https://mcreator.net/download) | Logs |
-| 13 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
-| 14 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
-| 15 | [Postman](https://www.postman.com/downloads) | Logs |
-| 16 | [Python](https://www.python.org/downloads) | Documentation |
-| 17 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
-| 18 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
-| 19 | [Unity Hub](https://unity.com/download) | Documentation |
-| 20 | Windows Kits | Documentation |
-| 21 | Xamarin | Logs |
+| 9 | [Gradle](https://gradle.org) | Cache |
+| 10 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
+| 11 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
+| 12 | [Java](https://www.java.com/download) | Documentation |
+| 13 | [MCCreator](https://mcreator.net/download) | Logs |
+| 14 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
+| 15 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
+| 16 | [Postman](https://www.postman.com/downloads) | Logs |
+| 17 | [Python](https://www.python.org/downloads) | Documentation |
+| 18 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
+| 19 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
+| 20 | [Unity Hub](https://unity.com/download) | Documentation |
+| 21 | Windows Kits | Documentation |
+| 22 | Xamarin | Logs |
 
 
 ## Driver
