@@ -2,7 +2,7 @@
   "EasyAntiCheat": "https://www.easy.ac/en-US",
   "FACEIT AC": "https://www.faceit.com/en/anti-cheat",
   "GameGuard": "https://gameguard.ac",
-  
+
   "Discord": "https://discord.com",
   "DeepL": "https://www.deepl.com",
   "Element": "https://element.io",
@@ -11,10 +11,10 @@
   "Telegram": "https://desktop.telegram.org",
   "Thunderbird": "https://www.thunderbird.net",
   "MAX": "https://max.ru",
-  
+
   "7-Zip": "https://www.7-zip.org/download.html",
   "WinRaR": "https://www.win-rar.com/predownload.html",
-  
+
   "AAF Optimus DCH Audio": "https://github.com/AAFOptimus/AAFFamilyDCHAudio",
   "ASIO4ALL v2": "https://asio4all.org/about/download-asio4all",
   "Alsa": "https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture",
@@ -23,7 +23,7 @@
   "Cassettle": "https://gitlab.gnome.org/Rirusha/Cassette",
   "Spotify": "https://open.spotify.com/download",
   "Yandex Music": "https://music.yandex.ru/download",
-  
+
   "Brave Browser": "https://brave.com/download",
   "Edge": "https://www.microsoft.com/edge",
   "Google Chrome": "https://www.google.com/intl/en/chrome",
@@ -31,7 +31,7 @@
   "Mozilla Firefox": "https://www.mozilla.org/firefox/new",
   "Opera GX": "https://www.opera.com/download",
   "Vivaldi": "https://vivaldi.com/download",
-  
+
   "ATLauncher": "https://atlauncher.com/downloads",
   "Badlion Client": "https://www.badlion.net/minecraft-client",
   "Cristalix": "https://cristalix.gg",
@@ -50,16 +50,16 @@
   "Tecknix Client": "https://tecknix.com/download.html",
   "SimpleMinecraft": "https://simpleminecraft.ru/start.html",
   "X Minecraft Launcher": "https://xmcl.app",
-  
+
   "HiAlgo Boost": "https://www.hialgo.com",
   "Mem Reduct": "https://github.com/henrypp/memreduct",
   "Winutil": "https://github.com/ChrisTitusTech/winutil",
   "ССleaner": "https://www.ccleaner.com",
-  
+
   "1Password": "https://1password.com/",
   "KeePass 2": "https://keepass.info/download.html",
   "KeePassXC": "https://keepassxc.org/download",
-  
+
   "Future Client": "https://futureclient.net",
   "Cheat Engine": "https://www.cheatengine.org/downloads.php",
   "ExecHack": "https://c.exechack.cc",
@@ -68,14 +68,13 @@
   "INTERIUM": "https://ru.interium.ooo",
   "Krnl": "https://wearedevs.net/d/Krnl",
   "OneTap": "https://www.onetap.com",
-  "RusherHack": "https://rusherhack.org",
   "Vape Client": "https://www.vape.gg",
   "Weave": "https://weave.su",
-  
+
   "Bit Monero": "https://www.getmonero.org/downloads",
   "Exodus Crypto Wallet": "https://www.exodus.com/download",
   "Wasabi Wallet": "https://wasabiwallet.io",
-  
+
   "Jdk": "https://www.oracle.com/java/technologies/downloads",
   "GTK": "https://www.gtk.org",
   "Ghidra": "https://github.com/NationalSecurityAgency/ghidra",
@@ -98,19 +97,19 @@
   "Recaf": "https://github.com/Col-E/Recaf",
   "Rust Language": "https://www.rust-lang.org/tools/install",
   "Unity Hub": "https://unity.com/download",
-  
+
   "IObit Driver Booster": "https://ru.iobit.com/driver-booster.php",
   "LGHUB": "https://www.logitechg.com/en-us/innovation/g-hub.html",
   "NVIDIA App": "https://www.nvidia.com/en-us/software/nvidia-app",
   "NVIDIA": "https://www.nvidia.com",
   "VulcanRT": "https://vulkan.lunarg.com/sdk/home",
-  
+
   "BlueStacks": "https://www.bluestacks.com",
   "BlueStacks 5": "https://www.bluestacks.com",
   "Gameloop": "https://www.gameloop.com",
   "Memu": "https://www.memuplay.com/download.html",
   "Nox": "https://bignox.com/nox-app-player",
- 
+
   "Lutris": "https://lutris.net/downloads",
   "Garry's mod": "https://store.steampowered.com/app/4000/Garrys_Mod",
   "Hearts of Iron IV": "https://store.steampowered.com/app/394360/Hearts_of_Iron_IV",
@@ -133,14 +132,14 @@
   "RimWorld": "https://store.steampowered.com/app/294100/RimWorld",
   "Winetricks": "https://github.com/Winetricks/winetricks",
   "Oxygen Not Included": "https://store.steampowered.com/app/457140/Oxygen_Not_Included",
-  
+
   "ImageGlass": "https://imageglass.org",
   "InkSpace": "https://inkscape.org",
   "Magpie": "https://github.com/Blinue/Magpie",
   "Microsoft Lobe": "https://github.com/orgs/lobe",
   "ShareX": "https://getsharex.com/downloads",
   "Tonfotos Telegram Connector": "https://tonfotos.com",
-  
+
   "4uKey for Android": "https://www.tenorshare.ru/products/android-password-reset-tool.html",
   "Gpg4win": "https://www.gpg4win.org",
   "I2P": "https://geti2p.net/download",
@@ -154,7 +153,7 @@
   "SystemInformer": "https://systeminformer.com/downloads",
   "VirtualBox": "https://www.virtualbox.org/wiki/Downloads",
   "Zapret": "https://github.com/bol-van/zapret",
-  
+
   "Cursor": "https://www.cursor.com/downloads",
   "JetBrains": "https://www.jetbrains.com/?var=1",
   "LM Studio": "https://lmstudio.ai/download",
@@ -166,13 +165,13 @@
   "VS Code": "https://code.visualstudio.com/download",
   "Gperf": "https://github.com/jwinarske/gperf",
   "Pcre": "https://www.pcre.org",
-  
+
   "Tribler": "https://www.tribler.org/download.html",
   "qBittorrent": "https://www.qbittorrent.org/download",
-  
+
   "MiniBin": "https://github.com/king-tri-ton/minibin",
   "PowerToys": "https://github.com/microsoft/PowerToys",
-  
+
   "Amnezia VPN": "https://github.com/amnezia-vpn/amnezia-client",
   "Amnezia WG": "https://docs.amnezia.org/ru/documentation/amnezia-wg",
   "CloudFlare": "https://one.one.one.one",
@@ -181,7 +180,7 @@
   "UrbanVPN": "https://www.urban-vpn.com",
   "Windscribe": "https://windscribe.com/features/windows",
   "iTop VPN": "https://www.itopvpn.com",
-  
+
   "AVCLabs Video Enhancer AI": "https://www.avclabs.com/video-enhancer-ai.html",
   "HandBrake": "https://handbrake.fr/downloads.php",
   "OBS Studio": "https://obsproject.com/download",
@@ -189,13 +188,13 @@
   "Topaz Video AI": "https://www.topazlabs.com/topaz-video-ai",
   "VLC": "https://www.videolan.org/vlc",
   "iTop Screen Recorder": "https://recorder.itopvpn.com",
-  
+
   "Yay": "https://github.com/Jguer/yay",
   "Chocolatey": "https://chocolatey.org/install",
   "Scoop": "https://scoop.sh",
   "WinGet": "https://github.com/microsoft/winget-cli",
   "pipx": "https://github.com/pypa/pipx",
-  
+
   "ImgBurn": "https://www.imgburn.com/index.php?act=download",
   "CachyOS": "https://cachyos.org",
   "Linux": "https://www.kernel.org",

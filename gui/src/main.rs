@@ -100,6 +100,7 @@ async fn work(
     progress_sender: mpsc::Sender<String>,
     database: &[CleanerData],
 ) -> (u64, u64, u64, Vec<Cleared>) {
+    let mut current_task = 0;
     let mut bytes_cleared = 0;
     let mut removed_files = 0;
     let mut removed_directories = 0;
@@ -149,9 +150,18 @@ async fn work(
         tasks.push(task);
     }
 
+    let total_tasks = tasks.len();
+    let _ = progress_sender
+        .send(format!("PROGRESS:0:{}", total_tasks))
+        .await;
+
     for task in tasks {
         match task.await {
             Ok(result) => {
+                current_task += 1;
+                let _ = progress_sender
+                    .send(format!("PROGRESS:{}:{}", current_task, total_tasks))
+                    .await;
                 if result.working {
                     bytes_cleared += result.bytes;
                     removed_files += result.files;
@@ -224,6 +234,8 @@ struct MyApp {
     pub progress_receiver: Option<mpsc::Receiver<String>>,
     pub cleared_data: Option<(u64, u64, u64, Vec<Cleared>)>,
     pub show_results: bool,
+    pub current_task: usize,
+    pub total_tasks: usize,
 
     pub result_sender: Option<mpsc::Sender<(u64, u64, u64, Vec<Cleared>)>>,
     pub result_receiver: Option<mpsc::Receiver<(u64, u64, u64, Vec<Cleared>)>>,
@@ -275,6 +287,8 @@ impl MyApp {
             progress_receiver: None,
             cleared_data: None,
             show_results: false,
+            current_task: 0,
+            total_tasks: 0,
 
             result_sender: Some(result_sender),
             result_receiver: Some(result_receiver),
@@ -286,7 +300,15 @@ impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if let Some(receiver) = &mut self.progress_receiver {
             if let Ok(message) = receiver.try_recv() {
-                self.progress_message = message;
+                if message.starts_with("PROGRESS:") {
+                    let parts: Vec<&str> = message.split(':').collect();
+                    if parts.len() == 3 {
+                        self.current_task = parts[1].parse().unwrap_or(0);
+                        self.total_tasks = parts[2].parse().unwrap_or(0);
+                    }
+                } else {
+                    self.progress_message = message;
+                }
                 ctx.request_repaint();
             }
         }
@@ -316,7 +338,25 @@ impl eframe::App for MyApp {
 
         egui::CentralPanel::default().show(ctx, |ui| {
             if self.task_handle.is_some() {
-                ui.label(&self.progress_message);
+                ui.vertical_centered(|ui| {
+                    ui.heading("Cleaning in progress...");
+                    ui.add_space(10.0);
+
+                    if self.total_tasks > 0 {
+                        let progress = self.current_task as f32 / self.total_tasks as f32;
+                        ui.add(
+                            egui::ProgressBar::new(progress)
+                                .show_percentage()
+                                .animate(true),
+                        );
+                        ui.label(format!("Task {}/{}", self.current_task, self.total_tasks));
+                    } else {
+                        ui.spinner();
+                    }
+
+                    ui.add_space(10.0);
+                    ui.label(&self.progress_message);
+                });
                 return;
             }
 
@@ -465,6 +505,8 @@ impl eframe::App for MyApp {
 
                 let (progress_sender, progress_receiver) = mpsc::channel(32);
                 self.progress_receiver = Some(progress_receiver);
+                self.current_task = 0;
+                self.total_tasks = 0;
 
                 let database = Arc::clone(&self.database);
                 let handle = tokio::spawn(async move {
