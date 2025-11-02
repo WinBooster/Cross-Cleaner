@@ -511,17 +511,35 @@ impl eframe::App for MyApp {
             }
 
             if self.show_program_selection {
-                // Resize window for program selection
+                // Dynamic window sizing based on number of programs
+                let num_programs = self.program_checkboxes.len();
+                let rows = (num_programs + 1) / 2; // 2 columns
+                let row_height = 20.0;
+                let base_height = 120.0; // Heading, search, buttons, separators
+                let min_scroll_height = 20.0;
+                let max_scroll_height = 400.0;
+
+                let content_height = rows as f32 * row_height;
+                let scroll_height = content_height.min(max_scroll_height).max(min_scroll_height);
+                let window_height = base_height + scroll_height;
+
                 ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
-                    400.0, 520.0,
+                    500.0,
+                    window_height,
                 )));
 
-                ui.heading("Select Programs to Clean");
+                ui.vertical_centered(|ui| {
+                    ui.heading("Select Programs to Clean");
+                });
                 ui.separator();
 
                 ui.horizontal(|ui| {
                     ui.label("Search:");
-                    let search_response = ui.text_edit_singleline(&mut self.search_query);
+                    let available_width = ui.available_width();
+                    let search_response = ui.add_sized(
+                        [available_width, 20.0],
+                        egui::TextEdit::singleline(&mut self.search_query),
+                    );
                     if search_response.changed() {
                         self.search_query = self.search_query.to_lowercase();
                     }
@@ -530,7 +548,7 @@ impl eframe::App for MyApp {
                 ui.separator();
 
                 egui::ScrollArea::vertical()
-                    .max_height(400.0)
+                    .max_height(scroll_height)
                     .show(ui, |ui| {
                         ui.columns(2, |columns| {
                             let mut col_index = 0;

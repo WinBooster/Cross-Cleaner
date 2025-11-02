@@ -1,12 +1,12 @@
 name: Release
 
-on: 
+on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version number (e.g., 2.0.1)'
+        description: "Version number (e.g., 2.0.1)"
         required: true
-        default: '2.0.1'
+        default: "2.0.1"
 
 env:
   CARGO_TERM_COLOR: always
@@ -18,58 +18,58 @@ jobs:
     permissions: write-all
     name: Formating code
     steps:
-    - uses: actions/checkout@v4
-    - name: Update Cargo.toml version
-      run: |
-        sed -i 's/^version = .*/version = "${{ env.APP_VERSION }}"/' Cargo.toml
-        sed -i 's/ProductVersion = .*/ProductVersion = "${{ env.APP_VERSION }}"/' Cargo.toml
-    - name: Formating code
-      run: cargo fmt
-    - name: Commit changes
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add .
-        git commit -m "Auto format code" || echo "No changes to commit"
-        git push || echo "No changes to push"
+      - uses: actions/checkout@v4
+      - name: Update Cargo.toml version
+        run: |
+          sed -i 's/^version = .*/version = "${{ env.APP_VERSION }}"/' Cargo.toml
+          sed -i 's/ProductVersion = .*/ProductVersion = "${{ env.APP_VERSION }}"/' Cargo.toml
+      - name: Formating code
+        run: cargo fmt
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .
+          git commit -m "Auto format code" || echo "No changes to commit"
+          git push || echo "No changes to push"
 
   sort_json:
     runs-on: ubuntu-latest
     name: Sorting json
     permissions: write-all
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Sort JSON files by program field
-      run: |
-        sudo apt-get -y install jq
-        
-        JSON_FILES=("database/linux_database.json" "database/windows_database.json")
-        for JSON_FILE in "${JSON_FILES[@]}"; do
-          echo "Processing $JSON_FILE..."
-          
-          if [ ! -f "$JSON_FILE" ]; then
-            echo "Error: JSON file not found at $JSON_FILE"
-            exit 1
-          fi
-          
-          jq 'sort_by(.program | ascii_downcase)' "$JSON_FILE" > "${JSON_FILE}.tmp"
-          
-          if [ $? -eq 0 ]; then
-            mv "${JSON_FILE}.tmp" "$JSON_FILE"
-            echo "Successfully sorted $JSON_FILE"
-          else
-            echo "Error: Failed to sort $JSON_FILE"
-            exit 1
-          fi
-        done
-        
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add "${JSON_FILES[@]}"
-        git commit -m "Auto-sorted JSON files by program field" || echo "No changes to commit"
-        git push || echo "No changes to push"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Sort JSON files by program field
+        run: |
+          sudo apt-get -y install jq
+
+          JSON_FILES=("database/linux_database.json" "database/windows_database.json")
+          for JSON_FILE in "${JSON_FILES[@]}"; do
+            echo "Processing $JSON_FILE..."
+
+            if [ ! -f "$JSON_FILE" ]; then
+              echo "Error: JSON file not found at $JSON_FILE"
+              exit 1
+            fi
+
+            jq 'sort_by(.program | ascii_downcase)' "$JSON_FILE" > "${JSON_FILE}.tmp"
+
+            if [ $? -eq 0 ]; then
+              mv "${JSON_FILE}.tmp" "$JSON_FILE"
+              echo "Successfully sorted $JSON_FILE"
+            else
+              echo "Error: Failed to sort $JSON_FILE"
+              exit 1
+            fi
+          done
+
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add "${JSON_FILES[@]}"
+          git commit -m "Auto-sorted JSON files by program field" || echo "No changes to commit"
+          git push || echo "No changes to push"
 
   upload_databases:
     needs: [sort_json]
@@ -78,18 +78,18 @@ jobs:
     permissions: write-all
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Move databases
-      run: |
-        mv database/linux_database.json linux_database.json
-        mv database/windows_database.json windows_database.json
-    - name: Upload databases to artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: databases
-        path: |
-          linux_database.json
-          windows_database.json
+      - uses: actions/checkout@v4
+      - name: Move databases
+        run: |
+          mv database/linux_database.json linux_database.json
+          mv database/windows_database.json windows_database.json
+      - name: Upload databases to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: databases
+          path: |
+            linux_database.json
+            windows_database.json
 
   build_linux:
     runs-on: ubuntu-latest
@@ -97,20 +97,20 @@ jobs:
     permissions: write-all
     name: Build Linux
     steps:
-    - uses: actions/checkout@v4
-    - name: Build linux
-      run: cargo build --release
-    - name: Move linux binaries
-      run: |
-        mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI
-        mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI
-    - name: Upload Linux artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: linux-binaries
-        path: |
-          Cross_Cleaner_CLI
-          Cross_Cleaner_GUI
+      - uses: actions/checkout@v4
+      - name: Build linux
+        run: cargo build --release
+      - name: Move linux binaries
+        run: |
+          mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI
+          mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-binaries
+          path: |
+            Cross_Cleaner_CLI
+            Cross_Cleaner_GUI
 
   build_windows:
     runs-on: windows-latest
@@ -118,20 +118,20 @@ jobs:
     permissions: write-all
     name: Build Windows
     steps:
-    - uses: actions/checkout@v4
-    - name: Build windows
-      run: cargo build --release
-    - name: Move windows binaries
-      run: |
-        move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI.exe
-        move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI.exe
-    - name: Upload Windows artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: windows-binaries
-        path: |
-          Cross_Cleaner_CLI.exe
-          Cross_Cleaner_GUI.exe
+      - uses: actions/checkout@v4
+      - name: Build windows
+        run: cargo build --release
+      - name: Move windows binaries
+        run: |
+          move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI.exe
+          move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI.exe
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-binaries
+          path: |
+            Cross_Cleaner_CLI.exe
+            Cross_Cleaner_GUI.exe
 
   create_release:
     needs: [build_linux, build_windows]
@@ -141,45 +141,44 @@ jobs:
       contents: write
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Download Linux artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: linux-binaries
-        path: linux-binaries
-    - name: Download Windows artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: windows-binaries
-        path: windows-binaries
-    - name: Create Release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: v${{ env.APP_VERSION }}
-        name: 🌟 Cross Cleaner ${{ env.APP_VERSION }} 🌟
-        body: |
-          ![Downloads](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}/total) ![Version](https://img.shields.io/badge/version-${{ env.APP_VERSION }}-blue) ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux-orange)
+      - uses: actions/checkout@v4
+      - name: Download Linux artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-binaries
+          path: linux-binaries
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-binaries
+          path: windows-binaries
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.APP_VERSION }}
+          name: 🌟 Cross Cleaner ${{ env.APP_VERSION }} 🌟
+          body: |
+            ![Downloads](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}/total) ![Version](https://img.shields.io/badge/version-${{ env.APP_VERSION }}-blue) ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux-orange)
 
-          ## ✨ What's New
+            ## ✨ What's New
 
-          ### 🐧 Linux Enhancements
-          - **RimWorld (Wine)** - Added logs, game saves clearing
-          - **LoliLand (Wine)** - Added documentation clearing
+            ### 🪟 Windows Enhancements
+            - **Zed** - Added log clearing
 
-          ### 🛠 Technical Updates
-          - GUI - now shows programs that have been cleaned
+            ### 🛠 Technical Updates
+            - GUI - now has possible disable program clearing and progress bar
 
-          ## 👏 Contributors Hall of Fame
-          Special thanks to our amazing contributors who made this release possible:
-          - **@Nekiplay** - Core improvements and feature implementations
+            ## 👏 Contributors Hall of Fame
+            Special thanks to our amazing contributors who made this release possible:
+            - **@Nekiplay** - Core improvements and feature implementations
 
-          ---
-          *Thank you for using Cross Cleaner! Your system, cleaner than ever.*
-        files: |
-          linux-binaries/Cross_Cleaner_CLI
-          linux-binaries/Cross_Cleaner_GUI
-          windows-binaries/Cross_Cleaner_CLI.exe
-          windows-binaries/Cross_Cleaner_GUI.exe
+            ---
+            *Thank you for using Cross Cleaner! Your system, cleaner than ever.*
+          files: |
+            linux-binaries/Cross_Cleaner_CLI
+            linux-binaries/Cross_Cleaner_GUI
+            windows-binaries/Cross_Cleaner_CLI.exe
+            windows-binaries/Cross_Cleaner_GUI.exe
 
   generate-lists:
     runs-on: ubuntu-latest
@@ -189,170 +188,170 @@ jobs:
       contents: write
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: sudo apt-get -y install jq
+      - name: Install dependencies
+        run: sudo apt-get -y install jq
 
-    - name: Process Windows data
-      run: |
-        # Load program links into a variable
-        if [ -f "database/program_links.json" ]; then
-          program_links=$(jq -r '.' database/program_links.json)
-        else
-          program_links="{}"
-        fi
-
-        # Header
-        echo "# Windows Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_WINDOWS.md
-        total_categories=$(jq -r 'map(.category) | unique | length' database/windows_database.json)
-        total_programs=$(jq -r 'map(.program) | unique | length' database/windows_database.json)
-        total_pathes=$(jq -r 'map(.path) | unique | length' database/windows_database.json)
-        echo -e "**Total categories in database:** $total_categories\n" >> LIST_WINDOWS.md
-        echo -e "**Total programs in database:** $total_programs\n" >> LIST_WINDOWS.md
-        echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_WINDOWS.md
-        
-        jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/windows_database.json | while IFS= read -r class; do
-          echo -e "## $class\n" >> LIST_WINDOWS.md
-          
-          # Get programs for this class
-          programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/windows_database.json)
-          
-          if [ -n "$programs" ]; then
-            echo "| № | Program | Categories |" >> LIST_WINDOWS.md
-            echo "| --- | --- | --- |" >> LIST_WINDOWS.md
-            
-            i=0
-            while IFS= read -r line; do
-              program=$(echo "$line" | jq -r '.[0].program')
-              # Check if program has a link
-              program_clean=$(echo "$program" | sed 's/ (Wine)//g')
-              program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
-              if [ -n "$program_link" ]; then
-                displayed_program="[$program]($program_link)"
-              else
-                displayed_program="$program"
-              fi
-              categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-              echo "| $((++i)) | $displayed_program | $categories |" >> LIST_WINDOWS.md
-            done <<< "$programs"
+      - name: Process Windows data
+        run: |
+          # Load program links into a variable
+          if [ -f "database/program_links.json" ]; then
+            program_links=$(jq -r '.' database/program_links.json)
           else
-            echo "*No programs found for this class*" >> LIST_WINDOWS.md
+            program_links="{}"
           fi
-          
-          echo -e "\n" >> LIST_WINDOWS.md
-        done
 
-        # Handle null class separately if needed
-        if jq -e '.[] | select(.class == null)' database/windows_database.json >/dev/null; then
-          echo -e "## Uncategorized\n" >> LIST_WINDOWS.md
-          programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/windows_database.json)
-          
-          if [ -n "$programs" ]; then
-            echo "| № | Program | Categories |" >> LIST_WINDOWS.md
-            echo "| --- | --- | --- |" >> LIST_WINDOWS.md
-            
-            i=0
-            while IFS= read -r line; do
-              program=$(echo "$line" | jq -r '.[0].program')
-              # Check if program has a link
-              program_clean=$(echo "$program" | sed 's/ (Wine)//g')
-              program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
-              if [ -n "$program_link" ]; then
-                displayed_program="[$program]($program_link)"
-              else
-                displayed_program="$program"
-              fi
-              categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-              echo "| $((++i)) | $displayed_program | $categories |" >> LIST_WINDOWS.md
-            done <<< "$programs"
+          # Header
+          echo "# Windows Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_WINDOWS.md
+          total_categories=$(jq -r 'map(.category) | unique | length' database/windows_database.json)
+          total_programs=$(jq -r 'map(.program) | unique | length' database/windows_database.json)
+          total_pathes=$(jq -r 'map(.path) | unique | length' database/windows_database.json)
+          echo -e "**Total categories in database:** $total_categories\n" >> LIST_WINDOWS.md
+          echo -e "**Total programs in database:** $total_programs\n" >> LIST_WINDOWS.md
+          echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_WINDOWS.md
+
+          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/windows_database.json | while IFS= read -r class; do
+            echo -e "## $class\n" >> LIST_WINDOWS.md
+
+            # Get programs for this class
+            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/windows_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_WINDOWS.md
+              echo "| --- | --- | --- |" >> LIST_WINDOWS.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_WINDOWS.md
+              done <<< "$programs"
+            else
+              echo "*No programs found for this class*" >> LIST_WINDOWS.md
+            fi
+
+            echo -e "\n" >> LIST_WINDOWS.md
+          done
+
+          # Handle null class separately if needed
+          if jq -e '.[] | select(.class == null)' database/windows_database.json >/dev/null; then
+            echo -e "## Uncategorized\n" >> LIST_WINDOWS.md
+            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/windows_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_WINDOWS.md
+              echo "| --- | --- | --- |" >> LIST_WINDOWS.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_WINDOWS.md
+              done <<< "$programs"
+            else
+              echo "*No uncategorized programs found*" >> LIST_WINDOWS.md
+            fi
+          fi
+
+      - name: Process Linux data
+        run: |
+          # Load program links into a variable
+          if [ -f "database/program_links.json" ]; then
+            program_links=$(jq -r '.' database/program_links.json)
           else
-            echo "*No uncategorized programs found*" >> LIST_WINDOWS.md
+            program_links="{}"
           fi
-        fi
 
-    - name: Process Linux data
-      run: |
-        # Load program links into a variable
-        if [ -f "database/program_links.json" ]; then
-          program_links=$(jq -r '.' database/program_links.json)
-        else
-          program_links="{}"
-        fi
+          # Header
+          echo "# Linux Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_LINUX.md
+          total_categories=$(jq -r 'map(.category) | unique | length' database/linux_database.json)
+          total_programs=$(jq -r 'map(.program) | unique | length' database/linux_database.json)
+          total_pathes=$(jq -r 'map(.path) | unique | length' database/linux_database.json)
+          echo -e "**Total categories in database:** $total_categories\n" >> LIST_LINUX.md
+          echo -e "**Total programs in database:** $total_programs\n" >> LIST_LINUX.md
+          echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_LINUX.md
 
-        # Header
-        echo "# Linux Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_LINUX.md
-        total_categories=$(jq -r 'map(.category) | unique | length' database/linux_database.json)
-        total_programs=$(jq -r 'map(.program) | unique | length' database/linux_database.json)
-        total_pathes=$(jq -r 'map(.path) | unique | length' database/linux_database.json)
-        echo -e "**Total categories in database:** $total_categories\n" >> LIST_LINUX.md
-        echo -e "**Total programs in database:** $total_programs\n" >> LIST_LINUX.md
-        echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_LINUX.md
-        
-        jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/linux_database.json | while IFS= read -r class; do
-          echo -e "## $class\n" >> LIST_LINUX.md
-          
-          # Get programs for this class
-          programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/linux_database.json)
-          
-          if [ -n "$programs" ]; then
-            echo "| № | Program | Categories |" >> LIST_LINUX.md
-            echo "| --- | --- | --- |" >> LIST_LINUX.md
-            
-            i=0
-            while IFS= read -r line; do
-              program=$(echo "$line" | jq -r '.[0].program')
-              # Check if program has a link
-              program_clean=$(echo "$program" | sed 's/ (Wine)//g')
-              program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
-              if [ -n "$program_link" ]; then
-                displayed_program="[$program]($program_link)"
-              else
-                displayed_program="$program"
-              fi
-              categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-              echo "| $((++i)) | $displayed_program | $categories |" >> LIST_LINUX.md
-            done <<< "$programs"
-          else
-            echo "*No programs found for this class*" >> LIST_LINUX.md
+          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/linux_database.json | while IFS= read -r class; do
+            echo -e "## $class\n" >> LIST_LINUX.md
+
+            # Get programs for this class
+            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/linux_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_LINUX.md
+              echo "| --- | --- | --- |" >> LIST_LINUX.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_LINUX.md
+              done <<< "$programs"
+            else
+              echo "*No programs found for this class*" >> LIST_LINUX.md
+            fi
+
+            echo -e "\n" >> LIST_LINUX.md
+          done
+
+          # Handle null class separately if needed
+          if jq -e '.[] | select(.class == null)' database/linux_database.json >/dev/null; then
+            echo -e "## Uncategorized\n" >> LIST_LINUX.md
+            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/linux_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_LINUX.md
+              echo "| --- | --- | --- |" >> LIST_LINUX.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_LINUX.md
+              done <<< "$programs"
+            else
+              echo "*No uncategorized programs found*" >> LIST_LINUX.md
+            fi
           fi
-          
-          echo -e "\n" >> LIST_LINUX.md
-        done
 
-        # Handle null class separately if needed
-        if jq -e '.[] | select(.class == null)' database/linux_database.json >/dev/null; then
-          echo -e "## Uncategorized\n" >> LIST_LINUX.md
-          programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/linux_database.json)
-          
-          if [ -n "$programs" ]; then
-            echo "| № | Program | Categories |" >> LIST_LINUX.md
-            echo "| --- | --- | --- |" >> LIST_LINUX.md
-            
-            i=0
-            while IFS= read -r line; do
-              program=$(echo "$line" | jq -r '.[0].program')
-              # Check if program has a link
-              program_clean=$(echo "$program" | sed 's/ (Wine)//g')
-              program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
-              if [ -n "$program_link" ]; then
-                displayed_program="[$program]($program_link)"
-              else
-                displayed_program="$program"
-              fi
-              categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-              echo "| $((++i)) | $displayed_program | $categories |" >> LIST_LINUX.md
-            done <<< "$programs"
-          else
-            echo "*No uncategorized programs found*" >> LIST_LINUX.md
-          fi
-        fi
-          
-    - name: Commit changes
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add LIST_*.md
-        git commit -m "Auto-updated program catalogs" || echo "No changes to commit"
-        git push || echo "No changes to push"
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add LIST_*.md
+          git commit -m "Auto-updated program catalogs" || echo "No changes to commit"
+          git push || echo "No changes to push"
