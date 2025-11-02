@@ -6,6 +6,7 @@ use database::structures::CleanerResult;
 use database::structures::{CleanerData, Cleared};
 use database::utils::get_file_size_string;
 use database::{get_icon, get_version};
+use futures::stream::{FuturesUnordered, StreamExt};
 use indicatif::{ProgressBar, ProgressStyle};
 use inquire::formatter::MultiOptionFormatter;
 use inquire::list_option::ListOption;
@@ -88,21 +89,14 @@ async fn work(
     // WARN: Windiws only
     #[cfg(windows)]
     if has_last_activity {
-        let progress_bar = pb.clone();
         let task = task::spawn(async move {
-            if let Some(ref pb) = progress_bar {
-                pb.set_message("LastActivity");
-            }
             let bytes_cleared = database::registry_database::clear_last_activity();
-            if let Some(ref pb) = progress_bar {
-                pb.inc(1);
-            }
             CleanerResult {
                 files: 0,
                 folders: 0,
                 bytes: bytes_cleared,
                 working: true,
-                path: String::new(),
+                path: String::from("LastActivity"),
                 program: String::from("Registry"),
                 category: String::from("LastActivity"),
             }
@@ -115,56 +109,8 @@ async fn work(
             && !disabled_programs.contains(&data.program.to_lowercase().as_str())
     }) {
         let data = Arc::new(data.clone());
-        let progress_bar = pb.clone();
-        let bytes_cleared = Arc::clone(&bytes_cleared);
-        let removed_files = Arc::clone(&removed_files);
-        let removed_directories = Arc::clone(&removed_directories);
-        let cleared_programs = Arc::clone(&cleared_programs);
 
-        let task = task::spawn(async move {
-            if let Some(ref pb) = progress_bar {
-                pb.set_message(data.path.clone());
-            }
-            let result = clear_data(&data);
-            if let Some(ref pb) = progress_bar {
-                pb.inc(1);
-            }
-
-            if result.working {
-                let mut bytes_cleared = bytes_cleared.lock().await;
-                *bytes_cleared += result.bytes;
-
-                let mut removed_files = removed_files.lock().await;
-                *removed_files += result.files;
-
-                let mut removed_directories = removed_directories.lock().await;
-                *removed_directories += result.folders;
-
-                let mut cleared_programs = cleared_programs.lock().await;
-                if let Some(cleared) = cleared_programs
-                    .iter_mut()
-                    .find(|c| c.program == result.program)
-                {
-                    cleared.removed_bytes += result.bytes as u64;
-                    cleared.removed_files += result.files as u64;
-                    cleared.removed_directories += result.folders as u64;
-                    if !cleared.affected_categories.contains(&result.category) {
-                        cleared.affected_categories.push(result.category.clone());
-                    }
-                } else {
-                    let cleared = Cleared {
-                        program: result.program.clone(),
-                        removed_bytes: result.bytes as u64,
-                        removed_files: result.files as u64,
-                        removed_directories: result.folders as u64,
-                        affected_categories: vec![result.category.clone()],
-                    };
-                    cleared_programs.push(cleared);
-                }
-            }
-
-            result
-        });
+        let task = task::spawn(async move { clear_data(&data) });
         tasks.push(task);
     }
 
@@ -172,11 +118,56 @@ async fn work(
         pb.set_length(tasks.len() as u64);
     }
 
-    for task in tasks {
-        match task.await {
-            Ok(_) => {}
+    // Use FuturesUnordered to process tasks as they complete (smoother progress)
+    let mut futures = tasks.into_iter().collect::<FuturesUnordered<_>>();
+
+    while let Some(task_result) = futures.next().await {
+        match task_result {
+            Ok(result) => {
+                // Update progress bar with current path
+                if let Some(ref pb) = pb {
+                    pb.set_message(result.path.clone());
+                    pb.inc(1);
+                }
+
+                if result.working {
+                    let mut bytes_cleared = bytes_cleared.lock().await;
+                    *bytes_cleared += result.bytes;
+
+                    let mut removed_files = removed_files.lock().await;
+                    *removed_files += result.files;
+
+                    let mut removed_directories = removed_directories.lock().await;
+                    *removed_directories += result.folders;
+
+                    let mut cleared_programs = cleared_programs.lock().await;
+                    if let Some(cleared) = cleared_programs
+                        .iter_mut()
+                        .find(|c| c.program == result.program)
+                    {
+                        cleared.removed_bytes += result.bytes as u64;
+                        cleared.removed_files += result.files as u64;
+                        cleared.removed_directories += result.folders as u64;
+                        if !cleared.affected_categories.contains(&result.category) {
+                            cleared.affected_categories.push(result.category.clone());
+                        }
+                    } else {
+                        let cleared = Cleared {
+                            program: result.program.clone(),
+                            removed_bytes: result.bytes as u64,
+                            removed_files: result.files as u64,
+                            removed_directories: result.folders as u64,
+                            affected_categories: vec![result.category.clone()],
+                        };
+                        cleared_programs.push(cleared);
+                    }
+                }
+            }
             Err(e) => {
                 eprintln!("Error waiting for task completion: {:?}", e);
+                if let Some(ref pb) = pb {
+                    pb.inc(1);
+                }
             }
         }
     }

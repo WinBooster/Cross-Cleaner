@@ -10,6 +10,7 @@ dependencies = [
  "cleaner",
  "crossterm 0.29.0",
  "database",
+ "futures",
  "indicatif",
  "inquire",
  "notify-rust",
