@@ -57,7 +57,7 @@ async fn main() -> eframe::Result {
     let checkbox_count = app.checked_boxes.len();
     let rows = checkbox_count.div_ceil(3);
     // INFO: 20px for 1 checkbox, 60px for button
-    let height = (rows * 20) + 45;
+    let height = (rows * 15) + 25;
 
     let size = egui::vec2(430.0, height as f32);
     let options = eframe::NativeOptions {
@@ -99,6 +99,7 @@ async fn work(
     categories: Vec<String>,
     progress_sender: mpsc::Sender<String>,
     database: &[CleanerData],
+    excluded_programs: HashSet<String>,
 ) -> (u64, u64, u64, Vec<Cleared>) {
     let mut current_task = 0;
     let mut bytes_cleared = 0;
@@ -138,7 +139,9 @@ async fn work(
 
     for data in database
         .iter()
-        .filter(|&data| categories_set.contains(&data.category))
+        .filter(|&data| {
+            categories_set.contains(&data.category) && !excluded_programs.contains(&data.program)
+        })
         .cloned()
     {
         let data = Arc::new(data);
@@ -237,6 +240,11 @@ struct MyApp {
     pub current_task: usize,
     pub total_tasks: usize,
 
+    pub show_program_selection: bool,
+    pub program_checkboxes: Vec<(Rc<RefCell<bool>>, String)>,
+    pub search_query: String,
+    pub excluded_programs: HashSet<String>,
+
     pub result_sender: Option<mpsc::Sender<(u64, u64, u64, Vec<Cleared>)>>,
     pub result_receiver: Option<mpsc::Receiver<(u64, u64, u64, Vec<Cleared>)>>,
     pub database: Arc<[CleanerData]>,
@@ -290,6 +298,11 @@ impl MyApp {
             current_task: 0,
             total_tasks: 0,
 
+            show_program_selection: false,
+            program_checkboxes: vec![],
+            search_query: String::new(),
+            excluded_programs: HashSet::new(),
+
             result_sender: Some(result_sender),
             result_receiver: Some(result_receiver),
         }
@@ -338,6 +351,9 @@ impl eframe::App for MyApp {
 
         egui::CentralPanel::default().show(ctx, |ui| {
             if self.task_handle.is_some() {
+                ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
+                    450.0, 120.0,
+                )));
                 ui.vertical_centered(|ui| {
                     ui.heading("Cleaning in progress...");
                     ui.add_space(10.0);
@@ -376,7 +392,19 @@ impl eframe::App for MyApp {
                     // Фиксированные размеры для колонок
                     let column_widths = [150.0, 80.0, 80.0, 170.0];
                     let total_width = column_widths.iter().sum::<f32>() + 100.0;
-                    let total_height = 400.0;
+
+                    // Динамический расчет высоты на основе количества программ
+                    let num_programs = cleared.len();
+                    let row_height = 20.0; // Высота одной строки
+                    let header_height = 100.0; // Заголовок с результатами + заголовки таблицы
+                    let min_scroll_height = 100.0; // Минимальная высота для прокрутки
+                    let max_scroll_height = 400.0; // Максимальная высота для прокрутки
+
+                    // Расчет необходимой высоты для всех строк
+                    let content_height = num_programs as f32 * row_height;
+                    let scroll_height =
+                        content_height.min(max_scroll_height).max(min_scroll_height);
+                    let total_height = header_height + scroll_height + 50.0;
 
                     ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
                         total_width,
@@ -428,7 +456,7 @@ impl eframe::App for MyApp {
 
                         // Прокручиваемое содержимое таблицы
                         egui::ScrollArea::vertical()
-                            .max_height(total_height - 50.0)
+                            .max_height(scroll_height)
                             .show(ui, |ui| {
                                 for cleared in cleared {
                                     ui.horizontal(|ui| {
@@ -482,40 +510,162 @@ impl eframe::App for MyApp {
                 }
             }
 
-            ui.columns(3, |columns| {
-                for (i, (checkbox, label)) in self.checked_boxes.iter().enumerate() {
-                    let column_index = i % 3;
-                    let mut value = checkbox.borrow_mut();
-                    columns[column_index].checkbox(&mut *value, label);
-                }
-            });
+            if self.show_program_selection {
+                // Resize window for program selection
+                ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
+                    400.0, 520.0,
+                )));
 
-            let available_width = ui.available_width();
+                ui.heading("Select Programs to Clean");
+                ui.separator();
 
-            if ui
-                .add_sized([available_width, 25.0], egui::Button::new("Clear"))
-                .clicked()
-            {
-                let selected_options: Vec<String> = self
-                    .checked_boxes
-                    .iter()
-                    .filter(|(checkbox, _)| *checkbox.borrow())
-                    .map(|(_, label)| label.clone())
-                    .collect();
-
-                let (progress_sender, progress_receiver) = mpsc::channel(32);
-                self.progress_receiver = Some(progress_receiver);
-                self.current_task = 0;
-                self.total_tasks = 0;
-
-                let database = Arc::clone(&self.database);
-                let handle = tokio::spawn(async move {
-                    work(selected_options, progress_sender, &database).await
+                ui.horizontal(|ui| {
+                    ui.label("Search:");
+                    let search_response = ui.text_edit_singleline(&mut self.search_query);
+                    if search_response.changed() {
+                        self.search_query = self.search_query.to_lowercase();
+                    }
                 });
-                self.task_handle = Some(handle);
 
-                for (checkbox, _) in &self.checked_boxes {
-                    *checkbox.borrow_mut() = false;
+                ui.separator();
+
+                egui::ScrollArea::vertical()
+                    .max_height(400.0)
+                    .show(ui, |ui| {
+                        ui.columns(2, |columns| {
+                            let mut col_index = 0;
+                            for (checkbox, program) in self.program_checkboxes.iter() {
+                                if self.search_query.is_empty()
+                                    || program.to_lowercase().contains(&self.search_query)
+                                {
+                                    let mut value = checkbox.borrow_mut();
+                                    columns[col_index % 2].checkbox(&mut *value, program);
+                                    col_index += 1;
+                                }
+                            }
+                        });
+                    });
+
+                ui.separator();
+
+                let available_width = ui.available_width();
+                ui.horizontal(|ui| {
+                    if ui
+                        .add_sized(
+                            [available_width / 2.0 - 5.0, 25.0],
+                            egui::Button::new("Back"),
+                        )
+                        .clicked()
+                    {
+                        self.show_program_selection = false;
+                        // Window will resize dynamically in the next frame based on category count
+                    }
+
+                    if ui
+                        .add_sized(
+                            [available_width / 2.0 - 5.0, 25.0],
+                            egui::Button::new("Start Cleaning"),
+                        )
+                        .clicked()
+                    {
+                        let selected_categories: Vec<String> = self
+                            .checked_boxes
+                            .iter()
+                            .filter(|(checkbox, _)| *checkbox.borrow())
+                            .map(|(_, label)| label.clone())
+                            .collect();
+
+                        self.excluded_programs.clear();
+                        for (checkbox, program) in &self.program_checkboxes {
+                            if !*checkbox.borrow() {
+                                self.excluded_programs.insert(program.clone());
+                            }
+                        }
+
+                        let (progress_sender, progress_receiver) = mpsc::channel(32);
+                        self.progress_receiver = Some(progress_receiver);
+                        self.current_task = 0;
+                        self.total_tasks = 0;
+
+                        let database = Arc::clone(&self.database);
+                        let excluded_programs = self.excluded_programs.clone();
+                        let handle = tokio::spawn(async move {
+                            work(
+                                selected_categories,
+                                progress_sender,
+                                &database,
+                                excluded_programs,
+                            )
+                            .await
+                        });
+                        self.task_handle = Some(handle);
+
+                        self.show_program_selection = false;
+                        // Window will resize dynamically in the next frame based on category count
+                        for (checkbox, _) in &self.checked_boxes {
+                            *checkbox.borrow_mut() = false;
+                        }
+                    }
+                });
+            } else {
+                // Calculate dynamic window height based on number of categories
+                let num_categories = self.checked_boxes.len();
+                let rows = (num_categories + 2) / 3; // Round up division by 3 (3 columns)
+                let row_height = 20.0; // Approximate height per row
+                let base_height = 45.0; // Space for heading, margins, and button
+                let dynamic_height = base_height + (rows as f32 * row_height);
+                let window_height = dynamic_height.max(20.0).min(500.0); // Clamp between 200 and 500
+
+                ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
+                    450.0,
+                    window_height,
+                )));
+
+                ui.columns(3, |columns| {
+                    for (i, (checkbox, label)) in self.checked_boxes.iter().enumerate() {
+                        let column_index = i % 3;
+                        let mut value = checkbox.borrow_mut();
+                        columns[column_index].checkbox(&mut *value, label);
+                    }
+                });
+
+                let available_width = ui.available_width();
+
+                if ui
+                    .add_sized([available_width, 25.0], egui::Button::new("Next"))
+                    .clicked()
+                {
+                    let selected_categories: Vec<String> = self
+                        .checked_boxes
+                        .iter()
+                        .filter(|(checkbox, _)| *checkbox.borrow())
+                        .map(|(_, label)| label.clone())
+                        .collect();
+
+                    if !selected_categories.is_empty() {
+                        let categories_set: HashSet<String> =
+                            selected_categories.into_iter().collect();
+
+                        let mut programs: Vec<String> = Vec::new();
+                        for data in self.database.iter() {
+                            if categories_set.contains(&data.category)
+                                && !programs.contains(&data.program)
+                            {
+                                programs.push(data.program.clone());
+                            }
+                        }
+                        programs.sort();
+
+                        self.program_checkboxes.clear();
+                        for program in programs {
+                            self.program_checkboxes
+                                .push((Rc::new(RefCell::new(true)), program));
+                        }
+
+                        self.search_query.clear();
+                        self.show_program_selection = true;
+                        // Resize window will happen in the next frame when show_program_selection is true
+                    }
                 }
             }
         });
