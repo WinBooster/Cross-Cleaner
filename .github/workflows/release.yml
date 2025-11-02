@@ -163,10 +163,7 @@ jobs:
             ## ✨ What's New
 
             ### 🪟 Windows Enhancements
-            - **Zed** - Added log clearing
-
-            ### 🛠 Technical Updates
-            - GUI - now has possible disable program clearing and progress bar
+            - **Gradle** Added cache clearing
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
