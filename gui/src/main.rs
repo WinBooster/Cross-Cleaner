@@ -14,6 +14,7 @@ use database::utils::get_file_size_string;
 use database::{get_icon, get_version};
 use eframe::egui;
 use egui::IconData;
+use futures::stream::{FuturesUnordered, StreamExt};
 use image::ImageReader;
 use notify_rust::Notification;
 use std::cell::RefCell;
@@ -118,16 +119,14 @@ async fn work(
     // WARN: Windiws only
     #[cfg(windows)]
     if has_last_activity {
-        let progress_sender = progress_sender.clone();
         let task = task::spawn(async move {
-            let _ = progress_sender.send("LastActivity".to_string()).await;
             let bytes_cleared = registry_database::clear_last_activity();
             CleanerResult {
                 files: 0,
                 folders: 0,
                 bytes: bytes_cleared,
                 working: true,
-                path: String::new(),
+                path: String::from("LastActivity"),
                 program: String::from("Registry"),
                 category: String::from("LastActivity"),
             }
@@ -145,11 +144,7 @@ async fn work(
         .cloned()
     {
         let data = Arc::new(data);
-        let progress_sender = progress_sender.clone();
-        let task = task::spawn(async move {
-            let _ = progress_sender.send(data.path.to_string()).await;
-            clear_data(&data)
-        });
+        let task = task::spawn(async move { clear_data(&data) });
         tasks.push(task);
     }
 
@@ -158,10 +153,16 @@ async fn work(
         .send(format!("PROGRESS:0:{}", total_tasks))
         .await;
 
-    for task in tasks {
-        match task.await {
+    // Use FuturesUnordered to process tasks as they complete (smoother progress)
+    let mut futures = tasks.into_iter().collect::<FuturesUnordered<_>>();
+
+    while let Some(task_result) = futures.next().await {
+        match task_result {
             Ok(result) => {
                 current_task += 1;
+                // Send progress message with current path
+                let _ = progress_sender.send(result.path.clone()).await;
+                // Send progress bar update
                 let _ = progress_sender
                     .send(format!("PROGRESS:{}:{}", current_task, total_tasks))
                     .await;
@@ -194,6 +195,10 @@ async fn work(
             }
             Err(_) => {
                 eprintln!("Error waiting for task completion");
+                current_task += 1;
+                let _ = progress_sender
+                    .send(format!("PROGRESS:{}:{}", current_task, total_tasks))
+                    .await;
             }
         }
     }
