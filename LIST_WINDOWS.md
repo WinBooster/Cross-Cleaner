@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.1.3
+# Windows Clearing Programs Catalog v2.0.1.4
 **Total categories in database:** 15
 
-**Total programs in database:** 169
+**Total programs in database:** 170
 
-**Total pathes in database:** 399
+**Total pathes in database:** 400
 
 ## AntiCheat
 
@@ -269,6 +269,7 @@
 | 8 | [Notepad++](https://notepad-plus-plus.org/downloads) | Documentation |
 | 9 | [Sublime Text](https://www.sublimetext.com/download) | Logs |
 | 10 | [VS Code](https://code.visualstudio.com/download) | Browser cookies, Documentation, Logs |
+| 11 | Zed | Logs |
 
 
 ## Torrent
