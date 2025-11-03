@@ -1,9 +1,11 @@
 use crate::CleanerData;
 use crate::registry_utils::get_steam_directory_from_registry;
 use disk_name::get_letters;
+use flate2::read::GzDecoder;
 use serde_json;
 use std::error::Error;
 use std::fs;
+use std::io::Read;
 use std::sync::OnceLock;
 
 static DATABASE: OnceLock<Vec<CleanerData>> = OnceLock::new();
@@ -11,15 +13,24 @@ static DATABASE: OnceLock<Vec<CleanerData>> = OnceLock::new();
 pub fn get_default_database() -> &'static Vec<CleanerData> {
     DATABASE.get_or_init(|| {
         #[cfg(unix)]
-        // NOTE: DataBase for Linux and Unix
-        let data = include_str!("../linux_database.json");
+        // NOTE: DataBase for Linux and Unix (minified and compressed at compile time)
+        let compressed_data =
+            include_bytes!(concat!(env!("OUT_DIR"), "/linux_database.min.json.gz"));
         #[cfg(windows)]
-        // NOTE: DataBase for Windows
-        let data = include_str!("../windows_database.json");
+        // NOTE: DataBase for Windows (minified and compressed at compile time)
+        let compressed_data =
+            include_bytes!(concat!(env!("OUT_DIR"), "/windows_database.min.json.gz"));
+
+        // NOTE: Decompress the data
+        let mut decoder = GzDecoder::new(&compressed_data[..]);
+        let mut json_data = String::new();
+        decoder
+            .read_to_string(&mut json_data)
+            .expect("Failed to decompress database");
 
         // NOTE: Deserialization JSON to Vec<CleanerData>
         let database: Vec<CleanerData> =
-            serde_json::from_str::<Vec<CleanerData>>(data).expect("Failed to parse database");
+            serde_json::from_str::<Vec<CleanerData>>(&json_data).expect("Failed to parse database");
 
         // NOTE: Get the username
         let username = whoami::username();

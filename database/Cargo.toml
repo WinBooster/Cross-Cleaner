@@ -2,6 +2,7 @@
 name = "database"
 version = "1.0.0"
 edition = "2024"
+build = "build.rs"
 
 [dependencies]
 tabled = "0.20.0"
@@ -9,6 +10,11 @@ whoami = "1.6.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 disk-name = "1.0.0"
+flate2 = "1.0"
+
+[build-dependencies]
+serde_json = "1.0"
+flate2 = "1.0"
 
 [target.'cfg(windows)'.dependencies]
 winreg = "0.55.0"
