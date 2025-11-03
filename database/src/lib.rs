@@ -182,29 +182,6 @@ mod tests {
     }
 
     #[test]
-    fn test_database_no_duplicate_entries() {
-        let database = get_default_database();
-        let mut seen_paths = std::collections::HashSet::new();
-        let mut duplicates = Vec::new();
-
-        for entry in database.iter() {
-            let key = format!("{}:{}:{}", entry.program, entry.category, entry.path);
-            if !seen_paths.insert(key.clone()) {
-                duplicates.push(key);
-            }
-        }
-
-        // Note: Some duplicates may be expected due to drive expansion on Windows
-        // Just verify the test runs without panicking
-        if !duplicates.is_empty() {
-            println!(
-                "Note: Found {} duplicate entries (may be expected due to drive expansion)",
-                duplicates.len()
-            );
-        }
-    }
-
-    #[test]
     fn test_database_performance() {
         use std::time::Instant;
 
