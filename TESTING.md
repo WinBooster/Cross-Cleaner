@@ -94,7 +94,6 @@ Located in: `database/src/lib.rs`
 - ✅ File loading (`test_database_from_file_*`)
 - ✅ File size formatting (`test_file_size_string_formatting`)
 - ✅ Data structure validation (`test_cleaner_data_structure`)
-- ✅ Database integrity (`test_database_no_duplicate_entries`)
 - ✅ Performance (`test_database_performance`)
 
 **Example:**
@@ -187,10 +186,10 @@ fn test_my_cleaner_feature() {
     let temp_dir = TempDir::new().unwrap();
     let file_path = temp_dir.path().join("test.txt");
     fs::write(&file_path, b"test").unwrap();
-    
+
     let mut data = create_test_data(file_path.to_str().unwrap().to_string());
     data.remove_files = true;
-    
+
     let result = clear_data(&data);
     assert!(result.working);
 }
@@ -207,7 +206,7 @@ fn test_my_cli_feature() {
         .args(&["run", "--bin", "Cross_Cleaner_CLI", "--", "--help"])
         .output()
         .expect("Failed to execute command");
-    
+
     assert!(output.status.success());
 }
 ```
@@ -349,11 +348,11 @@ Some tests measure performance:
 #[test]
 fn test_database_performance() {
     use std::time::Instant;
-    
+
     let start = Instant::now();
     let database = get_default_database();
     let duration = start.elapsed();
-    
+
     assert!(duration.as_millis() < 100, "Should load in < 100ms");
 }
 ```
@@ -457,7 +456,7 @@ jobs:
 
 ```rust
 /// Tests that the database correctly loads and decompresses gzip data.
-/// 
+///
 /// This test verifies:
 /// - Gzip decompression works correctly
 /// - JSON parsing succeeds
@@ -514,16 +513,16 @@ When contributing:
 
 ## Summary
 
-✅ **42 tests** covering core functionality  
-✅ **Automated testing** in CI/CD  
-✅ **Fast execution** (< 10 seconds for full suite)  
-✅ **Safe testing** with temporary files  
-✅ **Easy to run** with `cargo test`  
+✅ **42 tests** covering core functionality
+✅ **Automated testing** in CI/CD
+✅ **Fast execution** (< 10 seconds for full suite)
+✅ **Safe testing** with temporary files
+✅ **Easy to run** with `cargo test`
 ✅ **Admin handling** for GUI tests on Windows
 
 ### Test Count Breakdown:
 - Database: 15 tests
-- Cleaner: 12 tests  
+- Cleaner: 12 tests
 - CLI: 10 tests
 - GUI: 5 tests
 - **Total: 42 tests**
