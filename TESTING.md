@@ -513,7 +513,7 @@ When contributing:
 
 ## Summary
 
-✅ **42 tests** covering core functionality
+✅ **41 tests** covering core functionality
 ✅ **Automated testing** in CI/CD
 ✅ **Fast execution** (< 10 seconds for full suite)
 ✅ **Safe testing** with temporary files
