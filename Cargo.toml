@@ -1,6 +1,7 @@
 [workspace]
 resolver = "3"
 members = ["cli", "gui"]
+
 [profile.release] # optimize file size
 lto = true
 codegen-units = 1
