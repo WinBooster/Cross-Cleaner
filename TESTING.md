@@ -521,10 +521,10 @@ When contributing:
 ✅ **Admin handling** for GUI tests on Windows
 
 ### Test Count Breakdown:
-- Database: 15 tests
+- Database: 14 tests
 - Cleaner: 12 tests
 - CLI: 10 tests
 - GUI: 5 tests
-- **Total: 42 tests**
+- **Total: 41 tests**
 
 For questions or issues with tests, please open an issue on GitHub.
