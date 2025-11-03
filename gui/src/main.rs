@@ -456,7 +456,7 @@ impl eframe::App for MyApp {
 
                         // Прокручиваемое содержимое таблицы
                         egui::ScrollArea::vertical()
-                            .max_height(total_height - 150.0)
+                            .max_height(total_height - 70.0)
                             .show(ui, |ui| {
                                 for cleared in cleared {
                                     ui.horizontal(|ui| {
