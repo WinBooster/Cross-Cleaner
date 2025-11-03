@@ -1,6 +1,6 @@
 <div align="center">
 <h1>🌟 Cross Cleaner 🌟</h1>
-  
+
 [![Rustlang](https://img.shields.io/static/v1?label=Made%20with&message=Rust&logo=rust&labelColor=e82833&color=b11522)](https://www.rust-lang.org)
 [![Github License](https://img.shields.io/github/license/WinBooster/Cross-Cleaner?logo=mdBook)](https://github.com/WinBooster/Cross-Cleaner/blob/main/LICENSE)
 [![Build Status](https://github.com/WinBooster/Cross-Cleaner/actions/workflows/dev_build.yml/badge.svg)](https://github.com/WinBooster/Cross-Cleaner/actions)
@@ -22,7 +22,7 @@
 
 - 🚀 **Fast Cleanup**: Leverages multi-threading for maximum performance
 - 🔒 **Secure**: Carefully preserves critical system files
-- 💻 **Cross-Platform**: Full support for ![Windows](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_WINDOWS.md) and ![Linux](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_LINUX.md)
+- 💻 **Cross-Platform**: Full support for [Windows](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_WINDOWS.md) and [Linux](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_LINUX.md)
 - 🎯 **User-Friendly**: Clean, minimalist interface for easy operation
 - 📄 **Custom-DataBase**: Ability to use custom cleanup database
 
@@ -56,4 +56,3 @@ cargo build --release
 ```
 
 4. The compiled binary will be located in `target/release`
-
