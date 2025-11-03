@@ -3,7 +3,7 @@
 
 **Total programs in database:** 171
 
-**Total pathes in database:** 401
+**Total pathes in database:** 402
 
 ## AntiCheat
 
