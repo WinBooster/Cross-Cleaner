@@ -57,10 +57,10 @@ async fn main() -> eframe::Result {
     let app = MyApp::from_database(Arc::from(database));
     let checkbox_count = app.checked_boxes.len();
     let rows = checkbox_count.div_ceil(3);
-    // INFO: 20px for 1 checkbox, 60px for button
-    let height = (rows * 15) + 25;
+    // INFO: 20px for 1 checkbox, 45px for button
+    let height = (rows * 20) + 45;
 
-    let size = egui::vec2(430.0, height as f32);
+    let size = egui::vec2(450.0, height as f32);
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size(size)
@@ -399,8 +399,8 @@ impl eframe::App for MyApp {
 
                     // Фиксированные размеры для колонок
                     let column_widths = [150.0, 80.0, 80.0, 170.0];
-                    let total_width = column_widths.iter().sum::<f32>() + 100.0;
-                    let total_height = 400.0;
+                    let total_width = column_widths.iter().sum::<f32>() + 120.0;
+                    let total_height = 500.0;
 
                     // Resize window only once when results are first shown
                     if !self.results_window_resized {
@@ -456,7 +456,7 @@ impl eframe::App for MyApp {
 
                         // Прокручиваемое содержимое таблицы
                         egui::ScrollArea::vertical()
-                            .max_height(total_height - 70.0)
+                            .max_height(total_height)
                             .show(ui, |ui| {
                                 for cleared in cleared {
                                     ui.horizontal(|ui| {
