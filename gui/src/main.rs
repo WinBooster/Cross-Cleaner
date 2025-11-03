@@ -694,3 +694,151 @@ impl eframe::App for MyApp {
         });
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use database::structures::CleanerData;
+
+    #[test]
+    fn test_load_icon_from_bytes() {
+        let icon_data = get_icon();
+        let result = load_icon_from_bytes(icon_data);
+
+        assert!(result.is_ok(), "Icon should load successfully");
+        let icon = result.unwrap();
+        assert!(!icon.rgba.is_empty(), "Icon RGBA data should not be empty");
+    }
+
+    #[test]
+    fn test_myapp_from_database() {
+        let database: Vec<CleanerData> = vec![
+            CleanerData {
+                path: String::from("test/path1"),
+                category: String::from("Cache"),
+                program: String::from("TestApp1"),
+                class: String::from("Application"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: false,
+                remove_files: false,
+            },
+            CleanerData {
+                path: String::from("test/path2"),
+                category: String::from("Logs"),
+                program: String::from("TestApp2"),
+                class: String::from("Application"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: false,
+                remove_files: false,
+            },
+        ];
+
+        let app = MyApp::from_database(Arc::from(database.into_boxed_slice()));
+
+        assert_eq!(app.checked_boxes.len(), 2, "Should have 2 categories");
+        assert!(
+            app.task_handle.is_none(),
+            "Task handle should be None initially"
+        );
+        assert!(!app.show_results, "Should not show results initially");
+        assert_eq!(app.current_task, 0, "Current task should be 0");
+        assert_eq!(app.total_tasks, 0, "Total tasks should be 0");
+        assert!(
+            !app.show_program_selection,
+            "Should not show program selection initially"
+        );
+        assert!(
+            app.program_checkboxes.is_empty(),
+            "Program checkboxes should be empty"
+        );
+        assert!(
+            app.excluded_programs.is_empty(),
+            "Excluded programs should be empty"
+        );
+    }
+
+    #[test]
+    fn test_myapp_category_sorting() {
+        let database: Vec<CleanerData> = vec![
+            CleanerData {
+                path: String::from("test1"),
+                category: String::from("Documentation"),
+                program: String::from("App1"),
+                class: String::from("App"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: false,
+                remove_files: false,
+            },
+            CleanerData {
+                path: String::from("test2"),
+                category: String::from("Cache"),
+                program: String::from("App2"),
+                class: String::from("App"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: false,
+                remove_files: false,
+            },
+            CleanerData {
+                path: String::from("test3"),
+                category: String::from("Logs"),
+                program: String::from("App3"),
+                class: String::from("App"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: false,
+                remove_files: false,
+            },
+        ];
+
+        let app = MyApp::from_database(Arc::from(database.into_boxed_slice()));
+
+        // Categories should be sorted with Cache first, then Logs, then Documentation
+        assert_eq!(app.checked_boxes[0].1, "Cache", "First should be Cache");
+        assert_eq!(app.checked_boxes[1].1, "Logs", "Second should be Logs");
+        assert_eq!(
+            app.checked_boxes[2].1, "Documentation",
+            "Third should be Documentation"
+        );
+    }
+
+    #[test]
+    fn test_args_parsing() {
+        // Test that Args structure can be created
+        let args = Args {
+            database_path: Some(String::from("test.json")),
+        };
+
+        assert_eq!(args.database_path, Some(String::from("test.json")));
+    }
+
+    #[test]
+    fn test_myapp_initial_state() {
+        let database: Vec<CleanerData> = vec![];
+        let app = MyApp::from_database(Arc::from(database.into_boxed_slice()));
+
+        assert!(
+            app.progress_message.is_empty(),
+            "Progress message should be empty"
+        );
+        assert!(app.search_query.is_empty(), "Search query should be empty");
+        assert!(app.result_sender.is_some(), "Result sender should be Some");
+        assert!(
+            app.result_receiver.is_some(),
+            "Result receiver should be Some"
+        );
+    }
+}

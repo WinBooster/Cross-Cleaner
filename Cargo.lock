@@ -845,6 +845,7 @@ version = "0.2.0"
 dependencies = [
  "database",
  "glob",
+ "tempfile",
 ]
 
 [[package]]
@@ -1086,6 +1087,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tabled",
+ "tempfile",
  "whoami",
  "winreg",
 ]

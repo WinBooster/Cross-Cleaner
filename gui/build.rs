@@ -19,8 +19,11 @@ fn main() {
     let mut res = winres::WindowsResource::new();
     res.set_icon("../assets\\icon.ico");
 
-    res.set_manifest(
-        r#"
+    // Only require admin for release builds, not for tests
+    let profile = env::var("PROFILE").unwrap_or_else(|_| String::from("debug"));
+    if profile == "release" {
+        res.set_manifest(
+            r#"
     <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
     <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
         <security>
@@ -31,7 +34,8 @@ fn main() {
     </trustInfo>
     </assembly>
     "#,
-    );
+        );
+    }
 
     // Hide console window
     res.set("NO_CONSOLE", "1");

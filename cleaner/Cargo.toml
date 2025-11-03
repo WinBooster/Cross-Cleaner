@@ -7,6 +7,9 @@ edition = "2024"
 glob = "0.3.2"
 database = { path = "../database" }
 
+[dev-dependencies]
+tempfile = "3.3"
+
 [profile.release] # optimize file size
 lto = true
 codegen-units = 1

@@ -12,6 +12,9 @@ serde_json = "1.0"
 disk-name = "1.0.0"
 flate2 = "1.0"
 
+[dev-dependencies]
+tempfile = "3.3"
+
 [build-dependencies]
 serde_json = "1.0"
 flate2 = "1.0"
