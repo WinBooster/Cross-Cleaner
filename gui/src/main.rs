@@ -249,6 +249,7 @@ struct MyApp {
     pub program_checkboxes: Vec<(Rc<RefCell<bool>>, String)>,
     pub search_query: String,
     pub excluded_programs: HashSet<String>,
+    pub results_window_resized: bool,
 
     pub result_sender: Option<mpsc::Sender<(u64, u64, u64, Vec<Cleared>)>>,
     pub result_receiver: Option<mpsc::Receiver<(u64, u64, u64, Vec<Cleared>)>>,
@@ -307,6 +308,7 @@ impl MyApp {
             program_checkboxes: vec![],
             search_query: String::new(),
             excluded_programs: HashSet::new(),
+            results_window_resized: false,
 
             result_sender: Some(result_sender),
             result_receiver: Some(result_receiver),
@@ -335,6 +337,7 @@ impl eframe::App for MyApp {
             if let Ok(result) = receiver.try_recv() {
                 self.cleared_data = Some(result);
                 self.show_results = true;
+                self.results_window_resized = false; // Reset flag for new results
                 ctx.request_repaint();
             }
         }
@@ -397,24 +400,16 @@ impl eframe::App for MyApp {
                     // Фиксированные размеры для колонок
                     let column_widths = [150.0, 80.0, 80.0, 170.0];
                     let total_width = column_widths.iter().sum::<f32>() + 100.0;
+                    let total_height = 400.0;
 
-                    // Динамический расчет высоты на основе количества программ
-                    let num_programs = cleared.len();
-                    let row_height = 20.0; // Высота одной строки
-                    let header_height = 100.0; // Заголовок с результатами + заголовки таблицы
-                    let min_scroll_height = 100.0; // Минимальная высота для прокрутки
-                    let max_scroll_height = 400.0; // Максимальная высота для прокрутки
-
-                    // Расчет необходимой высоты для всех строк
-                    let content_height = num_programs as f32 * row_height;
-                    let scroll_height =
-                        content_height.min(max_scroll_height).max(min_scroll_height);
-                    let total_height = header_height + scroll_height + 50.0;
-
-                    ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
-                        total_width,
-                        total_height,
-                    )));
+                    // Resize window only once when results are first shown
+                    if !self.results_window_resized {
+                        ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
+                            total_width,
+                            total_height,
+                        )));
+                        self.results_window_resized = true;
+                    }
 
                     // Общий контейнер для таблицы
                     ui.vertical(|ui| {
@@ -461,7 +456,7 @@ impl eframe::App for MyApp {
 
                         // Прокручиваемое содержимое таблицы
                         egui::ScrollArea::vertical()
-                            .max_height(scroll_height)
+                            .max_height(total_height - 150.0)
                             .show(ui, |ui| {
                                 for cleared in cleared {
                                     ui.horizontal(|ui| {
@@ -609,6 +604,7 @@ impl eframe::App for MyApp {
                         self.progress_receiver = Some(progress_receiver);
                         self.current_task = 0;
                         self.total_tasks = 0;
+                        self.results_window_resized = false;
 
                         let database = Arc::clone(&self.database);
                         let excluded_programs = self.excluded_programs.clone();
