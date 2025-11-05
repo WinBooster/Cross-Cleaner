@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.1.6
+# Windows Clearing Programs Catalog v2.0.1.7
 **Total categories in database:** 15
 
-**Total programs in database:** 171
+**Total programs in database:** 172
 
-**Total pathes in database:** 402
+**Total pathes in database:** 403
 
 ## AntiCheat
 
@@ -88,17 +88,18 @@
 | 9 | [Gradle](https://gradle.org) | Cache |
 | 10 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
 | 11 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
-| 12 | [Java](https://www.java.com/download) | Documentation |
-| 13 | [MCCreator](https://mcreator.net/download) | Logs |
-| 14 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
-| 15 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
-| 16 | [Postman](https://www.postman.com/downloads) | Logs |
-| 17 | [Python](https://www.python.org/downloads) | Documentation |
-| 18 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
-| 19 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
-| 20 | [Unity Hub](https://unity.com/download) | Documentation |
-| 21 | Windows Kits | Documentation |
-| 22 | Xamarin | Logs |
+| 12 | Insomnia | Cache, Logs |
+| 13 | [Java](https://www.java.com/download) | Documentation |
+| 14 | [MCCreator](https://mcreator.net/download) | Logs |
+| 15 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
+| 16 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
+| 17 | [Postman](https://www.postman.com/downloads) | Logs |
+| 18 | [Python](https://www.python.org/downloads) | Documentation |
+| 19 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
+| 20 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
+| 21 | [Unity Hub](https://unity.com/download) | Documentation |
+| 22 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk/) | Documentation |
+| 23 | Xamarin | Logs |
 
 
 ## Driver
