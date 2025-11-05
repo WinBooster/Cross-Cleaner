@@ -21,11 +21,3 @@ flate2 = "1.0"
 
 [target.'cfg(windows)'.dependencies]
 winreg = "0.55.0"
-
-[profile.release] # optimize file size
-lto = true
-codegen-units = 1
-opt-level = "z"
-strip = true
-panic = "abort"
-debug = false

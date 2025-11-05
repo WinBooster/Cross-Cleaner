@@ -355,3 +355,240 @@ mod tests {
         assert!(!cache_dir.exists());
     }
 }
+
+// Property-based tests with proptest
+#[cfg(test)]
+mod proptests {
+    use super::*;
+    use proptest::prelude::*;
+    use tempfile::TempDir;
+
+    proptest! {
+        /// Property: byte counting should always match actual file sizes
+        #[test]
+        fn prop_byte_counting_accurate(content in prop::collection::vec(any::<u8>(), 0..1000)) {
+            let temp_dir = TempDir::new().unwrap();
+            let file_path = temp_dir.path().join("test_file.bin");
+            fs::write(&file_path, &content).unwrap();
+
+            let data = CleanerData {
+                path: file_path.to_str().unwrap().to_string(),
+                category: String::from("Test"),
+                program: String::from("Test"),
+                class: String::from("Test"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: false,
+                remove_files: true,
+            };
+
+            let result = clear_data(&data);
+            prop_assert_eq!(result.bytes, content.len() as u64);
+        }
+
+        /// Property: file counter should match number of files deleted
+        #[test]
+        fn prop_file_counter_accurate(num_files in 1usize..50) {
+            let temp_dir = TempDir::new().unwrap();
+            let target_dir = temp_dir.path().join("files");
+            fs::create_dir(&target_dir).unwrap();
+
+            for i in 0..num_files {
+                fs::write(target_dir.join(format!("file_{}.txt", i)), b"content").unwrap();
+            }
+
+            let pattern = format!("{}/*.txt", target_dir.to_str().unwrap());
+            let data = CleanerData {
+                path: pattern,
+                category: String::from("Test"),
+                program: String::from("Test"),
+                class: String::from("Test"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: false,
+                remove_files: true,
+            };
+
+            let result = clear_data(&data);
+            prop_assert_eq!(result.files, num_files as u64);
+        }
+
+        /// Property: clearing non-existent path should always be safe
+        #[test]
+        fn prop_nonexistent_path_safe(path in "[a-z]{1,20}/[a-z]{1,20}") {
+            let non_existent = format!("/tmp/nonexistent_{}/file.txt", path);
+            let data = CleanerData {
+                path: non_existent,
+                category: String::from("Test"),
+                program: String::from("Test"),
+                class: String::from("Test"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: false,
+                remove_files: true,
+            };
+
+            let result = clear_data(&data);
+            prop_assert!(!result.working);
+            prop_assert_eq!(result.files, 0);
+            prop_assert_eq!(result.folders, 0);
+            prop_assert_eq!(result.bytes, 0);
+        }
+
+        /// Property: removing empty directories should work
+        #[test]
+        fn prop_empty_directory_removal(num_dirs in 1usize..20) {
+            let temp_dir = TempDir::new().unwrap();
+
+            for i in 0..num_dirs {
+                let dir = temp_dir.path().join(format!("empty_dir_{}", i));
+                fs::create_dir(&dir).unwrap();
+            }
+
+            let pattern = format!("{}/*", temp_dir.path().to_str().unwrap());
+            let data = CleanerData {
+                path: pattern,
+                category: String::from("Test"),
+                program: String::from("Test"),
+                class: String::from("Test"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: true,
+                remove_files: false,
+            };
+
+            let result = clear_data(&data);
+            prop_assert_eq!(result.folders, num_dirs as u64);
+            prop_assert_eq!(result.files, 0);
+        }
+
+        /// Property: result should always have correct program/category
+        #[test]
+        fn prop_result_metadata(program in "[A-Za-z]{3,20}", category in "[A-Za-z]{3,20}") {
+            let temp_dir = TempDir::new().unwrap();
+            let file_path = temp_dir.path().join("test.txt");
+            fs::write(&file_path, b"test").unwrap();
+
+            let data = CleanerData {
+                path: file_path.to_str().unwrap().to_string(),
+                category: category.clone(),
+                program: program.clone(),
+                class: String::from("Test"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: false,
+                remove_files: true,
+            };
+
+            let result = clear_data(&data);
+            prop_assert_eq!(result.program, program);
+            prop_assert_eq!(result.category, category);
+        }
+
+        /// Property: nested directory deletion should count all subdirectories
+        #[test]
+        fn prop_nested_directory_counting(depth in 1usize..5) {
+            let temp_dir = TempDir::new().unwrap();
+            let mut current = temp_dir.path().join("level_0");
+            fs::create_dir(&current).unwrap();
+
+            for i in 1..depth {
+                current = current.join(format!("level_{}", i));
+                fs::create_dir(&current).unwrap();
+            }
+
+            let start_dir = temp_dir.path().join("level_0");
+            let data = CleanerData {
+                path: start_dir.to_str().unwrap().to_string(),
+                category: String::from("Test"),
+                program: String::from("Test"),
+                class: String::from("Test"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: true,
+                remove_files: false,
+            };
+
+            let result = clear_data(&data);
+            prop_assert_eq!(result.folders, depth as u64);
+        }
+
+        /// Property: specific file removal should only remove specified files
+        #[test]
+        fn prop_specific_file_removal(filename in "[a-z]{3,10}\\.(txt|tmp|log)") {
+            let temp_dir = TempDir::new().unwrap();
+            let target_dir = temp_dir.path().join("target");
+            fs::create_dir(&target_dir).unwrap();
+
+            // Create the target file
+            fs::write(target_dir.join(&filename), b"remove").unwrap();
+            // Create other files
+            fs::write(target_dir.join("keep1.txt"), b"keep").unwrap();
+            fs::write(target_dir.join("keep2.txt"), b"keep").unwrap();
+
+            let data = CleanerData {
+                path: target_dir.to_str().unwrap().to_string(),
+                category: String::from("Test"),
+                program: String::from("Test"),
+                class: String::from("Test"),
+                files_to_remove: vec![filename.clone()],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: false,
+                remove_files: false,
+            };
+
+            let result = clear_data(&data);
+            prop_assert_eq!(result.files, 1);
+            prop_assert!(!target_dir.join(&filename).exists());
+            prop_assert!(target_dir.join("keep1.txt").exists());
+            prop_assert!(target_dir.join("keep2.txt").exists());
+        }
+
+        /// Property: total bytes should equal sum of all file sizes
+        #[test]
+        fn prop_total_bytes_sum(file_sizes in prop::collection::vec(0u64..10000, 1..10)) {
+            let temp_dir = TempDir::new().unwrap();
+            let target_dir = temp_dir.path().join("bytes_test");
+            fs::create_dir(&target_dir).unwrap();
+
+            let mut expected_bytes = 0u64;
+            for (i, size) in file_sizes.iter().enumerate() {
+                let content = vec![0u8; *size as usize];
+                fs::write(target_dir.join(format!("file_{}.dat", i)), &content).unwrap();
+                expected_bytes += size;
+            }
+
+            let pattern = format!("{}/*.dat", target_dir.to_str().unwrap());
+            let data = CleanerData {
+                path: pattern,
+                category: String::from("Test"),
+                program: String::from("Test"),
+                class: String::from("Test"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: false,
+                remove_files: true,
+            };
+
+            let result = clear_data(&data);
+            prop_assert_eq!(result.bytes, expected_bytes);
+            prop_assert_eq!(result.files, file_sizes.len() as u64);
+        }
+    }
+}

@@ -18,6 +18,9 @@ tempfile = "3.20.0"
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }
 
+# Performance: Fast memory allocator
+mimalloc = "0.1"
+
 [target.'cfg(windows)'.dependencies]
 winreg = "0.55.0"
 winapi = { version = "0.3", features = [
@@ -36,10 +39,9 @@ OriginalFilename = "Cross Cleaner.exe"
 LegalCopyright = "Copyright Monolith Development © 2025"
 ProductName = "Cross Cleaner"
 
-[profile.release] # optimize file size
-lto = true
-codegen-units = 1
-opt-level = "z"
-strip = true
-panic = "abort"
-debug = false
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "cli_benchmarks"
+harness = false

@@ -17,6 +17,9 @@ clap = { version = "4.0", features = ["derive"] }
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }
 
+# Performance: Fast memory allocator
+mimalloc = "0.1"
+
 [target.'cfg(windows)'.dependencies]
 winreg = "0.55.0"
 
@@ -28,11 +31,3 @@ FileDescription = "Garbage remover"
 OriginalFilename = "Cross Cleaner.exe"
 LegalCopyright = "Copyright Monolith Development © 2025"
 ProductName = "Cross Cleaner"
-
-[profile.release] # optimize file size
-lto = true
-codegen-units = 1
-opt-level = "z"
-strip = true
-panic = "abort"
-debug = false

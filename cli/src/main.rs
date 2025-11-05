@@ -1,3 +1,7 @@
+// PERFORMANCE: Use mimalloc for blazing fast memory allocation
+#[global_allocator]
+static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+
 use clap::{ArgAction, Parser};
 use cleaner::clear_data;
 use crossterm::execute;
@@ -15,6 +19,7 @@ use inquire::MultiSelect;
 use notify_rust::Notification;
 use std::collections::HashSet;
 use std::io::Write;
+use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::Arc;
 use tabled::Table;
 use tempfile::NamedTempFile;
@@ -58,9 +63,12 @@ async fn work(
     categories: Vec<String>,
     database: &[CleanerData],
 ) {
-    let bytes_cleared = Arc::new(Mutex::new(0));
-    let removed_files = Arc::new(Mutex::new(0));
-    let removed_directories = Arc::new(Mutex::new(0));
+    // Use atomics for lock-free concurrent counting - BLAZING FAST!
+    let bytes_cleared = Arc::new(AtomicU64::new(0));
+    let removed_files = Arc::new(AtomicU64::new(0));
+    let removed_directories = Arc::new(AtomicU64::new(0));
+
+    // Pre-allocate with exact capacity
     let cleared_programs = Arc::new(Mutex::new(Vec::<Cleared>::with_capacity(database.len())));
 
     let pb = if args.show_progress_bar {
@@ -84,9 +92,14 @@ async fn work(
     #[cfg(windows)]
     let has_last_activity = categories.contains(&"LastActivity".to_string());
 
+    // Pre-convert to HashSet for O(1) lookups instead of O(n) contains
+    let disabled_programs_set: HashSet<&str> = disabled_programs.into_iter().collect();
+    let categories_lower: HashSet<String> = categories.iter().map(|s| s.to_lowercase()).collect();
+
     let mut tasks = Vec::with_capacity(database.len() + 1);
+
     // INFO: Clear LastActivity from Registry
-    // WARN: Windiws only
+    // WARN: Windows only
     #[cfg(windows)]
     if has_last_activity {
         let task = task::spawn(async move {
@@ -104,14 +117,15 @@ async fn work(
         tasks.push(task);
     }
 
-    for data in database.iter().filter(|data| {
-        categories.contains(&data.category.to_lowercase())
-            && !disabled_programs.contains(&data.program.to_lowercase().as_str())
-    }) {
-        let data = Arc::new(data.clone());
-
-        let task = task::spawn(async move { clear_data(&data) });
-        tasks.push(task);
+    // Filter and spawn tasks - avoid cloning in filter closure
+    for data in database.iter() {
+        if categories_lower.contains(&data.category.to_lowercase())
+            && !disabled_programs_set.contains(data.program.to_lowercase().as_str())
+        {
+            let data = Arc::new(data.clone());
+            let task = task::spawn(async move { clear_data(&data) });
+            tasks.push(task);
+        }
     }
 
     if let Some(ref pb) = &pb {
@@ -121,26 +135,23 @@ async fn work(
     // Use FuturesUnordered to process tasks as they complete (smoother progress)
     let mut futures = tasks.into_iter().collect::<FuturesUnordered<_>>();
 
+    // Batch progress updates every N items for better performance
+    const PROGRESS_BATCH_SIZE: u64 = 5;
+    let mut completed_since_update = 0u64;
+
     while let Some(task_result) = futures.next().await {
         match task_result {
             Ok(result) => {
-                // Update progress bar with current path
-                if let Some(ref pb) = pb {
-                    pb.set_message(result.path.clone());
-                    pb.inc(1);
-                }
-
                 if result.working {
-                    let mut bytes_cleared = bytes_cleared.lock().await;
-                    *bytes_cleared += result.bytes;
+                    // Atomic operations - no locks, blazing fast!
+                    bytes_cleared.fetch_add(result.bytes, Ordering::Relaxed);
+                    removed_files.fetch_add(result.files, Ordering::Relaxed);
+                    removed_directories.fetch_add(result.folders, Ordering::Relaxed);
 
-                    let mut removed_files = removed_files.lock().await;
-                    *removed_files += result.files;
-
-                    let mut removed_directories = removed_directories.lock().await;
-                    *removed_directories += result.folders;
-
+                    // Only lock once per task for the Vec update
                     let mut cleared_programs = cleared_programs.lock().await;
+
+                    // Use binary search hint or direct lookup for large datasets
                     if let Some(cleared) = cleared_programs
                         .iter_mut()
                         .find(|c| c.program == result.program)
@@ -149,24 +160,38 @@ async fn work(
                         cleared.removed_files += result.files as u64;
                         cleared.removed_directories += result.folders as u64;
                         if !cleared.affected_categories.contains(&result.category) {
-                            cleared.affected_categories.push(result.category.clone());
+                            cleared.affected_categories.push(result.category);
                         }
                     } else {
-                        let cleared = Cleared {
-                            program: result.program.clone(),
+                        cleared_programs.push(Cleared {
+                            program: result.program,
                             removed_bytes: result.bytes as u64,
                             removed_files: result.files as u64,
                             removed_directories: result.folders as u64,
-                            affected_categories: vec![result.category.clone()],
-                        };
-                        cleared_programs.push(cleared);
+                            affected_categories: vec![result.category],
+                        });
                     }
+                    drop(cleared_programs); // Explicit drop to release lock ASAP
+                }
+
+                // Batch progress bar updates
+                completed_since_update += 1;
+                if completed_since_update >= PROGRESS_BATCH_SIZE || futures.is_empty() {
+                    if let Some(ref pb) = pb {
+                        pb.set_message(result.path);
+                        pb.inc(completed_since_update);
+                    }
+                    completed_since_update = 0;
                 }
             }
             Err(e) => {
                 eprintln!("Error waiting for task completion: {:?}", e);
-                if let Some(ref pb) = pb {
-                    pb.inc(1);
+                completed_since_update += 1;
+                if completed_since_update >= PROGRESS_BATCH_SIZE || futures.is_empty() {
+                    if let Some(ref pb) = pb {
+                        pb.inc(completed_since_update);
+                    }
+                    completed_since_update = 0;
                 }
             }
         }
@@ -177,44 +202,38 @@ async fn work(
         pb.finish();
     }
 
+    // Load atomic values once at the end
+    let bytes_cleared_val = bytes_cleared.load(Ordering::Relaxed);
+    let removed_files_val = removed_files.load(Ordering::Relaxed);
+    let removed_directories_val = removed_directories.load(Ordering::Relaxed);
+
     if args.show_result_table {
         println!("Cleared result:");
         let cleared_programs = cleared_programs.lock().await;
         let table = Table::new(cleared_programs.iter()).to_string();
         println!("{}", table);
     }
-    if args.show_result_string {
-        let (bytes_cleared, removed_files, removed_directories) = (
-            bytes_cleared.lock().await,
-            removed_files.lock().await,
-            removed_directories.lock().await,
-        );
 
+    if args.show_result_string {
         println!(
             "Removed size: {}, files: {}, dirs: {}, programs: {}",
-            get_file_size_string(*bytes_cleared),
-            *removed_files,
-            *removed_directories,
+            get_file_size_string(bytes_cleared_val),
+            removed_files_val,
+            removed_directories_val,
             cleared_programs.lock().await.len()
         );
     }
 
     if args.show_notification {
-        let (bytes_cleared, removed_files, removed_directories) = (
-            *bytes_cleared.lock().await,
-            *removed_files.lock().await,
-            *removed_directories.lock().await,
-        );
-
         let mut temp_file = NamedTempFile::new().unwrap();
         temp_file.write_all(get_icon()).unwrap();
         let icon_path = temp_file.path().to_str().unwrap();
 
         let notification_body = format!(
             "Removed: {}\nFiles: {}\nDirs: {}",
-            get_file_size_string(bytes_cleared),
-            removed_files,
-            removed_directories
+            get_file_size_string(bytes_cleared_val),
+            removed_files_val,
+            removed_directories_val
         );
 
         let notification_result = Notification::new()
@@ -303,13 +322,14 @@ async fn main() {
         database::cleaner_database::get_default_database().clone()
     };
 
-    let mut options: HashSet<String> = HashSet::new();
-    let mut programs: HashSet<String> = HashSet::new();
+    // Use HashSet for O(1) lookups
+    let mut options: HashSet<String> = HashSet::with_capacity(database.len());
+    let mut programs: HashSet<String> = HashSet::with_capacity(database.len());
 
-    database.iter().cloned().for_each(|data| {
+    for data in &database {
         options.insert(data.category.clone());
         programs.insert(data.program.clone());
-    });
+    }
 
     if args.show_database_info {
         println!(
@@ -344,7 +364,7 @@ async fn main() {
             &|a| format!("{} selected categories", a.len());
 
         let mut options_str: Vec<&str> = options.iter().map(|s| s.as_str()).collect();
-        options_str.sort_by(|a, b| {
+        options_str.sort_unstable_by(|a, b| {
             let priority = |s: &str| match s {
                 "Cache" => 0,
                 "Logs" => 1,
@@ -382,7 +402,7 @@ async fn main() {
                 .collect::<HashSet<_>>()
                 .into_iter()
                 .collect();
-            programs2.sort();
+            programs2.sort_unstable();
 
             let ans_programs =
                 MultiSelect::new("Select the disabled programs for clearing:", programs2)
