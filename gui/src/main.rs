@@ -11,7 +11,6 @@ use clap::Parser;
 use cleaner::clear_data;
 #[cfg(windows)]
 use database::registry_database;
-#[cfg(windows)]
 use database::structures::{CleanerData, Cleared};
 use database::utils::get_file_size_string;
 use database::{get_icon, get_version};
