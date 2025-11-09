@@ -69,3 +69,25 @@ pub struct CleanerResult {
     pub program: String,
     pub category: String,
 }
+
+#[derive(Serialize, Deserialize, Clone)]
+pub struct CleanerDataRegistry {
+    pub category: String,
+    pub program: String,
+    #[serde(default = "default_class")]
+    pub class: String,
+
+    #[serde(default)]
+    pub remove_all_in_tree: bool,
+    #[serde(default)]
+    pub remove_all_in_registry: bool,
+
+    #[serde(default)]
+    pub path: String,
+
+    #[serde(default)]
+    pub values_to_remove: Vec<String>,
+
+    #[serde(default)]
+    pub keys_to_remove: Vec<String>,
+}

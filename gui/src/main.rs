@@ -12,7 +12,6 @@ use cleaner::clear_data;
 #[cfg(windows)]
 use database::registry_database;
 #[cfg(windows)]
-use database::structures::CleanerResult;
 use database::structures::{CleanerData, Cleared};
 use database::utils::get_file_size_string;
 use database::{get_icon, get_version};
@@ -117,34 +116,26 @@ async fn work(
     // Pre-allocate with exact capacity
     let mut cleared_programs = Vec::<Cleared>::with_capacity(database.len());
 
-    // INFO: Check if LastActivity enabled
-    // WARN: Windows only
-    #[cfg(windows)]
-    let has_last_activity = categories.contains(&"LastActivity".to_string());
-
     let mut tasks = Vec::with_capacity(database.len() + 1);
+
+    // Pre-convert to HashSet for O(1) lookups instead of O(n) contains
+    let categories_set: HashSet<String> = categories.into_iter().collect();
 
     // INFO: Clear LastActivity from Registry
     // WARN: Windows only
     #[cfg(windows)]
-    if has_last_activity {
-        let task = task::spawn(async move {
-            let bytes_cleared = registry_database::clear_last_activity();
-            CleanerResult {
-                files: 0,
-                folders: 0,
-                bytes: bytes_cleared,
-                working: true,
-                path: String::from("LastActivity"),
-                program: String::from("Registry"),
-                category: String::from("LastActivity"),
+    {
+        let registry_database = registry_database::get_default_database();
+        for data in registry_database.iter() {
+            if categories_set.contains(&data.category) && !excluded_programs.contains(&data.program)
+            {
+                let data = Arc::new(data.clone());
+                let task =
+                    task::spawn(async move { registry_database::clear_last_activity(&data) });
+                tasks.push(task);
             }
-        });
-        tasks.push(task);
+        }
     }
-
-    // Pre-convert to HashSet for O(1) lookups instead of O(n) contains
-    let categories_set: HashSet<String> = categories.into_iter().collect();
 
     // Filter and spawn tasks - avoid cloning in filter closure
     for data in database.iter() {
@@ -290,6 +281,13 @@ impl MyApp {
     pub(crate) fn from_database(database: Arc<[CleanerData]>) -> Self {
         let mut options: Vec<String> = Vec::with_capacity(database.len());
         for data in database.iter() {
+            if !options.contains(&data.category) {
+                options.push(data.category.clone());
+            }
+        }
+
+        #[cfg(windows)]
+        for data in registry_database::get_default_database().iter() {
             if !options.contains(&data.category) {
                 options.push(data.category.clone());
             }
@@ -702,6 +700,16 @@ impl eframe::App for MyApp {
                                 && !programs.contains(&data.program)
                             {
                                 programs.push(data.program.clone());
+                            }
+                        }
+                        #[cfg(windows)]
+                        {
+                            for data in registry_database::get_default_database() {
+                                if categories_set.contains(&data.category)
+                                    && !programs.contains(&data.program)
+                                {
+                                    programs.push(data.program.clone());
+                                }
                             }
                         }
                         programs.sort();

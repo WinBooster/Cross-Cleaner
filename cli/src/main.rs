@@ -5,11 +5,9 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 use clap::{ArgAction, Parser};
 use cleaner::clear_data;
 use crossterm::execute;
-#[cfg(windows)]
-use database::structures::CleanerResult;
 use database::structures::{CleanerData, Cleared};
 use database::utils::get_file_size_string;
-use database::{get_icon, get_version};
+use database::{get_icon, get_version, registry_database};
 use futures::stream::{FuturesUnordered, StreamExt};
 use indicatif::{ProgressBar, ProgressStyle};
 use inquire::formatter::MultiOptionFormatter;
@@ -87,11 +85,6 @@ async fn work(
         None
     };
 
-    // INFO: Check if LastActivity enabled
-    // WARN: Windows only
-    #[cfg(windows)]
-    let has_last_activity = categories.contains(&"LastActivity".to_string());
-
     // Pre-convert to HashSet for O(1) lookups instead of O(n) contains
     let disabled_programs_set: HashSet<&str> = disabled_programs.into_iter().collect();
     let categories_lower: HashSet<String> = categories.iter().map(|s| s.to_lowercase()).collect();
@@ -101,20 +94,19 @@ async fn work(
     // INFO: Clear LastActivity from Registry
     // WARN: Windows only
     #[cfg(windows)]
-    if has_last_activity {
-        let task = task::spawn(async move {
-            let bytes_cleared = database::registry_database::clear_last_activity();
-            CleanerResult {
-                files: 0,
-                folders: 0,
-                bytes: bytes_cleared,
-                working: true,
-                path: String::from("LastActivity"),
-                program: String::from("Registry"),
-                category: String::from("LastActivity"),
+    {
+        use database::registry_database;
+        let registry_database = registry_database::get_default_database();
+        for data in registry_database.iter() {
+            if categories_lower.contains(&data.category.to_lowercase())
+                && !disabled_programs_set.contains(data.program.to_lowercase().as_str())
+            {
+                let data = Arc::new(data.clone());
+                let task =
+                    task::spawn(async move { registry_database::clear_last_activity(&data) });
+                tasks.push(task);
             }
-        });
-        tasks.push(task);
+        }
     }
 
     // Filter and spawn tasks - avoid cloning in filter closure
@@ -323,12 +315,20 @@ async fn main() {
     };
 
     // Use HashSet for O(1) lookups
-    let mut options: HashSet<String> = HashSet::with_capacity(database.len());
-    let mut programs: HashSet<String> = HashSet::with_capacity(database.len());
+    let mut options: HashSet<String> = HashSet::new();
+    let mut programs: HashSet<String> = HashSet::new();
 
     for data in &database {
         options.insert(data.category.clone());
         programs.insert(data.program.clone());
+    }
+
+    #[cfg(windows)]
+    {
+        for data in registry_database::get_default_database() {
+            options.insert(data.category.clone());
+            programs.insert(data.program.clone());
+        }
     }
 
     if args.show_database_info {
@@ -399,6 +399,20 @@ async fn main() {
                 .iter()
                 .filter(|data| ans_categories.contains(&data.category))
                 .map(|data| data.program.as_str())
+                .collect();
+
+            #[cfg(windows)]
+            {
+                let registry_programs: Vec<&str> = registry_database::get_default_database()
+                    .iter()
+                    .filter(|data| ans_categories.contains(&data.category))
+                    .map(|data| data.program.as_str())
+                    .collect();
+                programs2.extend(registry_programs);
+            }
+
+            programs2 = programs2
+                .into_iter()
                 .collect::<HashSet<_>>()
                 .into_iter()
                 .collect();

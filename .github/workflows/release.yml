@@ -45,7 +45,7 @@ jobs:
         run: |
           sudo apt-get -y install jq
 
-          JSON_FILES=("database/linux_database.json" "database/windows_database.json")
+          JSON_FILES=("database/linux_database.json" "database/windows_database.json" "database/registry_database.json")
           for JSON_FILE in "${JSON_FILES[@]}"; do
             echo "Processing $JSON_FILE..."
 
@@ -83,6 +83,7 @@ jobs:
         run: |
           mv database/linux_database.json linux_database.json
           mv database/windows_database.json windows_database.json
+          mv database/windows_database.json registry_database.json
       - name: Upload databases to artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -90,6 +91,7 @@ jobs:
           path: |
             linux_database.json
             windows_database.json
+            registry_database.json
 
   build_linux:
     runs-on: ubuntu-latest

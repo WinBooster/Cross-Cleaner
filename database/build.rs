@@ -22,6 +22,22 @@ fn main() {
     let out_dir = env::var("OUT_DIR").unwrap();
 
     // Process windows_database.json
+    let registry_json = fs::read_to_string("registry_database.json")
+        .expect("Failed to read registry_database.json");
+    let registry_compressed = minify_and_compress_json(&registry_json);
+    let registry_out_path = Path::new(&out_dir).join("registry_database.min.json.gz");
+
+    println!(
+        "Registry DB: {} bytes -> {} bytes ({:.1}% reduction)",
+        registry_json.len(),
+        registry_compressed.len(),
+        100.0 - (registry_compressed.len() as f64 / registry_json.len() as f64 * 100.0)
+    );
+
+    fs::write(&registry_out_path, &registry_compressed)
+        .expect("Failed to write compressed registry database");
+
+    // Process windows_database.json
     let windows_json =
         fs::read_to_string("windows_database.json").expect("Failed to read windows_database.json");
     let windows_compressed = minify_and_compress_json(&windows_json);

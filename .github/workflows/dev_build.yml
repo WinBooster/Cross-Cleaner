@@ -5,16 +5,16 @@ on:
   workflow_call:
   push:
     paths:
-      - '**/*.toml'
-      - '**/*.rs'
-      - '**/*.json'
-      - '.github/workflows/**' 
+      - "**/*.toml"
+      - "**/*.rs"
+      - "**/*.json"
+      - ".github/workflows/**"
   pull_request:
     paths:
-      - '**/*.toml'
-      - '**/*.rs'
-      - '**/*.json'
-      - '.github/workflows/**' 
+      - "**/*.toml"
+      - "**/*.rs"
+      - "**/*.json"
+      - ".github/workflows/**"
 
 env:
   CARGO_TERM_COLOR: always
@@ -26,60 +26,60 @@ jobs:
     permissions: write-all
     name: Formating code
     steps:
-    - uses: actions/checkout@v4
-    - name: Update Cargo.toml version
-      run: |
-        sed -i 's/^version = .*/version = "${{ env.APP_VERSION }}"/' Cargo.toml
-        sed -i 's/ProductVersion = .*/ProductVersion = "${{ env.APP_VERSION }}"/' Cargo.toml
-    - name: Formating code
-      run: cargo fmt
-    - name: Commit changes
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add .
-        git commit -m "Auto format code" || echo "No changes to commit"
-        git push || echo "No changes to push"
+      - uses: actions/checkout@v4
+      - name: Update Cargo.toml version
+        run: |
+          sed -i 's/^version = .*/version = "${{ env.APP_VERSION }}"/' Cargo.toml
+          sed -i 's/ProductVersion = .*/ProductVersion = "${{ env.APP_VERSION }}"/' Cargo.toml
+      - name: Formating code
+        run: cargo fmt
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .
+          git commit -m "Auto format code" || echo "No changes to commit"
+          git push || echo "No changes to push"
 
   sort_json:
     runs-on: ubuntu-latest
     name: Sorting json
     permissions: write-all
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Sort JSON files by program field
-      run: |
-        sudo apt-get -y install jq
-        
-        JSON_FILES=("database/linux_database.json" "database/windows_database.json")
-        for JSON_FILE in "${JSON_FILES[@]}"; do
-          echo "Processing $JSON_FILE..."
-          
-          # Проверяем, существует ли файл
-          if [ ! -f "$JSON_FILE" ]; then
-            echo "Error: JSON file not found at $JSON_FILE"
-            exit 1
-          fi
-          
-          jq 'sort_by(.program | ascii_downcase)' "$JSON_FILE" > "${JSON_FILE}.tmp"
-          
-          if [ $? -eq 0 ]; then
-            mv "${JSON_FILE}.tmp" "$JSON_FILE"
-            echo "Successfully sorted $JSON_FILE"
-          else
-            echo "Error: Failed to sort $JSON_FILE"
-            exit 1
-          fi
-        done
-        
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add "${JSON_FILES[@]}"
-        git commit -m "Auto-sorted JSON files by program field" || echo "No changes to commit"
-        git push || echo "No changes to push"
-        
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Sort JSON files by program field
+        run: |
+          sudo apt-get -y install jq
+
+          JSON_FILES=("database/linux_database.json" "database/windows_database.json" "database/registry_database.json")
+          for JSON_FILE in "${JSON_FILES[@]}"; do
+            echo "Processing $JSON_FILE..."
+
+            # Проверяем, существует ли файл
+            if [ ! -f "$JSON_FILE" ]; then
+              echo "Error: JSON file not found at $JSON_FILE"
+              exit 1
+            fi
+
+            jq 'sort_by(.program | ascii_downcase)' "$JSON_FILE" > "${JSON_FILE}.tmp"
+
+            if [ $? -eq 0 ]; then
+              mv "${JSON_FILE}.tmp" "$JSON_FILE"
+              echo "Successfully sorted $JSON_FILE"
+            else
+              echo "Error: Failed to sort $JSON_FILE"
+              exit 1
+            fi
+          done
+
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add "${JSON_FILES[@]}"
+          git commit -m "Auto-sorted JSON files by program field" || echo "No changes to commit"
+          git push || echo "No changes to push"
+
   upload_databases:
     needs: [sort_json]
     runs-on: ubuntu-latest
@@ -87,18 +87,20 @@ jobs:
     permissions: write-all
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Move databases
-      run: |
-        mv database/linux_database.json linux_database.json
-        mv database/windows_database.json windows_database.json
-    - name: Upload databases to artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: databases
-        path: |
-          linux_database.json
-          windows_database.json
+      - uses: actions/checkout@v4
+      - name: Move databases
+        run: |
+          mv database/linux_database.json linux_database.json
+          mv database/windows_database.json windows_database.json
+          mv database/registry_database.json registry_database.json
+      - name: Upload databases to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: databases
+          path: |
+            linux_database.json
+            windows_database.json
+            registry_database.json
 
   build_linux:
     runs-on: ubuntu-latest
@@ -106,20 +108,20 @@ jobs:
     permissions: write-all
     name: Build Linux
     steps:
-    - uses: actions/checkout@v4
-    - name: Build linux
-      run: cargo build --release
-    - name: Move linux binaries
-      run: |
-        mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI
-        mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI
-    - name: Upload Linux artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: linux-binaries
-        path: |
-          Cross_Cleaner_CLI
-          Cross_Cleaner_GUI
+      - uses: actions/checkout@v4
+      - name: Build linux
+        run: cargo build --release
+      - name: Move linux binaries
+        run: |
+          mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI
+          mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-binaries
+          path: |
+            Cross_Cleaner_CLI
+            Cross_Cleaner_GUI
 
   build_windows:
     runs-on: windows-latest
@@ -127,17 +129,17 @@ jobs:
     permissions: write-all
     name: Build Windows
     steps:
-    - uses: actions/checkout@v4
-    - name: Build windows
-      run: cargo build --release
-    - name: Move windows binaries
-      run: |
-        move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI.exe
-        move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI.exe
-    - name: Upload Windows artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: windows-binaries
-        path: |
-          Cross_Cleaner_CLI.exe
-          Cross_Cleaner_GUI.exe
+      - uses: actions/checkout@v4
+      - name: Build windows
+        run: cargo build --release
+      - name: Move windows binaries
+        run: |
+          move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI.exe
+          move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI.exe
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-binaries
+          path: |
+            Cross_Cleaner_CLI.exe
+            Cross_Cleaner_GUI.exe
