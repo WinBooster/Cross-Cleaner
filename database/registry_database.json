@@ -1,5 +1,14 @@
 [
   {
+    "path": "HKEY_CURRENT_USER\\Software\\Vector 35\\Binary Ninja\\ui\\recentFileState",
+    "category": "LastActivity",
+    "program": "Binary Ninja",
+    "class": "System",
+    "values_to_remove": [
+      "files"
+    ]
+  },
+  {
     "path": "HKEY_CURRENT_USER\\Software\\Hex-Rays\\IDA\\History",
     "category": "LastActivity",
     "program": "IDA Pro",
@@ -79,12 +88,5 @@
     "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
-  },
-  {
-    "path": "HKEY_CURRENT_USER\\Software\\Vector 35\\Binary Ninja\\ui\\recentFileState",
-    "category": "LastActivity",
-    "program": "Binary Ninja",
-    "class": "System",
-    "values_to_remove": ["files"]
   }
 ]
