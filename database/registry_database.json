@@ -75,7 +75,7 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Hex-Rays\\IDA\\History64",
     "category": "LastActivity",
-    "program": "IDA",
+    "program": "IDA Pro",
     "class": "Developing",
     "remove_all_in_registry": true,
     "remove_all_in_tree": true
