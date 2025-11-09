@@ -1,5 +1,21 @@
 [
   {
+    "path": "HKEY_CURRENT_USER\\Software\\Hex-Rays\\IDA\\History",
+    "category": "LastActivity",
+    "program": "IDA Pro",
+    "class": "Developing",
+    "remove_all_in_registry": true,
+    "remove_all_in_tree": true
+  },
+  {
+    "path": "HKEY_CURRENT_USER\\Software\\Hex-Rays\\IDA\\History64",
+    "category": "LastActivity",
+    "program": "IDA Pro",
+    "class": "Developing",
+    "remove_all_in_registry": true,
+    "remove_all_in_tree": true
+  },
+  {
     "path": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TypedPaths",
     "category": "LastActivity",
     "program": "Windows",
@@ -63,21 +79,5 @@
     "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
-  },
-  {
-    "path": "HKEY_CURRENT_USER\\Software\\Hex-Rays\\IDA\\History",
-    "category": "LastActivity",
-    "program": "IDA Pro",
-    "class": "Developing",
-    "remove_all_in_registry": true,
-    "remove_all_in_tree": true
-  },
-  {
-    "path": "HKEY_CURRENT_USER\\Software\\Hex-Rays\\IDA\\History64",
-    "category": "LastActivity",
-    "program": "IDA Pro",
-    "class": "Developing",
-    "remove_all_in_registry": true,
-    "remove_all_in_tree": true
   }
 ]
