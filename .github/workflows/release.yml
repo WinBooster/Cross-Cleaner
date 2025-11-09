@@ -269,6 +269,82 @@ jobs:
               echo "*No uncategorized programs found*" >> LIST_WINDOWS.md
             fi
           fi
+      - name: Process Windows Registry data
+        run: |
+          # Load program links into a variable
+          if [ -f "database/program_links.json" ]; then
+            program_links=$(jq -r '.' database/program_links.json)
+          else
+            program_links="{}"
+          fi
+
+          # Header
+          echo "# Windows Registry Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_REGISTRY.md
+          total_categories=$(jq -r 'map(.category) | unique | length' database/registry_database.json)
+          total_programs=$(jq -r 'map(.program) | unique | length' database/registry_database.json)
+          total_pathes=$(jq -r 'map(.path) | unique | length' database/registry_database.json)
+          echo -e "**Total categories in database:** $total_categories\n" >> LIST_REGISTRY.md
+          echo -e "**Total programs in database:** $total_programs\n" >> LIST_REGISTRY.md
+          echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_REGISTRY.md
+
+          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/registry_database.json | while IFS= read -r class; do
+            echo -e "## $class\n" >> LIST_REGISTRY.md
+
+            # Get programs for this class
+            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/registry_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_REGISTRY.md
+              echo "| --- | --- | --- |" >> LIST_REGISTRY.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_REGISTRY.md
+              done <<< "$programs"
+            else
+              echo "*No programs found for this class*" >> LIST_REGISTRY.md
+            fi
+
+            echo -e "\n" >> LIST_REGISTRY.md
+          done
+
+          # Handle null class separately if needed
+          if jq -e '.[] | select(.class == null)' database/registry_database.json >/dev/null; then
+            echo -e "## Uncategorized\n" >> LIST_REGISTRY.md
+            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/registry_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_REGISTRY.md
+              echo "| --- | --- | --- |" >> LIST_REGISTRY.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_REGISTRY.md
+              done <<< "$programs"
+            else
+              echo "*No uncategorized programs found*" >> LIST_REGISTRY.md
+            fi
+          fi
 
       - name: Process Linux data
         run: |

@@ -2,35 +2,35 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TypedPaths",
     "category": "LastActivity",
-    "program": "Windows (Registry)",
+    "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
   },
   {
     "path": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FeatureUsage\\ShowJumpView",
     "category": "LastActivity",
-    "program": "Windows (Registry)",
+    "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
   },
   {
     "path": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Compatibility Assistant\\Store",
     "category": "LastActivity",
-    "program": "Windows (Registry)",
+    "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
   },
   {
     "path": "HKEY_CURRENT_USER\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache",
     "category": "LastActivity",
-    "program": "Windows (Registry)",
+    "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
   },
   {
     "path": "HKEY_CURRENT_USER\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags",
     "category": "LastActivity",
-    "program": "Windows (Registry)",
+    "program": "Windows",
     "class": "System",
     "remove_all_in_tree": true,
     "remove_all_in_registry": true
@@ -38,7 +38,7 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU",
     "category": "LastActivity",
-    "program": "Windows (Registry)",
+    "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true,
     "remove_all_in_tree": true
@@ -46,22 +46,38 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ComDlg32",
     "category": "LastActivity",
-    "program": "Windows (Registry)",
+    "program": "Windows",
     "class": "System",
     "remove_all_in_tree": true
   },
   {
     "path": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FeatureUsage\\AppSwitched",
     "category": "LastActivity",
-    "program": "Windows (Registry)",
+    "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
   },
   {
     "path": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RecentDocs",
     "category": "LastActivity",
-    "program": "Windows (Registry)",
+    "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
+  },
+  {
+    "path": "HKEY_CURRENT_USER\\Software\\Hex-Rays\\IDA\\History",
+    "category": "LastActivity",
+    "program": "IDA",
+    "class": "Developing",
+    "remove_all_in_registry": true,
+    "remove_all_in_tree": true
+  },
+  {
+    "path": "HKEY_CURRENT_USER\\Software\\Hex-Rays\\IDA\\History64",
+    "category": "LastActivity",
+    "program": "IDA",
+    "class": "Developing",
+    "remove_all_in_registry": true,
+    "remove_all_in_tree": true
   }
 ]
