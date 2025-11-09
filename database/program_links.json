@@ -23,6 +23,7 @@
   "Cassettle": "https://gitlab.gnome.org/Rirusha/Cassette",
   "Spotify": "https://open.spotify.com/download",
   "Yandex Music": "https://music.yandex.ru/download",
+  "Murglar": "https://murglar.app",
 
   "Brave Browser": "https://brave.com/download",
   "Edge": "https://www.microsoft.com/edge",
@@ -97,7 +98,9 @@
   "Recaf": "https://github.com/Col-E/Recaf",
   "Rust Language": "https://www.rust-lang.org/tools/install",
   "Unity Hub": "https://unity.com/download",
-  "Windows Kits": "https://developer.microsoft.com/windows/downloads/windows-sdk/",
+  "Windows Kits": "https://developer.microsoft.com/windows/downloads/windows-sdk",
+  "Insomnia": "https://developer.microsoft.com/windows/downloads/windows-sdk",
+  "Xamarin": "https://dotnet.microsoft.com/apps/xamarin",
 
   "IObit Driver Booster": "https://ru.iobit.com/driver-booster.php",
   "LGHUB": "https://www.logitechg.com/en-us/innovation/g-hub.html",
@@ -166,6 +169,7 @@
   "VS Code": "https://code.visualstudio.com/download",
   "Gperf": "https://github.com/jwinarske/gperf",
   "Pcre": "https://www.pcre.org",
+  "Zed": "https://zed.dev",
 
   "Tribler": "https://www.tribler.org/download.html",
   "qBittorrent": "https://www.qbittorrent.org/download",

@@ -7,7 +7,7 @@
 #[global_allocator]
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
-use clap::{Parser, command};
+use clap::Parser;
 use cleaner::clear_data;
 #[cfg(windows)]
 use database::registry_database;
@@ -277,6 +277,7 @@ struct MyApp {
     pub show_program_selection: bool,
     pub program_checkboxes: Vec<(Rc<RefCell<bool>>, String)>,
     pub search_query: String,
+    pub search_query_visible: String,
     pub excluded_programs: HashSet<String>,
     pub results_window_resized: bool,
 
@@ -336,6 +337,7 @@ impl MyApp {
             show_program_selection: false,
             program_checkboxes: vec![],
             search_query: String::new(),
+            search_query_visible: String::new(),
             excluded_programs: HashSet::new(),
             results_window_resized: false,
 
@@ -567,10 +569,10 @@ impl eframe::App for MyApp {
                     let available_width = ui.available_width();
                     let search_response = ui.add_sized(
                         [available_width, 20.0],
-                        egui::TextEdit::singleline(&mut self.search_query),
+                        egui::TextEdit::singleline(&mut self.search_query_visible),
                     );
                     if search_response.changed() {
-                        self.search_query = self.search_query.to_lowercase();
+                        self.search_query = self.search_query_visible.to_lowercase();
                     }
                 });
 

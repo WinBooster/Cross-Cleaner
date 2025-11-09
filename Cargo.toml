@@ -2,13 +2,13 @@
 resolver = "3"
 members = ["cli", "gui"]
 
-[profile.release] # optimize for BLAZING FAST performance
-lto = "fat"           # Full LTO for maximum optimization across crates
-codegen-units = 1     # Single codegen unit for better optimization
-opt-level = 3         # Maximum optimization for speed (not size)
-strip = true          # Strip symbols to reduce binary size
-panic = "abort"       # Smaller and faster panic handler
-debug = false         # No debug info in release
+[profile.release]
+lto = "fat"
+codegen-units = 1
+opt-level = 3
+strip = true
+panic = "abort"
+debug = false
 
 [profile.bench]
 inherits = "release"
