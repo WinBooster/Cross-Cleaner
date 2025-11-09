@@ -169,6 +169,7 @@ jobs:
             - **IDA Pro** Added lastactivity clearing
             - **360 Total Security** Added logs clearing
             - **Avast** Added logs clearing
+            - **Binary Ninja** Added lastactivity clearing
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:

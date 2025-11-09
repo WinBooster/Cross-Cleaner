@@ -71,6 +71,16 @@ pub fn clear_last_activity(data: &CleanerDataRegistry) -> CleanerResult {
         if data.remove_all_in_registry {
             removed += remove_all_in_registry(&root, path.to_string())
         }
+        for value in data.values_to_remove.iter() {
+            use crate::registry_utils::remove_value_in_registry;
+
+            removed += remove_value_in_registry(&root, path.to_string(), value.to_string());
+        }
+        for value in data.keys_to_remove.iter() {
+            use crate::registry_utils::remove_key_in_registry;
+
+            removed += remove_key_in_registry(&root, path.to_string() + "\\" + value);
+        }
     }
 
     if removed > 0 {

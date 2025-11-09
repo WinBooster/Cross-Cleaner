@@ -62,3 +62,32 @@ pub fn remove_all_in_registry(key: &RegKey, value: String) -> u64 {
 
     total_bytes
 }
+
+#[cfg(windows)]
+pub fn remove_value_in_registry(key: &RegKey, path: String, value_name: String) -> u64 {
+    let mut total_bytes = 0;
+
+    if let Ok(typed_path_read) = key.open_subkey_with_flags(&path, KEY_READ) {
+        if let Ok(reg_value) = typed_path_read.get_raw_value(&value_name) {
+            total_bytes = (value_name.len() + reg_value.bytes.len()) as u64;
+        }
+    }
+
+    if let Ok(typed_path_write) = key.open_subkey_with_flags(path, KEY_WRITE) {
+        let _ = typed_path_write.delete_value(&value_name);
+    }
+
+    total_bytes
+}
+
+#[cfg(windows)]
+pub fn remove_key_in_registry(key: &RegKey, path: String) -> u64 {
+    let values_size = remove_all_in_registry(key, path.clone());
+    let tree_size = remove_all_in_tree_in_registry(key, path.clone());
+
+    if let Ok(parent) = key.open_subkey_with_flags("", KEY_WRITE) {
+        let _ = parent.delete_subkey_all(&path);
+    }
+
+    values_size + tree_size
+}
