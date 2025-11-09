@@ -83,7 +83,7 @@ jobs:
         run: |
           mv database/linux_database.json linux_database.json
           mv database/windows_database.json windows_database.json
-          mv database/windows_database.json registry_database.json
+          mv database/registry_database.json registry_database.json
       - name: Upload databases to artifacts
         uses: actions/upload-artifact@v4
         with:
