@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.1.7
+# Windows Clearing Programs Catalog v2.0.1.8
 **Total categories in database:** 15
 
-**Total programs in database:** 172
+**Total programs in database:** 175
 
-**Total pathes in database:** 403
+**Total pathes in database:** 413
 
 ## AntiCheat
 
@@ -30,9 +30,10 @@
 | 1 | [AAF Optimus DCH Audio](https://github.com/AAFOptimus/AAFFamilyDCHAudio) | Documentation |
 | 2 | [ASIO4ALL v2](https://asio4all.org/about/download-asio4all) | Documentation |
 | 3 | [FL Studio](https://www.image-line.com/fl-studio-download) | Documentation |
-| 4 | [SoundWire Server](https://georgielabs.net) | Documentation |
-| 5 | [Spotify](https://open.spotify.com/download) | Cache, Logs |
-| 6 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
+| 4 | [Murglar](https://murglar.app) | Logs |
+| 5 | [SoundWire Server](https://georgielabs.net) | Documentation |
+| 6 | [Spotify](https://open.spotify.com/download) | Cache, Logs |
+| 7 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
 
 
 ## Browser
@@ -52,7 +53,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [Cheat Engine](https://www.cheatengine.org/downloads.php) | Cheats, Logs |
+| 1 | [Cheat Engine](https://www.cheatengine.org/downloads.php) | Cheats, Documentation |
 | 2 | [ExecHack](https://c.exechack.cc) | Cheats |
 | 3 | [Fatality](https://fatality.win) | Cheats |
 | 4 | [INTERIUM](https://ru.interium.ooo) | Cheats |
@@ -88,7 +89,7 @@
 | 9 | [Gradle](https://gradle.org) | Cache |
 | 10 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
 | 11 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
-| 12 | Insomnia | Cache, Logs |
+| 12 | [Insomnia](https://developer.microsoft.com/windows/downloads/windows-sdk) | Cache, Logs |
 | 13 | [Java](https://www.java.com/download) | Documentation |
 | 14 | [MCCreator](https://mcreator.net/download) | Logs |
 | 15 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
@@ -98,8 +99,8 @@
 | 19 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
 | 20 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
 | 21 | [Unity Hub](https://unity.com/download) | Documentation |
-| 22 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk/) | Documentation |
-| 23 | Xamarin | Logs |
+| 22 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk) | Documentation |
+| 23 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
 
 
 ## Driver
@@ -225,20 +226,22 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [4uKey for Android](https://www.tenorshare.ru/products/android-password-reset-tool.html) | Logs |
-| 2 | GnuPG | Documentation |
-| 3 | [Gpg4win](https://www.gpg4win.org) | Documentation |
-| 4 | [I2P](https://geti2p.net/download) | Documentation, Logs |
-| 5 | [IObit Malware Fighter](https://www.iobit.com/en/malware-fighter.php) | Logs |
-| 6 | [NetLimiter](https://www.netlimiter.com/download) | Logs |
-| 7 | [OONI Probe](https://ooni.org/install) | Logs |
-| 8 | [Panda Security](https://www.pandasecurity.com) | Logs |
-| 9 | [Process Hacker 2](https://systeminformer.sourceforge.io/downloads) | Documentation |
-| 10 | [Process Lasso](https://bitsum.com) | Logs |
-| 11 | [Sandboxie+](https://sandboxie-plus.com) | Documentation |
-| 12 | [SystemInformer](https://systeminformer.com/downloads) | Documentation |
-| 13 | [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | Documentation, Logs |
-| 14 | [Zapret](https://github.com/bol-van/zapret) | Logs |
+| 1 | [360 Total Security](https://www.360totalsecurity.com) | Logs |
+| 2 | [4uKey for Android](https://www.tenorshare.ru/products/android-password-reset-tool.html) | Logs |
+| 3 | [Avast](https://www.avast.ru) | Documentation, Logs |
+| 4 | GnuPG | Documentation |
+| 5 | [Gpg4win](https://www.gpg4win.org) | Documentation |
+| 6 | [I2P](https://geti2p.net/download) | Documentation, Logs |
+| 7 | [IObit Malware Fighter](https://www.iobit.com/en/malware-fighter.php) | Logs |
+| 8 | [NetLimiter](https://www.netlimiter.com/download) | Logs |
+| 9 | [OONI Probe](https://ooni.org/install) | Logs |
+| 10 | [Panda Security](https://www.pandasecurity.com) | Logs |
+| 11 | [Process Hacker 2](https://systeminformer.sourceforge.io/downloads) | Documentation |
+| 12 | [Process Lasso](https://bitsum.com) | Logs |
+| 13 | [Sandboxie+](https://sandboxie-plus.com) | Documentation |
+| 14 | [SystemInformer](https://systeminformer.com/downloads) | Documentation |
+| 15 | [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | Documentation, Logs |
+| 16 | [Zapret](https://github.com/bol-van/zapret) | Logs |
 
 
 ## Spyware
@@ -271,7 +274,7 @@
 | 8 | [Notepad++](https://notepad-plus-plus.org/downloads) | Documentation |
 | 9 | [Sublime Text](https://www.sublimetext.com/download) | Logs |
 | 10 | [VS Code](https://code.visualstudio.com/download) | Browser cookies, Documentation, Logs |
-| 11 | Zed | Logs |
+| 11 | [Zed](https://zed.dev) | Logs |
 
 
 ## Torrent
