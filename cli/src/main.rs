@@ -5,11 +5,11 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 use clap::{ArgAction, Parser};
 use cleaner::clear_data;
 use crossterm::execute;
+#[cfg(windows)]
+use database::registry_database;
 use database::structures::{CleanerData, CleanerDataRegistry, Cleared};
 use database::utils::get_file_size_string;
 use database::{get_icon, get_version};
-#[cfg(windows)]
-use database::{registry_database};
 use futures::stream::{FuturesUnordered, StreamExt};
 use indicatif::{ProgressBar, ProgressStyle};
 use inquire::formatter::MultiOptionFormatter;
