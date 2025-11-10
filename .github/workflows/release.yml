@@ -45,7 +45,7 @@ jobs:
         run: |
           sudo apt-get -y install jq
 
-          JSON_FILES=("database/linux_database.json" "database/windows_database.json" "database/registry_database.json")
+          JSON_FILES=("database/linux_database.json" "database/windows_database.json" "database/registry_database.json", "database/macos_database.json")
           for JSON_FILE in "${JSON_FILES[@]}"; do
             echo "Processing $JSON_FILE..."
 
@@ -84,6 +84,7 @@ jobs:
           mv database/linux_database.json linux_database.json
           mv database/windows_database.json windows_database.json
           mv database/registry_database.json registry_database.json
+          mv database/macos_database.json registry_database.json
       - name: Upload databases to artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -92,6 +93,7 @@ jobs:
             linux_database.json
             windows_database.json
             registry_database.json
+            macos_database.json
 
   build_linux:
     runs-on: ubuntu-latest
@@ -104,15 +106,15 @@ jobs:
         run: cargo build --release
       - name: Move linux binaries
         run: |
-          mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI
-          mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI
+          mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI_Linux
+          mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI_Linux
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
         with:
           name: linux-binaries
           path: |
-            Cross_Cleaner_CLI
-            Cross_Cleaner_GUI
+            Cross_Cleaner_CLI_Linux
+            Cross_Cleaner_GUI_Linux
 
   build_windows:
     runs-on: windows-latest
@@ -125,18 +127,38 @@ jobs:
         run: cargo build --release
       - name: Move windows binaries
         run: |
-          move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI.exe
-          move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI.exe
+          move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI_Windows.exe
+          move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI_Windows.exe
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows-binaries
           path: |
-            Cross_Cleaner_CLI.exe
-            Cross_Cleaner_GUI.exe
+            Cross_Cleaner_CLI_Windows.exe
+            Cross_Cleaner_GUI_Windows.exe
+  build_macos:
+    runs-on: macos-latest
+    needs: [sort_json]
+    permissions: write-all
+    name: Build Windows
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build windows
+        run: cargo build --release
+      - name: Move windows binaries
+        run: |
+          move target\release\Cross_Cleaner_CLI Cross_Cleaner_CLI_MacOS
+          move target\release\Cross_Cleaner_GUI Cross_Cleaner_GUI_MacOS
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-binaries
+          path: |
+            Cross_Cleaner_CLI_MacOS
+            Cross_Cleaner_GUI_MacOS
 
   create_release:
-    needs: [build_linux, build_windows]
+    needs: [build_linux, build_windows, build_macos]
     runs-on: ubuntu-latest
     name: Create Release
     permissions:
@@ -166,10 +188,6 @@ jobs:
 
             ### 🪟 Windows Enhancements
             - **Murglar** Added logs clearing
-            - **IDA Pro** Added lastactivity clearing
-            - **360 Total Security** Added logs clearing
-            - **Avast** Added logs clearing
-            - **Binary Ninja** Added lastactivity clearing
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
@@ -424,6 +442,82 @@ jobs:
               done <<< "$programs"
             else
               echo "*No uncategorized programs found*" >> LIST_LINUX.md
+            fi
+          fi
+      - name: Process MacOS data
+        run: |
+          # Load program links into a variable
+          if [ -f "database/program_links.json" ]; then
+            program_links=$(jq -r '.' database/program_links.json)
+          else
+            program_links="{}"
+          fi
+
+          # Header
+          echo "# Linux Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_MACOS.md
+          total_categories=$(jq -r 'map(.category) | unique | length' database/macos_database.json)
+          total_programs=$(jq -r 'map(.program) | unique | length' database/macos_database.json)
+          total_pathes=$(jq -r 'map(.path) | unique | length' database/macos_database.json)
+          echo -e "**Total categories in database:** $total_categories\n" >> LIST_MACOS.md
+          echo -e "**Total programs in database:** $total_programs\n" >> LIST_MACOS.md
+          echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_MACOS.md
+
+          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/macos_database.json | while IFS= read -r class; do
+            echo -e "## $class\n" >> LIST_MACOS.md
+
+            # Get programs for this class
+            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/macos_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_MACOS.md
+              echo "| --- | --- | --- |" >> LIST_MACOS.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_MACOS.md
+              done <<< "$programs"
+            else
+              echo "*No programs found for this class*" >> LIST_MACOS.md
+            fi
+
+            echo -e "\n" >> LIST_MACOS.md
+          done
+
+          # Handle null class separately if needed
+          if jq -e '.[] | select(.class == null)' database/macos_database.json >/dev/null; then
+            echo -e "## Uncategorized\n" >> LIST_MACOS.md
+            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/macos_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_MACOS.md
+              echo "| --- | --- | --- |" >> LIST_MACOS.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_MACOS.md
+              done <<< "$programs"
+            else
+              echo "*No uncategorized programs found*" >> LIST_MACOS.md
             fi
           fi
 

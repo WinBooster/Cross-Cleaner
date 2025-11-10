@@ -69,7 +69,25 @@ fn main() {
     fs::write(&linux_out_path, &linux_compressed)
         .expect("Failed to write compressed linux database");
 
+    // Process macos_database.json
+    let macos_json =
+        fs::read_to_string("linux_database.json").expect("Failed to read macos_database.json");
+    let macos_compressed = minify_and_compress_json(&linux_json);
+    let macos_out_path = Path::new(&out_dir).join("macos_database.min.json.gz");
+
+    println!(
+        "Linux DB: {} bytes -> {} bytes ({:.1}% reduction)",
+        macos_json.len(),
+        macos_compressed.len(),
+        100.0 - (macos_compressed.len() as f64 / macos_json.len() as f64 * 100.0)
+    );
+
+    fs::write(&macos_out_path, &macos_compressed)
+        .expect("Failed to write compressed linux database");
+
     // Tell Cargo to rerun if the database files change
+    println!("cargo:rerun-if-changed=registry_database.json");
     println!("cargo:rerun-if-changed=windows_database.json");
     println!("cargo:rerun-if-changed=linux_database.json");
+    println!("cargo:rerun-if-changed=macos_database.json");
 }
