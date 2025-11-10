@@ -135,7 +135,7 @@ jobs:
       - name: Build windows
         run: cargo build --release
       - name: List files for debugging
-        run: dir -la target\release\
+        run: dir target\release\
       - name: Move windows binaries
         run: |
           move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI.exe
