@@ -147,10 +147,10 @@ jobs:
     runs-on: macos-latest
     needs: [sort_json]
     permissions: write-all
-    name: Build Windows
+    name: Build MacOS
     steps:
       - uses: actions/checkout@v4
-      - name: Build windows
+      - name: Build macos
         run: cargo build --release
       - name: Move macos binaries
         run: |
@@ -159,7 +159,7 @@ jobs:
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: windows-binaries
+          name: macos-binaries
           path: |
             Cross_Cleaner_CLI_Windows_MacOS
             Cross_Cleaner_GUI_Windows_MacOS
