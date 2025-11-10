@@ -147,8 +147,8 @@ jobs:
         run: cargo build --release
       - name: Move macos binaries
         run: |
-          mv target\release\Cross_Cleaner_CLI Cross_Cleaner_CLI_MacOS
-          mv target\release\Cross_Cleaner_GUI Cross_Cleaner_GUI_MacOS
+          mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI_MacOS
+          mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI_MacOS
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
