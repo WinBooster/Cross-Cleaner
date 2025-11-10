@@ -319,18 +319,24 @@ async fn main() {
         database::cleaner_database::get_default_database().clone()
     };
 
-    let registry_database: Vec<CleanerDataRegistry> =
-        if let Some(db_path) = &args.registry_database_path {
-            match database::registry_database::get_database_from_file(db_path) {
-                Ok(db) => db,
-                Err(e) => {
-                    eprintln!("Failed to load database from file: {}", e);
-                    std::process::exit(1);
+    let mut registry_database: Vec<CleanerDataRegistry> = vec![];
+
+    #[cfg(windows)]
+    {
+        let registry_database2: Vec<CleanerDataRegistry> =
+            if let Some(db_path) = &args.registry_database_path {
+                match database::registry_database::get_database_from_file(db_path) {
+                    Ok(db) => db,
+                    Err(e) => {
+                        eprintln!("Failed to load database from file: {}", e);
+                        std::process::exit(1);
+                    }
                 }
-            }
-        } else {
-            database::registry_database::get_default_database().clone()
-        };
+            } else {
+                database::registry_database::get_default_database().clone()
+            };
+        registry_database = registry_database2
+    }
 
     // Use HashSet for O(1) lookups
     let mut options: HashSet<String> = HashSet::new();

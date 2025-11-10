@@ -63,19 +63,23 @@ async fn main() -> eframe::Result {
         database::cleaner_database::get_default_database().clone()
     };
 
-    let registry_database: Vec<CleanerDataRegistry> =
-        if let Some(db_path) = &args.registry_database_path {
-            match database::registry_database::get_database_from_file(db_path) {
-                Ok(db) => db,
-                Err(e) => {
-                    eprintln!("Failed to load database from file: {}", e);
-                    std::process::exit(1);
+    let mut registry_database: Vec<CleanerDataRegistry> = vec![];
+    #[cfg(windows)]
+    {
+        let registry_database2: Vec<CleanerDataRegistry> =
+            if let Some(db_path) = &args.registry_database_path {
+                match database::registry_database::get_database_from_file(db_path) {
+                    Ok(db) => db,
+                    Err(e) => {
+                        eprintln!("Failed to load database from file: {}", e);
+                        std::process::exit(1);
+                    }
                 }
-            }
-        } else {
-            database::registry_database::get_default_database().clone()
-        };
-
+            } else {
+                database::registry_database::get_default_database().clone()
+            };
+        registry_database = registry_database2;
+    }
     let app = MyApp::from_database(Arc::from(database), Arc::from(registry_database));
     let checkbox_count = app.checked_boxes.len();
     let rows = checkbox_count.div_ceil(3);
@@ -122,6 +126,7 @@ async fn work(
     categories: Vec<String>,
     progress_sender: mpsc::Sender<String>,
     database: &[CleanerData],
+    registry_database: &[CleanerDataRegistry],
     excluded_programs: HashSet<String>,
 ) -> (u64, u64, u64, Vec<Cleared>) {
     let mut current_task = 0;
@@ -143,7 +148,6 @@ async fn work(
     // WARN: Windows only
     #[cfg(windows)]
     {
-        let registry_database = registry_database::get_default_database();
         for data in registry_database.iter() {
             if categories_set.contains(&data.category) && !excluded_programs.contains(&data.program)
             {
@@ -660,12 +664,14 @@ impl eframe::App for MyApp {
                         self.results_window_resized = false;
 
                         let database = Arc::clone(&self.database);
+                        let reg_database = Arc::clone(&self.regisry_database);
                         let excluded_programs = self.excluded_programs.clone();
                         let handle = tokio::spawn(async move {
                             work(
                                 selected_categories,
                                 progress_sender,
                                 &database,
+                                &reg_database,
                                 excluded_programs,
                             )
                             .await
