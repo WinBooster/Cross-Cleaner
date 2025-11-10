@@ -1,3 +1,5 @@
+use std::error::Error;
+use std::fs;
 use std::sync::OnceLock;
 
 #[cfg(windows)]
@@ -21,16 +23,28 @@ pub fn get_default_database() -> &'static Vec<CleanerDataRegistry> {
 
         // NOTE: Decompress the data
         let mut decoder = GzDecoder::new(&compressed_data[..]);
+        // INFO: Read decompressed data
         let mut json_data = String::new();
         decoder
             .read_to_string(&mut json_data)
             .expect("Failed to decompress database");
+        // INFO: Deserialization JSON to Vec<CleanerDataRegistry>
         let database: Vec<CleanerDataRegistry> =
             serde_json::from_str::<Vec<CleanerDataRegistry>>(&json_data)
                 .expect("Failed to parse database");
 
         database
     })
+}
+
+pub fn get_database_from_file(file_path: &str) -> Result<Vec<CleanerDataRegistry>, Box<dyn Error>> {
+    // INFO: Read file
+    let data = fs::read_to_string(file_path)?;
+
+    // INFO: Deserialization JSON to Vec<CleanerDataRegistry>
+    let database: Vec<CleanerDataRegistry> = serde_json::from_str(&data)?;
+
+    Ok(database)
 }
 
 #[cfg(windows)]

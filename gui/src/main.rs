@@ -11,7 +11,7 @@ use clap::Parser;
 use cleaner::clear_data;
 #[cfg(windows)]
 use database::registry_database;
-use database::structures::{CleanerData, Cleared};
+use database::structures::{CleanerData, CleanerDataRegistry, Cleared};
 use database::utils::get_file_size_string;
 use database::{get_icon, get_version};
 use eframe::egui;
@@ -36,6 +36,12 @@ struct Args {
     /// Example: --database-path=custom_database.json
     #[arg(long, value_name = "path")]
     database_path: Option<String>,
+
+    /// Specify a custom registry database file path.
+    /// Example: --registry-database-path=custom_database.json
+    #[cfg(windows)]
+    #[arg(long, value_name = "registry_path")]
+    registry_database_path: Option<String>,
 }
 
 #[tokio::main]
@@ -57,7 +63,20 @@ async fn main() -> eframe::Result {
         database::cleaner_database::get_default_database().clone()
     };
 
-    let app = MyApp::from_database(Arc::from(database));
+    let registry_database: Vec<CleanerDataRegistry> =
+        if let Some(db_path) = &args.registry_database_path {
+            match database::registry_database::get_database_from_file(db_path) {
+                Ok(db) => db,
+                Err(e) => {
+                    eprintln!("Failed to load database from file: {}", e);
+                    std::process::exit(1);
+                }
+            }
+        } else {
+            database::registry_database::get_default_database().clone()
+        };
+
+    let app = MyApp::from_database(Arc::from(database), Arc::from(registry_database));
     let checkbox_count = app.checked_boxes.len();
     let rows = checkbox_count.div_ceil(3);
     // INFO: 20px for 1 checkbox, 45px for button
@@ -273,11 +292,16 @@ struct MyApp {
 
     pub result_sender: Option<mpsc::Sender<(u64, u64, u64, Vec<Cleared>)>>,
     pub result_receiver: Option<mpsc::Receiver<(u64, u64, u64, Vec<Cleared>)>>,
+
     pub database: Arc<[CleanerData]>,
+    pub regisry_database: Arc<[CleanerDataRegistry]>,
 }
 
 impl MyApp {
-    pub(crate) fn from_database(database: Arc<[CleanerData]>) -> Self {
+    pub(crate) fn from_database(
+        database: Arc<[CleanerData]>,
+        reg_database: Arc<[CleanerDataRegistry]>,
+    ) -> Self {
         let mut options: Vec<String> = Vec::with_capacity(database.len());
         for data in database.iter() {
             if !options.contains(&data.category) {
@@ -286,7 +310,7 @@ impl MyApp {
         }
 
         #[cfg(windows)]
-        for data in registry_database::get_default_database().iter() {
+        for data in reg_database.iter() {
             if !options.contains(&data.category) {
                 options.push(data.category.clone());
             }
@@ -322,6 +346,7 @@ impl MyApp {
 
         Self {
             database,
+            regisry_database: reg_database,
             checked_boxes,
             task_handle: None,
             progress_message: String::new(),
@@ -703,7 +728,7 @@ impl eframe::App for MyApp {
                         }
                         #[cfg(windows)]
                         {
-                            for data in registry_database::get_default_database() {
+                            for data in self.regisry_database.iter() {
                                 if categories_set.contains(&data.category)
                                     && !programs.contains(&data.program)
                                 {
@@ -773,7 +798,21 @@ mod tests {
             },
         ];
 
-        let app = MyApp::from_database(Arc::from(database.into_boxed_slice()));
+        let registry_database: Vec<CleanerDataRegistry> = vec![CleanerDataRegistry {
+            category: String::new(),
+            program: String::new(),
+            class: String::new(),
+            remove_all_in_tree: false,
+            remove_all_in_registry: false,
+            path: String::new(),
+            values_to_remove: vec![],
+            keys_to_remove: vec![],
+        }];
+
+        let app = MyApp::from_database(
+            Arc::from(database.into_boxed_slice()),
+            Arc::from(registry_database.into_boxed_slice()),
+        );
 
         assert_eq!(app.checked_boxes.len(), 2, "Should have 2 categories");
         assert!(
@@ -838,7 +877,21 @@ mod tests {
             },
         ];
 
-        let app = MyApp::from_database(Arc::from(database.into_boxed_slice()));
+        let registry_database: Vec<CleanerDataRegistry> = vec![CleanerDataRegistry {
+            category: String::new(),
+            program: String::new(),
+            class: String::new(),
+            remove_all_in_tree: false,
+            remove_all_in_registry: false,
+            path: String::new(),
+            values_to_remove: vec![],
+            keys_to_remove: vec![],
+        }];
+
+        let app = MyApp::from_database(
+            Arc::from(database.into_boxed_slice()),
+            Arc::from(registry_database.into_boxed_slice()),
+        );
 
         // Categories should be sorted with Cache first, then Logs, then Documentation
         assert_eq!(app.checked_boxes[0].1, "Cache", "First should be Cache");
@@ -854,15 +907,25 @@ mod tests {
         // Test that Args structure can be created
         let args = Args {
             database_path: Some(String::from("test.json")),
+            registry_database_path: Some(String::from("registry_test.json")),
         };
 
         assert_eq!(args.database_path, Some(String::from("test.json")));
+        assert_eq!(
+            args.registry_database_path,
+            Some(String::from("registry_test.json"))
+        );
     }
 
     #[test]
     fn test_myapp_initial_state() {
         let database: Vec<CleanerData> = vec![];
-        let app = MyApp::from_database(Arc::from(database.into_boxed_slice()));
+        let registry_database: Vec<CleanerDataRegistry> = vec![];
+
+        let app = MyApp::from_database(
+            Arc::from(database.into_boxed_slice()),
+            Arc::from(registry_database.into_boxed_slice()),
+        );
 
         assert!(
             app.progress_message.is_empty(),

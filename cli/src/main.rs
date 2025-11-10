@@ -5,7 +5,7 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 use clap::{ArgAction, Parser};
 use cleaner::clear_data;
 use crossterm::execute;
-use database::structures::{CleanerData, Cleared};
+use database::structures::{CleanerData, CleanerDataRegistry, Cleared};
 use database::utils::get_file_size_string;
 use database::{get_icon, get_version, registry_database};
 use futures::stream::{FuturesUnordered, StreamExt};
@@ -60,6 +60,7 @@ async fn work(
     disabled_programs: Vec<&str>,
     categories: Vec<String>,
     database: &[CleanerData],
+    registry_database: &[CleanerDataRegistry],
 ) {
     // Use atomics for lock-free concurrent counting - BLAZING FAST!
     let bytes_cleared = Arc::new(AtomicU64::new(0));
@@ -95,8 +96,6 @@ async fn work(
     // WARN: Windows only
     #[cfg(windows)]
     {
-        use database::registry_database;
-        let registry_database = registry_database::get_default_database();
         for data in registry_database.iter() {
             if categories_lower.contains(&data.category.to_lowercase())
                 && !disabled_programs_set.contains(data.program.to_lowercase().as_str())
@@ -283,6 +282,12 @@ struct Args {
     /// Example: --database-path=custom_database.json
     #[arg(long, value_name = "path")]
     database_path: Option<String>,
+
+    /// Specify a custom registry database file path.
+    /// Example: --registry-database-path=custom_database.json
+    #[cfg(windows)]
+    #[arg(long, value_name = "registry_path")]
+    registry_database_path: Option<String>,
 }
 
 #[tokio::main]
@@ -314,6 +319,19 @@ async fn main() {
         database::cleaner_database::get_default_database().clone()
     };
 
+    let registry_database: Vec<CleanerDataRegistry> =
+        if let Some(db_path) = &args.registry_database_path {
+            match database::registry_database::get_database_from_file(db_path) {
+                Ok(db) => db,
+                Err(e) => {
+                    eprintln!("Failed to load database from file: {}", e);
+                    std::process::exit(1);
+                }
+            }
+        } else {
+            database::registry_database::get_default_database().clone()
+        };
+
     // Use HashSet for O(1) lookups
     let mut options: HashSet<String> = HashSet::new();
     let mut programs: HashSet<String> = HashSet::new();
@@ -325,7 +343,7 @@ async fn main() {
 
     #[cfg(windows)]
     {
-        for data in registry_database::get_default_database() {
+        for data in &registry_database {
             options.insert(data.category.clone());
             programs.insert(data.program.clone());
         }
@@ -403,7 +421,7 @@ async fn main() {
 
             #[cfg(windows)]
             {
-                let registry_programs: Vec<&str> = registry_database::get_default_database()
+                let registry_programs: Vec<&str> = registry_database
                     .iter()
                     .filter(|data| ans_categories.contains(&data.category))
                     .map(|data| data.program.as_str())
@@ -429,6 +447,7 @@ async fn main() {
                     ans_programs.iter().map(|s| &**s).collect(),
                     ans_categories.iter().map(|s| s.to_lowercase()).collect(),
                     &database,
+                    &registry_database,
                 )
                 .await;
             }
@@ -444,6 +463,7 @@ async fn main() {
             ans_programs.iter().map(|s| s.as_str()).collect(),
             ans_categories,
             &database,
+            &registry_database,
         )
         .await;
     }
