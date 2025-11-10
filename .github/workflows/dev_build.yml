@@ -138,8 +138,8 @@ jobs:
         run: dir target\release\
       - name: Move windows binaries
         run: |
-          move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI.exe
-          move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI.exe
+          move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI_Windows.exe
+          move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI_Windows.exe
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -167,5 +167,5 @@ jobs:
         with:
           name: macos-binaries
           path: |
-            Cross_Cleaner_CLI_Windows_MacOS
-            Cross_Cleaner_GUI_Windows_MacOS
+            Cross_Cleaner_CLI_MacOS
+            Cross_Cleaner_GUI_MacOS
