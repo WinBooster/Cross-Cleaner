@@ -319,11 +319,9 @@ async fn main() {
         database::cleaner_database::get_default_database().clone()
     };
 
-    let mut registry_database: Vec<CleanerDataRegistry> = vec![];
-
-    #[cfg(windows)]
-    {
-        let registry_database2: Vec<CleanerDataRegistry> =
+    let registry_database: Vec<CleanerDataRegistry> = {
+        #[cfg(windows)]
+        {
             if let Some(db_path) = &args.registry_database_path {
                 match database::registry_database::get_database_from_file(db_path) {
                     Ok(db) => db,
@@ -334,9 +332,13 @@ async fn main() {
                 }
             } else {
                 database::registry_database::get_default_database().clone()
-            };
-        registry_database = registry_database2
-    }
+            }
+        }
+        #[cfg(not(windows))]
+        {
+            vec![]
+        }
+    };
 
     // Use HashSet for O(1) lookups
     let mut options: HashSet<String> = HashSet::new();

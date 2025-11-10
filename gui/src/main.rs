@@ -63,10 +63,9 @@ async fn main() -> eframe::Result {
         database::cleaner_database::get_default_database().clone()
     };
 
-    let mut registry_database: Vec<CleanerDataRegistry> = vec![];
-    #[cfg(windows)]
-    {
-        let registry_database2: Vec<CleanerDataRegistry> =
+    let registry_database: Vec<CleanerDataRegistry> = {
+        #[cfg(windows)]
+        {
             if let Some(db_path) = &args.registry_database_path {
                 match database::registry_database::get_database_from_file(db_path) {
                     Ok(db) => db,
@@ -77,9 +76,13 @@ async fn main() -> eframe::Result {
                 }
             } else {
                 database::registry_database::get_default_database().clone()
-            };
-        registry_database = registry_database2;
-    }
+            }
+        }
+        #[cfg(not(windows))]
+        {
+            vec![]
+        }
+    };
     let app = MyApp::from_database(Arc::from(database), Arc::from(registry_database));
     let checkbox_count = app.checked_boxes.len();
     let rows = checkbox_count.div_ceil(3);
