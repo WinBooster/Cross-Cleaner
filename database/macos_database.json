@@ -1,0 +1,66 @@
+[
+  {
+    "path": "~/.Trash/*",
+    "class": "System",
+    "category": "Trash",
+    "program": "System",
+    "remove_files": true,
+    "remove_directories": true
+  },
+  {
+    "path": "~/Library/Logs/DiagnosticReports/*",
+    "class": "System",
+    "category": "Crashes",
+    "program": "System",
+    "remove_files": true,
+    "remove_directories": true
+  },
+  {
+    "path": "/Library/Logs/DiagnosticReports/*",
+    "class": "System",
+    "category": "Crashes",
+    "program": "System",
+    "remove_files": true,
+    "remove_directories": true
+  },
+  {
+    "path": "/Library/logs/*",
+    "class": "System",
+    "category": "Logs",
+    "program": "System",
+    "remove_files": true,
+    "remove_directories": true
+  },
+  {
+    "path": "~/Library/logs/*",
+    "class": "System",
+    "category": "Logs",
+    "program": "System",
+    "remove_files": true,
+    "remove_directories": true
+  },
+  {
+    "path": "~/Library/Caches/*",
+    "class": "System",
+    "category": "Cache",
+    "program": "System",
+    "remove_files": true,
+    "remove_directories": true
+  },
+  {
+    "path": "/tmp/",
+    "class": "System",
+    "category": "Temp",
+    "program": "System",
+    "remove_files": true,
+    "remove_directories": true
+  },
+  {
+    "path": "/var/log/*",
+    "class": "System",
+    "category": "Logs",
+    "program": "System",
+    "remove_files": true,
+    "remove_directories": true
+  }
+]

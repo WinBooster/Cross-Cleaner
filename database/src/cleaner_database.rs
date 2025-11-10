@@ -12,7 +12,7 @@ static DATABASE: OnceLock<Vec<CleanerData>> = OnceLock::new();
 
 pub fn get_default_database() -> &'static Vec<CleanerData> {
     DATABASE.get_or_init(|| {
-        #[cfg(unix)]
+        #[cfg(target_os = "linux")]
         // NOTE: DataBase for Linux and Unix (minified and compressed at compile time)
         let compressed_data =
             include_bytes!(concat!(env!("OUT_DIR"), "/linux_database.min.json.gz"));
