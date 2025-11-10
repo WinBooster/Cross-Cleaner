@@ -20,7 +20,7 @@ pub fn get_default_database() -> &'static Vec<CleanerData> {
         // NOTE: DataBase for Windows (minified and compressed at compile time)
         let compressed_data =
             include_bytes!(concat!(env!("OUT_DIR"), "/windows_database.min.json.gz"));
-        #[cfg(macos)]
+        #[cfg(target_os = macos)]
         // NOTE: DataBase for MacOS (minified and compressed at compile time)
         let compressed_data =
             include_bytes!(concat!(env!("OUT_DIR"), "/macos_database.min.json.gz"));
