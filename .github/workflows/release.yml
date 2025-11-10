@@ -140,19 +140,19 @@ jobs:
     runs-on: macos-latest
     needs: [sort_json]
     permissions: write-all
-    name: Build Windows
+    name: Build MacOS
     steps:
       - uses: actions/checkout@v4
-      - name: Build windows
+      - name: Build macos
         run: cargo build --release
-      - name: Move windows binaries
+      - name: Move macos binaries
         run: |
           move target\release\Cross_Cleaner_CLI Cross_Cleaner_CLI_MacOS
           move target\release\Cross_Cleaner_GUI Cross_Cleaner_GUI_MacOS
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: windows-binaries
+          name: macos-binaries
           path: |
             Cross_Cleaner_CLI_MacOS
             Cross_Cleaner_GUI_MacOS
@@ -176,6 +176,11 @@ jobs:
         with:
           name: windows-binaries
           path: windows-binaries
+      - name: Download MacOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-binaries
+          path: macos-binaries
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
