@@ -106,15 +106,15 @@ jobs:
         run: cargo build --release
       - name: Move linux binaries
         run: |
-          mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI_Linux
-          mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI_Linux
+          mv target/release/Cross_Cleaner_CLI "[Linux] Cross_Cleaner_CLI"
+          mv target/release/Cross_Cleaner_GUI "[Linux] Cross_Cleaner_GUI"
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
         with:
           name: linux-binaries
           path: |
-            Cross_Cleaner_CLI_Linux
-            Cross_Cleaner_GUI_Linux
+            "[Linux] Cross_Cleaner_CLI"
+            "[Linux] Cross_Cleaner_GUI"
 
   build_windows:
     runs-on: windows-latest
@@ -127,38 +127,59 @@ jobs:
         run: cargo build --release
       - name: Move windows binaries
         run: |
-          move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI_Windows.exe
-          move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI_Windows.exe
+          move target\release\Cross_Cleaner_CLI.exe "[Windows] Cross_Cleaner_CLI.exe"
+          move target\release\Cross_Cleaner_GUI.exe "[Windows] Cross_Cleaner_GUI.exe"
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows-binaries
           path: |
-            Cross_Cleaner_CLI_Windows.exe
-            Cross_Cleaner_GUI_Windows.exe
-  build_macos:
+            "[Windows] Cross_Cleaner_CLI.exe"
+            "[Windows] Cross_Cleaner_GUI.exe"
+  build_macos_arm64:
     runs-on: macos-latest
     needs: [sort_json]
     permissions: write-all
-    name: Build MacOS
+    name: Build MacOS Arm64
     steps:
       - uses: actions/checkout@v4
       - name: Build macos
         run: cargo build --release
       - name: Move macos binaries
         run: |
-          mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI_MacOS
-          mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI_MacOS
+          mv target/release/Cross_Cleaner_CLI "[MacOS] [Arm64] Cross_Cleaner_CLI"
+          mv target/release/Cross_Cleaner_GUI "[MacOS] [Arm64] Cross_Cleaner_GUI"
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: macos-binaries
+          name: macos-binaries_arm64
           path: |
-            Cross_Cleaner_CLI_MacOS
-            Cross_Cleaner_GUI_MacOS
+            "[MacOS] [Arm64] Cross_Cleaner_CLI"
+            "[MacOS] [Arm64] Cross_Cleaner_GUI"
+
+  build_macos_intel:
+    runs-on: macos-latest-large
+    needs: [sort_json]
+    permissions: write-all
+    name: Build MacOS Arm64
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build macos
+        run: cargo build --release
+      - name: Move macos binaries
+        run: |
+          mv target/release/Cross_Cleaner_CLI "[MacOS] [Intel] Cross_Cleaner_CLI"
+          mv target/release/Cross_Cleaner_GUI "[MacOS] [Intel] Cross_Cleaner_GUI"
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-binaries_intel
+          path: |
+            "[MacOS] [Intel] Cross_Cleaner_CLI"
+            "[MacOS] [Intel] Cross_Cleaner_GUI"
 
   create_release:
-    needs: [build_linux, build_windows, build_macos]
+    needs: [build_linux, build_windows, build_macos_arm64]
     runs-on: ubuntu-latest
     name: Create Release
     permissions:
@@ -201,12 +222,14 @@ jobs:
             ---
             *Thank you for using Cross Cleaner! Your system, cleaner than ever.*
           files: |
-            linux-binaries/Cross_Cleaner_CLI_Linux
-            linux-binaries/Cross_Cleaner_GUI_Linux
-            macos-binaries/Cross_Cleaner_CLI_MacOS
-            macos-binaries/Cross_Cleaner_GUI_MacOS
-            windows-binaries/Cross_Cleaner_CLI_Windows.exe
-            windows-binaries/Cross_Cleaner_GUI_Windows.exe
+            "linux-binaries/[Linux] Cross_Cleaner_CLI"
+            "linux-binaries/[Linux] Cross_Cleaner_GUI"
+            "macos-binaries_arm64/[MacOS] [Arm64] Cross_Cleaner_CLI"
+            "macos-binaries_arm64/[MacOS] [Arm64] Cross_Cleaner_GUI"
+            "macos-binaries_intel/[MacOS] [Intel] Cross_Cleaner_CLI"
+            "macos-binaries_intel/[MacOS] [Intel] Cross_Cleaner_GUI"
+            "windows-binaries/[Windows] Cross_Cleaner_CLI.exe"
+            "windows-binaries/[Windows] Cross_Cleaner_GUI.exe"
 
   generate-lists:
     runs-on: ubuntu-latest
