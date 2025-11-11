@@ -106,8 +106,8 @@ jobs:
         run: cargo build --release
       - name: Move linux binaries
         run: |
-          mv target/release/Cross_Cleaner_CLI "[Linux] Cross_Cleaner_CLI"
-          mv target/release/Cross_Cleaner_GUI "[Linux] Cross_Cleaner_GUI"
+          mv "target/release/Cross_Cleaner_CLI" "[Linux] Cross_Cleaner_CLI"
+          mv "target/release/Cross_Cleaner_GUI" "[Linux] Cross_Cleaner_GUI"
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -126,8 +126,8 @@ jobs:
         run: cargo build --release
       - name: Move windows binaries
         run: |
-          move target\release\Cross_Cleaner_CLI.exe "[Windows] Cross_Cleaner_CLI.exe"
-          move target\release\Cross_Cleaner_GUI.exe "[Windows] Cross_Cleaner_GUI.exe"
+          move "target\release\Cross_Cleaner_CLI.exe" "[Windows] Cross_Cleaner_CLI.exe"
+          move "target\release\Cross_Cleaner_GUI.exe" "[Windows] Cross_Cleaner_GUI.exe"
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -146,8 +146,8 @@ jobs:
         run: cargo build --release
       - name: Move macos binaries
         run: |
-          mv target/release/Cross_Cleaner_CLI "[MacOS] [Arm64] Cross_Cleaner_CLI"
-          mv target/release/Cross_Cleaner_GUI "[MacOS] [Arm64] Cross_Cleaner_GUI"
+          mv "target/release/Cross_Cleaner_CLI" "[MacOS] [Arm64] Cross_Cleaner_CLI"
+          mv "target/release/Cross_Cleaner_GUI" "[MacOS] [Arm64] Cross_Cleaner_GUI"
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
