@@ -199,12 +199,12 @@ jobs:
             ---
             *Thank you for using Cross Cleaner! Your system, cleaner than ever.*
           files: |
-            "linux-binaries/Linux-Cross_Cleaner_CLI"
-            "linux-binaries/Linux-Cross_Cleaner_GUI"
-            "macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_CLI"
-            "macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_GUI"
-            "windows-binaries/Windows-Cross_Cleaner_CLI.exe"
-            "windows-binaries/Windows-Cross_Cleaner_GUI.exe"
+            linux-binaries/Linux-Cross_Cleaner_CLI
+            linux-binaries/Linux-Cross_Cleaner_GUI
+            macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_CLI
+            macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_GUI
+            windows-binaries/Windows-Cross_Cleaner_CLI.exe
+            windows-binaries/Windows-Cross_Cleaner_GUI.exe
 
   generate-lists:
     runs-on: ubuntu-latest
