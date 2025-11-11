@@ -203,8 +203,6 @@ jobs:
             "linux-binaries/[Linux] Cross_Cleaner_GUI"
             "macos-binaries_arm64/[MacOS] [Arm64] Cross_Cleaner_CLI"
             "macos-binaries_arm64/[MacOS] [Arm64] Cross_Cleaner_GUI"
-            "macos-binaries_intel/[MacOS] [Intel] Cross_Cleaner_CLI"
-            "macos-binaries_intel/[MacOS] [Intel] Cross_Cleaner_GUI"
             "windows-binaries/[Windows] Cross_Cleaner_CLI.exe"
             "windows-binaries/[Windows] Cross_Cleaner_GUI.exe"
 
