@@ -155,28 +155,8 @@ jobs:
           path: |
             "[MacOS] [Arm64] Cross_Cleaner_CLI"
             "[MacOS] [Arm64] Cross_Cleaner_GUI"
-  build_macos_intel:
-    runs-on: macos-14-large
-    needs: [sort_json]
-    permissions: write-all
-    name: Build MacOS Intel
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build macos
-        run: cargo build --release
-      - name: Move macos binaries
-        run: |
-          mv target/release/Cross_Cleaner_CLI "[MacOS] [Intel] Cross_Cleaner_CLI"
-          mv target/release/Cross_Cleaner_GUI "[MacOS] [Intel] Cross_Cleaner_GUI"
-      - name: Upload Windows artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: macos-binaries_intel
-          path: |
-            "[MacOS] [Intel] Cross_Cleaner_CLI"
-            "[MacOS] [Intel] Cross_Cleaner_GUI"
   create_release:
-    needs: [build_linux, build_windows, build_macos_arm64, build_macos_intel]
+    needs: [build_linux, build_windows, build_macos_arm64]
     runs-on: ubuntu-latest
     name: Create Release
     permissions:
