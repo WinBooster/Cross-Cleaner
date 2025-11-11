@@ -115,7 +115,6 @@ jobs:
           path: |
             "[Linux] Cross_Cleaner_CLI"
             "[Linux] Cross_Cleaner_GUI"
-
   build_windows:
     runs-on: windows-latest
     needs: [sort_json]
@@ -156,12 +155,11 @@ jobs:
           path: |
             "[MacOS] [Arm64] Cross_Cleaner_CLI"
             "[MacOS] [Arm64] Cross_Cleaner_GUI"
-
   build_macos_intel:
     runs-on: macos-latest-large
     needs: [sort_json]
     permissions: write-all
-    name: Build MacOS Arm64
+    name: Build MacOS Intel
     steps:
       - uses: actions/checkout@v4
       - name: Build macos
@@ -177,9 +175,8 @@ jobs:
           path: |
             "[MacOS] [Intel] Cross_Cleaner_CLI"
             "[MacOS] [Intel] Cross_Cleaner_GUI"
-
   create_release:
-    needs: [build_linux, build_windows, build_macos_arm64]
+    needs: [build_linux, build_windows, build_macos_arm64, build_macos_intel]
     runs-on: ubuntu-latest
     name: Create Release
     permissions:
