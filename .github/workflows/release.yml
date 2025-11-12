@@ -190,7 +190,8 @@ jobs:
             ## ✨ What's New
 
             ### 🪟 Windows Enhancements
-            - **Murglar** Added logs clearing
+            - **Void Train** Added logs, game saves, game settings clearing
+            - **Schedule I** Added logs, game saves clearing
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
