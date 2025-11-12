@@ -48,7 +48,7 @@
     "remove_directories": true
   },
   {
-    "path": "/tmp/",
+    "path": "/tmp/*",
     "class": "System",
     "category": "Temp",
     "program": "System",
