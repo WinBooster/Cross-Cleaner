@@ -320,25 +320,18 @@ async fn main() {
     } else {
         database::cleaner_database::get_default_database().clone()
     };
-
+    #[cfg(windows)]
     let registry_database: Vec<CleanerDataRegistry> = {
-        #[cfg(windows)]
-        {
-            if let Some(db_path) = &args.registry_database_path {
-                match database::registry_database::get_database_from_file(db_path) {
-                    Ok(db) => db,
-                    Err(e) => {
-                        eprintln!("Failed to load database from file: {}", e);
-                        std::process::exit(1);
-                    }
+        if let Some(db_path) = &args.registry_database_path {
+            match database::registry_database::get_database_from_file(db_path) {
+                Ok(db) => db,
+                Err(e) => {
+                    eprintln!("Failed to load database from file: {}", e);
+                    std::process::exit(1);
                 }
-            } else {
-                database::registry_database::get_default_database().clone()
             }
-        }
-        #[cfg(not(windows))]
-        {
-            vec![]
+        } else {
+            database::registry_database::get_default_database().clone()
         }
     };
 
