@@ -1,9 +1,9 @@
-# Linux Clearing Programs Catalog v2.0.1.9
+# Linux Clearing Programs Catalog v2.0.2.0
 **Total categories in database:** 12
 
-**Total programs in database:** 62
+**Total programs in database:** 63
 
-**Total pathes in database:** 140
+**Total pathes in database:** 145
 
 ## Audio
 
@@ -107,7 +107,8 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [Yay](https://github.com/Jguer/yay) | Cache |
+| 1 | Apt | Cache |
+| 2 | [Yay](https://github.com/Jguer/yay) | Cache |
 
 
 ## Password Manager
