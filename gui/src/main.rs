@@ -301,6 +301,7 @@ struct MyApp {
     pub result_receiver: Option<mpsc::Receiver<(u64, u64, u64, Vec<Cleared>)>>,
 
     pub database: Arc<[CleanerData]>,
+    #[cfg(windows)]
     pub regisry_database: Arc<[CleanerDataRegistry]>,
 }
 
@@ -323,17 +324,17 @@ impl MyApp {
             }
         }
 
-        options.sort_by(|a, b| {
-            let priority = |s: &str| match s {
-                "Cache" => 0,
-                "Logs" => 1,
-                "Crashes" => 2,
-                "Documentation" => 3,
-                "Backups" => 4,
-                "LastActivity" => 5,
-                _ => 6,
-            };
+        let priority = |s: &str| match s {
+            "Cache" => 0,
+            "Logs" => 1,
+            "Crashes" => 2,
+            "Documentation" => 3,
+            "Backups" => 4,
+            "LastActivity" => 5,
+            _ => 6,
+        };
 
+        options.sort_by(|a, b| {
             let a_prio = priority(a);
             let b_prio = priority(b);
 
@@ -353,6 +354,7 @@ impl MyApp {
 
         Self {
             database,
+            #[cfg(windows)]
             regisry_database: reg_database,
             checked_boxes,
             task_handle: None,
