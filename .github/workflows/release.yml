@@ -190,8 +190,15 @@ jobs:
             ## ✨ What's New
 
             ### 🪟 Windows Enhancements
+            - **Audacity** Added documentation clearing
             - **Void Train** Added logs, game saves, game settings clearing
             - **Schedule I** Added logs, game saves clearing
+
+            ### 🐧 Linux Enhancements
+            - **Apt** Added cacle clearing
+
+            ### 🍎 MacOS Enhancements
+            - **System** Improved cache clearing
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:

@@ -129,7 +129,7 @@ async fn work(
     categories: Vec<String>,
     progress_sender: mpsc::Sender<String>,
     database: &[CleanerData],
-    registry_database: &[CleanerDataRegistry],
+    #[cfg(windows)] registry_database: &[CleanerDataRegistry],
     excluded_programs: HashSet<String>,
 ) -> (u64, u64, u64, Vec<Cleared>) {
     let mut current_task = 0;
@@ -674,6 +674,7 @@ impl eframe::App for MyApp {
                                 selected_categories,
                                 progress_sender,
                                 &database,
+                                #[cfg(windows)]
                                 &reg_database,
                                 excluded_programs,
                             )
@@ -753,9 +754,7 @@ impl eframe::App for MyApp {
                                 .push((Rc::new(RefCell::new(true)), program));
                         }
 
-                        self.search_query.clear();
                         self.show_program_selection = true;
-                        // Resize window will happen in the next frame when show_program_selection is true
                     }
                 }
             }

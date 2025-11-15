@@ -62,7 +62,7 @@ async fn work(
     disabled_programs: Vec<&str>,
     categories: Vec<String>,
     database: &[CleanerData],
-    registry_database: &[CleanerDataRegistry],
+    #[cfg(windows)] registry_database: &[CleanerDataRegistry],
 ) {
     // Use atomics for lock-free concurrent counting - BLAZING FAST!
     let bytes_cleared = Arc::new(AtomicU64::new(0));
@@ -457,6 +457,7 @@ async fn main() {
                     ans_programs.iter().map(|s| &**s).collect(),
                     ans_categories.iter().map(|s| s.to_lowercase()).collect(),
                     &database,
+                    #[cfg(windows)]
                     &registry_database,
                 )
                 .await;
@@ -473,6 +474,7 @@ async fn main() {
             ans_programs.iter().map(|s| s.as_str()).collect(),
             ans_categories,
             &database,
+            #[cfg(windows)]
             &registry_database,
         )
         .await;
