@@ -7,6 +7,13 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Program Files\\Audacity",
+    "category": "Documentation",
+    "program": "Audacity",
+    "class": "Audio",
+    "files_to_remove": ["LICENSE.txt"]
+  },
+  {
     "path": "{drive}Program Files (x86)\\360\\Total Security",
     "class": "Security",
     "category": "Logs",
