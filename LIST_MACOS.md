@@ -1,5 +1,5 @@
-# Linux Clearing Programs Catalog v2.0.1.9
-**Total categories in database:** 5
+# Linux Clearing Programs Catalog v2.0.2.0
+**Total categories in database:** 4
 
 **Total programs in database:** 1
 
@@ -9,6 +9,6 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | System | Cache, Crashes, Logs, Temp, Trash |
+| 1 | System | Cache, Crashes, Logs, Trash |
 
 

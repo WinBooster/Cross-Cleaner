@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.1.9
+# Windows Clearing Programs Catalog v2.0.2.0
 **Total categories in database:** 15
 
-**Total programs in database:** 175
+**Total programs in database:** 181
 
-**Total pathes in database:** 413
+**Total pathes in database:** 423
 
 ## AntiCheat
 
@@ -18,7 +18,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [7-Zip](https://www.7-zip.org/download.html) | Logs |
+| 1 | [7-Zip](https://www.7-zip.org/download.html) | Documentation |
 | 2 | Magic TDX | Documentation |
 | 3 | [WinRaR](https://www.win-rar.com/predownload.html) | Documentation |
 
@@ -29,11 +29,12 @@
 | --- | --- | --- |
 | 1 | [AAF Optimus DCH Audio](https://github.com/AAFOptimus/AAFFamilyDCHAudio) | Documentation |
 | 2 | [ASIO4ALL v2](https://asio4all.org/about/download-asio4all) | Documentation |
-| 3 | [FL Studio](https://www.image-line.com/fl-studio-download) | Documentation |
-| 4 | [Murglar](https://murglar.app) | Logs |
-| 5 | [SoundWire Server](https://georgielabs.net) | Documentation |
-| 6 | [Spotify](https://open.spotify.com/download) | Cache, Logs |
-| 7 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
+| 3 | [Audacity](https://www.audacityteam.org) | Documentation |
+| 4 | [FL Studio](https://www.image-line.com/fl-studio-download) | Documentation |
+| 5 | [Murglar](https://murglar.app) | Logs |
+| 6 | [SoundWire Server](https://georgielabs.net) | Documentation |
+| 7 | [Spotify](https://open.spotify.com/download) | Cache, Logs |
+| 8 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
 
 
 ## Browser
@@ -128,22 +129,26 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [Arizona Games Launcher](https://arizona-rp.com/#how-to-play) | Crashes, Logs |
-| 2 | [Counter-Strike Global Offensive](https://store.steampowered.com/app/730/CounterStrike_2) | Game settings |
-| 3 | [Dota 2](https://www.dota2.com/home) | Game settings |
-| 4 | [Electronic Arts Desktop](https://www.ea.com/ea-app) | Logs |
-| 5 | [Epic Games Launcher](https://store.epicgames.com/en-US/download) | Logs |
-| 6 | [Lords Mobile](https://lordsmobile.igg.com/pc) | Logs |
-| 7 | [Melissia Games Launcher](https://melissia.games) | Documentation, Logs |
-| 8 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
-| 9 | [Roblox](https://www.roblox.com/download) | Logs |
-| 10 | Rockstar Games | Crashes |
-| 11 | [Rust](https://store.steampowered.com/app/252490/Rust) | Game settings |
-| 12 | [Steam](https://store.steampowered.com/about) | Accounts |
-| 13 | [Terraria](https://terraria.org) | Game saves, Game settings |
-| 14 | [The Powder Toy](https://powdertoy.co.uk) | Game saves |
-| 15 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game settings |
-| 16 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
+| 1 | [ArcheAge](https://archeage.ru) | Logs |
+| 2 | [Arizona Games Launcher](https://arizona-rp.com/#how-to-play) | Crashes, Logs |
+| 3 | [Counter-Strike Global Offensive](https://store.steampowered.com/app/730/CounterStrike_2) | Game settings |
+| 4 | [Dota 2](https://www.dota2.com/home) | Game settings |
+| 5 | [Electronic Arts Desktop](https://www.ea.com/ea-app) | Logs |
+| 6 | [Epic Games Launcher](https://store.epicgames.com/en-US/download) | Logs |
+| 7 | [Genshin Impact](https://genshin.hoyoverse.com) | Documentation, Logs |
+| 8 | [Lords Mobile](https://lordsmobile.igg.com/pc) | Logs |
+| 9 | [Melissia Games Launcher](https://melissia.games) | Documentation, Logs |
+| 10 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
+| 11 | [Roblox](https://www.roblox.com/download) | Logs |
+| 12 | Rockstar Games | Crashes |
+| 13 | [Rust](https://store.steampowered.com/app/252490/Rust) | Game settings |
+| 14 | [Schedule I](https://store.steampowered.com/app/3164500/Schedule_I) | Game saves, Logs |
+| 15 | [Steam](https://store.steampowered.com/about) | Accounts |
+| 16 | [Terraria](https://terraria.org) | Game saves, Game settings |
+| 17 | [The Powder Toy](https://powdertoy.co.uk) | Game saves |
+| 18 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game settings |
+| 19 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
+| 20 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game saves, Game settings, Logs |
 
 
 ## Image
@@ -229,19 +234,20 @@
 | 1 | [360 Total Security](https://www.360totalsecurity.com) | Logs |
 | 2 | [4uKey for Android](https://www.tenorshare.ru/products/android-password-reset-tool.html) | Logs |
 | 3 | [Avast](https://www.avast.ru) | Documentation, Logs |
-| 4 | GnuPG | Documentation |
-| 5 | [Gpg4win](https://www.gpg4win.org) | Documentation |
-| 6 | [I2P](https://geti2p.net/download) | Documentation, Logs |
-| 7 | [IObit Malware Fighter](https://www.iobit.com/en/malware-fighter.php) | Logs |
-| 8 | [NetLimiter](https://www.netlimiter.com/download) | Logs |
-| 9 | [OONI Probe](https://ooni.org/install) | Logs |
-| 10 | [Panda Security](https://www.pandasecurity.com) | Logs |
-| 11 | [Process Hacker 2](https://systeminformer.sourceforge.io/downloads) | Documentation |
-| 12 | [Process Lasso](https://bitsum.com) | Logs |
-| 13 | [Sandboxie+](https://sandboxie-plus.com) | Documentation |
-| 14 | [SystemInformer](https://systeminformer.com/downloads) | Documentation |
-| 15 | [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | Documentation, Logs |
-| 16 | [Zapret](https://github.com/bol-van/zapret) | Logs |
+| 4 | Doctor Web Cureit | Logs |
+| 5 | [GnuPG](https://www.gnupg.org/download/index.html) | Documentation |
+| 6 | [Gpg4win](https://www.gpg4win.org) | Documentation |
+| 7 | [I2P](https://geti2p.net/download) | Documentation, Logs |
+| 8 | [IObit Malware Fighter](https://www.iobit.com/en/malware-fighter.php) | Logs |
+| 9 | [NetLimiter](https://www.netlimiter.com/download) | Logs |
+| 10 | [OONI Probe](https://ooni.org/install) | Logs |
+| 11 | [Panda Security](https://www.pandasecurity.com) | Logs |
+| 12 | [Process Hacker 2](https://systeminformer.sourceforge.io/downloads) | Documentation |
+| 13 | [Process Lasso](https://bitsum.com) | Logs |
+| 14 | [Sandboxie+](https://sandboxie-plus.com) | Documentation |
+| 15 | [SystemInformer](https://systeminformer.com/downloads) | Documentation |
+| 16 | [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | Documentation, Logs |
+| 17 | [Zapret](https://github.com/bol-van/zapret) | Logs |
 
 
 ## Spyware
