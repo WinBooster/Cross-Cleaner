@@ -3,9 +3,9 @@ resolver = "3"
 members = ["cli", "gui"]
 
 [profile.release]
-lto = "fat"
+lto = true
 codegen-units = 1
-opt-level = 3
+opt-level = "z"
 strip = true
 panic = "abort"
 debug = false

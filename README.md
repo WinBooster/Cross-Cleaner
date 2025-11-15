@@ -20,7 +20,6 @@
 
 ### Key Features
 
-- ⚡ **Blazing Fast**: Optimized with `opt-level=3`, mimalloc allocator, and atomic operations for **10-50x faster** performance
 - 🚀 **Multi-threaded**: Leverages rayon for parallel processing on multi-core systems
 - 🔒 **Secure**: Carefully preserves critical system files
 - 💻 **Cross-Platform**: Full support for [Windows](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_WINDOWS.md), [MacOS](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_MACOS.md) and [Linux](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_LINUX.md)
