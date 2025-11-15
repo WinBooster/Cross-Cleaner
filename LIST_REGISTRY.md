@@ -16,7 +16,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Binary Ninja | LastActivity |
+| 1 | [Binary Ninja](https://binary.ninja) | LastActivity |
 | 2 | [Windows](https://www.microsoft.com/download/windows) | LastActivity |
 
 
