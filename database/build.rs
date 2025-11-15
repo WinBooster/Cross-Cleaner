@@ -76,7 +76,7 @@ fn main() {
     let macos_out_path = Path::new(&out_dir).join("macos_database.min.json.gz");
 
     println!(
-        "Linux DB: {} bytes -> {} bytes ({:.1}% reduction)",
+        "MacOS DB: {} bytes -> {} bytes ({:.1}% reduction)",
         macos_json.len(),
         macos_compressed.len(),
         100.0 - (macos_compressed.len() as f64 / macos_json.len() as f64 * 100.0)

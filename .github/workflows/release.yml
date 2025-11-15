@@ -193,6 +193,8 @@ jobs:
             - **Audacity** Added documentation clearing
             - **Void Train** Added logs, game saves, game settings clearing
             - **Schedule I** Added logs, game saves clearing
+            - **Genshin Impact** Added documentation, logs clearing
+            - **ArcheAge** Added logs clearing
 
             ### 🐧 Linux Enhancements
             - **Apt** Added cacle clearing
