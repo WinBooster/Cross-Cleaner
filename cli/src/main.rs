@@ -7,7 +7,9 @@ use cleaner::clear_data;
 use crossterm::execute;
 #[cfg(windows)]
 use database::registry_database;
-use database::structures::{CleanerData, CleanerDataRegistry, Cleared};
+#[cfg(windows)]
+use database::structures::CleanerDataRegistry;
+use database::structures::{CleanerData, Cleared};
 use database::utils::get_file_size_string;
 use database::{get_icon, get_version};
 use futures::stream::{FuturesUnordered, StreamExt};

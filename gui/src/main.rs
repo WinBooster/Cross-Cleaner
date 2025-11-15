@@ -667,7 +667,7 @@ impl eframe::App for MyApp {
                         self.results_window_resized = false;
 
                         let database = Arc::clone(&self.database);
-                        #[cfg(windows)
+                        #[cfg(windows)]
                         let reg_database = Arc::clone(&self.regisry_database);
                         let excluded_programs = self.excluded_programs.clone();
                         let handle = tokio::spawn(async move {
