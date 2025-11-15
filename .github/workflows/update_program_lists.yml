@@ -1,12 +1,12 @@
 name: Update program lists
 
-on: 
+on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version number (e.g., 2.0.1)'
+        description: "Version number (e.g., 2.0.1)"
         required: true
-        default: '2.0.1'
+        default: "2.0.1"
 
 env:
   CARGO_TERM_COLOR: always
@@ -18,38 +18,38 @@ jobs:
     name: Sorting json
     permissions: write-all
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Sort JSON files by program field
-      run: |
-        sudo apt-get -y install jq
-        
-        JSON_FILES=("database/linux_database.json" "database/windows_database.json")
-        for JSON_FILE in "${JSON_FILES[@]}"; do
-          echo "Processing $JSON_FILE..."
-          
-          if [ ! -f "$JSON_FILE" ]; then
-            echo "Error: JSON file not found at $JSON_FILE"
-            exit 1
-          fi
-          
-          jq 'sort_by(.program | ascii_downcase)' "$JSON_FILE" > "${JSON_FILE}.tmp"
-          
-          if [ $? -eq 0 ]; then
-            mv "${JSON_FILE}.tmp" "$JSON_FILE"
-            echo "Successfully sorted $JSON_FILE"
-          else
-            echo "Error: Failed to sort $JSON_FILE"
-            exit 1
-          fi
-        done
-        
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add "${JSON_FILES[@]}"
-        git commit -m "Auto-sorted JSON files by program field" || echo "No changes to commit"
-        git push || echo "No changes to push"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Sort JSON files by program field
+        run: |
+          sudo apt-get -y install jq
+
+          JSON_FILES=("database/linux_database.json" "database/windows_database.json")
+          for JSON_FILE in "${JSON_FILES[@]}"; do
+            echo "Processing $JSON_FILE..."
+
+            if [ ! -f "$JSON_FILE" ]; then
+              echo "Error: JSON file not found at $JSON_FILE"
+              exit 1
+            fi
+
+            jq 'sort_by(.program | ascii_downcase)' "$JSON_FILE" > "${JSON_FILE}.tmp"
+
+            if [ $? -eq 0 ]; then
+              mv "${JSON_FILE}.tmp" "$JSON_FILE"
+              echo "Successfully sorted $JSON_FILE"
+            else
+              echo "Error: Failed to sort $JSON_FILE"
+              exit 1
+            fi
+          done
+
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add "${JSON_FILES[@]}"
+          git commit -m "Auto-sorted JSON files by program field" || echo "No changes to commit"
+          git push || echo "No changes to push"
 
   generate-lists:
     runs-on: ubuntu-latest
@@ -59,170 +59,325 @@ jobs:
       contents: write
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: sudo apt-get -y install jq
+      - name: Install dependencies
+        run: sudo apt-get -y install jq
 
-    - name: Process Windows data
-      run: |
-        # Load program links into a variable
-        if [ -f "database/program_links.json" ]; then
-          program_links=$(jq -r '.' database/program_links.json)
-        else
-          program_links="{}"
-        fi
-
-        # Header
-        echo "# Windows Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_WINDOWS.md
-        total_categories=$(jq -r 'map(.category) | unique | length' database/windows_database.json)
-        total_programs=$(jq -r 'map(.program) | unique | length' database/windows_database.json)
-        total_pathes=$(jq -r 'map(.path) | unique | length' database/windows_database.json)
-        echo -e "**Total categories in database:** $total_categories\n" >> LIST_WINDOWS.md
-        echo -e "**Total programs in database:** $total_programs\n" >> LIST_WINDOWS.md
-        echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_WINDOWS.md
-        
-        jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/windows_database.json | while IFS= read -r class; do
-          echo -e "## $class\n" >> LIST_WINDOWS.md
-          
-          # Get programs for this class
-          programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/windows_database.json)
-          
-          if [ -n "$programs" ]; then
-            echo "| № | Program | Categories |" >> LIST_WINDOWS.md
-            echo "| --- | --- | --- |" >> LIST_WINDOWS.md
-            
-            i=0
-            while IFS= read -r line; do
-              program=$(echo "$line" | jq -r '.[0].program')
-              # Check if program has a link
-              program_clean=$(echo "$program" | sed 's/ (Wine)//g')
-              program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
-              if [ -n "$program_link" ]; then
-                displayed_program="[$program]($program_link)"
-              else
-                displayed_program="$program"
-              fi
-              categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-              echo "| $((++i)) | $displayed_program | $categories |" >> LIST_WINDOWS.md
-            done <<< "$programs"
+      - name: Process Windows data
+        run: |
+          # Load program links into a variable
+          if [ -f "database/program_links.json" ]; then
+            program_links=$(jq -r '.' database/program_links.json)
           else
-            echo "*No programs found for this class*" >> LIST_WINDOWS.md
+            program_links="{}"
           fi
-          
-          echo -e "\n" >> LIST_WINDOWS.md
-        done
 
-        # Handle null class separately if needed
-        if jq -e '.[] | select(.class == null)' database/windows_database.json >/dev/null; then
-          echo -e "## Uncategorized\n" >> LIST_WINDOWS.md
-          programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/windows_database.json)
-          
-          if [ -n "$programs" ]; then
-            echo "| № | Program | Categories |" >> LIST_WINDOWS.md
-            echo "| --- | --- | --- |" >> LIST_WINDOWS.md
-            
-            i=0
-            while IFS= read -r line; do
-              program=$(echo "$line" | jq -r '.[0].program')
-              # Check if program has a link
-              program_clean=$(echo "$program" | sed 's/ (Wine)//g')
-              program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
-              if [ -n "$program_link" ]; then
-                displayed_program="[$program]($program_link)"
-              else
-                displayed_program="$program"
-              fi
-              categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-              echo "| $((++i)) | $displayed_program | $categories |" >> LIST_WINDOWS.md
-            done <<< "$programs"
+          # Header
+          echo "# Windows Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_WINDOWS.md
+          total_categories=$(jq -r 'map(.category) | unique | length' database/windows_database.json)
+          total_programs=$(jq -r 'map(.program) | unique | length' database/windows_database.json)
+          total_pathes=$(jq -r 'map(.path) | unique | length' database/windows_database.json)
+          echo -e "**Total categories in database:** $total_categories\n" >> LIST_WINDOWS.md
+          echo -e "**Total programs in database:** $total_programs\n" >> LIST_WINDOWS.md
+          echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_WINDOWS.md
+
+          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/windows_database.json | while IFS= read -r class; do
+            echo -e "## $class\n" >> LIST_WINDOWS.md
+
+            # Get programs for this class
+            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/windows_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_WINDOWS.md
+              echo "| --- | --- | --- |" >> LIST_WINDOWS.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_WINDOWS.md
+              done <<< "$programs"
+            else
+              echo "*No programs found for this class*" >> LIST_WINDOWS.md
+            fi
+
+            echo -e "\n" >> LIST_WINDOWS.md
+          done
+
+          # Handle null class separately if needed
+          if jq -e '.[] | select(.class == null)' database/windows_database.json >/dev/null; then
+            echo -e "## Uncategorized\n" >> LIST_WINDOWS.md
+            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/windows_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_WINDOWS.md
+              echo "| --- | --- | --- |" >> LIST_WINDOWS.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_WINDOWS.md
+              done <<< "$programs"
+            else
+              echo "*No uncategorized programs found*" >> LIST_WINDOWS.md
+            fi
+          fi
+
+      - name: Process Windows Registry data
+        run: |
+          # Load program links into a variable
+          if [ -f "database/program_links.json" ]; then
+            program_links=$(jq -r '.' database/program_links.json)
           else
-            echo "*No uncategorized programs found*" >> LIST_WINDOWS.md
+            program_links="{}"
           fi
-        fi
 
-    - name: Process Linux data
-      run: |
-        # Load program links into a variable
-        if [ -f "database/program_links.json" ]; then
-          program_links=$(jq -r '.' database/program_links.json)
-        else
-          program_links="{}"
-        fi
+          # Header
+          echo "# Windows Registry Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_REGISTRY.md
+          total_categories=$(jq -r 'map(.category) | unique | length' database/registry_database.json)
+          total_programs=$(jq -r 'map(.program) | unique | length' database/registry_database.json)
+          total_pathes=$(jq -r 'map(.path) | unique | length' database/registry_database.json)
+          echo -e "**Total categories in database:** $total_categories\n" >> LIST_REGISTRY.md
+          echo -e "**Total programs in database:** $total_programs\n" >> LIST_REGISTRY.md
+          echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_REGISTRY.md
 
-        # Header
-        echo "# Linux Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_LINUX.md
-        total_categories=$(jq -r 'map(.category) | unique | length' database/linux_database.json)
-        total_programs=$(jq -r 'map(.program) | unique | length' database/linux_database.json)
-        total_pathes=$(jq -r 'map(.path) | unique | length' database/linux_database.json)
-        echo -e "**Total categories in database:** $total_categories\n" >> LIST_LINUX.md
-        echo -e "**Total programs in database:** $total_programs\n" >> LIST_LINUX.md
-        echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_LINUX.md
-        
-        jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/linux_database.json | while IFS= read -r class; do
-          echo -e "## $class\n" >> LIST_LINUX.md
-          
-          # Get programs for this class
-          programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/linux_database.json)
-          
-          if [ -n "$programs" ]; then
-            echo "| № | Program | Categories |" >> LIST_LINUX.md
-            echo "| --- | --- | --- |" >> LIST_LINUX.md
-            
-            i=0
-            while IFS= read -r line; do
-              program=$(echo "$line" | jq -r '.[0].program')
-              # Check if program has a link
-              program_clean=$(echo "$program" | sed 's/ (Wine)//g')
-              program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
-              if [ -n "$program_link" ]; then
-                displayed_program="[$program]($program_link)"
-              else
-                displayed_program="$program"
-              fi
-              categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-              echo "| $((++i)) | $displayed_program | $categories |" >> LIST_LINUX.md
-            done <<< "$programs"
+          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/registry_database.json | while IFS= read -r class; do
+            echo -e "## $class\n" >> LIST_REGISTRY.md
+
+            # Get programs for this class
+            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/registry_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_REGISTRY.md
+              echo "| --- | --- | --- |" >> LIST_REGISTRY.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_REGISTRY.md
+              done <<< "$programs"
+            else
+              echo "*No programs found for this class*" >> LIST_REGISTRY.md
+            fi
+
+            echo -e "\n" >> LIST_REGISTRY.md
+          done
+
+          # Handle null class separately if needed
+          if jq -e '.[] | select(.class == null)' database/registry_database.json >/dev/null; then
+            echo -e "## Uncategorized\n" >> LIST_REGISTRY.md
+            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/registry_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_REGISTRY.md
+              echo "| --- | --- | --- |" >> LIST_REGISTRY.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_REGISTRY.md
+              done <<< "$programs"
+            else
+              echo "*No uncategorized programs found*" >> LIST_REGISTRY.md
+            fi
+          fi
+
+      - name: Process Linux data
+        run: |
+
+          # Load program links into a variable
+          if [ -f "database/program_links.json" ]; then
+            program_links=$(jq -r '.' database/program_links.json)
           else
-            echo "*No programs found for this class*" >> LIST_LINUX.md
+            program_links="{}"
           fi
-          
-          echo -e "\n" >> LIST_LINUX.md
-        done
 
-        # Handle null class separately if needed
-        if jq -e '.[] | select(.class == null)' database/linux_database.json >/dev/null; then
-          echo -e "## Uncategorized\n" >> LIST_LINUX.md
-          programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/linux_database.json)
-          
-          if [ -n "$programs" ]; then
-            echo "| № | Program | Categories |" >> LIST_LINUX.md
-            echo "| --- | --- | --- |" >> LIST_LINUX.md
-            
-            i=0
-            while IFS= read -r line; do
-              program=$(echo "$line" | jq -r '.[0].program')
-              # Check if program has a link
-              program_clean=$(echo "$program" | sed 's/ (Wine)//g')
-              program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
-              if [ -n "$program_link" ]; then
-                displayed_program="[$program]($program_link)"
-              else
-                displayed_program="$program"
-              fi
-              categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-              echo "| $((++i)) | $displayed_program | $categories |" >> LIST_LINUX.md
-            done <<< "$programs"
-          else
-            echo "*No uncategorized programs found*" >> LIST_LINUX.md
+          # Header
+          echo "# Linux Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_LINUX.md
+          total_categories=$(jq -r 'map(.category) | unique | length' database/linux_database.json)
+          total_programs=$(jq -r 'map(.program) | unique | length' database/linux_database.json)
+          total_pathes=$(jq -r 'map(.path) | unique | length' database/linux_database.json)
+          echo -e "**Total categories in database:** $total_categories\n" >> LIST_LINUX.md
+          echo -e "**Total programs in database:** $total_programs\n" >> LIST_LINUX.md
+          echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_LINUX.md
+
+          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/linux_database.json | while IFS= read -r class; do
+            echo -e "## $class\n" >> LIST_LINUX.md
+
+            # Get programs for this class
+            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/linux_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_LINUX.md
+              echo "| --- | --- | --- |" >> LIST_LINUX.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_LINUX.md
+              done <<< "$programs"
+            else
+              echo "*No programs found for this class*" >> LIST_LINUX.md
+            fi
+
+            echo -e "\n" >> LIST_LINUX.md
+          done
+
+          # Handle null class separately if needed
+          if jq -e '.[] | select(.class == null)' database/linux_database.json >/dev/null; then
+            echo -e "## Uncategorized\n" >> LIST_LINUX.md
+            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/linux_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_LINUX.md
+              echo "| --- | --- | --- |" >> LIST_LINUX.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_LINUX.md
+              done <<< "$programs"
+            else
+              echo "*No uncategorized programs found*" >> LIST_LINUX.md
+            fi
           fi
-        fi
-          
-    - name: Commit changes
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add LIST_*.md
-        git commit -m "Auto-updated program catalogs" || echo "No changes to commit"
-        git push || echo "No changes to push"
+
+      - name: Process MacOS data
+        run: |
+          # Load program links into a variable
+          if [ -f "database/program_links.json" ]; then
+            program_links=$(jq -r '.' database/program_links.json)
+          else
+            program_links="{}"
+          fi
+
+          # Header
+          echo "# Linux Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_MACOS.md
+          total_categories=$(jq -r 'map(.category) | unique | length' database/macos_database.json)
+          total_programs=$(jq -r 'map(.program) | unique | length' database/macos_database.json)
+          total_pathes=$(jq -r 'map(.path) | unique | length' database/macos_database.json)
+          echo -e "**Total categories in database:** $total_categories\n" >> LIST_MACOS.md
+          echo -e "**Total programs in database:** $total_programs\n" >> LIST_MACOS.md
+          echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_MACOS.md
+
+          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/macos_database.json | while IFS= read -r class; do
+            echo -e "## $class\n" >> LIST_MACOS.md
+
+            # Get programs for this class
+            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/macos_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_MACOS.md
+              echo "| --- | --- | --- |" >> LIST_MACOS.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_MACOS.md
+              done <<< "$programs"
+            else
+              echo "*No programs found for this class*" >> LIST_MACOS.md
+            fi
+
+            echo -e "\n" >> LIST_MACOS.md
+          done
+
+          # Handle null class separately if needed
+          if jq -e '.[] | select(.class == null)' database/macos_database.json >/dev/null; then
+            echo -e "## Uncategorized\n" >> LIST_MACOS.md
+            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/macos_database.json)
+
+            if [ -n "$programs" ]; then
+              echo "| № | Program | Categories |" >> LIST_MACOS.md
+              echo "| --- | --- | --- |" >> LIST_MACOS.md
+
+              i=0
+              while IFS= read -r line; do
+                program=$(echo "$line" | jq -r '.[0].program')
+                # Check if program has a link
+                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                if [ -n "$program_link" ]; then
+                  displayed_program="[$program]($program_link)"
+                else
+                  displayed_program="$program"
+                fi
+                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_MACOS.md
+              done <<< "$programs"
+            else
+              echo "*No uncategorized programs found*" >> LIST_MACOS.md
+            fi
+          fi
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add LIST_*.md
+          git commit -m "Auto-updated program catalogs" || echo "No changes to commit"
+          git push || echo "No changes to push"
