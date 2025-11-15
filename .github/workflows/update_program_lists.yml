@@ -25,7 +25,7 @@ jobs:
         run: |
           sudo apt-get -y install jq
 
-          JSON_FILES=("database/linux_database.json" "database/windows_database.json")
+          JSON_FILES=("database/linux_database.json" "database/windows_database.json" "database/registry_database.json" "database/macos_database.json")
           for JSON_FILE in "${JSON_FILES[@]}"; do
             echo "Processing $JSON_FILE..."
 
