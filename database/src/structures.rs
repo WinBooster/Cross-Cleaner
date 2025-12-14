@@ -2,6 +2,7 @@ use crate::utils;
 use serde::{Deserialize, Serialize};
 use tabled::Tabled;
 
+// INFO: Struct for GUI table
 #[derive(PartialEq, Tabled)]
 pub struct Cleared {
     #[tabled(rename = "Program")]
@@ -33,6 +34,7 @@ impl PartialEq<Option<Cleared>> for &Cleared {
     }
 }
 
+// INFO: Struct for clearing files and folders
 #[derive(Serialize, Deserialize, Clone)]
 pub struct CleanerData {
     pub path: String,
@@ -56,20 +58,9 @@ pub struct CleanerData {
     pub remove_files: bool,
 }
 
-fn default_class() -> String {
-    String::from("Other")
-}
-
-pub struct CleanerResult {
-    pub files: u64,
-    pub folders: u64,
-    pub bytes: u64,
-    pub working: bool,
-    pub path: String,
-    pub program: String,
-    pub category: String,
-}
-
+// INFO: Struct for clearing registry
+// WARN: Windows only
+#[cfg(windows)]
 #[derive(Serialize, Deserialize, Clone)]
 pub struct CleanerDataRegistry {
     pub category: String,
@@ -90,4 +81,19 @@ pub struct CleanerDataRegistry {
 
     #[serde(default)]
     pub keys_to_remove: Vec<String>,
+}
+
+fn default_class() -> String {
+    String::from("Other")
+}
+
+// INFO: Struct for task clearing (Result cleared)
+pub struct CleanerResult {
+    pub files: u64,
+    pub folders: u64,
+    pub bytes: u64,
+    pub working: bool,
+    pub path: String,
+    pub program: String,
+    pub category: String,
 }

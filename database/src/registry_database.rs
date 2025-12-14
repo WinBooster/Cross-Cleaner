@@ -16,6 +16,7 @@ use winreg::enums::*;
 
 static DATABASE: OnceLock<Vec<CleanerDataRegistry>> = OnceLock::new();
 
+#[cfg(windows)]
 pub fn get_default_database() -> &'static Vec<CleanerDataRegistry> {
     DATABASE.get_or_init(|| {
         let compressed_data =
@@ -37,6 +38,7 @@ pub fn get_default_database() -> &'static Vec<CleanerDataRegistry> {
     })
 }
 
+#[cfg(windows)]
 pub fn get_database_from_file(file_path: &str) -> Result<Vec<CleanerDataRegistry>, Box<dyn Error>> {
     // INFO: Read file
     let data = fs::read_to_string(file_path)?;
@@ -49,8 +51,10 @@ pub fn get_database_from_file(file_path: &str) -> Result<Vec<CleanerDataRegistry
 
 #[cfg(windows)]
 pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
+    // INFO: Temporary clearing bytes result
     let mut removed: u64 = 0;
 
+    // INFO: Creating output struct
     let mut result = CleanerResult {
         files: 0,
         folders: 0,
@@ -61,6 +65,7 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
         category: data.category.clone(),
     };
 
+    // INFO: Parsing registry key
     let root = if data.path.starts_with("HKEY_CURRENT_USER") {
         Some(RegKey::predef(HKEY_CURRENT_USER))
     } else if data.path.starts_with("HKEY_LOCAL_MACHINE") {
@@ -75,6 +80,7 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
         None
     };
 
+    // INFO: Removing registry key from path
     let path = if data.path.starts_with("HKEY_CURRENT_USER\\") {
         Some(data.path.replace("HKEY_CURRENT_USER\\", ""))
     } else if data.path.starts_with("HKEY_LOCAL_MACHINE\\") {
@@ -89,6 +95,7 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
         None
     };
 
+    // INFO: Main logic
     if root.is_some() && path.is_some() {
         let root = root.unwrap();
         let path = path.unwrap();

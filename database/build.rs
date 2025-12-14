@@ -53,13 +53,21 @@ fn process_database(input_path: &str, output_name: &str) {
 }
 
 fn main() {
-    process_database("registry_database.json", "registry_database.min.json.gz");
-    process_database("windows_database.json", "windows_database.min.json.gz");
+    #[cfg(windows)]
+    {
+        process_database("registry_database.json", "registry_database.min.json.gz");
+        process_database("windows_database.json", "windows_database.min.json.gz");
+    }
+    #[cfg(target_os = "linux")]
     process_database("linux_database.json", "linux_database.min.json.gz");
+    #[cfg(target_os = "macos")]
     process_database("macos_database.json", "macos_database.min.json.gz");
 
     println!("cargo:rerun-if-changed=registry_database.json");
+    #[cfg(windows)]
     println!("cargo:rerun-if-changed=windows_database.json");
+    #[cfg(target_os = "linux")]
     println!("cargo:rerun-if-changed=linux_database.json");
+    #[cfg(target_os = "macos")]
     println!("cargo:rerun-if-changed=macos_database.json");
 }
