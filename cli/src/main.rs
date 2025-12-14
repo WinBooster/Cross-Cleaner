@@ -105,8 +105,7 @@ async fn work(
                 && !disabled_programs_set.contains(data.program.to_lowercase().as_str())
             {
                 let data = Arc::new(data.clone());
-                let task =
-                    task::spawn(async move { registry_database::clear_last_activity(&data) });
+                let task = task::spawn(async move { registry_database::clear_registry(&data) });
                 tasks.push(task);
             }
         }

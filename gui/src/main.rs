@@ -155,8 +155,7 @@ async fn work(
             if categories_set.contains(&data.category) && !excluded_programs.contains(&data.program)
             {
                 let data = Arc::new(data.clone());
-                let task =
-                    task::spawn(async move { registry_database::clear_last_activity(&data) });
+                let task = task::spawn(async move { registry_database::clear_registry(&data) });
                 tasks.push(task);
             }
         }

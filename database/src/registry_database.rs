@@ -48,7 +48,7 @@ pub fn get_database_from_file(file_path: &str) -> Result<Vec<CleanerDataRegistry
 }
 
 #[cfg(windows)]
-pub fn clear_last_activity(data: &CleanerDataRegistry) -> CleanerResult {
+pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
     let mut removed: u64 = 0;
 
     let mut result = CleanerResult {
