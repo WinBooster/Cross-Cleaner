@@ -82,7 +82,7 @@ async fn main() -> eframe::Result {
     #[cfg(windows)]
     let app = MyApp::from_database(Arc::from(database), Arc::from(registry_database));
     #[cfg(not(windows))]
-    let app = MyApp::from_database(Arc::from(database), Arc::from(vec![]));
+    let app = MyApp::from_database(Arc::from(database));
     let checkbox_count = app.checked_boxes.len();
     let rows = checkbox_count.div_ceil(3);
     // INFO: 20px for 1 checkbox, 45px for button
@@ -304,6 +304,7 @@ struct MyApp {
 }
 
 impl MyApp {
+    #[cfg(windows)]
     pub(crate) fn from_database(
         database: Arc<[CleanerData]>,
         reg_database: Arc<[CleanerDataRegistry]>,
@@ -315,7 +316,6 @@ impl MyApp {
             }
         }
 
-        #[cfg(windows)]
         for data in reg_database.iter() {
             if !options.contains(&data.category) {
                 options.push(data.category.clone());
@@ -354,6 +354,68 @@ impl MyApp {
             database,
             #[cfg(windows)]
             regisry_database: reg_database,
+            checked_boxes,
+            task_handle: None,
+            progress_message: String::new(),
+            progress_receiver: None,
+            cleared_data: None,
+            show_results: false,
+            current_task: 0,
+            total_tasks: 0,
+
+            show_program_selection: false,
+            program_checkboxes: vec![],
+            search_query: String::new(),
+            search_query_visible: String::new(),
+            excluded_programs: HashSet::new(),
+            results_window_resized: false,
+
+            result_sender: Some(result_sender),
+            result_receiver: Some(result_receiver),
+        }
+    }
+
+    #[cfg(not(windows))]
+    pub(crate) fn from_database(database: Arc<[CleanerData]>) -> Self {
+        let mut options: Vec<String> = Vec::with_capacity(database.len());
+        for data in database.iter() {
+            if !options.contains(&data.category) {
+                options.push(data.category.clone());
+            }
+        }
+
+        let priority = |s: &str| match s {
+            "Cache" => 0,
+            "Logs" => 1,
+            "Crashes" => 2,
+            "Documentation" => 3,
+            "Backups" => 4,
+            "LastActivity" => 5,
+            _ => 6,
+        };
+
+        options.sort_by(|a, b| {
+            let a_prio = priority(a);
+            let b_prio = priority(b);
+
+            if a_prio == b_prio {
+                a.cmp(b)
+            } else {
+                a_prio.cmp(&b_prio)
+            }
+        });
+
+        let mut checked_boxes = vec![];
+        for option in options {
+            checked_boxes.push((Rc::new(RefCell::new(false)), option));
+        }
+
+        let (result_sender, result_receiver) = mpsc::channel(1);
+
+        Self {
+            database,
+            #[cfg(windows)]
+            regisry_database: vec![],
             checked_boxes,
             task_handle: None,
             progress_message: String::new(),
