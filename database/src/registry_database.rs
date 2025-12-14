@@ -4,6 +4,7 @@ use std::sync::OnceLock;
 
 #[cfg(windows)]
 use crate::registry_utils::{remove_all_in_registry, remove_all_in_tree_in_registry};
+#[cfg(windows)]
 use crate::structures::CleanerDataRegistry;
 #[cfg(windows)]
 use crate::structures::CleanerResult;
