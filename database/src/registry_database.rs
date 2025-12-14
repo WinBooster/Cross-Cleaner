@@ -15,6 +15,7 @@ use winreg::RegKey;
 #[cfg(windows)]
 use winreg::enums::*;
 
+#[cfg(windows)]
 static DATABASE: OnceLock<Vec<CleanerDataRegistry>> = OnceLock::new();
 
 #[cfg(windows)]
