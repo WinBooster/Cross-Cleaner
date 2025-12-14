@@ -69,15 +69,15 @@ pub fn clear_last_activity(data: &CleanerDataRegistry) -> CleanerResult {
         None
     };
 
-    let path = if data.path.starts_with("HKEY_CURRENT_USER") {
+    let path = if data.path.starts_with("HKEY_CURRENT_USER\\") {
         data.path.replace("HKEY_CURRENT_USER\\", "")
-    } else if data.path.starts_with("HKEY_LOCAL_MACHINE") {
+    } else if data.path.starts_with("HKEY_LOCAL_MACHINE\\") {
         data.path.replace("HKEY_LOCAL_MACHINE\\", "")
     } else {
         String::new()
     };
 
-    if root.is_some() {
+    if root.is_some() && path != String::new() {
         let root = root.unwrap();
         if data.remove_all_in_tree {
             removed += remove_all_in_tree_in_registry(&root, path.to_string())

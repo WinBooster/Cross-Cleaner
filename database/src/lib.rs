@@ -211,32 +211,6 @@ mod tests {
     }
 
     #[test]
-    fn test_database_no_duplicates() {
-        let database = get_default_database();
-        let mut seen = std::collections::HashSet::new();
-        let mut duplicates = Vec::new();
-
-        for entry in database.iter() {
-            let key = format!("{}:{}:{}", entry.program, entry.category, entry.path);
-            if !seen.insert(key.clone()) {
-                duplicates.push(key);
-            }
-        }
-
-        // Note: Some duplicates may exist in the database (e.g., same program clearing same path for different purposes)
-        // This test now just reports duplicates without failing
-        if !duplicates.is_empty() {
-            println!(
-                "Found {} duplicate entries (this may be intentional):",
-                duplicates.len()
-            );
-            for dup in duplicates.iter().take(5) {
-                println!("  - {}", dup);
-            }
-        }
-    }
-
-    #[test]
     fn test_database_entries_valid_paths() {
         let database = get_default_database();
 

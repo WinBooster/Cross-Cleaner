@@ -148,17 +148,16 @@ Located in: `database/src/lib.rs`
 - ✅ File size formatting (`test_file_size_string_formatting`)
 - ✅ Data structure validation (`test_cleaner_data_structure`)
 - ✅ Performance (`test_database_performance`)
-- ✅ **NEW**: No duplicates validation (`test_database_no_duplicates`)
-- ✅ **NEW**: Path validation (`test_database_entries_valid_paths`)
-- ✅ **NEW**: Edge case handling (`test_file_size_edge_cases`)
-- ✅ **NEW**: Concurrent access safety (`test_database_concurrent_access`)
-- ✅ **NEW**: Memory efficiency (`test_database_memory_efficiency`)
-- ✅ **NEW**: Category consistency (`test_category_consistency`)
-- ✅ **NEW**: Filtering performance (`test_database_filtering_performance`)
-- ✅ **NEW**: Program name validity (`test_program_name_validity`)
-- ✅ **NEW**: JSON compatibility (`test_json_structure_compatibility`)
-- ✅ **NEW**: Cache efficiency (`test_database_cache_efficiency`)
-- ✅ **NEW**: Default values (`test_cleaner_data_default_values`)
+- ✅ Path validation (`test_database_entries_valid_paths`)
+- ✅ Edge case handling (`test_file_size_edge_cases`)
+- ✅ Concurrent access safety (`test_database_concurrent_access`)
+- ✅ Memory efficiency (`test_database_memory_efficiency`)
+- ✅ Category consistency (`test_category_consistency`)
+- ✅ Filtering performance (`test_database_filtering_performance`)
+- ✅ Program name validity (`test_program_name_validity`)
+- ✅ JSON compatibility (`test_json_structure_compatibility`)
+- ✅ Cache efficiency (`test_database_cache_efficiency`)
+- ✅ Default values (`test_cleaner_data_default_values`)
 
 **Example:**
 ```bash
@@ -494,8 +493,8 @@ cargo clippy -- -D warnings && cargo test --all
 |--------|-------|----------|-----|
 | Database | 24 tests | Core functionality ✅ | +9 tests |
 | Cleaner | 12 tests | File operations ✅ | - |
-| **NEW: Cleaner (PropTest)** | **8 properties (800+ cases)** | **Edge cases ✅** | **+800 cases** |
-| **NEW: CLI (Benchmarks)** | **9 benchmarks** | **Performance ✅** | **+9 benchmarks** |
+| Cleaner (PropTest) | **8 properties (800+ cases)** | **Edge cases ✅** | **+800 cases** |
+| CLI (Benchmarks) | **9 benchmarks** | **Performance ✅** | **+9 benchmarks** |
 | CLI | 10 tests | Arguments & Integration ✅ | - |
 | GUI | 5 tests | Basic functions ✅ (UI not testable) | - |
 
@@ -718,9 +717,9 @@ When contributing:
 ## Future Testing Goals
 
 - [x] Add GUI tests (basic functions) ✅
-- [x] **NEW**: Add benchmark tests with criterion ✅
-- [x] **NEW**: Add property-based tests with proptest ✅
-- [x] **NEW**: Expand database tests ✅
+- [x] Add benchmark tests with criterion ✅
+- [x] Add property-based tests with proptest ✅
+- [x] Expand database tests ✅
 - [ ] Increase code coverage to 90%+
 - [ ] Add fuzzing tests with `cargo-fuzz`
 - [ ] Add mutation testing with `cargo-mutants`
@@ -751,8 +750,8 @@ When contributing:
 ### Test Count Breakdown:
 - Database: 24 tests (+9 new)
 - Cleaner: 12 tests
-- **NEW**: Cleaner PropTests: 8 properties × 100 cases = 800+ test cases
-- **NEW**: CLI Benchmarks: 9 comprehensive benchmarks
+- Cleaner PropTests: 8 properties × 100 cases = 800+ test cases
+- CLI Benchmarks: 9 comprehensive benchmarks
 - CLI Integration: 10 tests
 - GUI: 5 tests
 - **Total: 59 tests + 800+ property cases + 9 benchmarks = 868+ test cases**
