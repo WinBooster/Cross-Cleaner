@@ -65,27 +65,24 @@ async fn main() -> eframe::Result {
         database::cleaner_database::get_default_database().clone()
     };
 
+    #[cfg(windows)]
     let registry_database: Vec<CleanerDataRegistry> = {
-        #[cfg(windows)]
-        {
-            if let Some(db_path) = &args.registry_database_path {
-                match database::registry_database::get_database_from_file(db_path) {
-                    Ok(db) => db,
-                    Err(e) => {
-                        eprintln!("Failed to load database from file: {}", e);
-                        std::process::exit(1);
-                    }
+        if let Some(db_path) = &args.registry_database_path {
+            match database::registry_database::get_database_from_file(db_path) {
+                Ok(db) => db,
+                Err(e) => {
+                    eprintln!("Failed to load database from file: {}", e);
+                    std::process::exit(1);
                 }
-            } else {
-                database::registry_database::get_default_database().clone()
             }
-        }
-        #[cfg(not(windows))]
-        {
-            vec![]
+        } else {
+            database::registry_database::get_default_database().clone()
         }
     };
+    #[cfg(windows)]
     let app = MyApp::from_database(Arc::from(database), Arc::from(registry_database));
+    #[cfg(not(windows))]
+    let app = MyApp::from_database(Arc::from(database), Arc::from(vec![]));
     let checkbox_count = app.checked_boxes.len();
     let rows = checkbox_count.div_ceil(3);
     // INFO: 20px for 1 checkbox, 45px for button
