@@ -12,7 +12,7 @@ use std::io::Read;
 #[cfg(windows)]
 use winreg::RegKey;
 #[cfg(windows)]
-use winreg::enums::{HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE};
+use winreg::enums::*;
 
 static DATABASE: OnceLock<Vec<CleanerDataRegistry>> = OnceLock::new();
 
@@ -65,20 +65,33 @@ pub fn clear_last_activity(data: &CleanerDataRegistry) -> CleanerResult {
         Some(RegKey::predef(HKEY_CURRENT_USER))
     } else if data.path.starts_with("HKEY_LOCAL_MACHINE") {
         Some(RegKey::predef(HKEY_LOCAL_MACHINE))
+    } else if data.path.starts_with("HKEY_CLASSES_ROOT") {
+        Some(RegKey::predef(HKEY_CLASSES_ROOT))
+    } else if data.path.starts_with("HKEY_USERS") {
+        Some(RegKey::predef(HKEY_USERS))
+    } else if data.path.starts_with("HKEY_CURRENT_CONFIG") {
+        Some(RegKey::predef(HKEY_CURRENT_CONFIG))
     } else {
         None
     };
 
     let path = if data.path.starts_with("HKEY_CURRENT_USER\\") {
-        data.path.replace("HKEY_CURRENT_USER\\", "")
+        Some(data.path.replace("HKEY_CURRENT_USER\\", ""))
     } else if data.path.starts_with("HKEY_LOCAL_MACHINE\\") {
-        data.path.replace("HKEY_LOCAL_MACHINE\\", "")
+        Some(data.path.replace("HKEY_LOCAL_MACHINE\\", ""))
+    } else if data.path.starts_with("HKEY_CLASSES_ROOT\\") {
+        Some(data.path.replace("HKEY_CLASSES_ROOT\\", ""))
+    } else if data.path.starts_with("HKEY_USERS\\") {
+        Some(data.path.replace("HKEY_USERS\\", ""))
+    } else if data.path.starts_with("HKEY_CURRENT_CONFIG\\") {
+        Some(data.path.replace("HKEY_CURRENT_CONFIG\\", ""))
     } else {
-        String::new()
+        None
     };
 
-    if root.is_some() && path != String::new() {
+    if root.is_some() && path.is_some() {
         let root = root.unwrap();
+        let path = path.unwrap();
         if data.remove_all_in_tree {
             removed += remove_all_in_tree_in_registry(&root, path.to_string())
         }
