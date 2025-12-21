@@ -62,7 +62,7 @@ async fn main() -> eframe::Result {
             }
         }
     } else {
-        database::cleaner_database::get_default_database().clone()
+        database::cleaner_database::get_default_database().to_vec()
     };
 
     #[cfg(windows)]
@@ -76,7 +76,7 @@ async fn main() -> eframe::Result {
                 }
             }
         } else {
-            database::registry_database::get_default_database().clone()
+            database::registry_database::get_default_database().to_vec()
         }
     };
     #[cfg(windows)]
