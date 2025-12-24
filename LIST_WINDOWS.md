@@ -1,9 +1,18 @@
-# Windows Clearing Programs Catalog v2.0.2.0
+# Windows Clearing Programs Catalog v2.0.2.1
 **Total categories in database:** 15
 
-**Total programs in database:** 181
+**Total programs in database:** 183
 
-**Total pathes in database:** 423
+**Total pathes in database:** 426
+
+## AI
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Cherry Studio | Logs |
+| 2 | [LM Studio](https://lmstudio.ai/download) | LastActivity, Logs |
+| 3 | [Microsoft Lobe](https://github.com/orgs/lobe) | Logs |
+
 
 ## AntiCheat
 
@@ -131,24 +140,25 @@
 | --- | --- | --- |
 | 1 | [ArcheAge](https://archeage.ru) | Logs |
 | 2 | [Arizona Games Launcher](https://arizona-rp.com/#how-to-play) | Crashes, Logs |
-| 3 | [Counter-Strike Global Offensive](https://store.steampowered.com/app/730/CounterStrike_2) | Game settings |
-| 4 | [Dota 2](https://www.dota2.com/home) | Game settings |
-| 5 | [Electronic Arts Desktop](https://www.ea.com/ea-app) | Logs |
-| 6 | [Epic Games Launcher](https://store.epicgames.com/en-US/download) | Logs |
-| 7 | [Genshin Impact](https://genshin.hoyoverse.com) | Documentation, Logs |
-| 8 | [Lords Mobile](https://lordsmobile.igg.com/pc) | Logs |
-| 9 | [Melissia Games Launcher](https://melissia.games) | Documentation, Logs |
-| 10 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
-| 11 | [Roblox](https://www.roblox.com/download) | Logs |
-| 12 | Rockstar Games | Crashes |
-| 13 | [Rust](https://store.steampowered.com/app/252490/Rust) | Game settings |
-| 14 | [Schedule I](https://store.steampowered.com/app/3164500/Schedule_I) | Game saves, Logs |
-| 15 | [Steam](https://store.steampowered.com/about) | Accounts |
-| 16 | [Terraria](https://terraria.org) | Game saves, Game settings |
-| 17 | [The Powder Toy](https://powdertoy.co.uk) | Game saves |
-| 18 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game settings |
-| 19 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
-| 20 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game saves, Game settings, Logs |
+| 3 | Borderlands 2 | Game saves, Game settings, Logs |
+| 4 | [Counter-Strike Global Offensive](https://store.steampowered.com/app/730/CounterStrike_2) | Game settings |
+| 5 | [Dota 2](https://www.dota2.com/home) | Game settings |
+| 6 | [Electronic Arts Desktop](https://www.ea.com/ea-app) | Logs |
+| 7 | [Epic Games Launcher](https://store.epicgames.com/en-US/download) | Logs |
+| 8 | [Genshin Impact](https://genshin.hoyoverse.com) | Documentation, Logs |
+| 9 | [Lords Mobile](https://lordsmobile.igg.com/pc) | Logs |
+| 10 | [Melissia Games Launcher](https://melissia.games) | Documentation, Logs |
+| 11 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
+| 12 | [Roblox](https://www.roblox.com/download) | Logs |
+| 13 | Rockstar Games | Crashes |
+| 14 | [Rust](https://store.steampowered.com/app/252490/Rust) | Game settings |
+| 15 | [Schedule I](https://store.steampowered.com/app/3164500/Schedule_I) | Game saves, Logs |
+| 16 | [Steam](https://store.steampowered.com/about) | Accounts |
+| 17 | [Terraria](https://terraria.org) | Game saves, Game settings |
+| 18 | [The Powder Toy](https://powdertoy.co.uk) | Game saves |
+| 19 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game settings |
+| 20 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
+| 21 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game saves, Game settings, Logs |
 
 
 ## Image
@@ -158,9 +168,8 @@
 | 1 | [ImageGlass](https://imageglass.org) | Cache, Documentation |
 | 2 | [InkSpace](https://inkscape.org) | Documentation, Logs |
 | 3 | [Magpie](https://github.com/Blinue/Magpie) | Cache, Logs |
-| 4 | [Microsoft Lobe](https://github.com/orgs/lobe) | Logs |
-| 5 | [ShareX](https://getsharex.com/downloads) | Backups, Images, Logs |
-| 6 | [Tonfotos Telegram Connector](https://tonfotos.com) | Images |
+| 4 | [ShareX](https://getsharex.com/downloads) | Backups, Images, Logs |
+| 5 | [Tonfotos Telegram Connector](https://tonfotos.com) | Images |
 
 
 ## Messanger
@@ -234,7 +243,7 @@
 | 1 | [360 Total Security](https://www.360totalsecurity.com) | Logs |
 | 2 | [4uKey for Android](https://www.tenorshare.ru/products/android-password-reset-tool.html) | Logs |
 | 3 | [Avast](https://www.avast.ru) | Documentation, Logs |
-| 4 | Doctor Web Cureit | Logs |
+| 4 | [Doctor Web Cureit](https://free.drweb.ru/download+cureit+free) | Logs |
 | 5 | [GnuPG](https://www.gnupg.org/download/index.html) | Documentation |
 | 6 | [Gpg4win](https://www.gpg4win.org) | Documentation |
 | 7 | [I2P](https://geti2p.net/download) | Documentation, Logs |
@@ -273,14 +282,13 @@
 | 1 | [Cursor](https://www.cursor.com/downloads) | Cache, Documentation, Logs |
 | 2 | [DeepL](https://www.deepl.com) | Cache, Logs |
 | 3 | [JetBrains](https://www.jetbrains.com/?var=1) | Documentation, Logs |
-| 4 | [LM Studio](https://lmstudio.ai/download) | Logs |
-| 5 | [LazyVim](https://www.lazyvim.org/installation) | Documentation |
-| 6 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Documentation, Logs |
-| 7 | [NeoVim](https://github.com/neovim/neovim/blob/master/INSTALL.md) | Documentation, Logs |
-| 8 | [Notepad++](https://notepad-plus-plus.org/downloads) | Documentation |
-| 9 | [Sublime Text](https://www.sublimetext.com/download) | Logs |
-| 10 | [VS Code](https://code.visualstudio.com/download) | Browser cookies, Documentation, Logs |
-| 11 | [Zed](https://zed.dev) | Logs |
+| 4 | [LazyVim](https://www.lazyvim.org/installation) | Documentation |
+| 5 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Documentation, Logs |
+| 6 | [NeoVim](https://github.com/neovim/neovim/blob/master/INSTALL.md) | Documentation, Logs |
+| 7 | [Notepad++](https://notepad-plus-plus.org/downloads) | Documentation |
+| 8 | [Sublime Text](https://www.sublimetext.com/download) | Logs |
+| 9 | [VS Code](https://code.visualstudio.com/download) | Browser cookies, Documentation, Logs |
+| 10 | [Zed](https://zed.dev) | Logs |
 
 
 ## Torrent

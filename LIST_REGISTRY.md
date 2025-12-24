@@ -1,4 +1,4 @@
-# Windows Registry Clearing Programs Catalog v2.0.2.0
+# Windows Registry Clearing Programs Catalog v2.0.2.1
 **Total categories in database:** 1
 
 **Total programs in database:** 3
@@ -9,14 +9,14 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [IDA Pro](https://hex-rays.com/ida-pro) | LastActivity |
+| 1 | [Binary Ninja](https://binary.ninja) | LastActivity |
+| 2 | [IDA Pro](https://hex-rays.com/ida-pro) | LastActivity |
 
 
 ## System
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [Binary Ninja](https://binary.ninja) | LastActivity |
-| 2 | [Windows](https://www.microsoft.com/download/windows) | LastActivity |
+| 1 | [Windows](https://www.microsoft.com/download/windows) | LastActivity |
 
 
