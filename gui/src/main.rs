@@ -10,7 +10,7 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 use clap::Parser;
 use cleaner::clear_data;
 #[cfg(windows)]
-use database::registry_database;
+use database::registry_database::clear_registry;
 #[cfg(windows)]
 use database::structures::CleanerDataRegistry;
 use database::structures::{CleanerData, Cleared};
@@ -154,7 +154,7 @@ async fn work(
             if categories_set.contains(&data.category) && !excluded_programs.contains(&data.program)
             {
                 let data = Arc::new(data.clone());
-                let task = task::spawn(async move { registry_database::clear_registry(&data) });
+                let task = task::spawn(async move { clear_registry(&data) });
                 tasks.push(task);
             }
         }

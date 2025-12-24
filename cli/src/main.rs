@@ -6,7 +6,7 @@ use clap::{ArgAction, Parser};
 use cleaner::clear_data;
 use crossterm::execute;
 #[cfg(windows)]
-use database::registry_database;
+use database::registry_database::clear_registry;
 #[cfg(windows)]
 use database::structures::CleanerDataRegistry;
 use database::structures::{CleanerData, Cleared};
@@ -105,7 +105,7 @@ async fn work(
                 && !disabled_programs_set.contains(data.program.to_lowercase().as_str())
             {
                 let data = Arc::new(data.clone());
-                let task = task::spawn(async move { registry_database::clear_registry(&data) });
+                let task = task::spawn(async move { clear_registry(&data) });
                 tasks.push(task);
             }
         }
