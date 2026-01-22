@@ -13,9 +13,13 @@ notify-rust = "4"
 image = "0.25.5"
 tempfile = "3.3"
 clap = { version = "4.0", features = ["derive"] }
+rhai = { version = "1.17", features = ["serde"] }
+lazy_static = "1.5"
+serde_json = "1.0"
 
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }
+script-runner = { path = "../script-runner" }
 
 # Performance: Fast memory allocator
 mimalloc = "0.1"

@@ -4,12 +4,16 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
 use clap::{ArgAction, Parser};
 use cleaner::clear_data;
+use lazy_static::lazy_static;
+use rhai::Engine;
+use script_runner;
+use std::sync::Mutex;
 use crossterm::execute;
 #[cfg(windows)]
 use database::registry_database::clear_registry;
 #[cfg(windows)]
 use database::structures::CleanerDataRegistry;
-use database::structures::{CleanerData, Cleared};
+use database::structures::{CleanerData, CleanerResult, Cleared};
 use database::utils::get_file_size_string;
 use database::{get_icon, get_version};
 use futures::stream::{FuturesUnordered, StreamExt};
@@ -25,7 +29,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::Arc;
 use tabled::Table;
 use tempfile::NamedTempFile;
-use tokio::sync::Mutex;
+
 use tokio::task;
 
 #[cfg(windows)]
@@ -143,7 +147,7 @@ async fn work(
                     removed_directories.fetch_add(result.folders, Ordering::Relaxed);
 
                     // Only lock once per task for the Vec update
-                    let mut cleared_programs = cleared_programs.lock().await;
+                    let mut cleared_programs = cleared_programs.lock().unwrap();
 
                     // Use binary search hint or direct lookup for large datasets
                     if let Some(cleared) = cleared_programs
@@ -200,10 +204,11 @@ async fn work(
     let bytes_cleared_val = bytes_cleared.load(Ordering::Relaxed);
     let removed_files_val = removed_files.load(Ordering::Relaxed);
     let removed_directories_val = removed_directories.load(Ordering::Relaxed);
+    let _cleared_programs_val = cleared_programs.lock().unwrap().clone();
 
     if args.show_result_table {
         println!("Cleared result:");
-        let cleared_programs = cleared_programs.lock().await;
+        let cleared_programs = cleared_programs.lock().unwrap();
         let table = Table::new(cleared_programs.iter()).to_string();
         println!("{}", table);
     }
@@ -214,7 +219,7 @@ async fn work(
             get_file_size_string(bytes_cleared_val),
             removed_files_val,
             removed_directories_val,
-            cleared_programs.lock().await.len()
+            cleared_programs.lock().unwrap().len()
         );
     }
 
@@ -293,6 +298,60 @@ struct Args {
     registry_database_path: Option<String>,
 }
 
+lazy_static! {
+    static ref ADDITIONAL_DATA: Mutex<Vec<CleanerData>> = Mutex::new(Vec::new());
+}
+
+fn add_cleaner_data(data: rhai::Map) {
+    let cleaner_data = CleanerData {
+        path: data.get("path").and_then(|v| v.clone().try_cast::<String>()).unwrap_or_default(),
+        category: data.get("category").and_then(|v| v.clone().try_cast::<String>()).unwrap_or_default(),
+        program: data.get("program").and_then(|v| v.clone().try_cast::<String>()).unwrap_or_default(),
+        class: data.get("class").and_then(|v| v.clone().try_cast::<String>()).unwrap_or_else(|| String::from("Other")),
+        files_to_remove: data.get("files_to_remove").and_then(|v| v.clone().try_cast::<rhai::Array>()).map(|arr| arr.into_iter().filter_map(|v| v.try_cast::<String>()).collect()).unwrap_or_default(),
+        directories_to_remove: data.get("directories_to_remove").and_then(|v| v.clone().try_cast::<rhai::Array>()).map(|arr| arr.into_iter().filter_map(|v| v.try_cast::<String>()).collect()).unwrap_or_default(),
+        remove_all_in_dir: data.get("remove_all_in_dir").and_then(|v| v.clone().try_cast::<bool>()).unwrap_or(false),
+        remove_directory_after_clean: data.get("remove_directory_after_clean").and_then(|v| v.clone().try_cast::<bool>()).unwrap_or(false),
+        remove_directories: data.get("remove_directories").and_then(|v| v.clone().try_cast::<bool>()).unwrap_or(false),
+        remove_files: data.get("remove_files").and_then(|v| v.clone().try_cast::<bool>()).unwrap_or(false),
+    };
+    ADDITIONAL_DATA.lock().unwrap().push(cleaner_data);
+}
+
+fn run_scripts() -> Result<Vec<CleanerData>, Box<dyn std::error::Error>> {
+    let mut engine = Engine::new();
+
+    // Register types
+    engine.register_type::<CleanerData>();
+    engine.register_type::<CleanerResult>();
+
+    // Register the clear_data function
+    engine.register_fn("clear_data", |data: CleanerData| -> CleanerResult {
+        clear_data(&data)
+    });
+
+    // Register function to add custom cleaning data
+    engine.register_fn("add_cleaner_data", add_cleaner_data);
+
+    // Register file system functions
+    engine.register_fn("delete_file", |path: String| -> i64 {
+        if let Ok(metadata) = std::fs::metadata(&path) {
+            let size = metadata.len() as i64;
+            if std::fs::remove_file(&path).is_ok() {
+                size
+            } else {
+                0
+            }
+        } else {
+            0
+        }
+    });
+
+    script_runner::run_scripts(&mut engine, add_cleaner_data)?;
+
+    Ok(ADDITIONAL_DATA.lock().unwrap().drain(..).collect())
+}
+
 #[tokio::main]
 async fn main() {
     execute!(
@@ -310,7 +369,7 @@ async fn main() {
         );
     }
 
-    let database: Vec<CleanerData> = if let Some(db_path) = &args.database_path {
+    let mut database: Vec<CleanerData> = if let Some(db_path) = &args.database_path {
         match database::cleaner_database::get_database_from_file(db_path) {
             Ok(db) => db,
             Err(e) => {
@@ -321,6 +380,17 @@ async fn main() {
     } else {
         database::cleaner_database::get_default_database().clone()
     };
+
+    // Load scripts and add custom cleaner data
+    match run_scripts() {
+        Ok(additional_data) => {
+            database.extend(additional_data);
+        }
+        Err(e) => {
+            eprintln!("Failed to run scripts: {}", e);
+            // Continue without scripts
+        }
+    }
     #[cfg(windows)]
     let registry_database: Vec<CleanerDataRegistry> = {
         if let Some(db_path) = &args.registry_database_path {

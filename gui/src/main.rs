@@ -1,19 +1,20 @@
-#![cfg_attr(
-    all(not(debug_assertions), target_os = "windows"),
-    windows_subsystem = "windows"
-)]
-
 // PERFORMANCE: Use mimalloc for blazing fast memory allocation
+#![cfg_attr(target_os = "windows", windows_subsystem = "windows")]
+
 #[global_allocator]
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
 use clap::Parser;
 use cleaner::clear_data;
+use lazy_static::lazy_static;
+use rhai::Engine;
+use script_runner;
+use std::sync::Mutex;
 #[cfg(windows)]
 use database::registry_database::clear_registry;
 #[cfg(windows)]
 use database::structures::CleanerDataRegistry;
-use database::structures::{CleanerData, Cleared};
+use database::structures::{CleanerData, CleanerResult, Cleared};
 use database::utils::get_file_size_string;
 use database::{get_icon, get_version};
 use eframe::egui;
@@ -46,6 +47,70 @@ struct Args {
     registry_database_path: Option<String>,
 }
 
+lazy_static! {
+    static ref ADDITIONAL_DATA_GUI: Mutex<Vec<CleanerData>> = Mutex::new(Vec::new());
+}
+
+fn add_cleaner_data_gui(data: rhai::Map) {
+    let cleaner_data = CleanerData {
+        path: data.get("path").and_then(|v| v.clone().try_cast::<String>()).unwrap_or_default(),
+        category: data.get("category").and_then(|v| v.clone().try_cast::<String>()).unwrap_or_default(),
+        program: data.get("program").and_then(|v| v.clone().try_cast::<String>()).unwrap_or_default(),
+        class: data.get("class").and_then(|v| v.clone().try_cast::<String>()).unwrap_or_else(|| String::from("Other")),
+        files_to_remove: data.get("files_to_remove").and_then(|v| v.clone().try_cast::<rhai::Array>()).map(|arr| arr.into_iter().filter_map(|v| v.try_cast::<String>()).collect()).unwrap_or_default(),
+        directories_to_remove: data.get("directories_to_remove").and_then(|v| v.clone().try_cast::<rhai::Array>()).map(|arr| arr.into_iter().filter_map(|v| v.try_cast::<String>()).collect()).unwrap_or_default(),
+        remove_all_in_dir: data.get("remove_all_in_dir").and_then(|v| v.clone().try_cast::<bool>()).unwrap_or(false),
+        remove_directory_after_clean: data.get("remove_directory_after_clean").and_then(|v| v.clone().try_cast::<bool>()).unwrap_or(false),
+        remove_directories: data.get("remove_directories").and_then(|v| v.clone().try_cast::<bool>()).unwrap_or(false),
+        remove_files: data.get("remove_files").and_then(|v| v.clone().try_cast::<bool>()).unwrap_or(false),
+    };
+    ADDITIONAL_DATA_GUI.lock().unwrap().push(cleaner_data);
+}
+
+fn run_scripts() -> Result<Vec<CleanerData>, Box<dyn std::error::Error>> {
+    let mut engine = Engine::new();
+
+    // Register types
+    engine.register_type::<CleanerData>();
+    engine.register_type::<CleanerResult>();
+
+    // Register the clear_data function
+    engine.register_fn("clear_data", |data: CleanerData| -> CleanerResult {
+        clear_data(&data)
+    });
+
+    // Register function to add custom cleaning data
+    engine.register_fn("add_cleaner_data", add_cleaner_data_gui);
+
+    // Register file system functions
+    engine.register_fn("delete_file", |path: String| -> i64 {
+        if let Ok(metadata) = std::fs::metadata(&path) {
+            let size = metadata.len() as i64;
+            if std::fs::remove_file(&path).is_ok() {
+                size
+            } else {
+                0
+            }
+        } else {
+            0
+        }
+    });
+
+    engine.register_fn("get_file_size", |path: String| -> i64 {
+        std::fs::metadata(&path)
+            .map(|m| m.len() as i64)
+            .unwrap_or(0)
+    });
+
+    engine.register_fn("delete_directory_recursive", |path: String| -> bool {
+        std::fs::remove_dir_all(&path).is_ok()
+    });
+
+    script_runner::run_scripts(&mut engine, add_cleaner_data_gui)?;
+
+    Ok(ADDITIONAL_DATA_GUI.lock().unwrap().drain(..).collect())
+}
+
 #[tokio::main]
 async fn main() -> eframe::Result {
     let icon_bytes = get_icon();
@@ -53,7 +118,7 @@ async fn main() -> eframe::Result {
 
     let args = Args::parse();
 
-    let database: Vec<CleanerData> = if let Some(db_path) = &args.database_path {
+    let mut database: Vec<CleanerData> = if let Some(db_path) = &args.database_path {
         match database::cleaner_database::get_database_from_file(db_path) {
             Ok(db) => db,
             Err(e) => {
@@ -64,6 +129,17 @@ async fn main() -> eframe::Result {
     } else {
         database::cleaner_database::get_default_database().to_vec()
     };
+
+    // Load scripts and add custom cleaner data
+    match run_scripts() {
+        Ok(additional_data) => {
+            database.extend(additional_data);
+        }
+        Err(e) => {
+            eprintln!("Failed to run scripts: {}", e);
+            // Continue without scripts
+        }
+    }
 
     #[cfg(windows)]
     let registry_database: Vec<CleanerDataRegistry> = {
@@ -245,6 +321,7 @@ async fn work(
     let bytes_cleared_val = bytes_cleared.load(Ordering::Relaxed);
     let removed_files_val = removed_files.load(Ordering::Relaxed);
     let removed_directories_val = removed_directories.load(Ordering::Relaxed);
+    let cleared_programs_val = cleared_programs;
 
     let mut temp_file = NamedTempFile::new().unwrap();
     temp_file.write_all(get_icon()).unwrap();
@@ -274,7 +351,7 @@ async fn work(
         bytes_cleared_val,
         removed_files_val,
         removed_directories_val,
-        cleared_programs,
+        cleared_programs_val,
     )
 }
 

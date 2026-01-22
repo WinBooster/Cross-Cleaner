@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use tabled::Tabled;
 
 // INFO: Struct for GUI table
-#[derive(PartialEq, Tabled)]
+#[derive(Clone, PartialEq, Tabled)]
 pub struct Cleared {
     #[tabled(rename = "Program")]
     pub program: String,
@@ -35,7 +35,7 @@ impl PartialEq<Option<Cleared>> for &Cleared {
 }
 
 // INFO: Struct for clearing files and folders
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct CleanerData {
     pub path: String,
     pub category: String,
@@ -88,6 +88,7 @@ fn default_class() -> String {
 }
 
 // INFO: Struct for task clearing (Result cleared)
+#[derive(Serialize, Deserialize, Clone)]
 pub struct CleanerResult {
     pub files: u64,
     pub folders: u64,
