@@ -4,10 +4,6 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
 use clap::{ArgAction, Parser};
 use cleaner::clear_data;
-use lazy_static::lazy_static;
-use rhai::Engine;
-use script_runner;
-use std::sync::Mutex;
 use crossterm::execute;
 #[cfg(windows)]
 use database::registry_database::clear_registry;
@@ -22,11 +18,15 @@ use inquire::formatter::MultiOptionFormatter;
 use inquire::list_option::ListOption;
 use inquire::validator::Validation;
 use inquire::MultiSelect;
+use lazy_static::lazy_static;
 use notify_rust::Notification;
+use rhai::Engine;
+use script_runner;
 use std::collections::HashSet;
 use std::io::Write;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::Arc;
+use std::sync::Mutex;
 use tabled::Table;
 use tempfile::NamedTempFile;
 
@@ -304,16 +304,56 @@ lazy_static! {
 
 fn add_cleaner_data(data: rhai::Map) {
     let cleaner_data = CleanerData {
-        path: data.get("path").and_then(|v| v.clone().try_cast::<String>()).unwrap_or_default(),
-        category: data.get("category").and_then(|v| v.clone().try_cast::<String>()).unwrap_or_default(),
-        program: data.get("program").and_then(|v| v.clone().try_cast::<String>()).unwrap_or_default(),
-        class: data.get("class").and_then(|v| v.clone().try_cast::<String>()).unwrap_or_else(|| String::from("Other")),
-        files_to_remove: data.get("files_to_remove").and_then(|v| v.clone().try_cast::<rhai::Array>()).map(|arr| arr.into_iter().filter_map(|v| v.try_cast::<String>()).collect()).unwrap_or_default(),
-        directories_to_remove: data.get("directories_to_remove").and_then(|v| v.clone().try_cast::<rhai::Array>()).map(|arr| arr.into_iter().filter_map(|v| v.try_cast::<String>()).collect()).unwrap_or_default(),
-        remove_all_in_dir: data.get("remove_all_in_dir").and_then(|v| v.clone().try_cast::<bool>()).unwrap_or(false),
-        remove_directory_after_clean: data.get("remove_directory_after_clean").and_then(|v| v.clone().try_cast::<bool>()).unwrap_or(false),
-        remove_directories: data.get("remove_directories").and_then(|v| v.clone().try_cast::<bool>()).unwrap_or(false),
-        remove_files: data.get("remove_files").and_then(|v| v.clone().try_cast::<bool>()).unwrap_or(false),
+        path: data
+            .get("path")
+            .and_then(|v| v.clone().try_cast::<String>())
+            .unwrap_or_default(),
+        category: data
+            .get("category")
+            .and_then(|v| v.clone().try_cast::<String>())
+            .unwrap_or_default(),
+        program: data
+            .get("program")
+            .and_then(|v| v.clone().try_cast::<String>())
+            .unwrap_or_default(),
+        class: data
+            .get("class")
+            .and_then(|v| v.clone().try_cast::<String>())
+            .unwrap_or_else(|| String::from("Other")),
+        files_to_remove: data
+            .get("files_to_remove")
+            .and_then(|v| v.clone().try_cast::<rhai::Array>())
+            .map(|arr| {
+                arr.into_iter()
+                    .filter_map(|v| v.try_cast::<String>())
+                    .collect()
+            })
+            .unwrap_or_default(),
+        directories_to_remove: data
+            .get("directories_to_remove")
+            .and_then(|v| v.clone().try_cast::<rhai::Array>())
+            .map(|arr| {
+                arr.into_iter()
+                    .filter_map(|v| v.try_cast::<String>())
+                    .collect()
+            })
+            .unwrap_or_default(),
+        remove_all_in_dir: data
+            .get("remove_all_in_dir")
+            .and_then(|v| v.clone().try_cast::<bool>())
+            .unwrap_or(false),
+        remove_directory_after_clean: data
+            .get("remove_directory_after_clean")
+            .and_then(|v| v.clone().try_cast::<bool>())
+            .unwrap_or(false),
+        remove_directories: data
+            .get("remove_directories")
+            .and_then(|v| v.clone().try_cast::<bool>())
+            .unwrap_or(false),
+        remove_files: data
+            .get("remove_files")
+            .and_then(|v| v.clone().try_cast::<bool>())
+            .unwrap_or(false),
     };
     ADDITIONAL_DATA.lock().unwrap().push(cleaner_data);
 }

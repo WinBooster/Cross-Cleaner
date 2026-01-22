@@ -1,6 +1,9 @@
 use rhai::Engine;
 
-pub fn run_scripts<F>(engine: &mut Engine, add_cleaner_data: F) -> Result<(), Box<dyn std::error::Error>>
+pub fn run_scripts<F>(
+    engine: &mut Engine,
+    add_cleaner_data: F,
+) -> Result<(), Box<dyn std::error::Error>>
 where
     F: Fn(rhai::Map) + 'static,
 {
@@ -9,17 +12,20 @@ where
     engine.register_type::<database::structures::CleanerResult>();
 
     // Register the clear_data function
-    engine.register_fn("clear_data", |data: database::structures::CleanerData| -> database::structures::CleanerResult {
-        database::structures::CleanerResult {
-            working: cleaner::clear_data(&data).working,
-            path: cleaner::clear_data(&data).path,
-            program: cleaner::clear_data(&data).program,
-            category: cleaner::clear_data(&data).category,
-            bytes: cleaner::clear_data(&data).bytes,
-            files: cleaner::clear_data(&data).files,
-            folders: cleaner::clear_data(&data).folders,
-        }
-    });
+    engine.register_fn(
+        "clear_data",
+        |data: database::structures::CleanerData| -> database::structures::CleanerResult {
+            database::structures::CleanerResult {
+                working: cleaner::clear_data(&data).working,
+                path: cleaner::clear_data(&data).path,
+                program: cleaner::clear_data(&data).program,
+                category: cleaner::clear_data(&data).category,
+                bytes: cleaner::clear_data(&data).bytes,
+                files: cleaner::clear_data(&data).files,
+                folders: cleaner::clear_data(&data).folders,
+            }
+        },
+    );
 
     // Register function to add custom cleaning data
     engine.register_fn("add_cleaner_data", add_cleaner_data);
@@ -49,10 +55,7 @@ where
     });
 
     // Determine scripts directory path relative to executable
-    let scripts_dir = std::env::current_exe()?
-        .parent()
-        .unwrap()
-        .join("scripts");
+    let scripts_dir = std::env::current_exe()?.parent().unwrap().join("scripts");
 
     println!("Scripts directory: {}", scripts_dir.display());
     if let Ok(entries) = std::fs::read_dir(&scripts_dir) {
