@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["cli", "gui", "script-runner"]
+members = ["cli", "gui"]
 
 [profile.release]
 lto = true
