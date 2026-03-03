@@ -189,9 +189,8 @@ jobs:
 
             ## ✨ What's New
 
-            ### 🛠 Technical Updates
-            - Added scripts for add custom clearings
-
+            ### 🪟 Windows Enhancements
+            - **Java** Fix incorrect clearings
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
