@@ -12,10 +12,7 @@ async fn remove_file_fast(path: PathBuf) -> io::Result<u64> {
     tokio::task::spawn_blocking(move || {
         let meta = std::fs::metadata(&path)?;
         if !meta.is_file() {
-            return Err(io::Error::new(
-                io::ErrorKind::InvalidInput,
-                "not a file",
-            ));
+            return Err(io::Error::new(io::ErrorKind::InvalidInput, "not a file"));
         }
         let len = meta.len();
         std::fs::remove_file(&path)?;
@@ -28,10 +25,7 @@ async fn remove_file_fast(path: PathBuf) -> io::Result<u64> {
 fn remove_dir_sync(root: PathBuf) -> io::Result<(u64, u64, u64)> {
     let meta = std::fs::metadata(&root)?;
     if !meta.is_dir() {
-        return Err(io::Error::new(
-            io::ErrorKind::InvalidInput,
-            "not a dir",
-        ));
+        return Err(io::Error::new(io::ErrorKind::InvalidInput, "not a dir"));
     }
     let mut files = 0u64;
     let mut folders = 0u64;

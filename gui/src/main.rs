@@ -29,7 +29,7 @@ use std::pin::Pin;
 use std::rc::Rc;
 use std::sync::Arc;
 use tempfile::NamedTempFile;
-use tokio::sync::{mpsc, Semaphore};
+use tokio::sync::{Semaphore, mpsc};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -143,8 +143,9 @@ async fn work(
 
     // C: limit to 16 concurrent cleaners
     let sem = Arc::new(Semaphore::new(16));
-    let mut futures: FuturesUnordered<Pin<Box<dyn Future<Output = database::structures::CleanerResult> + Send>>> =
-        FuturesUnordered::new();
+    let mut futures: FuturesUnordered<
+        Pin<Box<dyn Future<Output = database::structures::CleanerResult> + Send>>,
+    > = FuturesUnordered::new();
 
     // INFO: Clear LastActivity from Registry
     // WARN: Windows only - показываем что СЕЙЧАС чистится
