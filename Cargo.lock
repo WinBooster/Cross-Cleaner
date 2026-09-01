@@ -886,6 +886,7 @@ name = "cleaner"
 version = "0.2.0"
 dependencies = [
  "database",
+ "futures",
  "glob",
  "proptest",
  "rayon",

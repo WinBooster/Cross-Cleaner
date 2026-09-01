@@ -1,67 +1,83 @@
 use database::structures::{CleanerData, CleanerResult};
+use futures::stream::{FuturesUnordered, StreamExt};
 use glob::glob;
 use std::future::Future;
-use std::path::{Path, PathBuf};
-use tokio::fs;
+use std::path::PathBuf;
+use std::sync::Arc;
 use tokio::io;
+use tokio::sync::Semaphore;
 
-// NOTE: Recursively deletes the directory and updates the counters in `cleaner_result`.
-// ASYNC: tokio::fs, recursion via Box::pin
-fn remove_directory_recursive<'a>(
-    path: &'a Path,
-    cleaner_result: &'a mut CleanerResult,
-) -> std::pin::Pin<Box<dyn Future<Output = io::Result<()>> + Send + 'a>> {
-    Box::pin(async move {
-        let metadata = fs::metadata(path).await?;
-        if !metadata.is_dir() {
+// B: blocking fast helpers - use std::fs inside spawn_blocking
+async fn remove_file_fast(path: PathBuf) -> io::Result<u64> {
+    tokio::task::spawn_blocking(move || {
+        let meta = std::fs::metadata(&path)?;
+        if !meta.is_file() {
             return Err(io::Error::new(
                 io::ErrorKind::InvalidInput,
-                "The provided path is not a directory",
+                "not a file",
             ));
         }
+        let len = meta.len();
+        std::fs::remove_file(&path)?;
+        Ok(len)
+    })
+    .await
+    .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("join: {e}")))?
+}
 
-        let mut dir = fs::read_dir(path).await?;
-        while let Some(entry) = dir.next_entry().await? {
-            let entry_path = entry.path();
-            let ft = entry.file_type().await?;
-            if ft.is_dir() {
-                remove_directory_recursive(&entry_path, cleaner_result).await?;
+fn remove_dir_sync(root: PathBuf) -> io::Result<(u64, u64, u64)> {
+    let meta = std::fs::metadata(&root)?;
+    if !meta.is_dir() {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "not a dir",
+        ));
+    }
+    let mut files = 0u64;
+    let mut folders = 0u64;
+    let mut bytes = 0u64;
+    let mut stack = vec![root];
+    let mut to_delete: Vec<PathBuf> = Vec::new();
+
+    while let Some(dir) = stack.pop() {
+        let entries = std::fs::read_dir(&dir)?;
+        for e in entries {
+            let e = e?;
+            let p = e.path();
+            let m = e.metadata()?;
+            if m.is_dir() {
+                stack.push(p);
             } else {
-                remove_file(&entry_path, cleaner_result).await?;
+                bytes += m.len();
+                files += 1;
+                std::fs::remove_file(&p)?;
             }
         }
-
-        fs::remove_dir(path).await?;
-        cleaner_result.folders += 1;
-        Ok(())
-    })
+        to_delete.push(dir);
+    }
+    for d in to_delete.iter().rev() {
+        std::fs::remove_dir(d)?;
+        folders += 1;
+    }
+    Ok((files, folders, bytes))
 }
 
-// NOTE: Deletes the file and updates the counters in `cleaner_result`.
-// ASYNC: tokio::fs
-async fn remove_file(path: &Path, cleaner_result: &mut CleanerResult) -> io::Result<()> {
-    let metadata = fs::metadata(path).await?;
-    fs::remove_file(path).await?;
-    cleaner_result.bytes += metadata.len();
-    cleaner_result.files += 1;
-    Ok(())
-}
-
-// helper: async remove_dir_all without counting (for remove_directory_after_clean)
-// uses spawn_blocking to avoid blocking runtime
-async fn remove_dir_all_async(path: &Path) -> io::Result<()> {
-    let p = PathBuf::from(path);
-    // spawn_blocking returns JoinError; map to io::Error
-    let res = tokio::task::spawn_blocking(move || std::fs::remove_dir_all(&p))
+async fn remove_dir_fast(path: PathBuf) -> io::Result<(u64, u64, u64)> {
+    tokio::task::spawn_blocking(move || remove_dir_sync(path))
         .await
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("join error: {e}")))?;
-    res
+        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("join: {e}")))?
+}
+
+async fn remove_dir_all_fast(path: PathBuf) -> io::Result<()> {
+    tokio::task::spawn_blocking(move || std::fs::remove_dir_all(&path))
+        .await
+        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("join: {e}")))?
 }
 
 // NOTE: The main function for data cleansing.
-// ASYNC: fully async, non-blocking IO
+// PERF: A (parallel intra-entry) + B (spawn_blocking) + C (Semaphore 32)
 pub async fn clear_data(data: &CleanerData) -> CleanerResult {
-    let mut cleaner_result = CleanerResult {
+    let mut out = CleanerResult {
         files: 0,
         folders: 0,
         bytes: 0,
@@ -71,78 +87,146 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
         category: data.category.clone(),
     };
 
-    // NOTE: Use glob to search for files and directories (glob is sync, cheap)
-    if let Ok(results) = glob(&data.path) {
-        for result in results.flatten() {
-            let path = result.as_path();
-            // cache is_dir/is_file via metadata once to avoid extra syscalls?
-            // keep original logic: check exists + is_file/is_dir before each op,
-            // but also compute is_dir/is_file for remove_all/remove_files branches
-            let is_dir = path.is_dir();
-            let is_file = path.is_file();
+    let paths: Vec<PathBuf> = match glob(&data.path) {
+        Ok(g) => g.filter_map(Result::ok).collect(),
+        Err(_) => return out,
+    };
+    if paths.is_empty() {
+        return out;
+    }
 
-            // NOTE: Deleting specified files
-            for file in &data.files_to_remove {
-                let file_path = path.join(file);
-                // use tokio check via try_exists? keep sync exists for simplicity (non-blocking cheap)
-                // but metadata check via tokio for actual removal
-                if file_path.exists()
-                    && file_path.is_file()
-                    && remove_file(&file_path, &mut cleaner_result).await.is_ok()
-                {
-                    cleaner_result.working = true;
+    // C: global limit inside cleaner
+    let sem = Arc::new(Semaphore::new(32));
+    let mut path_futs: FuturesUnordered<
+        std::pin::Pin<Box<dyn Future<Output = CleanerResult> + Send>>,
+    > = FuturesUnordered::new();
+
+    for path in paths {
+        let data = data.clone();
+        let sem = sem.clone();
+        path_futs.push(Box::pin(async move {
+            let mut local = CleanerResult {
+                files: 0,
+                folders: 0,
+                bytes: 0,
+                working: false,
+                path: path.to_string_lossy().to_string(),
+                program: data.program.clone(),
+                category: data.category.clone(),
+            };
+
+            // A: parallel files_to_remove with C limit
+            if !data.files_to_remove.is_empty() {
+                let mut inner: FuturesUnordered<
+                    std::pin::Pin<Box<dyn Future<Output = Option<u64>> + Send>>,
+                > = FuturesUnordered::new();
+                for fname in &data.files_to_remove {
+                    let fpath = path.join(fname);
+                    let sem2 = sem.clone();
+                    inner.push(Box::pin(async move {
+                        let _p = sem2.acquire_owned().await.unwrap();
+                        match remove_file_fast(fpath).await {
+                            Ok(b) => Some(b),
+                            Err(_) => None,
+                        }
+                    }));
+                }
+                while let Some(opt) = inner.next().await {
+                    if let Some(b) = opt {
+                        local.files += 1;
+                        local.bytes += b;
+                        local.working = true;
+                    }
                 }
             }
 
-            // NOTE: Deleting specified directories
-            for dir in &data.directories_to_remove {
-                let dir_path = path.join(dir);
-                if dir_path.exists()
-                    && dir_path.is_dir()
-                    && remove_directory_recursive(&dir_path, &mut cleaner_result)
-                        .await
-                        .is_ok()
-                {
-                    cleaner_result.working = true;
+            // A: parallel directories_to_remove
+            if !data.directories_to_remove.is_empty() {
+                let mut inner: FuturesUnordered<
+                    std::pin::Pin<Box<dyn Future<Output = Option<(u64, u64, u64)>> + Send>>,
+                > = FuturesUnordered::new();
+                for dname in &data.directories_to_remove {
+                    let dpath = path.join(dname);
+                    let sem2 = sem.clone();
+                    inner.push(Box::pin(async move {
+                        let _p = sem2.acquire_owned().await.unwrap();
+                        match remove_dir_fast(dpath).await {
+                            Ok(v) => Some(v),
+                            Err(_) => None,
+                        }
+                    }));
+                }
+                while let Some(opt) = inner.next().await {
+                    if let Some((f, fo, b)) = opt {
+                        local.files += f;
+                        local.folders += fo;
+                        local.bytes += b;
+                        local.working = true;
+                    }
                 }
             }
 
-            // NOTE: Deleting all files and directories if required
-            if data.remove_all_in_dir
-                && is_dir
-                && remove_directory_recursive(path, &mut cleaner_result)
-                    .await
-                    .is_ok()
-            {
-                cleaner_result.working = true;
+            // remove_all_in_dir - single, needs semaphore
+            if data.remove_all_in_dir {
+                let sem2 = sem.clone();
+                let _p = sem2.acquire_owned().await.unwrap();
+                // try fast; skip is_dir check for speed (A)
+                if let Ok((f, fo, b)) = remove_dir_fast(path.clone()).await {
+                    local.files += f;
+                    local.folders += fo;
+                    local.bytes += b;
+                    local.working = true;
+                    // path now gone, following ops will quickly fail (NotFound) - keep for semantics
+                }
             }
 
-            // NOTE: Deleting files if required
-            if data.remove_files && is_file && remove_file(path, &mut cleaner_result).await.is_ok()
-            {
-                cleaner_result.working = true;
+            // remove_files (path itself is file)
+            if data.remove_files {
+                let sem2 = sem.clone();
+                let _p = sem2.acquire_owned().await.unwrap();
+                if let Ok(b) = remove_file_fast(path.clone()).await {
+                    local.files += 1;
+                    local.bytes += b;
+                    local.working = true;
+                }
             }
 
-            // NOTE: Deleting directories if required
-            if data.remove_directories
-                && is_dir
-                && remove_directory_recursive(path, &mut cleaner_result)
-                    .await
-                    .is_ok()
-            {
-                cleaner_result.working = true;
+            // remove_directories
+            if data.remove_directories {
+                let sem2 = sem.clone();
+                let _p = sem2.acquire_owned().await.unwrap();
+                if let Ok((f, fo, b)) = remove_dir_fast(path.clone()).await {
+                    local.files += f;
+                    local.folders += fo;
+                    local.bytes += b;
+                    local.working = true;
+                }
             }
 
-            // NOTE: Deleting a directory after cleaning, if required
-            if data.remove_directory_after_clean && is_dir && remove_dir_all_async(path).await.is_ok()
-            {
-                cleaner_result.folders += 1;
-                cleaner_result.working = true;
+            // remove_directory_after_clean - B via spawn_blocking, no counting bytes/files
+            if data.remove_directory_after_clean {
+                let sem2 = sem.clone();
+                let _p = sem2.acquire_owned().await.unwrap();
+                if remove_dir_all_fast(path.clone()).await.is_ok() {
+                    local.folders += 1;
+                    local.working = true;
+                }
             }
+
+            local
+        }));
+    }
+
+    while let Some(partial) = path_futs.next().await {
+        if partial.working {
+            out.working = true;
+            out.files += partial.files;
+            out.folders += partial.folders;
+            out.bytes += partial.bytes;
         }
     }
 
-    cleaner_result
+    out
 }
 
 #[cfg(test)]

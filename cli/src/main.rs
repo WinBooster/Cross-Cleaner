@@ -23,8 +23,10 @@ use std::collections::HashSet;
 use std::future::Future;
 use std::io::Write;
 use std::pin::Pin;
+use std::sync::Arc;
 use tabled::Table;
 use tempfile::NamedTempFile;
+use tokio::sync::Semaphore;
 
 #[cfg(windows)]
 use std::io::stdin;
@@ -90,7 +92,8 @@ async fn work(
     let disabled_programs_set: HashSet<&str> = disabled_programs.into_iter().collect();
     let categories_lower: HashSet<String> = categories.iter().map(|s| s.to_lowercase()).collect();
 
-    // FuturesUnordered without spawn - cooperatively polled
+    // C: limit global concurrency to 16 to avoid thread pool overload
+    let sem = Arc::new(Semaphore::new(16));
     let mut futures: FuturesUnordered<Pin<Box<dyn Future<Output = database::structures::CleanerResult> + Send>>> =
         FuturesUnordered::new();
 
@@ -105,7 +108,9 @@ async fn work(
                 let data = data.clone();
                 let pb_clone = pb.clone();
                 let path_msg = data.path.clone();
+                let sem = sem.clone();
                 futures.push(Box::pin(async move {
+                    let _p = sem.acquire_owned().await.unwrap();
                     if let Some(pb) = pb_clone {
                         pb.set_message(format!("Cleaning: {}", path_msg));
                     }
@@ -122,7 +127,9 @@ async fn work(
             let data = data.clone();
             let pb_clone = pb.clone();
             let path_msg = data.path.clone();
+            let sem = sem.clone();
             futures.push(Box::pin(async move {
+                let _p = sem.acquire_owned().await.unwrap();
                 if let Some(pb) = pb_clone {
                     pb.set_message(format!("Cleaning: {}", path_msg));
                 }

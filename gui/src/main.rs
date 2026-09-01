@@ -29,7 +29,7 @@ use std::pin::Pin;
 use std::rc::Rc;
 use std::sync::Arc;
 use tempfile::NamedTempFile;
-use tokio::sync::mpsc;
+use tokio::sync::{mpsc, Semaphore};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -141,6 +141,8 @@ async fn work(
 
     let categories_set: HashSet<String> = categories.into_iter().collect();
 
+    // C: limit to 16 concurrent cleaners
+    let sem = Arc::new(Semaphore::new(16));
     let mut futures: FuturesUnordered<Pin<Box<dyn Future<Output = database::structures::CleanerResult> + Send>>> =
         FuturesUnordered::new();
 
@@ -154,7 +156,9 @@ async fn work(
                 let data = data.clone();
                 let sender = progress_sender.clone();
                 let path_msg = data.path.clone();
+                let sem = sem.clone();
                 futures.push(Box::pin(async move {
+                    let _p = sem.acquire_owned().await.unwrap();
                     let _ = sender.send(format!("Cleaning: {}", path_msg)).await;
                     clear_registry(&data)
                 }));
@@ -167,7 +171,9 @@ async fn work(
             let data = data.clone();
             let sender = progress_sender.clone();
             let path_msg = data.path.clone();
+            let sem = sem.clone();
             futures.push(Box::pin(async move {
+                let _p = sem.acquire_owned().await.unwrap();
                 let _ = sender.send(format!("Cleaning: {}", path_msg)).await;
                 clear_data(&data).await
             }));
