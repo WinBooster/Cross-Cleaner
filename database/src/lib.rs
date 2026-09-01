@@ -7,7 +7,7 @@ pub mod structures;
 pub mod utils;
 
 pub fn get_version() -> &'static str {
-    option_env!("APP_VERSION").unwrap_or("1.9.8")
+    option_env!("APP_VERSION").unwrap_or("2.0.2.2")
 }
 
 pub fn get_icon() -> &'static [u8; 3216] {
