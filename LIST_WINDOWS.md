@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.2.2
+# Windows Clearing Programs Catalog v2.0.2.3
 **Total categories in database:** 15
 
-**Total programs in database:** 183
+**Total programs in database:** 191
 
-**Total pathes in database:** 426
+**Total pathes in database:** 434
 
 ## AI
 
@@ -28,7 +28,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [7-Zip](https://www.7-zip.org/download.html) | Documentation |
-| 2 | Magic TDX | Documentation |
+| 2 | [Magic TXD](https://github.com/FrannDzs/Magic.TXD) | Documentation |
 | 3 | [WinRaR](https://www.win-rar.com/predownload.html) | Documentation |
 
 
@@ -64,7 +64,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [Cheat Engine](https://www.cheatengine.org/downloads.php) | Cheats, Documentation |
-| 2 | [ExecHack](https://c.exechack.cc) | Cheats |
+| 2 | [ExecHack](https://exechack.cc) | Cheats |
 | 3 | [Fatality](https://fatality.win) | Cheats |
 | 4 | [INTERIUM](https://ru.interium.ooo) | Cheats |
 | 5 | [Krnl](https://wearedevs.net/d/Krnl) | Cheats |
@@ -145,7 +145,7 @@
 | 5 | [Dota 2](https://www.dota2.com/home) | Game settings |
 | 6 | [Electronic Arts Desktop](https://www.ea.com/ea-app) | Logs |
 | 7 | [Epic Games Launcher](https://store.epicgames.com/en-US/download) | Logs |
-| 8 | [Genshin Impact](https://genshin.hoyoverse.com) | Documentation, Logs |
+| 8 | [Genshin Impact](https://genshin.hoyoverse.com) | Crashes, Documentation, Logs |
 | 9 | [Lords Mobile](https://lordsmobile.igg.com/pc) | Logs |
 | 10 | [Melissia Games Launcher](https://melissia.games) | Documentation, Logs |
 | 11 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
@@ -156,9 +156,10 @@
 | 16 | [Steam](https://store.steampowered.com/about) | Accounts |
 | 17 | [Terraria](https://terraria.org) | Game saves, Game settings |
 | 18 | [The Powder Toy](https://powdertoy.co.uk) | Game saves |
-| 19 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game settings |
-| 20 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
-| 21 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game saves, Game settings, Logs |
+| 19 | [Ultrakill](https://store.steampowered.com/app/1229490/ULTRAKILL) | Logs |
+| 20 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game settings |
+| 21 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
+| 22 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game saves, Game settings, Logs |
 
 
 ## Image
@@ -168,8 +169,9 @@
 | 1 | [ImageGlass](https://imageglass.org) | Cache, Documentation |
 | 2 | [InkSpace](https://inkscape.org) | Documentation, Logs |
 | 3 | [Magpie](https://github.com/Blinue/Magpie) | Cache, Logs |
-| 4 | [ShareX](https://getsharex.com/downloads) | Backups, Images, Logs |
-| 5 | [Tonfotos Telegram Connector](https://tonfotos.com) | Images |
+| 4 | [Paint.NET](https://paint.net) | Documentation |
+| 5 | [ShareX](https://getsharex.com/downloads) | Backups, Images, Logs |
+| 6 | [Tonfotos Telegram Connector](https://tonfotos.com) | Images |
 
 
 ## Messanger
@@ -183,6 +185,7 @@
 | 5 | [Signal](https://signal.org) | Cache, Logs |
 | 6 | [Telegram](https://desktop.telegram.org) | Accounts, Cache, Logs |
 | 7 | [Thunderbird](https://www.thunderbird.net) | Crashes |
+| 8 | [Vesktop](https://vesktop.dev) | Documentation |
 
 
 ## Minecraft Launcher
@@ -195,16 +198,17 @@
 | 4 | [CubixWorld](https://cubixworld.net/start) | Game saves, Logs |
 | 5 | [CurseForge](https://www.curseforge.com/download/app) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
 | 6 | [GribLand](https://gribland.net/#start) | Accounts, Cache, Crashes, Documentation, Game saves, Images, Logs |
-| 7 | [LoliLand](https://loliland.ru/ru/start) | Crashes, Documentation, Game saves, Images, Logs |
-| 8 | [Lunar Client](https://www.lunarclient.com/download) | Accounts, Cache, Documentation, Logs |
-| 9 | [MCSkill](https://mcskill.net/start) | Crashes, Game saves, Images, Logs |
-| 10 | [McLaunch](https://github.com/mclaunch/mclaunch) | Crashes |
-| 11 | [Minecraft](https://www.minecraft.net/ru-ru/about-minecraft) | Cheats, Crashes, Game saves, Images, Logs |
-| 12 | [Modrinth](https://modrinth.com/app) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 13 | [MultiMC](https://multimc.org/#Download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 14 | [PolyMC](https://polymc.org/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 15 | [PrismLauncher](https://prismlauncher.org/download/windows) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 16 | [Tecknix Client](https://tecknix.com/download.html) | Accounts, Cache, Crashes, Documentation, Game saves, Images, Logs |
+| 7 | [LabyMod](https://laby.net/client) | Logs |
+| 8 | [LoliLand](https://loliland.ru/ru/start) | Crashes, Documentation, Game saves, Images, Logs |
+| 9 | [Lunar Client](https://www.lunarclient.com/download) | Accounts, Cache, Documentation, Logs |
+| 10 | [MCSkill](https://mcskill.net/start) | Crashes, Game saves, Images, Logs |
+| 11 | [McLaunch](https://github.com/mclaunch/mclaunch) | Crashes |
+| 12 | [Minecraft](https://www.minecraft.net/ru-ru/about-minecraft) | Cheats, Crashes, Game saves, Images, Logs |
+| 13 | [Modrinth](https://modrinth.com/app) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 14 | [MultiMC](https://multimc.org/#Download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 15 | [PolyMC](https://polymc.org/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 16 | [PrismLauncher](https://prismlauncher.org/download/windows) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 17 | [Tecknix Client](https://tecknix.com/download.html) | Accounts, Cache, Crashes, Documentation, Game saves, Images, Logs |
 
 
 ## Optimization
@@ -255,8 +259,9 @@
 | 13 | [Process Lasso](https://bitsum.com) | Logs |
 | 14 | [Sandboxie+](https://sandboxie-plus.com) | Documentation |
 | 15 | [SystemInformer](https://systeminformer.com/downloads) | Documentation |
-| 16 | [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | Documentation, Logs |
-| 17 | [Zapret](https://github.com/bol-van/zapret) | Logs |
+| 16 | [TG WS Proxy](https://github.com/Flowseal/tg-ws-proxy) | Logs |
+| 17 | [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | Documentation, Logs |
+| 18 | [Zapret](https://github.com/bol-van/zapret) | Logs |
 
 
 ## Spyware
@@ -288,7 +293,8 @@
 | 7 | [Notepad++](https://notepad-plus-plus.org/downloads) | Documentation |
 | 8 | [Sublime Text](https://www.sublimetext.com/download) | Logs |
 | 9 | [VS Code](https://code.visualstudio.com/download) | Browser cookies, Documentation, Logs |
-| 10 | [Zed](https://zed.dev) | Logs |
+| 10 | Visual Studio | Documentation |
+| 11 | [Zed](https://zed.dev) | Logs |
 
 
 ## Torrent
@@ -303,8 +309,10 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [MiniBin](https://github.com/king-tri-ton/minibin) | Logs |
-| 2 | [PowerToys](https://github.com/microsoft/PowerToys) | Documentation |
+| 1 | [Everything](https://www.voidtools.com) | Documentation |
+| 2 | [MiniBin](https://github.com/king-tri-ton/minibin) | Logs |
+| 3 | [PowerToys](https://github.com/microsoft/PowerToys) | Documentation |
+| 4 | [Unlocker](http://www.emptyloop.com/unlocker) | Documentation |
 
 
 ## VPN
