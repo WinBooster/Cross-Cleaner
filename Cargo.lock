@@ -890,6 +890,7 @@ dependencies = [
  "proptest",
  "rayon",
  "tempfile",
+ "tokio",
 ]
 
 [[package]]

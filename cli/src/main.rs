@@ -20,13 +20,11 @@ use inquire::validator::Validation;
 use inquire::MultiSelect;
 use notify_rust::Notification;
 use std::collections::HashSet;
+use std::future::Future;
 use std::io::Write;
-use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::Arc;
+use std::pin::Pin;
 use tabled::Table;
 use tempfile::NamedTempFile;
-use tokio::sync::Mutex;
-use tokio::task;
 
 #[cfg(windows)]
 use std::io::stdin;
@@ -66,13 +64,11 @@ async fn work(
     database: &[CleanerData],
     #[cfg(windows)] registry_database: &[CleanerDataRegistry],
 ) {
-    // Use atomics for lock-free concurrent counting - BLAZING FAST!
-    let bytes_cleared = Arc::new(AtomicU64::new(0));
-    let removed_files = Arc::new(AtomicU64::new(0));
-    let removed_directories = Arc::new(AtomicU64::new(0));
-
-    // Pre-allocate with exact capacity
-    let cleared_programs = Arc::new(Mutex::new(Vec::<Cleared>::with_capacity(database.len())));
+    // ASYNC without threads: pure FuturesUnordered + tokio::fs
+    let mut bytes_cleared: u64 = 0;
+    let mut removed_files: u64 = 0;
+    let mut removed_directories: u64 = 0;
+    let mut cleared_programs: Vec<Cleared> = Vec::with_capacity(database.len());
 
     let pb = if args.show_progress_bar {
         let sty = ProgressStyle::with_template(
@@ -90,104 +86,91 @@ async fn work(
         None
     };
 
-    // Pre-convert to HashSet for O(1) lookups instead of O(n) contains
+    // Pre-convert to HashSet for O(1) lookups
     let disabled_programs_set: HashSet<&str> = disabled_programs.into_iter().collect();
     let categories_lower: HashSet<String> = categories.iter().map(|s| s.to_lowercase()).collect();
 
-    let mut tasks = Vec::with_capacity(database.len() + 1);
+    // FuturesUnordered without spawn - cooperatively polled
+    let mut futures: FuturesUnordered<Pin<Box<dyn Future<Output = database::structures::CleanerResult> + Send>>> =
+        FuturesUnordered::new();
 
-    // INFO: Clear LastActivity from Registry
-    // WARN: Windows only
+    // INFO: Clear LastActivity from Registry - also async without spawn
+    // Показываем что СЕЙЧАС чистится, а не что уже очистилось
     #[cfg(windows)]
     {
         for data in registry_database.iter() {
             if categories_lower.contains(&data.category.to_lowercase())
                 && !disabled_programs_set.contains(data.program.to_lowercase().as_str())
             {
-                let data = Arc::new(data.clone());
-                let task = task::spawn(async move { clear_registry(&data) });
-                tasks.push(task);
+                let data = data.clone();
+                let pb_clone = pb.clone();
+                let path_msg = data.path.clone();
+                futures.push(Box::pin(async move {
+                    if let Some(pb) = pb_clone {
+                        pb.set_message(format!("Cleaning: {}", path_msg));
+                    }
+                    clear_registry(&data)
+                }));
             }
         }
     }
 
-    // Filter and spawn tasks - avoid cloning in filter closure
     for data in database.iter() {
         if categories_lower.contains(&data.category.to_lowercase())
             && !disabled_programs_set.contains(data.program.to_lowercase().as_str())
         {
-            let data = Arc::new(data.clone());
-            let task = task::spawn(async move { clear_data(&data) });
-            tasks.push(task);
+            let data = data.clone();
+            let pb_clone = pb.clone();
+            let path_msg = data.path.clone();
+            futures.push(Box::pin(async move {
+                if let Some(pb) = pb_clone {
+                    pb.set_message(format!("Cleaning: {}", path_msg));
+                }
+                clear_data(&data).await
+            }));
         }
     }
 
     if let Some(ref pb) = &pb {
-        pb.set_length(tasks.len() as u64);
+        pb.set_length(futures.len() as u64);
     }
 
-    // Use FuturesUnordered to process tasks as they complete (smoother progress)
-    let mut futures = tasks.into_iter().collect::<FuturesUnordered<_>>();
-
-    // Batch progress updates every N items for better performance
     const PROGRESS_BATCH_SIZE: u64 = 5;
     let mut completed_since_update = 0u64;
 
-    while let Some(task_result) = futures.next().await {
-        match task_result {
-            Ok(result) => {
-                if result.working {
-                    // Atomic operations - no locks, blazing fast!
-                    bytes_cleared.fetch_add(result.bytes, Ordering::Relaxed);
-                    removed_files.fetch_add(result.files, Ordering::Relaxed);
-                    removed_directories.fetch_add(result.folders, Ordering::Relaxed);
+    while let Some(result) = futures.next().await {
+        if result.working {
+            bytes_cleared += result.bytes;
+            removed_files += result.files;
+            removed_directories += result.folders;
 
-                    // Only lock once per task for the Vec update
-                    let mut cleared_programs = cleared_programs.lock().await;
-
-                    // Use binary search hint or direct lookup for large datasets
-                    if let Some(cleared) = cleared_programs
-                        .iter_mut()
-                        .find(|c| c.program == result.program)
-                    {
-                        cleared.removed_bytes += result.bytes as u64;
-                        cleared.removed_files += result.files as u64;
-                        cleared.removed_directories += result.folders as u64;
-                        if !cleared.affected_categories.contains(&result.category) {
-                            cleared.affected_categories.push(result.category);
-                        }
-                    } else {
-                        cleared_programs.push(Cleared {
-                            program: result.program,
-                            removed_bytes: result.bytes as u64,
-                            removed_files: result.files as u64,
-                            removed_directories: result.folders as u64,
-                            affected_categories: vec![result.category],
-                        });
-                    }
-                    drop(cleared_programs); // Explicit drop to release lock ASAP
+            if let Some(cleared) = cleared_programs
+                .iter_mut()
+                .find(|c| c.program == result.program)
+            {
+                cleared.removed_bytes += result.bytes;
+                cleared.removed_files += result.files;
+                cleared.removed_directories += result.folders;
+                if !cleared.affected_categories.contains(&result.category) {
+                    cleared.affected_categories.push(result.category);
                 }
-
-                // Batch progress bar updates
-                completed_since_update += 1;
-                if completed_since_update >= PROGRESS_BATCH_SIZE || futures.is_empty() {
-                    if let Some(ref pb) = pb {
-                        pb.set_message(result.path);
-                        pb.inc(completed_since_update);
-                    }
-                    completed_since_update = 0;
-                }
+            } else {
+                cleared_programs.push(Cleared {
+                    program: result.program,
+                    removed_bytes: result.bytes,
+                    removed_files: result.files,
+                    removed_directories: result.folders,
+                    affected_categories: vec![result.category],
+                });
             }
-            Err(e) => {
-                eprintln!("Error waiting for task completion: {:?}", e);
-                completed_since_update += 1;
-                if completed_since_update >= PROGRESS_BATCH_SIZE || futures.is_empty() {
-                    if let Some(ref pb) = pb {
-                        pb.inc(completed_since_update);
-                    }
-                    completed_since_update = 0;
-                }
+        }
+
+        completed_since_update += 1;
+        if completed_since_update >= PROGRESS_BATCH_SIZE || futures.is_empty() {
+            if let Some(ref pb) = pb {
+                pb.inc(completed_since_update);
             }
+            completed_since_update = 0;
         }
     }
 
@@ -196,14 +179,8 @@ async fn work(
         pb.finish();
     }
 
-    // Load atomic values once at the end
-    let bytes_cleared_val = bytes_cleared.load(Ordering::Relaxed);
-    let removed_files_val = removed_files.load(Ordering::Relaxed);
-    let removed_directories_val = removed_directories.load(Ordering::Relaxed);
-
     if args.show_result_table {
         println!("Cleared result:");
-        let cleared_programs = cleared_programs.lock().await;
         let table = Table::new(cleared_programs.iter()).to_string();
         println!("{}", table);
     }
@@ -211,10 +188,10 @@ async fn work(
     if args.show_result_string {
         println!(
             "Removed size: {}, files: {}, dirs: {}, programs: {}",
-            get_file_size_string(bytes_cleared_val),
-            removed_files_val,
-            removed_directories_val,
-            cleared_programs.lock().await.len()
+            get_file_size_string(bytes_cleared),
+            removed_files,
+            removed_directories,
+            cleared_programs.len()
         );
     }
 
@@ -225,9 +202,9 @@ async fn work(
 
         let notification_body = format!(
             "Removed: {}\nFiles: {}\nDirs: {}",
-            get_file_size_string(bytes_cleared_val),
-            removed_files_val,
-            removed_directories_val
+            get_file_size_string(bytes_cleared),
+            removed_files,
+            removed_directories
         );
 
         let notification_result = Notification::new()

@@ -1,48 +1,66 @@
 use database::structures::{CleanerData, CleanerResult};
 use glob::glob;
-use std::path::Path;
-use std::{fs, io};
+use std::future::Future;
+use std::path::{Path, PathBuf};
+use tokio::fs;
+use tokio::io;
 
 // NOTE: Recursively deletes the directory and updates the counters in `cleaner_result`.
-// PERF: Fully optimized
-fn remove_directory_recursive(path: &Path, cleaner_result: &mut CleanerResult) -> io::Result<()> {
-    if path.is_dir() {
-        for entry in fs::read_dir(path)? {
-            let entry = entry?;
+// ASYNC: tokio::fs, recursion via Box::pin
+fn remove_directory_recursive<'a>(
+    path: &'a Path,
+    cleaner_result: &'a mut CleanerResult,
+) -> std::pin::Pin<Box<dyn Future<Output = io::Result<()>> + Send + 'a>> {
+    Box::pin(async move {
+        let metadata = fs::metadata(path).await?;
+        if !metadata.is_dir() {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "The provided path is not a directory",
+            ));
+        }
+
+        let mut dir = fs::read_dir(path).await?;
+        while let Some(entry) = dir.next_entry().await? {
             let entry_path = entry.path();
-            if entry_path.is_dir() {
-                remove_directory_recursive(&entry_path, cleaner_result)?;
+            let ft = entry.file_type().await?;
+            if ft.is_dir() {
+                remove_directory_recursive(&entry_path, cleaner_result).await?;
             } else {
-                remove_file(&entry_path, cleaner_result)?;
+                remove_file(&entry_path, cleaner_result).await?;
             }
         }
 
-        fs::remove_dir(path)?;
+        fs::remove_dir(path).await?;
         cleaner_result.folders += 1;
-    } else {
-        return Err(io::Error::new(
-            io::ErrorKind::InvalidInput,
-            "The provided path is not a directory",
-        ));
-    }
-
-    Ok(())
+        Ok(())
+    })
 }
-// NOTE: Deletes the file and updates the counters in `cleaner_result`.
-// PERF: Fully optimized
-fn remove_file(path: &Path, cleaner_result: &mut CleanerResult) -> io::Result<()> {
-    let metadata = fs::metadata(path)?;
-    fs::remove_file(path)?;
 
+// NOTE: Deletes the file and updates the counters in `cleaner_result`.
+// ASYNC: tokio::fs
+async fn remove_file(path: &Path, cleaner_result: &mut CleanerResult) -> io::Result<()> {
+    let metadata = fs::metadata(path).await?;
+    fs::remove_file(path).await?;
     cleaner_result.bytes += metadata.len();
     cleaner_result.files += 1;
-
     Ok(())
+}
+
+// helper: async remove_dir_all without counting (for remove_directory_after_clean)
+// uses spawn_blocking to avoid blocking runtime
+async fn remove_dir_all_async(path: &Path) -> io::Result<()> {
+    let p = PathBuf::from(path);
+    // spawn_blocking returns JoinError; map to io::Error
+    let res = tokio::task::spawn_blocking(move || std::fs::remove_dir_all(&p))
+        .await
+        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("join error: {e}")))?;
+    res
 }
 
 // NOTE: The main function for data cleansing.
-// PERF: Fully optimized
-pub fn clear_data(data: &CleanerData) -> CleanerResult {
+// ASYNC: fully async, non-blocking IO
+pub async fn clear_data(data: &CleanerData) -> CleanerResult {
     let mut cleaner_result = CleanerResult {
         files: 0,
         folders: 0,
@@ -53,19 +71,24 @@ pub fn clear_data(data: &CleanerData) -> CleanerResult {
         category: data.category.clone(),
     };
 
-    // NOTE: Use glob to search for files and directories
+    // NOTE: Use glob to search for files and directories (glob is sync, cheap)
     if let Ok(results) = glob(&data.path) {
         for result in results.flatten() {
             let path = result.as_path();
+            // cache is_dir/is_file via metadata once to avoid extra syscalls?
+            // keep original logic: check exists + is_file/is_dir before each op,
+            // but also compute is_dir/is_file for remove_all/remove_files branches
             let is_dir = path.is_dir();
             let is_file = path.is_file();
 
             // NOTE: Deleting specified files
             for file in &data.files_to_remove {
                 let file_path = path.join(file);
+                // use tokio check via try_exists? keep sync exists for simplicity (non-blocking cheap)
+                // but metadata check via tokio for actual removal
                 if file_path.exists()
                     && file_path.is_file()
-                    && remove_file(&file_path, &mut cleaner_result).is_ok()
+                    && remove_file(&file_path, &mut cleaner_result).await.is_ok()
                 {
                     cleaner_result.working = true;
                 }
@@ -76,7 +99,9 @@ pub fn clear_data(data: &CleanerData) -> CleanerResult {
                 let dir_path = path.join(dir);
                 if dir_path.exists()
                     && dir_path.is_dir()
-                    && remove_directory_recursive(&dir_path, &mut cleaner_result).is_ok()
+                    && remove_directory_recursive(&dir_path, &mut cleaner_result)
+                        .await
+                        .is_ok()
                 {
                     cleaner_result.working = true;
                 }
@@ -85,26 +110,32 @@ pub fn clear_data(data: &CleanerData) -> CleanerResult {
             // NOTE: Deleting all files and directories if required
             if data.remove_all_in_dir
                 && is_dir
-                && remove_directory_recursive(path, &mut cleaner_result).is_ok()
+                && remove_directory_recursive(path, &mut cleaner_result)
+                    .await
+                    .is_ok()
             {
                 cleaner_result.working = true;
             }
 
             // NOTE: Deleting files if required
-            if data.remove_files && is_file && remove_file(path, &mut cleaner_result).is_ok() {
+            if data.remove_files && is_file && remove_file(path, &mut cleaner_result).await.is_ok()
+            {
                 cleaner_result.working = true;
             }
 
             // NOTE: Deleting directories if required
             if data.remove_directories
                 && is_dir
-                && remove_directory_recursive(path, &mut cleaner_result).is_ok()
+                && remove_directory_recursive(path, &mut cleaner_result)
+                    .await
+                    .is_ok()
             {
                 cleaner_result.working = true;
             }
 
             // NOTE: Deleting a directory after cleaning, if required
-            if data.remove_directory_after_clean && is_dir && fs::remove_dir_all(path).is_ok() {
+            if data.remove_directory_after_clean && is_dir && remove_dir_all_async(path).await.is_ok()
+            {
                 cleaner_result.folders += 1;
                 cleaner_result.working = true;
             }
@@ -136,10 +167,10 @@ mod tests {
         }
     }
 
-    #[test]
-    fn test_clear_data_nonexistent_path() {
+    #[tokio::test]
+    async fn test_clear_data_nonexistent_path() {
         let data = create_test_data(String::from("/nonexistent/path/*"));
-        let result = clear_data(&data);
+        let result = clear_data(&data).await;
 
         assert_eq!(result.files, 0);
         assert_eq!(result.folders, 0);
@@ -147,8 +178,8 @@ mod tests {
         assert!(!result.working);
     }
 
-    #[test]
-    fn test_clear_data_remove_files() {
+    #[tokio::test]
+    async fn test_clear_data_remove_files() {
         let temp_dir = TempDir::new().unwrap();
         let file_path = temp_dir.path().join("test_file.txt");
         fs::write(&file_path, b"test content").unwrap();
@@ -156,7 +187,7 @@ mod tests {
         let mut data = create_test_data(file_path.to_str().unwrap().to_string());
         data.remove_files = true;
 
-        let result = clear_data(&data);
+        let result = clear_data(&data).await;
 
         assert!(result.working);
         assert_eq!(result.files, 1);
@@ -164,8 +195,8 @@ mod tests {
         assert!(!file_path.exists());
     }
 
-    #[test]
-    fn test_clear_data_remove_directory() {
+    #[tokio::test]
+    async fn test_clear_data_remove_directory() {
         let temp_dir = TempDir::new().unwrap();
         let sub_dir = temp_dir.path().join("sub_dir");
         fs::create_dir(&sub_dir).unwrap();
@@ -174,15 +205,15 @@ mod tests {
         let mut data = create_test_data(sub_dir.to_str().unwrap().to_string());
         data.remove_directories = true;
 
-        let result = clear_data(&data);
+        let result = clear_data(&data).await;
 
         assert!(result.working);
         assert!(result.folders > 0);
         assert!(!sub_dir.exists());
     }
 
-    #[test]
-    fn test_clear_data_remove_all_in_dir() {
+    #[tokio::test]
+    async fn test_clear_data_remove_all_in_dir() {
         let temp_dir = TempDir::new().unwrap();
         let target_dir = temp_dir.path().join("target");
         fs::create_dir(&target_dir).unwrap();
@@ -192,15 +223,15 @@ mod tests {
         let mut data = create_test_data(target_dir.to_str().unwrap().to_string());
         data.remove_all_in_dir = true;
 
-        let result = clear_data(&data);
+        let result = clear_data(&data).await;
 
         assert!(result.working);
         assert!(result.files >= 2);
         assert!(!target_dir.exists());
     }
 
-    #[test]
-    fn test_clear_data_specific_files() {
+    #[tokio::test]
+    async fn test_clear_data_specific_files() {
         let temp_dir = TempDir::new().unwrap();
         let target_dir = temp_dir.path().join("target");
         fs::create_dir(&target_dir).unwrap();
@@ -210,7 +241,7 @@ mod tests {
         let mut data = create_test_data(target_dir.to_str().unwrap().to_string());
         data.files_to_remove = vec![String::from("remove_me.tmp")];
 
-        let result = clear_data(&data);
+        let result = clear_data(&data).await;
 
         assert!(result.working);
         assert_eq!(result.files, 1);
@@ -218,8 +249,8 @@ mod tests {
         assert!(target_dir.join("keep_me.txt").exists());
     }
 
-    #[test]
-    fn test_clear_data_specific_directories() {
+    #[tokio::test]
+    async fn test_clear_data_specific_directories() {
         let temp_dir = TempDir::new().unwrap();
         let target_dir = temp_dir.path().join("target");
         fs::create_dir(&target_dir).unwrap();
@@ -234,7 +265,7 @@ mod tests {
         let mut data = create_test_data(target_dir.to_str().unwrap().to_string());
         data.directories_to_remove = vec![String::from("cache")];
 
-        let result = clear_data(&data);
+        let result = clear_data(&data).await;
 
         assert!(result.working);
         assert!(result.folders >= 1);
@@ -242,8 +273,8 @@ mod tests {
         assert!(keep_dir.exists());
     }
 
-    #[test]
-    fn test_clear_data_glob_pattern() {
+    #[tokio::test]
+    async fn test_clear_data_glob_pattern() {
         let temp_dir = TempDir::new().unwrap();
         fs::write(temp_dir.path().join("file1.tmp"), b"temp1").unwrap();
         fs::write(temp_dir.path().join("file2.tmp"), b"temp2").unwrap();
@@ -253,7 +284,7 @@ mod tests {
         let mut data = create_test_data(pattern);
         data.remove_files = true;
 
-        let result = clear_data(&data);
+        let result = clear_data(&data).await;
 
         assert!(result.working);
         assert_eq!(result.files, 2);
@@ -262,8 +293,8 @@ mod tests {
         assert!(temp_dir.path().join("file3.txt").exists());
     }
 
-    #[test]
-    fn test_clear_data_nested_directories() {
+    #[tokio::test]
+    async fn test_clear_data_nested_directories() {
         let temp_dir = TempDir::new().unwrap();
         let nested = temp_dir.path().join("level1").join("level2").join("level3");
         fs::create_dir_all(&nested).unwrap();
@@ -273,15 +304,15 @@ mod tests {
             create_test_data(temp_dir.path().join("level1").to_str().unwrap().to_string());
         data.remove_directories = true;
 
-        let result = clear_data(&data);
+        let result = clear_data(&data).await;
 
         assert!(result.working);
         assert!(result.folders >= 3);
         assert!(result.files >= 1);
     }
 
-    #[test]
-    fn test_clear_data_result_fields() {
+    #[tokio::test]
+    async fn test_clear_data_result_fields() {
         let temp_dir = TempDir::new().unwrap();
         let file_path = temp_dir.path().join("test.txt");
         fs::write(&file_path, b"test").unwrap();
@@ -289,7 +320,7 @@ mod tests {
         let mut data = create_test_data(file_path.to_str().unwrap().to_string());
         data.remove_files = true;
 
-        let result = clear_data(&data);
+        let result = clear_data(&data).await;
 
         assert_eq!(result.program, "TestProgram");
         assert_eq!(result.category, "TestCategory");
@@ -297,8 +328,8 @@ mod tests {
         assert!(result.working);
     }
 
-    #[test]
-    fn test_clear_data_empty_directory() {
+    #[tokio::test]
+    async fn test_clear_data_empty_directory() {
         let temp_dir = TempDir::new().unwrap();
         let empty_dir = temp_dir.path().join("empty");
         fs::create_dir(&empty_dir).unwrap();
@@ -306,15 +337,15 @@ mod tests {
         let mut data = create_test_data(empty_dir.to_str().unwrap().to_string());
         data.remove_directories = true;
 
-        let result = clear_data(&data);
+        let result = clear_data(&data).await;
 
         assert!(result.working);
         assert_eq!(result.folders, 1);
         assert_eq!(result.files, 0);
     }
 
-    #[test]
-    fn test_clear_data_byte_counting() {
+    #[tokio::test]
+    async fn test_clear_data_byte_counting() {
         let temp_dir = TempDir::new().unwrap();
         let file_path = temp_dir.path().join("sized_file.txt");
         let content = b"0123456789"; // 10 bytes
@@ -323,13 +354,13 @@ mod tests {
         let mut data = create_test_data(file_path.to_str().unwrap().to_string());
         data.remove_files = true;
 
-        let result = clear_data(&data);
+        let result = clear_data(&data).await;
 
         assert_eq!(result.bytes, 10);
     }
 
-    #[test]
-    fn test_clear_data_multiple_operations() {
+    #[tokio::test]
+    async fn test_clear_data_multiple_operations() {
         let temp_dir = TempDir::new().unwrap();
         let target_dir = temp_dir.path().join("multi_test");
         fs::create_dir(&target_dir).unwrap();
@@ -346,7 +377,7 @@ mod tests {
         data.files_to_remove = vec![String::from("temp.tmp")];
         data.directories_to_remove = vec![String::from("cache")];
 
-        let result = clear_data(&data);
+        let result = clear_data(&data).await;
 
         assert!(result.working);
         assert!(result.files >= 2); // temp.tmp + cache.dat
@@ -361,7 +392,20 @@ mod tests {
 mod proptests {
     use super::*;
     use proptest::prelude::*;
+    use std::fs;
     use tempfile::TempDir;
+
+    // helper to run async clear_data inside sync proptest
+    fn run_async<F, T>(f: F) -> T
+    where
+        F: std::future::Future<Output = T>,
+    {
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap()
+            .block_on(f)
+    }
 
     proptest! {
         /// Property: byte counting should always match actual file sizes
@@ -384,7 +428,7 @@ mod proptests {
                 remove_files: true,
             };
 
-            let result = clear_data(&data);
+            let result = run_async(clear_data(&data));
             prop_assert_eq!(result.bytes, content.len() as u64);
         }
 
@@ -413,7 +457,7 @@ mod proptests {
                 remove_files: true,
             };
 
-            let result = clear_data(&data);
+            let result = run_async(clear_data(&data));
             prop_assert_eq!(result.files, num_files as u64);
         }
 
@@ -434,7 +478,7 @@ mod proptests {
                 remove_files: true,
             };
 
-            let result = clear_data(&data);
+            let result = run_async(clear_data(&data));
             prop_assert!(!result.working);
             prop_assert_eq!(result.files, 0);
             prop_assert_eq!(result.folders, 0);
@@ -465,7 +509,7 @@ mod proptests {
                 remove_files: false,
             };
 
-            let result = clear_data(&data);
+            let result = run_async(clear_data(&data));
             prop_assert_eq!(result.folders, num_dirs as u64);
             prop_assert_eq!(result.files, 0);
         }
@@ -490,7 +534,7 @@ mod proptests {
                 remove_files: true,
             };
 
-            let result = clear_data(&data);
+            let result = run_async(clear_data(&data));
             prop_assert_eq!(result.program, program);
             prop_assert_eq!(result.category, category);
         }
@@ -521,7 +565,7 @@ mod proptests {
                 remove_files: false,
             };
 
-            let result = clear_data(&data);
+            let result = run_async(clear_data(&data));
             prop_assert_eq!(result.folders, depth as u64);
         }
 
@@ -551,7 +595,7 @@ mod proptests {
                 remove_files: false,
             };
 
-            let result = clear_data(&data);
+            let result = run_async(clear_data(&data));
             prop_assert_eq!(result.files, 1);
             prop_assert!(!target_dir.join(&filename).exists());
             prop_assert!(target_dir.join("keep1.txt").exists());
@@ -586,7 +630,7 @@ mod proptests {
                 remove_files: true,
             };
 
-            let result = clear_data(&data);
+            let result = run_async(clear_data(&data));
             prop_assert_eq!(result.bytes, expected_bytes);
             prop_assert_eq!(result.files, file_sizes.len() as u64);
         }
