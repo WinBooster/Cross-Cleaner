@@ -190,7 +190,14 @@ jobs:
             ## ✨ What's New
 
             ### 🪟 Windows Enhancements
-            - **Java** Fix incorrect clearings
+            - **Unlocker** Added documentation clearing
+            - **Paint.NET** Added documentation clearing
+            - **Everything** Added documentation clearing
+            - **Visual Studio** Added documentation clearing
+            - **LabyMod** Added logs clearing
+            - **TG WS Proxy** Added logs clearing
+            - **Genshin Impact** Improved logs clearing, Added crashes cleanup
+            - **Ultrakill** Added logs clearing
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:

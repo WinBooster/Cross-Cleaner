@@ -1293,6 +1293,27 @@
     "files_to_remove": [
       "output_log.txt",
       "output_log.txt.last"
+    ],
+    "directories_to_remove": [
+      "logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\miHoYo\\Genshin Impact",
+    "category": "Crashes",
+    "program": "Genshin Impact",
+    "class": "Game",
+    "directories_to_remove": [
+      "Crashed"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\Hakita\\ULTRAKILL",
+    "category": "Logs",
+    "program": "Ultrakill",
+    "class": "Game",
+    "files_to_remove": [
+      "Player.log"
     ]
   },
   {
@@ -2355,7 +2376,7 @@
     "path": "{drive}Program Files\\Magic TXD",
     "class": "Archive",
     "category": "Documentation",
-    "program": "Magic TDX",
+    "program": "Magic TXD",
     "directories_to_remove": [
       "licenses"
     ]
@@ -4578,6 +4599,74 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Unlocker",
+    "class": "Utility",
+    "category": "Documentation",
+    "program": "Unlocker",
+    "files_to_remove": [
+      "README.TXT",
+      "Unlocker.url"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Paint.NET",
+    "class": "Image",
+    "category": "Documentation",
+    "program": "Paint.NET",
+    "files_to_remove": [
+      "License.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Everything",
+    "class": "Utility",
+    "category": "Documentation",
+    "program": "Everything",
+    "files_to_remove": [
+      "License.txt",
+      "Changes.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Visual Studio\\Shared\\RemotedSimulator",
+    "class": "Text",
+    "category": "Documentation",
+    "program": "Visual Studio",
+    "files_to_remove": [
+      "License.rtf",
+      "ThirdPartyNotices.txt",
+      "WIX-License.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\LabyMod",
+    "class": "Minecraft Launcher",
+    "category": "Logs",
+    "program": "LabyMod",
+    "directories_to_remove": [
+      "launcher-logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\TgWsProxy",
+    "class": "Security",
+    "category": "Logs",
+    "program": "TG WS Proxy",
+    "files_to_remove": [
+      "proxy.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\vesktop",
+    "class": "Messanger",
+    "category": "Documentation",
+    "program": "Vesktop",
+    "files_to_remove": [
+      "LICENSE.electron.txt",
+      "LICENSES.chromium.html"
     ]
   }
 ]
