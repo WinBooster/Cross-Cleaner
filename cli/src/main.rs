@@ -94,8 +94,9 @@ async fn work(
 
     // C: limit global concurrency to 16 to avoid thread pool overload
     let sem = Arc::new(Semaphore::new(16));
-    let mut futures: FuturesUnordered<Pin<Box<dyn Future<Output = database::structures::CleanerResult> + Send>>> =
-        FuturesUnordered::new();
+    let mut futures: FuturesUnordered<
+        Pin<Box<dyn Future<Output = database::structures::CleanerResult> + Send>>,
+    > = FuturesUnordered::new();
 
     // INFO: Clear LastActivity from Registry - also async without spawn
     // Показываем что СЕЙЧАС чистится, а не что уже очистилось
