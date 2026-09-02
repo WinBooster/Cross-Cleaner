@@ -972,57 +972,66 @@ impl eframe::App for MyApp {
                                     ui.memory_mut(|mem| mem.toggle_popup(popup_id));
                                 }
 
-                                // Popup with sub_category checkboxes
-                                egui::popup::popup_below_widget(
-                                    ui,
-                                    popup_id,
-                                    &menu_resp,
-                                    egui::popup::PopupCloseBehavior::CloseOnClickOutside,
-                                    |ui| {
-                                        ui.set_min_width(200.0);
-                                        egui::ScrollArea::vertical().max_height(300.0).show(
-                                            ui,
-                                            |ui| {
-                                                for sub in cat.subs.clone() {
-                                                    let mut is_sel = cat.selected.contains(&sub);
-                                                    if ui.checkbox(&mut is_sel, &sub).changed() {
-                                                        if is_sel {
-                                                            cat.selected.insert(sub.clone());
-                                                        } else {
-                                                            cat.selected.remove(&sub);
+                                // Popup with sub_category checkboxes - shifted to right-bottom corner of image so it doesn't cover the button
+                                if ui.memory(|m| m.is_popup_open(popup_id)) {
+                                    let pos = menu_resp.rect.right_bottom();
+                                    let frame = egui::Frame::popup(ui.style());
+                                    let popup_response = egui::Area::new(popup_id)
+                                        .pivot(egui::Align2::LEFT_TOP)
+                                        .fixed_pos(pos)
+                                        .order(egui::Order::Foreground)
+                                        .show(ui.ctx(), |ui| {
+                                            frame
+                                                .show(ui, |ui| {
+                                                    ui.set_min_width(200.0);
+                                                    egui::ScrollArea::vertical().max_height(300.0).show(
+                                                        ui,
+                                                        |ui| {
+                                                            for sub in cat.subs.clone() {
+                                                                let mut is_sel = cat.selected.contains(&sub);
+                                                                if ui.checkbox(&mut is_sel, &sub).changed() {
+                                                                    if is_sel {
+                                                                        cat.selected.insert(sub.clone());
+                                                                    } else {
+                                                                        cat.selected.remove(&sub);
+                                                                    }
+                                                                }
+                                                            }
+                                                            // Show Uncategorized for objects without sub_category, only if category has ≥1 real sub
+                                                            if cat.has_empty {
+                                                                let mut is_uncat = cat.selected.contains("");
+                                                                if ui.checkbox(&mut is_uncat, "Uncategorized").changed() {
+                                                                    if is_uncat {
+                                                                        cat.selected.insert(String::new());
+                                                                    } else {
+                                                                        cat.selected.remove(&String::new());
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                    );
+                                                    ui.separator();
+                                                    ui.horizontal(|ui| {
+                                                        if ui.small_button("All").clicked() {
+                                                            cat.selected = cat.subs.iter().cloned().collect();
+                                                            if cat.has_empty {
+                                                                cat.selected.insert(String::new());
+                                                            }
                                                         }
-                                                    }
-                                                }
-                                                // Show Uncategorized for objects without sub_category, only if category has ≥1 real sub
-                                                if cat.has_empty {
-                                                    let mut is_uncat = cat.selected.contains("");
-                                                    if ui
-                                                        .checkbox(&mut is_uncat, "Uncategorized")
-                                                        .changed()
-                                                    {
-                                                        if is_uncat {
-                                                            cat.selected.insert(String::new());
-                                                        } else {
-                                                            cat.selected.remove(&String::new());
+                                                        if ui.small_button("None").clicked() {
+                                                            cat.selected.clear();
                                                         }
-                                                    }
-                                                }
-                                            },
-                                        );
-                                        ui.separator();
-                                        ui.horizontal(|ui| {
-                                            if ui.small_button("All").clicked() {
-                                                cat.selected = cat.subs.iter().cloned().collect();
-                                                if cat.has_empty {
-                                                    cat.selected.insert(String::new());
-                                                }
-                                            }
-                                            if ui.small_button("None").clicked() {
-                                                cat.selected.clear();
-                                            }
+                                                    });
+                                                })
+                                                .inner
                                         });
-                                    },
-                                );
+                                    // Close on click outside or Escape, so clicking empty area is easy
+                                    let should_close = menu_resp.clicked_elsewhere()
+                                        && popup_response.response.clicked_elsewhere();
+                                    if ui.input(|i| i.key_pressed(egui::Key::Escape)) || should_close {
+                                        ui.memory_mut(|m| m.close_popup());
+                                    }
+                                }
                             }
                             // suppress unused warning
                             let _ = resp;
