@@ -108,12 +108,12 @@ async fn work(
             {
                 let data = data.clone();
                 let pb_clone = pb.clone();
-                let path_msg = data.path.clone();
+                let name_msg = data.program.clone();
                 let sem = sem.clone();
                 futures.push(Box::pin(async move {
                     let _p = sem.acquire_owned().await.unwrap();
                     if let Some(pb) = pb_clone {
-                        pb.set_message(format!("Cleaning: {}", path_msg));
+                        pb.set_message(format!("Cleaning: {}", name_msg));
                     }
                     clear_registry(&data)
                 }));

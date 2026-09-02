@@ -191,6 +191,11 @@ jobs:
 
             ### 🪟 Windows Enhancements
             - **Thorium** Added documentation, browser cookies, browser passwords, browser history clearing
+            - **SystemInformer** Improved documentation (signatures) clearing
+            - **MinGW** Improved documentation (signatures) clearing
+
+            ### 🛠 Technical Updates
+            GUI - added sub category system
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
