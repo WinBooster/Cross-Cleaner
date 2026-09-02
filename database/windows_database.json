@@ -107,7 +107,7 @@
     "path": "{drive}Program Files\\AmneziaVPN\\ss",
     "class": "VPN",
     "category": "Documentation",
-    "sub_category":"Licenses",
+    "sub_category": "Licenses",
     "program": "Amnezia VPN",
     "files_to_remove": [
       "LICENSE"
@@ -127,7 +127,7 @@
     "path": "{drive}Program Files\\AmneziaVPN\\tap",
     "class": "VPN",
     "category": "Documentation",
-    "sub_category":"Licenses",
+    "sub_category": "Licenses",
     "program": "Amnezia VPN",
     "files_to_remove": [
       "license.txt"
@@ -288,7 +288,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher",
     "class": "Minecraft Launcher",
     "category": "Documentation",
-    "sub_category":"Licenses",
+    "sub_category": "Licenses",
     "program": "ATLauncher",
     "directories_to_remove": [
       "licenses"
@@ -317,7 +317,7 @@
   {
     "path": "{drive}Program Files\\Audacity",
     "category": "Documentation",
-    "sub_category":"Licenses",
+    "sub_category": "Licenses",
     "program": "Audacity",
     "class": "Audio",
     "files_to_remove": [
@@ -346,7 +346,7 @@
     "path": "{drive}Program Files\\Avast Software\\Avast",
     "class": "Security",
     "category": "Documentation",
-    "sub_category":"Licenses",
+    "sub_category": "Licenses",
     "program": "Avast",
     "directories_to_remove": [
       "Licenses"
@@ -4375,6 +4375,59 @@
     "remove_all_in_dir": true
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\Application",
+    "class": "Browser",
+    "category": "Logs",
+    "program": "Thorium",
+    "files_to_remove": [
+      "debug.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\Application\\**\\WidevineCdm",
+    "class": "Browser",
+    "category": "Documentation",
+    "program": "Thorium",
+    "files_to_remove": [
+      "LICENCE"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default\\Network",
+    "class": "Browser",
+    "category": "Browser cookies",
+    "program": "Thorium",
+    "files_to_remove": [
+      "Cookies",
+      "Cookies-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default",
+    "class": "Browser",
+    "category": "Browser passwords",
+    "program": "Thorium",
+    "files_to_remove": [
+      "Login Data",
+      "Login Data For Account",
+      "Login Data For Account-journal",
+      "Login Data-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default",
+    "class": "Browser",
+    "category": "Browser history",
+    "program": "Thorium",
+    "files_to_remove": [
+      "Favicons",
+      "Favicons-journal",
+      "History",
+      "History-journal",
+      "Visited Links"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\thunderbird\\Profiles\\**",
     "class": "Messanger",
     "category": "Crashes",
@@ -5143,59 +5196,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\Application",
-    "class": "Browser",
-    "category": "Logs",
-    "program": "Thorium",
-    "files_to_remove": [
-      "debug.log"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\Application\\**\\WidevineCdm",
-    "class": "Browser",
-    "category": "Documentation",
-    "program": "Thorium",
-    "files_to_remove": [
-      "LICENCE"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default\\Network",
-    "class": "Browser",
-    "category": "Browser cookies",
-    "program": "Thorium",
-    "files_to_remove": [
-      "Cookies",
-      "Cookies-journal"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default",
-    "class": "Browser",
-    "category": "Browser passwords",
-    "program": "Thorium",
-    "files_to_remove": [
-      "Login Data",
-      "Login Data For Account",
-      "Login Data For Account-journal",
-      "Login Data-journal"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default",
-    "class": "Browser",
-    "category": "Browser history",
-    "program": "Thorium",
-    "files_to_remove": [
-      "Favicons",
-      "Favicons-journal",
-      "History",
-      "History-journal",
-      "Visited Links"
     ]
   }
 ]
