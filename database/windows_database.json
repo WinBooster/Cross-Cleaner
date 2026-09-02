@@ -4795,5 +4795,58 @@
     "directories_to_remove": [
       "LOGS"
     ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\Application",
+    "class": "Browser",
+    "category": "Logs",
+    "program": "Thorium",
+    "remove_files": [
+      "debug.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\Application\\**\\WidevineCdm",
+    "class": "Browser",
+    "category": "Documentation",
+    "program": "Thorium",
+    "remove_files": [
+      "LICENCE"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default\\Network",
+    "class": "Browser",
+    "category": "Browser cookies",
+    "program": "Thorium",
+    "remove_files": [
+      "Cookies",
+      "Cookies-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default",
+    "class": "Browser",
+    "category": "Browser passwords",
+    "program": "Thorium",
+    "remove_files": [
+      "Login Data",
+      "Login Data For Account",
+      "Login Data For Account-journal",
+      "Login Data-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default",
+    "class": "Browser",
+    "category": "Browser history",
+    "program": "Thorium",
+    "remove_files": [
+      "Favicons",
+      "Favicons-journal",
+      "History",
+      "History-journal",
+      "Visited Links"
+    ]
   }
 ]

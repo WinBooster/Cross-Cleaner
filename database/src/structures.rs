@@ -96,4 +96,5 @@ pub struct CleanerResult {
     pub path: String,
     pub program: String,
     pub category: String,
+    pub sub_category: String,
 }

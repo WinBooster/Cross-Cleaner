@@ -190,16 +190,7 @@ jobs:
             ## ✨ What's New
 
             ### 🪟 Windows Enhancements
-            - **Google Chrome** Added documentation clearing
-            - **Edge** Added logs clearing
-            - **Namida** Added documentation clearing
-            - **qTox** Added logs clearing
-            - **OnionShare** Added documentation clearing
-            - **VeraCrypt** Added documentation clearing
-            - **VLC** Added logs clearing
-            - **Discord** Improved logs clearing
-            - **MSI Afterburner** Added documentation clearing
-            - **Wireshark** Added documentation clearing
+            - **Thorium** Added documentation, browser cookies, browser passwords, browser history clearing
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
