@@ -521,7 +521,7 @@
   {
     "path": "{drive}Program Files\\BlueStacks_nxt",
     "class": "Emulator",
-    "category": "Logs",
+    "category": "Documentation",
     "sub_category": "Licenses",
     "program": "BlueStacks 5",
     "files_to_remove": [
