@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.2.3
+# Windows Clearing Programs Catalog v2.0.2.4
 **Total categories in database:** 15
 
-**Total programs in database:** 191
+**Total programs in database:** 197
 
-**Total pathes in database:** 434
+**Total pathes in database:** 443
 
 ## AI
 
@@ -41,9 +41,10 @@
 | 3 | [Audacity](https://www.audacityteam.org) | Documentation |
 | 4 | [FL Studio](https://www.image-line.com/fl-studio-download) | Documentation |
 | 5 | [Murglar](https://murglar.app) | Logs |
-| 6 | [SoundWire Server](https://georgielabs.net) | Documentation |
-| 7 | [Spotify](https://open.spotify.com/download) | Cache, Logs |
-| 8 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
+| 6 | [Namida](https://github.com/namidaco/namida) | Documentation |
+| 7 | [SoundWire Server](https://georgielabs.net) | Documentation |
+| 8 | [Spotify](https://open.spotify.com/download) | Cache, Logs |
+| 9 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
 
 
 ## Browser
@@ -51,8 +52,8 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [Brave Browser](https://brave.com/download) | Browser cookies, Browser history, Browser passwords, Cache, Logs |
-| 2 | [Edge](https://www.microsoft.com/edge) | Browser cookies, Browser history, Cache |
-| 3 | [Google Chrome](https://www.google.com/intl/en/chrome) | Browser cookies, Browser history, Browser passwords, Logs |
+| 2 | [Edge](https://www.microsoft.com/edge) | Browser cookies, Browser history, Cache, Logs |
+| 3 | [Google Chrome](https://www.google.com/intl/en/chrome) | Browser cookies, Browser history, Browser passwords, Documentation, Logs |
 | 4 | [LibreWolf](https://librewolf.net/installation) | Browser cookies, Browser history |
 | 5 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser cookies, Browser history, Cache, Logs |
 | 6 | [Opera GX](https://www.opera.com/download) | Browser cookies, Browser history, Browser passwords |
@@ -119,9 +120,10 @@
 | --- | --- | --- |
 | 1 | [IObit Driver Booster](https://ru.iobit.com/driver-booster.php) | Logs |
 | 2 | [LGHUB](https://www.logitechg.com/en-us/innovation/g-hub.html) | Documentation |
-| 3 | [NVIDIA](https://www.nvidia.com) | Cache, Documentation, Logs |
-| 4 | [NVIDIA App](https://www.nvidia.com/en-us/software/nvidia-app) | Logs |
-| 5 | [VulcanRT](https://vulkan.lunarg.com/sdk/home) | Documentation |
+| 3 | [MSI Afterburner](https://www.msi.com/Landing/afterburner) | Documentation |
+| 4 | [NVIDIA](https://www.nvidia.com) | Cache, Documentation, Logs |
+| 5 | [NVIDIA App](https://www.nvidia.com/en-us/software/nvidia-app) | Logs |
+| 6 | [VulcanRT](https://vulkan.lunarg.com/sdk/home) | Documentation |
 
 
 ## Emulator
@@ -186,6 +188,7 @@
 | 6 | [Telegram](https://desktop.telegram.org) | Accounts, Cache, Logs |
 | 7 | [Thunderbird](https://www.thunderbird.net) | Crashes |
 | 8 | [Vesktop](https://vesktop.dev) | Documentation |
+| 9 | [qTox](https://qtox.github.io) | Logs |
 
 
 ## Minecraft Launcher
@@ -260,8 +263,10 @@
 | 14 | [Sandboxie+](https://sandboxie-plus.com) | Documentation |
 | 15 | [SystemInformer](https://systeminformer.com/downloads) | Documentation |
 | 16 | [TG WS Proxy](https://github.com/Flowseal/tg-ws-proxy) | Logs |
-| 17 | [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | Documentation, Logs |
-| 18 | [Zapret](https://github.com/bol-van/zapret) | Logs |
+| 17 | [VeraCrypt](https://veracrypt.io) | Documentation |
+| 18 | [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | Documentation, Logs |
+| 19 | [Wireshark](https://www.wireshark.org) | Documentation |
+| 20 | [Zapret](https://github.com/bol-van/zapret) | Logs |
 
 
 ## Spyware
@@ -338,7 +343,7 @@
 | 3 | [OBS Studio](https://obsproject.com/download) | Logs |
 | 4 | [Rave](https://rave.io) | Cache, Logs |
 | 5 | [Topaz Video AI](https://www.topazlabs.com/topaz-video-ai) | Logs |
-| 6 | [VLC](https://www.videolan.org/vlc) | Documentation |
+| 6 | [VLC](https://www.videolan.org/vlc) | Documentation, Logs |
 | 7 | [iTop Screen Recorder](https://recorder.itopvpn.com) | Logs |
 
 
@@ -350,3 +355,4 @@
 | 2 | Electron App's | Documentation, Logs |
 | 3 | [ImgBurn](https://www.imgburn.com/index.php?act=download) | Documentation, Logs |
 | 4 | Mozilla Maintenance Service | Logs |
+| 5 | [OnionShare](https://onionshare.org) | Documentation |
