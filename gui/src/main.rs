@@ -29,7 +29,7 @@ use std::pin::Pin;
 use std::rc::Rc;
 use std::sync::Arc;
 use tempfile::NamedTempFile;
-use tokio::sync::{mpsc};
+use tokio::sync::mpsc;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -88,7 +88,7 @@ async fn main() -> eframe::Result {
     // INFO: 20px for 1 checkbox, 45px for button
     let height = (rows * 20) + 45;
 
-    let size = egui::vec2(450.0, height as f32);
+    let size = egui::vec2(470.0, height as f32);
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size(size)
@@ -286,9 +286,6 @@ impl CategoryState {
             !self.selected.is_empty() && !self.is_checked()
         }
     }
-    fn is_unchecked(&self) -> bool {
-        self.selected.is_empty()
-    }
 }
 
 fn effective_sub(_class: &str, sub_category: &str) -> String {
@@ -323,7 +320,8 @@ fn tristate_checkbox(
         let visuals = ui.style().interact(&response);
         // Use bg_fill for outer, but for indeterminate we fill inner square with fg color
         // Mimic checkbox bg
-        ui.painter().rect_filled(small_rect, 1.0, visuals.fg_stroke.color);
+        ui.painter()
+            .rect_filled(small_rect, 1.0, visuals.fg_stroke.color);
         // Also need to erase the hline that Checkbox didn't draw (we passed false, so no hline)
         // So nothing else
     } else if indeterminate {
@@ -373,10 +371,13 @@ const MENU_BYTES: &[u8] = include_bytes!("../assets/menu.png");
 fn load_menu_color_image() -> egui::ColorImage {
     // Decode and invert black -> white for dark theme visibility
     let img = ImageReader::new(std::io::Cursor::new(MENU_BYTES))
-        .with_guessed_format().expect("menu png format")
-        .decode().expect("decode menu").to_rgba8();
+        .with_guessed_format()
+        .expect("menu png format")
+        .decode()
+        .expect("decode menu")
+        .to_rgba8();
     let (w, h) = (img.width() as usize, img.height() as usize);
-    let mut pixels = Vec::with_capacity(w*h);
+    let mut pixels = Vec::with_capacity(w * h);
     for p in img.pixels() {
         let a = p[3];
         if a < 10 {
@@ -390,7 +391,10 @@ fn load_menu_color_image() -> egui::ColorImage {
             pixels.push(egui::Color32::from_rgba_unmultiplied(gv, gv, gv, a));
         }
     }
-    egui::ColorImage { size: [w, h], pixels }
+    egui::ColorImage {
+        size: [w, h],
+        pixels,
+    }
 }
 
 impl MyApp {
@@ -459,7 +463,11 @@ impl MyApp {
 
         let mut categories = vec![];
         for opt in options {
-            let mut subs: Vec<String> = cat_to_subs.remove(&opt).unwrap_or_default().into_iter().collect();
+            let mut subs: Vec<String> = cat_to_subs
+                .remove(&opt)
+                .unwrap_or_default()
+                .into_iter()
+                .collect();
             subs.sort();
             let has_empty = cat_has_empty.remove(&opt).unwrap_or(false);
             categories.push(CategoryState {
@@ -538,7 +546,11 @@ impl MyApp {
 
         let mut categories = vec![];
         for opt in options {
-            let mut subs: Vec<String> = cat_to_subs.remove(&opt).unwrap_or_default().into_iter().collect();
+            let mut subs: Vec<String> = cat_to_subs
+                .remove(&opt)
+                .unwrap_or_default()
+                .into_iter()
+                .collect();
             subs.sort();
             let has_empty = cat_has_empty.remove(&opt).unwrap_or(false);
             categories.push(CategoryState {
@@ -634,7 +646,7 @@ impl eframe::App for MyApp {
         egui::CentralPanel::default().show(ctx, |ui| {
             if self.task_handle.is_some() {
                 ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
-                    450.0, 120.0,
+                    470.0, 120.0,
                 )));
                 ui.vertical_centered(|ui| {
                     ui.heading("Cleaning in progress...");
@@ -909,12 +921,16 @@ impl eframe::App for MyApp {
                 let window_height = dynamic_height.max(20.0).min(500.0); // Clamp between 200 and 500
 
                 ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
-                    450.0,
+                    470.0,
                     window_height,
                 )));
 
                 if self.menu_texture.is_none() {
-                    self.menu_texture = Some(ctx.load_texture("menu", load_menu_color_image(), egui::TextureOptions::LINEAR));
+                    self.menu_texture = Some(ctx.load_texture(
+                        "menu",
+                        load_menu_color_image(),
+                        egui::TextureOptions::LINEAR,
+                    ));
                 }
                 let menu_tex = self.menu_texture.clone().unwrap();
 
@@ -926,7 +942,8 @@ impl eframe::App for MyApp {
 
                         columns[column_index].horizontal(|ui| {
                             // Tristate checkbox with square for indeterminate
-                            let (resp, clicked) = tristate_checkbox(ui, is_checked, is_indet, &cat.name.clone());
+                            let (resp, clicked) =
+                                tristate_checkbox(ui, is_checked, is_indet, &cat.name.clone());
                             if clicked {
                                 if is_checked || is_indet {
                                     cat.selected.clear();
@@ -943,7 +960,12 @@ impl eframe::App for MyApp {
                             // menu image only if sub-categories exist (embedded menu.png)
                             if !cat.subs.is_empty() {
                                 let popup_id = egui::Id::new(format!("popup_{}", cat.name));
-                                let menu_image = egui::Image::from_texture(egui::load::SizedTexture::new(menu_tex.id(), menu_tex.size_vec2())).fit_to_exact_size(egui::vec2(16.0, 16.0));
+                                let menu_image =
+                                    egui::Image::from_texture(egui::load::SizedTexture::new(
+                                        menu_tex.id(),
+                                        menu_tex.size_vec2(),
+                                    ))
+                                    .fit_to_exact_size(egui::vec2(16.0, 16.0));
                                 let menu_btn = egui::ImageButton::new(menu_image).frame(false);
                                 let menu_resp = ui.add_sized(egui::vec2(16.0, 16.0), menu_btn);
                                 if menu_resp.clicked() {
@@ -958,29 +980,35 @@ impl eframe::App for MyApp {
                                     egui::popup::PopupCloseBehavior::CloseOnClickOutside,
                                     |ui| {
                                         ui.set_min_width(200.0);
-                                        egui::ScrollArea::vertical().max_height(300.0).show(ui, |ui| {
-                                            for sub in cat.subs.clone() {
-                                                let mut is_sel = cat.selected.contains(&sub);
-                                                if ui.checkbox(&mut is_sel, &sub).changed() {
-                                                    if is_sel {
-                                                        cat.selected.insert(sub.clone());
-                                                    } else {
-                                                        cat.selected.remove(&sub);
+                                        egui::ScrollArea::vertical().max_height(300.0).show(
+                                            ui,
+                                            |ui| {
+                                                for sub in cat.subs.clone() {
+                                                    let mut is_sel = cat.selected.contains(&sub);
+                                                    if ui.checkbox(&mut is_sel, &sub).changed() {
+                                                        if is_sel {
+                                                            cat.selected.insert(sub.clone());
+                                                        } else {
+                                                            cat.selected.remove(&sub);
+                                                        }
                                                     }
                                                 }
-                                            }
-                                            // Show Uncategorized for objects without sub_category, only if category has ≥1 real sub
-                                            if cat.has_empty {
-                                                let mut is_uncat = cat.selected.contains("");
-                                                if ui.checkbox(&mut is_uncat, "Uncategorized").changed() {
-                                                    if is_uncat {
-                                                        cat.selected.insert(String::new());
-                                                    } else {
-                                                        cat.selected.remove(&String::new());
+                                                // Show Uncategorized for objects without sub_category, only if category has ≥1 real sub
+                                                if cat.has_empty {
+                                                    let mut is_uncat = cat.selected.contains("");
+                                                    if ui
+                                                        .checkbox(&mut is_uncat, "Uncategorized")
+                                                        .changed()
+                                                    {
+                                                        if is_uncat {
+                                                            cat.selected.insert(String::new());
+                                                        } else {
+                                                            cat.selected.remove(&String::new());
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        });
+                                            },
+                                        );
                                         ui.separator();
                                         ui.horizontal(|ui| {
                                             if ui.small_button("All").clicked() {
