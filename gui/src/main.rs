@@ -22,14 +22,14 @@ use futures::stream::{FuturesUnordered, StreamExt};
 use image::ImageReader;
 use notify_rust::Notification;
 use std::cell::RefCell;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::future::Future;
 use std::io::Write;
 use std::pin::Pin;
 use std::rc::Rc;
 use std::sync::Arc;
 use tempfile::NamedTempFile;
-use tokio::sync::{Semaphore, mpsc};
+use tokio::sync::{mpsc};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -83,7 +83,7 @@ async fn main() -> eframe::Result {
     let app = MyApp::from_database(Arc::from(database), Arc::from(registry_database));
     #[cfg(not(windows))]
     let app = MyApp::from_database(Arc::from(database));
-    let checkbox_count = app.checked_boxes.len();
+    let checkbox_count = app.categories.len();
     let rows = checkbox_count.div_ceil(3);
     // INFO: 20px for 1 checkbox, 45px for button
     let height = (rows * 20) + 45;
@@ -125,7 +125,7 @@ fn load_icon_from_bytes(bytes: &[u8]) -> Result<Arc<IconData>, image::ImageError
 }
 
 async fn work(
-    categories: Vec<String>,
+    selected_map: HashMap<String, HashSet<String>>,
     progress_sender: mpsc::Sender<String>,
     database: &[CleanerData],
     #[cfg(windows)] registry_database: &[CleanerDataRegistry],
@@ -139,10 +139,8 @@ async fn work(
     let mut removed_directories: u64 = 0;
     let mut cleared_programs = Vec::<Cleared>::with_capacity(database.len());
 
-    let categories_set: HashSet<String> = categories.into_iter().collect();
-
     // C: limit to 16 concurrent cleaners
-    let sem = Arc::new(Semaphore::new(16));
+    let sem = Arc::new(tokio::sync::Semaphore::new(16));
     let mut futures: FuturesUnordered<
         Pin<Box<dyn Future<Output = database::structures::CleanerResult> + Send>>,
     > = FuturesUnordered::new();
@@ -152,8 +150,27 @@ async fn work(
     #[cfg(windows)]
     {
         for data in registry_database.iter() {
-            if categories_set.contains(&data.category) && !excluded_programs.contains(&data.program)
-            {
+            let eff = effective_sub(&data.class, &data.sub_category);
+            if let Some(subs) = selected_map.get(&data.category) {
+                if subs.contains(&eff) && !excluded_programs.contains(&data.program) {
+                    let data = data.clone();
+                    let sender = progress_sender.clone();
+                    let path_msg = data.path.clone();
+                    let sem = sem.clone();
+                    futures.push(Box::pin(async move {
+                        let _p = sem.acquire_owned().await.unwrap();
+                        let _ = sender.send(format!("Cleaning: {}", path_msg)).await;
+                        clear_registry(&data)
+                    }));
+                }
+            }
+        }
+    }
+
+    for data in database.iter() {
+        let eff = effective_sub(&data.class, &data.sub_category);
+        if let Some(subs) = selected_map.get(&data.category) {
+            if subs.contains(&eff) && !excluded_programs.contains(&data.program) {
                 let data = data.clone();
                 let sender = progress_sender.clone();
                 let path_msg = data.path.clone();
@@ -161,23 +178,9 @@ async fn work(
                 futures.push(Box::pin(async move {
                     let _p = sem.acquire_owned().await.unwrap();
                     let _ = sender.send(format!("Cleaning: {}", path_msg)).await;
-                    clear_registry(&data)
+                    clear_data(&data).await
                 }));
             }
-        }
-    }
-
-    for data in database.iter() {
-        if categories_set.contains(&data.category) && !excluded_programs.contains(&data.program) {
-            let data = data.clone();
-            let sender = progress_sender.clone();
-            let path_msg = data.path.clone();
-            let sem = sem.clone();
-            futures.push(Box::pin(async move {
-                let _p = sem.acquire_owned().await.unwrap();
-                let _ = sender.send(format!("Cleaning: {}", path_msg)).await;
-                clear_data(&data).await
-            }));
         }
     }
 
@@ -257,8 +260,89 @@ async fn work(
     )
 }
 
+#[derive(Clone, Debug)]
+struct CategoryState {
+    name: String,
+    subs: Vec<String>,
+    has_empty: bool,
+    selected: HashSet<String>,
+}
+
+impl CategoryState {
+    fn is_checked(&self) -> bool {
+        if self.subs.is_empty() && !self.has_empty {
+            !self.selected.is_empty()
+        } else if self.has_empty {
+            // fully checked = all subs + empty selected
+            self.selected.len() == self.subs.len() + 1 && self.selected.contains("")
+        } else {
+            !self.subs.is_empty() && self.selected.len() == self.subs.len()
+        }
+    }
+    fn is_indeterminate(&self) -> bool {
+        if self.subs.is_empty() && !self.has_empty {
+            false
+        } else {
+            !self.selected.is_empty() && !self.is_checked()
+        }
+    }
+    fn is_unchecked(&self) -> bool {
+        self.selected.is_empty()
+    }
+}
+
+fn effective_sub(_class: &str, sub_category: &str) -> String {
+    sub_category.to_string()
+}
+
+/// Tristate checkbox with square (filled rect) for indeterminate state.
+/// Returns response and whether state changed via click.
+fn tristate_checkbox(
+    ui: &mut egui::Ui,
+    checked: bool,
+    indeterminate: bool,
+    text: &str,
+) -> (egui::Response, bool) {
+    // Use a mutable dummy bool for Checkbox widget (it will toggle on click)
+    let mut dummy = checked;
+    // We don't rely on Checkbox's indeterminate painting (hline); we will paint square ourselves.
+    // So pass false to avoid double paint, and we handle visual manually.
+    let mut response = ui.add(egui::Checkbox::new(&mut dummy, text));
+    // If indeterminate, we need to paint square overlay manually
+    if indeterminate && ui.is_rect_visible(response.rect) {
+        // Calculate icon rect similar to Checkbox impl
+        let icon_width = ui.spacing().icon_width;
+        let rect = response.rect;
+        // icon is at left side, centered vertically
+        let icon_rect = egui::Rect::from_min_size(
+            egui::pos2(rect.min.x, rect.center().y - icon_width / 2.0),
+            egui::vec2(icon_width, icon_width),
+        );
+        // small inner square (shrink)
+        let small_rect = icon_rect.shrink(4.0);
+        let visuals = ui.style().interact(&response);
+        // Use bg_fill for outer, but for indeterminate we fill inner square with fg color
+        // Mimic checkbox bg
+        ui.painter().rect_filled(small_rect, 1.0, visuals.fg_stroke.color);
+        // Also need to erase the hline that Checkbox didn't draw (we passed false, so no hline)
+        // So nothing else
+    } else if indeterminate {
+        // still need to ensure checkbox appears indeterminate visually even if not visible yet
+        // nothing
+    }
+    let clicked = response.clicked();
+    // When clicked, dummy has been toggled (!checked) but for indeterminate we want custom toggle handling outside
+    // Return whether clicked
+    response.mark_changed();
+    (response, clicked)
+}
+
 struct MyApp {
-    pub checked_boxes: Vec<(Rc<RefCell<bool>>, String)>,
+    pub categories: Vec<CategoryState>,
+    /// legacy alias kept for tests compat: returns categories length etc.
+    /// We keep checked_boxes as deprecated view for tests via method, but store as categories.
+    /// For internal compat we also expose checked_boxes as computed (not stored). However test expects field.
+    /// So we add a helper method and keep field via Deref? Instead keep both via getter.
     pub task_handle: Option<tokio::task::JoinHandle<(u64, u64, u64, Vec<Cleared>)>>,
     pub progress_message: String,
     pub progress_receiver: Option<mpsc::Receiver<String>>,
@@ -280,26 +364,77 @@ struct MyApp {
     pub database: Arc<[CleanerData]>,
     #[cfg(windows)]
     pub regisry_database: Arc<[CleanerDataRegistry]>,
+    pub menu_texture: Option<egui::TextureHandle>,
+}
+
+// Embedded menu image bytes (required to be embedded)
+const MENU_BYTES: &[u8] = include_bytes!("../assets/menu.png");
+
+fn load_menu_color_image() -> egui::ColorImage {
+    // Decode and invert black -> white for dark theme visibility
+    let img = ImageReader::new(std::io::Cursor::new(MENU_BYTES))
+        .with_guessed_format().expect("menu png format")
+        .decode().expect("decode menu").to_rgba8();
+    let (w, h) = (img.width() as usize, img.height() as usize);
+    let mut pixels = Vec::with_capacity(w*h);
+    for p in img.pixels() {
+        let a = p[3];
+        if a < 10 {
+            pixels.push(egui::Color32::TRANSPARENT);
+        } else {
+            // original black (0,0,0) -> white, keep alpha
+            let lum = p[0] as u32; // black -> 0, white -> 255
+            let v = 255 - lum; // invert: black->white
+            // if already white, keep white
+            let gv = v.max(200) as u8; // ensure light
+            pixels.push(egui::Color32::from_rgba_unmultiplied(gv, gv, gv, a));
+        }
+    }
+    egui::ColorImage { size: [w, h], pixels }
 }
 
 impl MyApp {
+    // Helper for legacy test code: checked_boxes view
+    #[allow(dead_code)]
+    pub fn checked_boxes(&self) -> Vec<(Rc<RefCell<bool>>, String)> {
+        self.categories
+            .iter()
+            .map(|c| {
+                let b = c.is_checked();
+                (Rc::new(RefCell::new(b)), c.name.clone())
+            })
+            .collect()
+    }
+
     #[cfg(windows)]
     pub(crate) fn from_database(
         database: Arc<[CleanerData]>,
         reg_database: Arc<[CleanerDataRegistry]>,
     ) -> Self {
-        let mut options: Vec<String> = Vec::with_capacity(database.len());
+        let mut cat_to_subs: HashMap<String, HashSet<String>> = HashMap::new();
+        let mut cat_has_empty: HashMap<String, bool> = HashMap::new();
+        // Ensure all categories appear even if no sub_category
         for data in database.iter() {
-            if !options.contains(&data.category) {
-                options.push(data.category.clone());
+            cat_to_subs.entry(data.category.clone()).or_default();
+            cat_has_empty.entry(data.category.clone()).or_insert(false);
+            let sub = effective_sub(&data.class, &data.sub_category);
+            if !sub.is_empty() {
+                cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
+            } else {
+                *cat_has_empty.get_mut(&data.category).unwrap() = true;
             }
         }
-
         for data in reg_database.iter() {
-            if !options.contains(&data.category) {
-                options.push(data.category.clone());
+            cat_to_subs.entry(data.category.clone()).or_default();
+            cat_has_empty.entry(data.category.clone()).or_insert(false);
+            let sub = effective_sub(&data.class, &data.sub_category);
+            if !sub.is_empty() {
+                cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
+            } else {
+                *cat_has_empty.get_mut(&data.category).unwrap() = true;
             }
         }
+        let mut options: Vec<String> = cat_to_subs.keys().cloned().collect();
 
         let priority = |s: &str| match s {
             "Cache" => 0,
@@ -322,9 +457,17 @@ impl MyApp {
             }
         });
 
-        let mut checked_boxes = vec![];
-        for option in options {
-            checked_boxes.push((Rc::new(RefCell::new(false)), option));
+        let mut categories = vec![];
+        for opt in options {
+            let mut subs: Vec<String> = cat_to_subs.remove(&opt).unwrap_or_default().into_iter().collect();
+            subs.sort();
+            let has_empty = cat_has_empty.remove(&opt).unwrap_or(false);
+            categories.push(CategoryState {
+                name: opt,
+                subs,
+                has_empty,
+                selected: HashSet::new(),
+            });
         }
 
         let (result_sender, result_receiver) = mpsc::channel(1);
@@ -333,7 +476,7 @@ impl MyApp {
             database,
             #[cfg(windows)]
             regisry_database: reg_database,
-            checked_boxes,
+            categories,
             task_handle: None,
             progress_message: String::new(),
             progress_receiver: None,
@@ -351,17 +494,26 @@ impl MyApp {
 
             result_sender: Some(result_sender),
             result_receiver: Some(result_receiver),
+            menu_texture: None,
         }
     }
 
     #[cfg(not(windows))]
     pub(crate) fn from_database(database: Arc<[CleanerData]>) -> Self {
-        let mut options: Vec<String> = Vec::with_capacity(database.len());
+        let mut cat_to_subs: HashMap<String, HashSet<String>> = HashMap::new();
+        let mut cat_has_empty: HashMap<String, bool> = HashMap::new();
         for data in database.iter() {
-            if !options.contains(&data.category) {
-                options.push(data.category.clone());
+            cat_to_subs.entry(data.category.clone()).or_default();
+            cat_has_empty.entry(data.category.clone()).or_insert(false);
+            let sub = effective_sub(&data.class, &data.sub_category);
+            if !sub.is_empty() {
+                cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
+            } else {
+                *cat_has_empty.get_mut(&data.category).unwrap() = true;
             }
         }
+
+        let mut options: Vec<String> = cat_to_subs.keys().cloned().collect();
 
         let priority = |s: &str| match s {
             "Cache" => 0,
@@ -384,18 +536,24 @@ impl MyApp {
             }
         });
 
-        let mut checked_boxes = vec![];
-        for option in options {
-            checked_boxes.push((Rc::new(RefCell::new(false)), option));
+        let mut categories = vec![];
+        for opt in options {
+            let mut subs: Vec<String> = cat_to_subs.remove(&opt).unwrap_or_default().into_iter().collect();
+            subs.sort();
+            let has_empty = cat_has_empty.remove(&opt).unwrap_or(false);
+            categories.push(CategoryState {
+                name: opt,
+                subs,
+                has_empty,
+                selected: HashSet::new(),
+            });
         }
 
         let (result_sender, result_receiver) = mpsc::channel(1);
 
         Self {
             database,
-            #[cfg(windows)]
-            regisry_database: vec![],
-            checked_boxes,
+            categories,
             task_handle: None,
             progress_message: String::new(),
             progress_receiver: None,
@@ -413,7 +571,22 @@ impl MyApp {
 
             result_sender: Some(result_sender),
             result_receiver: Some(result_receiver),
+            menu_texture: None,
         }
+    }
+
+    fn selected_map(&self) -> HashMap<String, HashSet<String>> {
+        let mut map = HashMap::new();
+        for cat in &self.categories {
+            if !cat.selected.is_empty() {
+                map.insert(cat.name.clone(), cat.selected.clone());
+            }
+        }
+        map
+    }
+
+    fn has_selection(&self) -> bool {
+        self.categories.iter().any(|c| !c.selected.is_empty())
     }
 }
 
@@ -687,12 +860,7 @@ impl eframe::App for MyApp {
                         )
                         .clicked()
                     {
-                        let selected_categories: Vec<String> = self
-                            .checked_boxes
-                            .iter()
-                            .filter(|(checkbox, _)| *checkbox.borrow())
-                            .map(|(_, label)| label.clone())
-                            .collect();
+                        let selected_map = self.selected_map();
 
                         self.excluded_programs.clear();
                         for (checkbox, program) in &self.program_checkboxes {
@@ -713,7 +881,7 @@ impl eframe::App for MyApp {
                         let excluded_programs = self.excluded_programs.clone();
                         let handle = tokio::spawn(async move {
                             work(
-                                selected_categories,
+                                selected_map,
                                 progress_sender,
                                 &database,
                                 #[cfg(windows)]
@@ -725,15 +893,15 @@ impl eframe::App for MyApp {
                         self.task_handle = Some(handle);
 
                         self.show_program_selection = false;
-                        // Window will resize dynamically in the next frame based on category count
-                        for (checkbox, _) in &self.checked_boxes {
-                            *checkbox.borrow_mut() = false;
+                        // clear selection
+                        for cat in &mut self.categories {
+                            cat.selected.clear();
                         }
                     }
                 });
             } else {
                 // Calculate dynamic window height based on number of categories
-                let num_categories = self.checked_boxes.len();
+                let num_categories = self.categories.len();
                 let rows = (num_categories + 2) / 3; // Round up division by 3 (3 columns)
                 let row_height = 20.0; // Approximate height per row
                 let base_height = 45.0; // Space for heading, margins, and button
@@ -745,11 +913,92 @@ impl eframe::App for MyApp {
                     window_height,
                 )));
 
+                if self.menu_texture.is_none() {
+                    self.menu_texture = Some(ctx.load_texture("menu", load_menu_color_image(), egui::TextureOptions::LINEAR));
+                }
+                let menu_tex = self.menu_texture.clone().unwrap();
+
                 ui.columns(3, |columns| {
-                    for (i, (checkbox, label)) in self.checked_boxes.iter().enumerate() {
-                        let column_index = i % 3;
-                        let mut value = checkbox.borrow_mut();
-                        columns[column_index].checkbox(&mut *value, label);
+                    for (idx, cat) in self.categories.iter_mut().enumerate() {
+                        let column_index = idx % 3;
+                        let is_checked = cat.is_checked();
+                        let is_indet = cat.is_indeterminate();
+
+                        columns[column_index].horizontal(|ui| {
+                            // Tristate checkbox with square for indeterminate
+                            let (resp, clicked) = tristate_checkbox(ui, is_checked, is_indet, &cat.name.clone());
+                            if clicked {
+                                if is_checked || is_indet {
+                                    cat.selected.clear();
+                                } else {
+                                    cat.selected = cat.subs.iter().cloned().collect();
+                                    if cat.has_empty {
+                                        cat.selected.insert(String::new());
+                                    }
+                                    if cat.subs.is_empty() && !cat.has_empty {
+                                        cat.selected.insert(String::new());
+                                    }
+                                }
+                            }
+                            // menu image only if sub-categories exist (embedded menu.png)
+                            if !cat.subs.is_empty() {
+                                let popup_id = egui::Id::new(format!("popup_{}", cat.name));
+                                let menu_image = egui::Image::from_texture(egui::load::SizedTexture::new(menu_tex.id(), menu_tex.size_vec2())).fit_to_exact_size(egui::vec2(16.0, 16.0));
+                                let menu_btn = egui::ImageButton::new(menu_image).frame(false);
+                                let menu_resp = ui.add_sized(egui::vec2(16.0, 16.0), menu_btn);
+                                if menu_resp.clicked() {
+                                    ui.memory_mut(|mem| mem.toggle_popup(popup_id));
+                                }
+
+                                // Popup with sub_category checkboxes
+                                egui::popup::popup_below_widget(
+                                    ui,
+                                    popup_id,
+                                    &menu_resp,
+                                    egui::popup::PopupCloseBehavior::CloseOnClickOutside,
+                                    |ui| {
+                                        ui.set_min_width(200.0);
+                                        egui::ScrollArea::vertical().max_height(300.0).show(ui, |ui| {
+                                            for sub in cat.subs.clone() {
+                                                let mut is_sel = cat.selected.contains(&sub);
+                                                if ui.checkbox(&mut is_sel, &sub).changed() {
+                                                    if is_sel {
+                                                        cat.selected.insert(sub.clone());
+                                                    } else {
+                                                        cat.selected.remove(&sub);
+                                                    }
+                                                }
+                                            }
+                                            // Show Uncategorized for objects without sub_category, only if category has ≥1 real sub
+                                            if cat.has_empty {
+                                                let mut is_uncat = cat.selected.contains("");
+                                                if ui.checkbox(&mut is_uncat, "Uncategorized").changed() {
+                                                    if is_uncat {
+                                                        cat.selected.insert(String::new());
+                                                    } else {
+                                                        cat.selected.remove(&String::new());
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        ui.separator();
+                                        ui.horizontal(|ui| {
+                                            if ui.small_button("All").clicked() {
+                                                cat.selected = cat.subs.iter().cloned().collect();
+                                                if cat.has_empty {
+                                                    cat.selected.insert(String::new());
+                                                }
+                                            }
+                                            if ui.small_button("None").clicked() {
+                                                cat.selected.clear();
+                                            }
+                                        });
+                                    },
+                                );
+                            }
+                            // suppress unused warning
+                            let _ = resp;
+                        });
                     }
                 });
 
@@ -759,32 +1008,25 @@ impl eframe::App for MyApp {
                     .add_sized([available_width, 25.0], egui::Button::new("Next"))
                     .clicked()
                 {
-                    let selected_categories: Vec<String> = self
-                        .checked_boxes
-                        .iter()
-                        .filter(|(checkbox, _)| *checkbox.borrow())
-                        .map(|(_, label)| label.clone())
-                        .collect();
-
-                    if !selected_categories.is_empty() {
-                        let categories_set: HashSet<String> =
-                            selected_categories.into_iter().collect();
-
+                    if self.has_selection() {
+                        let selected_map = self.selected_map();
                         let mut programs: Vec<String> = Vec::new();
                         for data in self.database.iter() {
-                            if categories_set.contains(&data.category)
-                                && !programs.contains(&data.program)
-                            {
-                                programs.push(data.program.clone());
+                            let eff = effective_sub(&data.class, &data.sub_category);
+                            if let Some(subs) = selected_map.get(&data.category) {
+                                if subs.contains(&eff) && !programs.contains(&data.program) {
+                                    programs.push(data.program.clone());
+                                }
                             }
                         }
                         #[cfg(windows)]
                         {
                             for data in self.regisry_database.iter() {
-                                if categories_set.contains(&data.category)
-                                    && !programs.contains(&data.program)
-                                {
-                                    programs.push(data.program.clone());
+                                let eff = effective_sub(&data.class, &data.sub_category);
+                                if let Some(subs) = selected_map.get(&data.category) {
+                                    if subs.contains(&eff) && !programs.contains(&data.program) {
+                                        programs.push(data.program.clone());
+                                    }
                                 }
                             }
                         }
@@ -827,6 +1069,7 @@ mod tests {
                 category: String::from("Cache"),
                 program: String::from("TestApp1"),
                 class: String::from("Application"),
+                sub_category: String::from("Browser"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 remove_all_in_dir: false,
@@ -839,6 +1082,7 @@ mod tests {
                 category: String::from("Logs"),
                 program: String::from("TestApp2"),
                 class: String::from("Application"),
+                sub_category: String::from("System"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 remove_all_in_dir: false,
@@ -852,6 +1096,7 @@ mod tests {
             category: String::new(),
             program: String::new(),
             class: String::new(),
+            sub_category: String::new(),
             remove_all_in_tree: false,
             remove_all_in_registry: false,
             path: String::new(),
@@ -864,7 +1109,7 @@ mod tests {
             Arc::from(registry_database.into_boxed_slice()),
         );
 
-        assert_eq!(app.checked_boxes.len(), 2, "Should have 2 categories");
+        assert_eq!(app.categories.len(), 2, "Should have 2 categories");
         assert!(
             app.task_handle.is_none(),
             "Task handle should be None initially"
@@ -894,6 +1139,7 @@ mod tests {
                 category: String::from("Documentation"),
                 program: String::from("App1"),
                 class: String::from("App"),
+                sub_category: String::new(),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 remove_all_in_dir: false,
@@ -906,6 +1152,7 @@ mod tests {
                 category: String::from("Cache"),
                 program: String::from("App2"),
                 class: String::from("App"),
+                sub_category: String::new(),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 remove_all_in_dir: false,
@@ -918,6 +1165,7 @@ mod tests {
                 category: String::from("Logs"),
                 program: String::from("App3"),
                 class: String::from("App"),
+                sub_category: String::new(),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 remove_all_in_dir: false,
@@ -931,6 +1179,7 @@ mod tests {
             category: String::new(),
             program: String::new(),
             class: String::new(),
+            sub_category: String::new(),
             remove_all_in_tree: false,
             remove_all_in_registry: false,
             path: String::new(),
@@ -944,10 +1193,10 @@ mod tests {
         );
 
         // Categories should be sorted with Cache first, then Logs, then Documentation
-        assert_eq!(app.checked_boxes[0].1, "Cache", "First should be Cache");
-        assert_eq!(app.checked_boxes[1].1, "Logs", "Second should be Logs");
+        assert_eq!(app.categories[0].name, "Cache", "First should be Cache");
+        assert_eq!(app.categories[1].name, "Logs", "Second should be Logs");
         assert_eq!(
-            app.checked_boxes[2].1, "Documentation",
+            app.categories[2].name, "Documentation",
             "Third should be Documentation"
         );
     }
@@ -987,5 +1236,68 @@ mod tests {
             app.result_receiver.is_some(),
             "Result receiver should be Some"
         );
+    }
+
+    #[test]
+    fn test_tristate_logic() {
+        let mut cat = CategoryState {
+            name: "Cache".to_string(),
+            subs: vec!["A".to_string(), "B".to_string(), "C".to_string()],
+            has_empty: false,
+            selected: HashSet::new(),
+        };
+        assert!(cat.is_unchecked());
+        assert!(!cat.is_checked());
+        assert!(!cat.is_indeterminate());
+        cat.selected.insert("A".to_string());
+        assert!(cat.is_indeterminate());
+        assert!(!cat.is_checked());
+        cat.selected.insert("B".to_string());
+        cat.selected.insert("C".to_string());
+        assert!(cat.is_checked());
+        assert!(!cat.is_indeterminate());
+        cat.selected.clear();
+        assert!(cat.is_unchecked());
+    }
+
+    #[test]
+    fn test_subcategory_selection() {
+        let database: Vec<CleanerData> = vec![
+            CleanerData {
+                path: String::from("p1"),
+                category: String::from("Cache"),
+                program: String::from("App1"),
+                class: String::from("Browser"),
+                sub_category: String::from("Browser"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: false,
+                remove_files: false,
+            },
+            CleanerData {
+                path: String::from("p2"),
+                category: String::from("Cache"),
+                program: String::from("App2"),
+                class: String::from("Game"),
+                sub_category: String::from("Game"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                remove_all_in_dir: false,
+                remove_directory_after_clean: false,
+                remove_directories: false,
+                remove_files: false,
+            },
+        ];
+        let registry_database: Vec<CleanerDataRegistry> = vec![];
+        let app = MyApp::from_database(
+            Arc::from(database.into_boxed_slice()),
+            Arc::from(registry_database.into_boxed_slice()),
+        );
+        assert_eq!(app.categories.len(), 1);
+        assert_eq!(app.categories[0].subs.len(), 2);
+        assert!(app.categories[0].subs.contains(&"Browser".to_string()));
+        assert!(app.categories[0].subs.contains(&"Game".to_string()));
     }
 }

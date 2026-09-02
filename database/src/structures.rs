@@ -42,6 +42,8 @@ pub struct CleanerData {
     pub program: String,
     #[serde(default = "default_class")]
     pub class: String,
+    #[serde(default, alias = "sub_class", alias = "subCategory")]
+    pub sub_category: String,
 
     #[serde(default)]
     pub files_to_remove: Vec<String>,
@@ -67,6 +69,8 @@ pub struct CleanerDataRegistry {
     pub program: String,
     #[serde(default = "default_class")]
     pub class: String,
+    #[serde(default, alias = "sub_class")]
+    pub sub_category: String,
 
     #[serde(default)]
     pub remove_all_in_tree: bool,

@@ -65,6 +65,7 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
         path: data.path.clone(),
         program: data.program.clone(),
         category: data.category.clone(),
+        sub_category: data.sub_category.clone(),
     };
 
     // INFO: Parsing registry key

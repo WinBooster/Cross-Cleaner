@@ -107,6 +107,7 @@
     "path": "{drive}Program Files\\AmneziaVPN\\ss",
     "class": "VPN",
     "category": "Documentation",
+    "sub_category":"Licenses",
     "program": "Amnezia VPN",
     "files_to_remove": [
       "LICENSE"
@@ -116,6 +117,7 @@
     "path": "{drive}Program Files\\AmneziaVPN\\openvpn",
     "class": "VPN",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Amnezia VPN",
     "files_to_remove": [
       "license.txt"
@@ -125,6 +127,7 @@
     "path": "{drive}Program Files\\AmneziaVPN\\tap",
     "class": "VPN",
     "category": "Documentation",
+    "sub_category":"Licenses",
     "program": "Amnezia VPN",
     "files_to_remove": [
       "license.txt"
@@ -285,6 +288,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category":"Licenses",
     "program": "ATLauncher",
     "directories_to_remove": [
       "licenses"
@@ -313,6 +317,7 @@
   {
     "path": "{drive}Program Files\\Audacity",
     "category": "Documentation",
+    "sub_category":"Licenses",
     "program": "Audacity",
     "class": "Audio",
     "files_to_remove": [
@@ -341,6 +346,7 @@
     "path": "{drive}Program Files\\Avast Software\\Avast",
     "class": "Security",
     "category": "Documentation",
+    "sub_category":"Licenses",
     "program": "Avast",
     "directories_to_remove": [
       "Licenses"
@@ -462,6 +468,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Clien",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Badlion Client",
     "directories_to_remove": [
       "licenses"
@@ -507,9 +514,18 @@
     "category": "Logs",
     "program": "BlueStacks 5",
     "files_to_remove": [
-      "LICENSE.txt",
       "NOTICE.html",
       "ffmpeg_command_template.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\BlueStacks_nxt",
+    "class": "Emulator",
+    "category": "Logs",
+    "sub_category": "Licenses",
+    "program": "BlueStacks 5",
+    "files_to_remove": [
+      "LICENSE.txt"
     ]
   },
   {
@@ -559,9 +575,18 @@
     "category": "Documentation",
     "program": "BoxedAppPacker",
     "files_to_remove": [
-      "CHANGELOG.txt",
       "HomePage.url",
       "purchase.url"
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\BoxedAppPacker",
+    "class": "Developing",
+    "category": "Documentation",
+    "sub_category": "Change logs",
+    "program": "BoxedAppPacker",
+    "files_to_remove": [
+      "CHANGELOG.txt"
     ]
   },
   {
@@ -669,6 +694,7 @@
   {
     "path": "{drive}ProgramData\\chocolatey",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Chocolatey",
     "files_to_remove": [
       "CREDITS.txt",
@@ -678,6 +704,7 @@
   {
     "path": "{drive}ProgramData\\chocolatey\\tools",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Chocolatey",
     "files_to_remove": [
       "7zip.license.txt",
@@ -830,6 +857,7 @@
     "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "CurseForge",
     "directories_to_remove": [
       "licenses"
@@ -859,15 +887,34 @@
     "path": "{drive}Users\\{username}\\.cursor\\extensions\\**",
     "class": "Text",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Cursor",
     "files_to_remove": [
-      "LICENSE",
-      "LICENSE.txt",
-      "changelog.md",
-      "change.log",
       "readme.txt",
       "readme.md",
       "walkthrough-setup-tips.md"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\.cursor\\extensions\\**",
+    "class": "Text",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Cursor",
+    "files_to_remove": [
+      "LICENSE",
+      "LICENSE.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\.cursor\\extensions\\**",
+    "class": "Text",
+    "category": "Documentation",
+    "sub_category": "Change logs",
+    "program": "Cursor",
+    "files_to_remove": [
+      "changelog.md",
+      "change.log",
     ]
   },
   {
@@ -1080,6 +1127,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\**",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Electron App's",
     "files_to_remove": [
       "LICENSES.chromium.html",
@@ -1126,11 +1174,29 @@
     "program": "Enigma Virtual Box",
     "files_to_remove": [
       "help.chm",
-      "History.txt",
-      "License.txt",
       "site.url",
       "forum.url",
       "support.url"
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Enigma Virtual Box",
+    "class": "Developing",
+    "category": "Documentation",
+    "sub_category": "Change logs",
+    "program": "Enigma Virtual Box",
+    "files_to_remove": [
+      "History.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Enigma Virtual Box",
+    "class": "Developing",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Enigma Virtual Box",
+    "files_to_remove": [
+      "License.txt"
     ]
   },
   {
@@ -1200,9 +1266,19 @@
     "path": "{drive}Program Files (x86)\\Everything",
     "class": "Utility",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Everything",
     "files_to_remove": [
       "License.txt",
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Everything",
+    "class": "Utility",
+    "category": "Documentation",
+    "sub_category": "Change logs",
+    "program": "Everything",
+    "files_to_remove": [
       "Changes.txt"
     ]
   },
@@ -1346,9 +1422,18 @@
     "path": "{drive}Program Files\\Git",
     "class": "Developing",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Git",
     "files_to_remove": [
-      "LICENSE.txt",
+      "LICENSE.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Git",
+    "class": "Developing",
+    "category": "Documentation",
+    "program": "Git",
+    "files_to_remove": [
       "ReleaseNotes.html"
     ]
   },
@@ -1387,10 +1472,19 @@
     "path": "{drive}Program Files\\Go",
     "category": "Documentation",
     "program": "Go Language",
+    "sub_category": "Licenses",
+    "class": "Developing",
+    "files_to_remove": [
+      "LICENSE"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Go",
+    "category": "Documentation",
+    "program": "Go Language",
     "class": "Developing",
     "files_to_remove": [
       "CONTRIBUTING.md",
-      "LICENSE",
       "PATENTS",
       "README.md",
       "SECURITY.md"
@@ -1446,6 +1540,7 @@
     "path": "{drive}Program Files\\Google\\Chrome\\Application\\**\\WidevineCdm",
     "class": "Browser",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Google Chrome",
     "files_to_remove": [
       "LICENSE"
@@ -1567,6 +1662,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\bin",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "GribLand",
     "directories_to_remove": [
       "licenses"
@@ -1592,6 +1688,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "GribLand",
     "directories_to_remove": [
       "licenses"
@@ -1642,9 +1739,26 @@
     "category": "Documentation",
     "program": "HiAlgo Boost",
     "files_to_remove": [
-      "hialgo_eula.txt",
-      "Update Boost.log",
       "UpdateListing.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\HiAlgo\\Plugins\\BOOST",
+    "class": "Optimization",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "HiAlgo Boost",
+    "files_to_remove": [
+      "hialgo_eula.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\HiAlgo\\Plugins\\BOOST",
+    "class": "Optimization",
+    "category": "Logs",
+    "program": "HiAlgo Boost",
+    "files_to_remove": [
+      "Update Boost.log"
     ]
   },
   {
@@ -1691,6 +1805,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy",
     "class": "Security",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "I2P",
     "directories_to_remove": [
       "licenses"
@@ -1729,7 +1844,6 @@
       "DotNetZip.xml",
       "ImageGlass.ImageBox.xml",
       "ImageGlass.ImageListView.xml",
-      "LICENSE",
       "Magick.NET.Core.xml",
       "Magick.NET.SystemDrawing.xml",
       "Magick.NET-Q16-HDRI-OpenMP-x64.xml",
@@ -1753,6 +1867,16 @@
       "ImageGlass.UI.pdb",
       "ImageGlass.Viewer.pdb",
       "ImageGlass.WinTouch.pdb"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\ImageGlass",
+    "class": "Image",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "ImageGlass",
+    "files_to_remove": [
+      "LICENSE"
     ],
     "directories_to_remove": [
       "License"
@@ -1798,7 +1922,16 @@
     "program": "Inno Setup 6",
     "files_to_remove": [
       "whatsnew.htm",
-      "isfaq.url",
+      "isfaq.url"
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Inno Setup 6",
+    "class": "Developing",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Inno Setup 6",
+    "files_to_remove": [
       "license.txt"
     ]
   },
@@ -2131,13 +2264,22 @@
     "path": "{drive}Program Files\\JetBrains\\**",
     "class": "Text",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "JetBrains",
     "files_to_remove": [
-      "LICENSE.txt",
-      "NOTICE.txt"
+      "LICENSE.txt"
     ],
     "directories_to_remove": [
       "license"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\JetBrains\\**",
+    "class": "Text",
+    "category": "Documentation",
+    "program": "JetBrains",
+    "files_to_remove": [
+      "NOTICE.txt"
     ]
   },
   {
@@ -2187,10 +2329,19 @@
     "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim-data\\lazy\\**",
     "class": "Text",
     "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "LazyVim",
+    "files_to_remove": [
+      "LICENSE"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim-data\\lazy\\**",
+    "class": "Text",
+    "category": "Documentation",
     "program": "LazyVim",
     "files_to_remove": [
       "CHANGELOG.md",
-      "LICENSE",
       "README.md"
     ],
     "directories_to_remove": [
@@ -2201,6 +2352,7 @@
     "path": "{drive}Program Files\\LGHUB",
     "class": "Driver",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "LGHUB",
     "files_to_remove": [
       "LICENSE",
@@ -2211,11 +2363,20 @@
     "path": "{drive}Program Files\\LibreOffice",
     "class": "Text",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "LibreOffice",
     "files_to_remove": [
       "CREDITS.fodt",
       "LICENSE.html",
-      "license.txt",
+      "license.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\LibreOffice",
+    "class": "Text",
+    "category": "Documentation",
+    "program": "LibreOffice",
+    "files_to_remove": [
       "NOTICE"
     ]
   },
@@ -2294,21 +2455,39 @@
     "program": "LoliLand",
     "files_to_remove": [
       "NOTICE",
-      "COPYRIGHT",
-      "LICENSE",
       "release",
       "README",
-      "ADDITIONAL_LICENSE_INFO",
       "ASSEMBLY_EXCEPTION",
       "Welcome.html",
-      "THIRDPARTYLICENSEREADME-JAVAFX.txt",
-      "THIRDPARTYLICENSEREADME.txt",
       "README.txt",
       "DISCLAIMER",
-      "CHANGELOG.txt",
       "THIRD_PARTY_README",
       "version.txt",
       "README.md"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.loliland\\java",
+    "class": "Minecraft Launcher",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "LoliLand",
+    "files_to_remove": [
+      "COPYRIGHT",
+      "LICENSE",
+      "ADDITIONAL_LICENSE_INFO",
+      "THIRDPARTYLICENSEREADME-JAVAFX.txt",
+      "THIRDPARTYLICENSEREADME.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.loliland\\java",
+    "class": "Minecraft Launcher",
+    "category": "Documentation",
+    "sub_category": "Change logs",
+    "program": "LoliLand",
+    "files_to_remove": [
+      "CHANGELOG.txt"
     ]
   },
   {
@@ -2397,6 +2576,7 @@
     "path": "{drive}Users\\{username}\\.lunarclient",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Lunar Client",
     "directories_to_remove": [
       "licenses"
@@ -2422,6 +2602,7 @@
     "path": "{drive}Program Files\\Magic TXD",
     "class": "Archive",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Magic TXD",
     "directories_to_remove": [
       "licenses"
@@ -2528,8 +2709,26 @@
     "program": "Mem Reduct",
     "files_to_remove": [
       "History.txt",
-      "License.txt",
-      "Readme.txt",
+      "Readme.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Mem Reduct",
+    "class": "Optimization",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Mem Reduct",
+    "files_to_remove": [
+      "License.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Mem Reduct",
+    "class": "Optimization",
+    "category": "Documentation",
+    "sub_category": "Signatures",
+    "program": "Mem Reduct",
+    "files_to_remove": [
       "memreduct.exe.sig"
     ]
   },
@@ -2598,6 +2797,7 @@
     "path": "{drive}ProgramData\\mingw64\\mingw64",
     "class": "Developing",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "MinGW",
     "directories_to_remove": [
       "licenses"
@@ -2687,6 +2887,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Modrinth",
     "directories_to_remove": [
       "licenses"
@@ -2851,6 +3052,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "MultiMC",
     "directories_to_remove": [
       "licenses"
@@ -2894,10 +3096,19 @@
     "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim",
     "class": "Text",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "NeoVim",
     "files_to_remove": [
-      "README.md",
       "LICENSE"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim",
+    "class": "Text",
+    "category": "Documentation",
+    "program": "NeoVim",
+    "files_to_remove": [
+      "README.md"
     ]
   },
   {
@@ -2942,10 +3153,19 @@
     "path": "{drive}Users\\{username}\\node_modules",
     "class": "Developing",
     "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Node JS",
+    "files_to_remove": [
+      "LICENSE"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\node_modules",
+    "class": "Developing",
+    "category": "Documentation",
     "program": "Node JS",
     "files_to_remove": [
       "README.md",
-      "LICENSE",
       "CODEOWNERS",
       "readme.markdown"
     ],
@@ -2957,11 +3177,20 @@
     "path": "{drive}Program Files\\nodejs\\node_modules\\npm",
     "class": "Developing",
     "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Node JS",
+    "files_to_remove": [
+      "LICENSE",
+      "CODEOWNERS"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\nodejs\\node_modules\\npm",
+    "class": "Developing",
+    "category": "Documentation",
     "program": "Node JS",
     "files_to_remove": [
       "README.md",
-      "LICENSE",
-      "CODEOWNERS",
       "readme.markdown"
     ],
     "directories_to_remove": [
@@ -2972,11 +3201,30 @@
     "path": "{drive}Program Files\\Notepad++",
     "class": "Text",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Notepad++",
     "files_to_remove": [
-      "LICENSE",
-      "change.log",
       "readme.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Notepad++",
+    "class": "Text",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Notepad++",
+    "files_to_remove": [
+      "LICENSE"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Notepad++",
+    "class": "Text",
+    "category": "Documentation",
+    "sub_category": "Change logs",
+    "program": "Notepad++",
+    "files_to_remove": [
+      "change.log"
     ]
   },
   {
@@ -2997,6 +3245,7 @@
     "path": "{drive}Program Files\\NVIDIA Corporation",
     "class": "Driver",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "NVIDIA",
     "files_to_remove": [
       "license.txt"
@@ -3136,6 +3385,7 @@
   {
     "path": "{drive}Program Files\\OnionShare",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "OnionShare",
     "files_to_remove": [
       "frozen_application_license.txt",
@@ -3218,6 +3468,7 @@
     "path": "{drive}Program Files\\Paint.NET",
     "class": "Image",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Paint.NET",
     "files_to_remove": [
       "License.txt"
@@ -3385,6 +3636,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "PolyMC",
     "directories_to_remove": [
       "licenses"
@@ -3417,9 +3669,19 @@
     "path": "{drive}Program Files\\PowerToys",
     "class": "Utility",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "PowerToys",
     "files_to_remove": [
       "License.rtf",
+      "Notice.md"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\PowerToys",
+    "class": "Utility",
+    "category": "Documentation",
+    "program": "PowerToys",
+    "files_to_remove": [
       "Notice.md"
     ]
   },
@@ -3547,6 +3809,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "PrismLauncher",
     "directories_to_remove": [
       "licenses"
@@ -3572,12 +3835,40 @@
     "path": "{drive}Program Files\\Process Hacker 2",
     "class": "Security",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Process Hacker 2",
     "files_to_remove": [
       "CHANGELOG.txt",
       "COPYRIGHT.txt",
-      "LICENSE.txt",
-      "README.txt",
+      "LICENSE.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Process Hacker 2",
+    "class": "Security",
+    "category": "Documentation",
+    "program": "Process Hacker 2",
+    "files_to_remove": [
+      "README.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Process Hacker 2",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category": "Change logs",
+    "program": "Process Hacker 2",
+    "files_to_remove": [
+      "CHANGELOG.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Process Hacker 2",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category": "Signatures",
+    "program": "Process Hacker 2",
+    "files_to_remove": [
       "ProcessHacker.sig"
     ]
   },
@@ -3658,6 +3949,7 @@
     "path": "{drive}Program Files (x86)\\Radmin VPN",
     "class": "VPN",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Radmin VPN",
     "files_to_remove": [
       "eula.txt"
@@ -3784,10 +4076,19 @@
     "path": "{drive}Users\\{username}\\scoop\\apps\\**\\**",
     "class": "Packet Manager",
     "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Scoop",
+    "files_to_remove": [
+      "LICENSE"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\scoop\\apps\\**\\**",
+    "class": "Packet Manager",
+    "category": "Documentation",
     "program": "Scoop",
     "files_to_remove": [
       "CHANGELOG.md",
-      "LICENSE",
       "README.md"
     ]
   },
@@ -3842,6 +4143,7 @@
     "path": "{drive}Program Files (x86)\\SoundWire Server",
     "class": "Audio",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "SoundWire Server",
     "files_to_remove": [
       "license.txt",
@@ -3886,11 +4188,20 @@
     "path": "{drive}Program Files\\SystemInformer",
     "class": "Security",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "SystemInformer",
     "files_to_remove": [
       "LICENSE.txt",
-      "README.txt",
       "COPYRIGHT.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\SystemInformer",
+    "class": "Security",
+    "category": "Documentation",
+    "program": "SystemInformer",
+    "files_to_remove": [
+      "README.txt"
     ]
   },
   {
@@ -3956,6 +4267,7 @@
     "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Tecknix Client",
     "directories_to_remove": [
       "licenses"
@@ -4149,8 +4461,6 @@
     "category": "Documentation",
     "program": "VeraCrypt",
     "files_to_remove": [
-      "LICENSE",
-      "License.txt",
       "NOTICE"
     ],
     "directories_to_remove": [
@@ -4158,9 +4468,21 @@
     ]
   },
   {
+    "path": "{drive}Program Files\\VeraCrypt",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "VeraCrypt",
+    "files_to_remove": [
+      "LICENSE",
+      "License.txt"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Local\\vesktop",
     "class": "Messanger",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Vesktop",
     "files_to_remove": [
       "LICENSE.electron.txt",
@@ -4321,8 +4643,6 @@
     "category": "Documentation",
     "program": "VS Code",
     "files_to_remove": [
-      "LICENSE",
-      "LICENSE.txt",
       "changelog.md",
       "change.log",
       "readme.txt",
@@ -4331,9 +4651,21 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\.vscode\\extensions\\**",
+    "class": "Text",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "VS Code",
+    "files_to_remove": [
+      "LICENSE",
+      "LICENSE.txt"
+    ]
+  },
+  {
     "path": "{drive}Program Files (x86)\\VulkanRT\\**",
     "class": "Driver",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "VulcanRT",
     "files_to_remove": [
       "LICENSE.txt",
@@ -4649,6 +4981,7 @@
     "path": "{drive}Program Files (x86)\\Windows Kits\\**",
     "class": "Developing",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Windows Kits",
     "directories_to_remove": [
       "Licenses"
@@ -4666,15 +4999,31 @@
     "class": "Packet Manager",
     "category": "Documentation",
     "program": "WinGet",
-    "files_to_remove": [
-      "CHANGELOG.md",
-      "LICENSE",
-      "LICENSE-APACHE",
-      "LICENSE-MIT",
-      "README.md"
-    ],
     "directories_to_remove": [
       "doc"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
+    "class": "Packet Manager",
+    "category": "Documentation",
+    "sub_class": "Change logs",
+    "program": "WinGet",
+    "files_to_remove": [
+      "CHANGELOG.md",
+      "README.md"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
+    "class": "Packet Manager",
+    "category": "Documentation",
+    "sub_class": "Licenses",
+    "program": "WinGet",
+    "files_to_remove": [
+      "LICENSE",
+      "LICENSE-APACHE",
+      "LICENSE-MIT"
     ]
   },
   {
@@ -4801,7 +5150,7 @@
     "class": "Browser",
     "category": "Logs",
     "program": "Thorium",
-    "remove_files": [
+    "files_to_remove": [
       "debug.log"
     ]
   },
@@ -4810,7 +5159,7 @@
     "class": "Browser",
     "category": "Documentation",
     "program": "Thorium",
-    "remove_files": [
+    "files_to_remove": [
       "LICENCE"
     ]
   },
@@ -4819,7 +5168,7 @@
     "class": "Browser",
     "category": "Browser cookies",
     "program": "Thorium",
-    "remove_files": [
+    "files_to_remove": [
       "Cookies",
       "Cookies-journal"
     ]
@@ -4829,7 +5178,7 @@
     "class": "Browser",
     "category": "Browser passwords",
     "program": "Thorium",
-    "remove_files": [
+    "files_to_remove": [
       "Login Data",
       "Login Data For Account",
       "Login Data For Account-journal",
@@ -4841,7 +5190,7 @@
     "class": "Browser",
     "category": "Browser history",
     "program": "Thorium",
-    "remove_files": [
+    "files_to_remove": [
       "Favicons",
       "Favicons-journal",
       "History",

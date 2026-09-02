@@ -79,6 +79,7 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
         program: data.program.clone(),
         path: data.path.clone(),
         category: data.category.clone(),
+        sub_category: data.sub_category.clone(),
     };
 
     let paths: Vec<PathBuf> = match glob(&data.path) {
@@ -107,6 +108,7 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
                 path: path.to_string_lossy().to_string(),
                 program: data.program.clone(),
                 category: data.category.clone(),
+                sub_category: data.sub_category.clone(),
             };
 
             // A: parallel files_to_remove with C limit
@@ -236,6 +238,7 @@ mod tests {
             category: String::from("TestCategory"),
             program: String::from("TestProgram"),
             class: String::from("TestClass"),
+            sub_category: String::from("TestSub"),
             files_to_remove: vec![],
             directories_to_remove: vec![],
             remove_all_in_dir: false,
@@ -498,6 +501,7 @@ mod proptests {
                 category: String::from("Test"),
                 program: String::from("Test"),
                 class: String::from("Test"),
+                sub_category: String::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 remove_all_in_dir: false,
@@ -527,6 +531,7 @@ mod proptests {
                 category: String::from("Test"),
                 program: String::from("Test"),
                 class: String::from("Test"),
+                sub_category: String::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 remove_all_in_dir: false,
@@ -548,6 +553,7 @@ mod proptests {
                 category: String::from("Test"),
                 program: String::from("Test"),
                 class: String::from("Test"),
+                sub_category: String::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 remove_all_in_dir: false,
@@ -579,6 +585,7 @@ mod proptests {
                 category: String::from("Test"),
                 program: String::from("Test"),
                 class: String::from("Test"),
+                sub_category: String::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 remove_all_in_dir: false,
@@ -604,6 +611,7 @@ mod proptests {
                 category: category.clone(),
                 program: program.clone(),
                 class: String::from("Test"),
+                sub_category: String::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 remove_all_in_dir: false,
@@ -635,6 +643,7 @@ mod proptests {
                 category: String::from("Test"),
                 program: String::from("Test"),
                 class: String::from("Test"),
+                sub_category: String::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 remove_all_in_dir: false,
@@ -665,6 +674,7 @@ mod proptests {
                 category: String::from("Test"),
                 program: String::from("Test"),
                 class: String::from("Test"),
+                sub_category: String::from("Test"),
                 files_to_remove: vec![filename.clone()],
                 directories_to_remove: vec![],
                 remove_all_in_dir: false,
@@ -700,6 +710,7 @@ mod proptests {
                 category: String::from("Test"),
                 program: String::from("Test"),
                 class: String::from("Test"),
+                sub_category: String::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 remove_all_in_dir: false,
