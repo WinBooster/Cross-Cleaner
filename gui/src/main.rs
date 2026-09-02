@@ -984,14 +984,19 @@ impl eframe::App for MyApp {
                                             frame
                                                 .show(ui, |ui| {
                                                     ui.set_min_width(200.0);
-                                                    egui::ScrollArea::vertical().max_height(300.0).show(
-                                                        ui,
-                                                        |ui| {
+                                                    egui::ScrollArea::vertical()
+                                                        .max_height(300.0)
+                                                        .show(ui, |ui| {
                                                             for sub in cat.subs.clone() {
-                                                                let mut is_sel = cat.selected.contains(&sub);
-                                                                if ui.checkbox(&mut is_sel, &sub).changed() {
+                                                                let mut is_sel =
+                                                                    cat.selected.contains(&sub);
+                                                                if ui
+                                                                    .checkbox(&mut is_sel, &sub)
+                                                                    .changed()
+                                                                {
                                                                     if is_sel {
-                                                                        cat.selected.insert(sub.clone());
+                                                                        cat.selected
+                                                                            .insert(sub.clone());
                                                                     } else {
                                                                         cat.selected.remove(&sub);
                                                                     }
@@ -999,21 +1004,30 @@ impl eframe::App for MyApp {
                                                             }
                                                             // Show Uncategorized for objects without sub_category, only if category has ≥1 real sub
                                                             if cat.has_empty {
-                                                                let mut is_uncat = cat.selected.contains("");
-                                                                if ui.checkbox(&mut is_uncat, "Uncategorized").changed() {
+                                                                let mut is_uncat =
+                                                                    cat.selected.contains("");
+                                                                if ui
+                                                                    .checkbox(
+                                                                        &mut is_uncat,
+                                                                        "Uncategorized",
+                                                                    )
+                                                                    .changed()
+                                                                {
                                                                     if is_uncat {
-                                                                        cat.selected.insert(String::new());
+                                                                        cat.selected
+                                                                            .insert(String::new());
                                                                     } else {
-                                                                        cat.selected.remove(&String::new());
+                                                                        cat.selected
+                                                                            .remove(&String::new());
                                                                     }
                                                                 }
                                                             }
-                                                        },
-                                                    );
+                                                        });
                                                     ui.separator();
                                                     ui.horizontal(|ui| {
                                                         if ui.small_button("All").clicked() {
-                                                            cat.selected = cat.subs.iter().cloned().collect();
+                                                            cat.selected =
+                                                                cat.subs.iter().cloned().collect();
                                                             if cat.has_empty {
                                                                 cat.selected.insert(String::new());
                                                             }
@@ -1028,7 +1042,9 @@ impl eframe::App for MyApp {
                                     // Close on click outside or Escape, so clicking empty area is easy
                                     let should_close = menu_resp.clicked_elsewhere()
                                         && popup_response.response.clicked_elsewhere();
-                                    if ui.input(|i| i.key_pressed(egui::Key::Escape)) || should_close {
+                                    if ui.input(|i| i.key_pressed(egui::Key::Escape))
+                                        || should_close
+                                    {
                                         ui.memory_mut(|m| m.close_popup());
                                     }
                                 }
