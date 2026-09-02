@@ -12,6 +12,7 @@
   "Thunderbird": "https://www.thunderbird.net",
   "MAX": "https://max.ru",
   "Vesktop": "https://vesktop.dev",
+  "qTox": "https://qtox.github.io",
 
   "7-Zip": "https://www.7-zip.org/download.html",
   "WinRaR": "https://www.win-rar.com/predownload.html",
@@ -27,6 +28,7 @@
   "Yandex Music": "https://music.yandex.ru/download",
   "Murglar": "https://murglar.app",
   "Audacity": "https://www.audacityteam.org",
+  "Namida": "https://github.com/namidaco/namida",
 
   "Brave Browser": "https://brave.com/download",
   "Edge": "https://www.microsoft.com/edge",
@@ -114,6 +116,7 @@
   "NVIDIA App": "https://www.nvidia.com/en-us/software/nvidia-app",
   "NVIDIA": "https://www.nvidia.com",
   "VulcanRT": "https://vulkan.lunarg.com/sdk/home",
+  "MSI Afterburner": "https://www.msi.com/Landing/afterburner",
 
   "BlueStacks": "https://www.bluestacks.com",
   "BlueStacks 5": "https://www.bluestacks.com",
@@ -175,6 +178,8 @@
   "360 Total Security": "https://www.360totalsecurity.com",
   "Doctor Web Cureit": "https://free.drweb.ru/download+cureit+free",
   "TG WS Proxy": "https://github.com/Flowseal/tg-ws-proxy",
+  "VeraCrypt": "https://veracrypt.io",
+  "Wireshark": "https://www.wireshark.org",
 
   "Cursor": "https://www.cursor.com/downloads",
   "JetBrains": "https://www.jetbrains.com/?var=1",
@@ -223,5 +228,6 @@
   "Linux": "https://www.kernel.org",
   "OneDrive": "https://www.microsoft.com/microsoft-365/onedrive/online-cloud-storage",
   "Windows": "https://www.microsoft.com/download/windows",
-  "Windows Defender": "https://www.microsoft.com/download/windows"
+  "Windows Defender": "https://www.microsoft.com/download/windows",
+  "OnionShare": "https://onionshare.org"
 }
