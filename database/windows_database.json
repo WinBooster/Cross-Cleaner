@@ -2804,6 +2804,22 @@
     ]
   },
   {
+    "path": "{drive}msys64\\var\\cache\\pacman\\pkg\\*.sig",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category": "Signatures",
+    "program": "MinGW",
+    "remove_files": true
+  },
+  {
+    "path": "{drive}msys64\\var\\cache\\pacman\\sys\\*.sig",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category": "Signatures",
+    "program": "MinGW",
+    "remove_files": true
+  },
+  {
     "path": "{drive}Program Files (x86)\\MiniBin\\*.txt",
     "class": "Utility",
     "category": "Logs",
@@ -4205,6 +4221,68 @@
     ]
   },
   {
+    "path": "{drive}Program Files\\SystemInformer",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category": "Signatures",
+    "program": "SystemInformer",
+    "files_to_remove": [
+      "ksidyn.sig",
+      "peview.sig",
+      "SystemInformer.sig"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\SystemInformer\\plugins",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category": "Signatures",
+    "program": "SystemInformer",
+    "files_to_remove": [
+      "DotNetTools.sig",
+      "ExtendedNotifications.sig",
+      "ExtendedServices.sig",
+      "ExtendedTools.sig",
+      "HardwareDevices.sig",
+      "NetworkTools.sig",
+      "OnlineChecks.sig",
+      "ToolStatus.sig",
+      "Updater.sig",
+      "UserNotes.sig",
+      "WindowExplorer.sig"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\SystemInformer\\x86\\plugins",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category": "Signatures",
+    "program": "SystemInformer",
+    "files_to_remove": [
+      "DotNetTools.sig",
+      "ExtendedNotifications.sig",
+      "ExtendedServices.sig",
+      "ExtendedTools.sig",
+      "HardwareDevices.sig",
+      "NetworkTools.sig",
+      "OnlineChecks.sig",
+      "ToolStatus.sig",
+      "Updater.sig",
+      "UserNotes.sig",
+      "WindowExplorer.sig"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\SystemInformer\\x86",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category": "Signatures",
+    "program": "SystemInformer",
+    "files_to_remove": [
+      "SystemInformer.sig"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher",
     "class": "Minecraft Launcher",
     "category": "Accounts",
@@ -5197,83 +5275,5 @@
     "directories_to_remove": [
       "LOGS"
     ]
-  },
-  {
-    "path": "{drive}Program Files\\SystemInformer",
-    "class": "Security",
-    "category": "Documentation",
-    "sub_category": "Signatures",
-    "program": "SystemInformer",
-    "files_to_remove": [
-      "ksidyn.sig",
-      "peview.sig",
-      "SystemInformer.sig"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\SystemInformer\\plugins",
-    "class": "Security",
-    "category": "Documentation",
-    "sub_category": "Signatures",
-    "program": "SystemInformer",
-    "files_to_remove": [
-      "DotNetTools.sig",
-      "ExtendedNotifications.sig",
-      "ExtendedServices.sig",
-      "ExtendedTools.sig",
-      "HardwareDevices.sig",
-      "NetworkTools.sig",
-      "OnlineChecks.sig",
-      "ToolStatus.sig",
-      "Updater.sig",
-      "UserNotes.sig",
-      "WindowExplorer.sig"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\SystemInformer\\x86\\plugins",
-    "class": "Security",
-    "category": "Documentation",
-    "sub_category": "Signatures",
-    "program": "SystemInformer",
-    "files_to_remove": [
-      "DotNetTools.sig",
-      "ExtendedNotifications.sig",
-      "ExtendedServices.sig",
-      "ExtendedTools.sig",
-      "HardwareDevices.sig",
-      "NetworkTools.sig",
-      "OnlineChecks.sig",
-      "ToolStatus.sig",
-      "Updater.sig",
-      "UserNotes.sig",
-      "WindowExplorer.sig"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\SystemInformer\\x86",
-    "class": "Security",
-    "category": "Documentation",
-    "sub_category": "Signatures",
-    "program": "SystemInformer",
-    "files_to_remove": [
-      "SystemInformer.sig"
-    ]
-  },
-  {
-    "path": "{drive}msys64\\var\\cache\\pacman\\pkg\\*.sig",
-    "class": "Security",
-    "category": "Documentation",
-    "sub_category": "Signatures",
-    "program": "MinGW",
-    "remove_files": true
-  },
-  {
-    "path": "{drive}msys64\\var\\cache\\pacman\\sys\\*.sig",
-    "class": "Security",
-    "category": "Documentation",
-    "sub_category": "Signatures",
-    "program": "MinGW",
-    "remove_files": true
   }
 ]
