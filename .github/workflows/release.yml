@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version number (e.g., 2.0.1)"
+        description: "Version number (e.g., 2.0.2.4)"
         required: true
-        default: "2.0.1"
+        default: "2.0.2.5"
 
 env:
   CARGO_TERM_COLOR: always
