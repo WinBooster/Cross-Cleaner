@@ -1069,6 +1069,15 @@
     ]
   },
   {
+    "path": "{drive}Program Files",
+    "class": "Browser",
+    "category": "Logs",
+    "program": "Edge",
+    "files_to_remove": [
+      "msedge_installer.log"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\**",
     "category": "Documentation",
     "program": "Electron App's",
@@ -1449,15 +1458,6 @@
     "program": "Google Chrome",
     "files_to_remove": [
       "chrome_installer.log"
-    ]
-  },
-  {
-    "path": "{drive}Program Files",
-    "class": "Browser",
-    "category": "Logs",
-    "program": "Edge",
-    "files_to_remove": [
-      "msedge_installer.log"
     ]
   },
   {
@@ -2766,6 +2766,15 @@
     ]
   },
   {
+    "path": "{drive}Program Files (x86)\\MSI Afterburner",
+    "class": "Driver",
+    "category": "Documentation",
+    "program": "MSI Afterburner",
+    "directories_to_remove": [
+      "Doc"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC",
     "class": "Minecraft Launcher",
     "category": "Accounts",
@@ -2870,6 +2879,15 @@
     "class": "Audio",
     "files_to_remove": [
       "murglar.log"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\namida\\data\\flutter_assets",
+    "class": "Audio",
+    "category": "Documentation",
+    "program": "Namida",
+    "files_to_remove": [
+      "NOTICES.Z"
     ]
   },
   {
@@ -3114,6 +3132,18 @@
     "program": "OneTap",
     "remove_all_in_dir": true,
     "remove_directory_after_clean": true
+  },
+  {
+    "path": "{drive}Program Files\\OnionShare",
+    "category": "Documentation",
+    "program": "OnionShare",
+    "files_to_remove": [
+      "frozen_application_license.txt",
+      "LICENSE.txt",
+      "license-obfs4.txt",
+      "license-snowflake.txt",
+      "license-tor.txt"
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\OONI Probe",
@@ -3591,6 +3621,15 @@
     "category": "Logs",
     "program": "qBittorrent",
     "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\qTox",
+    "class": "Messanger",
+    "category": "Logs",
+    "program": "qTox",
+    "files_to_remove": [
+      "uninstall.log"
+    ]
   },
   {
     "path": "{drive}Program Files (x86)\\Radmin VPN",
@@ -4103,6 +4142,20 @@
     "program": "Vape Client",
     "remove_all_in_dir": true,
     "remove_directory_after_clean": true
+  },
+  {
+    "path": "{drive}Program Files\\VeraCrypt",
+    "class": "Security",
+    "category": "Documentation",
+    "program": "VeraCrypt",
+    "files_to_remove": [
+      "LICENSE",
+      "License.txt",
+      "NOTICE"
+    ],
+    "directories_to_remove": [
+      "docs"
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\vesktop",
@@ -4648,6 +4701,35 @@
     ]
   },
   {
+    "path": "{drive}Program Files\\Wireshark",
+    "class": "Security",
+    "category": "Documentation",
+    "program": "Wireshark",
+    "files_to_remove": [
+      "COPYING.txt",
+      "README.txt",
+      "capinfos.html",
+      "captype.html",
+      "dumpcap.html",
+      "editcap.html",
+      "etwdump.html",
+      "extcap.html",
+      "ipmap.html",
+      "randpkt.html",
+      "rawshark.html",
+      "reordercap.html",
+      "sharkd.html",
+      "text2pcap.html",
+      "tshark.html",
+      "Wireshark Release Notes.html",
+      "wireshark.html",
+      "wireshark-filter.html"
+    ],
+    "directories_to_remove": [
+      "Wireshark User's Guide"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Xamarin\\Logs\\**\\*.log",
     "class": "Developing",
     "category": "Logs",
@@ -4712,88 +4794,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\namida\\data\\flutter_assets",
-    "class": "Audio",
-    "category": "Documentation",
-    "program": "Namida",
-    "files_to_remove": [
-      "NOTICES.Z"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\qTox",
-    "class": "Messanger",
-    "category": "Logs",
-    "program": "qTox",
-    "files_to_remove": [
-      "uninstall.log"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\OnionShare",
-    "category": "Documentation",
-    "program": "OnionShare",
-    "files_to_remove": [
-      "frozen_application_license.txt",
-      "LICENSE.txt",
-      "license-obfs4.txt",
-      "license-snowflake.txt",
-      "license-tor.txt"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\VeraCrypt",
-    "class": "Security",
-    "category": "Documentation",
-    "program": "VeraCrypt",
-    "files_to_remove": [
-      "LICENSE",
-      "License.txt",
-      "NOTICE"
-    ],
-    "directories_to_remove": [
-      "docs"
-    ]
-  },
-  {
-    "path": "{drive}Program Files (x86)\\MSI Afterburner",
-    "class": "Driver",
-    "category": "Documentation",
-    "program": "MSI Afterburner",
-    "directories_to_remove": [
-      "Doc"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\Wireshark",
-    "class": "Security",
-    "category": "Documentation",
-    "program": "Wireshark",
-    "files_to_remove": [
-      "COPYING.txt",
-      "README.txt",
-      "capinfos.html",
-      "captype.html",
-      "dumpcap.html",
-      "editcap.html",
-      "etwdump.html",
-      "extcap.html",
-      "ipmap.html",
-      "randpkt.html",
-      "rawshark.html",
-      "reordercap.html",
-      "sharkd.html",
-      "text2pcap.html",
-      "tshark.html",
-      "Wireshark Release Notes.html",
-      "wireshark.html",
-      "wireshark-filter.html"
-    ],
-    "directories_to_remove": [
-      "Wireshark User's Guide"
     ]
   }
 ]
