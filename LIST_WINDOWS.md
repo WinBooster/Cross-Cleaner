@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.2.4
+# Windows Clearing Programs Catalog v2.0.2.5
 **Total categories in database:** 15
 
-**Total programs in database:** 197
+**Total programs in database:** 198
 
-**Total pathes in database:** 443
+**Total pathes in database:** 452
 
 ## AI
 
@@ -57,7 +57,8 @@
 | 4 | [LibreWolf](https://librewolf.net/installation) | Browser cookies, Browser history |
 | 5 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser cookies, Browser history, Cache, Logs |
 | 6 | [Opera GX](https://www.opera.com/download) | Browser cookies, Browser history, Browser passwords |
-| 7 | [Vivaldi](https://vivaldi.com/download) | Browser cookies, Browser history, Browser passwords, Images |
+| 7 | [Thorium](https://thorium.rocks) | Browser cookies, Browser history, Browser passwords, Documentation, Logs |
+| 8 | [Vivaldi](https://vivaldi.com/download) | Browser cookies, Browser history, Browser passwords, Images |
 
 
 ## Cheat
@@ -130,7 +131,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [BlueStacks 5](https://www.bluestacks.com) | Images, Logs |
+| 1 | [BlueStacks 5](https://www.bluestacks.com) | Documentation, Images, Logs |
 | 2 | [Gameloop](https://www.gameloop.com) | Logs |
 | 3 | [Memu](https://www.memuplay.com/download.html) | Logs |
 | 4 | [Nox](https://bignox.com/nox-app-player) | Logs |
@@ -218,7 +219,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [HiAlgo Boost](https://www.hialgo.com) | Documentation |
+| 1 | [HiAlgo Boost](https://www.hialgo.com) | Documentation, Logs |
 | 2 | [Mem Reduct](https://github.com/henrypp/memreduct) | Documentation |
 | 3 | [Winutil](https://github.com/ChrisTitusTech/winutil) | Logs |
 | 4 | [ССleaner](https://www.ccleaner.com) | Logs |
