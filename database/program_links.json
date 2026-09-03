@@ -224,6 +224,8 @@
   "WinGet": "https://github.com/microsoft/winget-cli",
   "pipx": "https://github.com/pypa/pipx",
 
+  "YASB": "https://github.com/amnweb/yasb",
+
   "ImgBurn": "https://www.imgburn.com/index.php?act=download",
   "CachyOS": "https://cachyos.org",
   "Linux": "https://www.kernel.org",

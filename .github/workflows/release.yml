@@ -190,12 +190,10 @@ jobs:
             ## ✨ What's New
 
             ### 🪟 Windows Enhancements
-            - **Thorium** Added documentation, browser cookies, browser passwords, browser history clearing
-            - **SystemInformer** Improved documentation (signatures) clearing
-            - **MinGW** Improved documentation (signatures) clearing
-
-            ### 🛠 Technical Updates
-            GUI - added sub category system
+            - **YASB** Added logs clearing
+            - **Cristalix** Improved logs clearing
+            - **GlazeWM** Added logs clearing
+            - **Namida** Added logs clearing
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:

@@ -769,6 +769,15 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\.cristalix",
+    "class": "Minecraft Launcher",
+    "category": "Logs",
+    "program": "Cristalix",
+    "directories_to_remove": [
+      "logs"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\cubixworld\\updates\\**\\",
     "class": "Minecraft Launcher",
     "category": "Game",
@@ -1902,6 +1911,7 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ImgBurn",
+    "class": "ISO",
     "category": "Logs",
     "program": "ImgBurn",
     "directories_to_remove": [
@@ -1910,6 +1920,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\ImgBurn",
+    "class": "ISO",
     "category": "Documentation",
     "program": "ImgBurn",
     "files_to_remove": [
@@ -3138,6 +3149,15 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\.namida",
+    "class": "Audio",
+    "category": "Logs",
+    "program": "Namida",
+    "directories_to_remove": [
+      "Logs"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim",
     "class": "Text",
     "category": "Documentation",
@@ -3429,6 +3449,7 @@
   },
   {
     "path": "{drive}Program Files\\OnionShare",
+    "class": "Files Transport",
     "category": "Documentation",
     "sub_category": "Licenses",
     "program": "OnionShare",
@@ -5326,6 +5347,30 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\.config\\yasb\\yasb*log*",
+    "class": "Status Bar",
+    "category": "Logs",
+    "program": "YASB",
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\.glzr\\glazewm",
+    "class": "Tiling Manager",
+    "category": "Logs",
+    "program": "GlazeWM",
+    "files_to_remove": [
+      "errors.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\.glzr\\zebar",
+    "category": "Logs",
+    "program": "Zebar",
+    "files_to_remove": [
+      "errors.log"
     ]
   }
 ]

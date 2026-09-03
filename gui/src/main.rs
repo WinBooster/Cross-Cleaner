@@ -1036,7 +1036,6 @@ impl eframe::App for MyApp {
                                     }
                                 }
                             }
-                            // suppress unused warning
                             let _ = resp;
                         });
                     }
