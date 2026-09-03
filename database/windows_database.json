@@ -444,7 +444,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "Badlion Client",
     "remove_directories": true,
     "remove_files": true
@@ -548,7 +548,7 @@
     "path": "{drive}Users\\{username}\\Documents\\My Games\\Borderlands 2\\WillowGame",
     "class": "Game",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "Borderlands 2",
     "directories_to_remove": [
       "SaveData"
@@ -567,7 +567,7 @@
     "path": "{drive}Users\\{username}\\Documents\\My Games\\Borderlands 2\\WillowGame",
     "class": "Game",
     "category": "Game",
-    "sub_category":"Settings",
+    "sub_category": "Settings",
     "program": "Borderlands 2",
     "directories_to_remove": [
       "Config"
@@ -730,7 +730,7 @@
     "path": "{steam}\\userdata\\**\\730\\local\\cfg\\*",
     "class": "Game",
     "category": "Game",
-    "sub_category":"Settings",
+    "sub_category": "Settings",
     "program": "Counter-Strike Global Offensive",
     "remove_files": true
   },
@@ -746,7 +746,7 @@
     "path": "{drive}Users\\{username}\\.cristalix\\updates\\**\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "Cristalix",
     "remove_directories": true,
     "remove_files": true
@@ -781,7 +781,7 @@
     "path": "{drive}Users\\{username}\\cubixworld\\updates\\**\\",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "CubixWorld",
     "directories_to_remove": [
       "saves"
@@ -851,7 +851,7 @@
     "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\**\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "CurseForge",
     "remove_directories": true,
     "remove_files": true
@@ -1053,7 +1053,7 @@
     "path": "{steam}\\userdata\\**\\570\\local\\cfg\\*",
     "class": "Game",
     "category": "Game",
-    "sub_category":"Settings",
+    "sub_category": "Settings",
     "program": "Dota 2",
     "remove_files": true
   },
@@ -1129,7 +1129,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\Edge\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"History",
+    "sub_category": "History",
     "program": "Edge",
     "files_to_remove": [
       "History",
@@ -1482,6 +1482,15 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Users\\{username}\\.glzr\\glazewm",
+    "class": "Tiling Manager",
+    "category": "Logs",
+    "program": "GlazeWM",
+    "files_to_remove": [
+      "errors.log"
+    ]
+  },
+  {
     "path": "{drive}Program Files (x86)\\GnuPG",
     "class": "Security",
     "category": "Documentation",
@@ -1521,7 +1530,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Network",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"Cookies",
+    "sub_category": "Cookies",
     "program": "Google Chrome",
     "files_to_remove": [
       "Browser cookies",
@@ -1532,7 +1541,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"Passwords",
+    "sub_category": "Passwords",
     "program": "Google Chrome",
     "files_to_remove": [
       "Login Data",
@@ -1545,7 +1554,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"History",
+    "sub_category": "History",
     "program": "Google Chrome",
     "files_to_remove": [
       "Favicons",
@@ -1663,7 +1672,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\**\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "GribLand",
     "remove_directories": true,
     "remove_files": true
@@ -2421,7 +2430,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\librewolf\\Profiles\\**",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"History",
+    "sub_category": "History",
     "program": "LibreWolf",
     "files_to_remove": [
       "places.sqlite",
@@ -2433,7 +2442,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\librewolf\\Profiles\\**",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"Cookies",
+    "sub_category": "Cookies",
     "program": "LibreWolf",
     "files_to_remove": [
       "cookies.sqlite",
@@ -2445,7 +2454,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\librewolf\\Profiles\\**",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"History",
+    "sub_category": "History",
     "program": "LibreWolf",
     "files_to_remove": [
       "favicons.sqlite",
@@ -2534,7 +2543,7 @@
     "path": "{drive}.loliland\\updates\\clients\\**\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "LoliLand",
     "remove_directories": true,
     "remove_files": true
@@ -2691,7 +2700,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\**\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "MCSkill",
     "remove_directories": true,
     "remove_files": true
@@ -2806,7 +2815,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "Minecraft",
     "remove_directories": true,
     "remove_files": true
@@ -2913,7 +2922,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "Modrinth",
     "remove_directories": true,
     "remove_files": true
@@ -2965,7 +2974,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"History",
+    "sub_category": "History",
     "program": "Mozilla Firefox",
     "files_to_remove": [
       "places.sqlite",
@@ -2977,7 +2986,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"Cookies",
+    "sub_category": "Cookies",
     "program": "Mozilla Firefox",
     "files_to_remove": [
       "cookies.sqlite",
@@ -2996,7 +3005,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"History",
+    "sub_category": "History",
     "program": "Mozilla Firefox",
     "files_to_remove": [
       "favicons.sqlite",
@@ -3082,7 +3091,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\**\\minecraft\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "MultiMC",
     "remove_directories": true,
     "remove_files": true
@@ -3474,7 +3483,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera GX Stable\\Network",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"Cookies",
+    "sub_category": "Cookies",
     "program": "Opera GX",
     "files_to_remove": [
       "Browser cookies",
@@ -3485,7 +3494,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera GX Stable",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"Passwords",
+    "sub_category": "Passwords",
     "program": "Opera GX",
     "files_to_remove": [
       "Login Data",
@@ -3496,7 +3505,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera GX Stable",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"History",
+    "sub_category": "History",
     "program": "Opera GX",
     "files_to_remove": [
       "Favicons",
@@ -3655,7 +3664,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\minecraft\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "PolyMC",
     "remove_directories": true,
     "remove_files": true
@@ -3664,7 +3673,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\**\\.minecraft\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "PolyMC",
     "remove_directories": true,
     "remove_files": true
@@ -3830,7 +3839,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "PrismLauncher",
     "remove_directories": true,
     "remove_files": true
@@ -3839,7 +3848,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\.minecraft\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "PrismLauncher",
     "remove_directories": true,
     "remove_files": true
@@ -4099,7 +4108,7 @@
     "path": "{steam}\\userdata\\**\\252490\\local\\cfg\\*",
     "class": "Game",
     "category": "Game",
-    "sub_category":"Settings",
+    "sub_category": "Settings",
     "program": "Rust",
     "remove_files": true
   },
@@ -4133,7 +4142,7 @@
   {
     "path": "{drive}Users\\{username}\\AppData\\LocalLow\\TVGS\\Schedule I\\Saves",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "Schedule I",
     "class": "Game",
     "remove_directories": true
@@ -4379,7 +4388,7 @@
     "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "Tecknix Client",
     "remove_directories": true,
     "remove_files": true
@@ -4477,7 +4486,7 @@
     "path": "{drive}Users\\{username}\\Documents\\My Games\\Terraria",
     "class": "Game",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "Terraria",
     "files_to_remove": [
       "favorites.json"
@@ -4491,7 +4500,7 @@
     "path": "{drive}Users\\{username}\\Documents\\My Games\\Terraria",
     "class": "Game",
     "category": "Game",
-    "sub_category":"Settings",
+    "sub_category": "Settings",
     "program": "Terraria",
     "files_to_remove": [
       "config.json",
@@ -4511,7 +4520,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\The Powder Toy\\Saves",
     "class": "Game",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "The Powder Toy",
     "remove_all_in_dir": true
   },
@@ -4537,7 +4546,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default\\Network",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"Cookies",
+    "sub_category": "Cookies",
     "program": "Thorium",
     "files_to_remove": [
       "Cookies",
@@ -4548,7 +4557,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"Passwords",
+    "sub_category": "Passwords",
     "program": "Thorium",
     "files_to_remove": [
       "Login Data",
@@ -4561,7 +4570,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"History",
+    "sub_category": "History",
     "program": "Thorium",
     "files_to_remove": [
       "Favicons",
@@ -4632,7 +4641,7 @@
     "path": "{steam}\\userdata\\**\\304930\\local\\cfg\\*",
     "class": "Game",
     "category": "Game",
-    "sub_category":"Settings",
+    "sub_category": "Settings",
     "program": "Unturned",
     "remove_files": true
   },
@@ -4725,7 +4734,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\Vivaldi\\User Data\\Default\\Network",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"Cookies",
+    "sub_category": "Cookies",
     "program": "Vivaldi",
     "files_to_remove": [
       "Browser cookies",
@@ -4736,7 +4745,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\Vivaldi\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"Passwords",
+    "sub_category": "Passwords",
     "program": "Vivaldi",
     "files_to_remove": [
       "Login Data",
@@ -4756,7 +4765,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\Vivaldi\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"History",
+    "sub_category": "History",
     "program": "Vivaldi",
     "files_to_remove": [
       "Favicons",
@@ -5322,6 +5331,13 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\.config\\yasb\\yasb*log*",
+    "class": "Status Bar",
+    "category": "Logs",
+    "program": "YASB",
+    "remove_files": true
+  },
+  {
     "path": "{drive}ProgramData\\Zapret",
     "class": "Security",
     "category": "Logs",
@@ -5329,6 +5345,14 @@
     "files_to_remove": [
       "connection_test.log",
       "zapret_log.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\.glzr\\zebar",
+    "category": "Logs",
+    "program": "Zebar",
+    "files_to_remove": [
+      "errors.log"
     ]
   },
   {
