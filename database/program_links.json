@@ -175,6 +175,7 @@
   "SystemInformer": "https://systeminformer.com/downloads",
   "VirtualBox": "https://www.virtualbox.org/wiki/Downloads",
   "Zapret": "https://github.com/bol-van/zapret",
+  "Zapret Universal Interface": "https://github.com/AmantesNihilo/zapret-universal-interface",
   "Avast": "https://www.avast.ru",
   "360 Total Security": "https://www.360totalsecurity.com",
   "Doctor Web Cureit": "https://free.drweb.ru/download+cureit+free",
@@ -194,6 +195,7 @@
   "Gperf": "https://github.com/jwinarske/gperf",
   "Pcre": "https://www.pcre.org",
   "Zed": "https://zed.dev",
+  "Visual Studio": "https://visualstudio.microsoft.com",
 
   "Tribler": "https://www.tribler.org/download.html",
   "qBittorrent": "https://www.qbittorrent.org/download",
@@ -232,5 +234,6 @@
   "OneDrive": "https://www.microsoft.com/microsoft-365/onedrive/online-cloud-storage",
   "Windows": "https://www.microsoft.com/download/windows",
   "Windows Defender": "https://www.microsoft.com/download/windows",
-  "OnionShare": "https://onionshare.org"
+  "OnionShare": "https://onionshare.org",
+  "Copilot": "https://copilot.microsoft.com/"
 }
