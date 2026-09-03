@@ -1023,19 +1023,6 @@ impl eframe::App for MyApp {
                                                                 }
                                                             }
                                                         });
-                                                    ui.separator();
-                                                    ui.horizontal(|ui| {
-                                                        if ui.small_button("All").clicked() {
-                                                            cat.selected =
-                                                                cat.subs.iter().cloned().collect();
-                                                            if cat.has_empty {
-                                                                cat.selected.insert(String::new());
-                                                            }
-                                                        }
-                                                        if ui.small_button("None").clicked() {
-                                                            cat.selected.clear();
-                                                        }
-                                                    });
                                                 })
                                                 .inner
                                         });
