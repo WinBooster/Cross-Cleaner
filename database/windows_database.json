@@ -1967,7 +1967,7 @@
     "path": "{drive}Program Files\\Inkscape",
     "class": "Image",
     "category": "Documentation",
-    "sub_category":"News",
+    "sub_category": "News",
     "program": "InkSpace",
     "files_to_remove": [
       "NEWS.md"
@@ -4149,6 +4149,26 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.Salwyrr\\launcher",
+    "class": "Minecraft Launcher",
+    "category": "Documentation",
+    "sub_category": "Change logs",
+    "program": "Salwyrr Launcher",
+    "files_to_remove": [
+      "changelogs_en"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.Salwyrr\\launcher",
+    "class": "Minecraft Launcher",
+    "category": "Documentation",
+    "sub_category": "News",
+    "program": "Salwyrr Launcher",
+    "files_to_remove": [
+      "news_en"
+    ]
+  },
+  {
     "path": "{drive}Program Files\\Sandboxie-Plus",
     "class": "Security",
     "category": "Documentation",
@@ -4813,7 +4833,7 @@
     "path": "{drive}Program Files\\VideoLAN\\VLC",
     "class": "Video",
     "category": "Documentation",
-    "sub_category":"News",
+    "sub_category": "News",
     "program": "VLC",
     "files_to_remove": [
       "NEWS.txt"
@@ -5431,26 +5451,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.Salwyrr\\launcher",
-    "class": "Minecraft Launcher",
-    "category": "Documentation",
-    "sub_category": "Change logs",
-    "program": "Salwyrr Launcher",
-    "files_to_remove": [
-      "changelogs_en"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.Salwyrr\\launcher",
-    "class": "Minecraft Launcher",
-    "category": "Documentation",
-    "sub_category": "News",
-    "program": "Salwyrr Launcher",
-    "files_to_remove": [
-      "news_en"
     ]
   }
 ]
