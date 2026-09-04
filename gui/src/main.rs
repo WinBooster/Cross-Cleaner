@@ -449,6 +449,7 @@ fn load_menu_color_image() -> egui::ColorImage {
     }
     egui::ColorImage {
         size: [w, h],
+        source_size: egui::Vec2::new(w as f32, h as f32),
         pixels,
     }
 }
@@ -692,7 +693,8 @@ impl MyApp {
 }
 
 impl eframe::App for MyApp {
-    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+    fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+        let ctx = ui.ctx().clone();
         if let Some(receiver) = &mut self.progress_receiver {
             if let Ok(message) = receiver.try_recv() {
                 if message.starts_with("PROGRESS:") {
@@ -741,9 +743,9 @@ impl eframe::App for MyApp {
             .frame(
                 egui::Frame::new()
                     .inner_margin(egui::Margin::same(inner_margin))
-                    .fill(ctx.style().visuals.panel_fill),
+                    .fill(ui.visuals().panel_fill),
             )
-            .show(ctx, |ui| {
+            .show(ui, |ui| {
                 if self.task_handle.is_some() {
                     ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
                         470.0, 100.0,
@@ -1110,87 +1112,62 @@ impl eframe::App for MyApp {
                                 }
                                 // menu image only if sub-categories exist (embedded menu.png)
                                 if !cat.subs.is_empty() {
-                                    let popup_id = egui::Id::new(format!("popup_{}", cat.name));
                                     let menu_image =
                                         egui::Image::from_texture(egui::load::SizedTexture::new(
                                             menu_tex.id(),
                                             menu_tex.size_vec2(),
                                         ))
                                         .fit_to_exact_size(egui::vec2(16.0, 16.0))
-                                        .tint(ui.visuals().text_color());
-                                    let menu_btn = egui::ImageButton::new(menu_image).frame(false);
-                                    let menu_resp = ui.add_sized(egui::vec2(16.0, 16.0), menu_btn);
-                                    if menu_resp.clicked() {
-                                        ui.memory_mut(|mem| mem.toggle_popup(popup_id));
-                                    }
+                                        .tint(ui.visuals().text_color())
+                                        .sense(egui::Sense::click());
+                                    let menu_resp = ui.add_sized(egui::vec2(16.0, 16.0), menu_image);
 
                                     // Popup with sub_category checkboxes - shifted to right-bottom corner of image so it doesn't cover the button
-                                    if ui.memory(|m| m.is_popup_open(popup_id)) {
-                                        let pos = menu_resp.rect.right_bottom();
-                                        let frame = egui::Frame::popup(ui.style());
-                                        let popup_response = egui::Area::new(popup_id)
-                                            .pivot(egui::Align2::LEFT_TOP)
-                                            .fixed_pos(pos)
-                                            .order(egui::Order::Foreground)
-                                            .show(ui.ctx(), |ui| {
-                                                frame
-                                                    .show(ui, |ui| {
-                                                        ui.set_min_width(200.0);
-                                                        egui::ScrollArea::vertical()
-                                                            .max_height(300.0)
-                                                            .show(ui, |ui| {
-                                                                for sub in cat.subs.clone() {
-                                                                    let mut is_sel =
-                                                                        cat.selected.contains(&sub);
-                                                                    if ui
-                                                                        .checkbox(&mut is_sel, &sub)
-                                                                        .changed()
-                                                                    {
-                                                                        if is_sel {
-                                                                            cat.selected.insert(
-                                                                                sub.clone(),
-                                                                            );
-                                                                        } else {
-                                                                            cat.selected
-                                                                                .remove(&sub);
-                                                                        }
-                                                                    }
-                                                                }
-                                                                // Show Uncategorized for objects without sub_category, only if category has ≥1 real sub
-                                                                if cat.has_empty {
-                                                                    let mut is_uncat =
-                                                                        cat.selected.contains("");
-                                                                    if ui
-                                                                        .checkbox(
-                                                                            &mut is_uncat,
-                                                                            "Uncategorized",
-                                                                        )
-                                                                        .changed()
-                                                                    {
-                                                                        if is_uncat {
-                                                                            cat.selected.insert(
-                                                                                String::new(),
-                                                                            );
-                                                                        } else {
-                                                                            cat.selected.remove(
-                                                                                &String::new(),
-                                                                            );
-                                                                        }
-                                                                    }
-                                                                }
-                                                            });
-                                                    })
-                                                    .inner
-                                            });
-                                        // Close on click outside or Escape, so clicking empty area is easy
-                                        let should_close = menu_resp.clicked_elsewhere()
-                                            && popup_response.response.clicked_elsewhere();
-                                        if ui.input(|i| i.key_pressed(egui::Key::Escape))
-                                            || should_close
-                                        {
-                                            ui.memory_mut(|m| m.close_popup());
-                                        }
-                                    }
+                                    let frame = egui::Frame::popup(ui.style());
+                                    egui::Popup::menu(&menu_resp)
+                                        .close_behavior(egui::PopupCloseBehavior::CloseOnClickOutside)
+                                        .frame(frame)
+                                        .show(|ui| {
+                                            ui.set_min_width(200.0);
+                                            egui::ScrollArea::vertical()
+                                                .max_height(300.0)
+                                                .show(ui, |ui| {
+                                                    for sub in cat.subs.clone() {
+                                                        let mut is_sel =
+                                                            cat.selected.contains(&sub);
+                                                        if ui
+                                                            .checkbox(&mut is_sel, &sub)
+                                                            .changed()
+                                                        {
+                                                            if is_sel {
+                                                                cat.selected.insert(sub.clone());
+                                                            } else {
+                                                                cat.selected.remove(&sub);
+                                                            }
+                                                        }
+                                                    }
+                                                    // Show Uncategorized for objects without sub_category, only if category has ≥1 real sub
+                                                    if cat.has_empty {
+                                                        let mut is_uncat =
+                                                            cat.selected.contains("");
+                                                        if ui
+                                                            .checkbox(
+                                                                &mut is_uncat,
+                                                                "Uncategorized",
+                                                            )
+                                                            .changed()
+                                                        {
+                                                            if is_uncat {
+                                                                cat.selected
+                                                                    .insert(String::new());
+                                                            } else {
+                                                                cat.selected
+                                                                    .remove(&String::new());
+                                                            }
+                                                        }
+                                                    }
+                                                });
+                                        });
                                 }
                                 let _ = resp;
                             });
