@@ -42,9 +42,10 @@ pub fn get_custom_cleaner(id: &str) -> Option<CustomCleaner> {
         .get(id)
         .cloned()
         .map(|mut cleaner| {
-            cleaner.path = cleaner
-                .path
-                .replace("{username}", &whoami::username().expect("Failed to get username"));
+            cleaner.path = cleaner.path.replace(
+                "{username}",
+                &whoami::username().expect("Failed to get username"),
+            );
             cleaner
         })
 }
@@ -226,8 +227,10 @@ mod tests {
         assert_eq!(expanded.len(), 1);
         assert_eq!(
             expanded[0].path,
-            "WindowsUser/test.log"
-                .replace("WindowsUser", &whoami::username().expect("Failed to get username")),
+            "WindowsUser/test.log".replace(
+                "WindowsUser",
+                &whoami::username().expect("Failed to get username")
+            ),
         );
     }
 
