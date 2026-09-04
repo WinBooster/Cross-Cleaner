@@ -199,7 +199,7 @@ pub fn register_all() {
     // from Visual Studio ApplicationPrivateSettings.xml
     let _ = custom_glob_cleaner! {
         id: "vs_code_containers_offline",
-        program: "Custom: Visual Studio recent projects",
+        program: "Visual Studio",
         category: "LastActivity",
         sub_category: "",
         os: ["windows"],

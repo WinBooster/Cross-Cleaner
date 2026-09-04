@@ -452,13 +452,12 @@ jobs:
               return len(os_list) == 0 or osname in os_list
 
           def table(sel):
-              out = ['| № | Program | ID | Category | Sub-category | OS | Target |',
-                     '| --- | --- | --- | --- | --- | --- | --- |']
+              out = ['| № | Program | Category | OS |',
+                     '| --- | --- | --- | --- |']
               for i, e in enumerate(sel, 1):
-                  sub = e.get('sub_category') or '-'
                   prog = e.get('program') or e['id']
-                  out.append('| %d | %s | `%s` | %s | %s | %s | `%s` |' % (
-                      i, prog, e['id'], e['category'], sub, os_label(e), e['target']))
+                  out.append('| %d | %s | %s | %s |' % (
+                      i, prog, e['category'], os_label(e)))
               return '\n'.join(out)
 
           with open('LIST_CUSTOM.md', 'w', encoding='utf-8') as f:
