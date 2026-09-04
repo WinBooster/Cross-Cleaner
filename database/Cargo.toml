@@ -5,7 +5,7 @@ edition = "2024"
 build = "build.rs"
 
 [dependencies]
-tabled = "0.20.0"
+tabled = "0.21.0"
 whoami = "1.6.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
