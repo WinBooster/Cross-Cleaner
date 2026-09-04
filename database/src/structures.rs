@@ -127,9 +127,7 @@ impl CustomCleaner {
         } else {
             "macos"
         };
-        self.os
-            .iter()
-            .any(|os| os.eq_ignore_ascii_case(current))
+        self.os.iter().any(|os| os.eq_ignore_ascii_case(current))
     }
 }
 

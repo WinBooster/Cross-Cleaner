@@ -1,4 +1,4 @@
-use crate::structures::{CustomCleaner, CleanerResult};
+use crate::structures::{CleanerResult, CustomCleaner};
 use std::collections::HashMap;
 use std::sync::{OnceLock, RwLock};
 

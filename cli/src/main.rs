@@ -136,18 +136,20 @@ async fn work(
                 if let Some(pb) = pb_clone {
                     pb.set_message(format!("Cleaning: {}", name_msg));
                 }
-                tokio::task::spawn_blocking(move || database::custom_cleaners::run_custom_cleaner(&data))
-                    .await
-                    .unwrap_or_else(|_| CleanerResult {
-                        files: 0,
-                        folders: 0,
-                        bytes: 0,
-                        working: false,
-                        path: String::new(),
-                        program: String::new(),
-                        category: String::new(),
-                        sub_category: String::new(),
-                    })
+                tokio::task::spawn_blocking(move || {
+                    database::custom_cleaners::run_custom_cleaner(&data)
+                })
+                .await
+                .unwrap_or_else(|_| CleanerResult {
+                    files: 0,
+                    folders: 0,
+                    bytes: 0,
+                    working: false,
+                    path: String::new(),
+                    program: String::new(),
+                    category: String::new(),
+                    sub_category: String::new(),
+                })
             }));
         }
     }

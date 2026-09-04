@@ -13,9 +13,7 @@ use cleaner::clear_data;
 use database::registry_database::clear_registry;
 #[cfg(windows)]
 use database::structures::CleanerDataRegistry;
-use database::structures::{
-    CleanerData, CleanerResult, Cleared, CustomCleaner,
-};
+use database::structures::{CleanerData, CleanerResult, Cleared, CustomCleaner};
 use database::utils::get_file_size_string;
 use database::{get_icon, get_version};
 use eframe::egui;
@@ -746,479 +744,469 @@ impl eframe::App for MyApp {
                     .fill(ctx.style().visuals.panel_fill),
             )
             .show(ctx, |ui| {
-            if self.task_handle.is_some() {
-                ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
-                    470.0, 100.0,
-                )));
-                // Панель даёт 8px, текст добирает 12px от краёв экрана
-                ui.vertical(|ui| {
-                    ui.add_space(4.0);
-                    // Слева сверху: имя программы, которая сейчас чистится
-                    let program = self
-                        .progress_message
-                        .strip_prefix("Cleaning: ")
-                        .unwrap_or(&self.progress_message)
-                        .to_string();
-                    if !program.is_empty() {
-                        ui.horizontal(|ui| {
-                            ui.add_space(4.0);
-                            ui.strong(&program);
-                        });
-                    }
-                    ui.add_space(4.0);
-
-                    if self.total_tasks > 0 {
-                        let progress = self.current_task as f32 / self.total_tasks as f32;
-                        // Прогресс-бар: 8px от краёв экрана
-                        ui.add_sized(
-                            [ui.available_width(), 20.0],
-                            egui::ProgressBar::new(progress)
-                                .show_percentage()
-                                .animate(true),
-                        );
+                if self.task_handle.is_some() {
+                    ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
+                        470.0, 100.0,
+                    )));
+                    // Панель даёт 8px, текст добирает 12px от краёв экрана
+                    ui.vertical(|ui| {
+                        ui.add_space(4.0);
+                        // Слева сверху: имя программы, которая сейчас чистится
+                        let program = self
+                            .progress_message
+                            .strip_prefix("Cleaning: ")
+                            .unwrap_or(&self.progress_message)
+                            .to_string();
+                        if !program.is_empty() {
+                            ui.horizontal(|ui| {
+                                ui.add_space(4.0);
+                                ui.strong(&program);
+                            });
+                        }
                         ui.add_space(4.0);
 
-                        let eta = self.progress_start.and_then(|start| {
-                            if self.current_task == 0 || self.current_task >= self.total_tasks {
-                                None
-                            } else {
-                                let elapsed = start.elapsed().as_secs_f64();
-                                let per_task = elapsed / self.current_task as f64;
-                                let remaining =
-                                    per_task * (self.total_tasks - self.current_task) as f64;
-                                let mins = (remaining / 60.0).floor() as u64;
-                                let secs = (remaining % 60.0).round() as u64;
-                                if mins > 0 {
-                                    Some(format!("~{}m {:02}s", mins, secs))
-                                } else {
-                                    Some(format!("~{}s", secs))
-                                }
-                            }
-                        });
-
-                        ui.horizontal(|ui| {
+                        if self.total_tasks > 0 {
+                            let progress = self.current_task as f32 / self.total_tasks as f32;
+                            // Прогресс-бар: 8px от краёв экрана
+                            ui.add_sized(
+                                [ui.available_width(), 20.0],
+                                egui::ProgressBar::new(progress)
+                                    .show_percentage()
+                                    .animate(true),
+                            );
                             ui.add_space(4.0);
-                            // Слева снизу: сколько очистилось
-                            ui.label(get_file_size_string(self.cleaned_bytes));
-                            // Справа снизу: оставшееся время
-                            ui.with_layout(egui::Layout::right_to_left(egui::Align::Min), |ui| {
-                                if let Some(eta) = eta {
-                                    ui.label(eta);
+
+                            let eta = self.progress_start.and_then(|start| {
+                                if self.current_task == 0 || self.current_task >= self.total_tasks {
+                                    None
+                                } else {
+                                    let elapsed = start.elapsed().as_secs_f64();
+                                    let per_task = elapsed / self.current_task as f64;
+                                    let remaining =
+                                        per_task * (self.total_tasks - self.current_task) as f64;
+                                    let mins = (remaining / 60.0).floor() as u64;
+                                    let secs = (remaining % 60.0).round() as u64;
+                                    if mins > 0 {
+                                        Some(format!("~{}m {:02}s", mins, secs))
+                                    } else {
+                                        Some(format!("~{}s", secs))
+                                    }
                                 }
+                            });
+
+                            ui.horizontal(|ui| {
                                 ui.add_space(4.0);
+                                // Слева снизу: сколько очистилось
+                                ui.label(get_file_size_string(self.cleaned_bytes));
+                                // Справа снизу: оставшееся время
+                                ui.with_layout(
+                                    egui::Layout::right_to_left(egui::Align::Min),
+                                    |ui| {
+                                        if let Some(eta) = eta {
+                                            ui.label(eta);
+                                        }
+                                        ui.add_space(4.0);
+                                    },
+                                );
                             });
-                        });
-                    } else {
-                        ui.spinner();
-                    }
-                });
-                return;
-            }
-
-            if self.show_results {
-                if let Some((bytes, files, dirs, cleared)) = &self.cleared_data {
-                    ui.vertical_centered(|ui| {
-                        ui.heading("Cleaning Results");
-                        ui.heading(format!(
-                            "Size: {}, Files: {}, Dirs: {}",
-                            get_file_size_string(*bytes),
-                            files,
-                            dirs
-                        ));
-                    });
-                    ui.separator();
-
-                    // Фиксированные размеры для колонок
-                    let column_widths = [150.0, 80.0, 80.0, 170.0];
-                    let total_width = column_widths.iter().sum::<f32>() + 120.0;
-                    let total_height = 500.0;
-
-                    // Resize window only once when results are first shown
-                    if !self.results_window_resized {
-                        ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
-                            total_width,
-                            total_height,
-                        )));
-                        self.results_window_resized = true;
-                    }
-
-                    // Общий контейнер для таблицы
-                    ui.vertical(|ui| {
-                        // Заголовки таблицы
-                        ui.horizontal(|ui| {
-                            ui.style_mut().spacing.item_spacing = egui::vec2(0.0, 0.0);
-
-                            // Колонка Program
-                            ui.add_sized(
-                                egui::vec2(column_widths[0], 20.0),
-                                egui::Label::new(egui::RichText::new("Program").heading()),
-                            )
-                            .on_hover_text("Program name");
-
-                            // Колонка Size
-                            ui.add_sized(
-                                egui::vec2(column_widths[1], 20.0),
-                                egui::Label::new(egui::RichText::new("Size").heading()),
-                            )
-                            .on_hover_text("Deleted data size");
-
-                            // Колонка Files
-                            ui.add_sized(
-                                egui::vec2(column_widths[2], 20.0),
-                                egui::Label::new(egui::RichText::new("Files").heading()),
-                            )
-                            .on_hover_text("Number of files");
-
-                            // Колонка Dirs
-                            ui.add_sized(
-                                egui::vec2(column_widths[2], 20.0),
-                                egui::Label::new(egui::RichText::new("Dirs").heading()),
-                            )
-                            .on_hover_text("Number of folders");
-
-                            // Колонка Categories
-                            ui.add_sized(
-                                egui::vec2(column_widths[3], 20.0),
-                                egui::Label::new(egui::RichText::new("Categories").heading()),
-                            )
-                            .on_hover_text("Data categories");
-                        });
-                        ui.separator();
-
-                        // Прокручиваемое содержимое таблицы
-                        egui::ScrollArea::vertical()
-                            .max_height(total_height)
-                            .show(ui, |ui| {
-                                for cleared in cleared {
-                                    ui.horizontal(|ui| {
-                                        ui.style_mut().spacing.item_spacing = egui::vec2(0.0, 0.0);
-
-                                        // Колонка Program
-                                        ui.add_sized(
-                                            egui::vec2(column_widths[0], 20.0),
-                                            egui::Label::new(&cleared.program).truncate(),
-                                        );
-
-                                        // Колонка Size
-                                        ui.add_sized(
-                                            egui::vec2(column_widths[1], 20.0),
-                                            egui::Label::new(get_file_size_string(
-                                                cleared.removed_bytes,
-                                            ))
-                                            .truncate(),
-                                        );
-
-                                        // Колонка Files
-                                        ui.add_sized(
-                                            egui::vec2(column_widths[2], 20.0),
-                                            egui::Label::new(cleared.removed_files.to_string())
-                                                .truncate(),
-                                        );
-
-                                        // Колонка Dirs
-                                        ui.add_sized(
-                                            egui::vec2(column_widths[2], 20.0),
-                                            egui::Label::new(
-                                                cleared.removed_directories.to_string(),
-                                            )
-                                            .truncate(),
-                                        );
-
-                                        // Колонка Categories
-                                        ui.add_sized(
-                                            egui::vec2(column_widths[3], 20.0),
-                                            egui::Label::new(
-                                                cleared.affected_categories.join(", "),
-                                            )
-                                            .wrap(),
-                                        );
-                                    });
-                                    ui.separator();
-                                }
-                            });
+                        } else {
+                            ui.spinner();
+                        }
                     });
                     return;
                 }
-            }
 
-            if self.show_program_selection {
-                // Dynamic window sizing based on number of programs
-                let num_programs = self.program_checkboxes.len();
-                let rows = (num_programs + 1) / 2; // 2 columns
-                let row_height = 20.0;
-                let base_height = 120.0; // Heading, search, buttons, separators
-                let min_scroll_height = 20.0;
-                let max_scroll_height = 400.0;
-
-                let content_height = rows as f32 * row_height;
-                let scroll_height = content_height.min(max_scroll_height).max(min_scroll_height);
-                let window_height = base_height + scroll_height;
-
-                ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
-                    500.0,
-                    window_height,
-                )));
-
-                ui.vertical_centered(|ui| {
-                    ui.heading("Select Programs to Clean");
-                });
-                ui.separator();
-
-                ui.horizontal(|ui| {
-                    ui.label("Search:");
-                    let available_width = ui.available_width();
-                    let search_response = ui.add_sized(
-                        [available_width, 20.0],
-                        egui::TextEdit::singleline(&mut self.search_query_visible),
-                    );
-                    if search_response.changed() {
-                        self.search_query = self.search_query_visible.to_lowercase();
-                    }
-                });
-
-                ui.separator();
-
-                egui::ScrollArea::vertical()
-                    .max_height(scroll_height)
-                    .show(ui, |ui| {
-                        ui.columns(2, |columns| {
-                            let mut col_index = 0;
-                            for (checkbox, program) in self.program_checkboxes.iter() {
-                                if self.search_query.is_empty()
-                                    || program.to_lowercase().contains(&self.search_query)
-                                {
-                                    let mut value = checkbox.borrow_mut();
-                                    columns[col_index % 2].checkbox(&mut *value, program);
-                                    col_index += 1;
-                                }
-                            }
+                if self.show_results {
+                    if let Some((bytes, files, dirs, cleared)) = &self.cleared_data {
+                        ui.vertical_centered(|ui| {
+                            ui.heading("Cleaning Results");
+                            ui.heading(format!(
+                                "Size: {}, Files: {}, Dirs: {}",
+                                get_file_size_string(*bytes),
+                                files,
+                                dirs
+                            ));
                         });
+                        ui.separator();
+
+                        // Фиксированные размеры для колонок
+                        let column_widths = [150.0, 80.0, 80.0, 170.0];
+                        let total_width = column_widths.iter().sum::<f32>() + 120.0;
+                        let total_height = 500.0;
+
+                        // Resize window only once when results are first shown
+                        if !self.results_window_resized {
+                            ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(
+                                egui::Vec2::new(total_width, total_height),
+                            ));
+                            self.results_window_resized = true;
+                        }
+
+                        // Общий контейнер для таблицы
+                        ui.vertical(|ui| {
+                            // Заголовки таблицы
+                            ui.horizontal(|ui| {
+                                ui.style_mut().spacing.item_spacing = egui::vec2(0.0, 0.0);
+
+                                // Колонка Program
+                                ui.add_sized(
+                                    egui::vec2(column_widths[0], 20.0),
+                                    egui::Label::new(egui::RichText::new("Program").heading()),
+                                )
+                                .on_hover_text("Program name");
+
+                                // Колонка Size
+                                ui.add_sized(
+                                    egui::vec2(column_widths[1], 20.0),
+                                    egui::Label::new(egui::RichText::new("Size").heading()),
+                                )
+                                .on_hover_text("Deleted data size");
+
+                                // Колонка Files
+                                ui.add_sized(
+                                    egui::vec2(column_widths[2], 20.0),
+                                    egui::Label::new(egui::RichText::new("Files").heading()),
+                                )
+                                .on_hover_text("Number of files");
+
+                                // Колонка Dirs
+                                ui.add_sized(
+                                    egui::vec2(column_widths[2], 20.0),
+                                    egui::Label::new(egui::RichText::new("Dirs").heading()),
+                                )
+                                .on_hover_text("Number of folders");
+
+                                // Колонка Categories
+                                ui.add_sized(
+                                    egui::vec2(column_widths[3], 20.0),
+                                    egui::Label::new(egui::RichText::new("Categories").heading()),
+                                )
+                                .on_hover_text("Data categories");
+                            });
+                            ui.separator();
+
+                            // Прокручиваемое содержимое таблицы
+                            egui::ScrollArea::vertical()
+                                .max_height(total_height)
+                                .show(ui, |ui| {
+                                    for cleared in cleared {
+                                        ui.horizontal(|ui| {
+                                            ui.style_mut().spacing.item_spacing =
+                                                egui::vec2(0.0, 0.0);
+
+                                            // Колонка Program
+                                            ui.add_sized(
+                                                egui::vec2(column_widths[0], 20.0),
+                                                egui::Label::new(&cleared.program).truncate(),
+                                            );
+
+                                            // Колонка Size
+                                            ui.add_sized(
+                                                egui::vec2(column_widths[1], 20.0),
+                                                egui::Label::new(get_file_size_string(
+                                                    cleared.removed_bytes,
+                                                ))
+                                                .truncate(),
+                                            );
+
+                                            // Колонка Files
+                                            ui.add_sized(
+                                                egui::vec2(column_widths[2], 20.0),
+                                                egui::Label::new(cleared.removed_files.to_string())
+                                                    .truncate(),
+                                            );
+
+                                            // Колонка Dirs
+                                            ui.add_sized(
+                                                egui::vec2(column_widths[2], 20.0),
+                                                egui::Label::new(
+                                                    cleared.removed_directories.to_string(),
+                                                )
+                                                .truncate(),
+                                            );
+
+                                            // Колонка Categories
+                                            ui.add_sized(
+                                                egui::vec2(column_widths[3], 20.0),
+                                                egui::Label::new(
+                                                    cleared.affected_categories.join(", "),
+                                                )
+                                                .wrap(),
+                                            );
+                                        });
+                                        ui.separator();
+                                    }
+                                });
+                        });
+                        return;
+                    }
+                }
+
+                if self.show_program_selection {
+                    // Dynamic window sizing based on number of programs
+                    let num_programs = self.program_checkboxes.len();
+                    let rows = (num_programs + 1) / 2; // 2 columns
+                    let row_height = 20.0;
+                    let base_height = 120.0; // Heading, search, buttons, separators
+                    let min_scroll_height = 20.0;
+                    let max_scroll_height = 400.0;
+
+                    let content_height = rows as f32 * row_height;
+                    let scroll_height =
+                        content_height.min(max_scroll_height).max(min_scroll_height);
+                    let window_height = base_height + scroll_height;
+
+                    ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
+                        500.0,
+                        window_height,
+                    )));
+
+                    ui.vertical_centered(|ui| {
+                        ui.heading("Select Programs to Clean");
+                    });
+                    ui.separator();
+
+                    ui.horizontal(|ui| {
+                        ui.label("Search:");
+                        let available_width = ui.available_width();
+                        let search_response = ui.add_sized(
+                            [available_width, 20.0],
+                            egui::TextEdit::singleline(&mut self.search_query_visible),
+                        );
+                        if search_response.changed() {
+                            self.search_query = self.search_query_visible.to_lowercase();
+                        }
                     });
 
-                ui.separator();
+                    ui.separator();
 
-                let available_width = ui.available_width();
-                ui.horizontal(|ui| {
-                    if ui
-                        .add_sized(
-                            [available_width / 2.0 - 5.0, 25.0],
-                            egui::Button::new("Back"),
-                        )
-                        .clicked()
-                    {
-                        self.show_program_selection = false;
-                        // Window will resize dynamically in the next frame based on category count
-                    }
-
-                    if ui
-                        .add_sized(
-                            [available_width / 2.0 - 5.0, 25.0],
-                            egui::Button::new("Start Cleaning"),
-                        )
-                        .clicked()
-                    {
-                        let selected_map = self.selected_map();
-
-                        self.excluded_programs.clear();
-                        for (checkbox, program) in &self.program_checkboxes {
-                            if !*checkbox.borrow() {
-                                self.excluded_programs.insert(program.clone());
-                            }
-                        }
-
-                        let (progress_sender, progress_receiver) = mpsc::channel(32);
-                        self.progress_receiver = Some(progress_receiver);
-                        self.current_task = 0;
-                        self.total_tasks = 0;
-                        self.cleaned_bytes = 0;
-                        self.progress_start = None;
-                        self.results_window_resized = false;
-
-                        let database = Arc::clone(&self.database);
-                        let custom_database = Arc::clone(&self.custom_database);
-                        #[cfg(windows)]
-                        let reg_database = Arc::clone(&self.regisry_database);
-                        let excluded_programs = self.excluded_programs.clone();
-                        let handle = tokio::spawn(async move {
-                            work(
-                                selected_map,
-                                progress_sender,
-                                &database,
-                                &custom_database,
-                                #[cfg(windows)]
-                                &reg_database,
-                                excluded_programs,
-                            )
-                            .await
-                        });
-                        self.task_handle = Some(handle);
-
-                        self.show_program_selection = false;
-                        // clear selection
-                        for cat in &mut self.categories {
-                            cat.selected.clear();
-                        }
-                    }
-                });
-            } else {
-                // Calculate dynamic window height based on number of categories
-                let num_categories = self.categories.len();
-                let rows = (num_categories + 2) / 3; // Round up division by 3 (3 columns)
-                let row_height = 20.0; // Approximate height per row
-                let base_height = 45.0; // Space for heading, margins, and button
-                let dynamic_height = base_height + (rows as f32 * row_height);
-                let window_height = dynamic_height.max(20.0).min(500.0); // Clamp between 200 and 500
-
-                ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
-                    470.0,
-                    window_height,
-                )));
-
-                if self.menu_texture.is_none() {
-                    self.menu_texture = Some(ctx.load_texture(
-                        "menu",
-                        load_menu_color_image(),
-                        egui::TextureOptions::LINEAR,
-                    ));
-                }
-                let menu_tex = self.menu_texture.clone().unwrap();
-
-                ui.columns(3, |columns| {
-                    for (idx, cat) in self.categories.iter_mut().enumerate() {
-                        let column_index = idx % 3;
-                        let is_checked = cat.is_checked();
-                        let is_indet = cat.is_indeterminate();
-
-                        columns[column_index].horizontal(|ui| {
-                            // Tristate checkbox with square for indeterminate
-                            let (resp, clicked) =
-                                tristate_checkbox(ui, is_checked, is_indet, &cat.name.clone());
-                            if clicked {
-                                if is_checked || is_indet {
-                                    cat.selected.clear();
-                                } else {
-                                    cat.selected = cat.subs.iter().cloned().collect();
-                                    if cat.has_empty {
-                                        cat.selected.insert(String::new());
-                                    }
-                                    if cat.subs.is_empty() && !cat.has_empty {
-                                        cat.selected.insert(String::new());
-                                    }
-                                }
-                            }
-                            // menu image only if sub-categories exist (embedded menu.png)
-                            if !cat.subs.is_empty() {
-                                let popup_id = egui::Id::new(format!("popup_{}", cat.name));
-                                let menu_image =
-                                    egui::Image::from_texture(egui::load::SizedTexture::new(
-                                        menu_tex.id(),
-                                        menu_tex.size_vec2(),
-                                    ))
-                                    .fit_to_exact_size(egui::vec2(16.0, 16.0))
-                                    .tint(ui.visuals().text_color());
-                                let menu_btn = egui::ImageButton::new(menu_image).frame(false);
-                                let menu_resp = ui.add_sized(egui::vec2(16.0, 16.0), menu_btn);
-                                if menu_resp.clicked() {
-                                    ui.memory_mut(|mem| mem.toggle_popup(popup_id));
-                                }
-
-                                // Popup with sub_category checkboxes - shifted to right-bottom corner of image so it doesn't cover the button
-                                if ui.memory(|m| m.is_popup_open(popup_id)) {
-                                    let pos = menu_resp.rect.right_bottom();
-                                    let frame = egui::Frame::popup(ui.style());
-                                    let popup_response = egui::Area::new(popup_id)
-                                        .pivot(egui::Align2::LEFT_TOP)
-                                        .fixed_pos(pos)
-                                        .order(egui::Order::Foreground)
-                                        .show(ui.ctx(), |ui| {
-                                            frame
-                                                .show(ui, |ui| {
-                                                    ui.set_min_width(200.0);
-                                                    egui::ScrollArea::vertical()
-                                                        .max_height(300.0)
-                                                        .show(ui, |ui| {
-                                                            for sub in cat.subs.clone() {
-                                                                let mut is_sel =
-                                                                    cat.selected.contains(&sub);
-                                                                if ui
-                                                                    .checkbox(&mut is_sel, &sub)
-                                                                    .changed()
-                                                                {
-                                                                    if is_sel {
-                                                                        cat.selected
-                                                                            .insert(sub.clone());
-                                                                    } else {
-                                                                        cat.selected.remove(&sub);
-                                                                    }
-                                                                }
-                                                            }
-                                                            // Show Uncategorized for objects without sub_category, only if category has ≥1 real sub
-                                                            if cat.has_empty {
-                                                                let mut is_uncat =
-                                                                    cat.selected.contains("");
-                                                                if ui
-                                                                    .checkbox(
-                                                                        &mut is_uncat,
-                                                                        "Uncategorized",
-                                                                    )
-                                                                    .changed()
-                                                                {
-                                                                    if is_uncat {
-                                                                        cat.selected
-                                                                            .insert(String::new());
-                                                                    } else {
-                                                                        cat.selected
-                                                                            .remove(&String::new());
-                                                                    }
-                                                                }
-                                                            }
-                                                        });
-                                                })
-                                                .inner
-                                        });
-                                    // Close on click outside or Escape, so clicking empty area is easy
-                                    let should_close = menu_resp.clicked_elsewhere()
-                                        && popup_response.response.clicked_elsewhere();
-                                    if ui.input(|i| i.key_pressed(egui::Key::Escape))
-                                        || should_close
+                    egui::ScrollArea::vertical()
+                        .max_height(scroll_height)
+                        .show(ui, |ui| {
+                            ui.columns(2, |columns| {
+                                let mut col_index = 0;
+                                for (checkbox, program) in self.program_checkboxes.iter() {
+                                    if self.search_query.is_empty()
+                                        || program.to_lowercase().contains(&self.search_query)
                                     {
-                                        ui.memory_mut(|m| m.close_popup());
+                                        let mut value = checkbox.borrow_mut();
+                                        columns[col_index % 2].checkbox(&mut *value, program);
+                                        col_index += 1;
                                     }
                                 }
-                            }
-                            let _ = resp;
+                            });
                         });
-                    }
-                });
 
-                let available_width = ui.available_width();
+                    ui.separator();
 
-                if ui
-                    .add_sized([available_width, 25.0], egui::Button::new("Next"))
-                    .clicked()
-                {
-                    if self.has_selection() {
-                        let selected_map = self.selected_map();
-                        let mut programs: Vec<String> = Vec::new();
-                        for data in self.database.iter() {
-                            let eff = effective_sub(&data.class, &data.sub_category);
-                            if let Some(subs) = selected_map.get(&data.category) {
-                                if subs.contains(&eff) && !programs.contains(&data.program) {
-                                    programs.push(data.program.clone());
-                                }
-                            }
-                        }
-                        for data in self.custom_database.iter() {
-                            let eff = effective_sub("", &data.sub_category);
-                            if let Some(subs) = selected_map.get(&data.category) {
-                                if subs.contains(&eff) && !programs.contains(&data.program) {
-                                    programs.push(data.program.clone());
-                                }
-                            }
-                        }
-                        #[cfg(windows)]
+                    let available_width = ui.available_width();
+                    ui.horizontal(|ui| {
+                        if ui
+                            .add_sized(
+                                [available_width / 2.0 - 5.0, 25.0],
+                                egui::Button::new("Back"),
+                            )
+                            .clicked()
                         {
-                            for data in self.regisry_database.iter() {
+                            self.show_program_selection = false;
+                            // Window will resize dynamically in the next frame based on category count
+                        }
+
+                        if ui
+                            .add_sized(
+                                [available_width / 2.0 - 5.0, 25.0],
+                                egui::Button::new("Start Cleaning"),
+                            )
+                            .clicked()
+                        {
+                            let selected_map = self.selected_map();
+
+                            self.excluded_programs.clear();
+                            for (checkbox, program) in &self.program_checkboxes {
+                                if !*checkbox.borrow() {
+                                    self.excluded_programs.insert(program.clone());
+                                }
+                            }
+
+                            let (progress_sender, progress_receiver) = mpsc::channel(32);
+                            self.progress_receiver = Some(progress_receiver);
+                            self.current_task = 0;
+                            self.total_tasks = 0;
+                            self.cleaned_bytes = 0;
+                            self.progress_start = None;
+                            self.results_window_resized = false;
+
+                            let database = Arc::clone(&self.database);
+                            let custom_database = Arc::clone(&self.custom_database);
+                            #[cfg(windows)]
+                            let reg_database = Arc::clone(&self.regisry_database);
+                            let excluded_programs = self.excluded_programs.clone();
+                            let handle = tokio::spawn(async move {
+                                work(
+                                    selected_map,
+                                    progress_sender,
+                                    &database,
+                                    &custom_database,
+                                    #[cfg(windows)]
+                                    &reg_database,
+                                    excluded_programs,
+                                )
+                                .await
+                            });
+                            self.task_handle = Some(handle);
+
+                            self.show_program_selection = false;
+                            // clear selection
+                            for cat in &mut self.categories {
+                                cat.selected.clear();
+                            }
+                        }
+                    });
+                } else {
+                    // Calculate dynamic window height based on number of categories
+                    let num_categories = self.categories.len();
+                    let rows = (num_categories + 2) / 3; // Round up division by 3 (3 columns)
+                    let row_height = 20.0; // Approximate height per row
+                    let base_height = 45.0; // Space for heading, margins, and button
+                    let dynamic_height = base_height + (rows as f32 * row_height);
+                    let window_height = dynamic_height.max(20.0).min(500.0); // Clamp between 200 and 500
+
+                    ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
+                        470.0,
+                        window_height,
+                    )));
+
+                    if self.menu_texture.is_none() {
+                        self.menu_texture = Some(ctx.load_texture(
+                            "menu",
+                            load_menu_color_image(),
+                            egui::TextureOptions::LINEAR,
+                        ));
+                    }
+                    let menu_tex = self.menu_texture.clone().unwrap();
+
+                    ui.columns(3, |columns| {
+                        for (idx, cat) in self.categories.iter_mut().enumerate() {
+                            let column_index = idx % 3;
+                            let is_checked = cat.is_checked();
+                            let is_indet = cat.is_indeterminate();
+
+                            columns[column_index].horizontal(|ui| {
+                                // Tristate checkbox with square for indeterminate
+                                let (resp, clicked) =
+                                    tristate_checkbox(ui, is_checked, is_indet, &cat.name.clone());
+                                if clicked {
+                                    if is_checked || is_indet {
+                                        cat.selected.clear();
+                                    } else {
+                                        cat.selected = cat.subs.iter().cloned().collect();
+                                        if cat.has_empty {
+                                            cat.selected.insert(String::new());
+                                        }
+                                        if cat.subs.is_empty() && !cat.has_empty {
+                                            cat.selected.insert(String::new());
+                                        }
+                                    }
+                                }
+                                // menu image only if sub-categories exist (embedded menu.png)
+                                if !cat.subs.is_empty() {
+                                    let popup_id = egui::Id::new(format!("popup_{}", cat.name));
+                                    let menu_image =
+                                        egui::Image::from_texture(egui::load::SizedTexture::new(
+                                            menu_tex.id(),
+                                            menu_tex.size_vec2(),
+                                        ))
+                                        .fit_to_exact_size(egui::vec2(16.0, 16.0))
+                                        .tint(ui.visuals().text_color());
+                                    let menu_btn = egui::ImageButton::new(menu_image).frame(false);
+                                    let menu_resp = ui.add_sized(egui::vec2(16.0, 16.0), menu_btn);
+                                    if menu_resp.clicked() {
+                                        ui.memory_mut(|mem| mem.toggle_popup(popup_id));
+                                    }
+
+                                    // Popup with sub_category checkboxes - shifted to right-bottom corner of image so it doesn't cover the button
+                                    if ui.memory(|m| m.is_popup_open(popup_id)) {
+                                        let pos = menu_resp.rect.right_bottom();
+                                        let frame = egui::Frame::popup(ui.style());
+                                        let popup_response = egui::Area::new(popup_id)
+                                            .pivot(egui::Align2::LEFT_TOP)
+                                            .fixed_pos(pos)
+                                            .order(egui::Order::Foreground)
+                                            .show(ui.ctx(), |ui| {
+                                                frame
+                                                    .show(ui, |ui| {
+                                                        ui.set_min_width(200.0);
+                                                        egui::ScrollArea::vertical()
+                                                            .max_height(300.0)
+                                                            .show(ui, |ui| {
+                                                                for sub in cat.subs.clone() {
+                                                                    let mut is_sel =
+                                                                        cat.selected.contains(&sub);
+                                                                    if ui
+                                                                        .checkbox(&mut is_sel, &sub)
+                                                                        .changed()
+                                                                    {
+                                                                        if is_sel {
+                                                                            cat.selected.insert(
+                                                                                sub.clone(),
+                                                                            );
+                                                                        } else {
+                                                                            cat.selected
+                                                                                .remove(&sub);
+                                                                        }
+                                                                    }
+                                                                }
+                                                                // Show Uncategorized for objects without sub_category, only if category has ≥1 real sub
+                                                                if cat.has_empty {
+                                                                    let mut is_uncat =
+                                                                        cat.selected.contains("");
+                                                                    if ui
+                                                                        .checkbox(
+                                                                            &mut is_uncat,
+                                                                            "Uncategorized",
+                                                                        )
+                                                                        .changed()
+                                                                    {
+                                                                        if is_uncat {
+                                                                            cat.selected.insert(
+                                                                                String::new(),
+                                                                            );
+                                                                        } else {
+                                                                            cat.selected.remove(
+                                                                                &String::new(),
+                                                                            );
+                                                                        }
+                                                                    }
+                                                                }
+                                                            });
+                                                    })
+                                                    .inner
+                                            });
+                                        // Close on click outside or Escape, so clicking empty area is easy
+                                        let should_close = menu_resp.clicked_elsewhere()
+                                            && popup_response.response.clicked_elsewhere();
+                                        if ui.input(|i| i.key_pressed(egui::Key::Escape))
+                                            || should_close
+                                        {
+                                            ui.memory_mut(|m| m.close_popup());
+                                        }
+                                    }
+                                }
+                                let _ = resp;
+                            });
+                        }
+                    });
+
+                    let available_width = ui.available_width();
+
+                    if ui
+                        .add_sized([available_width, 25.0], egui::Button::new("Next"))
+                        .clicked()
+                    {
+                        if self.has_selection() {
+                            let selected_map = self.selected_map();
+                            let mut programs: Vec<String> = Vec::new();
+                            for data in self.database.iter() {
                                 let eff = effective_sub(&data.class, &data.sub_category);
                                 if let Some(subs) = selected_map.get(&data.category) {
                                     if subs.contains(&eff) && !programs.contains(&data.program) {
@@ -1226,20 +1214,39 @@ impl eframe::App for MyApp {
                                     }
                                 }
                             }
-                        }
-                        programs.sort();
+                            for data in self.custom_database.iter() {
+                                let eff = effective_sub("", &data.sub_category);
+                                if let Some(subs) = selected_map.get(&data.category) {
+                                    if subs.contains(&eff) && !programs.contains(&data.program) {
+                                        programs.push(data.program.clone());
+                                    }
+                                }
+                            }
+                            #[cfg(windows)]
+                            {
+                                for data in self.regisry_database.iter() {
+                                    let eff = effective_sub(&data.class, &data.sub_category);
+                                    if let Some(subs) = selected_map.get(&data.category) {
+                                        if subs.contains(&eff) && !programs.contains(&data.program)
+                                        {
+                                            programs.push(data.program.clone());
+                                        }
+                                    }
+                                }
+                            }
+                            programs.sort();
 
-                        self.program_checkboxes.clear();
-                        for program in programs {
-                            self.program_checkboxes
-                                .push((Rc::new(RefCell::new(true)), program));
-                        }
+                            self.program_checkboxes.clear();
+                            for program in programs {
+                                self.program_checkboxes
+                                    .push((Rc::new(RefCell::new(true)), program));
+                            }
 
-                        self.show_program_selection = true;
+                            self.show_program_selection = true;
+                        }
                     }
                 }
-            }
-        });
+            });
     }
 }
 
