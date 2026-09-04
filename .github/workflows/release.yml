@@ -183,19 +183,19 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.APP_VERSION }}
-          name: рџЊџ Cross Cleaner ${{ env.APP_VERSION }} рџЊџ
+          name: 🌟 Cross Cleaner ${{ env.APP_VERSION }} 🌟
           body: |
             ![Downloads](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}/total) ![Version](https://img.shields.io/badge/version-${{ env.APP_VERSION }}-blue) ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux-orange)
 
-            ## вњЁ What's New
+            ## ✨ What's New
 
-            ### рџЄџ Windows Enhancements
+            ### 🪟 Windows Enhancements
             - **YASB** Added logs clearing
             - **Cristalix** Improved logs clearing
             - **GlazeWM** Added logs clearing
             - **Namida** Added logs clearing
 
-            ## рџ‘Џ Contributors Hall of Fame
+            ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
             - **@Nekiplay** - Core improvements and feature implementations
 
