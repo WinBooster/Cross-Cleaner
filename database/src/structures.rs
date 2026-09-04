@@ -91,6 +91,48 @@ fn default_class() -> String {
     String::from("Other")
 }
 
+// INFO: Built-in custom cleaning (defined in code, not JSON).
+// Each entry describes: category, sub_category, target OS and the cleaning
+// function itself. Functions are registered at runtime via
+// database::custom_cleaners::register_custom_cleaner (see cleaner::custom_cleaners::register_all).
+pub type CustomCleanFn = fn(&CustomCleaner) -> CleanerResult;
+
+#[derive(Clone)]
+pub struct CustomCleaner {
+    /// Unique id, used to enable/disable this cleaner from CLI/GUI
+    pub id: String,
+    pub program: String,
+    pub category: String,
+    pub sub_category: String,
+    /// Target file or directory. Supports {username} placeholder
+    pub path: String,
+    /// Extra arguments passed to the cleaning function
+    pub args: Vec<String>,
+    /// Operating systems this cleaning applies to (empty = all)
+    /// Values: "windows", "linux", "macos"
+    pub os: Vec<String>,
+    /// The cleaning function that performs the custom cleanup
+    pub function: CustomCleanFn,
+}
+
+impl CustomCleaner {
+    pub fn matches_current_os(&self) -> bool {
+        if self.os.is_empty() {
+            return true;
+        }
+        let current = if cfg!(windows) {
+            "windows"
+        } else if cfg!(target_os = "linux") {
+            "linux"
+        } else {
+            "macos"
+        };
+        self.os
+            .iter()
+            .any(|os| os.eq_ignore_ascii_case(current))
+    }
+}
+
 // INFO: Struct for task clearing (Result cleared)
 pub struct CleanerResult {
     pub files: u64,

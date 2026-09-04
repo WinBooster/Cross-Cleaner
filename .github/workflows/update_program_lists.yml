@@ -7,10 +7,17 @@ on:
         description: "Version number (e.g., 2.0.1)"
         required: true
         default: "2.0.1"
+  workflow_call:
+    inputs:
+      version:
+        description: "Version number (e.g., 2.0.1)"
+        required: false
+        type: string
+        default: "2.0.1"
 
 env:
   CARGO_TERM_COLOR: always
-  APP_VERSION: ${{ github.event.inputs.version }}
+  APP_VERSION: ${{ github.event.inputs.version || inputs.version }}
 
 jobs:
   sort_json:
@@ -373,6 +380,107 @@ jobs:
               echo "*No uncategorized programs found*" >> LIST_MACOS.md
             fi
           fi
+
+      - name: Generate custom cleanings lists
+        run: |
+          APP_VERSION="${{ env.APP_VERSION }}" python3 << 'EOF'
+          import os, re
+
+          version = os.environ.get('APP_VERSION', '')
+          src = open('cleaner/src/custom_cleaners.rs', encoding='utf-8').read()
+          # Parse only non-test part of the file
+          src = src.split('#[cfg(test)]')[0]
+
+          field_re = lambda name: re.compile(
+              r'^\s*' + name + r':\s*(?:String::from\("([^"]*)"\)|"([^"]*)")\s*,')
+          id_re = field_re('id')
+          program_re = field_re('program')
+          category_re = field_re('category')
+          sub_re = field_re('sub_category')
+          os_re = re.compile(r'^\s*os:\s*(?:vec!\[([^\]]*)\]|\[([^\]]*)\])')
+          path_re = re.compile(r'^\s*path:\s*String::from\("([^"]*)"\)')
+          glob_re = re.compile(r'^\s*glob:\s*"([^"]*)"')
+
+          entries = []
+          cur = {}
+
+          def flush(e):
+              if e.get('id') and e.get('target') is not None and e.get('category'):
+                  entries.append(e)
+
+          for line in src.splitlines():
+              m = id_re.match(line)
+              if m:
+                  flush(cur)
+                  cur = {'id': m.group(1) or m.group(2)}
+                  continue
+              m = program_re.match(line)
+              if m:
+                  cur['program'] = m.group(1) or m.group(2)
+                  continue
+              m = category_re.match(line)
+              if m:
+                  cur['category'] = m.group(1) or m.group(2)
+                  continue
+              m = sub_re.match(line)
+              if m:
+                  cur['sub_category'] = m.group(1) or m.group(2)
+                  continue
+              m = os_re.match(line)
+              if m:
+                  raw = m.group(1) if m.group(1) is not None else m.group(2)
+                  cur['os'] = re.findall(r'"([^"]*)"', raw)
+                  continue
+              m = path_re.match(line)
+              if m:
+                  cur['target'] = m.group(1).replace('\\\\', '\\')
+                  flush(cur)
+                  cur = {}
+                  continue
+              m = glob_re.match(line)
+              if m:
+                  cur['target'] = m.group(1)
+                  flush(cur)
+                  cur = {}
+
+          def os_label(entry):
+              return ', '.join(entry.get('os', [])) if entry.get('os') else 'all'
+
+          def os_matches(entry, osname):
+              os_list = [o.lower() for o in entry.get('os', [])]
+              return len(os_list) == 0 or osname in os_list
+
+          def table(sel):
+              out = ['| № | Program | ID | Category | Sub-category | OS | Target |',
+                     '| --- | --- | --- | --- | --- | --- | --- |']
+              for i, e in enumerate(sel, 1):
+                  sub = e.get('sub_category') or '-'
+                  prog = e.get('program') or e['id']
+                  out.append('| %d | %s | `%s` | %s | %s | %s | `%s` |' % (
+                      i, prog, e['id'], e['category'], sub, os_label(e), e['target']))
+              return '\n'.join(out)
+
+          with open('LIST_CUSTOM.md', 'w', encoding='utf-8') as f:
+              f.write('# Custom Cleanings Catalog v%s\n\n' % version)
+              f.write('**Total custom cleanings:** %d\n\n' % len(entries))
+              f.write(table(entries) + '\n')
+
+          appendix = {
+              'LIST_WINDOWS.md': 'windows',
+              'LIST_LINUX.md': 'linux',
+              'LIST_MACOS.md': 'macos',
+          }
+          for fname, osname in appendix.items():
+              sel = [e for e in entries if os_matches(e, osname)]
+              with open(fname, 'a', encoding='utf-8') as f:
+                  f.write('\n---\n\n## Built-in custom cleanings\n\n')
+                  if not sel:
+                      f.write('*No custom cleanings for this OS*\n')
+                  else:
+                      f.write(table(sel) + '\n')
+
+          print('Custom cleanings parsed: %d' % len(entries))
+          EOF
 
       - name: Commit changes
         run: |

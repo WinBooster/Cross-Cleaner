@@ -9,7 +9,7 @@ use crossterm::execute;
 use database::registry_database::clear_registry;
 #[cfg(windows)]
 use database::structures::CleanerDataRegistry;
-use database::structures::{CleanerData, Cleared};
+use database::structures::{CleanerData, CleanerResult, Cleared, CustomCleaner};
 use database::utils::get_file_size_string;
 use database::{get_icon, get_version};
 use futures::stream::{FuturesUnordered, StreamExt};
@@ -64,6 +64,7 @@ async fn work(
     disabled_programs: Vec<&str>,
     categories: Vec<String>,
     database: &[CleanerData],
+    custom_database: &[CustomCleaner],
     #[cfg(windows)] registry_database: &[CleanerDataRegistry],
 ) {
     // ASYNC without threads: pure FuturesUnordered + tokio::fs
@@ -118,6 +119,36 @@ async fn work(
                     clear_registry(&data)
                 }));
             }
+        }
+    }
+
+    // INFO: Run built-in custom cleanings (functions defined in cleaner::custom_cleaners)
+    for data in custom_database.iter() {
+        if categories_lower.contains(&data.category.to_lowercase())
+            && !disabled_programs_set.contains(data.program.to_lowercase().as_str())
+        {
+            let data = data.clone();
+            let pb_clone = pb.clone();
+            let name_msg = data.id.clone();
+            let sem = sem.clone();
+            futures.push(Box::pin(async move {
+                let _p = sem.acquire_owned().await.unwrap();
+                if let Some(pb) = pb_clone {
+                    pb.set_message(format!("Cleaning: {}", name_msg));
+                }
+                tokio::task::spawn_blocking(move || database::custom_cleaners::run_custom_cleaner(&data))
+                    .await
+                    .unwrap_or_else(|_| CleanerResult {
+                        files: 0,
+                        folders: 0,
+                        bytes: 0,
+                        working: false,
+                        path: String::new(),
+                        program: String::new(),
+                        category: String::new(),
+                        sub_category: String::new(),
+                    })
+            }));
         }
     }
 
@@ -266,6 +297,21 @@ struct Args {
     #[arg(long, value_name = "bool", default_value_t = true, action = ArgAction::Set)]
     show_notification: bool,
 
+    /// Disable all built-in custom cleanings.
+    /// Example: --disable-custom=true
+    #[arg(long, value_name = "bool", default_value_t = false, action = ArgAction::Set)]
+    disable_custom: bool,
+
+    /// Disable specific built-in custom cleanings by id (comma-separated).
+    /// Example: --disabled-custom-ids=truncate_demo_log,scrub_demo_log
+    #[arg(long, value_name = "ids")]
+    disabled_custom_ids: Option<String>,
+
+    /// List all registered built-in custom cleanings and exit.
+    /// Example: --list-custom=true
+    #[arg(long, value_name = "bool", default_value_t = false, action = ArgAction::Set)]
+    list_custom: bool,
+
     /// Specify a custom database file path.
     /// Example: --database-path=custom_database.json
     #[arg(long, value_name = "path")]
@@ -287,6 +333,43 @@ async fn main() {
     .unwrap();
 
     let args = Args::parse();
+
+    // INFO: Register all built-in custom cleanings (functions in cleaner::custom_cleaners)
+    cleaner::custom_cleaners::register_all();
+
+    if args.list_custom {
+        println!("Registered built-in custom cleanings:");
+        for id in database::custom_cleaners::custom_cleaner_ids() {
+            if let Some(cleaner) = database::custom_cleaners::get_custom_cleaner(&id) {
+                println!(
+                    "  {} - category: {}, sub_category: {}, os: {}",
+                    cleaner.id,
+                    cleaner.category,
+                    cleaner.sub_category,
+                    if cleaner.os.is_empty() {
+                        String::from("all")
+                    } else {
+                        cleaner.os.join(", ")
+                    }
+                );
+            }
+        }
+        return;
+    }
+
+    let custom_database: Vec<CustomCleaner> = if args.disable_custom {
+        vec![]
+    } else {
+        let disabled_ids: HashSet<String> = args
+            .disabled_custom_ids
+            .as_ref()
+            .map(|s| s.split(',').map(|x| x.trim().to_string()).collect())
+            .unwrap_or_default();
+        database::custom_cleaners::get_custom_cleaners()
+            .into_iter()
+            .filter(|cleaner| !disabled_ids.contains(&cleaner.id))
+            .collect()
+    };
 
     #[cfg(windows)]
     if !is_admin() {
@@ -330,6 +413,11 @@ async fn main() {
         programs.insert(data.program.clone());
     }
 
+    for data in &custom_database {
+        options.insert(data.category.clone());
+        programs.insert(data.program.clone());
+    }
+
     #[cfg(windows)]
     {
         for data in &registry_database {
@@ -340,9 +428,10 @@ async fn main() {
 
     if args.show_database_info {
         println!(
-            "DataBase programs: {}, DataBase paths: {}",
+            "DataBase programs: {}, DataBase paths: {}, Custom cleanings: {}",
             programs.len(),
-            database.len()
+            database.len(),
+            custom_database.len()
         );
     }
 
@@ -408,6 +497,13 @@ async fn main() {
                 .map(|data| data.program.as_str())
                 .collect();
 
+            let custom_programs: Vec<&str> = custom_database
+                .iter()
+                .filter(|data| ans_categories.contains(&data.category))
+                .map(|data| data.program.as_str())
+                .collect();
+            programs2.extend(custom_programs);
+
             #[cfg(windows)]
             {
                 let registry_programs: Vec<&str> = registry_database
@@ -436,6 +532,7 @@ async fn main() {
                     ans_programs.iter().map(|s| &**s).collect(),
                     ans_categories.iter().map(|s| s.to_lowercase()).collect(),
                     &database,
+                    &custom_database,
                     #[cfg(windows)]
                     &registry_database,
                 )
@@ -453,6 +550,7 @@ async fn main() {
             ans_programs.iter().map(|s| s.as_str()).collect(),
             ans_categories,
             &database,
+            &custom_database,
             #[cfg(windows)]
             &registry_database,
         )

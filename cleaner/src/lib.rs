@@ -7,6 +7,11 @@ use std::sync::Arc;
 use tokio::io;
 use tokio::sync::Semaphore;
 
+pub mod custom_cleaners;
+
+// INFO: Re-export so macro_rules! ($crate::database::...) resolves in any consumer crate
+pub use database;
+
 // B: blocking fast helpers - use std::fs inside spawn_blocking
 async fn remove_file_fast(path: PathBuf) -> io::Result<u64> {
     tokio::task::spawn_blocking(move || {
