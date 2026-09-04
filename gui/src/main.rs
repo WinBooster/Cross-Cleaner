@@ -95,6 +95,7 @@ async fn main() -> eframe::Result {
             .with_min_inner_size(size)
             .with_max_inner_size(size)
             .with_resizable(false)
+            .with_maximize_button(false)
             .with_icon(icon),
         ..Default::default()
     };
@@ -369,7 +370,7 @@ struct MyApp {
 const MENU_BYTES: &[u8] = include_bytes!("../assets/menu.png");
 
 fn load_menu_color_image() -> egui::ColorImage {
-    // Decode and invert black -> white for dark theme visibility
+    // White with original alpha; actual color applied at draw time via tint()
     let img = ImageReader::new(std::io::Cursor::new(MENU_BYTES))
         .with_guessed_format()
         .expect("menu png format")
@@ -383,12 +384,7 @@ fn load_menu_color_image() -> egui::ColorImage {
         if a < 10 {
             pixels.push(egui::Color32::TRANSPARENT);
         } else {
-            // original black (0,0,0) -> white, keep alpha
-            let lum = p[0] as u32; // black -> 0, white -> 255
-            let v = 255 - lum; // invert: black->white
-            // if already white, keep white
-            let gv = v.max(200) as u8; // ensure light
-            pixels.push(egui::Color32::from_rgba_unmultiplied(gv, gv, gv, a));
+            pixels.push(egui::Color32::from_rgba_unmultiplied(255, 255, 255, a));
         }
     }
     egui::ColorImage {
@@ -965,7 +961,8 @@ impl eframe::App for MyApp {
                                         menu_tex.id(),
                                         menu_tex.size_vec2(),
                                     ))
-                                    .fit_to_exact_size(egui::vec2(16.0, 16.0));
+                                    .fit_to_exact_size(egui::vec2(16.0, 16.0))
+                                    .tint(ui.visuals().text_color());
                                 let menu_btn = egui::ImageButton::new(menu_image).frame(false);
                                 let menu_resp = ui.add_sized(egui::vec2(16.0, 16.0), menu_btn);
                                 if menu_resp.clicked() {
