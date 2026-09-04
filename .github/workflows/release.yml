@@ -190,10 +190,8 @@ jobs:
             ## ✨ What's New
 
             ### 🪟 Windows Enhancements
-            - **YASB** Added logs clearing
-            - **Cristalix** Improved logs clearing
-            - **GlazeWM** Added logs clearing
-            - **Namida** Added logs clearing
+            - **dnSpy** Added last activity clearing
+            - **Visual Studio** Added last activity clearing
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
