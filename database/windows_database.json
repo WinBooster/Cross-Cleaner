@@ -728,7 +728,8 @@
   },
   {
     "path": "{drive}Users\\{username}\\.copilot",
-    "category": "AI",
+    "class": "AI",
+    "category": "Logs",
     "program": "Copilot",
     "directories_to_remove": [
       "logs"
@@ -5237,7 +5238,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
     "class": "Packet Manager",
     "category": "Documentation",
-    "sub_class": "Change logs",
+    "sub_category": "Change logs",
     "program": "WinGet",
     "files_to_remove": [
       "CHANGELOG.md",
@@ -5248,7 +5249,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
     "class": "Packet Manager",
     "category": "Documentation",
-    "sub_class": "Licenses",
+    "sub_category": "Licenses",
     "program": "WinGet",
     "files_to_remove": [
       "LICENSE",
@@ -5373,7 +5374,8 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ZUI",
-    "category": "Security",
+    "class": "Security",
+    "category": "Logs",
     "program": "Zapret Universal Interface",
     "directories_to_remove": [
       "logs"
