@@ -1120,24 +1120,25 @@ impl eframe::App for MyApp {
                                         .fit_to_exact_size(egui::vec2(16.0, 16.0))
                                         .tint(ui.visuals().text_color())
                                         .sense(egui::Sense::click());
-                                    let menu_resp = ui.add_sized(egui::vec2(16.0, 16.0), menu_image);
+                                    let menu_resp =
+                                        ui.add_sized(egui::vec2(16.0, 16.0), menu_image);
 
                                     // Popup with sub_category checkboxes - shifted to right-bottom corner of image so it doesn't cover the button
                                     let frame = egui::Frame::popup(ui.style());
                                     egui::Popup::menu(&menu_resp)
-                                        .close_behavior(egui::PopupCloseBehavior::CloseOnClickOutside)
+                                        .close_behavior(
+                                            egui::PopupCloseBehavior::CloseOnClickOutside,
+                                        )
                                         .frame(frame)
                                         .show(|ui| {
                                             ui.set_min_width(200.0);
-                                            egui::ScrollArea::vertical()
-                                                .max_height(300.0)
-                                                .show(ui, |ui| {
+                                            egui::ScrollArea::vertical().max_height(300.0).show(
+                                                ui,
+                                                |ui| {
                                                     for sub in cat.subs.clone() {
                                                         let mut is_sel =
                                                             cat.selected.contains(&sub);
-                                                        if ui
-                                                            .checkbox(&mut is_sel, &sub)
-                                                            .changed()
+                                                        if ui.checkbox(&mut is_sel, &sub).changed()
                                                         {
                                                             if is_sel {
                                                                 cat.selected.insert(sub.clone());
@@ -1158,15 +1159,14 @@ impl eframe::App for MyApp {
                                                             .changed()
                                                         {
                                                             if is_uncat {
-                                                                cat.selected
-                                                                    .insert(String::new());
+                                                                cat.selected.insert(String::new());
                                                             } else {
-                                                                cat.selected
-                                                                    .remove(&String::new());
+                                                                cat.selected.remove(&String::new());
                                                             }
                                                         }
                                                     }
-                                                });
+                                                },
+                                            );
                                         });
                                 }
                                 let _ = resp;
