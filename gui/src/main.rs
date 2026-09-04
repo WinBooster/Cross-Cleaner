@@ -187,7 +187,7 @@ async fn work(
 
     let total_tasks = futures.len();
     let _ = progress_sender
-        .send(format!("PROGRESS:0:{}", total_tasks))
+        .send(format!("PROGRESS:0:{}:0", total_tasks))
         .await;
 
     while let Some(result) = futures.next().await {
@@ -219,9 +219,12 @@ async fn work(
             }
         }
 
-        // Отправляем только прогресс, путь уже отправлен перед очисткой
+        // Отправляем только прогресс и очищенные байты, путь уже отправлен перед очисткой
         let _ = progress_sender
-            .send(format!("PROGRESS:{}:{}", current_task, total_tasks))
+            .send(format!(
+                "PROGRESS:{}:{}:{}",
+                current_task, total_tasks, bytes_cleared
+            ))
             .await;
     }
 
@@ -349,6 +352,8 @@ struct MyApp {
     pub show_results: bool,
     pub current_task: usize,
     pub total_tasks: usize,
+    pub cleaned_bytes: u64,
+    pub progress_start: Option<std::time::Instant>,
 
     pub show_program_selection: bool,
     pub program_checkboxes: Vec<(Rc<RefCell<bool>>, String)>,
@@ -488,6 +493,8 @@ impl MyApp {
             show_results: false,
             current_task: 0,
             total_tasks: 0,
+            cleaned_bytes: 0,
+            progress_start: None,
 
             show_program_selection: false,
             program_checkboxes: vec![],
@@ -569,6 +576,8 @@ impl MyApp {
             show_results: false,
             current_task: 0,
             total_tasks: 0,
+            cleaned_bytes: 0,
+            progress_start: None,
 
             show_program_selection: false,
             program_checkboxes: vec![],
@@ -604,9 +613,13 @@ impl eframe::App for MyApp {
             if let Ok(message) = receiver.try_recv() {
                 if message.starts_with("PROGRESS:") {
                     let parts: Vec<&str> = message.split(':').collect();
-                    if parts.len() == 3 {
+                    if parts.len() == 4 {
                         self.current_task = parts[1].parse().unwrap_or(0);
                         self.total_tasks = parts[2].parse().unwrap_or(0);
+                        self.cleaned_bytes = parts[3].parse().unwrap_or(0);
+                        if self.progress_start.is_none() {
+                            self.progress_start = Some(std::time::Instant::now());
+                        }
                     }
                 } else {
                     self.progress_message = message;
@@ -639,29 +652,79 @@ impl eframe::App for MyApp {
             }
         }
 
-        egui::CentralPanel::default().show(ctx, |ui| {
+        let inner_margin = 8;
+        egui::CentralPanel::default()
+            .frame(
+                egui::Frame::new()
+                    .inner_margin(egui::Margin::same(inner_margin))
+                    .fill(ctx.style().visuals.panel_fill),
+            )
+            .show(ctx, |ui| {
             if self.task_handle.is_some() {
                 ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
-                    470.0, 120.0,
+                    470.0, 100.0,
                 )));
-                ui.vertical_centered(|ui| {
-                    ui.heading("Cleaning in progress...");
-                    ui.add_space(10.0);
+                // Панель даёт 8px, текст добирает 12px от краёв экрана
+                ui.vertical(|ui| {
+                    ui.add_space(4.0);
+                    // Слева сверху: имя программы, которая сейчас чистится
+                    let program = self
+                        .progress_message
+                        .strip_prefix("Cleaning: ")
+                        .unwrap_or(&self.progress_message)
+                        .to_string();
+                    if !program.is_empty() {
+                        ui.horizontal(|ui| {
+                            ui.add_space(4.0);
+                            ui.strong(&program);
+                        });
+                    }
+                    ui.add_space(4.0);
 
                     if self.total_tasks > 0 {
                         let progress = self.current_task as f32 / self.total_tasks as f32;
-                        ui.add(
+                        // Прогресс-бар: 8px от краёв экрана
+                        ui.add_sized(
+                            [ui.available_width(), 20.0],
                             egui::ProgressBar::new(progress)
                                 .show_percentage()
                                 .animate(true),
                         );
-                        ui.label(format!("Task {}/{}", self.current_task, self.total_tasks));
+                        ui.add_space(4.0);
+
+                        let eta = self.progress_start.and_then(|start| {
+                            if self.current_task == 0 || self.current_task >= self.total_tasks {
+                                None
+                            } else {
+                                let elapsed = start.elapsed().as_secs_f64();
+                                let per_task = elapsed / self.current_task as f64;
+                                let remaining =
+                                    per_task * (self.total_tasks - self.current_task) as f64;
+                                let mins = (remaining / 60.0).floor() as u64;
+                                let secs = (remaining % 60.0).round() as u64;
+                                if mins > 0 {
+                                    Some(format!("~{}m {:02}s", mins, secs))
+                                } else {
+                                    Some(format!("~{}s", secs))
+                                }
+                            }
+                        });
+
+                        ui.horizontal(|ui| {
+                            ui.add_space(4.0);
+                            // Слева снизу: сколько очистилось
+                            ui.label(get_file_size_string(self.cleaned_bytes));
+                            // Справа снизу: оставшееся время
+                            ui.with_layout(egui::Layout::right_to_left(egui::Align::Min), |ui| {
+                                if let Some(eta) = eta {
+                                    ui.label(eta);
+                                }
+                                ui.add_space(4.0);
+                            });
+                        });
                     } else {
                         ui.spinner();
                     }
-
-                    ui.add_space(10.0);
-                    ui.label(&self.progress_message);
                 });
                 return;
             }
@@ -881,6 +944,8 @@ impl eframe::App for MyApp {
                         self.progress_receiver = Some(progress_receiver);
                         self.current_task = 0;
                         self.total_tasks = 0;
+                        self.cleaned_bytes = 0;
+                        self.progress_start = None;
                         self.results_window_resized = false;
 
                         let database = Arc::clone(&self.database);
