@@ -1,17 +1,18 @@
-# Windows Clearing Programs Catalog v2.0.2.5
-**Total categories in database:** 15
+# Windows Clearing Programs Catalog v2.0.2.6
+**Total categories in database:** 12
 
-**Total programs in database:** 198
+**Total programs in database:** 203
 
-**Total pathes in database:** 452
+**Total pathes in database:** 459
 
 ## AI
 
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | Cherry Studio | Logs |
-| 2 | [LM Studio](https://lmstudio.ai/download) | LastActivity, Logs |
-| 3 | [Microsoft Lobe](https://github.com/orgs/lobe) | Logs |
+| 2 | [Copilot](https://copilot.microsoft.com/) | Logs |
+| 3 | [LM Studio](https://lmstudio.ai/download) | LastActivity, Logs |
+| 4 | [Microsoft Lobe](https://github.com/orgs/lobe) | Logs |
 
 
 ## AntiCheat
@@ -41,7 +42,7 @@
 | 3 | [Audacity](https://www.audacityteam.org) | Documentation |
 | 4 | [FL Studio](https://www.image-line.com/fl-studio-download) | Documentation |
 | 5 | [Murglar](https://murglar.app) | Logs |
-| 6 | [Namida](https://github.com/namidaco/namida) | Documentation |
+| 6 | [Namida](https://github.com/namidaco/namida) | Documentation, Logs |
 | 7 | [SoundWire Server](https://georgielabs.net) | Documentation |
 | 8 | [Spotify](https://open.spotify.com/download) | Cache, Logs |
 | 9 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
@@ -51,14 +52,14 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [Brave Browser](https://brave.com/download) | Browser cookies, Browser history, Browser passwords, Cache, Logs |
-| 2 | [Edge](https://www.microsoft.com/edge) | Browser cookies, Browser history, Cache, Logs |
-| 3 | [Google Chrome](https://www.google.com/intl/en/chrome) | Browser cookies, Browser history, Browser passwords, Documentation, Logs |
-| 4 | [LibreWolf](https://librewolf.net/installation) | Browser cookies, Browser history |
-| 5 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser cookies, Browser history, Cache, Logs |
-| 6 | [Opera GX](https://www.opera.com/download) | Browser cookies, Browser history, Browser passwords |
-| 7 | [Thorium](https://thorium.rocks) | Browser cookies, Browser history, Browser passwords, Documentation, Logs |
-| 8 | [Vivaldi](https://vivaldi.com/download) | Browser cookies, Browser history, Browser passwords, Images |
+| 1 | [Brave Browser](https://brave.com/download) | Browser, Cache, Logs |
+| 2 | [Edge](https://www.microsoft.com/edge) | Browser, Cache, Logs |
+| 3 | [Google Chrome](https://www.google.com/intl/en/chrome) | Browser, Documentation, Logs |
+| 4 | [LibreWolf](https://librewolf.net/installation) | Browser |
+| 5 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser, Cache, Logs |
+| 6 | [Opera GX](https://www.opera.com/download) | Browser |
+| 7 | [Thorium](https://thorium.rocks) | Browser, Documentation, Logs |
+| 8 | [Vivaldi](https://vivaldi.com/download) | Browser, Images |
 
 
 ## Cheat
@@ -137,15 +138,22 @@
 | 4 | [Nox](https://bignox.com/nox-app-player) | Logs |
 
 
+## Files Transport
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | [OnionShare](https://onionshare.org) | Documentation |
+
+
 ## Game
 
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [ArcheAge](https://archeage.ru) | Logs |
 | 2 | [Arizona Games Launcher](https://arizona-rp.com/#how-to-play) | Crashes, Logs |
-| 3 | Borderlands 2 | Game saves, Game settings, Logs |
-| 4 | [Counter-Strike Global Offensive](https://store.steampowered.com/app/730/CounterStrike_2) | Game settings |
-| 5 | [Dota 2](https://www.dota2.com/home) | Game settings |
+| 3 | Borderlands 2 | Game, Logs |
+| 4 | [Counter-Strike Global Offensive](https://store.steampowered.com/app/730/CounterStrike_2) | Game |
+| 5 | [Dota 2](https://www.dota2.com/home) | Game |
 | 6 | [Electronic Arts Desktop](https://www.ea.com/ea-app) | Logs |
 | 7 | [Epic Games Launcher](https://store.epicgames.com/en-US/download) | Logs |
 | 8 | [Genshin Impact](https://genshin.hoyoverse.com) | Crashes, Documentation, Logs |
@@ -154,15 +162,22 @@
 | 11 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
 | 12 | [Roblox](https://www.roblox.com/download) | Logs |
 | 13 | Rockstar Games | Crashes |
-| 14 | [Rust](https://store.steampowered.com/app/252490/Rust) | Game settings |
-| 15 | [Schedule I](https://store.steampowered.com/app/3164500/Schedule_I) | Game saves, Logs |
+| 14 | [Rust](https://store.steampowered.com/app/252490/Rust) | Game |
+| 15 | [Schedule I](https://store.steampowered.com/app/3164500/Schedule_I) | Game, Logs |
 | 16 | [Steam](https://store.steampowered.com/about) | Accounts |
-| 17 | [Terraria](https://terraria.org) | Game saves, Game settings |
-| 18 | [The Powder Toy](https://powdertoy.co.uk) | Game saves |
+| 17 | [Terraria](https://terraria.org) | Game |
+| 18 | [The Powder Toy](https://powdertoy.co.uk) | Game |
 | 19 | [Ultrakill](https://store.steampowered.com/app/1229490/ULTRAKILL) | Logs |
-| 20 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game settings |
+| 20 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game |
 | 21 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
-| 22 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game saves, Game settings, Logs |
+| 22 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game, Logs |
+
+
+## ISO
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | [ImgBurn](https://www.imgburn.com/index.php?act=download) | Documentation, Logs |
 
 
 ## Image
@@ -196,23 +211,23 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [ATLauncher](https://atlauncher.com/downloads) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 2 | [Badlion Client](https://www.badlion.net/minecraft-client) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 3 | [Cristalix](https://cristalix.gg) | Crashes, Game saves, Images, Logs |
-| 4 | [CubixWorld](https://cubixworld.net/start) | Game saves, Logs |
-| 5 | [CurseForge](https://www.curseforge.com/download/app) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 6 | [GribLand](https://gribland.net/#start) | Accounts, Cache, Crashes, Documentation, Game saves, Images, Logs |
+| 1 | [ATLauncher](https://atlauncher.com/downloads) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
+| 2 | [Badlion Client](https://www.badlion.net/minecraft-client) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
+| 3 | [Cristalix](https://cristalix.gg) | Crashes, Game, Images, Logs |
+| 4 | [CubixWorld](https://cubixworld.net/start) | Game, Logs |
+| 5 | [CurseForge](https://www.curseforge.com/download/app) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
+| 6 | [GribLand](https://gribland.net/#start) | Accounts, Cache, Crashes, Documentation, Game, Images, Logs |
 | 7 | [LabyMod](https://laby.net/client) | Logs |
-| 8 | [LoliLand](https://loliland.ru/ru/start) | Crashes, Documentation, Game saves, Images, Logs |
+| 8 | [LoliLand](https://loliland.ru/ru/start) | Crashes, Documentation, Game, Images, Logs |
 | 9 | [Lunar Client](https://www.lunarclient.com/download) | Accounts, Cache, Documentation, Logs |
-| 10 | [MCSkill](https://mcskill.net/start) | Crashes, Game saves, Images, Logs |
+| 10 | [MCSkill](https://mcskill.net/start) | Crashes, Game, Images, Logs |
 | 11 | [McLaunch](https://github.com/mclaunch/mclaunch) | Crashes |
-| 12 | [Minecraft](https://www.minecraft.net/ru-ru/about-minecraft) | Cheats, Crashes, Game saves, Images, Logs |
-| 13 | [Modrinth](https://modrinth.com/app) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 14 | [MultiMC](https://multimc.org/#Download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 15 | [PolyMC](https://polymc.org/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 16 | [PrismLauncher](https://prismlauncher.org/download/windows) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 17 | [Tecknix Client](https://tecknix.com/download.html) | Accounts, Cache, Crashes, Documentation, Game saves, Images, Logs |
+| 12 | [Minecraft](https://www.minecraft.net/ru-ru/about-minecraft) | Cheats, Crashes, Game, Images, Logs |
+| 13 | [Modrinth](https://modrinth.com/app) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
+| 14 | [MultiMC](https://multimc.org/#Download) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
+| 15 | [PolyMC](https://polymc.org/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
+| 16 | [PrismLauncher](https://prismlauncher.org/download/windows) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
+| 17 | [Tecknix Client](https://tecknix.com/download.html) | Accounts, Cache, Crashes, Documentation, Game, Images, Logs |
 
 
 ## Optimization
@@ -268,6 +283,7 @@
 | 18 | [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | Documentation, Logs |
 | 19 | [Wireshark](https://www.wireshark.org) | Documentation |
 | 20 | [Zapret](https://github.com/bol-van/zapret) | Logs |
+| 21 | [Zapret Universal Interface](https://github.com/AmantesNihilo/zapret-universal-interface) | Logs |
 
 
 ## Spyware
@@ -275,6 +291,13 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | HP Touchpoint Analytics Client | Logs |
+
+
+## Status Bar
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | [YASB](https://github.com/amnweb/yasb) | Logs |
 
 
 ## System
@@ -298,9 +321,16 @@
 | 6 | [NeoVim](https://github.com/neovim/neovim/blob/master/INSTALL.md) | Documentation, Logs |
 | 7 | [Notepad++](https://notepad-plus-plus.org/downloads) | Documentation |
 | 8 | [Sublime Text](https://www.sublimetext.com/download) | Logs |
-| 9 | [VS Code](https://code.visualstudio.com/download) | Browser cookies, Documentation, Logs |
-| 10 | Visual Studio | Documentation |
+| 9 | [VS Code](https://code.visualstudio.com/download) | Browser, Documentation, Logs |
+| 10 | [Visual Studio](https://visualstudio.microsoft.com) | Documentation |
 | 11 | [Zed](https://zed.dev) | Logs |
+
+
+## Tiling Manager
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | GlazeWM | Logs |
 
 
 ## Torrent
@@ -354,6 +384,14 @@
 | --- | --- | --- |
 | 1 | Adobe | Documentation |
 | 2 | Electron App's | Documentation, Logs |
-| 3 | [ImgBurn](https://www.imgburn.com/index.php?act=download) | Documentation, Logs |
-| 4 | Mozilla Maintenance Service | Logs |
-| 5 | [OnionShare](https://onionshare.org) | Documentation |
+| 3 | Mozilla Maintenance Service | Logs |
+| 4 | Zebar | Logs |
+
+---
+
+## Built-in custom cleanings
+
+| № | Program | ID | Category | Sub-category | OS | Target |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | Custom: Visual Studio recent projects | `vs_code_containers_offline` | LastActivity | - | windows | `C:/Users/{username}/AppData/Local/Microsoft/VisualStudio/*/ApplicationPrivateSettings.xml` |
+| 2 | dnSpy | `dnspy_recent_files` | LastActivity | - | windows | `C:/Users/{username}/AppData/Roaming/dnSpy/dnSpy.xml` |

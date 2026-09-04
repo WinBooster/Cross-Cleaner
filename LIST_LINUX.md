@@ -1,4 +1,4 @@
-# Linux Clearing Programs Catalog v2.0.2.5
+# Linux Clearing Programs Catalog v2.0.2.6
 **Total categories in database:** 12
 
 **Total programs in database:** 63
@@ -156,3 +156,9 @@
 | 2 | EFI tools | Logs |
 | 3 | Info | Documentation |
 | 4 | Licenses | Documentation |
+
+---
+
+## Built-in custom cleanings
+
+*No custom cleanings for this OS*
