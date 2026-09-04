@@ -203,7 +203,7 @@ pub fn register_all() {
         category: "LastActivity",
         sub_category: "",
         os: ["windows"],
-        glob: "C:/Users/{username}/AppData/Local/Microsoft/VisualStudio/*/ApplicationPrivateSettings.xml",
+        glob: "{drive}/Users/{username}/AppData/Local/Microsoft/VisualStudio/*/ApplicationPrivateSettings.xml",
         |path| {
             remove_code_containers_offline(path)
         }
@@ -216,7 +216,7 @@ pub fn register_all() {
         category: "LastActivity",
         sub_category: "",
         os: ["windows"],
-        glob: "C:/Users/{username}/AppData/Roaming/dnSpy/dnSpy.xml",
+        glob: "{drive}/Users/{username}/AppData/Roaming/dnSpy/dnSpy.xml",
         |path| {
             remove_dnspy_file_lists(path)
         }

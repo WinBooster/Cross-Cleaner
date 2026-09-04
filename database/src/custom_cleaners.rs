@@ -21,6 +21,7 @@ pub fn register_custom_cleaner(cleaner: CustomCleaner) -> bool {
 }
 
 /// All registered custom cleaners for the current OS, with placeholders expanded.
+/// Cleaners whose path contains {drive} are expanded into one entry per drive.
 pub fn get_custom_cleaners() -> Vec<CustomCleaner> {
     registry()
         .read()
@@ -28,18 +29,22 @@ pub fn get_custom_cleaners() -> Vec<CustomCleaner> {
         .values()
         .filter(|cleaner| cleaner.matches_current_os())
         .cloned()
-        .map(expand_placeholders)
+        .flat_map(expand_placeholders)
         .collect()
 }
 
-/// Get a single registered cleaner by id, with placeholders expanded.
+/// Get a single registered cleaner by id, with {username} expanded.
+/// NOTE: {drive} stays as-is here (per-drive expansion happens in get_custom_cleaners).
 pub fn get_custom_cleaner(id: &str) -> Option<CustomCleaner> {
     registry()
         .read()
         .expect("custom cleaner registry poisoned")
         .get(id)
         .cloned()
-        .map(expand_placeholders)
+        .map(|mut cleaner| {
+            cleaner.path = cleaner.path.replace("{username}", &whoami::username());
+            cleaner
+        })
 }
 
 /// Ids of all registered custom cleaners (all OS, without filtering).
@@ -57,9 +62,29 @@ pub fn run_custom_cleaner(cleaner: &CustomCleaner) -> CleanerResult {
     (cleaner.function)(cleaner)
 }
 
-fn expand_placeholders(mut cleaner: CustomCleaner) -> CustomCleaner {
-    cleaner.path = cleaner.path.replace("{username}", &whoami::username());
-    cleaner
+/// Expand placeholders: {username}, {drive} (one entry per drive letter).
+fn expand_placeholders(cleaner: CustomCleaner) -> Vec<CustomCleaner> {
+    let username = whoami::username();
+    let path = cleaner.path.replace("{username}", &username);
+
+    if !path.contains("{drive}") {
+        return vec![CustomCleaner { path, ..cleaner }];
+    }
+
+    // WARN: Windows only ({drive} placeholder makes sense on Windows)
+    let drives = if cfg!(windows) {
+        disk_name::get_letters()
+    } else {
+        Vec::new()
+    };
+
+    drives
+        .into_iter()
+        .map(|drive| CustomCleaner {
+            path: path.replace("{drive}", &drive),
+            ..cleaner.clone()
+        })
+        .collect()
 }
 
 #[cfg(test)]
@@ -158,5 +183,56 @@ mod tests {
 
         cleaner.os = vec![String::from("someotheros")];
         assert!(!cleaner.matches_current_os());
+    }
+
+    #[test]
+    fn test_expand_placeholders_drive() {
+        let mut cleaner = test_cleaner("drive_test_1");
+        cleaner.path = String::from("{drive}/Users/{username}/data");
+
+        let expanded = expand_placeholders(cleaner);
+
+        if cfg!(windows) {
+            assert!(!expanded.is_empty(), "must expand to at least one drive");
+            for e in &expanded {
+                assert!(e.path.contains("/Users/"), "drive replaced: {}", e.path);
+                assert!(!e.path.contains("{drive}"), "no placeholder left: {}", e.path);
+                assert!(!e.path.contains("{username}"), "no placeholder left: {}", e.path);
+                assert!(e.path.starts_with('\\') || e.path.as_bytes()[1] == b':');
+            }
+            let paths: std::collections::HashSet<&String> = expanded.iter().map(|e| &e.path).collect();
+            assert_eq!(paths.len(), expanded.len(), "each drive = unique path");
+            assert!(expanded.iter().all(|e| e.id == "drive_test_1"));
+        } else {
+            assert!(expanded.is_empty(), "no drives on non-windows");
+        }
+    }
+
+    #[test]
+    fn test_expand_placeholders_no_drive() {
+        let cleaner = test_cleaner("no_drive_test_1");
+        let expanded = expand_placeholders(cleaner);
+        assert_eq!(expanded.len(), 1);
+        assert_eq!(expanded[0].path, "WindowsUser/test.log".replace("WindowsUser", &whoami::username()));
+    }
+
+    #[test]
+    fn test_get_custom_cleaners_expands_drive() {
+        let mut cleaner = test_cleaner("drive_multi_test_1");
+        cleaner.path = String::from("{drive}/some/path.log");
+        register_custom_cleaner(cleaner);
+
+        let all = get_custom_cleaners();
+        let matched: Vec<&CustomCleaner> = all
+            .iter()
+            .filter(|c| c.id == "drive_multi_test_1")
+            .collect();
+
+        if cfg!(windows) {
+            assert!(!matched.is_empty());
+            assert!(matched.iter().all(|c| !c.path.contains("{drive}")));
+        } else {
+            assert!(matched.is_empty(), "{{drive}} entry without drives is dropped");
+        }
     }
 }
