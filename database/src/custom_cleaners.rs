@@ -196,11 +196,20 @@ mod tests {
             assert!(!expanded.is_empty(), "must expand to at least one drive");
             for e in &expanded {
                 assert!(e.path.contains("/Users/"), "drive replaced: {}", e.path);
-                assert!(!e.path.contains("{drive}"), "no placeholder left: {}", e.path);
-                assert!(!e.path.contains("{username}"), "no placeholder left: {}", e.path);
+                assert!(
+                    !e.path.contains("{drive}"),
+                    "no placeholder left: {}",
+                    e.path
+                );
+                assert!(
+                    !e.path.contains("{username}"),
+                    "no placeholder left: {}",
+                    e.path
+                );
                 assert!(e.path.starts_with('\\') || e.path.as_bytes()[1] == b':');
             }
-            let paths: std::collections::HashSet<&String> = expanded.iter().map(|e| &e.path).collect();
+            let paths: std::collections::HashSet<&String> =
+                expanded.iter().map(|e| &e.path).collect();
             assert_eq!(paths.len(), expanded.len(), "each drive = unique path");
             assert!(expanded.iter().all(|e| e.id == "drive_test_1"));
         } else {
@@ -213,7 +222,10 @@ mod tests {
         let cleaner = test_cleaner("no_drive_test_1");
         let expanded = expand_placeholders(cleaner);
         assert_eq!(expanded.len(), 1);
-        assert_eq!(expanded[0].path, "WindowsUser/test.log".replace("WindowsUser", &whoami::username()));
+        assert_eq!(
+            expanded[0].path,
+            "WindowsUser/test.log".replace("WindowsUser", &whoami::username())
+        );
     }
 
     #[test]
@@ -232,7 +244,10 @@ mod tests {
             assert!(!matched.is_empty());
             assert!(matched.iter().all(|c| !c.path.contains("{drive}")));
         } else {
-            assert!(matched.is_empty(), "{{drive}} entry without drives is dropped");
+            assert!(
+                matched.is_empty(),
+                "{{drive}} entry without drives is dropped"
+            );
         }
     }
 }
