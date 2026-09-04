@@ -37,7 +37,7 @@ pub fn get_default_database() -> &'static Vec<CleanerData> {
             serde_json::from_str::<Vec<CleanerData>>(&json_data).expect("Failed to parse database");
 
         // NOTE: Get the username
-        let username = whoami::username();
+        let username = whoami::username().expect("Failed to get username");
 
         // NOTE: Getting a list of disks
         // WARN: Windows only
@@ -89,7 +89,7 @@ pub fn get_database_from_file(file_path: &str) -> Result<Vec<CleanerData>, Box<d
     let database: Vec<CleanerData> = serde_json::from_str(&data)?;
 
     // INFO: Get the username
-    let username = whoami::username();
+    let username = whoami::username().expect("Failed to get username");
 
     // INFO: Getting a list of disks
     // WARN: Windows only

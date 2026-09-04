@@ -42,7 +42,9 @@ pub fn get_custom_cleaner(id: &str) -> Option<CustomCleaner> {
         .get(id)
         .cloned()
         .map(|mut cleaner| {
-            cleaner.path = cleaner.path.replace("{username}", &whoami::username());
+            cleaner.path = cleaner
+                .path
+                .replace("{username}", &whoami::username().expect("Failed to get username"));
             cleaner
         })
 }
@@ -64,7 +66,7 @@ pub fn run_custom_cleaner(cleaner: &CustomCleaner) -> CleanerResult {
 
 /// Expand placeholders: {username}, {drive} (one entry per drive letter).
 fn expand_placeholders(cleaner: CustomCleaner) -> Vec<CustomCleaner> {
-    let username = whoami::username();
+    let username = whoami::username().expect("Failed to get username");
     let path = cleaner.path.replace("{username}", &username);
 
     if !path.contains("{drive}") {
@@ -224,7 +226,8 @@ mod tests {
         assert_eq!(expanded.len(), 1);
         assert_eq!(
             expanded[0].path,
-            "WindowsUser/test.log".replace("WindowsUser", &whoami::username())
+            "WindowsUser/test.log"
+                .replace("WindowsUser", &whoami::username().expect("Failed to get username")),
         );
     }
 

@@ -6,13 +6,13 @@ edition = "2024"
 [dependencies]
 egui = "0.31.1"
 eframe = "0.31.1"
-env_logger = "0.11.6"
+env_logger = "0.11.11"
 tokio = { version = "1", features = ["full"] }
 futures = "0.3"
 notify-rust = "4"
-image = "0.25.5"
-tempfile = "3.3"
-clap = { version = "4.0", features = ["derive"] }
+image = "0.25.10"
+tempfile = "3.27"
+clap = { version = "4.6", features = ["derive"] }
 
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }
@@ -21,7 +21,7 @@ cleaner = { path = "../cleaner" }
 mimalloc = "0.1"
 
 [target.'cfg(windows)'.dependencies]
-winreg = "0.55.0"
+winreg = "0.56.0"
 
 [target.'cfg(windows)'.build-dependencies]
 winres = "0.1.12"
