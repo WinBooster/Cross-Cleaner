@@ -3201,6 +3201,15 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\.namida",
+    "class": "Audio",
+    "category": "LastActivity",
+    "program": "Namida",
+    "directories_to_remove": [
+      "History"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim",
     "class": "Text",
     "category": "Documentation",

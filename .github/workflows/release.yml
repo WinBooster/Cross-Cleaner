@@ -185,7 +185,7 @@ jobs:
           tag_name: v${{ env.APP_VERSION }}
           name: 🌟 Cross Cleaner ${{ env.APP_VERSION }} 🌟
           body: |
-            ![Downloads](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}/total) ![Version](https://img.shields.io/badge/version-${{ env.APP_VERSION }}-blue) ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux-orange)
+            ![Downloads](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}/total) ![Version](https://img.shields.io/badge/version-${{ env.APP_VERSION }}-blue) ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux|%20MacOS-orange)
 
             ## ✨ What's New
 
@@ -195,6 +195,7 @@ jobs:
             - **FlowLauncher** Added logs, cache, last activity clearing
             - **Recaf** Improved logs clearing
             - **Genshin Impact** Improved logs clearing
+            - **Namida** Added last activity clearing
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:

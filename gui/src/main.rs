@@ -137,12 +137,15 @@ const TITLE_BAR_HEIGHT: f32 = 32.0;
 const TITLE_BAR_BUTTONS_WIDTH: f32 = 96.0;
 
 /// Custom window title bar: drag-to-move, minimize and close buttons.
+/// Optionally shows a back button (returns whether it was clicked).
 fn title_bar(
     ui: &mut egui::Ui,
     ctx: &egui::Context,
     title: &str,
     icon_texture: Option<&egui::TextureHandle>,
-) {
+    show_back: bool,
+) -> bool {
+    let back_clicked = RefCell::new(false);
     let panel_frame = egui::Frame::new()
         .inner_margin(egui::Margin::symmetric(8, 0))
         .fill(ui.visuals().window_fill);
@@ -166,6 +169,14 @@ fn title_bar(
                 }
                 paint_minimize_glyph(ui, minimize.rect);
                 ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
+                    if show_back {
+                        let back = title_bar_button(ui);
+                        if back.clicked() {
+                            *back_clicked.borrow_mut() = true;
+                        }
+                        paint_back_glyph(ui, back.rect);
+                        ui.add_space(4.0);
+                    }
                     ui.add_space(4.0);
                     if let Some(tex) = icon_texture {
                         let icon = egui::Image::from_texture(egui::load::SizedTexture::new(
@@ -179,12 +190,17 @@ fn title_bar(
                 });
             });
         });
+    let back_clicked = back_clicked.into_inner();
 
     // Drag area: whole bar except the button zone on the right, so buttons
     // get a single click instead of the drag overlay swallowing it.
     let bar_rect = title_bar.response.rect;
+    let left_reserved = if show_back { 44.0 } else { 0.0 };
     let drag_rect = egui::Rect::from_min_max(
-        bar_rect.min,
+        egui::pos2(
+            (bar_rect.min.x + left_reserved).min(bar_rect.max.x),
+            bar_rect.min.y,
+        ),
         egui::pos2(
             (bar_rect.max.x - TITLE_BAR_BUTTONS_WIDTH).max(bar_rect.min.x),
             bar_rect.max.y,
@@ -198,6 +214,8 @@ fn title_bar(
     if drag_response.drag_started() {
         ctx.send_viewport_cmd(egui::ViewportCommand::StartDrag);
     }
+
+    back_clicked
 }
 
 /// A flat click area in the title bar (hover highlight, no frame).
@@ -219,17 +237,36 @@ fn paint_close_glyph(ui: &egui::Ui, rect: egui::Rect) {
     let c = rect.center();
     let h = 5.0;
     let stroke = egui::Stroke::new(1.5, ui.visuals().text_color());
-    ui.painter()
-        .line_segment([egui::pos2(c.x - h, c.y - h), egui::pos2(c.x + h, c.y + h)], stroke);
-    ui.painter()
-        .line_segment([egui::pos2(c.x - h, c.y + h), egui::pos2(c.x + h, c.y - h)], stroke);
+    ui.painter().line_segment(
+        [egui::pos2(c.x - h, c.y - h), egui::pos2(c.x + h, c.y + h)],
+        stroke,
+    );
+    ui.painter().line_segment(
+        [egui::pos2(c.x - h, c.y + h), egui::pos2(c.x + h, c.y - h)],
+        stroke,
+    );
 }
 
 fn paint_minimize_glyph(ui: &egui::Ui, rect: egui::Rect) {
     let c = rect.center();
     let stroke = egui::Stroke::new(1.5, ui.visuals().text_color());
-    ui.painter()
-        .line_segment([egui::pos2(c.x - 5.0, c.y), egui::pos2(c.x + 5.0, c.y)], stroke);
+    ui.painter().line_segment(
+        [egui::pos2(c.x - 5.0, c.y), egui::pos2(c.x + 5.0, c.y)],
+        stroke,
+    );
+}
+
+fn paint_back_glyph(ui: &egui::Ui, rect: egui::Rect) {
+    let c = rect.center();
+    let stroke = egui::Stroke::new(1.5, ui.visuals().text_color());
+    ui.painter().line_segment(
+        [egui::pos2(c.x + 2.5, c.y - 5.0), egui::pos2(c.x - 2.5, c.y)],
+        stroke,
+    );
+    ui.painter().line_segment(
+        [egui::pos2(c.x - 2.5, c.y), egui::pos2(c.x + 2.5, c.y + 5.0)],
+        stroke,
+    );
 }
 
 /// Decodes the application icon into an egui texture (original colors).
@@ -821,6 +858,42 @@ impl MyApp {
 impl eframe::App for MyApp {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
         let ctx = ui.ctx().clone();
+        let focused = ctx.input(|i| i.viewport().focused.unwrap_or(false));
+        if focused {
+            let painter = ctx.layer_painter(egui::LayerId::new(
+                egui::Order::Foreground,
+                egui::Id::new("focused_window_border"),
+            ));
+            let r = ctx.viewport_rect();
+            let t = 2.0;
+            let c = egui::Color32::from_rgb(0, 120, 215);
+            painter.rect_filled(
+                egui::Rect::from_min_max(r.min, egui::pos2(r.max.x, r.min.y + t)),
+                0.0,
+                c,
+            );
+            painter.rect_filled(
+                egui::Rect::from_min_max(
+                    egui::pos2(r.min.x, r.max.y - t - 1.0),
+                    egui::pos2(r.max.x, r.max.y - 1.0),
+                ),
+                0.0,
+                c,
+            );
+            painter.rect_filled(
+                egui::Rect::from_min_max(r.min, egui::pos2(r.min.x + t, r.max.y)),
+                0.0,
+                c,
+            );
+            painter.rect_filled(
+                egui::Rect::from_min_max(
+                    egui::pos2(r.max.x - t, r.min.y),
+                    egui::pos2(r.max.x, r.max.y),
+                ),
+                0.0,
+                c,
+            );
+        }
         if let Some(receiver) = &mut self.progress_receiver {
             if let Ok(message) = receiver.try_recv() {
                 if message.starts_with("PROGRESS:") {
@@ -845,6 +918,7 @@ impl eframe::App for MyApp {
                 self.cleared_data = Some(result);
                 self.show_results = true;
                 self.results_window_resized = false; // Reset flag for new results
+                self.result_receiver = None; // Consume the result once
                 ctx.request_repaint();
             }
         }
@@ -852,15 +926,16 @@ impl eframe::App for MyApp {
         if let Some(handle) = &mut self.task_handle {
             if handle.is_finished() {
                 let handle = self.task_handle.take().unwrap();
-                let sender = self.result_sender.take().unwrap();
-                tokio::spawn(async move {
-                    match handle.await {
-                        Ok(result) => {
-                            let _ = sender.send(result).await;
+                if let Some(sender) = self.result_sender.take() {
+                    tokio::spawn(async move {
+                        match handle.await {
+                            Ok(result) => {
+                                let _ = sender.send(result).await;
+                            }
+                            Err(e) => eprintln!("Task failed: {:?}", e),
                         }
-                        Err(e) => eprintln!("Task failed: {:?}", e),
-                    }
-                });
+                    });
+                }
             }
         }
 
@@ -872,8 +947,18 @@ impl eframe::App for MyApp {
                 egui::TextureOptions::LINEAR,
             ));
         }
-        title_bar(ui, &ctx, &title, self.icon_texture.as_ref());
-
+        let show_back =
+            (self.show_results && self.cleared_data.is_some()) || self.show_program_selection;
+        let back_clicked = title_bar(ui, &ctx, &title, self.icon_texture.as_ref(), show_back);
+        if back_clicked {
+            if self.show_program_selection {
+                self.show_program_selection = false;
+            } else {
+                self.show_results = false;
+                self.cleared_data = None;
+                self.results_window_resized = false;
+            }
+        }
         let inner_margin = 8;
         egui::CentralPanel::default()
             .frame(
@@ -1169,6 +1254,9 @@ impl eframe::App for MyApp {
 
                             let (progress_sender, progress_receiver) = mpsc::channel(32);
                             self.progress_receiver = Some(progress_receiver);
+                            let (result_sender, result_receiver) = mpsc::channel(1);
+                            self.result_sender = Some(result_sender);
+                            self.result_receiver = Some(result_receiver);
                             self.current_task = 0;
                             self.total_tasks = 0;
                             self.cleaned_bytes = 0;
