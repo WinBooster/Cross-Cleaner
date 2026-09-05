@@ -874,8 +874,8 @@ impl eframe::App for MyApp {
             );
             painter.rect_filled(
                 egui::Rect::from_min_max(
-                    egui::pos2(r.min.x, r.max.y - t - 1.0),
-                    egui::pos2(r.max.x, r.max.y - 1.0),
+                    egui::pos2(r.min.x, r.max.y - t - 2.0),
+                    egui::pos2(r.max.x, r.max.y - 2.0),
                 ),
                 0.0,
                 c,
