@@ -143,6 +143,24 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\anarchyloader",
+    "class": "Cheat",
+    "category": "Logs",
+    "program": "AnarchyLoader",
+    "files_to_remove": [
+      "anarchyloader.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming",
+    "class": "Cheat",
+    "category": "Cheats",
+    "program": "AnarchyLoader",
+    "directories_to_remove": [
+      "anarchyloader"
+    ]
+  },
+  {
     "path": "{drive}ArcheAge\\Documents\\*.log",
     "category": "Logs",
     "program": "ArcheAge",
@@ -717,6 +735,15 @@
       "7zip.license.txt",
       "checksum.license.txt",
       "shimgen.license.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\cliamp",
+    "class": "Audio",
+    "category": "Logs",
+    "program": "Cliamp",
+    "files_to_remove": [
+      "cliamp.log"
     ]
   },
   {
@@ -1315,6 +1342,15 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Everything",
+    "class": "Utility",
+    "category": "LastActivity",
+    "program": "Everything",
+    "files_to_remove": [
+      "Run History.csv"
+    ]
+  },
+  {
     "path": "{drive}exechack",
     "class": "Cheat",
     "category": "Cheats",
@@ -1394,6 +1430,34 @@
     "program": "FL Studio",
     "files_to_remove": [
       "What's new.lnk"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher",
+    "class": "Program Launcher",
+    "category": "Logs",
+    "program": "FlowLauncher",
+    "directories_to_remove": [
+      "Logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher",
+    "class": "Program Launcher",
+    "category": "Cache",
+    "program": "FlowLauncher",
+    "directories_to_remove": [
+      "Cache"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher\\Settings",
+    "class": "Program Launcher",
+    "category": "LastActivity",
+    "program": "FlowLauncher",
+    "files_to_remove": [
+      "History.json",
+      "History.json.bak"
     ]
   },
   {
@@ -3523,6 +3587,24 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ai.opencode.desktop",
+    "class": "AI",
+    "category": "Logs",
+    "program": "OpenCode Desktop",
+    "directories_to_remove": [
+      "logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ai.opencode.desktop",
+    "class": "AI",
+    "category": "Cache",
+    "program": "OpenCode Desktop",
+    "directories_to_remove": [
+      "Cache"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera GX Stable\\Network",
     "class": "Browser",
     "category": "Browser",
@@ -4980,6 +5062,24 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\app.waveflow\\waveflow\\profiles\\*",
+    "class": "Audio",
+    "category": "Cache",
+    "program": "WaveFlow",
+    "directories_to_remove": [
+      "artwork"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\app.waveflow\\waveflow",
+    "class": "Audio",
+    "category": "Cache",
+    "program": "WaveFlow",
+    "directories_to_remove": [
+      "metadata_artwork"
+    ]
+  },
+  {
     "path": "{drive}Weave",
     "class": "Cheat",
     "category": "Cheats",
@@ -5482,106 +5582,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\cliamp",
-    "class": "Audio",
-    "category": "Logs",
-    "program": "Cliamp",
-    "files_to_remove": [
-      "cliamp.log"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\anarchyloader",
-    "class": "Cheat",
-    "category": "Logs",
-    "program": "AnarchyLoader",
-    "files_to_remove": [
-      "anarchyloader.log"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming",
-    "class": "Cheat",
-    "category": "Cheats",
-    "program": "AnarchyLoader",
-    "directories_to_remove": [
-      "anarchyloader"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Everything",
-    "class": "Utility",
-    "category": "LastActivity",
-    "program": "Everything",
-    "files_to_remove": [
-      "Run History.csv"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher",
-    "class": "Program Launcher",
-    "category": "Logs",
-    "program": "FlowLauncher",
-    "directories_to_remove": [
-      "Logs"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher",
-    "class": "Program Launcher",
-    "category": "Cache",
-    "program": "FlowLauncher",
-    "directories_to_remove": [
-      "Cache"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher\\Settings",
-    "class": "Program Launcher",
-    "category": "LastActivity",
-    "program": "FlowLauncher",
-    "files_to_remove": [
-      "History.json",
-      "History.json.bak"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\app.waveflow\\waveflow\\profiles\\*",
-    "class": "Audio",
-    "category": "Cache",
-    "program": "WaveFlow",
-    "directories_to_remove": [
-      "artwork"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\app.waveflow\\waveflow",
-    "class": "Audio",
-    "category": "Cache",
-    "program": "WaveFlow",
-    "directories_to_remove": [
-      "metadata_artwork"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ai.opencode.desktop",
-    "class": "AI",
-    "category": "Logs",
-    "program": "OpenCode Desktop",
-    "directories_to_remove": [
-      "logs"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ai.opencode.desktop",
-    "class": "AI",
-    "category": "Cache",
-    "program": "OpenCode Desktop",
-    "directories_to_remove": [
-      "Cache"
     ]
   }
 ]
