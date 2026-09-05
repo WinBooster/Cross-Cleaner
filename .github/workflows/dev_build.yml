@@ -110,7 +110,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build linux
-        run: cargo build --release
+        run: cargo +nightly build --release
       - name: List files for debugging
         run: ls -la target/release/
       - name: Move linux binaries
@@ -133,7 +133,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build windows
-        run: cargo build --release
+        run: cargo +nightly build --release
       - name: List files for debugging
         run: dir target\release\
       - name: Move windows binaries
@@ -155,7 +155,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build macos
-        run: cargo build --release
+        run: cargo +nightly build --release
       - name: List files for debugging
         run: ls -la target/release/
       - name: Move macos binaries

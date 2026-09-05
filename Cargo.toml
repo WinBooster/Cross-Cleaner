@@ -10,6 +10,9 @@ strip = true
 panic = "abort"
 debug = false
 
+[profile.dev]
+debug = "line-tables-only"
+
 [profile.bench]
 inherits = "release"
 

@@ -1444,6 +1444,13 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\GME\\GenshinImpact.exe\\*.log",
+    "category": "Logs",
+    "program": "Genshin Impact",
+    "class": "Game",
+    "remove_files": true
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ghidra\\ghidra*\\*.log",
     "class": "Developing",
     "category": "Logs",
@@ -4086,13 +4093,28 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Recaf\\*.log",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Recaf",
     "class": "Developing",
     "category": "Logs",
     "program": "Recaf",
-    "remove_files": true,
     "directories_to_remove": [
       "logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Recaf\\log*.txt",
+    "class": "Developing",
+    "category": "Logs",
+    "program": "Recaf",
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Recaf\\launcher",
+    "class": "Developing",
+    "category": "Logs",
+    "program": "Recaf",
+    "files_to_remove": [
+      "launcher-log.txt"
     ]
   },
   {
@@ -5451,6 +5473,106 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\cliamp",
+    "class": "Audio",
+    "category": "Logs",
+    "program": "Cliamp",
+    "files_to_remove": [
+      "cliamp.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\anarchyloader",
+    "class": "Cheat",
+    "category": "Logs",
+    "program": "AnarchyLoader",
+    "files_to_remove": [
+      "anarchyloader.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming",
+    "class": "Cheat",
+    "category": "Cheats",
+    "program": "AnarchyLoader",
+    "directories_to_remove": [
+      "anarchyloader"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Everything",
+    "class": "Utility",
+    "category": "LastActivity",
+    "program": "Everything",
+    "files_to_remove": [
+      "Run History.csv"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher",
+    "class": "Program Launcher",
+    "category": "Logs",
+    "program": "FlowLauncher",
+    "directories_to_remove": [
+      "Logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher",
+    "class": "Program Launcher",
+    "category": "Cache",
+    "program": "FlowLauncher",
+    "directories_to_remove": [
+      "Cache"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher\\Settings",
+    "class": "Program Launcher",
+    "category": "LastActivity",
+    "program": "FlowLauncher",
+    "files_to_remove": [
+      "History.json",
+      "History.json.bak"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\app.waveflow\\waveflow\\profiles\\*",
+    "class": "Audio",
+    "category": "Cache",
+    "program": "WaveFlow",
+    "directories_to_remove": [
+      "artwork"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\app.waveflow\\waveflow",
+    "class": "Audio",
+    "category": "Cache",
+    "program": "WaveFlow",
+    "directories_to_remove": [
+      "metadata_artwork"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ai.opencode.desktop",
+    "class": "AI",
+    "category": "Logs",
+    "program": "OpenCode Desktop",
+    "directories_to_remove": [
+      "logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ai.opencode.desktop",
+    "class": "AI",
+    "category": "Cache",
+    "program": "OpenCode Desktop",
+    "directories_to_remove": [
+      "Cache"
     ]
   }
 ]

@@ -103,7 +103,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build linux
-        run: cargo build --release
+        run: cargo +nightly build --release
       - name: Move linux binaries
         run: |
           mv target/release/Cross_Cleaner_CLI Linux-Cross_Cleaner_CLI
@@ -123,7 +123,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build windows
-        run: cargo build --release
+        run: cargo +nightly build --release
       - name: Move windows binaries
         run: |
           move target\release\Cross_Cleaner_CLI.exe Windows-Cross_Cleaner_CLI.exe
@@ -143,7 +143,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build macos
-        run: cargo build --release
+        run: cargo +nightly build --release
       - name: Move macos binaries
         run: |
           mv target/release/Cross_Cleaner_CLI MacOS-Arm64-Cross_Cleaner_CLI
@@ -190,8 +190,11 @@ jobs:
             ## ✨ What's New
 
             ### 🪟 Windows Enhancements
-            - **dnSpy** Added last activity clearing
-            - **Visual Studio** Added last activity clearing
+            - **Salwyrr Launcher** Added documentation clearing
+            - **Cliamp** Added logs clearing
+            - **FlowLauncher** Added logs, cache, last activity clearing
+            - **Recaf** Improved logs clearing
+            - **Genshin Impact** Improved logs clearing
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:

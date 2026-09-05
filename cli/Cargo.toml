@@ -34,9 +34,9 @@ winapi = { version = "0.3", features = [
 winres = "0.1.12"
 
 [package.metadata.winres]
-FileDescription = "Garbage remover"
+FileDescription = "Cross Cleaner"
 OriginalFilename = "Cross Cleaner.exe"
-LegalCopyright = "Copyright Monolith Development © 2025"
+LegalCopyright = "Copyright Monolith Development © 2026"
 ProductName = "Cross Cleaner"
 
 [dev-dependencies]

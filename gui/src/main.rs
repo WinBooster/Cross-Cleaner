@@ -103,8 +103,8 @@ async fn main() -> eframe::Result {
     let app = MyApp::from_database(Arc::from(database), custom_database);
     let checkbox_count = app.categories.len();
     let rows = checkbox_count.div_ceil(3);
-    // INFO: 20px for 1 checkbox, 45px for button
-    let height = (rows * 20) + 45;
+    // INFO: 20px for 1 checkbox, 45px for button, 32px for custom title bar
+    let height = (rows * 20) + 45 + TITLE_BAR_HEIGHT as usize;
 
     let size = egui::vec2(470.0, height as f32);
     let options = eframe::NativeOptions {
@@ -114,6 +114,7 @@ async fn main() -> eframe::Result {
             .with_max_inner_size(size)
             .with_resizable(false)
             .with_maximize_button(false)
+            .with_decorations(false)
             .with_icon(icon),
         ..Default::default()
     };
@@ -126,6 +127,128 @@ async fn main() -> eframe::Result {
             Ok(Box::new(app))
         }),
     )
+}
+
+/// Height of the custom title bar (in points).
+const TITLE_BAR_HEIGHT: f32 = 32.0;
+
+// Width reserved for the close & minimize buttons (drag area excludes them
+// so a single click always reaches the buttons instead of starting a drag).
+const TITLE_BAR_BUTTONS_WIDTH: f32 = 96.0;
+
+/// Custom window title bar: drag-to-move, minimize and close buttons.
+fn title_bar(
+    ui: &mut egui::Ui,
+    ctx: &egui::Context,
+    title: &str,
+    icon_texture: Option<&egui::TextureHandle>,
+) {
+    let panel_frame = egui::Frame::new()
+        .inner_margin(egui::Margin::symmetric(8, 0))
+        .fill(ui.visuals().window_fill);
+
+    let title_bar = egui::Panel::top("custom_title_bar")
+        .exact_size(TITLE_BAR_HEIGHT)
+        .resizable(false)
+        .frame(panel_frame)
+        .show(ui, |ui| {
+            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                // Windows order: close rightmost, minimize to its left.
+                // Glyphs are painted manually (default egui font has no ✕/— glyphs).
+                let close = title_bar_button(ui);
+                if close.clicked() {
+                    ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+                }
+                paint_close_glyph(ui, close.rect);
+                let minimize = title_bar_button(ui);
+                if minimize.clicked() {
+                    ctx.send_viewport_cmd(egui::ViewportCommand::Minimized(true));
+                }
+                paint_minimize_glyph(ui, minimize.rect);
+                ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
+                    ui.add_space(4.0);
+                    if let Some(tex) = icon_texture {
+                        let icon = egui::Image::from_texture(egui::load::SizedTexture::new(
+                            tex.id(),
+                            tex.size_vec2(),
+                        ))
+                        .fit_to_exact_size(egui::vec2(16.0, 16.0));
+                        ui.add_sized(egui::vec2(16.0, 16.0), icon);
+                    }
+                    ui.strong(title);
+                });
+            });
+        });
+
+    // Drag area: whole bar except the button zone on the right, so buttons
+    // get a single click instead of the drag overlay swallowing it.
+    let bar_rect = title_bar.response.rect;
+    let drag_rect = egui::Rect::from_min_max(
+        bar_rect.min,
+        egui::pos2(
+            (bar_rect.max.x - TITLE_BAR_BUTTONS_WIDTH).max(bar_rect.min.x),
+            bar_rect.max.y,
+        ),
+    );
+    let drag_response = ui.interact(
+        drag_rect,
+        ui.id().with("title_bar_drag"),
+        egui::Sense::click_and_drag(),
+    );
+    if drag_response.drag_started() {
+        ctx.send_viewport_cmd(egui::ViewportCommand::StartDrag);
+    }
+}
+
+/// A flat click area in the title bar (hover highlight, no frame).
+fn title_bar_button(ui: &mut egui::Ui) -> egui::Response {
+    let (rect, resp) =
+        ui.allocate_exact_size(egui::vec2(40.0, TITLE_BAR_HEIGHT), egui::Sense::click());
+    if resp.hovered() || resp.is_pointer_button_down_on() {
+        let fill = if resp.is_pointer_button_down_on() {
+            ui.visuals().widgets.active.bg_fill
+        } else {
+            ui.visuals().widgets.hovered.bg_fill
+        };
+        ui.painter().rect_filled(rect, 0.0, fill);
+    }
+    resp
+}
+
+fn paint_close_glyph(ui: &egui::Ui, rect: egui::Rect) {
+    let c = rect.center();
+    let h = 5.0;
+    let stroke = egui::Stroke::new(1.5, ui.visuals().text_color());
+    ui.painter()
+        .line_segment([egui::pos2(c.x - h, c.y - h), egui::pos2(c.x + h, c.y + h)], stroke);
+    ui.painter()
+        .line_segment([egui::pos2(c.x - h, c.y + h), egui::pos2(c.x + h, c.y - h)], stroke);
+}
+
+fn paint_minimize_glyph(ui: &egui::Ui, rect: egui::Rect) {
+    let c = rect.center();
+    let stroke = egui::Stroke::new(1.5, ui.visuals().text_color());
+    ui.painter()
+        .line_segment([egui::pos2(c.x - 5.0, c.y), egui::pos2(c.x + 5.0, c.y)], stroke);
+}
+
+/// Decodes the application icon into an egui texture (original colors).
+fn load_icon_color_image() -> egui::ColorImage {
+    let img = ImageReader::new(std::io::Cursor::new(get_icon()))
+        .with_guessed_format()
+        .expect("app icon format")
+        .decode()
+        .expect("decode app icon")
+        .to_rgba8();
+    let (w, h) = (img.width() as usize, img.height() as usize);
+    egui::ColorImage {
+        size: [w, h],
+        source_size: egui::Vec2::new(w as f32, h as f32),
+        pixels: img
+            .pixels()
+            .map(|p| egui::Color32::from_rgba_unmultiplied(p[0], p[1], p[2], p[3]))
+            .collect(),
+    }
 }
 
 fn load_icon_from_bytes(bytes: &[u8]) -> Result<Arc<IconData>, image::ImageError> {
@@ -424,6 +547,7 @@ struct MyApp {
     #[cfg(windows)]
     pub regisry_database: Arc<[CleanerDataRegistry]>,
     pub menu_texture: Option<egui::TextureHandle>,
+    pub icon_texture: Option<egui::TextureHandle>,
 }
 
 // Embedded menu image bytes (required to be embedded)
@@ -577,6 +701,7 @@ impl MyApp {
             result_sender: Some(result_sender),
             result_receiver: Some(result_receiver),
             menu_texture: None,
+            icon_texture: None,
         }
     }
 
@@ -674,6 +799,7 @@ impl MyApp {
             result_sender: Some(result_sender),
             result_receiver: Some(result_receiver),
             menu_texture: None,
+            icon_texture: None,
         }
     }
 
@@ -738,6 +864,16 @@ impl eframe::App for MyApp {
             }
         }
 
+        let title = format!("Cross Cleaner GUI v{}", get_version());
+        if self.icon_texture.is_none() {
+            self.icon_texture = Some(ctx.load_texture(
+                "app_icon",
+                load_icon_color_image(),
+                egui::TextureOptions::LINEAR,
+            ));
+        }
+        title_bar(ui, &ctx, &title, self.icon_texture.as_ref());
+
         let inner_margin = 8;
         egui::CentralPanel::default()
             .frame(
@@ -748,7 +884,8 @@ impl eframe::App for MyApp {
             .show(ui, |ui| {
                 if self.task_handle.is_some() {
                     ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
-                        470.0, 100.0,
+                        470.0,
+                        100.0 + TITLE_BAR_HEIGHT,
                     )));
                     // Панель даёт 8px, текст добирает 12px от краёв экрана
                     ui.vertical(|ui| {
@@ -839,7 +976,7 @@ impl eframe::App for MyApp {
                         // Resize window only once when results are first shown
                         if !self.results_window_resized {
                             ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(
-                                egui::Vec2::new(total_width, total_height),
+                                egui::Vec2::new(total_width, total_height + TITLE_BAR_HEIGHT),
                             ));
                             self.results_window_resized = true;
                         }
@@ -960,7 +1097,7 @@ impl eframe::App for MyApp {
 
                     ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
                         500.0,
-                        window_height,
+                        window_height + TITLE_BAR_HEIGHT,
                     )));
 
                     ui.vertical_centered(|ui| {
@@ -1075,7 +1212,7 @@ impl eframe::App for MyApp {
 
                     ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
                         470.0,
-                        window_height,
+                        window_height + TITLE_BAR_HEIGHT,
                     )));
 
                     if self.menu_texture.is_none() {

@@ -197,6 +197,7 @@ macro_rules! custom_glob_cleaner {
 pub fn register_all() {
     // Removes the CodeContainers.Offline entry (offline recent projects list)
     // from Visual Studio ApplicationPrivateSettings.xml
+    #[cfg(windows)]
     let _ = custom_glob_cleaner! {
         id: "vs_code_containers_offline",
         program: "Visual Studio",
@@ -210,6 +211,7 @@ pub fn register_all() {
     };
 
     // Removes the FileLists section (recent files list) from dnSpy.xml
+    #[cfg(windows)]
     let _ = custom_glob_cleaner! {
         id: "dnspy_recent_files",
         program: "dnSpy",
