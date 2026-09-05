@@ -1227,18 +1227,7 @@ impl eframe::App for MyApp {
                     ui.horizontal(|ui| {
                         if ui
                             .add_sized(
-                                [available_width / 2.0 - 5.0, 25.0],
-                                egui::Button::new("Back"),
-                            )
-                            .clicked()
-                        {
-                            self.show_program_selection = false;
-                            // Window will resize dynamically in the next frame based on category count
-                        }
-
-                        if ui
-                            .add_sized(
-                                [available_width / 2.0 - 5.0, 25.0],
+                                [available_width, 25.0],
                                 egui::Button::new("Start Cleaning"),
                             )
                             .clicked()
