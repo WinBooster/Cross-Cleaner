@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.2.6
+# Windows Clearing Programs Catalog v2.0.2.7
 **Total categories in database:** 12
 
-**Total programs in database:** 203
+**Total programs in database:** 209
 
-**Total pathes in database:** 459
+**Total pathes in database:** 473
 
 ## AI
 
@@ -13,6 +13,7 @@
 | 2 | [Copilot](https://copilot.microsoft.com/) | Logs |
 | 3 | [LM Studio](https://lmstudio.ai/download) | LastActivity, Logs |
 | 4 | [Microsoft Lobe](https://github.com/orgs/lobe) | Logs |
+| 5 | [OpenCode Desktop](https://opencode.ai/download) | Cache, Logs |
 
 
 ## AntiCheat
@@ -40,12 +41,14 @@
 | 1 | [AAF Optimus DCH Audio](https://github.com/AAFOptimus/AAFFamilyDCHAudio) | Documentation |
 | 2 | [ASIO4ALL v2](https://asio4all.org/about/download-asio4all) | Documentation |
 | 3 | [Audacity](https://www.audacityteam.org) | Documentation |
-| 4 | [FL Studio](https://www.image-line.com/fl-studio-download) | Documentation |
-| 5 | [Murglar](https://murglar.app) | Logs |
-| 6 | [Namida](https://github.com/namidaco/namida) | Documentation, Logs |
-| 7 | [SoundWire Server](https://georgielabs.net) | Documentation |
-| 8 | [Spotify](https://open.spotify.com/download) | Cache, Logs |
-| 9 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
+| 4 | [Cliamp](https://github.com/bjarneo/cliamp) | Logs |
+| 5 | [FL Studio](https://www.image-line.com/fl-studio-download) | Documentation |
+| 6 | [Murglar](https://murglar.app) | Logs |
+| 7 | [Namida](https://github.com/namidaco/namida) | Documentation, LastActivity, Logs |
+| 8 | [SoundWire Server](https://georgielabs.net) | Documentation |
+| 9 | [Spotify](https://open.spotify.com/download) | Cache, Logs |
+| 10 | [WaveFlow](https://github.com/InstaZDLL/WaveFlow) | Cache |
+| 11 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
 
 
 ## Browser
@@ -66,16 +69,17 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [Cheat Engine](https://www.cheatengine.org/downloads.php) | Cheats, Documentation |
-| 2 | [ExecHack](https://exechack.cc) | Cheats |
-| 3 | [Fatality](https://fatality.win) | Cheats |
-| 4 | [INTERIUM](https://ru.interium.ooo) | Cheats |
-| 5 | [Krnl](https://wearedevs.net/d/Krnl) | Cheats |
-| 6 | [OneTap](https://www.onetap.com) | Cheats |
-| 7 | Pandora | Cheats |
-| 8 | [RusherHack](https://rusherhack.org) | Cheats |
-| 9 | [Vape Client](https://www.vape.gg) | Cheats |
-| 10 | [Weave](https://weave.su) | Cheats |
+| 1 | [AnarchyLoader](https://github.com/AnarchyLoader/AnarchyLoader) | Cheats, Logs |
+| 2 | [Cheat Engine](https://www.cheatengine.org/downloads.php) | Cheats, Documentation |
+| 3 | [ExecHack](https://exechack.cc) | Cheats |
+| 4 | [Fatality](https://fatality.win) | Cheats |
+| 5 | [INTERIUM](https://ru.interium.ooo) | Cheats |
+| 6 | [Krnl](https://wearedevs.net/d/Krnl) | Cheats |
+| 7 | [OneTap](https://www.onetap.com) | Cheats |
+| 8 | Pandora | Cheats |
+| 9 | [RusherHack](https://rusherhack.org) | Cheats |
+| 10 | [Vape Client](https://www.vape.gg) | Cheats |
+| 11 | [Weave](https://weave.su) | Cheats |
 
 
 ## Crypto Wallet
@@ -227,7 +231,8 @@
 | 14 | [MultiMC](https://multimc.org/#Download) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
 | 15 | [PolyMC](https://polymc.org/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
 | 16 | [PrismLauncher](https://prismlauncher.org/download/windows) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
-| 17 | [Tecknix Client](https://tecknix.com/download.html) | Accounts, Cache, Crashes, Documentation, Game, Images, Logs |
+| 17 | Salwyrr Launcher | Documentation |
+| 18 | [Tecknix Client](https://tecknix.com/download.html) | Accounts, Cache, Crashes, Documentation, Game, Images, Logs |
 
 
 ## Optimization
@@ -257,6 +262,13 @@
 | 1 | [1Password](https://1password.com/) | Logs |
 | 2 | [KeePass 2](https://keepass.info/download.html) | Logs |
 | 3 | [KeePassXC](https://keepassxc.org/download) | Documentation |
+
+
+## Program Launcher
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | FlowLauncher | Cache, LastActivity, Logs |
 
 
 ## Security
@@ -345,7 +357,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [Everything](https://www.voidtools.com) | Documentation |
+| 1 | [Everything](https://www.voidtools.com) | Documentation, LastActivity |
 | 2 | [MiniBin](https://github.com/king-tri-ton/minibin) | Logs |
 | 3 | [PowerToys](https://github.com/microsoft/PowerToys) | Documentation |
 | 4 | [Unlocker](http://www.emptyloop.com/unlocker) | Documentation |
