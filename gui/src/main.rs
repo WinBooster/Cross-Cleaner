@@ -1226,10 +1226,7 @@ impl eframe::App for MyApp {
                     let available_width = ui.available_width();
                     ui.horizontal(|ui| {
                         if ui
-                            .add_sized(
-                                [available_width, 25.0],
-                                egui::Button::new("Start Cleaning"),
-                            )
+                            .add_sized([available_width, 25.0], egui::Button::new("Start Cleaning"))
                             .clicked()
                         {
                             let selected_map = self.selected_map();
