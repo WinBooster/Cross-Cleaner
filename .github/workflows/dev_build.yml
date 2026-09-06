@@ -115,14 +115,12 @@ jobs:
         run: ls -la target/release/
       - name: Move linux binaries
         run: |
-          mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI_Linux
           mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI_Linux
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
         with:
           name: linux-binaries
           path: |
-            Cross_Cleaner_CLI_Linux
             Cross_Cleaner_GUI_Linux
 
   build_windows:
@@ -138,14 +136,12 @@ jobs:
         run: dir target\release\
       - name: Move windows binaries
         run: |
-          move target\release\Cross_Cleaner_CLI.exe Cross_Cleaner_CLI_Windows.exe
           move target\release\Cross_Cleaner_GUI.exe Cross_Cleaner_GUI_Windows.exe
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows-binaries
           path: |
-            Cross_Cleaner_CLI_Windows.exe
             Cross_Cleaner_GUI_Windows.exe
   build_macos:
     runs-on: macos-latest
@@ -160,12 +156,10 @@ jobs:
         run: ls -la target/release/
       - name: Move macos binaries
         run: |
-          mv target/release/Cross_Cleaner_CLI Cross_Cleaner_CLI_MacOS
           mv target/release/Cross_Cleaner_GUI Cross_Cleaner_GUI_MacOS
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: macos-binaries
           path: |
-            Cross_Cleaner_CLI_MacOS
             Cross_Cleaner_GUI_MacOS

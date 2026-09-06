@@ -106,14 +106,12 @@ jobs:
         run: cargo +nightly build --release
       - name: Move linux binaries
         run: |
-          mv target/release/Cross_Cleaner_CLI Linux-Cross_Cleaner_CLI
           mv target/release/Cross_Cleaner_GUI Linux-Cross_Cleaner_GUI
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
         with:
           name: linux-binaries
           path: |
-            Linux-Cross_Cleaner_CLI
             Linux-Cross_Cleaner_GUI
   build_windows:
     runs-on: windows-latest
@@ -126,14 +124,12 @@ jobs:
         run: cargo +nightly build --release
       - name: Move windows binaries
         run: |
-          move target\release\Cross_Cleaner_CLI.exe Windows-Cross_Cleaner_CLI.exe
           move target\release\Cross_Cleaner_GUI.exe Windows-Cross_Cleaner_GUI.exe
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows-binaries
           path: |
-            Windows-Cross_Cleaner_CLI.exe
             Windows-Cross_Cleaner_GUI.exe
   build_macos_arm64:
     runs-on: macos-latest
@@ -146,14 +142,12 @@ jobs:
         run: cargo +nightly build --release
       - name: Move macos binaries
         run: |
-          mv target/release/Cross_Cleaner_CLI MacOS-Arm64-Cross_Cleaner_CLI
           mv target/release/Cross_Cleaner_GUI MacOS-Arm64-Cross_Cleaner_GUI
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: macos-binaries-arm64
           path: |
-            MacOS-Arm64-Cross_Cleaner_CLI
             MacOS-Arm64-Cross_Cleaner_GUI
   create_release:
     needs: [build_linux, build_windows, build_macos_arm64]
@@ -190,17 +184,7 @@ jobs:
             ## ✨ What's New
 
             ### 🪟 Windows Enhancements
-            - **Zed** Fixed logs clearing
-            - **Opera** Added browser clearing
-            - **Opera Air** Added browser clearing
-            - **Opera Neon** Added browser clearing
-            - **Yandex Browser** Added browser clearing
-            - **Ruffle** Added documentation clearing
-            - **Namida** Added backups clearing
-            - **CollapseLoader** Added accounts, cache, and cheats clearing
-            - **Windows PowerShell** Added last activity history clearing
-            - **Windows** Added event viewer logs clearing
-            - **qTox** Improved logs clearing
+            -
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
@@ -209,11 +193,8 @@ jobs:
             ---
             *Thank you for using Cross Cleaner! Your system, cleaner than ever.*
           files: |
-            linux-binaries/Linux-Cross_Cleaner_CLI
             linux-binaries/Linux-Cross_Cleaner_GUI
-            macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_CLI
             macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_GUI
-            windows-binaries/Windows-Cross_Cleaner_CLI.exe
             windows-binaries/Windows-Cross_Cleaner_GUI.exe
 
   generate-lists:
