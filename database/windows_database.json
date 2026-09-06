@@ -1408,7 +1408,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher",
     "class": "Program Launcher",
     "category": "Logs",
-    "program": "Flow Launcher",
+    "program": "FlowLauncher",
     "directories_to_remove": [
       "Logs"
     ]
@@ -1417,7 +1417,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher",
     "class": "Program Launcher",
     "category": "Cache",
-    "program": "Flow Launcher",
+    "program": "FlowLauncher",
     "directories_to_remove": [
       "Cache"
     ]
@@ -1426,7 +1426,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher\\Settings",
     "class": "Program Launcher",
     "category": "LastActivity",
-    "program": "Flow Launcher",
+    "program": "FlowLauncher",
     "files_to_remove": [
       "History.json",
       "History.json.bak"
@@ -5850,12 +5850,5 @@
     "directories_to_remove": [
       "LOGS"
     ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\kache\\*.log",
-    "class": "Developing",
-    "category": "Logs",
-    "program": "Kache",
-    "remove_files": true
   }
 ]

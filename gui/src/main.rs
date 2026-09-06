@@ -16,7 +16,6 @@ use database::registry_database::clear_registry;
 use database::structures::CleanerDataRegistry;
 use database::structures::{CleanerData, CleanerResult, Cleared, CustomCleaner};
 use database::utils::get_file_size_string;
-use database::version::{NewRelease, check_new_version};
 use eframe::egui;
 use egui::IconData;
 use flate2::read::GzDecoder;
@@ -109,14 +108,6 @@ async fn main() -> eframe::Result {
     let rows = checkbox_count.div_ceil(3);
     // INFO: 20px for 1 checkbox, 45px for button, 32px for custom title bar
     let height = (rows * 20) + 45 + TITLE_BAR_HEIGHT as usize;
-
-    // INFO: Check for a new version in the background
-    let (update_sender, update_receiver) = std::sync::mpsc::channel();
-    let mut app = app;
-    app.update_receiver = Some(update_receiver);
-    std::thread::spawn(move || {
-        let _ = update_sender.send(check_new_version());
-    });
 
     let size = egui::vec2(470.0, height as f32);
     let options = eframe::NativeOptions {
@@ -600,11 +591,6 @@ struct MyApp {
     pub regisry_database: Arc<[CleanerDataRegistry]>,
     pub menu_texture: Option<egui::TextureHandle>,
     pub icon_texture: Option<egui::TextureHandle>,
-
-    pub update_receiver:
-        Option<std::sync::mpsc::Receiver<Result<Option<NewRelease>, String>>>,
-    pub new_release: Option<NewRelease>,
-    pub update_banner_dismissed: bool,
 }
 
 // Embedded menu image bytes (required to be embedded)
@@ -779,10 +765,6 @@ impl MyApp {
             result_receiver: Some(result_receiver),
             menu_texture: None,
             icon_texture: None,
-
-            update_receiver: None,
-            new_release: None,
-            update_banner_dismissed: false,
         }
     }
 
@@ -881,10 +863,6 @@ impl MyApp {
             result_receiver: Some(result_receiver),
             menu_texture: None,
             icon_texture: None,
-
-            update_receiver: None,
-            new_release: None,
-            update_banner_dismissed: false,
         }
     }
 
@@ -1005,23 +983,6 @@ impl eframe::App for MyApp {
             }
         }
 
-        if let Some(receiver) = &mut self.update_receiver {
-            match receiver.try_recv() {
-                Ok(check) => {
-                    self.update_receiver = None;
-                    if let Ok(Some(release)) = check {
-                        self.new_release = Some(release);
-                        self.update_banner_dismissed = false;
-                        ctx.request_repaint();
-                    }
-                }
-                Err(std::sync::mpsc::TryRecvError::Disconnected) => {
-                    self.update_receiver = None;
-                }
-                Err(std::sync::mpsc::TryRecvError::Empty) => {}
-            }
-        }
-
         if let Some(handle) = &mut self.task_handle {
             if handle.is_finished() {
                 let handle = self.task_handle.take().unwrap();
@@ -1058,34 +1019,6 @@ impl eframe::App for MyApp {
                 self.results_window_resized = false;
             }
         }
-        // INFO: Floating update notification: right side, above everything else
-        if let Some(release) = self.new_release.clone() {
-            if !self.update_banner_dismissed {
-                egui::Area::new(egui::Id::new("update_notification"))
-                    .order(egui::Order::Foreground)
-                    .anchor(egui::Align2::RIGHT_TOP, [-10.0, TITLE_BAR_HEIGHT + 8.0])
-                    .show(&ctx, |ui| {
-                        egui::Frame::new()
-                            .corner_radius(4.0)
-                            .inner_margin(egui::Margin::symmetric(10, 8))
-                            .fill(ui.visuals().window_fill)
-                            .stroke(ui.visuals().widgets.noninteractive.bg_stroke)
-                            .show(ui, |ui| {
-                                ui.horizontal(|ui| {
-                                    ui.strong(format!(
-                                        "New version available: v{}",
-                                        release.version
-                                    ));
-                                    ui.hyperlink_to("Download", &release.url);
-                                    if ui.small_button("x").clicked() {
-                                        self.update_banner_dismissed = true;
-                                    }
-                                });
-                            });
-                    });
-            }
-        }
-
         let inner_margin = 8;
         egui::CentralPanel::default()
             .frame(
@@ -1573,7 +1506,7 @@ mod tests {
     #[test]
     fn test_load_icon_from_bytes() {
         let icon_data = database::ICON_BYTES;
-        let result = load_icon_from_bytes(icon_data);
+        let result = load_icon_from_bytes(&icon_data);
 
         assert!(result.is_ok(), "Icon should load successfully");
         let icon = result.unwrap();
