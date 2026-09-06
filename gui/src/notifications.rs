@@ -79,7 +79,10 @@ impl NotificationManager {
         let mut actions = Vec::new();
         egui::Area::new(egui::Id::new("notification_stack"))
             .order(egui::Order::Foreground)
-            .anchor(egui::Align2::RIGHT_TOP, [-10.0, crate::TITLE_BAR_HEIGHT + 8.0])
+            .anchor(
+                egui::Align2::RIGHT_TOP,
+                [-10.0, crate::TITLE_BAR_HEIGHT + 8.0],
+            )
             .show(ctx, |ui| {
                 for (index, n) in self.active.iter_mut().enumerate() {
                     if index > 0 {
@@ -139,10 +142,7 @@ impl Notification for UpdateNotification {
             // Plain left-to-right rows keep the frame exactly content-sized;
             // the anchored Area aligns it to the right window edge.
             ui.horizontal(|ui| {
-                ui.strong(format!(
-                    "New version available: v{}",
-                    self.release.version
-                ));
+                ui.strong(format!("New version available: v{}", self.release.version));
                 if ui.small_button("x").clicked() {
                     action = NotificationAction::Close;
                 }
