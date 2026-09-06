@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.2.7
+# Windows Clearing Programs Catalog v2.0.2.8
 **Total categories in database:** 12
 
-**Total programs in database:** 209
+**Total programs in database:** 218
 
-**Total pathes in database:** 473
+**Total pathes in database:** 489
 
 ## AI
 
@@ -44,7 +44,7 @@
 | 4 | [Cliamp](https://github.com/bjarneo/cliamp) | Logs |
 | 5 | [FL Studio](https://www.image-line.com/fl-studio-download) | Documentation |
 | 6 | [Murglar](https://murglar.app) | Logs |
-| 7 | [Namida](https://github.com/namidaco/namida) | Documentation, LastActivity, Logs |
+| 7 | [Namida](https://github.com/namidaco/namida) | Backups, Documentation, LastActivity, Logs |
 | 8 | [SoundWire Server](https://georgielabs.net) | Documentation |
 | 9 | [Spotify](https://open.spotify.com/download) | Cache, Logs |
 | 10 | [WaveFlow](https://github.com/InstaZDLL/WaveFlow) | Cache |
@@ -56,13 +56,18 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [Brave Browser](https://brave.com/download) | Browser, Cache, Logs |
-| 2 | [Edge](https://www.microsoft.com/edge) | Browser, Cache, Logs |
-| 3 | [Google Chrome](https://www.google.com/intl/en/chrome) | Browser, Documentation, Logs |
-| 4 | [LibreWolf](https://librewolf.net/installation) | Browser |
+| 2 | [Google Chrome](https://www.google.com/intl/en/chrome) | Browser, Documentation, Logs |
+| 3 | [LibreWolf](https://librewolf.net/installation) | Browser |
+| 4 | [Microsoft Edge](https://www.microsoft.com/edge) | Browser, Cache, Logs |
 | 5 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser, Cache, Logs |
-| 6 | [Opera GX](https://www.opera.com/download) | Browser |
-| 7 | [Thorium](https://thorium.rocks) | Browser, Documentation, Logs |
-| 8 | [Vivaldi](https://vivaldi.com/download) | Browser, Images |
+| 6 | [Opera](https://www.opera.com/opera) | Browser |
+| 7 | [Opera Air](https://www.opera.com/air) | Browser |
+| 8 | [Opera GX](https://www.opera.com/gx) | Browser |
+| 9 | [Opera Neon](https://www.operaneon.com/) | Browser |
+| 10 | [Thorium](https://thorium.rocks) | Browser, Documentation, Logs |
+| 11 | [Vivaldi](https://vivaldi.com/download) | Browser, Images |
+| 12 | [Yandex Browser](https://browser.yandex.ru) | Browser |
+| 13 | [Zen Browser](https://zen-browser.app) | Browser |
 
 
 ## Cheat
@@ -71,15 +76,16 @@
 | --- | --- | --- |
 | 1 | [AnarchyLoader](https://github.com/AnarchyLoader/AnarchyLoader) | Cheats, Logs |
 | 2 | [Cheat Engine](https://www.cheatengine.org/downloads.php) | Cheats, Documentation |
-| 3 | [ExecHack](https://exechack.cc) | Cheats |
-| 4 | [Fatality](https://fatality.win) | Cheats |
-| 5 | [INTERIUM](https://ru.interium.ooo) | Cheats |
-| 6 | [Krnl](https://wearedevs.net/d/Krnl) | Cheats |
-| 7 | [OneTap](https://www.onetap.com) | Cheats |
-| 8 | Pandora | Cheats |
-| 9 | [RusherHack](https://rusherhack.org) | Cheats |
-| 10 | [Vape Client](https://www.vape.gg) | Cheats |
-| 11 | [Weave](https://weave.su) | Cheats |
+| 3 | [CollapseLoader](https://github.com/dest4590/CollapseLoader) | Accounts, Cache, Cheats |
+| 4 | [ExecHack](https://exechack.cc) | Cheats |
+| 5 | [Fatality](https://fatality.win) | Cheats |
+| 6 | [INTERIUM](https://ru.interium.ooo) | Cheats |
+| 7 | [Krnl](https://wearedevs.net/d/Krnl) | Cheats |
+| 8 | [OneTap](https://www.onetap.com) | Cheats |
+| 9 | Pandora | Cheats |
+| 10 | [RusherHack](https://rusherhack.org) | Cheats |
+| 11 | [Vape Client](https://www.vape.gg) | Cheats |
+| 12 | [Weave](https://weave.su) | Cheats |
 
 
 ## Crypto Wallet
@@ -106,7 +112,7 @@
 | 9 | [Gradle](https://gradle.org) | Cache |
 | 10 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
 | 11 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
-| 12 | [Insomnia](https://developer.microsoft.com/windows/downloads/windows-sdk) | Cache, Logs |
+| 12 | [Insomnia](https://insomnia.rest) | Cache, Logs |
 | 13 | [Java](https://www.java.com/download) | Documentation |
 | 14 | [MCCreator](https://mcreator.net/download) | Logs |
 | 15 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
@@ -140,6 +146,7 @@
 | 2 | [Gameloop](https://www.gameloop.com) | Logs |
 | 3 | [Memu](https://www.memuplay.com/download.html) | Logs |
 | 4 | [Nox](https://bignox.com/nox-app-player) | Logs |
+| 5 | Ruffle | Documentation |
 
 
 ## Files Transport
@@ -233,6 +240,7 @@
 | 16 | [PrismLauncher](https://prismlauncher.org/download/windows) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
 | 17 | Salwyrr Launcher | Documentation |
 | 18 | [Tecknix Client](https://tecknix.com/download.html) | Accounts, Cache, Crashes, Documentation, Game, Images, Logs |
+| 19 | [X Minecraft Launcher](https://xmcl.app) | Logs |
 
 
 ## Optimization
@@ -319,6 +327,7 @@
 | 1 | [OneDrive](https://www.microsoft.com/microsoft-365/onedrive/online-cloud-storage) | Cache |
 | 2 | [Windows](https://www.microsoft.com/download/windows) | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
 | 3 | [Windows Defender](https://www.microsoft.com/download/windows) | Documentation |
+| 4 | Windows PowerShell | LastActivity |
 
 
 ## Text

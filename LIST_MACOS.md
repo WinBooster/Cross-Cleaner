@@ -1,4 +1,4 @@
-# Linux Clearing Programs Catalog v2.0.2.7
+# Linux Clearing Programs Catalog v2.0.2.8
 **Total categories in database:** 4
 
 **Total programs in database:** 1

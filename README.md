@@ -25,13 +25,9 @@
 - 💻 **Cross-Platform**: Full support for [Windows](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_WINDOWS.md), [MacOS](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_MACOS.md) and [Linux](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_LINUX.md)
 - 🎯 **User-Friendly**: Clean, minimalist interface for easy operation
 - 📄 **Custom-DataBase**: Ability to use custom cleanup database
-- 🧪 **Well-Tested**: 59+ unit tests, 800+ property-based tests, and 9 performance benchmarks
 
 ### Demo
-![CLI](https://github.com/user-attachments/assets/7d28a763-97ee-45b9-9ad5-2ed0fb8886c0)
-<img width="430" height="168" alt="изображение" src="https://github.com/user-attachments/assets/4d4caa7c-15d7-4e8a-b547-f845d84dcea7" />
-
-
+<img width="470" height="157" alt="image" src="https://github.com/user-attachments/assets/0cee6303-7ada-49f2-bd33-8159a583ebf9" />
 
 ## 📥 Installation
 
@@ -57,35 +53,3 @@ cargo build --release
 ```
 
 4. The compiled binary will be located in `target/release`
-
-## 🧪 Testing & Benchmarking
-
-Cross Cleaner has comprehensive test coverage to ensure reliability and performance.
-
-### Run Tests
-```bash
-# Run all tests
-cargo test --all
-
-# Run property-based tests (800+ test cases)
-cargo test --package cleaner proptests
-
-# Run with more test cases
-PROPTEST_CASES=1000 cargo test --package cleaner proptests
-```
-
-### Run Benchmarks
-```bash
-# Run performance benchmarks
-cargo bench --package Cross_Cleaner_CLI
-
-# View detailed HTML reports
-open target/criterion/report/index.html
-```
-
-### Test Coverage
-- **59 unit/integration tests** - Core functionality
-- **800+ property-based tests** - Edge case detection with proptest
-- **9 performance benchmarks** - Regression detection with criterion
-
-See [TESTING.md](TESTING.md) for detailed testing documentation.
