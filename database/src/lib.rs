@@ -35,15 +35,15 @@ mod tests {
 
     #[test]
     fn test_get_icon() {
-            let icon = ICON_BYTES;
-            assert_eq!(icon.len(), 38078, "Icon should be exactly 38078 bytes");
-            // Check ICO magic number
-            assert_eq!(
-                &icon[0..4],
-                &[0x00, 0x00, 0x01, 0x00],
-                "Should be an ICO file"
-            );
-        }
+        let icon = ICON_BYTES;
+        assert_eq!(icon.len(), 38078, "Icon should be exactly 38078 bytes");
+        // Check ICO magic number
+        assert_eq!(
+            &icon[0..4],
+            &[0x00, 0x00, 0x01, 0x00],
+            "Should be an ICO file"
+        );
+    }
 
     #[test]
     fn test_get_default_database() {
