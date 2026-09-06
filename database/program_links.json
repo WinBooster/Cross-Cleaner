@@ -77,6 +77,8 @@
   "KeePass 2": "https://keepass.info/download.html",
   "KeePassXC": "https://keepassxc.org/download",
 
+  "Flow Launcher": "https://www.flowlauncher.com/",
+
   "Future Client": "https://futureclient.net",
   "Cheat Engine": "https://www.cheatengine.org/downloads.php",
   "ExecHack": "https://exechack.cc",
@@ -120,6 +122,7 @@
   "Insomnia": "https://insomnia.rest",
   "Xamarin": "https://dotnet.microsoft.com/apps/xamarin",
   "Binary Ninja": "https://binary.ninja",
+  "Kache": "https://github.com/kunobi-ninja/kache",
 
   "IObit Driver Booster": "https://ru.iobit.com/driver-booster.php",
   "LGHUB": "https://www.logitechg.com/en-us/innovation/g-hub.html",
@@ -133,6 +136,7 @@
   "Gameloop": "https://www.gameloop.com",
   "Memu": "https://www.memuplay.com/download.html",
   "Nox": "https://bignox.com/nox-app-player",
+  "Ruffle": "https://ruffle.rs",
 
   "Lutris": "https://lutris.net/downloads",
   "Garry's mod": "https://store.steampowered.com/app/4000/Garrys_Mod",
@@ -170,6 +174,8 @@
   "Tonfotos Telegram Connector": "https://tonfotos.com",
   "Paint.NET": "https://paint.net",
   "OpenCode Desktop": "https://opencode.ai/download",
+  "Copilot": "https://copilot.microsoft.com",
+  "Cherry Studio": "https://github.com/cherryhq/cherry-studio",
 
   "4uKey for Android": "https://www.tenorshare.ru/products/android-password-reset-tool.html",
   "Gpg4win": "https://www.gpg4win.org",
@@ -206,6 +212,10 @@
   "Pcre": "https://www.pcre.org",
   "Zed": "https://zed.dev",
   "Visual Studio": "https://visualstudio.microsoft.com",
+
+  "GlazeWM": "https://glazewm.com",
+
+  "Zebar": "https://github.com/glzr-io/zebar",
 
   "Tribler": "https://www.tribler.org/download.html",
   "qBittorrent": "https://www.qbittorrent.org/download",
@@ -245,5 +255,4 @@
   "Windows": "https://www.microsoft.com/download/windows",
   "Windows Defender": "https://www.microsoft.com/download/windows",
   "OnionShare": "https://onionshare.org",
-  "Copilot": "https://copilot.microsoft.com/"
 }
