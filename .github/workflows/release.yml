@@ -138,9 +138,9 @@ jobs:
         run: |
           (Get-Content build_setup.iss) -replace '#define MyAppVersion ".*"', '#define MyAppVersion "${{ env.APP_VERSION }}"' | Set-Content build_setup.iss
       - name: Build installer (Inno Setup)
-        uses: robin24/inno-setup-action@v1
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.9
         with:
-          filepath: build_setup.iss
+          path: build_setup.iss
       - name: Upload Windows setup artifacts
         uses: actions/upload-artifact@v4
         with:
