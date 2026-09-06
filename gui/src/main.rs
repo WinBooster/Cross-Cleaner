@@ -1,4 +1,4 @@
-#![cfg_attr(
+﻿#![cfg_attr(
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
@@ -6,6 +6,8 @@
 // PERFORMANCE: Use mimalloc for blazing fast memory allocation
 #[global_allocator]
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+
+mod notifications;
 
 use clap::{ArgAction, Parser};
 use cleaner::clear_data;
@@ -16,13 +18,13 @@ use database::registry_database::clear_registry;
 use database::structures::CleanerDataRegistry;
 use database::structures::{CleanerData, CleanerResult, Cleared, CustomCleaner};
 use database::utils::get_file_size_string;
-use database::version::{NewRelease, check_new_version};
+use database::version::{Changelog, NewRelease, check_new_version, fetch_changelogs};
 use eframe::egui;
 use egui::IconData;
 use flate2::read::GzDecoder;
 use futures::stream::{FuturesUnordered, StreamExt};
 use image::{ImageError, ImageFormat, ImageReader, load_from_memory};
-use notify_rust::Notification;
+use notifications::{NotificationAction, NotificationManager, UpdateNotification};
 use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
 use std::future::Future;
@@ -151,6 +153,43 @@ const GITHUB_URL: &str = "https://github.com/WinBooster/Cross-Cleaner";
 // them so a single click always reaches the buttons instead of starting a drag).
 const TITLE_BAR_BUTTONS_WIDTH: f32 = 126.0;
 
+/// Paints the 2px window outline used by both the main window and the
+/// changelog viewport (blue when focused, text color otherwise).
+fn paint_window_border(ctx: &egui::Context, id: &str, color: egui::Color32) {
+    let painter = ctx.layer_painter(egui::LayerId::new(
+        egui::Order::Foreground,
+        egui::Id::new(id),
+    ));
+    let r = ctx.viewport_rect();
+    let t = 2.0;
+    painter.rect_filled(
+        egui::Rect::from_min_max(r.min, egui::pos2(r.max.x, r.min.y + t)),
+        0.0,
+        color,
+    );
+    painter.rect_filled(
+        egui::Rect::from_min_max(
+            egui::pos2(r.min.x, r.max.y - t - 2.0),
+            egui::pos2(r.max.x, r.max.y - 2.0),
+        ),
+        0.0,
+        color,
+    );
+    painter.rect_filled(
+        egui::Rect::from_min_max(r.min, egui::pos2(r.min.x + t, r.max.y)),
+        0.0,
+        color,
+    );
+    painter.rect_filled(
+        egui::Rect::from_min_max(
+            egui::pos2(r.max.x - t, r.min.y),
+            egui::pos2(r.max.x, r.max.y),
+        ),
+        0.0,
+        color,
+    );
+}
+
 /// Custom window title bar: drag-to-move, minimize and close buttons.
 /// Optionally shows a back button (returns whether it was clicked).
 fn title_bar(
@@ -172,7 +211,7 @@ fn title_bar(
         .show(ui, |ui| {
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                 // Windows order: close rightmost, minimize to its left.
-                // Glyphs are painted manually (default egui font has no ✕/— glyphs).
+                // Glyphs are painted manually (default egui font has no check/cross glyphs).
                 let close = title_bar_button(ui);
                 if close.clicked() {
                     ctx.send_viewport_cmd(egui::ViewportCommand::Close);
@@ -401,7 +440,7 @@ async fn work(
     > = FuturesUnordered::new();
 
     // INFO: Clear LastActivity from Registry
-    // WARN: Windows only - показываем что СЕЙЧАС чистится
+    // WARN: Windows only - show what is being cleaned right now
     #[cfg(windows)]
     {
         for data in registry_database.iter() {
@@ -504,7 +543,7 @@ async fn work(
             }
         }
 
-        // Отправляем только прогресс и очищенные байты, путь уже отправлен перед очисткой
+        // Send only progress and cleared bytes; the program name was already sent before cleaning
         let _ = progress_sender
             .send(format!(
                 "PROGRESS:{}:{}:{}",
@@ -528,7 +567,7 @@ async fn work(
         removed_directories_val
     );
 
-    let mut notification = Notification::new();
+    let mut notification = notify_rust::Notification::new();
     let notification = notification
         .summary("Cross Cleaner GUI")
         .body(&notification_body)
@@ -663,25 +702,33 @@ struct MyApp {
     pub icon_texture: Option<egui::TextureHandle>,
 
     pub update_receiver: Option<std::sync::mpsc::Receiver<Result<Option<NewRelease>, String>>>,
-    pub new_release: Option<NewRelease>,
-    pub update_banner_dismissed: bool,
+    /// All currently visible notifications (update banner, etc.).
+    pub notifications: NotificationManager,
+    /// Shared slot filled by the background changelog fetch.
+    pub changelog: Option<Arc<std::sync::Mutex<Option<Changelog>>>>,
+    /// Background fetch of the changelog.
+    pub changelog_handle: Option<std::thread::JoinHandle<()>>,
+    /// Set to false when the user closes the changelog viewport window.
+    pub changelog_open: Option<Arc<std::sync::Mutex<bool>>>,
+    /// True while the changelog window is open.
+    pub show_changelog: bool,
 }
 
 // Embedded menu image bytes (required to be embedded)
 const MENU_BYTES: &[u8] = include_bytes!("../assets/menu.png.gz");
 
 pub fn ico_bytes_to_png_bytes(ico_data: &[u8]) -> Result<Vec<u8>, ImageError> {
-    // Декодируем ICO в DynamicImage
+    // Decode the ICO into a DynamicImage
     let img = load_from_memory(ico_data)?;
 
-    // Создаём Cursor, который владеет вектором и поддерживает Seek
+    // Create a Cursor that owns the vector and supports Seek
     let png_data = Vec::new();
     let mut cursor = Cursor::new(png_data);
 
-    // Записываем PNG в Cursor
+    // Write the PNG into the Cursor
     img.write_to(&mut cursor, ImageFormat::Png)?;
 
-    // Забираем внутренний вектор с данными PNG
+    // Take back the inner vector with the PNG data
     Ok(cursor.into_inner())
 }
 
@@ -841,8 +888,11 @@ impl MyApp {
             icon_texture: None,
 
             update_receiver: None,
-            new_release: None,
-            update_banner_dismissed: false,
+            notifications: NotificationManager::default(),
+            changelog: None,
+            changelog_handle: None,
+            changelog_open: None,
+            show_changelog: false,
         }
     }
 
@@ -943,8 +993,11 @@ impl MyApp {
             icon_texture: None,
 
             update_receiver: None,
-            new_release: None,
-            update_banner_dismissed: false,
+            notifications: NotificationManager::default(),
+            changelog: None,
+            changelog_handle: None,
+            changelog_open: None,
+            show_changelog: false,
         }
     }
 
@@ -961,81 +1014,166 @@ impl MyApp {
     fn has_selection(&self) -> bool {
         self.categories.iter().any(|c| !c.selected.is_empty())
     }
+
+    /// Opens the changelog window (fetch starts in `show_changelog_window`).
+    fn open_changelog(&mut self) {
+        self.show_changelog = true;
+    }
+
+    /// Draws the changelog viewport ("What's New") as a separate native window.
+    /// The changelog is shared via `Arc<Mutex<Option<Changelog>>>` so the
+    /// background fetch fills it while the window is open.
+    fn show_changelog_window(&mut self, ctx: &egui::Context) {
+        if !self.show_changelog {
+            return;
+        }
+
+        // Spawn the fetch once per open session.
+        if self.changelog.is_none() && self.changelog_handle.is_none() {
+            let current_version = get_version().to_string();
+            let shared: Arc<std::sync::Mutex<Option<Changelog>>> =
+                Arc::new(std::sync::Mutex::new(None));
+            let shared_for_thread = shared.clone();
+            self.changelog_handle = Some(std::thread::spawn(move || {
+                let fetched = fetch_changelogs(&current_version).unwrap_or_default();
+                *shared_for_thread
+                    .lock()
+                    .expect("changelog mutex poisoned") = Some(fetched);
+            }));
+            self.changelog = Some(shared);
+            self.changelog_open = Some(Arc::new(std::sync::Mutex::new(true)));
+        }
+
+        // Mark the slot as done once the fetch thread finishes, so the window
+        // stops showing the spinner even if nothing was parsed.
+        let shared = self.changelog.clone().expect("changelog slot exists");
+        if let Some(handle) = self.changelog_handle.as_ref() {
+            if handle.is_finished() {
+                if let Ok(mut slot) = shared.lock() {
+                    if slot.is_none() {
+                        *slot = Some(Changelog::default());
+                    }
+                }
+            }
+        }
+
+        let shared_open = self
+            .changelog_open
+            .clone()
+            .expect("changelog open flag exists");
+        let icon = self.icon_texture.clone();
+        ctx.show_viewport_deferred(
+            egui::ViewportId(egui::Id::new("changelog_viewport")),
+            egui::ViewportBuilder::default()
+                .with_title("Cross Cleaner - What's New")
+                .with_inner_size([560.0, 640.0])
+                .with_min_inner_size([460.0, 480.0])
+                .with_decorations(false),
+            move |ctx, _class| {
+                // Detect the user pressing X on this viewport window.
+                if ctx.input(|i| i.viewport().close_requested()) {
+                    *shared_open
+                        .lock()
+                        .expect("changelog open flag poisoned") = false;
+                }
+                let icon = icon.clone();
+                // CentralPanel consumes the context mutably; title_bar only
+                // needs commands, so reuse the same context inside the panel.
+                egui::CentralPanel::default().show(ctx, |ui| {
+                    let ctx = ui.ctx().clone();
+                    // Same custom title bar as the main window (drag, GitHub,
+                    // minimize & close buttons). Close sends ViewportCommand::Close
+                    // to this viewport, which is handled above.
+                    title_bar(
+                        ui,
+                        &ctx,
+                        "Cross Cleaner - What's New",
+                        icon.as_ref(),
+                        false,
+                    );
+                    // Same 2px outline as the main window.
+                    let focused =
+                        ctx.input(|i| i.viewport().focused.unwrap_or(false));
+                    let border_color = if focused {
+                        egui::Color32::from_rgb(0, 120, 215)
+                    } else {
+                        ui.visuals().text_color()
+                    };
+                    paint_window_border(&ctx, "changelog_window_border", border_color);
+                    egui::ScrollArea::vertical()
+                        .id_salt("changelog_scroll")
+                        // Fill the full window width so the scrollbar sits at
+                        // the window edge instead of hugging the text.
+                        .auto_shrink([false, false])
+                        .show(ui, |ui| {
+                        let fetched = shared.lock().ok().and_then(|slot| slot.clone());
+                        match fetched {
+                            Some(changelog) => {
+                                if changelog.groups.is_empty()
+                                    && changelog.contributors.is_empty()
+                                {
+                                    ui.label("No changes found.");
+                                }
+                                for group in &changelog.groups {
+                                    ui.add_space(4.0);
+                                    ui.strong(&group.title);
+                                    for item in &group.items {
+                                        ui.horizontal_wrapped(|ui| {
+                                            ui.label("•");
+                                            ui.label(item);
+                                        });
+                                    }
+                                }
+                                if !changelog.contributors.is_empty() {
+                                    ui.add_space(8.0);
+                                    ui.strong("Contributors");
+                                    for contributor in &changelog.contributors {
+                                        ui.horizontal_wrapped(|ui| {
+                                            ui.label("•");
+                                            ui.label(contributor);
+                                        });
+                                    }
+                                }
+                            }
+                            None => {
+                                ui.horizontal(|ui| {
+                                    ui.spinner();
+                                    ui.label("Loading changelog...");
+                                });
+                            }
+                        }
+                    });
+                });
+            },
+        );
+
+        // Reset state when the user closed the viewport window; the native
+        // window disappears on the next frame because the viewport is no
+        // longer requested.
+        let still_open = self
+            .changelog_open
+            .as_ref()
+            .and_then(|flag| flag.lock().ok().map(|v| *v))
+            .unwrap_or(false);
+        if !still_open {
+            self.show_changelog = false;
+            self.changelog = None;
+            self.changelog_handle = None;
+            self.changelog_open = None;
+        }
+    }
 }
 
 impl eframe::App for MyApp {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
         let ctx = ui.ctx().clone();
         let focused = ctx.input(|i| i.viewport().focused.unwrap_or(false));
-        if focused {
-            let painter = ctx.layer_painter(egui::LayerId::new(
-                egui::Order::Foreground,
-                egui::Id::new("focused_window_border"),
-            ));
-            let r = ctx.viewport_rect();
-            let t = 2.0;
-            let c = egui::Color32::from_rgb(0, 120, 215);
-            painter.rect_filled(
-                egui::Rect::from_min_max(r.min, egui::pos2(r.max.x, r.min.y + t)),
-                0.0,
-                c,
-            );
-            painter.rect_filled(
-                egui::Rect::from_min_max(
-                    egui::pos2(r.min.x, r.max.y - t - 2.0),
-                    egui::pos2(r.max.x, r.max.y - 2.0),
-                ),
-                0.0,
-                c,
-            );
-            painter.rect_filled(
-                egui::Rect::from_min_max(r.min, egui::pos2(r.min.x + t, r.max.y)),
-                0.0,
-                c,
-            );
-            painter.rect_filled(
-                egui::Rect::from_min_max(
-                    egui::pos2(r.max.x - t, r.min.y),
-                    egui::pos2(r.max.x, r.max.y),
-                ),
-                0.0,
-                c,
-            );
+        let border_color = if focused {
+            egui::Color32::from_rgb(0, 120, 215)
         } else {
-            let painter = ctx.layer_painter(egui::LayerId::new(
-                egui::Order::Foreground,
-                egui::Id::new("unfocused_window_border"),
-            ));
-            let r = ctx.viewport_rect();
-            let t = 2.0;
-            let c = ui.visuals().text_color();
-            painter.rect_filled(
-                egui::Rect::from_min_max(r.min, egui::pos2(r.max.x, r.min.y + t)),
-                0.0,
-                c,
-            );
-            painter.rect_filled(
-                egui::Rect::from_min_max(
-                    egui::pos2(r.min.x, r.max.y - t - 2.0),
-                    egui::pos2(r.max.x, r.max.y - 2.0),
-                ),
-                0.0,
-                c,
-            );
-            painter.rect_filled(
-                egui::Rect::from_min_max(r.min, egui::pos2(r.min.x + t, r.max.y)),
-                0.0,
-                c,
-            );
-            painter.rect_filled(
-                egui::Rect::from_min_max(
-                    egui::pos2(r.max.x - t, r.min.y),
-                    egui::pos2(r.max.x, r.max.y),
-                ),
-                0.0,
-                c,
-            );
-        }
+            ui.visuals().text_color()
+        };
+        paint_window_border(&ctx, "main_window_border", border_color);
         if let Some(receiver) = &mut self.progress_receiver {
             if let Ok(message) = receiver.try_recv() {
                 if message.starts_with("PROGRESS:") {
@@ -1070,8 +1208,7 @@ impl eframe::App for MyApp {
                 Ok(check) => {
                     self.update_receiver = None;
                     if let Ok(Some(release)) = check {
-                        self.new_release = Some(release);
-                        self.update_banner_dismissed = false;
+                        self.notifications.push(UpdateNotification::new(release));
                         ctx.request_repaint();
                     }
                 }
@@ -1098,33 +1235,15 @@ impl eframe::App for MyApp {
             }
         }
 
-        // INFO: Floating update notification: right side, above everything else
-        if let Some(release) = self.new_release.clone() {
-            if !self.update_banner_dismissed {
-                egui::Area::new(egui::Id::new("update_notification"))
-                    .order(egui::Order::Foreground)
-                    .anchor(egui::Align2::RIGHT_TOP, [-10.0, TITLE_BAR_HEIGHT + 8.0])
-                    .show(&ctx, |ui| {
-                        egui::Frame::new()
-                            .corner_radius(4.0)
-                            .inner_margin(egui::Margin::symmetric(10, 8))
-                            .fill(ui.visuals().window_fill)
-                            .stroke(ui.visuals().widgets.noninteractive.bg_stroke)
-                            .show(ui, |ui| {
-                                ui.horizontal(|ui| {
-                                    ui.strong(format!(
-                                        "New version available: v{}",
-                                        release.version
-                                    ));
-                                    ui.hyperlink_to("Download", &release.url);
-                                    if ui.small_button("x").clicked() {
-                                        self.update_banner_dismissed = true;
-                                    }
-                                });
-                            });
-                    });
+        // INFO: Floating notifications (right side, above everything else)
+        for (id, action) in self.notifications.update(&ctx) {
+            match action {
+                NotificationAction::Close => self.notifications.close(id),
+                NotificationAction::ShowChangelog => self.open_changelog(),
+                NotificationAction::None => {}
             }
         }
+        self.show_changelog_window(&ctx);
 
         let title = format!("Cross Cleaner GUI v{}", get_version());
         if self.icon_texture.is_none() {
@@ -1159,10 +1278,10 @@ impl eframe::App for MyApp {
                         470.0,
                         100.0 + TITLE_BAR_HEIGHT,
                     )));
-                    // Панель даёт 8px, текст добирает 12px от краёв экрана
+                    // Panel gives 8px, text adds 12px from the screen edges
                     ui.vertical(|ui| {
                         ui.add_space(4.0);
-                        // Слева сверху: имя программы, которая сейчас чистится
+                        // Top left: name of the program currently being cleaned
                         let program = self
                             .progress_message
                             .strip_prefix("Cleaning: ")
@@ -1178,7 +1297,7 @@ impl eframe::App for MyApp {
 
                         if self.total_tasks > 0 {
                             let progress = self.current_task as f32 / self.total_tasks as f32;
-                            // Прогресс-бар: 8px от краёв экрана
+                            // Progress bar: 8px from the screen edges
                             ui.add_sized(
                                 [ui.available_width(), 20.0],
                                 egui::ProgressBar::new(progress)
@@ -1207,9 +1326,9 @@ impl eframe::App for MyApp {
 
                             ui.horizontal(|ui| {
                                 ui.add_space(4.0);
-                                // Слева снизу: сколько очистилось
+                                // Bottom left: amount cleaned so far
                                 ui.label(get_file_size_string(self.cleaned_bytes));
-                                // Справа снизу: оставшееся время
+                                // Bottom right: remaining time
                                 ui.with_layout(
                                     egui::Layout::right_to_left(egui::Align::Min),
                                     |ui| {
@@ -1240,7 +1359,7 @@ impl eframe::App for MyApp {
                         });
                         ui.separator();
 
-                        // Фиксированные размеры для колонок
+                        // Fixed column widths
                         let column_widths = [150.0, 80.0, 80.0, 170.0];
                         let total_width = column_widths.iter().sum::<f32>() + 120.0;
                         let total_height = 500.0;
@@ -1253,41 +1372,41 @@ impl eframe::App for MyApp {
                             self.results_window_resized = true;
                         }
 
-                        // Общий контейнер для таблицы
+                        // Outer container for the table
                         ui.vertical(|ui| {
-                            // Заголовки таблицы
+                            // Table headers
                             ui.horizontal(|ui| {
                                 ui.style_mut().spacing.item_spacing = egui::vec2(0.0, 0.0);
 
-                                // Колонка Program
+                                // Program column
                                 ui.add_sized(
                                     egui::vec2(column_widths[0], 20.0),
                                     egui::Label::new(egui::RichText::new("Program").heading()),
                                 )
                                 .on_hover_text("Program name");
 
-                                // Колонка Size
+                                // Size column
                                 ui.add_sized(
                                     egui::vec2(column_widths[1], 20.0),
                                     egui::Label::new(egui::RichText::new("Size").heading()),
                                 )
                                 .on_hover_text("Deleted data size");
 
-                                // Колонка Files
+                                // Files column
                                 ui.add_sized(
                                     egui::vec2(column_widths[2], 20.0),
                                     egui::Label::new(egui::RichText::new("Files").heading()),
                                 )
                                 .on_hover_text("Number of files");
 
-                                // Колонка Dirs
+                                // Dirs column
                                 ui.add_sized(
                                     egui::vec2(column_widths[2], 20.0),
                                     egui::Label::new(egui::RichText::new("Dirs").heading()),
                                 )
                                 .on_hover_text("Number of folders");
 
-                                // Колонка Categories
+                                // Categories column
                                 ui.add_sized(
                                     egui::vec2(column_widths[3], 20.0),
                                     egui::Label::new(egui::RichText::new("Categories").heading()),
@@ -1296,7 +1415,7 @@ impl eframe::App for MyApp {
                             });
                             ui.separator();
 
-                            // Прокручиваемое содержимое таблицы
+                            // Scrollable table content
                             egui::ScrollArea::vertical()
                                 .max_height(total_height)
                                 .show(ui, |ui| {
@@ -1305,13 +1424,13 @@ impl eframe::App for MyApp {
                                             ui.style_mut().spacing.item_spacing =
                                                 egui::vec2(0.0, 0.0);
 
-                                            // Колонка Program
+                                            // Program column
                                             ui.add_sized(
                                                 egui::vec2(column_widths[0], 20.0),
                                                 egui::Label::new(&cleared.program).truncate(),
                                             );
 
-                                            // Колонка Size
+                                            // Size column
                                             ui.add_sized(
                                                 egui::vec2(column_widths[1], 20.0),
                                                 egui::Label::new(get_file_size_string(
@@ -1320,14 +1439,14 @@ impl eframe::App for MyApp {
                                                 .truncate(),
                                             );
 
-                                            // Колонка Files
+                                            // Files column
                                             ui.add_sized(
                                                 egui::vec2(column_widths[2], 20.0),
                                                 egui::Label::new(cleared.removed_files.to_string())
                                                     .truncate(),
                                             );
 
-                                            // Колонка Dirs
+                                            // Dirs column
                                             ui.add_sized(
                                                 egui::vec2(column_widths[2], 20.0),
                                                 egui::Label::new(
@@ -1336,7 +1455,7 @@ impl eframe::App for MyApp {
                                                 .truncate(),
                                             );
 
-                                            // Колонка Categories
+                                            // Categories column
                                             ui.add_sized(
                                                 egui::vec2(column_widths[3], 20.0),
                                                 egui::Label::new(
@@ -1545,7 +1664,7 @@ impl eframe::App for MyApp {
                                                             }
                                                         }
                                                     }
-                                                    // Show Uncategorized for objects without sub_category, only if category has ≥1 real sub
+                                                    // Show Uncategorized for objects without sub_category, only if category has >= 1 real sub
                                                     if cat.has_empty {
                                                         let mut is_uncat =
                                                             cat.selected.contains("");
