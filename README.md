@@ -8,8 +8,6 @@
 [![GitHub Issues](https://img.shields.io/github/issues/WinBooster/Cross-Cleaner)](https://github.com/WinBooster/Cross-Cleaner/issues)
 [![GitHub Stars](https://img.shields.io/github/stars/WinBooster/Cross-Cleaner?style=social)](https://github.com/WinBooster/Cross-Cleaner/stargazers)
 
-<img src="assets/icon.png" alt="Cross Cleaner Logo" width="64"/>
-
 ### A powerful system cleanup tool written in Rust
 
 </div>
