@@ -132,9 +132,7 @@ pub fn parse_changelog(body: &str) -> Changelog {
             let title = strip_markdown_inline(title);
             // The real header is `## 👏 Contributors Hall of Fame` and may be prefixed
             // with an emoji, so match by substring.
-            in_contributors = title
-                .to_lowercase()
-                .contains("contributors hall of fame");
+            in_contributors = title.to_lowercase().contains("contributors hall of fame");
             // `##` headers are top-level sections (e.g. "What's New");
             // only `###` headers start a changelog group.
             current_group = if in_contributors || !line.starts_with("### ") {
@@ -154,11 +152,7 @@ pub fn parse_changelog(body: &str) -> Changelog {
                     changelog.contributors.push(item);
                 }
             } else if let Some(title) = &current_group {
-                if let Some(group) = changelog
-                    .groups
-                    .iter_mut()
-                    .find(|g| g.title == *title)
-                {
+                if let Some(group) = changelog.groups.iter_mut().find(|g| g.title == *title) {
                     if !group.items.contains(&item) {
                         group.items.push(item);
                     }
@@ -178,11 +172,7 @@ pub fn parse_changelog(body: &str) -> Changelog {
 /// Merges `other` into `groups`: same-titled groups are united, items deduplicated.
 fn merge_changelog_groups(changelog: &mut Changelog, other: Changelog) {
     for group in other.groups {
-        if let Some(existing) = changelog
-            .groups
-            .iter_mut()
-            .find(|g| g.title == group.title)
-        {
+        if let Some(existing) = changelog.groups.iter_mut().find(|g| g.title == group.title) {
             for item in group.items {
                 if !existing.items.contains(&item) {
                     existing.items.push(item);
@@ -277,8 +267,14 @@ Special thanks to our amazing contributors who made this release possible:\n\
         assert_eq!(changelog.groups.len(), 1);
         assert_eq!(changelog.groups[0].title, "🪟 Windows Enhancements");
         assert_eq!(changelog.groups[0].items.len(), 2);
-        assert_eq!(changelog.groups[0].items[0], "Audacity Added documentation clearing");
-        assert_eq!(changelog.contributors, vec!["@Nekiplay - Core improvements and feature implementations"]);
+        assert_eq!(
+            changelog.groups[0].items[0],
+            "Audacity Added documentation clearing"
+        );
+        assert_eq!(
+            changelog.contributors,
+            vec!["@Nekiplay - Core improvements and feature implementations"]
+        );
     }
 
     #[test]
@@ -292,7 +288,12 @@ Special thanks to our amazing contributors who made this release possible:\n\
         assert_eq!(merged.groups.len(), 2);
         assert_eq!(merged.groups[0].title, "🪟 Windows Enhancements");
         assert_eq!(merged.groups[0].items.len(), 3);
-        assert!(!merged.groups[0].items.contains(&"Audacity Added documentation clearing".to_string()) == false);
+        assert!(
+            !merged.groups[0]
+                .items
+                .contains(&"Audacity Added documentation clearing".to_string())
+                == false
+        );
         assert_eq!(merged.groups[1].title, "🐧 Linux Enhancements");
     }
 }

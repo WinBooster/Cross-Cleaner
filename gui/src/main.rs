@@ -1,4 +1,4 @@
-﻿#![cfg_attr(
+#![cfg_attr(
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
@@ -1036,9 +1036,7 @@ impl MyApp {
             let shared_for_thread = shared.clone();
             self.changelog_handle = Some(std::thread::spawn(move || {
                 let fetched = fetch_changelogs(&current_version).unwrap_or_default();
-                *shared_for_thread
-                    .lock()
-                    .expect("changelog mutex poisoned") = Some(fetched);
+                *shared_for_thread.lock().expect("changelog mutex poisoned") = Some(fetched);
             }));
             self.changelog = Some(shared);
             self.changelog_open = Some(Arc::new(std::sync::Mutex::new(true)));
@@ -1072,9 +1070,7 @@ impl MyApp {
             move |ctx, _class| {
                 // Detect the user pressing X on this viewport window.
                 if ctx.input(|i| i.viewport().close_requested()) {
-                    *shared_open
-                        .lock()
-                        .expect("changelog open flag poisoned") = false;
+                    *shared_open.lock().expect("changelog open flag poisoned") = false;
                 }
                 let icon = icon.clone();
                 // CentralPanel consumes the context mutably; title_bar only
@@ -1084,16 +1080,9 @@ impl MyApp {
                     // Same custom title bar as the main window (drag, GitHub,
                     // minimize & close buttons). Close sends ViewportCommand::Close
                     // to this viewport, which is handled above.
-                    title_bar(
-                        ui,
-                        &ctx,
-                        "Cross Cleaner - What's New",
-                        icon.as_ref(),
-                        false,
-                    );
+                    title_bar(ui, &ctx, "Cross Cleaner - What's New", icon.as_ref(), false);
                     // Same 2px outline as the main window.
-                    let focused =
-                        ctx.input(|i| i.viewport().focused.unwrap_or(false));
+                    let focused = ctx.input(|i| i.viewport().focused.unwrap_or(false));
                     let border_color = if focused {
                         egui::Color32::from_rgb(0, 120, 215)
                     } else {
@@ -1106,43 +1095,43 @@ impl MyApp {
                         // the window edge instead of hugging the text.
                         .auto_shrink([false, false])
                         .show(ui, |ui| {
-                        let fetched = shared.lock().ok().and_then(|slot| slot.clone());
-                        match fetched {
-                            Some(changelog) => {
-                                if changelog.groups.is_empty()
-                                    && changelog.contributors.is_empty()
-                                {
-                                    ui.label("No changes found.");
-                                }
-                                for group in &changelog.groups {
-                                    ui.add_space(4.0);
-                                    ui.strong(&group.title);
-                                    for item in &group.items {
-                                        ui.horizontal_wrapped(|ui| {
-                                            ui.label("•");
-                                            ui.label(item);
-                                        });
+                            let fetched = shared.lock().ok().and_then(|slot| slot.clone());
+                            match fetched {
+                                Some(changelog) => {
+                                    if changelog.groups.is_empty()
+                                        && changelog.contributors.is_empty()
+                                    {
+                                        ui.label("No changes found.");
+                                    }
+                                    for group in &changelog.groups {
+                                        ui.add_space(4.0);
+                                        ui.strong(&group.title);
+                                        for item in &group.items {
+                                            ui.horizontal_wrapped(|ui| {
+                                                ui.label("•");
+                                                ui.label(item);
+                                            });
+                                        }
+                                    }
+                                    if !changelog.contributors.is_empty() {
+                                        ui.add_space(8.0);
+                                        ui.strong("Contributors");
+                                        for contributor in &changelog.contributors {
+                                            ui.horizontal_wrapped(|ui| {
+                                                ui.label("•");
+                                                ui.label(contributor);
+                                            });
+                                        }
                                     }
                                 }
-                                if !changelog.contributors.is_empty() {
-                                    ui.add_space(8.0);
-                                    ui.strong("Contributors");
-                                    for contributor in &changelog.contributors {
-                                        ui.horizontal_wrapped(|ui| {
-                                            ui.label("•");
-                                            ui.label(contributor);
-                                        });
-                                    }
+                                None => {
+                                    ui.horizontal(|ui| {
+                                        ui.spinner();
+                                        ui.label("Loading changelog...");
+                                    });
                                 }
                             }
-                            None => {
-                                ui.horizontal(|ui| {
-                                    ui.spinner();
-                                    ui.label("Loading changelog...");
-                                });
-                            }
-                        }
-                    });
+                        });
                 });
             },
         );
