@@ -183,8 +183,9 @@ jobs:
 
             ## ✨ What's New
 
-            ### 🪟 Windows Enhancements
-            -
+            ### 🛠 Technical Updates
+            - Less binary file size
+            - Removed CLI
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
