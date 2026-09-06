@@ -102,6 +102,10 @@ jobs:
     name: Build Linux
     steps:
       - uses: actions/checkout@v4
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
       - name: Build linux
         run: cargo +nightly build --release
       - name: Move linux binaries
@@ -120,6 +124,10 @@ jobs:
     name: Build Windows
     steps:
       - uses: actions/checkout@v4
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
       - name: Build windows
         run: cargo +nightly build --release
       - name: Move windows binaries
@@ -138,6 +146,10 @@ jobs:
     name: Build MacOS Arm64
     steps:
       - uses: actions/checkout@v4
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
       - name: Build macos
         run: cargo +nightly build --release
       - name: Move macos binaries

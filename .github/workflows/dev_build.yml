@@ -109,6 +109,10 @@ jobs:
     name: Build Linux
     steps:
       - uses: actions/checkout@v4
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
       - name: Build linux
         run: cargo +nightly build --release
       - name: List files for debugging
@@ -130,6 +134,10 @@ jobs:
     name: Build Windows
     steps:
       - uses: actions/checkout@v4
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
       - name: Build windows
         run: cargo +nightly build --release
       - name: List files for debugging
@@ -150,6 +158,10 @@ jobs:
     name: Build MacOS
     steps:
       - uses: actions/checkout@v4
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
       - name: Build macos
         run: cargo +nightly build --release
       - name: List files for debugging
