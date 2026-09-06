@@ -13,7 +13,6 @@ pub fn get_version() -> &'static str {
 
 pub const ICON_BYTES: &'static [u8; 38078] = include_bytes!("../../assets/icon.ico");
 
-
 #[cfg(test)]
 mod tests {
     use super::*;

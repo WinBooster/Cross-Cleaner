@@ -9,29 +9,29 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
 use clap::{ArgAction, Parser};
 use cleaner::clear_data;
+use database::get_version;
 #[cfg(windows)]
 use database::registry_database::clear_registry;
 #[cfg(windows)]
 use database::structures::CleanerDataRegistry;
 use database::structures::{CleanerData, CleanerResult, Cleared, CustomCleaner};
 use database::utils::get_file_size_string;
-use database::{get_version};
 use eframe::egui;
 use egui::IconData;
+use flate2::read::GzDecoder;
 use futures::stream::{FuturesUnordered, StreamExt};
-use image::{load_from_memory, ImageReader, ImageFormat, ImageError};
+use image::{ImageError, ImageFormat, ImageReader, load_from_memory};
 use notify_rust::Notification;
 use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
 use std::future::Future;
+use std::io::Cursor;
 use std::io::{Read, Write};
 use std::pin::Pin;
 use std::rc::Rc;
 use std::sync::Arc;
-use flate2::read::GzDecoder;
 use tempfile::NamedTempFile;
 use tokio::sync::mpsc;
-use std::io::Cursor;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -55,7 +55,8 @@ struct Args {
 
 #[tokio::main]
 async fn main() -> eframe::Result {
-    let icon_bytes = ico_bytes_to_png_bytes(database::ICON_BYTES).expect("Failed to convert icon bytes to PNG");
+    let icon_bytes =
+        ico_bytes_to_png_bytes(database::ICON_BYTES).expect("Failed to convert icon bytes to PNG");
     let icon = load_icon_from_bytes(&icon_bytes).expect("Failed to load icon");
 
     let args = Args::parse();
@@ -273,12 +274,14 @@ fn paint_back_glyph(ui: &egui::Ui, rect: egui::Rect) {
 
 /// Decodes the application icon into an egui texture (original colors).
 fn load_icon_color_image() -> egui::ColorImage {
-    let img = ImageReader::new(std::io::Cursor::new(ico_bytes_to_png_bytes(database::ICON_BYTES).unwrap()))
-        .with_guessed_format()
-        .expect("app icon format")
-        .decode()
-        .expect("decode app icon")
-        .to_rgba8();
+    let img = ImageReader::new(std::io::Cursor::new(
+        ico_bytes_to_png_bytes(database::ICON_BYTES).unwrap(),
+    ))
+    .with_guessed_format()
+    .expect("app icon format")
+    .decode()
+    .expect("decode app icon")
+    .to_rgba8();
     let (w, h) = (img.width() as usize, img.height() as usize);
     egui::ColorImage {
         size: [w, h],
