@@ -53,7 +53,3 @@ cargo build --release
 ```
 
 4. The compiled binary will be located in `target/release`
-- **800+ property-based tests** - Edge case detection with proptest
-- **9 performance benchmarks** - Regression detection with criterion
-
-See [TESTING.md](TESTING.md) for detailed testing documentation.
