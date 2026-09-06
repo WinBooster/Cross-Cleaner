@@ -33,13 +33,18 @@
   "WaveFlow": "https://github.com/InstaZDLL/WaveFlow",
 
   "Brave Browser": "https://brave.com/download",
-  "Edge": "https://www.microsoft.com/edge",
+  "Microsoft Edge": "https://www.microsoft.com/edge",
   "Google Chrome": "https://www.google.com/intl/en/chrome",
   "LibreWolf": "https://librewolf.net/installation",
   "Mozilla Firefox": "https://www.mozilla.org/firefox/new",
-  "Opera GX": "https://www.opera.com/download",
+  "Opera": "https://www.opera.com/opera",
+  "Opera GX": "https://www.opera.com/gx",
+  "Opera Air": "https://www.opera.com/air",
+  "Opera Neon": "https://www.operaneon.com/",
   "Vivaldi": "https://vivaldi.com/download",
   "Thorium": "https://thorium.rocks",
+  "Zen Browser": "https://zen-browser.app",
+  "Yandex Browser": "https://browser.yandex.ru",
 
   "ATLauncher": "https://atlauncher.com/downloads",
   "Badlion Client": "https://www.badlion.net/minecraft-client",
@@ -83,6 +88,7 @@
   "Vape Client": "https://www.vape.gg",
   "Weave": "https://weave.su",
   "AnarchyLoader": "https://github.com/AnarchyLoader/AnarchyLoader",
+  "CollapseLoader": "https://github.com/dest4590/CollapseLoader",
 
   "Bit Monero": "https://www.getmonero.org/downloads",
   "Exodus Crypto Wallet": "https://www.exodus.com/download",
@@ -111,7 +117,7 @@
   "Rust Language": "https://www.rust-lang.org/tools/install",
   "Unity Hub": "https://unity.com/download",
   "Windows Kits": "https://developer.microsoft.com/windows/downloads/windows-sdk",
-  "Insomnia": "https://developer.microsoft.com/windows/downloads/windows-sdk",
+  "Insomnia": "https://insomnia.rest",
   "Xamarin": "https://dotnet.microsoft.com/apps/xamarin",
   "Binary Ninja": "https://binary.ninja",
 

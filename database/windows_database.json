@@ -1132,7 +1132,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\Edge\\User Data",
     "class": "Browser",
     "category": "Cache",
-    "program": "Edge",
+    "program": "Microsoft Edge",
     "directories_to_remove": [
       "GraphiteDawnCache",
       "GrShaderCache",
@@ -1143,7 +1143,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\Edge\\User Data\\Default",
     "class": "Browser",
     "category": "Cache",
-    "program": "Edge",
+    "program": "Microsoft Edge",
     "directories_to_remove": [
       "Cache",
       "Code Cache",
@@ -1155,7 +1155,7 @@
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
-    "program": "Edge",
+    "program": "Microsoft Edge",
     "files_to_remove": [
       "Cookies",
       "Cookies-journal"
@@ -1166,7 +1166,7 @@
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
-    "program": "Edge",
+    "program": "Microsoft Edge",
     "files_to_remove": [
       "History",
       "History-journal",
@@ -1178,7 +1178,7 @@
     "path": "{drive}Program Files",
     "class": "Browser",
     "category": "Logs",
-    "program": "Edge",
+    "program": "Microsoft Edge",
     "files_to_remove": [
       "msedge_installer.log"
     ]
@@ -3274,6 +3274,15 @@
     ]
   },
   {
+    "path": "{drive}Namida",
+    "class": "Audio",
+    "category": "Backups",
+    "program": "Namida",
+    "directories_to_remove": [
+      "Backups"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim",
     "class": "Text",
     "category": "Documentation",
@@ -4098,7 +4107,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Python\\**\\share",
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Python\\*\\share",
     "class": "Developing",
     "category": "Documentation",
     "program": "Python",
@@ -4127,6 +4136,15 @@
     "program": "qTox",
     "files_to_remove": [
       "uninstall.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\tox",
+    "class": "Messanger",
+    "category": "Logs",
+    "program": "qTox",
+    "files_to_remove": [
+      "qtox.log"
     ]
   },
   {
@@ -5572,7 +5590,7 @@
     "category": "Logs",
     "program": "Zed",
     "directories_to_remove": [
-      " logs"
+      "logs"
     ]
   },
   {
@@ -5582,6 +5600,255 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\.minecraftx\\instances\\*",
+    "class": "Minecraft Launcher",
+    "category": "Logs",
+    "program": "X Minecraft Launcher",
+    "directories_to_remove": [
+      "logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\zen\\Profiles\\*",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Cookies",
+    "program": "Zen Browser",
+    "files_to_remove": [
+      "cookies.sqlite",
+      "cookies.sqlite-shm",
+      "cookies.sqlite-wal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\zen\\Profiles\\*",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "History",
+    "program": "Zen Browser",
+    "files_to_remove": [
+      "favicons.sqlite",
+      "favicons.sqlite-shm",
+      "favicons.sqlite-wal",
+      "formhistory.sqlite"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\zen\\Profiles\\*",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Passwords",
+    "program": "Zen Browser",
+    "files_to_remove": [
+      "key4.db",
+      "logins.db"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Yandex\\YandexBrowser\\User Data\\Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "History",
+    "program": "Yandex Browser",
+    "files_to_remove": [
+      "History",
+      "History-journal",
+      "Favicons",
+      "Favicons-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Yandex\\YandexBrowser\\User Data\\Default\\Network",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Cookies",
+    "program": "Yandex Browser",
+    "files_to_remove": [
+      "Cookies",
+      "Cookies-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Yandex\\YandexBrowser\\User Data\\Default\\Network",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Passwords",
+    "program": "Yandex Browser",
+    "files_to_remove": [
+      "Ya Passman Data",
+      "Ya Passman Data-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Air Stable\\Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "History",
+    "program": "Opera Air",
+    "files_to_remove": [
+      "History",
+      "History-journal",
+      "Favicons",
+      "Favicons-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Air Stable\\Default\\Network",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Cookies",
+    "program": "Opera Air",
+    "files_to_remove": [
+      "Cookies",
+      "Cookies-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Air Stable\\Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Passwords",
+    "program": "Opera Air",
+    "files_to_remove": [
+      "Login Data",
+      "Login Data-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Neon Stable\\Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "History",
+    "program": "Opera Neon",
+    "files_to_remove": [
+      "History",
+      "History-journal",
+      "Favicons",
+      "Favicons-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Neon Stable\\Default\\Network",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Cookies",
+    "program": "Opera Neon",
+    "files_to_remove": [
+      "Cookies",
+      "Cookies-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Neon Stable\\Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Passwords",
+    "program": "Opera Neon",
+    "files_to_remove": [
+      "Login Data",
+      "Login Data-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Stable\\Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "History",
+    "program": "Opera",
+    "files_to_remove": [
+      "History",
+      "History-journal",
+      "Favicons",
+      "Favicons-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Stable\\Default\\Network",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Cookies",
+    "program": "Opera",
+    "files_to_remove": [
+      "Cookies",
+      "Cookies-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Stable\\Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Passwords",
+    "program": "Opera",
+    "files_to_remove": [
+      "Login Data",
+      "Login Data-journal"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\ruffle",
+    "class": "Emulator",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Ruffle",
+    "files_to_remove": [
+      "LICENSE.md"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\CollapseLoader",
+    "class": "Cheat",
+    "category": "Accounts",
+    "program": "CollapseLoader",
+    "files_to_remove": [
+      "accounts.json"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\CollapseLoader",
+    "class": "Cheat",
+    "category": "Cache",
+    "program": "CollapseLoader",
+    "directories_to_remove": [
+      "cache"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming",
+    "class": "Cheat",
+    "category": "Cheats",
+    "program": "CollapseLoader",
+    "directories_to_remove": [
+      "CollapseLoader"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Microsoft\\Windows\\PowerShell\\PSReadLine",
+    "class": "System",
+    "category": "LastActivity",
+    "program": "Windows PowerShell",
+    "files_to_remove": [
+      "ConsoleHost_history.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Microsoft\\MMC",
+    "class": "System",
+    "category": "LastActivity",
+    "program": "Windows",
+    "files_to_remove": [
+      "eventvwr"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Microsoft\\MMC",
+    "class": "System",
+    "category": "Logs",
+    "program": "Windows",
+    "files_to_remove": [
+      "eventvwr"
     ]
   }
 ]

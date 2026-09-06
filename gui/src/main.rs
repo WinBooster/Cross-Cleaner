@@ -175,9 +175,9 @@ fn title_bar(
                             *back_clicked.borrow_mut() = true;
                         }
                         paint_back_glyph(ui, back.rect);
-                        ui.add_space(4.0);
+                        ui.add_space(0.0);
                     }
-                    ui.add_space(4.0);
+                    ui.add_space(2.0);
                     if let Some(tex) = icon_texture {
                         let icon = egui::Image::from_texture(egui::load::SizedTexture::new(
                             tex.id(),
@@ -221,7 +221,7 @@ fn title_bar(
 /// A flat click area in the title bar (hover highlight, no frame).
 fn title_bar_button(ui: &mut egui::Ui) -> egui::Response {
     let (rect, resp) =
-        ui.allocate_exact_size(egui::vec2(40.0, TITLE_BAR_HEIGHT), egui::Sense::click());
+        ui.allocate_exact_size(egui::vec2(30.0, TITLE_BAR_HEIGHT), egui::Sense::click());
     if resp.hovered() || resp.is_pointer_button_down_on() {
         let fill = if resp.is_pointer_button_down_on() {
             ui.visuals().widgets.active.bg_fill
@@ -483,6 +483,7 @@ struct CategoryState {
 }
 
 impl CategoryState {
+    #[allow(dead_code)]
     fn is_unchecked(&self) -> bool {
         self.selected.is_empty()
     }
@@ -867,6 +868,40 @@ impl eframe::App for MyApp {
             let r = ctx.viewport_rect();
             let t = 2.0;
             let c = egui::Color32::from_rgb(0, 120, 215);
+            painter.rect_filled(
+                egui::Rect::from_min_max(r.min, egui::pos2(r.max.x, r.min.y + t)),
+                0.0,
+                c,
+            );
+            painter.rect_filled(
+                egui::Rect::from_min_max(
+                    egui::pos2(r.min.x, r.max.y - t - 2.0),
+                    egui::pos2(r.max.x, r.max.y - 2.0),
+                ),
+                0.0,
+                c,
+            );
+            painter.rect_filled(
+                egui::Rect::from_min_max(r.min, egui::pos2(r.min.x + t, r.max.y)),
+                0.0,
+                c,
+            );
+            painter.rect_filled(
+                egui::Rect::from_min_max(
+                    egui::pos2(r.max.x - t, r.min.y),
+                    egui::pos2(r.max.x, r.max.y),
+                ),
+                0.0,
+                c,
+            );
+        else {
+            let painter = ctx.layer_painter(egui::LayerId::new(
+                egui::Order::Foreground,
+                egui::Id::new("unfocused_window_border"),
+            ));
+            let r = ctx.viewport_rect();
+            let t = 2.0;
+            let c = ui.visuals().text_color();
             painter.rect_filled(
                 egui::Rect::from_min_max(r.min, egui::pos2(r.max.x, r.min.y + t)),
                 0.0,

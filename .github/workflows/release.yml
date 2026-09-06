@@ -190,12 +190,17 @@ jobs:
             ## ✨ What's New
 
             ### 🪟 Windows Enhancements
-            - **Salwyrr Launcher** Added documentation clearing
-            - **Cliamp** Added logs clearing
-            - **FlowLauncher** Added logs, cache, last activity clearing
-            - **Recaf** Improved logs clearing
-            - **Genshin Impact** Improved logs clearing
-            - **Namida** Added last activity clearing
+            - **Zed** Fixed logs clearing
+            - **Opera** Added browser clearing
+            - **Opera Air** Added browser clearing
+            - **Opera Neon** Added browser clearing
+            - **Yandex Browser** Added browser clearing
+            - **Ruffle** Added documentation clearing
+            - **Namida** Added backups clearing
+            - **CollapseLoader** Added accounts, cache, and cheats clearing
+            - **Windows PowerShell** Added last activity history clearing
+            - **Windows** Added event viewer logs clearing
+            - **qTox** Improved logs clearing
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
