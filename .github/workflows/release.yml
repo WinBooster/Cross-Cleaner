@@ -132,7 +132,21 @@ jobs:
         run: cargo +nightly build --release
       - name: Move windows binaries
         run: |
-          move target\release\Cross_Cleaner_GUI.exe Windows-Cross_Cleaner_GUI.exe
+          copy target\release\Cross_Cleaner_GUI.exe Windows-Cross_Cleaner_GUI.exe
+      - name: Update installer version
+        shell: pwsh
+        run: |
+          (Get-Content build_setup.iss) -replace '#define MyAppVersion ".*"', '#define MyAppVersion "${{ env.APP_VERSION }}"' | Set-Content build_setup.iss
+      - name: Build installer (Inno Setup)
+        uses: robin24/inno-setup-action@v1
+        with:
+          filepath: build_setup.iss
+      - name: Upload Windows setup artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-setup
+          path: |
+            innosetup\compiler\Cross Cleaner Setup.exe
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -185,6 +199,11 @@ jobs:
         with:
           name: macos-binaries-arm64
           path: macos-binaries-arm64
+      - name: Download Windows setup artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-setup
+          path: windows-setup
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
@@ -209,6 +228,7 @@ jobs:
             linux-binaries/Linux-Cross_Cleaner_GUI
             macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_GUI
             windows-binaries/Windows-Cross_Cleaner_GUI.exe
+            windows-setup/Cross Cleaner Setup.exe
 
   generate-lists:
     name: Generating clearing programs list

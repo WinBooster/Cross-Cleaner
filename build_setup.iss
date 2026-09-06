@@ -32,13 +32,13 @@ ArchitecturesInstallIn64BitMode=x64compatible
 ;SetupArchitecture=x64
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=C:\Users\WindowsUser\Documents\GitHub\Cross-Cleaner\LICENSE
+LicenseFile=LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only).
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-OutputDir=C:\Users\WindowsUser\Documents\GitHub\Cross-Cleaner\innosetup\compiler
-OutputBaseFilename=mysetup
-SetupIconFile=C:\Users\WindowsUser\Documents\GitHub\Cross-Cleaner\assets\icon.ico
+OutputDir=innosetup\compiler
+OutputBaseFilename=Cross Cleaner Setup
+SetupIconFile=assets\icon.ico
 SolidCompression=yes
 WizardStyle=modern dynamic
 
@@ -49,7 +49,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\WindowsUser\Documents\GitHub\Cross-Cleaner\target\release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "target\release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files.
 
 [Icons]
