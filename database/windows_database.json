@@ -1156,7 +1156,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\**",
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\*",
     "category": "Documentation",
     "sub_category": "Licenses",
     "program": "Electron App's",
@@ -1166,7 +1166,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ow-electron\\**",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ow-electron\\*",
     "category": "Logs",
     "program": "Electron App's",
     "directories_to_remove": [
@@ -5180,7 +5180,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.vscode\\extensions\\**",
+    "path": "{drive}Users\\{username}\\.vscode\\extensions\\*",
     "class": "Text",
     "category": "Documentation",
     "program": "VS Code",
@@ -5193,7 +5193,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.vscode\\extensions\\**",
+    "path": "{drive}Users\\{username}\\.vscode\\extensions\\*",
     "class": "Text",
     "category": "Documentation",
     "sub_category": "Licenses",

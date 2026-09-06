@@ -15,21 +15,23 @@ use database::registry_database::clear_registry;
 use database::structures::CleanerDataRegistry;
 use database::structures::{CleanerData, CleanerResult, Cleared, CustomCleaner};
 use database::utils::get_file_size_string;
-use database::{get_icon, get_version};
+use database::{get_version};
 use eframe::egui;
 use egui::IconData;
 use futures::stream::{FuturesUnordered, StreamExt};
-use image::ImageReader;
+use image::{load_from_memory, ImageReader, ImageFormat, ImageError};
 use notify_rust::Notification;
 use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
 use std::future::Future;
-use std::io::Write;
+use std::io::{Read, Write};
 use std::pin::Pin;
 use std::rc::Rc;
 use std::sync::Arc;
+use flate2::read::GzDecoder;
 use tempfile::NamedTempFile;
 use tokio::sync::mpsc;
+use std::io::Cursor;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -53,8 +55,8 @@ struct Args {
 
 #[tokio::main]
 async fn main() -> eframe::Result {
-    let icon_bytes = get_icon();
-    let icon = load_icon_from_bytes(icon_bytes).expect("Failed to load icon");
+    let icon_bytes = ico_bytes_to_png_bytes(database::ICON_BYTES).expect("Failed to convert icon bytes to PNG");
+    let icon = load_icon_from_bytes(&icon_bytes).expect("Failed to load icon");
 
     let args = Args::parse();
 
@@ -271,7 +273,7 @@ fn paint_back_glyph(ui: &egui::Ui, rect: egui::Rect) {
 
 /// Decodes the application icon into an egui texture (original colors).
 fn load_icon_color_image() -> egui::ColorImage {
-    let img = ImageReader::new(std::io::Cursor::new(get_icon()))
+    let img = ImageReader::new(std::io::Cursor::new(ico_bytes_to_png_bytes(database::ICON_BYTES).unwrap()))
         .with_guessed_format()
         .expect("app icon format")
         .decode()
@@ -443,7 +445,7 @@ async fn work(
     let removed_directories_val = removed_directories;
 
     let mut temp_file = NamedTempFile::new().unwrap();
-    temp_file.write_all(get_icon()).unwrap();
+    temp_file.write_all(database::ICON_BYTES).unwrap();
     let icon_path = temp_file.path().to_str().unwrap();
 
     let notification_body = format!(
@@ -589,11 +591,31 @@ struct MyApp {
 }
 
 // Embedded menu image bytes (required to be embedded)
-const MENU_BYTES: &[u8] = include_bytes!("../assets/menu.png");
+const MENU_BYTES: &[u8] = include_bytes!("../assets/menu.png.gz");
 
-fn load_menu_color_image() -> egui::ColorImage {
+pub fn ico_bytes_to_png_bytes(ico_data: &[u8]) -> Result<Vec<u8>, ImageError> {
+    // Декодируем ICO в DynamicImage
+    let img = load_from_memory(ico_data)?;
+
+    // Создаём Cursor, который владеет вектором и поддерживает Seek
+    let png_data = Vec::new();
+    let mut cursor = Cursor::new(png_data);
+
+    // Записываем PNG в Cursor
+    img.write_to(&mut cursor, ImageFormat::Png)?;
+
+    // Забираем внутренний вектор с данными PNG
+    Ok(cursor.into_inner())
+}
+
+fn load_asset_image(data: &[u8]) -> egui::ColorImage {
     // White with original alpha; actual color applied at draw time via tint()
-    let img = ImageReader::new(std::io::Cursor::new(MENU_BYTES))
+    let mut bytes: Vec<u8> = vec![];
+
+    let mut decoder = GzDecoder::new(data);
+    decoder.read_to_end(&mut bytes).expect("Failded load asset");
+
+    let img = ImageReader::new(std::io::Cursor::new(bytes))
         .with_guessed_format()
         .expect("menu png format")
         .decode()
@@ -1328,7 +1350,7 @@ impl eframe::App for MyApp {
                     if self.menu_texture.is_none() {
                         self.menu_texture = Some(ctx.load_texture(
                             "menu",
-                            load_menu_color_image(),
+                            load_asset_image(MENU_BYTES),
                             egui::TextureOptions::LINEAR,
                         ));
                     }
@@ -1481,8 +1503,8 @@ mod tests {
 
     #[test]
     fn test_load_icon_from_bytes() {
-        let icon_data = get_icon();
-        let result = load_icon_from_bytes(icon_data);
+        let icon_data = database::ICON_BYTES;
+        let result = load_icon_from_bytes(&icon_data);
 
         assert!(result.is_ok(), "Icon should load successfully");
         let icon = result.unwrap();

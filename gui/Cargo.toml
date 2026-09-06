@@ -5,20 +5,29 @@ edition = "2024"
 
 [dependencies]
 egui = "0.36"
-eframe = "0.36"
+eframe = { version = "0.36", default-features = false, features = [
+    "glow",
+    "default_fonts",
+    "x11",
+    "wayland",
+] }
 env_logger = "0.11.11"
-tokio = { version = "1", features = ["full"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync"] }
 futures = "0.3"
 notify-rust = "4"
-image = "0.25.10"
+image = { version = "0.25.10", default-features = false, features = ["png", "ico"] }
 tempfile = "3.27"
 clap = { version = "4.6", features = ["derive"] }
+flate2 = "1.1"
 
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }
 
 # Performance: Fast memory allocator
 mimalloc = "0.1"
+
+[build-dependencies]
+flate2 = "1.1"
 
 [target.'cfg(windows)'.dependencies]
 winreg = "0.56.0"

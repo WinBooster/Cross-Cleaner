@@ -1,3 +1,8 @@
+use flate2::Compression;
+use flate2::write::GzEncoder;
+use std::fs::File;
+use std::io::{Read, Write};
+
 #[cfg(windows)]
 extern crate winres;
 
@@ -17,7 +22,7 @@ fn main() {
         | version_numbers.get(3).copied().unwrap_or(0);
 
     let mut res = winres::WindowsResource::new();
-    res.set_icon("../assets\\icon.ico");
+    res.set_icon("..\\assets\\icon.ico");
 
     // Only require admin for release builds, not for tests
     let profile = env::var("PROFILE").unwrap_or_else(|_| String::from("debug"));
@@ -47,6 +52,21 @@ fn main() {
         eprintln!("Error: {}", e);
         std::process::exit(1);
     }
+
+    asset_compressor("menu.png")
+}
+
+fn asset_compressor(asset: &str) {
+    let mut bytes: Vec<u8> = vec![];
+    File::open(format!("assets/{}", asset))
+        .unwrap()
+        .read_to_end(&mut bytes)
+        .expect("Failed read asset");
+
+    let mut encoder = GzEncoder::new(Vec::new(), Compression::best());
+    encoder.write_all(&*bytes).expect("Failed to compress");
+    let compressed = encoder.finish().expect("Failed to finalize compression");
+    std::fs::write(format!("assets/{}{}", asset, ".gz"), compressed).unwrap();
 }
 
 #[cfg(unix)]
