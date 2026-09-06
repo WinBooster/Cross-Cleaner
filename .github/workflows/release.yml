@@ -215,8 +215,7 @@ jobs:
             ## ✨ What's New
 
             ### 🛠 Technical Updates
-            - Less binary file size
-            - Removed CLI
+            - Fix auto updater
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:

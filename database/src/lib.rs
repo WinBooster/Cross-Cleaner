@@ -6,6 +6,7 @@ pub mod registry_database;
 mod registry_utils;
 pub mod structures;
 pub mod utils;
+pub mod version;
 
 pub fn get_version() -> &'static str {
     option_env!("APP_VERSION").unwrap_or("2.0.2.2")
@@ -34,15 +35,15 @@ mod tests {
 
     #[test]
     fn test_get_icon() {
-        let icon = get_icon();
-        assert_eq!(icon.len(), 3216, "Icon should be exactly 3216 bytes");
-        // Check PNG magic number
-        assert_eq!(
-            &icon[0..4],
-            &[0x89, 0x50, 0x4E, 0x47],
-            "Should be a PNG file"
-        );
-    }
+            let icon = ICON_BYTES;
+            assert_eq!(icon.len(), 38078, "Icon should be exactly 38078 bytes");
+            // Check ICO magic number
+            assert_eq!(
+                &icon[0..4],
+                &[0x00, 0x00, 0x01, 0x00],
+                "Should be an ICO file"
+            );
+        }
 
     #[test]
     fn test_get_default_database() {
