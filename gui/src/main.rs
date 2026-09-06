@@ -135,9 +135,12 @@ async fn main() -> eframe::Result {
 /// Height of the custom title bar (in points).
 const TITLE_BAR_HEIGHT: f32 = 32.0;
 
-// Width reserved for the close & minimize buttons (drag area excludes them
-// so a single click always reaches the buttons instead of starting a drag).
-const TITLE_BAR_BUTTONS_WIDTH: f32 = 96.0;
+/// Project repository, opened by the GitHub icon in the title bar.
+const GITHUB_URL: &str = "https://github.com/WinBooster/Cross-Cleaner";
+
+// Width reserved for the close, minimize & GitHub buttons (drag area excludes
+// them so a single click always reaches the buttons instead of starting a drag).
+const TITLE_BAR_BUTTONS_WIDTH: f32 = 126.0;
 
 /// Custom window title bar: drag-to-move, minimize and close buttons.
 /// Optionally shows a back button (returns whether it was clicked).
@@ -171,6 +174,28 @@ fn title_bar(
                     ctx.send_viewport_cmd(egui::ViewportCommand::Minimized(true));
                 }
                 paint_minimize_glyph(ui, minimize.rect);
+                // Vertical separator between window controls and the GitHub button.
+                // Spans the full title bar height: from the top window border
+                // down to the bottom of the title bar.
+                let (sep_rect, _sep) = ui.allocate_exact_size(
+                    egui::vec2(1.0, TITLE_BAR_HEIGHT),
+                    egui::Sense::hover(),
+                );
+                ui.painter().line_segment(
+                    [
+                        egui::pos2(sep_rect.center().x, sep_rect.min.y),
+                        egui::pos2(sep_rect.center().x, sep_rect.max.y),
+                    ],
+                    egui::Stroke::new(1.0, ui.visuals().widgets.noninteractive.bg_stroke.color),
+                );
+                // GitHub icon (U+E624 from the built-in emoji-icon-font)
+                // that opens the project repository.
+                let github = title_bar_button(ui);
+                if github.clicked() {
+                    open_in_browser(GITHUB_URL);
+                }
+                paint_github_glyph(ui, github.rect);
+                github.on_hover_text("GitHub repository");
                 ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
                     if show_back {
                         let back = title_bar_button(ui);
@@ -257,6 +282,44 @@ fn paint_minimize_glyph(ui: &egui::Ui, rect: egui::Rect) {
         [egui::pos2(c.x - 5.0, c.y), egui::pos2(c.x + 5.0, c.y)],
         stroke,
     );
+}
+
+fn paint_github_glyph(ui: &egui::Ui, rect: egui::Rect) {
+    ui.painter().text(
+        rect.center(),
+        egui::Align2::CENTER_CENTER,
+        "\u{e624}",
+        egui::FontId::proportional(14.0),
+        ui.visuals().text_color(),
+    );
+}
+
+/// Opens a URL in the system browser.
+#[cfg(windows)]
+fn open_in_browser(url: &str) {
+    let _ = std::process::Command::new("cmd")
+        .args(["/C", "start", "", url])
+        .spawn();
+}
+
+#[cfg(target_os = "linux")]
+fn open_in_browser(url: &str) {
+    let _ = std::process::Command::new("xdg-open").arg(url).spawn();
+}
+
+#[cfg(target_os = "macos")]
+fn open_in_browser(url: &str) {
+    let _ = std::process::Command::new("open").arg(url).spawn();
+}
+
+#[cfg(any(
+    target_os = "freebsd",
+    target_os = "netbsd",
+    target_os = "openbsd",
+    target_os = "dragonfly"
+))]
+fn open_in_browser(url: &str) {
+    let _ = std::process::Command::new("xdg-open").arg(url).spawn();
 }
 
 fn paint_back_glyph(ui: &egui::Ui, rect: egui::Rect) {
