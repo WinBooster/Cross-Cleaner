@@ -1,4 +1,4 @@
-﻿#![cfg_attr(
+#![cfg_attr(
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
@@ -1036,9 +1036,7 @@ impl MyApp {
             let shared_for_thread = shared.clone();
             self.changelog_handle = Some(std::thread::spawn(move || {
                 let fetched = fetch_changelogs(&current_version).unwrap_or_default();
-                *shared_for_thread
-                    .lock()
-                    .expect("changelog mutex poisoned") = Some(fetched);
+                *shared_for_thread.lock().expect("changelog mutex poisoned") = Some(fetched);
             }));
             self.changelog = Some(shared);
             self.changelog_open = Some(Arc::new(std::sync::Mutex::new(true)));
@@ -1072,9 +1070,7 @@ impl MyApp {
             move |ctx, _class| {
                 // Detect the user pressing X on this viewport window.
                 if ctx.input(|i| i.viewport().close_requested()) {
-                    *shared_open
-                        .lock()
-                        .expect("changelog open flag poisoned") = false;
+                    *shared_open.lock().expect("changelog open flag poisoned") = false;
                 }
                 let icon = icon.clone();
                 // Same zero-margin panel as the main window so the title bar
@@ -1090,33 +1086,22 @@ impl MyApp {
                         // Same custom title bar as the main window (drag, GitHub,
                         // minimize & close buttons). Close sends ViewportCommand::Close
                         // to this viewport, which is handled above.
-                        title_bar(
-                            ui,
-                            &ctx,
-                            "Cross Cleaner - What's New",
-                            icon.as_ref(),
-                            false,
-                        );
+                        title_bar(ui, &ctx, "Cross Cleaner - What's New", icon.as_ref(), false);
                         // Same 2px outline as the main window.
-                        let focused =
-                            ctx.input(|i| i.viewport().focused.unwrap_or(false));
+                        let focused = ctx.input(|i| i.viewport().focused.unwrap_or(false));
                         let border_color = if focused {
                             egui::Color32::from_rgb(0, 120, 215)
                         } else {
                             ui.visuals().text_color()
                         };
-                        paint_window_border(
-                            &ctx,
-                            "changelog_window_border",
-                            border_color,
-                        );
+                        paint_window_border(&ctx, "changelog_window_border", border_color);
                         ui.add_space(8.0);
                         // Inner padding around the scroll content, matching
                         // the main window's 8px panel margin.
                         egui::Frame::new()
                             .inner_margin(egui::Margin::same(8))
                             .show(ui, |ui| {
-                                    egui::ScrollArea::vertical()
+                                egui::ScrollArea::vertical()
                                     .id_salt("changelog_scroll")
                                     // Fill the full window width so the scrollbar sits at
                                     // the window edge instead of hugging the text.
