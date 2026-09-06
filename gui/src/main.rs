@@ -894,6 +894,7 @@ impl eframe::App for MyApp {
                 0.0,
                 c,
             );
+        }
         else {
             let painter = ctx.layer_painter(egui::LayerId::new(
                 egui::Order::Foreground,
