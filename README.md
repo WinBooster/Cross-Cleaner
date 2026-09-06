@@ -28,10 +28,7 @@
 - 🧪 **Well-Tested**: 59+ unit tests, 800+ property-based tests, and 9 performance benchmarks
 
 ### Demo
-![CLI](https://github.com/user-attachments/assets/7d28a763-97ee-45b9-9ad5-2ed0fb8886c0)
-<img width="430" height="168" alt="изображение" src="https://github.com/user-attachments/assets/4d4caa7c-15d7-4e8a-b547-f845d84dcea7" />
-
-
+<img width="470" height="157" alt="image" src="https://github.com/user-attachments/assets/0cee6303-7ada-49f2-bd33-8159a583ebf9" />
 
 ## 📥 Installation
 
