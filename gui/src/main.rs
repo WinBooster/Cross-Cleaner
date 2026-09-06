@@ -1077,73 +1077,91 @@ impl MyApp {
                         .expect("changelog open flag poisoned") = false;
                 }
                 let icon = icon.clone();
-                // CentralPanel consumes the context mutably; title_bar only
-                // needs commands, so reuse the same context inside the panel.
-                egui::CentralPanel::default().show(ctx, |ui| {
-                    let ctx = ui.ctx().clone();
-                    // Same custom title bar as the main window (drag, GitHub,
-                    // minimize & close buttons). Close sends ViewportCommand::Close
-                    // to this viewport, which is handled above.
-                    title_bar(
-                        ui,
-                        &ctx,
-                        "Cross Cleaner - What's New",
-                        icon.as_ref(),
-                        false,
-                    );
-                    // Same 2px outline as the main window.
-                    let focused =
-                        ctx.input(|i| i.viewport().focused.unwrap_or(false));
-                    let border_color = if focused {
-                        egui::Color32::from_rgb(0, 120, 215)
-                    } else {
-                        ui.visuals().text_color()
-                    };
-                    paint_window_border(&ctx, "changelog_window_border", border_color);
-                    egui::ScrollArea::vertical()
-                        .id_salt("changelog_scroll")
-                        // Fill the full window width so the scrollbar sits at
-                        // the window edge instead of hugging the text.
-                        .auto_shrink([false, false])
-                        .show(ui, |ui| {
-                        let fetched = shared.lock().ok().and_then(|slot| slot.clone());
-                        match fetched {
-                            Some(changelog) => {
-                                if changelog.groups.is_empty()
-                                    && changelog.contributors.is_empty()
-                                {
-                                    ui.label("No changes found.");
-                                }
-                                for group in &changelog.groups {
-                                    ui.add_space(4.0);
-                                    ui.strong(&group.title);
-                                    for item in &group.items {
-                                        ui.horizontal_wrapped(|ui| {
-                                            ui.label("•");
-                                            ui.label(item);
-                                        });
-                                    }
-                                }
-                                if !changelog.contributors.is_empty() {
-                                    ui.add_space(8.0);
-                                    ui.strong("Contributors");
-                                    for contributor in &changelog.contributors {
-                                        ui.horizontal_wrapped(|ui| {
-                                            ui.label("•");
-                                            ui.label(contributor);
-                                        });
-                                    }
-                                }
-                            }
-                            None => {
-                                ui.horizontal(|ui| {
-                                    ui.spinner();
-                                    ui.label("Loading changelog...");
-                                });
-                            }
-                        }
+                // Same zero-margin panel as the main window so the title bar
+                // is flush with the top edge and exactly TITLE_BAR_HEIGHT tall.
+                egui::CentralPanel::default()
+                    .frame(
+                        egui::Frame::new()
+                            .inner_margin(egui::Margin::same(0))
+                            .fill(ctx.style().visuals.panel_fill),
+                    )
+                    .show(ctx, |ui| {
+                        let ctx = ui.ctx().clone();
+                        // Same custom title bar as the main window (drag, GitHub,
+                        // minimize & close buttons). Close sends ViewportCommand::Close
+                        // to this viewport, which is handled above.
+                        title_bar(
+                            ui,
+                            &ctx,
+                            "Cross Cleaner - What's New",
+                            icon.as_ref(),
+                            false,
+                        );
+                        // Same 2px outline as the main window.
+                        let focused =
+                            ctx.input(|i| i.viewport().focused.unwrap_or(false));
+                        let border_color = if focused {
+                            egui::Color32::from_rgb(0, 120, 215)
+                        } else {
+                            ui.visuals().text_color()
+                        };
+                        paint_window_border(
+                            &ctx,
+                            "changelog_window_border",
+                            border_color,
+                        );
+                        ui.add_space(8.0);
+                        // Inner padding around the scroll content, matching
+                        // the main window's 8px panel margin.
+                        egui::Frame::new()
+                            .inner_margin(egui::Margin::same(8))
+                            .show(ui, |ui| {
+                                    egui::ScrollArea::vertical()
+                                    .id_salt("changelog_scroll")
+                                    // Fill the full window width so the scrollbar sits at
+                                    // the window edge instead of hugging the text.
+                                    .auto_shrink([false, false])
+                                    .show(ui, |ui| {
+                                        let fetched =
+                                            shared.lock().ok().and_then(|slot| slot.clone());
+                                        match fetched {
+                                            Some(changelog) => {
+                                                if changelog.groups.is_empty()
+                                                    && changelog.contributors.is_empty()
+                                                {
+                                                    ui.label("No changes found.");
+                                                }
+                                                for group in &changelog.groups {
+                                                    ui.add_space(4.0);
+                                                    ui.strong(&group.title);
+                                                    for item in &group.items {
+                                                        ui.horizontal_wrapped(|ui| {
+                                                            ui.label("•");
+                                                            ui.label(item);
+                                                        });
+                                                    }
+                                                }
+                                                if !changelog.contributors.is_empty() {
+                                                    ui.add_space(8.0);
+                                                    ui.strong("Contributors");
+                                                    for contributor in &changelog.contributors {
+                                                        ui.horizontal_wrapped(|ui| {
+                                                            ui.label("•");
+                                                            ui.label(contributor);
+                                                        });
+                                                    }
+                                                }
+                                            }
+                                            None => {
+                                                ui.horizontal(|ui| {
+                                                    ui.spinner();
+                                                    ui.label("Loading changelog...");
+                                                });
+                                            }
+                                        }
+                                    });
+                            });
                     });
-                });
             },
         );
 

@@ -100,6 +100,20 @@ fn strip_markdown_inline(text: &str) -> String {
     text.replace("**", "").replace('`', "").trim().to_string()
 }
 
+/// Replaces emoji that are missing from the fonts bundled with egui
+/// (they would render as empty boxes) with supported glyphs from the
+/// bundled emoji-icon-font.
+///
+/// Verified against the bundled fonts:
+/// - `🪟` (U+1FA9F, Windows) is in no font -> U+E61F (Windows logo);
+/// - `🍎` (U+1F34E, red apple) -> U+F8FF (Apple logo);
+/// - `🐧` (U+1F427, penguin) renders fine via NotoEmoji-Regular, no Linux
+///   logo glyph exists in the bundled fonts, so it is kept as is.
+fn replace_unsupported_emoji(text: &str) -> String {
+    text.replace('\u{1FA9F}', "\u{E61F}")
+        .replace('\u{1F34E}', "\u{F8FF}")
+}
+
 /// True when the line is a section header (`##` or `###` level) of a changelog body.
 fn changelog_header(line: &str) -> Option<&str> {
     line.strip_prefix("### ")
@@ -129,7 +143,7 @@ pub fn parse_changelog(body: &str) -> Changelog {
         }
 
         if let Some(title) = changelog_header(line) {
-            let title = strip_markdown_inline(title);
+            let title = replace_unsupported_emoji(&strip_markdown_inline(title));
             // The real header is `## 👏 Contributors Hall of Fame` and may be prefixed
             // with an emoji, so match by substring.
             in_contributors = title
@@ -145,7 +159,11 @@ pub fn parse_changelog(body: &str) -> Changelog {
             continue;
         }
 
-        if let Some(item) = line.strip_prefix("- ").map(strip_markdown_inline) {
+        if let Some(item) = line
+            .strip_prefix("- ")
+            .map(strip_markdown_inline)
+            .map(|ref i| replace_unsupported_emoji(i))
+        {
             if item.is_empty() {
                 continue;
             }
@@ -275,7 +293,11 @@ Special thanks to our amazing contributors who made this release possible:\n\
 
         let changelog = parse_changelog(body);
         assert_eq!(changelog.groups.len(), 1);
-        assert_eq!(changelog.groups[0].title, "🪟 Windows Enhancements");
+        // 🪟 is replaced with the emoji-icon-font Windows glyph U+E61F.
+        assert_eq!(
+            changelog.groups[0].title,
+            "\u{E61F} Windows Enhancements"
+        );
         assert_eq!(changelog.groups[0].items.len(), 2);
         assert_eq!(changelog.groups[0].items[0], "Audacity Added documentation clearing");
         assert_eq!(changelog.contributors, vec!["@Nekiplay - Core improvements and feature implementations"]);
@@ -290,9 +312,13 @@ Special thanks to our amazing contributors who made this release possible:\n\
         merge_changelog_groups(&mut merged, parse_changelog(body_b));
 
         assert_eq!(merged.groups.len(), 2);
-        assert_eq!(merged.groups[0].title, "🪟 Windows Enhancements");
+        assert_eq!(
+            merged.groups[0].title,
+            "\u{E61F} Windows Enhancements"
+        );
         assert_eq!(merged.groups[0].items.len(), 3);
         assert!(!merged.groups[0].items.contains(&"Audacity Added documentation clearing".to_string()) == false);
+        // 🐧 is kept: it renders fine via the bundled NotoEmoji font.
         assert_eq!(merged.groups[1].title, "🐧 Linux Enhancements");
     }
 }
