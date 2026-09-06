@@ -894,8 +894,7 @@ impl eframe::App for MyApp {
                 0.0,
                 c,
             );
-        }
-        else {
+        } else {
             let painter = ctx.layer_painter(egui::LayerId::new(
                 egui::Order::Foreground,
                 egui::Id::new("unfocused_window_border"),
