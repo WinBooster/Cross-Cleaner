@@ -177,10 +177,8 @@ fn title_bar(
                 // Vertical separator between window controls and the GitHub button.
                 // Spans the full title bar height: from the top window border
                 // down to the bottom of the title bar.
-                let (sep_rect, _sep) = ui.allocate_exact_size(
-                    egui::vec2(1.0, TITLE_BAR_HEIGHT),
-                    egui::Sense::hover(),
-                );
+                let (sep_rect, _sep) =
+                    ui.allocate_exact_size(egui::vec2(1.0, TITLE_BAR_HEIGHT), egui::Sense::hover());
                 ui.painter().line_segment(
                     [
                         egui::pos2(sep_rect.center().x, sep_rect.min.y),
