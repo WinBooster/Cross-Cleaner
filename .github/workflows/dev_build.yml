@@ -9,12 +9,14 @@ on:
       - "**/*.rs"
       - "**/*.json"
       - ".github/workflows/**"
+      - "Cargo.lock"
   pull_request:
     paths:
       - "**/*.toml"
       - "**/*.rs"
       - "**/*.json"
       - ".github/workflows/**"
+      - "Cargo.lock"
 
 env:
   CARGO_TERM_COLOR: always
