@@ -73,6 +73,27 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Program Files\\7-Zip",
+    "class": "Archive",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "7-Zip",
+    "files_to_remove": [
+      "License.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\7-Zip",
+    "class": "Archive",
+    "category": "Documentation",
+    "program": "7-Zip",
+    "files_to_remove": [
+      "readme.txt",
+      "History.txt",
+      "descript.ion"
+    ]
+  },
+  {
     "path": "{drive}Program Files\\AAFTweak",
     "category": "Documentation",
     "program": "AAF Optimus DCH Audio",
@@ -798,6 +819,26 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Program Files\\CPUID\\*",
+    "class": "Utility",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "CPU-Z",
+    "files_to_remove": [
+      "cpuz_gbt_eula.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\CPUID\\*",
+    "class": "Utility",
+    "category": "Documentation",
+    "program": "CPU-Z",
+    "files_to_remove": [
+      "cpuz_gbt_readme.txt",
+      "cpuz_readme.txt"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\.cristalix\\updates\\*\\crash-reports/*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
@@ -838,6 +879,16 @@
     "program": "Cristalix",
     "directories_to_remove": [
       "logs"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\CrystalDiskInfo",
+    "class": "Utility",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "CrystalDiskInfo",
+    "directories_to_remove": [
+      "License"
     ]
   },
   {
@@ -1079,6 +1130,16 @@
     "program": "Discord",
     "directories_to_remove": [
       "logs"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\DNSCrypt",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "DNSCrypt",
+    "files_to_remove": [
+      "LICENSE"
     ]
   },
   {
@@ -1667,6 +1728,15 @@
     "class": "Developing",
     "directories_to_remove": [
       "caches"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\Appdata\\Local\\Greenshot",
+    "class": "Image",
+    "category": "Logs",
+    "program": "Greenshot",
+    "files_to_remove": [
+      "Greenshot.log"
     ]
   },
   {
@@ -3165,6 +3235,28 @@
     ]
   },
   {
+    "path": "{drive}Program Files\\MTT File Manager",
+    "class": "File Manager",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "MTT File Manager",
+    "files_to_remove": [
+      "LICENSE"
+    ],
+    "directories_to_remove": [
+      "third_party_licenses"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\MTT File Manager",
+    "class": "File Manager",
+    "category": "Documentation",
+    "program": "MTT File Manager",
+    "files_to_remove": [
+      "NOTICE"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC",
     "class": "Minecraft Launcher",
     "category": "Accounts",
@@ -4413,28 +4505,6 @@
     "remove_files": true
   },
   {
-    "path": "{steam}\\*.log",
-    "class": "Game",
-    "category": "Logs",
-    "program": "Steam",
-    "remove_files": true
-  },
-  {
-    "path": "{steam}\\*.signatures",
-    "class": "Game",
-    "category": "Documentation",
-    "sub_category": "Signatures",
-    "program": "Steam",
-    "remove_files": true
-  },
-  {
-    "path": "{steam}\\logs\\*",
-    "class": "Game",
-    "category": "Logs",
-    "program": "Steam",
-    "remove_files": true
-  },
-  {
     "path": "{drive}Users\\{username}\\.rustup\\toolchains\\*\\share",
     "class": "Developing",
     "category": "Documentation",
@@ -4594,6 +4664,28 @@
     "files_to_remove": [
       "chrome_debug.log"
     ]
+  },
+  {
+    "path": "{steam}\\*.log",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Steam",
+    "remove_files": true
+  },
+  {
+    "path": "{steam}\\*.signatures",
+    "class": "Game",
+    "category": "Documentation",
+    "sub_category": "Signatures",
+    "program": "Steam",
+    "remove_files": true
+  },
+  {
+    "path": "{steam}\\logs\\*",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Steam",
+    "remove_files": true
   },
   {
     "path": "{steam}\\userdata\\*",
@@ -5568,6 +5660,15 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}",
+    "class": "System",
+    "category": "LastActivity",
+    "program": "Windows",
+    "directories_to_remove": [
+      "Searches"
+    ]
+  },
+  {
     "path": "{drive}Program Files\\Windows Defender",
     "class": "System",
     "category": "Documentation",
@@ -5880,107 +5981,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\MTT File Manager",
-    "class": "File Manager",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "MTT File Manager",
-    "files_to_remove": [
-      "LICENSE"
-    ],
-    "directories_to_remove": [
-      "third_party_licenses"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\MTT File Manager",
-    "class": "File Manager",
-    "category": "Documentation",
-    "program": "MTT File Manager",
-    "files_to_remove": [
-      "NOTICE"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\CPUID\\*",
-    "class": "Utility",
-    "category": "Documentation",
-    "sub_category":"Licenses",
-    "program": "CPU-Z",
-    "files_to_remove": [
-      "cpuz_gbt_eula.txt"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\CPUID\\*",
-    "class": "Utility",
-    "category": "Documentation",
-    "program": "CPU-Z",
-    "files_to_remove": [
-      "cpuz_gbt_readme.txt",
-      "cpuz_readme.txt"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\CrystalDiskInfo",
-    "class": "Utility",
-    "category": "Documentation",
-    "sub_category":"Licenses",
-    "program": "CrystalDiskInfo",
-    "directories_to_remove": [
-      "License"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\DNSCrypt",
-    "class": "Security",
-    "category": "Documentation",
-    "sub_category":"Licenses",
-    "program": "DNSCrypt",
-    "files_to_remove": [
-      "LICENSE"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\7-Zip",
-    "class": "Archive",
-    "category": "Documentation",
-    "sub_category":"Licenses",
-    "program": "7-Zip",
-    "files_to_remove": [
-      "License.txt"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\7-Zip",
-    "class": "Archive",
-    "category": "Documentation",
-    "program": "7-Zip",
-    "files_to_remove": [
-      "readme.txt",
-      "History.txt",
-      "descript.ion"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}",
-    "class": "System",
-    "category": "LastActivity",
-    "program": "Windows",
-    "directories_to_remove": [
-      "Searches"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\Appdata\\Local\\Greenshot",
-    "class": "Image",
-    "category": "Logs",
-    "program": "Greenshot",
-    "files_to_remove": [
-      "Greenshot.log"
     ]
   }
 ]
