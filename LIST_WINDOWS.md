@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.2.8.4.1
+# Windows Clearing Programs Catalog v2.0.2.9
 **Total categories in database:** 12
 
-**Total programs in database:** 218
+**Total programs in database:** 223
 
-**Total pathes in database:** 489
+**Total pathes in database:** 499
 
 ## AI
 
@@ -149,6 +149,13 @@
 | 5 | Ruffle | Documentation |
 
 
+## File Manager
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | [MTT File Manager](https://github.com/MTTamurex/MTT-File-Manager-RUST) | Documentation |
+
+
 ## Files Transport
 
 | № | Program | Categories |
@@ -175,7 +182,7 @@
 | 13 | Rockstar Games | Crashes |
 | 14 | [Rust](https://store.steampowered.com/app/252490/Rust) | Game |
 | 15 | [Schedule I](https://store.steampowered.com/app/3164500/Schedule_I) | Game, Logs |
-| 16 | [Steam](https://store.steampowered.com/about) | Accounts |
+| 16 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
 | 17 | [Terraria](https://terraria.org) | Game |
 | 18 | [The Powder Toy](https://powdertoy.co.uk) | Game |
 | 19 | [Ultrakill](https://store.steampowered.com/app/1229490/ULTRAKILL) | Logs |
@@ -195,12 +202,13 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [ImageGlass](https://imageglass.org) | Cache, Documentation |
-| 2 | [InkSpace](https://inkscape.org) | Documentation, Logs |
-| 3 | [Magpie](https://github.com/Blinue/Magpie) | Cache, Logs |
-| 4 | [Paint.NET](https://paint.net) | Documentation |
-| 5 | [ShareX](https://getsharex.com/downloads) | Backups, Images, Logs |
-| 6 | [Tonfotos Telegram Connector](https://tonfotos.com) | Images |
+| 1 | [Greenshot](https://github.com/greenshot/greenshot) | Logs |
+| 2 | [ImageGlass](https://imageglass.org) | Cache, Documentation |
+| 3 | [InkSpace](https://inkscape.org) | Documentation, Logs |
+| 4 | [Magpie](https://github.com/Blinue/Magpie) | Cache, Logs |
+| 5 | [Paint.NET](https://paint.net) | Documentation |
+| 6 | [ShareX](https://getsharex.com/downloads) | Backups, Images, Logs |
+| 7 | [Tonfotos Telegram Connector](https://tonfotos.com) | Images |
 
 
 ## Messanger
@@ -286,24 +294,25 @@
 | 1 | [360 Total Security](https://www.360totalsecurity.com) | Logs |
 | 2 | [4uKey for Android](https://www.tenorshare.ru/products/android-password-reset-tool.html) | Logs |
 | 3 | [Avast](https://www.avast.ru) | Documentation, Logs |
-| 4 | [Doctor Web Cureit](https://free.drweb.ru/download+cureit+free) | Logs |
-| 5 | [GnuPG](https://www.gnupg.org/download/index.html) | Documentation |
-| 6 | [Gpg4win](https://www.gpg4win.org) | Documentation |
-| 7 | [I2P](https://geti2p.net/download) | Documentation, Logs |
-| 8 | [IObit Malware Fighter](https://www.iobit.com/en/malware-fighter.php) | Logs |
-| 9 | [NetLimiter](https://www.netlimiter.com/download) | Logs |
-| 10 | [OONI Probe](https://ooni.org/install) | Logs |
-| 11 | [Panda Security](https://www.pandasecurity.com) | Logs |
-| 12 | [Process Hacker 2](https://systeminformer.sourceforge.io/downloads) | Documentation |
-| 13 | [Process Lasso](https://bitsum.com) | Logs |
-| 14 | [Sandboxie+](https://sandboxie-plus.com) | Documentation |
-| 15 | [SystemInformer](https://systeminformer.com/downloads) | Documentation |
-| 16 | [TG WS Proxy](https://github.com/Flowseal/tg-ws-proxy) | Logs |
-| 17 | [VeraCrypt](https://veracrypt.io) | Documentation |
-| 18 | [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | Documentation, Logs |
-| 19 | [Wireshark](https://www.wireshark.org) | Documentation |
-| 20 | [Zapret](https://github.com/bol-van/zapret) | Logs |
-| 21 | [Zapret Universal Interface](https://github.com/AmantesNihilo/zapret-universal-interface) | Logs |
+| 4 | DNSCrypt | Documentation |
+| 5 | [Doctor Web Cureit](https://free.drweb.ru/download+cureit+free) | Logs |
+| 6 | [GnuPG](https://www.gnupg.org/download/index.html) | Documentation |
+| 7 | [Gpg4win](https://www.gpg4win.org) | Documentation |
+| 8 | [I2P](https://geti2p.net/download) | Documentation, Logs |
+| 9 | [IObit Malware Fighter](https://www.iobit.com/en/malware-fighter.php) | Logs |
+| 10 | [NetLimiter](https://www.netlimiter.com/download) | Logs |
+| 11 | [OONI Probe](https://ooni.org/install) | Logs |
+| 12 | [Panda Security](https://www.pandasecurity.com) | Logs |
+| 13 | [Process Hacker 2](https://systeminformer.sourceforge.io/downloads) | Documentation |
+| 14 | [Process Lasso](https://bitsum.com) | Logs |
+| 15 | [Sandboxie+](https://sandboxie-plus.com) | Documentation |
+| 16 | [SystemInformer](https://systeminformer.com/downloads) | Documentation |
+| 17 | [TG WS Proxy](https://github.com/Flowseal/tg-ws-proxy) | Logs |
+| 18 | [VeraCrypt](https://veracrypt.io) | Documentation |
+| 19 | [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | Documentation, Logs |
+| 20 | [Wireshark](https://www.wireshark.org) | Documentation |
+| 21 | [Zapret](https://github.com/bol-van/zapret) | Logs |
+| 22 | [Zapret Universal Interface](https://github.com/AmantesNihilo/zapret-universal-interface) | Logs |
 
 
 ## Spyware
@@ -351,7 +360,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | GlazeWM | Logs |
+| 1 | [GlazeWM](https://visualstudio.microsoft.com) | Logs |
 
 
 ## Torrent
@@ -366,10 +375,12 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [Everything](https://www.voidtools.com) | Documentation, LastActivity |
-| 2 | [MiniBin](https://github.com/king-tri-ton/minibin) | Logs |
-| 3 | [PowerToys](https://github.com/microsoft/PowerToys) | Documentation |
-| 4 | [Unlocker](http://www.emptyloop.com/unlocker) | Documentation |
+| 1 | [CPU-Z](https://www.cpuid.com) | Documentation |
+| 2 | [CrystalDiskInfo](https://crystalmark.info) | Documentation |
+| 3 | [Everything](https://www.voidtools.com) | Documentation, LastActivity |
+| 4 | [MiniBin](https://github.com/king-tri-ton/minibin) | Logs |
+| 5 | [PowerToys](https://github.com/microsoft/PowerToys) | Documentation |
+| 6 | [Unlocker](http://www.emptyloop.com/unlocker) | Documentation |
 
 
 ## VPN
