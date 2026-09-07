@@ -73,13 +73,6 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Program Files\\7-Zip\\*.txt",
-    "class": "Archive",
-    "category": "Documentation",
-    "program": "7-Zip",
-    "remove_files": true
-  },
-  {
     "path": "{drive}Program Files\\AAFTweak",
     "category": "Documentation",
     "program": "AAF Optimus DCH Audio",
@@ -748,6 +741,13 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Cloudflare\\*.log",
+    "class": "VPN",
+    "category": "Logs",
+    "program": "CloudFlare",
+    "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\Cloudflare\\*log*",
     "class": "VPN",
     "category": "Logs",
     "program": "CloudFlare",
@@ -4405,11 +4405,33 @@
     ]
   },
   {
-    "path": "{steam}\\userdata\\**\\252490\\local\\cfg\\*",
+    "path": "{steam}\\userdata\\*\\252490\\local\\cfg\\*",
     "class": "Game",
     "category": "Game",
     "sub_category": "Settings",
     "program": "Rust",
+    "remove_files": true
+  },
+  {
+    "path": "{steam}\\*.log",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Steam",
+    "remove_files": true
+  },
+  {
+    "path": "{steam}\\*.signatures",
+    "class": "Game",
+    "category": "Documentation",
+    "sub_category": "Signatures",
+    "program": "Steam",
+    "remove_files": true
+  },
+  {
+    "path": "{steam}\\logs\\*",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Steam",
     "remove_files": true
   },
   {
@@ -4574,7 +4596,7 @@
     ]
   },
   {
-    "path": "{steam}\\userdata\\**",
+    "path": "{steam}\\userdata\\*",
     "class": "Game",
     "category": "Accounts",
     "program": "Steam",
@@ -4955,6 +4977,15 @@
     "files_to_remove": [
       "README.TXT",
       "Unlocker.url"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\UnlockerPortable\\App\\*",
+    "class": "Utility",
+    "category": "Documentation",
+    "program": "Unlocker",
+    "files_to_remove": [
+      "README.TXT"
     ]
   },
   {
@@ -5849,6 +5880,107 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\MTT File Manager",
+    "class": "File Manager",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "MTT File Manager",
+    "files_to_remove": [
+      "LICENSE"
+    ],
+    "directories_to_remove": [
+      "third_party_licenses"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\MTT File Manager",
+    "class": "File Manager",
+    "category": "Documentation",
+    "program": "MTT File Manager",
+    "files_to_remove": [
+      "NOTICE"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\CPUID\\*",
+    "class": "Utility",
+    "category": "Documentation",
+    "sub_category":"Licenses",
+    "program": "CPU-Z",
+    "files_to_remove": [
+      "cpuz_gbt_eula.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\CPUID\\*",
+    "class": "Utility",
+    "category": "Documentation",
+    "program": "CPU-Z",
+    "files_to_remove": [
+      "cpuz_gbt_readme.txt",
+      "cpuz_readme.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\CrystalDiskInfo",
+    "class": "Utility",
+    "category": "Documentation",
+    "sub_category":"Licenses",
+    "program": "CrystalDiskInfo",
+    "directories_to_remove": [
+      "License"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\DNSCrypt",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category":"Licenses",
+    "program": "DNSCrypt",
+    "files_to_remove": [
+      "LICENSE"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\7-Zip",
+    "class": "Archive",
+    "category": "Documentation",
+    "sub_category":"Licenses",
+    "program": "7-Zip",
+    "files_to_remove": [
+      "License.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\7-Zip",
+    "class": "Archive",
+    "category": "Documentation",
+    "program": "7-Zip",
+    "files_to_remove": [
+      "readme.txt",
+      "History.txt",
+      "descript.ion"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}",
+    "class": "System",
+    "category": "LastActivity",
+    "program": "Windows",
+    "directories_to_remove": [
+      "Searches"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\Appdata\\Local\\Greenshot",
+    "class": "Image",
+    "category": "Logs",
+    "program": "Greenshot",
+    "files_to_remove": [
+      "Greenshot.log"
     ]
   }
 ]
