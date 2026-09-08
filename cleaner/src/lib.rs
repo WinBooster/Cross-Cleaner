@@ -34,9 +34,9 @@ fn safe_join(base: &Path, name: &str) -> Option<PathBuf> {
 async fn remove_file_fast(path: PathBuf) -> io::Result<u64> {
     tokio::task::spawn_blocking(move || {
         let authority = cap_std::ambient_authority();
-        let name = path.file_name().ok_or_else(|| {
-            io::Error::new(io::ErrorKind::InvalidInput, "no file name in path")
-        })?;
+        let name = path
+            .file_name()
+            .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "no file name in path"))?;
         let parent = path.parent().unwrap_or_else(|| Path::new(""));
         let dir = if parent.as_os_str().is_empty() {
             cap_std::fs::Dir::open_ambient_dir(".", authority)?
