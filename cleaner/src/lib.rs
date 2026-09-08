@@ -15,9 +15,15 @@ pub use database;
 // B: blocking fast helpers - use std::fs inside spawn_blocking
 async fn remove_file_fast(path: PathBuf) -> io::Result<u64> {
     tokio::task::spawn_blocking(move || {
-        let meta = std::fs::metadata(&path)?;
+        let meta = std::fs::symlink_metadata(&path)?;
         if !meta.is_file() {
             return Err(io::Error::new(io::ErrorKind::InvalidInput, "not a file"));
+        }
+        if meta.is_symlink() {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "symlink not supported",
+            ));
         }
         let len = meta.len();
         std::fs::remove_file(&path)?;
@@ -28,9 +34,15 @@ async fn remove_file_fast(path: PathBuf) -> io::Result<u64> {
 }
 
 fn remove_dir_sync(root: PathBuf) -> io::Result<(u64, u64, u64)> {
-    let meta = std::fs::metadata(&root)?;
+    let meta = std::fs::symlink_metadata(&root)?;
     if !meta.is_dir() {
         return Err(io::Error::new(io::ErrorKind::InvalidInput, "not a dir"));
+    }
+    if meta.is_symlink() {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "symlink not supported",
+        ));
     }
     let mut files = 0u64;
     let mut folders = 0u64;
