@@ -2,7 +2,7 @@ use database::structures::{CleanerData, CleanerResult};
 use futures::stream::{FuturesUnordered, StreamExt};
 use glob::glob;
 use std::future::Future;
-use std::path::PathBuf;
+use std::path::{Component, Path, PathBuf};
 use std::sync::Arc;
 use tokio::io;
 use tokio::sync::Semaphore;
@@ -11,6 +11,24 @@ pub mod custom_cleaners;
 
 // INFO: Re-export so macro_rules! ($crate::database::...) resolves in any consumer crate
 pub use database;
+
+// INFO: Safe join for untrusted names (from DB): only plain relative components.
+// Rejects "..", ".", absolute paths, Windows prefixes (C:\, \\?\) and empty names.
+fn safe_join(base: &Path, name: &str) -> Option<PathBuf> {
+    let rel = Path::new(name);
+    let mut out = base.to_path_buf();
+    let mut any = false;
+    for c in rel.components() {
+        match c {
+            Component::Normal(s) => {
+                out.push(s);
+                any = true;
+            }
+            _ => return None,
+        }
+    }
+    if any { Some(out) } else { None }
+}
 
 // B: blocking fast helpers - use std::fs inside spawn_blocking
 async fn remove_file_fast(path: PathBuf) -> io::Result<u64> {
@@ -55,11 +73,24 @@ fn remove_dir_sync(root: PathBuf) -> io::Result<(u64, u64, u64)> {
         for e in entries {
             let e = e?;
             let p = e.path();
-            let m = e.metadata()?;
-            if m.is_dir() {
+            // NOTE: DirEntry::file_type() does not follow links. On Windows a junction
+            // reports is_dir()=true, so descending into it would escape the tree
+            // (read_dir would follow the junction). Remove the link itself instead.
+            let ft = e.file_type()?;
+            if ft.is_symlink() {
+                if ft.is_dir() {
+                    std::fs::remove_dir(&p)?; // junction / dir symlink: removes link only
+                    folders += 1;
+                } else {
+                    std::fs::remove_file(&p)?; // file symlink: unlink
+                    files += 1;
+                }
+                continue;
+            }
+            if ft.is_dir() {
                 stack.push(p);
             } else {
-                bytes += m.len();
+                bytes += e.metadata()?.len();
                 files += 1;
                 std::fs::remove_file(&p)?;
             }
@@ -99,6 +130,14 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
         sub_category: data.sub_category.clone(),
     };
 
+    // INFO: Reject parent-dir traversal in the DB-supplied glob pattern
+    if Path::new(&data.path)
+        .components()
+        .any(|c| matches!(c, Component::ParentDir))
+    {
+        return out;
+    }
+
     let paths: Vec<PathBuf> = match glob(&data.path) {
         Ok(g) => g.filter_map(Result::ok).collect(),
         Err(_) => return out,
@@ -134,13 +173,22 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
                     std::pin::Pin<Box<dyn Future<Output = Option<u64>> + Send>>,
                 > = FuturesUnordered::new();
                 for fname in &data.files_to_remove {
-                    let fpath = path.join(fname);
+                    let Some(fpath) = safe_join(&path, fname) else {
+                        eprintln!(
+                            "cleaner: skipping unsafe file name {:?} in {}",
+                            fname, data.path
+                        );
+                        continue;
+                    };
                     let sem2 = sem.clone();
                     inner.push(Box::pin(async move {
                         let _p = sem2.acquire_owned().await.unwrap();
-                        match remove_file_fast(fpath).await {
+                        match remove_file_fast(fpath.clone()).await {
                             Ok(b) => Some(b),
-                            Err(_) => None,
+                            Err(e) => {
+                                eprintln!("cleaner: remove_file {}: {}", fpath.display(), e);
+                                None
+                            }
                         }
                     }));
                 }
@@ -159,13 +207,22 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
                     std::pin::Pin<Box<dyn Future<Output = Option<(u64, u64, u64)>> + Send>>,
                 > = FuturesUnordered::new();
                 for dname in &data.directories_to_remove {
-                    let dpath = path.join(dname);
+                    let Some(dpath) = safe_join(&path, dname) else {
+                        eprintln!(
+                            "cleaner: skipping unsafe dir name {:?} in {}",
+                            dname, data.path
+                        );
+                        continue;
+                    };
                     let sem2 = sem.clone();
                     inner.push(Box::pin(async move {
                         let _p = sem2.acquire_owned().await.unwrap();
-                        match remove_dir_fast(dpath).await {
+                        match remove_dir_fast(dpath.clone()).await {
                             Ok(v) => Some(v),
-                            Err(_) => None,
+                            Err(e) => {
+                                eprintln!("cleaner: remove_dir {}: {}", dpath.display(), e);
+                                None
+                            }
                         }
                     }));
                 }
@@ -482,6 +539,89 @@ mod tests {
         assert!(result.folders >= 1); // cache dir
         assert!(!target_dir.join("temp.tmp").exists());
         assert!(!cache_dir.exists());
+    }
+
+    #[tokio::test]
+    async fn test_clear_data_rejects_parent_traversal() {
+        let temp_dir = TempDir::new().unwrap();
+        let base = temp_dir.path().join("base");
+        fs::create_dir(&base).unwrap();
+        fs::write(base.join("ok.txt"), b"x").unwrap();
+
+        let outside = temp_dir.path().join("outside");
+        fs::create_dir(&outside).unwrap();
+        let secret = outside.join("secret.txt");
+        fs::write(&secret, b"secret").unwrap();
+
+        let mut data = create_test_data(base.to_str().unwrap().to_string());
+        data.files_to_remove = vec![String::from("../outside/secret.txt")];
+        data.directories_to_remove = vec![String::from("../outside")];
+
+        let result = clear_data(&data).await;
+
+        assert!(!result.working);
+        assert!(secret.exists());
+        assert!(outside.exists());
+        assert!(base.join("ok.txt").exists());
+    }
+
+    #[tokio::test]
+    async fn test_clear_data_rejects_absolute_names() {
+        let temp_dir = TempDir::new().unwrap();
+        let base = temp_dir.path().join("base");
+        fs::create_dir(&base).unwrap();
+
+        let outside = temp_dir.path().join("outside");
+        fs::create_dir(&outside).unwrap();
+        let secret = outside.join("secret.txt");
+        fs::write(&secret, b"secret").unwrap();
+
+        let mut data = create_test_data(base.to_str().unwrap().to_string());
+        data.files_to_remove = vec![secret.to_string_lossy().to_string()];
+        data.directories_to_remove = vec![outside.to_string_lossy().to_string()];
+
+        let result = clear_data(&data).await;
+
+        assert!(!result.working);
+        assert!(secret.exists());
+        assert!(outside.exists());
+    }
+
+    #[tokio::test]
+    async fn test_clear_data_rejects_parent_in_pattern() {
+        let temp_dir = TempDir::new().unwrap();
+        let base = temp_dir.path().join("base");
+        fs::create_dir(&base).unwrap();
+        let f = base.join("f.txt");
+        fs::write(&f, b"x").unwrap();
+
+        let pattern = format!(
+            "{}/../base/*.txt",
+            temp_dir.path().join("base").to_str().unwrap()
+        );
+        let mut data = create_test_data(pattern);
+        data.remove_files = true;
+
+        let result = clear_data(&data).await;
+
+        assert!(!result.working);
+        assert!(f.exists());
+    }
+
+    #[tokio::test]
+    async fn test_clear_data_skips_dot_and_empty_names() {
+        let temp_dir = TempDir::new().unwrap();
+        let base = temp_dir.path().join("base");
+        fs::create_dir(&base).unwrap();
+        fs::write(base.join("ok.txt"), b"x").unwrap();
+
+        let mut data = create_test_data(base.to_str().unwrap().to_string());
+        data.files_to_remove = vec![String::from("."), String::from("")];
+
+        let result = clear_data(&data).await;
+
+        assert!(!result.working);
+        assert!(base.join("ok.txt").exists());
     }
 }
 
