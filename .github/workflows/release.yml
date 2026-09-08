@@ -214,18 +214,9 @@ jobs:
 
             ## ✨ What's New
 
-            ### 🪟 Windows Enhancements
-            - Unlocker improved documentation clearing
-            - CloudFlare improved log clearing
-            - MTT File Manager added documentation clearing
-            - CPU-Z added documentation clearing
-            - CrystalDiskInfo added documentation clearing
-            - Steam added log clearing
-            - Steam added documentation clearing
-            - DNSCrypt added documentation clearing
-            - 7-Zip improved documentation clearing
-            - Windows improved last activity clearing
-            - Greenshot added logs clearing
+            ### 🛠 Technical Updates
+            - Fix toctou  window
+            - Fix symlink following
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
