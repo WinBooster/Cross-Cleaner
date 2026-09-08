@@ -30,21 +30,31 @@ fn safe_join(base: &Path, name: &str) -> Option<PathBuf> {
     if any { Some(out) } else { None }
 }
 
-// B: blocking fast helpers - use std::fs inside spawn_blocking
+// B: blocking fast helpers - use cap-std inside spawn_blocking
 async fn remove_file_fast(path: PathBuf) -> io::Result<u64> {
     tokio::task::spawn_blocking(move || {
-        let meta = std::fs::symlink_metadata(&path)?;
-        if !meta.is_file() {
-            return Err(io::Error::new(io::ErrorKind::InvalidInput, "not a file"));
-        }
+        let authority = cap_std::ambient_authority();
+        let name = path.file_name().ok_or_else(|| {
+            io::Error::new(io::ErrorKind::InvalidInput, "no file name in path")
+        })?;
+        let parent = path.parent().unwrap_or_else(|| Path::new(""));
+        let dir = if parent.as_os_str().is_empty() {
+            cap_std::fs::Dir::open_ambient_dir(".", authority)?
+        } else {
+            cap_std::fs::Dir::open_ambient_dir(parent, authority)?
+        };
+        let meta = dir.symlink_metadata(&name)?;
         if meta.is_symlink() {
             return Err(io::Error::new(
                 io::ErrorKind::InvalidInput,
                 "symlink not supported",
             ));
         }
+        if !meta.is_file() {
+            return Err(io::Error::new(io::ErrorKind::InvalidInput, "not a file"));
+        }
         let len = meta.len();
-        std::fs::remove_file(&path)?;
+        dir.remove_file(&name)?;
         Ok(len)
     })
     .await
@@ -52,54 +62,83 @@ async fn remove_file_fast(path: PathBuf) -> io::Result<u64> {
 }
 
 fn remove_dir_sync(root: PathBuf) -> io::Result<(u64, u64, u64)> {
-    let meta = std::fs::symlink_metadata(&root)?;
-    if !meta.is_dir() {
-        return Err(io::Error::new(io::ErrorKind::InvalidInput, "not a dir"));
-    }
+    let authority = cap_std::ambient_authority();
+    let name = root.file_name().ok_or_else(|| {
+        io::Error::new(io::ErrorKind::InvalidInput, "cannot remove filesystem root")
+    })?;
+    let parent = root.parent().unwrap_or_else(|| Path::new("."));
+    // Open the parent as a capability handle (dirfd on Unix, HANDLE on Windows).
+    // Every further operation is resolved against open handles, so paths swapped
+    // in mid-traversal cannot escape the parent's tree - this closes the TOCTOU
+    // window that plain name-based std::fs calls have.
+    let parent_dir = cap_std::fs::Dir::open_ambient_dir(parent, authority)?;
+    // Refuse a symlinked root: check the final component with lstat semantics
+    // before opening it relative to the parent handle.
+    let meta = parent_dir.symlink_metadata(name)?;
     if meta.is_symlink() {
         return Err(io::Error::new(
             io::ErrorKind::InvalidInput,
             "symlink not supported",
         ));
     }
+    let dir = parent_dir.open_dir(name)?;
+    // Keep the handle open only while walking; on Windows a directory cannot
+    // be removed while any handle to it is open (cap-std omits FILE_SHARE_DELETE).
+    let (files, folders, bytes) = remove_dir_recursive(&dir)?;
+    drop(dir);
+    parent_dir.remove_dir(name)?; // root is now empty; counts itself
+    Ok((files, folders + 1, bytes))
+}
+
+// INFO: Depth-first deletion relative to open handles. Entry types come from
+// the handle (lstat semantics, never follows links). Symlinks and Windows
+// junctions are removed as links; their targets are never touched.
+fn remove_dir_recursive(dir: &cap_std::fs::Dir) -> io::Result<(u64, u64, u64)> {
     let mut files = 0u64;
     let mut folders = 0u64;
     let mut bytes = 0u64;
-    let mut stack = vec![root];
-    let mut to_delete: Vec<PathBuf> = Vec::new();
 
-    while let Some(dir) = stack.pop() {
-        let entries = std::fs::read_dir(&dir)?;
-        for e in entries {
-            let e = e?;
-            let p = e.path();
-            // NOTE: DirEntry::file_type() does not follow links. On Windows a junction
-            // reports is_dir()=true, so descending into it would escape the tree
-            // (read_dir would follow the junction). Remove the link itself instead.
-            let ft = e.file_type()?;
-            if ft.is_symlink() {
-                if ft.is_dir() {
-                    std::fs::remove_dir(&p)?; // junction / dir symlink: removes link only
-                    folders += 1;
-                } else {
-                    std::fs::remove_file(&p)?; // file symlink: unlink
+    for entry in dir.entries()? {
+        let entry = entry?;
+        let name = entry.file_name();
+        let ft = entry.file_type()?;
+        if ft.is_symlink() {
+            // Never follow links. The removal syscall differs per platform:
+            // - Windows: directory reparse points (junctions, dir symlinks) have
+            //   FILE_ATTRIBUTE_DIRECTORY but FileType::is_dir() is false for them,
+            //   so they must go through RemoveDirectory (removes the link itself).
+            // - Unix: unlink removes any symlink, including symlink-to-dir.
+            #[cfg(windows)]
+            {
+                // Junctions and dir symlinks are reparse points; DeleteFile
+                // rejects them, RemoveDirectory removes the link itself.
+                // Regular file symlinks go through DeleteFile.
+                if dir.remove_file(&name).is_ok() {
                     files += 1;
+                } else {
+                    dir.remove_dir(&name)?;
+                    folders += 1;
                 }
-                continue;
             }
-            if ft.is_dir() {
-                stack.push(p);
-            } else {
-                bytes += e.metadata()?.len();
+            #[cfg(not(windows))]
+            {
+                dir.remove_file(&name)?;
                 files += 1;
-                std::fs::remove_file(&p)?;
             }
+        } else if ft.is_dir() {
+            let sub = dir.open_dir(&name)?;
+            let (f, fo, b) = remove_dir_recursive(&sub)?;
+            drop(sub); // release handle before removing (Windows FILE_SHARE_DELETE)
+            files += f;
+            folders += fo;
+            bytes += b;
+            dir.remove_dir(&name)?; // sub is now empty
+            folders += 1;
+        } else {
+            bytes += entry.metadata()?.len();
+            files += 1;
+            dir.remove_file(&name)?;
         }
-        to_delete.push(dir);
-    }
-    for d in to_delete.iter().rev() {
-        std::fs::remove_dir(d)?;
-        folders += 1;
     }
     Ok((files, folders, bytes))
 }
@@ -622,6 +661,107 @@ mod tests {
 
         assert!(!result.working);
         assert!(base.join("ok.txt").exists());
+    }
+
+    // INFO: junction on Windows, symlink on Unix. The cleaner must remove the
+    // link itself, never descend into or delete the target's contents.
+    #[cfg(windows)]
+    #[tokio::test]
+    async fn test_clear_data_junction_inside_tree_not_followed() {
+        use std::os::windows::fs::symlink_dir;
+
+        let temp_dir = TempDir::new().unwrap();
+        let base = temp_dir.path().join("base");
+        fs::create_dir(&base).unwrap();
+
+        let target = temp_dir.path().join("target");
+        fs::create_dir(&target).unwrap();
+        fs::write(target.join("valuable.txt"), b"keep").unwrap();
+
+        let link = base.join("link");
+        symlink_dir(&target, &link).unwrap();
+
+        let mut data = create_test_data(base.to_str().unwrap().to_string());
+        data.remove_all_in_dir = true;
+
+        let result = clear_data(&data).await;
+
+        assert!(result.working);
+        assert!(target.join("valuable.txt").exists());
+        assert!(!link.exists());
+    }
+
+    #[cfg(unix)]
+    #[tokio::test]
+    async fn test_clear_data_symlink_inside_tree_not_followed() {
+        use std::os::unix::fs::symlink;
+
+        let temp_dir = TempDir::new().unwrap();
+        let base = temp_dir.path().join("base");
+        fs::create_dir(&base).unwrap();
+
+        let target = temp_dir.path().join("target");
+        fs::create_dir(&target).unwrap();
+        fs::write(target.join("valuable.txt"), b"keep").unwrap();
+
+        let link = base.join("link");
+        symlink(&target, &link).unwrap();
+
+        let mut data = create_test_data(base.to_str().unwrap().to_string());
+        data.remove_all_in_dir = true;
+
+        let result = clear_data(&data).await;
+
+        assert!(result.working);
+        assert!(target.join("valuable.txt").exists());
+        assert!(!link.exists());
+    }
+
+    // INFO: root itself is a link -> refuse instead of following it.
+    #[cfg(windows)]
+    #[tokio::test]
+    async fn test_clear_data_refuses_junction_root() {
+        use std::os::windows::fs::symlink_dir;
+
+        let temp_dir = TempDir::new().unwrap();
+        let target = temp_dir.path().join("target");
+        fs::create_dir(&target).unwrap();
+        fs::write(target.join("valuable.txt"), b"keep").unwrap();
+
+        let link = temp_dir.path().join("link");
+        symlink_dir(&target, &link).unwrap();
+
+        let mut data = create_test_data(link.to_str().unwrap().to_string());
+        data.remove_all_in_dir = true;
+
+        let result = clear_data(&data).await;
+
+        assert!(!result.working);
+        assert!(target.join("valuable.txt").exists());
+        assert!(link.exists());
+    }
+
+    #[cfg(unix)]
+    #[tokio::test]
+    async fn test_clear_data_refuses_symlink_root() {
+        use std::os::unix::fs::symlink;
+
+        let temp_dir = TempDir::new().unwrap();
+        let target = temp_dir.path().join("target");
+        fs::create_dir(&target).unwrap();
+        fs::write(target.join("valuable.txt"), b"keep").unwrap();
+
+        let link = temp_dir.path().join("link");
+        symlink(&target, &link).unwrap();
+
+        let mut data = create_test_data(link.to_str().unwrap().to_string());
+        data.remove_all_in_dir = true;
+
+        let result = clear_data(&data).await;
+
+        assert!(!result.working);
+        assert!(target.join("valuable.txt").exists());
+        assert!(link.exists());
     }
 }
 
