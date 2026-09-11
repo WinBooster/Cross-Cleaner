@@ -5810,7 +5810,7 @@
     "path": "{drive}Users\\{username}\\.minecraftx\\instances\\*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "X Minecraft Launcher",
     "directories_to_remove": [
       "saves"
@@ -5820,7 +5820,7 @@
     "path": "{drive}Users\\{username}\\.minecraftx",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Saves",
+    "sub_category": "Saves",
     "program": "X Minecraft Launcher",
     "directories_to_remove": [
       "saves"
@@ -5830,7 +5830,7 @@
     "path": "{drive}Users\\{username}\\.minecraftx\\instances\\*",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Settings",
+    "sub_category": "Settings",
     "program": "X Minecraft Launcher",
     "files_to_remove": [
       "options.txt"
@@ -5840,7 +5840,7 @@
     "path": "{drive}Users\\{username}\\.minecraftx",
     "class": "Minecraft Launcher",
     "category": "Game",
-    "sub_category":"Settings",
+    "sub_category": "Settings",
     "program": "X Minecraft Launcher",
     "files_to_remove": [
       "options.txt"
