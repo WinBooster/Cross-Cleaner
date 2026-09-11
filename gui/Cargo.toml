@@ -28,7 +28,8 @@ flate2 = "1.1"
 # macOS: Apple deprecated OpenGL, поэтому wgpu (Metal).
 [target.'cfg(windows)'.dependencies]
 eframe = { version = "0.36", default-features = false, features = [
-    "wgpu_no_default_features",
+    "wgpu",
+    "glow",
     "default_fonts",
 ] }
 winreg = "0.56.0"
@@ -43,7 +44,8 @@ eframe = { version = "0.36", default-features = false, features = [
 
 [target.'cfg(target_os = "macos")'.dependencies]
 eframe = { version = "0.36", default-features = false, features = [
-    "wgpu_no_default_features",
+    "wgpu",
+    "glow",
     "default_fonts",
 ] }
 
