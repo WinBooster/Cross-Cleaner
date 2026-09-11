@@ -181,7 +181,12 @@ pub fn expand_registry_path_pattern(key: &RegKey, pattern: &str) -> Vec<String> 
 }
 
 #[cfg(windows)]
-fn expand_pattern_recursive(key: &RegKey, base: String, segments: &[&str], results: &mut Vec<String>) {
+fn expand_pattern_recursive(
+    key: &RegKey,
+    base: String,
+    segments: &[&str],
+    results: &mut Vec<String>,
+) {
     if segments.is_empty() {
         // INFO: Only report paths that actually exist in registry
         if !base.is_empty() && key.open_subkey_with_flags(&base, KEY_READ).is_ok() {
@@ -278,10 +283,8 @@ mod tests {
         base_key.create_subkey("Settings").unwrap();
 
         // INFO: star pattern matches History + History64, not Settings
-        let mut found = expand_registry_path_pattern(
-            &hkcu,
-            "Software\\CrossCleanerGlobTest\\Hist*",
-        );
+        let mut found =
+            expand_registry_path_pattern(&hkcu, "Software\\CrossCleanerGlobTest\\Hist*");
         found.sort();
         assert_eq!(
             found,
@@ -292,30 +295,23 @@ mod tests {
         );
 
         // INFO: question mark pattern matches exactly one char
-        let found = expand_registry_path_pattern(
-            &hkcu,
-            "Software\\CrossCleanerGlobTest\\History6?",
-        );
+        let found =
+            expand_registry_path_pattern(&hkcu, "Software\\CrossCleanerGlobTest\\History6?");
         assert_eq!(
             found,
             vec![String::from("Software\\CrossCleanerGlobTest\\History64")]
         );
 
         // INFO: literal path returns itself when key exists
-        let found = expand_registry_path_pattern(
-            &hkcu,
-            "Software\\CrossCleanerGlobTest\\History",
-        );
+        let found = expand_registry_path_pattern(&hkcu, "Software\\CrossCleanerGlobTest\\History");
         assert_eq!(
             found,
             vec![String::from("Software\\CrossCleanerGlobTest\\History")]
         );
 
         // INFO: literal path that does not exist -> empty
-        let found = expand_registry_path_pattern(
-            &hkcu,
-            "Software\\CrossCleanerGlobTest\\Missing\\Deep",
-        );
+        let found =
+            expand_registry_path_pattern(&hkcu, "Software\\CrossCleanerGlobTest\\Missing\\Deep");
         assert!(found.is_empty());
 
         hkcu.delete_subkey_all(test_base).unwrap();
@@ -355,14 +351,21 @@ mod tests {
         let result = clear_registry(&data);
         assert!(result.working, "glob path clear should remove values");
 
-        let base = hkcu
-            .open_subkey_with_flags(test_base, KEY_READ)
-            .unwrap();
+        let base = hkcu.open_subkey_with_flags(test_base, KEY_READ).unwrap();
         let app1 = base.open_subkey("App1\\History").unwrap();
         let app2 = base.open_subkey("App2\\History").unwrap();
-        assert!(app1.get_value::<String, _>("recent").is_err(), "App1\\History recent value should be removed");
-        assert!(app2.get_value::<String, _>("recent").is_err(), "App2\\History recent value should be removed");
-        assert!(base.open_subkey("App1\\KeepMe").is_ok(), "KeepMe should survive");
+        assert!(
+            app1.get_value::<String, _>("recent").is_err(),
+            "App1\\History recent value should be removed"
+        );
+        assert!(
+            app2.get_value::<String, _>("recent").is_err(),
+            "App2\\History recent value should be removed"
+        );
+        assert!(
+            base.open_subkey("App1\\KeepMe").is_ok(),
+            "KeepMe should survive"
+        );
 
         hkcu.delete_subkey_all(test_base).unwrap();
     }
@@ -442,12 +445,19 @@ mod tests {
         let result = clear_registry(&data);
         assert!(result.working, "remove_trees should delete matched trees");
 
-        let base = hkcu
-            .open_subkey_with_flags(test_base, KEY_READ)
-            .unwrap();
-        assert!(base.open_subkey("App1\\History").is_err(), "App1\\History tree should be removed");
-        assert!(base.open_subkey("App2\\History").is_err(), "App2\\History tree should be removed");
-        assert!(base.open_subkey("App1\\KeepMe").is_ok(), "KeepMe should survive");
+        let base = hkcu.open_subkey_with_flags(test_base, KEY_READ).unwrap();
+        assert!(
+            base.open_subkey("App1\\History").is_err(),
+            "App1\\History tree should be removed"
+        );
+        assert!(
+            base.open_subkey("App2\\History").is_err(),
+            "App2\\History tree should be removed"
+        );
+        assert!(
+            base.open_subkey("App1\\KeepMe").is_ok(),
+            "KeepMe should survive"
+        );
 
         hkcu.delete_subkey_all(test_base).unwrap();
     }

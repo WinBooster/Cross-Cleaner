@@ -145,8 +145,7 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
             for value in data.values_to_remove.iter() {
                 use crate::registry_utils::remove_value_in_registry;
 
-                removed +=
-                    remove_value_in_registry(&root, current_path.clone(), value.to_string());
+                removed += remove_value_in_registry(&root, current_path.clone(), value.to_string());
             }
             for value in data.keys_to_remove.iter() {
                 removed += remove_key_in_registry(&root, current_path.clone() + "\\" + value);
