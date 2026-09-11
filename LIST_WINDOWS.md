@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.3.0
+# Windows Clearing Programs Catalog v2.0.3.1
 **Total categories in database:** 12
 
 **Total programs in database:** 223
 
-**Total pathes in database:** 499
+**Total pathes in database:** 500
 
 ## AI
 
@@ -248,7 +248,7 @@
 | 16 | [PrismLauncher](https://prismlauncher.org/download/windows) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
 | 17 | Salwyrr Launcher | Documentation |
 | 18 | [Tecknix Client](https://tecknix.com/download.html) | Accounts, Cache, Crashes, Documentation, Game, Images, Logs |
-| 19 | [X Minecraft Launcher](https://xmcl.app) | Logs |
+| 19 | [X Minecraft Launcher](https://xmcl.app) | Game, Logs |
 
 
 ## Optimization
