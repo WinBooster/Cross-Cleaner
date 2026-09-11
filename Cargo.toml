@@ -2,6 +2,12 @@
 resolver = "3"
 members = ["gui"]
 
+# wgpu-hal 30.0.1 requires windows 0.62, but the crates.io gpu-allocator 0.28.0
+# release resolves to windows 0.61 (pulled in by notify-rust -> tauri-winrt-notification).
+# Main branch widens the windows requirement to ">=0.53, <=0.62".
+[patch.crates-io]
+gpu-allocator = { git = "https://github.com/Traverse-Research/gpu-allocator" }
+
 [profile.release]
 lto = true
 codegen-units = 1
