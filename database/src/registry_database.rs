@@ -3,7 +3,10 @@ use std::fs;
 use std::sync::OnceLock;
 
 #[cfg(windows)]
-use crate::registry_utils::{remove_all_in_registry, remove_all_in_tree_in_registry};
+use crate::registry_utils::{
+    expand_registry_path_pattern, remove_all_in_registry, remove_all_in_tree_in_registry,
+    remove_key_in_registry, remove_trees_matching_in_registry, remove_values_matching_in_registry,
+};
 #[cfg(windows)]
 use crate::structures::CleanerDataRegistry;
 #[cfg(windows)]
@@ -102,21 +105,52 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
     if root.is_some() && path.is_some() {
         let root = root.unwrap();
         let path = path.unwrap();
-        if data.remove_all_in_tree {
-            removed += remove_all_in_tree_in_registry(&root, path.to_string())
-        }
-        if data.remove_all_in_registry {
-            removed += remove_all_in_registry(&root, path.to_string())
-        }
-        for value in data.values_to_remove.iter() {
-            use crate::registry_utils::remove_value_in_registry;
 
-            removed += remove_value_in_registry(&root, path.to_string(), value.to_string());
-        }
-        for value in data.keys_to_remove.iter() {
-            use crate::registry_utils::remove_key_in_registry;
+        // INFO: Expand glob pattern in main path ("*" and "?" per segment)
+        let paths: Vec<String> = if path.contains('*') || path.contains('?') {
+            expand_registry_path_pattern(&root, &path)
+        } else {
+            vec![path.clone()]
+        };
 
-            removed += remove_key_in_registry(&root, path.to_string() + "\\" + value);
+        for current_path in paths {
+            if data.remove_all_in_tree {
+                removed += remove_all_in_tree_in_registry(&root, current_path.clone())
+            }
+            if data.remove_all_in_registry {
+                removed += remove_all_in_registry(&root, current_path.clone())
+            }
+            // INFO: remove_values is the glob for value names matched at
+            // the end of resolved paths, "true" removes all values
+            if data.remove_values == "true" {
+                removed += remove_all_in_registry(&root, current_path.clone())
+            } else if !data.remove_values.is_empty() {
+                removed += remove_values_matching_in_registry(
+                    &root,
+                    current_path.clone(),
+                    data.remove_values.clone(),
+                )
+            }
+            // INFO: remove_trees is the glob for subkey trees matched at
+            // the end of resolved paths, "true" removes resolved keys
+            if data.remove_trees == "true" {
+                removed += remove_key_in_registry(&root, current_path.clone())
+            } else if !data.remove_trees.is_empty() {
+                removed += remove_trees_matching_in_registry(
+                    &root,
+                    current_path.clone(),
+                    data.remove_trees.clone(),
+                )
+            }
+            for value in data.values_to_remove.iter() {
+                use crate::registry_utils::remove_value_in_registry;
+
+                removed +=
+                    remove_value_in_registry(&root, current_path.clone(), value.to_string());
+            }
+            for value in data.keys_to_remove.iter() {
+                removed += remove_key_in_registry(&root, current_path.clone() + "\\" + value);
+            }
         }
     }
 

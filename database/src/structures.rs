@@ -85,6 +85,15 @@ pub struct CleanerDataRegistry {
 
     #[serde(default)]
     pub keys_to_remove: Vec<String>,
+
+    // INFO: Glob matched against the last segment(s) of resolved paths:
+    // value names for remove_values, subkey names for remove_trees.
+    // "true" = remove all values / the resolved key tree itself
+    #[serde(default)]
+    pub remove_values: String,
+
+    #[serde(default)]
+    pub remove_trees: String,
 }
 
 fn default_class() -> String {

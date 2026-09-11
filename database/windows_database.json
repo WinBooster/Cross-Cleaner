@@ -4505,12 +4505,12 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.rustup\\toolchains\\*\\share",
+    "path": "{drive}Users\\{username}\\.rustup\\toolchains\\*\\share\\doc\\rust",
     "class": "Developing",
     "category": "Documentation",
     "program": "Rust Language",
     "directories_to_remove": [
-      "doc"
+      "html"
     ]
   },
   {
@@ -5804,6 +5804,46 @@
     "program": "X Minecraft Launcher",
     "directories_to_remove": [
       "logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\.minecraftx\\instances\\*",
+    "class": "Minecraft Launcher",
+    "category": "Game",
+    "sub_category":"Saves",
+    "program": "X Minecraft Launcher",
+    "directories_to_remove": [
+      "saves"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\.minecraftx",
+    "class": "Minecraft Launcher",
+    "category": "Game",
+    "sub_category":"Saves",
+    "program": "X Minecraft Launcher",
+    "directories_to_remove": [
+      "saves"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\.minecraftx\\instances\\*",
+    "class": "Minecraft Launcher",
+    "category": "Game",
+    "sub_category":"Settings",
+    "program": "X Minecraft Launcher",
+    "files_to_remove": [
+      "options.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\.minecraftx",
+    "class": "Minecraft Launcher",
+    "category": "Game",
+    "sub_category":"Settings",
+    "program": "X Minecraft Launcher",
+    "files_to_remove": [
+      "options.txt"
     ]
   },
   {

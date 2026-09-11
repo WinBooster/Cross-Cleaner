@@ -214,9 +214,11 @@ jobs:
 
             ## ✨ What's New
 
+            ### 🪟 Windows Enhancements
+            - X Minecraft Launcher added game settings and saves clearing
+
             ### 🛠 Technical Updates
-            - Fix toctou  window
-            - Fix symlink following
+            - Return native windows render driver
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:

@@ -1803,6 +1803,8 @@ mod tests {
             path: String::new(),
             values_to_remove: vec![],
             keys_to_remove: vec![],
+            remove_values: String::new(),
+            remove_trees: String::new(),
         }];
 
         let app = MyApp::from_database(
@@ -1887,6 +1889,8 @@ mod tests {
             path: String::new(),
             values_to_remove: vec![],
             keys_to_remove: vec![],
+            remove_values: String::new(),
+            remove_trees: String::new(),
         }];
 
         let app = MyApp::from_database(
