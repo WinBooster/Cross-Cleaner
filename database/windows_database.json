@@ -6318,5 +6318,159 @@
     "directories_to_remove": [
       "LOGS"
     ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\imput\\Helium\\User Data\\Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "History",
+    "program": "Helium Browser",
+    "files_to_remove": [
+      "Favicons",
+      "Favicons-journal",
+      "History",
+      "History-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\imput\\Helium\\User Data\\Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Cookies",
+    "program": "Helium Browser",
+    "files_to_remove": [
+      "Cookies",
+      "Cookies-journal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\imput\\Helium\\User Data\\Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Passwords",
+    "program": "Helium Browser",
+    "files_to_remove": [
+      "Login Data",
+      "Login Data-journal",
+      "Login Data For Account",
+      "Login Data For Account-journal"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\CrystalCry",
+    "class": "Optimization",
+    "category": "Logs",
+    "program": "CrystalCry",
+    "directories_to_remove": [
+      "Logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\AltSnap",
+    "class": "Utility",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "AltSnap",
+    "files_to_remove": [
+      "License.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\AltSnap",
+    "class": "Utility",
+    "category": "Documentation",
+    "program": "AltSnap",
+    "files_to_remove": [
+      "AltSnap.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\RustDesk\\usbmmidd_v2",
+    "class": "Utility",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "RustDesk",
+    "files_to_remove": [
+      "License.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\RustDesk\\usbmmidd_v2",
+    "class": "Utility",
+    "category": "Documentation",
+    "program": "RustDesk",
+    "files_to_remove": [
+      "idd_instructions.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Blender Foundation\\*",
+    "class": "Modeling",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Blender",
+    "directories_to_remove": [
+      "license"
+    ],
+    "files_to_remove": [
+      "copyright.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\CMake",
+    "class": "Developing",
+    "category": "Documentation",
+    "program": "CMake",
+    "directories_to_remove": [
+      "doc"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\FreeCAD 1.1",
+    "class": "Developing",
+    "category": "Documentation",
+    "program": "FreeCAD",
+    "directories_to_remove": [
+      "doc"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\FreeCAD 1.1\\data",
+    "class": "Developing",
+    "category": "Documentation",
+    "sub_category": "Examples",
+    "program": "FreeCAD",
+    "directories_to_remove": [
+      "examples"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\FreeCAD 1.1",
+    "class": "Developing",
+    "category": "Logs",
+    "program": "FreeCAD",
+    "files_to_remove": [
+      "install.log"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\PuTTY",
+    "class": "SSH",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "PuTTY",
+    "files_to_remove": [
+      "LICENCE"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\PuTTY",
+    "class": "SSH",
+    "category": "Documentation",
+    "program": "PuTTY",
+    "files_to_remove": [
+      "website.url",
+      "README.txt"
+    ]
   }
 ]

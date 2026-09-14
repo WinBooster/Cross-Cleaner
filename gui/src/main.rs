@@ -252,7 +252,15 @@ fn title_bar(
                 }
                 paint_glyph(ui, donations.rect, "\u{24}");
                 donations.on_hover_text("Donations");
-
+                let (sep_rect, _sep) =
+                    ui.allocate_exact_size(egui::vec2(1.0, TITLE_BAR_HEIGHT), egui::Sense::hover());
+                ui.painter().line_segment(
+                    [
+                        egui::pos2(sep_rect.center().x, sep_rect.min.y),
+                        egui::pos2(sep_rect.center().x, sep_rect.max.y),
+                    ],
+                    egui::Stroke::new(1.0, ui.visuals().widgets.noninteractive.bg_stroke.color),
+                );
                 ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
                     if show_back {
                         let back = title_bar_button(ui);
@@ -353,7 +361,7 @@ fn paint_glyph(ui: &egui::Ui, rect: egui::Rect, glyph: &str) {
 
 /// Opens a URL in the system browser.
 #[cfg(windows)]
-fn open_in_browser(url: &str) {
+pub(crate) fn open_in_browser(url: &str) {
     use std::os::windows::process::CommandExt;
     const CREATE_NO_WINDOW: u32 = 0x08000000;
 
@@ -364,12 +372,12 @@ fn open_in_browser(url: &str) {
 }
 
 #[cfg(target_os = "linux")]
-fn open_in_browser(url: &str) {
+pub(crate) fn open_in_browser(url: &str) {
     let _ = std::process::Command::new("xdg-open").arg(url).spawn();
 }
 
 #[cfg(target_os = "macos")]
-fn open_in_browser(url: &str) {
+pub(crate) fn open_in_browser(url: &str) {
     let _ = std::process::Command::new("open").arg(url).spawn();
 }
 
@@ -379,7 +387,7 @@ fn open_in_browser(url: &str) {
     target_os = "openbsd",
     target_os = "dragonfly"
 ))]
-fn open_in_browser(url: &str) {
+pub(crate) fn open_in_browser(url: &str) {
     let _ = std::process::Command::new("xdg-open").arg(url).spawn();
 }
 

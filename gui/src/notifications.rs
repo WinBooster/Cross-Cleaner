@@ -152,8 +152,9 @@ impl Notification for UpdateNotification {
                 // Left-to-right so the buttons read Download, Changelog; the
                 // row hugs the left edge of the (content-sized) notification.
                 if ui.button("Download").clicked() {
-                    ui.ctx()
-                        .open_url(egui::OpenUrl::new_tab(self.release.url.clone()));
+                    // eframe's native backend ignores egui's OpenUrl command,
+                    // so open the release page through the system browser.
+                    crate::open_in_browser(&self.release.url);
                 }
                 if ui.button("Changelog").clicked() {
                     action = NotificationAction::ShowChangelog;
