@@ -1,9 +1,9 @@
-# Windows Registry Clearing Programs Catalog v2.0.3.1
+# Windows Registry Clearing Programs Catalog v2.0.3.2
 **Total categories in database:** 1
 
 **Total programs in database:** 3
 
-**Total pathes in database:** 12
+**Total pathes in database:** 15
 
 ## Developing
 

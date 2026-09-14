@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.3.1
+# Windows Clearing Programs Catalog v2.0.3.2
 **Total categories in database:** 12
 
-**Total programs in database:** 223
+**Total programs in database:** 233
 
-**Total pathes in database:** 500
+**Total pathes in database:** 521
 
 ## AI
 
@@ -11,9 +11,11 @@
 | --- | --- | --- |
 | 1 | Cherry Studio | Logs |
 | 2 | [Copilot](https://copilot.microsoft.com/) | Logs |
-| 3 | [LM Studio](https://lmstudio.ai/download) | LastActivity, Logs |
-| 4 | [Microsoft Lobe](https://github.com/orgs/lobe) | Logs |
-| 5 | [OpenCode Desktop](https://opencode.ai/download) | Cache, Logs |
+| 3 | Kilo Code | Logs |
+| 4 | [LM Studio](https://lmstudio.ai/download) | LastActivity, Logs |
+| 5 | [Microsoft Lobe](https://github.com/orgs/lobe) | Logs |
+| 6 | OpenCode | LastActivity, Logs |
+| 7 | [OpenCode Desktop](https://opencode.ai/download) | Cache, Logs |
 
 
 ## AntiCheat
@@ -97,33 +99,43 @@
 | 3 | [Wasabi Wallet](https://wasabiwallet.io) | Logs |
 
 
+## Data Base
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | DBeaver | Documentation |
+
+
 ## Developing
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [BoxedAppPacker](https://www.boxedapp.com/boxedapppacker/download.html) | Documentation |
-| 2 | [Docker](https://www.docker.com/products/docker-desktop) | Logs |
-| 3 | [DotNet](https://dotnet.microsoft.com/en-us/download) | Logs |
-| 4 | [Enigma Virtual Box](https://enigmaprotector.com/en/downloads.html) | Documentation |
-| 5 | [Ghidra](https://github.com/NationalSecurityAgency/ghidra) | Logs |
-| 6 | [Git](https://git-scm.com/downloads) | Documentation |
-| 7 | [GitHub Desktop](https://desktop.github.com/download) | Logs |
-| 8 | [Go Language](https://go.dev/doc/install) | Documentation |
-| 9 | [Gradle](https://gradle.org) | Cache |
-| 10 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
-| 11 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
-| 12 | [Insomnia](https://insomnia.rest) | Cache, Logs |
-| 13 | [Java](https://www.java.com/download) | Documentation |
-| 14 | [MCCreator](https://mcreator.net/download) | Logs |
-| 15 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
-| 16 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
-| 17 | [Postman](https://www.postman.com/downloads) | Logs |
-| 18 | [Python](https://www.python.org/downloads) | Documentation |
-| 19 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
-| 20 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
-| 21 | [Unity Hub](https://unity.com/download) | Documentation |
-| 22 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk) | Documentation |
-| 23 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
+| 1 | Anaconda | Documentation, Logs |
+| 2 | [BoxedAppPacker](https://www.boxedapp.com/boxedapppacker/download.html) | Documentation |
+| 3 | [Docker](https://www.docker.com/products/docker-desktop) | Logs |
+| 4 | [DotNet](https://dotnet.microsoft.com/en-us/download) | Logs |
+| 5 | [Enigma Virtual Box](https://enigmaprotector.com/en/downloads.html) | Documentation |
+| 6 | [Ghidra](https://github.com/NationalSecurityAgency/ghidra) | Logs |
+| 7 | [Git](https://git-scm.com/downloads) | Documentation |
+| 8 | [GitHub Desktop](https://desktop.github.com/download) | Logs |
+| 9 | [Go Language](https://go.dev/doc/install) | Documentation |
+| 10 | [Gradle](https://gradle.org) | Cache |
+| 11 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
+| 12 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
+| 13 | [Insomnia](https://insomnia.rest) | Cache, Logs |
+| 14 | [Java](https://www.java.com/download) | Documentation |
+| 15 | [Kache](https://github.com/kunobi-ninja/kache) | Logs |
+| 16 | [MCCreator](https://mcreator.net/download) | Logs |
+| 17 | [Maven](https://maven.apache.org/download.cgi) | Documentation |
+| 18 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
+| 19 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
+| 20 | [Postman](https://www.postman.com/downloads) | Logs |
+| 21 | [Python](https://www.python.org/downloads) | Documentation |
+| 22 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
+| 23 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
+| 24 | [Unity Hub](https://unity.com/download) | Documentation |
+| 25 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk) | Documentation |
+| 26 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
 
 
 ## Driver
@@ -144,7 +156,7 @@
 | --- | --- | --- |
 | 1 | [BlueStacks 5](https://www.bluestacks.com) | Documentation, Images, Logs |
 | 2 | [Gameloop](https://www.gameloop.com) | Logs |
-| 3 | [Memu](https://www.memuplay.com/download.html) | Logs |
+| 3 | [Memu](https://www.memuplay.com/download.html) | Documentation, Logs |
 | 4 | [Nox](https://bignox.com/nox-app-player) | Logs |
 | 5 | Ruffle | Documentation |
 
@@ -167,28 +179,31 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [ArcheAge](https://archeage.ru) | Logs |
-| 2 | [Arizona Games Launcher](https://arizona-rp.com/#how-to-play) | Crashes, Logs |
-| 3 | Borderlands 2 | Game, Logs |
-| 4 | [Counter-Strike Global Offensive](https://store.steampowered.com/app/730/CounterStrike_2) | Game |
-| 5 | [Dota 2](https://www.dota2.com/home) | Game |
-| 6 | [Electronic Arts Desktop](https://www.ea.com/ea-app) | Logs |
-| 7 | [Epic Games Launcher](https://store.epicgames.com/en-US/download) | Logs |
-| 8 | [Genshin Impact](https://genshin.hoyoverse.com) | Crashes, Documentation, Logs |
-| 9 | [Lords Mobile](https://lordsmobile.igg.com/pc) | Logs |
-| 10 | [Melissia Games Launcher](https://melissia.games) | Documentation, Logs |
-| 11 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
-| 12 | [Roblox](https://www.roblox.com/download) | Logs |
-| 13 | Rockstar Games | Crashes |
-| 14 | [Rust](https://store.steampowered.com/app/252490/Rust) | Game |
-| 15 | [Schedule I](https://store.steampowered.com/app/3164500/Schedule_I) | Game, Logs |
-| 16 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
-| 17 | [Terraria](https://terraria.org) | Game |
-| 18 | [The Powder Toy](https://powdertoy.co.uk) | Game |
-| 19 | [Ultrakill](https://store.steampowered.com/app/1229490/ULTRAKILL) | Logs |
-| 20 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game |
-| 21 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
-| 22 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game, Logs |
+| 1 | Albion Online | Cache, Logs |
+| 2 | [ArcheAge](https://archeage.ru) | Logs |
+| 3 | [Arizona Games Launcher](https://arizona-rp.com/#how-to-play) | Crashes, Images, Logs |
+| 4 | Borderlands 2 | Game, Logs |
+| 5 | Cossacks 3 | Game |
+| 6 | [Counter-Strike Global Offensive](https://store.steampowered.com/app/730/CounterStrike_2) | Game |
+| 7 | [Dota 2](https://www.dota2.com/home) | Game |
+| 8 | [Electronic Arts Desktop](https://www.ea.com/ea-app) | Logs |
+| 9 | [Epic Games Launcher](https://store.epicgames.com/en-US/download) | Logs |
+| 10 | GTA San Andreas | Images, Logs |
+| 11 | [Genshin Impact](https://genshin.hoyoverse.com) | Crashes, Documentation, Logs |
+| 12 | [Lords Mobile](https://lordsmobile.igg.com/pc) | Logs |
+| 13 | [Melissia Games Launcher](https://melissia.games) | Documentation, Logs |
+| 14 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
+| 15 | [Roblox](https://www.roblox.com/download) | Logs |
+| 16 | Rockstar Games | Crashes |
+| 17 | [Rust](https://store.steampowered.com/app/252490/Rust) | Game |
+| 18 | [Schedule I](https://store.steampowered.com/app/3164500/Schedule_I) | Game, Logs |
+| 19 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
+| 20 | [Terraria](https://terraria.org) | Game |
+| 21 | [The Powder Toy](https://powdertoy.co.uk) | Game |
+| 22 | [Ultrakill](https://store.steampowered.com/app/1229490/ULTRAKILL) | Logs |
+| 23 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game |
+| 24 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
+| 25 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game, Logs |
 
 
 ## ISO
@@ -216,7 +231,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [Discord](https://discord.com) | Cache, Crashes, Logs |
-| 2 | [Element](https://element.io) | Logs |
+| 2 | [Element](https://element.io) | Documentation, Logs |
 | 3 | [Guilded](https://www.guilded.gg) | Logs |
 | 4 | [MAX](https://max.ru) | Cache |
 | 5 | [Signal](https://signal.org) | Cache, Logs |
@@ -298,7 +313,7 @@
 | 5 | [Doctor Web Cureit](https://free.drweb.ru/download+cureit+free) | Logs |
 | 6 | [GnuPG](https://www.gnupg.org/download/index.html) | Documentation |
 | 7 | [Gpg4win](https://www.gpg4win.org) | Documentation |
-| 8 | [I2P](https://geti2p.net/download) | Documentation, Logs |
+| 8 | [I2P Easy Bundle](https://geti2p.net/download) | Documentation, Logs |
 | 9 | [IObit Malware Fighter](https://www.iobit.com/en/malware-fighter.php) | Logs |
 | 10 | [NetLimiter](https://www.netlimiter.com/download) | Logs |
 | 11 | [OONI Probe](https://ooni.org/install) | Logs |
@@ -333,10 +348,11 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [OneDrive](https://www.microsoft.com/microsoft-365/onedrive/online-cloud-storage) | Cache |
-| 2 | [Windows](https://www.microsoft.com/download/windows) | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
-| 3 | [Windows Defender](https://www.microsoft.com/download/windows) | Documentation |
-| 4 | Windows PowerShell | LastActivity |
+| 1 | Internet Explorer | Logs |
+| 2 | [OneDrive](https://www.microsoft.com/microsoft-365/onedrive/online-cloud-storage) | Cache |
+| 3 | [Windows](https://www.microsoft.com/download/windows) | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
+| 4 | [Windows Defender](https://www.microsoft.com/download/windows) | Documentation |
+| 5 | Windows PowerShell | LastActivity |
 
 
 ## Text
@@ -353,7 +369,7 @@
 | 8 | [Sublime Text](https://www.sublimetext.com/download) | Logs |
 | 9 | [VS Code](https://code.visualstudio.com/download) | Browser, Documentation, Logs |
 | 10 | [Visual Studio](https://visualstudio.microsoft.com) | Documentation |
-| 11 | [Zed](https://zed.dev) | Logs |
+| 11 | [Zed](https://zed.dev) | Crashes, Logs |
 
 
 ## Tiling Manager
