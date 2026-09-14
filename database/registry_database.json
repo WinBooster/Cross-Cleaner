@@ -88,5 +88,29 @@
     "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
+  },
+  {
+    "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Enum\\USBSTOR",
+    "category": "LastActivity",
+    "program": "Windows",
+    "class": "System",
+    "remove_all_in_registry": true,
+    "remove_all_in_tree": true
+  },
+  {
+    "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Enum\\USB",
+    "category": "LastActivity",
+    "program": "Windows",
+    "class": "System",
+    "remove_all_in_registry": true,
+    "remove_all_in_tree": true
+  },
+  {
+    "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Portable Devices\\Devices",
+    "category": "LastActivity",
+    "program": "Windows",
+    "class": "System",
+    "remove_all_in_registry": true,
+    "remove_all_in_tree": true
   }
 ]

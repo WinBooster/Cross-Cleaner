@@ -148,10 +148,11 @@ const TITLE_BAR_HEIGHT: f32 = 32.0;
 
 /// Project repository, opened by the GitHub icon in the title bar.
 const GITHUB_URL: &str = "https://github.com/WinBooster/Cross-Cleaner";
+const DONATE_URL: &str = "https://nowpayments.io/donation/neki_play";
 
 // Width reserved for the close, minimize & GitHub buttons (drag area excludes
 // them so a single click always reaches the buttons instead of starting a drag).
-const TITLE_BAR_BUTTONS_WIDTH: f32 = 126.0;
+const TITLE_BAR_BUTTONS_WIDTH: f32 = 162.0;
 
 /// Paints the 2px window outline used by both the main window and the
 /// changelog viewport (blue when focused, text color otherwise).
@@ -240,8 +241,18 @@ fn title_bar(
                 if github.clicked() {
                     open_in_browser(GITHUB_URL);
                 }
-                paint_github_glyph(ui, github.rect);
+                paint_glyph(ui, github.rect, "\u{e624}");
                 github.on_hover_text("GitHub repository");
+
+                // GitHub icon (U+24 from the built-in emoji-icon-font)
+                // that opens the project repository.
+                let donations = title_bar_button(ui);
+                if donations.clicked() {
+                    open_in_browser(DONATE_URL);
+                }
+                paint_glyph(ui, donations.rect, "\u{24}");
+                donations.on_hover_text("Donations");
+
                 ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
                     if show_back {
                         let back = title_bar_button(ui);
@@ -330,11 +341,11 @@ fn paint_minimize_glyph(ui: &egui::Ui, rect: egui::Rect) {
     );
 }
 
-fn paint_github_glyph(ui: &egui::Ui, rect: egui::Rect) {
+fn paint_glyph(ui: &egui::Ui, rect: egui::Rect, glyph: &str) {
     ui.painter().text(
         rect.center(),
         egui::Align2::CENTER_CENTER,
-        "\u{e624}",
+        glyph,
         egui::FontId::proportional(14.0),
         ui.visuals().text_color(),
     );
@@ -343,8 +354,12 @@ fn paint_github_glyph(ui: &egui::Ui, rect: egui::Rect) {
 /// Opens a URL in the system browser.
 #[cfg(windows)]
 fn open_in_browser(url: &str) {
+    use std::os::windows::process::CommandExt;
+    const CREATE_NO_WINDOW: u32 = 0x08000000;
+
     let _ = std::process::Command::new("cmd")
         .args(["/C", "start", "", url])
+        .creation_flags(CREATE_NO_WINDOW)
         .spawn();
 }
 

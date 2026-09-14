@@ -215,7 +215,24 @@ jobs:
             ## ✨ What's New
 
             ### 🪟 Windows Enhancements
-            - X Minecraft Launcher added game settings and saves clearing
+            - **Arizona RP** Added logs, images clearing
+            - **GTA San Andreas** Added logs, images clearing
+            - **Cossacks 3** Added game saves, game settings clearing
+            - **OpenCode** Added last activity, logs clearing
+            - **Anaconda** Added logs, documentation clearing
+            - **Genshin Impact** Added logs clearing
+            - **Albion Online** Added logs, cache clearing
+            - **DBeaver** Added documentation clearing
+            - **I2P Easy Bundle** Improved documentation clearing
+            - **I2P Easy Bundle** Added logs clearing
+            - **Element** Improved documentation, logs clearing
+            - **Internet Explorer** Added logs clearing
+            - **Kache** Added logs clearing
+            - **Maven** Added documentation clearing
+            - **Visual Studio** Improved documentation clearing
+            - **Memu** Added documentation clearing
+            - **Memu** Improved logs clearing
+            - **Windows** Improved last activity (USB History) clearing
 
             ### 🛠 Technical Updates
             - Return native windows render driver

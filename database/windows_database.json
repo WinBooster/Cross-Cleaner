@@ -235,6 +235,42 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\Documents\\GTA San Andreas User Files\\SAMP\\arizona",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Arizona Games Launcher",
+    "directories_to_remove": [
+      "chatlog"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\GTA San Andreas User Files\\SAMP\\arizona",
+    "class": "Game",
+    "category": "Images",
+    "program": "Arizona Games Launcher",
+    "directories_to_remove": [
+      "screens"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\GTA San Andreas User Files\\SAMP",
+    "class": "Game",
+    "category": "Images",
+    "program": "GTA San Andreas",
+    "directories_to_remove": [
+      "screens"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\GTA San Andreas User Files\\SAMP",
+    "class": "Game",
+    "category": "Logs",
+    "program": "GTA San Andreas",
+    "files_to_remove": [
+      "chatlog.txt"
+    ]
+  },
+  {
     "path": "{drive}Program Files (x86)\\ASIO4ALL v2",
     "class": "Audio",
     "category": "Documentation",
@@ -1260,6 +1296,26 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\element-desktop\\app*",
+    "class": "Messanger",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Element",
+    "files_to_remove": [
+      "LICENSE.electron.txt",
+      "LICENSES.chromium.html"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\element-desktop\\app*",
+    "class": "Messanger",
+    "category": "Logs",
+    "program": "Element",
+    "files_to_remove": [
+      "Squirrel-UpdateSelf.log"
+    ]
+  },
+  {
     "path": "{drive}Program Files (x86)\\Enigma Virtual Box",
     "class": "Developing",
     "category": "Documentation",
@@ -1529,6 +1585,15 @@
     ],
     "directories_to_remove": [
       "logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\miHoYo\\Genshin Impact",
+    "category": "Logs",
+    "program": "Genshin Impact",
+    "class": "Game",
+    "files_to_remove": [
+      "LocalLog.log"
     ]
   },
   {
@@ -1950,7 +2015,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy\\addressbook",
     "class": "Security",
     "category": "Logs",
-    "program": "I2P",
+    "program": "I2P Easy Bundle",
     "files_to_remove": [
       "log.txt"
     ]
@@ -1959,7 +2024,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy",
     "class": "Security",
     "category": "Logs",
-    "program": "I2P",
+    "program": "I2P Easy Bundle",
     "files_to_remove": [
       "eventlog.txt",
       "wrapper.log"
@@ -1973,9 +2038,42 @@
     "class": "Security",
     "category": "Documentation",
     "sub_category": "Licenses",
-    "program": "I2P",
+    "program": "I2P Easy Bundle",
     "directories_to_remove": [
       "licenses"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy\\app",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "I2P Easy Bundle",
+    "directories_to_remove": [
+      "licenses"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy\\runtime",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "I2P Easy Bundle",
+    "directories_to_remove": [
+      "legal"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy\\config",
+    "class": "Security",
+    "category": "Logs",
+    "program": "I2P Easy Bundle",
+    "directories_to_remove": [
+      "logs"
+    ],
+    "files_to_remove": [
+      "eventlog.txt",
+      "wrapper.log"
     ]
   },
   {
@@ -2923,6 +3021,25 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Program Files\\Microvirt\\MEmu",
+    "class": "Emulator",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Memu",
+    "directories_to_remove": [
+      "License"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Microvirt\\MEmu\\MemuHyperv VMs\\MEmu",
+    "class": "Emulator",
+    "category": "Logs",
+    "program": "Memu",
+    "directories_to_remove": [
+      "Logs"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\Edge\\User Data",
     "class": "Browser",
     "category": "Cache",
@@ -3730,6 +3847,33 @@
     "program": "OpenCode Desktop",
     "directories_to_remove": [
       "Cache"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\.local\\share\\opencode",
+    "class": "AI",
+    "category": "Logs",
+    "program": "OpenCode",
+    "directories_to_remove": [
+      "log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\.local\\share\\opencode",
+    "class": "AI",
+    "category": "LastActivity",
+    "program": "OpenCode",
+    "directories_to_remove": [
+      "storage"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\.local\\share\\kilo",
+    "class": "AI",
+    "category": "Logs",
+    "program": "Kilo Code",
+    "directories_to_remove": [
+      "log"
     ]
   },
   {
@@ -5166,11 +5310,30 @@
     "path": "{drive}Program Files (x86)\\Visual Studio\\Shared\\RemotedSimulator",
     "class": "Text",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Visual Studio",
     "files_to_remove": [
       "License.rtf",
-      "ThirdPartyNotices.txt",
       "WIX-License.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Visual Studio\\Shared\\RemotedSimulator",
+    "class": "Text",
+    "category": "Documentation",
+    "program": "Visual Studio",
+    "files_to_remove": [
+      "ThirdPartyNotices.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Microsoft Visual Studio\\*\\Community",
+    "class": "Text",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Visual Studio",
+    "directories_to_remove": [
+      "Licenses"
     ]
   },
   {
@@ -5513,7 +5676,7 @@
   {
     "path": "{drive}Windows\\Minidump\\*",
     "class": "System",
-    "category": "Logs",
+    "category": "Crashes",
     "program": "Windows",
     "remove_files": true
   },
@@ -5688,7 +5851,7 @@
     ]
   },
   {
-    "path": "{drive}Program Files (x86)\\Windows Kits\\**",
+    "path": "{drive}Program Files (x86)\\Windows Kits\\*",
     "class": "Developing",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -5979,6 +6142,13 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Zed\\zed-crash-handler*",
+    "class": "Text",
+    "category": "Crashes",
+    "program": "Zed",
+    "remove_files": true
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\zen\\Profiles\\*",
     "class": "Browser",
     "category": "Browser",
@@ -6021,6 +6191,132 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\cossacks\\profiles\\*\\saves\\*.map",
+    "class": "Game",
+    "category": "Game",
+    "sub_category": "Saves",
+    "program": "Cossacks 3",
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\cossacks\\profiles\\*",
+    "class": "Game",
+    "category": "Game",
+    "sub_category": "Settings",
+    "program": "Cossacks 3",
+    "files_to_remove": [
+      "profile.cfg",
+      "profile.dat"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\anaconda3",
+    "class": "Developing",
+    "category": "Logs",
+    "program": "Anaconda",
+    "files_to_remove": [
+      "install.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\anaconda3",
+    "class": "Developing",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Anaconda",
+    "files_to_remove": [
+      "EULA.txt",
+      "LICENSE_PYTHON.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\Sandbox Interactive GmbH\\Albion Online Client",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Albion Online",
+    "files_to_remove": [
+      "ime_log.txt",
+      "Player.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Sandbox Interactive GmbH\\Albion Online Launcher",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Albion Online",
+    "files_to_remove": [
+      "launcher.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Sandbox Interactive GmbH\\Albion Online Launcher",
+    "class": "Game",
+    "category": "Cache",
+    "program": "Albion Online",
+    "directories_to_remove": [
+      "cache"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\DBeaver",
+    "class": "Data Base",
+    "category": "Documentation",
+    "program": "DBeaver",
+    "files_to_remove": [
+      "readme.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\DBeaver",
+    "class": "Data Base",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "DBeaver",
+    "directories_to_remove": [
+      "licenses"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Microsoft\\Internet Explorer",
+    "class": "System",
+    "category": "Logs",
+    "program": "Internet Explorer",
+    "files_to_remove": [
+      "brndlog.txt",
+      "ie4uinit-ClearIconCache.log",
+      "ie4uinit-UserConfig.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\kache",
+    "class": "Developing",
+    "category": "Logs",
+    "program": "Kache",
+    "files_to_remove": [
+      "kache.log"
+    ]
+  },
+  {
+    "path": "{drive}ProgramData\\Maven",
+    "class": "Developing",
+    "category": "Documentation",
+    "program": "Maven",
+    "files_to_remove": [
+      "README.txt",
+      "NOTICE"
+    ]
+  },
+  {
+    "path": "{drive}ProgramData\\Maven",
+    "class": "Developing",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Maven",
+    "files_to_remove": [
+      "LICENSE"
     ]
   }
 ]
