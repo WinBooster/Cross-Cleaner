@@ -146,7 +146,7 @@ jobs:
         with:
           name: windows-setup
           path: |
-            innosetup\compiler\Cross Cleaner Setup.exe
+            innosetup\compiler\Cross.Cleaner.Setup.exe
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -235,7 +235,23 @@ jobs:
             linux-binaries/Linux-Cross_Cleaner_GUI
             macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_GUI
             windows-binaries/Windows-Cross_Cleaner_GUI.exe
-            windows-setup/Cross Cleaner Setup.exe
+            windows-setup/Cross.Cleaner.Setup.exe
+
+  winget_release:
+    name: Update package on winget
+    needs: [create_release]
+    runs-on: windows-latest
+    steps:
+      - name: Release to winget
+        uses: vedantmgoyal9/winget-releaser@v2
+        with:
+          identifier: WinBooster.Cross_Cleaner
+          version: ${{ env.APP_VERSION }}
+          release-tag: v${{ env.APP_VERSION }}
+          installers-regex: '^Cross\.Cleaner\.Setup\.exe$'
+          max-versions-to-keep: 0
+          fork-user: Nekiplay
+          token: ${{ secrets.WINGET_TOKEN }}
 
   generate-lists:
     name: Generating clearing programs list
