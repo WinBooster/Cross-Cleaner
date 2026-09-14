@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.3.2
+# Windows Clearing Programs Catalog v2.0.3.3
 **Total categories in database:** 12
 
-**Total programs in database:** 233
+**Total programs in database:** 241
 
-**Total pathes in database:** 521
+**Total pathes in database:** 530
 
 ## AI
 
@@ -59,17 +59,18 @@
 | --- | --- | --- |
 | 1 | [Brave Browser](https://brave.com/download) | Browser, Cache, Logs |
 | 2 | [Google Chrome](https://www.google.com/intl/en/chrome) | Browser, Documentation, Logs |
-| 3 | [LibreWolf](https://librewolf.net/installation) | Browser |
-| 4 | [Microsoft Edge](https://www.microsoft.com/edge) | Browser, Cache, Logs |
-| 5 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser, Cache, Logs |
-| 6 | [Opera](https://www.opera.com/opera) | Browser |
-| 7 | [Opera Air](https://www.opera.com/air) | Browser |
-| 8 | [Opera GX](https://www.opera.com/gx) | Browser |
-| 9 | [Opera Neon](https://www.operaneon.com/) | Browser |
-| 10 | [Thorium](https://thorium.rocks) | Browser, Documentation, Logs |
-| 11 | [Vivaldi](https://vivaldi.com/download) | Browser, Images |
-| 12 | [Yandex Browser](https://browser.yandex.ru) | Browser |
-| 13 | [Zen Browser](https://zen-browser.app) | Browser |
+| 3 | [Helium Browser](https://github.com/imputnet/helium) | Browser |
+| 4 | [LibreWolf](https://librewolf.net/installation) | Browser |
+| 5 | [Microsoft Edge](https://www.microsoft.com/edge) | Browser, Cache, Logs |
+| 6 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser, Cache, Logs |
+| 7 | [Opera](https://www.opera.com/opera) | Browser |
+| 8 | [Opera Air](https://www.opera.com/air) | Browser |
+| 9 | [Opera GX](https://www.opera.com/gx) | Browser |
+| 10 | [Opera Neon](https://www.operaneon.com/) | Browser |
+| 11 | [Thorium](https://thorium.rocks) | Browser, Documentation, Logs |
+| 12 | [Vivaldi](https://vivaldi.com/download) | Browser, Images |
+| 13 | [Yandex Browser](https://browser.yandex.ru) | Browser |
+| 14 | [Zen Browser](https://zen-browser.app) | Browser |
 
 
 ## Cheat
@@ -112,30 +113,32 @@
 | --- | --- | --- |
 | 1 | Anaconda | Documentation, Logs |
 | 2 | [BoxedAppPacker](https://www.boxedapp.com/boxedapppacker/download.html) | Documentation |
-| 3 | [Docker](https://www.docker.com/products/docker-desktop) | Logs |
-| 4 | [DotNet](https://dotnet.microsoft.com/en-us/download) | Logs |
-| 5 | [Enigma Virtual Box](https://enigmaprotector.com/en/downloads.html) | Documentation |
-| 6 | [Ghidra](https://github.com/NationalSecurityAgency/ghidra) | Logs |
-| 7 | [Git](https://git-scm.com/downloads) | Documentation |
-| 8 | [GitHub Desktop](https://desktop.github.com/download) | Logs |
-| 9 | [Go Language](https://go.dev/doc/install) | Documentation |
-| 10 | [Gradle](https://gradle.org) | Cache |
-| 11 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
-| 12 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
-| 13 | [Insomnia](https://insomnia.rest) | Cache, Logs |
-| 14 | [Java](https://www.java.com/download) | Documentation |
-| 15 | [Kache](https://github.com/kunobi-ninja/kache) | Logs |
-| 16 | [MCCreator](https://mcreator.net/download) | Logs |
-| 17 | [Maven](https://maven.apache.org/download.cgi) | Documentation |
-| 18 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
-| 19 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
-| 20 | [Postman](https://www.postman.com/downloads) | Logs |
-| 21 | [Python](https://www.python.org/downloads) | Documentation |
-| 22 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
-| 23 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
-| 24 | [Unity Hub](https://unity.com/download) | Documentation |
-| 25 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk) | Documentation |
-| 26 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
+| 3 | CMake | Documentation |
+| 4 | [Docker](https://www.docker.com/products/docker-desktop) | Logs |
+| 5 | [DotNet](https://dotnet.microsoft.com/en-us/download) | Logs |
+| 6 | [Enigma Virtual Box](https://enigmaprotector.com/en/downloads.html) | Documentation |
+| 7 | FreeCAD | Documentation, Logs |
+| 8 | [Ghidra](https://github.com/NationalSecurityAgency/ghidra) | Logs |
+| 9 | [Git](https://git-scm.com/downloads) | Documentation |
+| 10 | [GitHub Desktop](https://desktop.github.com/download) | Logs |
+| 11 | [Go Language](https://go.dev/doc/install) | Documentation |
+| 12 | [Gradle](https://gradle.org) | Cache |
+| 13 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
+| 14 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
+| 15 | [Insomnia](https://insomnia.rest) | Cache, Logs |
+| 16 | [Java](https://www.java.com/download) | Documentation |
+| 17 | [Kache](https://github.com/kunobi-ninja/kache) | Logs |
+| 18 | [MCCreator](https://mcreator.net/download) | Logs |
+| 19 | [Maven](https://maven.apache.org/download.cgi) | Documentation |
+| 20 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
+| 21 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
+| 22 | [Postman](https://www.postman.com/downloads) | Logs |
+| 23 | [Python](https://www.python.org/downloads) | Documentation |
+| 24 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
+| 25 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
+| 26 | [Unity Hub](https://unity.com/download) | Documentation |
+| 27 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk) | Documentation |
+| 28 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
 
 
 ## Driver
@@ -266,14 +269,22 @@
 | 19 | [X Minecraft Launcher](https://xmcl.app) | Game, Logs |
 
 
+## Modeling
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Blender | Documentation |
+
+
 ## Optimization
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [HiAlgo Boost](https://www.hialgo.com) | Documentation, Logs |
-| 2 | [Mem Reduct](https://github.com/henrypp/memreduct) | Documentation |
-| 3 | [Winutil](https://github.com/ChrisTitusTech/winutil) | Logs |
-| 4 | [ССleaner](https://www.ccleaner.com) | Logs |
+| 1 | CrystalCry | Logs |
+| 2 | [HiAlgo Boost](https://www.hialgo.com) | Documentation, Logs |
+| 3 | [Mem Reduct](https://github.com/henrypp/memreduct) | Documentation |
+| 4 | [Winutil](https://github.com/ChrisTitusTech/winutil) | Logs |
+| 5 | [ССleaner](https://www.ccleaner.com) | Logs |
 
 
 ## Packet Manager
@@ -300,6 +311,13 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | FlowLauncher | Cache, LastActivity, Logs |
+
+
+## SSH
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | PuTTY | Documentation |
 
 
 ## Security
@@ -391,12 +409,14 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [CPU-Z](https://www.cpuid.com) | Documentation |
-| 2 | [CrystalDiskInfo](https://crystalmark.info) | Documentation |
-| 3 | [Everything](https://www.voidtools.com) | Documentation, LastActivity |
-| 4 | [MiniBin](https://github.com/king-tri-ton/minibin) | Logs |
-| 5 | [PowerToys](https://github.com/microsoft/PowerToys) | Documentation |
-| 6 | [Unlocker](http://www.emptyloop.com/unlocker) | Documentation |
+| 1 | [AltSnap](https://github.com/RamonUnch/AltSnap) | Documentation |
+| 2 | [CPU-Z](https://www.cpuid.com) | Documentation |
+| 3 | [CrystalDiskInfo](https://crystalmark.info) | Documentation |
+| 4 | [Everything](https://www.voidtools.com) | Documentation, LastActivity |
+| 5 | [MiniBin](https://github.com/king-tri-ton/minibin) | Logs |
+| 6 | [PowerToys](https://github.com/microsoft/PowerToys) | Documentation |
+| 7 | RustDesk | Documentation |
+| 8 | [Unlocker](http://www.emptyloop.com/unlocker) | Documentation |
 
 
 ## VPN
