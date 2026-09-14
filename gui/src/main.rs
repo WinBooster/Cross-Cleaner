@@ -8,6 +8,7 @@
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
 mod notifications;
+mod taskbar;
 
 use clap::{ArgAction, Parser};
 use cleaner::clear_data;
@@ -735,6 +736,8 @@ struct MyApp {
     pub changelog_open: Option<Arc<std::sync::Mutex<bool>>>,
     /// True while the changelog window is open.
     pub show_changelog: bool,
+    /// Windows taskbar progress (no-op on other platforms).
+    pub taskbar: Option<taskbar::TaskbarProgress>,
 }
 
 // Embedded menu image bytes (required to be embedded)
@@ -916,6 +919,7 @@ impl MyApp {
             changelog_handle: None,
             changelog_open: None,
             show_changelog: false,
+            taskbar: None,
         }
     }
 
@@ -1021,6 +1025,7 @@ impl MyApp {
             changelog_handle: None,
             changelog_open: None,
             show_changelog: false,
+            taskbar: None,
         }
     }
 
@@ -1191,8 +1196,13 @@ impl MyApp {
 }
 
 impl eframe::App for MyApp {
-    fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+    fn ui(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame) {
         let ctx = ui.ctx().clone();
+
+        // Windows taskbar progress: create once on the first frame (needs HWND).
+        if self.taskbar.is_none() {
+            self.taskbar = Some(taskbar::TaskbarProgress::new(frame));
+        }
         let focused = ctx.input(|i| i.viewport().focused.unwrap_or(false));
         let border_color = if focused {
             egui::Color32::from_rgb(0, 120, 215)
@@ -1210,6 +1220,15 @@ impl eframe::App for MyApp {
                         self.cleaned_bytes = parts[3].parse().unwrap_or(0);
                         if self.progress_start.is_none() {
                             self.progress_start = Some(std::time::Instant::now());
+                        }
+                        // Mirror the cleaning progress on the Windows taskbar.
+                        if self.total_tasks > 0 {
+                            if let Some(taskbar) = &self.taskbar {
+                                taskbar.set_progress(
+                                    self.current_task as u64,
+                                    self.total_tasks as u64,
+                                );
+                            }
                         }
                     }
                 } else {
@@ -1247,6 +1266,10 @@ impl eframe::App for MyApp {
 
         if let Some(handle) = &mut self.task_handle {
             if handle.is_finished() {
+                // Cleaning is done: clear the taskbar progress indicator.
+                if let Some(taskbar) = &self.taskbar {
+                    taskbar.remove();
+                }
                 let handle = self.task_handle.take().unwrap();
                 if let Some(sender) = self.result_sender.take() {
                     tokio::spawn(async move {

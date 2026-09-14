@@ -17,8 +17,10 @@ dependencies = [
  "image",
  "mimalloc",
  "notify-rust",
+ "raw-window-handle",
  "tempfile",
  "tokio",
+ "windows 0.62.2",
  "winreg",
  "winres",
 ]
