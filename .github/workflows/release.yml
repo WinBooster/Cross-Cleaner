@@ -237,6 +237,15 @@ jobs:
             windows-binaries/Windows-Cross_Cleaner_GUI.exe
             windows-setup/Cross.Cleaner.Setup.exe
 
+  generate-lists:
+    name: Generating clearing programs list
+    needs: [create_release]
+    permissions:
+      contents: write
+    uses: ./.github/workflows/update_program_lists.yml
+    with:
+      version: ${{ github.event.inputs.version }}
+
   winget_release:
     name: Update package on winget
     needs: [create_release]
@@ -253,12 +262,3 @@ jobs:
           max-versions-to-keep: 0
           fork-user: Nekiplay
           token: ${{ secrets.WINGET_TOKEN }}
-
-  generate-lists:
-    name: Generating clearing programs list
-    needs: [create_release]
-    permissions:
-      contents: write
-    uses: ./.github/workflows/update_program_lists.yml
-    with:
-      version: ${{ github.event.inputs.version }}
