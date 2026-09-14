@@ -248,6 +248,7 @@ jobs:
           identifier: WinBooster.Cross_Cleaner
           version: ${{ env.APP_VERSION }}
           release-tag: v${{ env.APP_VERSION }}
+          release-notes-url: https://github.com/${{ github.repository }}/releases/tag/v${{ env.APP_VERSION }}
           installers-regex: '^Cross\.Cleaner\.Setup\.exe$'
           max-versions-to-keep: 0
           fork-user: Nekiplay
