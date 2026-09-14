@@ -109,6 +109,34 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\Sandbox Interactive GmbH\\Albion Online Client",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Albion Online",
+    "files_to_remove": [
+      "ime_log.txt",
+      "Player.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Sandbox Interactive GmbH\\Albion Online Launcher",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Albion Online",
+    "files_to_remove": [
+      "launcher.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Sandbox Interactive GmbH\\Albion Online Launcher",
+    "class": "Game",
+    "category": "Cache",
+    "program": "Albion Online",
+    "directories_to_remove": [
+      "cache"
+    ]
+  },
+  {
     "path": "{drive}Program Files\\AmneziaVPN",
     "class": "VPN",
     "category": "Logs",
@@ -154,6 +182,26 @@
     "program": "Amnezia WG",
     "files_to_remove": [
       "log.bin"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\anaconda3",
+    "class": "Developing",
+    "category": "Logs",
+    "program": "Anaconda",
+    "files_to_remove": [
+      "install.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\anaconda3",
+    "class": "Developing",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Anaconda",
+    "files_to_remove": [
+      "EULA.txt",
+      "LICENSE_PYTHON.txt"
     ]
   },
   {
@@ -250,24 +298,6 @@
     "program": "Arizona Games Launcher",
     "directories_to_remove": [
       "screens"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\Documents\\GTA San Andreas User Files\\SAMP",
-    "class": "Game",
-    "category": "Images",
-    "program": "GTA San Andreas",
-    "directories_to_remove": [
-      "screens"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\Documents\\GTA San Andreas User Files\\SAMP",
-    "class": "Game",
-    "category": "Logs",
-    "program": "GTA San Andreas",
-    "files_to_remove": [
-      "chatlog.txt"
     ]
   },
   {
@@ -847,6 +877,25 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\Documents\\cossacks\\profiles\\*\\saves\\*.map",
+    "class": "Game",
+    "category": "Game",
+    "sub_category": "Saves",
+    "program": "Cossacks 3",
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\cossacks\\profiles\\*",
+    "class": "Game",
+    "category": "Game",
+    "sub_category": "Settings",
+    "program": "Cossacks 3",
+    "files_to_remove": [
+      "profile.cfg",
+      "profile.dat"
+    ]
+  },
+  {
     "path": "{steam}\\userdata\\*\\730\\local\\cfg\\*",
     "class": "Game",
     "category": "Game",
@@ -1105,6 +1154,25 @@
       "DawnGraphiteCache",
       "DawnWebGPUCache",
       "GPUCache"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\DBeaver",
+    "class": "Data Base",
+    "category": "Documentation",
+    "program": "DBeaver",
+    "files_to_remove": [
+      "readme.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\DBeaver",
+    "class": "Data Base",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "DBeaver",
+    "directories_to_remove": [
+      "licenses"
     ]
   },
   {
@@ -1943,6 +2011,24 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Users\\{username}\\Documents\\GTA San Andreas User Files\\SAMP",
+    "class": "Game",
+    "category": "Images",
+    "program": "GTA San Andreas",
+    "directories_to_remove": [
+      "screens"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\Documents\\GTA San Andreas User Files\\SAMP",
+    "class": "Game",
+    "category": "Logs",
+    "program": "GTA San Andreas",
+    "files_to_remove": [
+      "chatlog.txt"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\Guilded\\*.log",
     "class": "Messanger",
     "category": "Logs",
@@ -2244,6 +2330,17 @@
     "program": "INTERIUM",
     "directories_to_remove": [
       "INTERIUM"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Microsoft\\Internet Explorer",
+    "class": "System",
+    "category": "Logs",
+    "program": "Internet Explorer",
+    "files_to_remove": [
+      "brndlog.txt",
+      "ie4uinit-ClearIconCache.log",
+      "ie4uinit-UserConfig.log"
     ]
   },
   {
@@ -2568,6 +2665,15 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\kache",
+    "class": "Developing",
+    "category": "Logs",
+    "program": "Kache",
+    "files_to_remove": [
+      "kache.log"
+    ]
+  },
+  {
     "path": "{drive}Program Files\\KeePass Password Safe 2\\*.txt",
     "category": "Logs",
     "class": "Password Manager",
@@ -2581,6 +2687,15 @@
     "program": "KeePassXC",
     "directories_to_remove": [
       "docs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\.local\\share\\kilo",
+    "class": "AI",
+    "category": "Logs",
+    "program": "Kilo Code",
+    "directories_to_remove": [
+      "log"
     ]
   },
   {
@@ -2902,6 +3017,26 @@
     "category": "Logs",
     "program": "Magpie",
     "remove_files": true
+  },
+  {
+    "path": "{drive}ProgramData\\Maven",
+    "class": "Developing",
+    "category": "Documentation",
+    "program": "Maven",
+    "files_to_remove": [
+      "README.txt",
+      "NOTICE"
+    ]
+  },
+  {
+    "path": "{drive}ProgramData\\Maven",
+    "class": "Developing",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Maven",
+    "files_to_remove": [
+      "LICENSE"
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\max",
@@ -3832,24 +3967,6 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ai.opencode.desktop",
-    "class": "AI",
-    "category": "Logs",
-    "program": "OpenCode Desktop",
-    "directories_to_remove": [
-      "logs"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ai.opencode.desktop",
-    "class": "AI",
-    "category": "Cache",
-    "program": "OpenCode Desktop",
-    "directories_to_remove": [
-      "Cache"
-    ]
-  },
-  {
     "path": "{drive}Users\\{username}\\.local\\share\\opencode",
     "class": "AI",
     "category": "Logs",
@@ -3868,12 +3985,21 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.local\\share\\kilo",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ai.opencode.desktop",
     "class": "AI",
     "category": "Logs",
-    "program": "Kilo Code",
+    "program": "OpenCode Desktop",
     "directories_to_remove": [
-      "log"
+      "logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ai.opencode.desktop",
+    "class": "AI",
+    "category": "Cache",
+    "program": "OpenCode Desktop",
+    "directories_to_remove": [
+      "Cache"
     ]
   },
   {
@@ -6191,132 +6317,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\Documents\\cossacks\\profiles\\*\\saves\\*.map",
-    "class": "Game",
-    "category": "Game",
-    "sub_category": "Saves",
-    "program": "Cossacks 3",
-    "remove_files": true
-  },
-  {
-    "path": "{drive}Users\\{username}\\Documents\\cossacks\\profiles\\*",
-    "class": "Game",
-    "category": "Game",
-    "sub_category": "Settings",
-    "program": "Cossacks 3",
-    "files_to_remove": [
-      "profile.cfg",
-      "profile.dat"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\anaconda3",
-    "class": "Developing",
-    "category": "Logs",
-    "program": "Anaconda",
-    "files_to_remove": [
-      "install.log"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\anaconda3",
-    "class": "Developing",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "Anaconda",
-    "files_to_remove": [
-      "EULA.txt",
-      "LICENSE_PYTHON.txt"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\Sandbox Interactive GmbH\\Albion Online Client",
-    "class": "Game",
-    "category": "Logs",
-    "program": "Albion Online",
-    "files_to_remove": [
-      "ime_log.txt",
-      "Player.log"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Sandbox Interactive GmbH\\Albion Online Launcher",
-    "class": "Game",
-    "category": "Logs",
-    "program": "Albion Online",
-    "files_to_remove": [
-      "launcher.log"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Sandbox Interactive GmbH\\Albion Online Launcher",
-    "class": "Game",
-    "category": "Cache",
-    "program": "Albion Online",
-    "directories_to_remove": [
-      "cache"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\DBeaver",
-    "class": "Data Base",
-    "category": "Documentation",
-    "program": "DBeaver",
-    "files_to_remove": [
-      "readme.txt"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\DBeaver",
-    "class": "Data Base",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "DBeaver",
-    "directories_to_remove": [
-      "licenses"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Microsoft\\Internet Explorer",
-    "class": "System",
-    "category": "Logs",
-    "program": "Internet Explorer",
-    "files_to_remove": [
-      "brndlog.txt",
-      "ie4uinit-ClearIconCache.log",
-      "ie4uinit-UserConfig.log"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\kache",
-    "class": "Developing",
-    "category": "Logs",
-    "program": "Kache",
-    "files_to_remove": [
-      "kache.log"
-    ]
-  },
-  {
-    "path": "{drive}ProgramData\\Maven",
-    "class": "Developing",
-    "category": "Documentation",
-    "program": "Maven",
-    "files_to_remove": [
-      "README.txt",
-      "NOTICE"
-    ]
-  },
-  {
-    "path": "{drive}ProgramData\\Maven",
-    "class": "Developing",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "Maven",
-    "files_to_remove": [
-      "LICENSE"
     ]
   }
 ]
