@@ -223,7 +223,7 @@ jobs:
             - **PuTTY** Added documentation clearing
 
             ### 🛠 Technical Updates
-            - Return native windows render driver
+            - Fixed download buttun in update notification
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
