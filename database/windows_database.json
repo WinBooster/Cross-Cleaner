@@ -5595,14 +5595,14 @@
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\JAM Software\\TreeSize Free\\HELP_*",
-    "class": "File Manager",
+    "class": "Disk Analyzer",
     "category": "Documentation",
     "program": "TreeSize",
     "remove_directories": true
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\JAM Software\\TreeSize Free",
-    "class": "File Manager",
+    "class": "Disk Analyzer",
     "category": "Documentation",
     "sub_category": "Licenses",
     "program": "TreeSize",
