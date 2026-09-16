@@ -25,6 +25,7 @@ use database::structures::{CleanerData, CustomCleaner};
 use database::version::check_new_version;
 use eframe::egui;
 use icons::{ico_bytes_to_png_bytes, load_icon_from_bytes};
+use std::collections::HashMap;
 use std::sync::Arc;
 use title_bar::TITLE_BAR_HEIGHT;
 
@@ -94,14 +95,15 @@ async fn main() -> eframe::Result {
             database::registry_database::get_default_database().to_vec()
         }
     };
+    let database: Arc<[CleanerData]> = Arc::from(database);
     #[cfg(windows)]
     let app = MyApp::from_database(
-        Arc::from(database),
+        Arc::clone(&database),
         Arc::from(registry_database),
         custom_database,
     );
     #[cfg(not(windows))]
-    let app = MyApp::from_database(Arc::from(database), custom_database);
+    let app = MyApp::from_database(Arc::clone(&database), custom_database);
     let checkbox_count = app.categories.len();
     let rows = checkbox_count.div_ceil(3);
     // INFO: 20px for 1 checkbox, 45px for button, 32px for custom title bar
@@ -114,6 +116,30 @@ async fn main() -> eframe::Result {
     std::thread::spawn(move || {
         let _ = update_sender.send(check_new_version());
     });
+
+    // INFO: Precompute freeable size per category on a background thread so
+    // the UI thread is never blocked; results arrive via the channel.
+    let (size_sender, size_receiver) = std::sync::mpsc::channel();
+    app.size_receiver = Some(size_receiver);
+    {
+        let database = Arc::clone(&database);
+        std::thread::spawn(move || {
+            // Same 32-lane parallelism as the real cleaning pass.
+            let sizes = cleaner::estimate_size_parallel(&database, 32);
+            let mut cat_sizes: HashMap<String, u64> = HashMap::new();
+            let mut sub_sizes: HashMap<(String, String), u64> = HashMap::new();
+            for (data, size) in database.iter().zip(sizes) {
+                if size == 0 {
+                    continue;
+                }
+                *cat_sizes.entry(data.category.clone()).or_insert(0) += size;
+                *sub_sizes
+                    .entry((data.category.clone(), data.sub_category.clone()))
+                    .or_insert(0) += size;
+            }
+            let _ = size_sender.send((cat_sizes, sub_sizes));
+        });
+    }
 
     let size = egui::vec2(470.0, height as f32);
     let options = eframe::NativeOptions {

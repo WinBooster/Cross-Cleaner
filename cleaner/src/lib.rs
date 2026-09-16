@@ -338,6 +338,115 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
     out
 }
 
+// NOTE: Size estimation without deletion. Synchronous on purpose: callers run
+// it on a background thread / spawn_blocking so the UI never blocks.
+fn dir_size(root: &Path) -> u64 {
+    let Ok(meta) = std::fs::symlink_metadata(root) else {
+        return 0;
+    };
+    if meta.is_file() {
+        return meta.len();
+    }
+    if !meta.is_dir() {
+        return 0;
+    }
+    let Ok(entries) = std::fs::read_dir(root) else {
+        return 0;
+    };
+    let mut total = 0u64;
+    for entry in entries.flatten() {
+        let Ok(ft) = entry.file_type() else { continue };
+        if ft.is_dir() {
+            total += dir_size(&entry.path());
+        } else if ft.is_file() {
+            if let Ok(m) = entry.metadata() {
+                total += m.len();
+            }
+        }
+        // Symlinks are never followed, matching clear_data semantics.
+    }
+    total
+}
+
+/// Estimates how many bytes cleaning `data` would free, without deleting
+/// anything. Mirrors the counting logic of `clear_data`.
+pub fn estimate_size(data: &CleanerData) -> u64 {
+    if Path::new(&data.path)
+        .components()
+        .any(|c| matches!(c, Component::ParentDir))
+    {
+        return 0;
+    }
+
+    let paths: Vec<PathBuf> = match glob(&data.path) {
+        Ok(g) => g.filter_map(Result::ok).collect(),
+        Err(_) => return 0,
+    };
+
+    let mut bytes = 0u64;
+    for path in paths {
+        if !data.files_to_remove.is_empty() {
+            for fname in &data.files_to_remove {
+                if let Some(fpath) = safe_join(&path, fname) {
+                    if let Ok(meta) = std::fs::symlink_metadata(&fpath) {
+                        if meta.is_file() {
+                            bytes += meta.len();
+                        }
+                    }
+                }
+            }
+        }
+
+        if !data.directories_to_remove.is_empty() {
+            for dname in &data.directories_to_remove {
+                if let Some(dpath) = safe_join(&path, dname) {
+                    bytes += dir_size(&dpath);
+                }
+            }
+        }
+
+        if data.remove_all_in_dir || data.remove_directories {
+            bytes += dir_size(&path);
+        }
+
+        if data.remove_files {
+            if let Ok(meta) = std::fs::symlink_metadata(&path) {
+                if meta.is_file() {
+                    bytes += meta.len();
+                }
+            }
+        }
+
+        // remove_directory_after_clean frees no measurable bytes (folder itself).
+    }
+    bytes
+}
+
+/// Parallel variant of `estimate_size`: computes sizes for all entries using
+/// `concurrency` worker threads (mirrors the 32-lane parallelism of the real
+/// cleaning pass). Returns bytes per entry, in input order.
+pub fn estimate_size_parallel(database: &[CleanerData], concurrency: usize) -> Vec<u64> {
+    use std::sync::atomic::{AtomicUsize, Ordering};
+
+    let next = AtomicUsize::new(0);
+    let sizes = std::sync::Mutex::new(vec![0u64; database.len()]);
+
+    std::thread::scope(|scope| {
+        for _ in 0..concurrency.max(1) {
+            scope.spawn(|| loop {
+                let i = next.fetch_add(1, Ordering::Relaxed);
+                if i >= database.len() {
+                    break;
+                }
+                let size = estimate_size(&database[i]);
+                sizes.lock().expect("sizes mutex poisoned")[i] = size;
+            });
+        }
+    });
+
+    sizes.into_inner().expect("sizes mutex poisoned")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
