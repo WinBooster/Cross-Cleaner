@@ -219,12 +219,9 @@ jobs:
             ## ✨ What's New
 
             ### 🪟 Windows Enhancements
-            - **Fluxer** Added documentation clearing
-            - **Dungeon Keeper 2** Added documentation, logs clearing
-            - **Sephiria** Added logs clearing
-            - **Audacity** Added Audacity 4 documentation clearing
-            - **Zed** Improved logs clearing
-            - **Total Commander** Added documentation clearing
+            - **HWiNFO** Added documentation clearing
+            - **TreeSize** Added documentation clearing
+            - **Windhawk** Added documentation clearing
 
             ### 🛠 Technical Updates
             - Added sounds to UI interaction
