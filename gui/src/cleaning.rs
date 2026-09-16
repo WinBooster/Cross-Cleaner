@@ -4,9 +4,9 @@
 use cleaner::clear_data;
 #[cfg(windows)]
 use database::registry_database::clear_registry;
-use database::structures::{CleanerData, CleanerResult, Cleared, CustomCleaner};
 #[cfg(windows)]
 use database::structures::CleanerDataRegistry;
+use database::structures::{CleanerData, CleanerResult, Cleared, CustomCleaner};
 use database::utils::get_file_size_string;
 use futures::stream::{FuturesUnordered, StreamExt};
 use std::collections::{HashMap, HashSet};
