@@ -1640,6 +1640,26 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Program Files (x86)\\FastStone Image Viewer",
+    "class": "Utility",
+    "category": "Documentation",
+    "program": "FastStone Image Viewer",
+    "files_to_remove": [
+      "Credits.txt",
+      "Website.url"
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\FastStone Image Viewer",
+    "class": "Utility",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "FastStone Image Viewer",
+    "files_to_remove": [
+      "LicenseAgreement.pdf"
+    ]
+  },
+  {
     "path": "{steam}\\steamapps\\common\\Counter-Strike Global Offensive",
     "class": "Cheat",
     "category": "Cheats",
@@ -2272,6 +2292,15 @@
     "program": "HP Touchpoint Analytics Client",
     "directories_to_remove": [
       "logs"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\HWiNFO64",
+    "class": "Utility",
+    "category": "Documentation",
+    "program": "HWiNFO",
+    "files_to_remove": [
+      "HWiNFO Manual.pdf"
     ]
   },
   {
@@ -5565,6 +5594,26 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\JAM Software\\TreeSize Free\\HELP_*",
+    "class": "File Manager",
+    "category": "Documentation",
+    "program": "TreeSize",
+    "remove_directories": true
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\JAM Software\\TreeSize Free",
+    "class": "File Manager",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "TreeSize",
+    "directories_to_remove": [
+      "LicenseFiles"
+    ],
+    "files_to_remove": [
+      "FreewareLicense.rtf"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.Tribler\\*.log",
     "class": "Torrent",
     "category": "Logs",
@@ -5922,6 +5971,55 @@
     "program": "Weave",
     "remove_all_in_dir": true,
     "remove_directory_after_clean": true
+  },
+  {
+    "path": "{drive}Program Files\\Windhawk\\Compiler",
+    "class": "Utility",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Windhawk",
+    "files_to_remove": [
+      "LICENSE.TXT"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Windhawk\\Compiler\\aarch64-w64-mingw32\\share\\mingw32",
+    "class": "Utility",
+    "category": "Documentation",
+    "program": "Windhawk",
+    "files_to_remove": [
+      "COPYING",
+      "COPYING.MinGW-w64-runtime.txt",
+      "COPYING.MinGW-w64.txt",
+      "COPYING.winpthreads.txt",
+      "COPYING.winstorecompat.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Windhawk\\Compiler\\i686-w64-mingw32\\share\\mingw32",
+    "class": "Utility",
+    "category": "Documentation",
+    "program": "Windhawk",
+    "files_to_remove": [
+      "COPYING",
+      "COPYING.MinGW-w64-runtime.txt",
+      "COPYING.MinGW-w64.txt",
+      "COPYING.winpthreads.txt",
+      "COPYING.winstorecompat.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Windhawk\\Compiler\\x86_64-w64-mingw32\\share\\mingw32",
+    "class": "Utility",
+    "category": "Documentation",
+    "program": "Windhawk",
+    "files_to_remove": [
+      "COPYING",
+      "COPYING.MinGW-w64-runtime.txt",
+      "COPYING.MinGW-w64.txt",
+      "COPYING.winpthreads.txt",
+      "COPYING.winstorecompat.txt"
+    ]
   },
   {
     "path": "{drive}Windows\\System32\\DriverStore",
@@ -6583,103 +6681,5 @@
     "directories_to_remove": [
       "LOGS"
     ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\JAM Software\\TreeSize Free\\HELP_*",
-    "class": "File Manager",
-    "category": "Documentation",
-    "program": "TreeSize",
-    "remove_directories": true
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\JAM Software\\TreeSize Free",
-    "class": "File Manager",
-    "category": "Documentation",
-	"sub_category": "Licenses",
-    "program": "TreeSize",
-    "directories_to_remove": [
-		"LicenseFiles"
-	],
-	"files_to_remove": [
-		"FreewareLicense.rtf"
-	]
-  },
-  {
-    "path": "{drive}Program Files\\HWiNFO64",
-    "class": "Utility",
-    "category": "Documentation",
-    "program": "HWiNFO",
-	"files_to_remove": [
-		"HWiNFO Manual.pdf"
-	]
-  },
-  {
-    "path": "{drive}Program Files (x86)\\FastStone Image Viewer",
-    "class": "Utility",
-    "category": "Documentation",
-    "program": "FastStone Image Viewer",
-	"files_to_remove": [
-		"Credits.txt",
-		"Website.url"
-	]
-  },
-  {
-    "path": "{drive}Program Files (x86)\\FastStone Image Viewer",
-    "class": "Utility",
-    "category": "Documentation",
-	"sub_category": "Licenses",
-    "program": "FastStone Image Viewer",
-	"files_to_remove": [
-		"LicenseAgreement.pdf"
-	]
-  },
-  {
-    "path": "{drive}Program Files\\Windhawk\\Compiler",
-    "class": "Utility",
-    "category": "Documentation",
-	"sub_category": "Licenses",
-    "program": "Windhawk",
-	"files_to_remove": [
-		"LICENSE.TXT"
-	]
-  },
-  {
-    "path": "{drive}Program Files\\Windhawk\\Compiler\\aarch64-w64-mingw32\\share\\mingw32",
-    "class": "Utility",
-    "category": "Documentation",
-    "program": "Windhawk",
-	"files_to_remove": [
-		"COPYING",
-		"COPYING.MinGW-w64-runtime.txt",
-		"COPYING.MinGW-w64.txt",
-		"COPYING.winpthreads.txt",
-		"COPYING.winstorecompat.txt"
-	]
-  },
-  {
-    "path": "{drive}Program Files\\Windhawk\\Compiler\\i686-w64-mingw32\\share\\mingw32",
-    "class": "Utility",
-    "category": "Documentation",
-    "program": "Windhawk",
-	"files_to_remove": [
-		"COPYING",
-		"COPYING.MinGW-w64-runtime.txt",
-		"COPYING.MinGW-w64.txt",
-		"COPYING.winpthreads.txt",
-		"COPYING.winstorecompat.txt"
-	]
-  },
-  {
-    "path": "{drive}Program Files\\Windhawk\\Compiler\\x86_64-w64-mingw32\\share\\mingw32",
-    "class": "Utility",
-    "category": "Documentation",
-    "program": "Windhawk",
-	"files_to_remove": [
-		"COPYING",
-		"COPYING.MinGW-w64-runtime.txt",
-		"COPYING.MinGW-w64.txt",
-		"COPYING.winpthreads.txt",
-		"COPYING.winstorecompat.txt"
-	]
   }
 ]
