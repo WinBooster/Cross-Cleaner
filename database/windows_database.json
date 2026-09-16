@@ -1684,7 +1684,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher",
     "class": "Program Launcher",
     "category": "Logs",
-    "program": "FlowLauncher",
+    "program": "Flow Launcher",
     "directories_to_remove": [
       "Logs"
     ]
@@ -1693,7 +1693,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher",
     "class": "Program Launcher",
     "category": "Cache",
-    "program": "FlowLauncher",
+    "program": "Flow Launcher",
     "directories_to_remove": [
       "Cache"
     ]
@@ -1702,7 +1702,7 @@
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher\\Settings",
     "class": "Program Launcher",
     "category": "LastActivity",
-    "program": "FlowLauncher",
+    "program": "Flow Launcher",
     "files_to_remove": [
       "History.json",
       "History.json.bak"
