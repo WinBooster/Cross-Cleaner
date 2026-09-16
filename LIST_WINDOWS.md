@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.3.3
+# Windows Clearing Programs Catalog v2.0.3.4
 **Total categories in database:** 12
 
-**Total programs in database:** 241
+**Total programs in database:** 246
 
-**Total pathes in database:** 530
+**Total pathes in database:** 539
 
 ## AI
 
@@ -11,10 +11,10 @@
 | --- | --- | --- |
 | 1 | Cherry Studio | Logs |
 | 2 | [Copilot](https://copilot.microsoft.com/) | Logs |
-| 3 | Kilo Code | Logs |
+| 3 | [Kilo Code](https://kilo.ai) | Logs |
 | 4 | [LM Studio](https://lmstudio.ai/download) | LastActivity, Logs |
 | 5 | [Microsoft Lobe](https://github.com/orgs/lobe) | Logs |
-| 6 | OpenCode | LastActivity, Logs |
+| 6 | [OpenCode](https://opencode.ai/download) | LastActivity, Logs |
 | 7 | [OpenCode Desktop](https://opencode.ai/download) | Cache, Logs |
 
 
@@ -136,9 +136,10 @@
 | 23 | [Python](https://www.python.org/downloads) | Documentation |
 | 24 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
 | 25 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
-| 26 | [Unity Hub](https://unity.com/download) | Documentation |
-| 27 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk) | Documentation |
-| 28 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
+| 26 | RustRover | Documentation |
+| 27 | [Unity Hub](https://unity.com/download) | Documentation |
+| 28 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk) | Documentation |
+| 29 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
 
 
 ## Driver
@@ -161,7 +162,7 @@
 | 2 | [Gameloop](https://www.gameloop.com) | Logs |
 | 3 | [Memu](https://www.memuplay.com/download.html) | Documentation, Logs |
 | 4 | [Nox](https://bignox.com/nox-app-player) | Logs |
-| 5 | Ruffle | Documentation |
+| 5 | [Ruffle](https://github.com/ruffle-rs/ruffle) | Documentation |
 
 
 ## File Manager
@@ -169,6 +170,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [MTT File Manager](https://github.com/MTTamurex/MTT-File-Manager-RUST) | Documentation |
+| 2 | Total Commander | Documentation |
 
 
 ## Files Transport
@@ -189,24 +191,26 @@
 | 5 | Cossacks 3 | Game |
 | 6 | [Counter-Strike Global Offensive](https://store.steampowered.com/app/730/CounterStrike_2) | Game |
 | 7 | [Dota 2](https://www.dota2.com/home) | Game |
-| 8 | [Electronic Arts Desktop](https://www.ea.com/ea-app) | Logs |
-| 9 | [Epic Games Launcher](https://store.epicgames.com/en-US/download) | Logs |
-| 10 | GTA San Andreas | Images, Logs |
-| 11 | [Genshin Impact](https://genshin.hoyoverse.com) | Crashes, Documentation, Logs |
-| 12 | [Lords Mobile](https://lordsmobile.igg.com/pc) | Logs |
-| 13 | [Melissia Games Launcher](https://melissia.games) | Documentation, Logs |
-| 14 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
-| 15 | [Roblox](https://www.roblox.com/download) | Logs |
-| 16 | Rockstar Games | Crashes |
-| 17 | [Rust](https://store.steampowered.com/app/252490/Rust) | Game |
-| 18 | [Schedule I](https://store.steampowered.com/app/3164500/Schedule_I) | Game, Logs |
-| 19 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
-| 20 | [Terraria](https://terraria.org) | Game |
-| 21 | [The Powder Toy](https://powdertoy.co.uk) | Game |
-| 22 | [Ultrakill](https://store.steampowered.com/app/1229490/ULTRAKILL) | Logs |
-| 23 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game |
-| 24 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
-| 25 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game, Logs |
+| 8 | Dungeon Keeper 2 | Documentation, Logs |
+| 9 | [Electronic Arts Desktop](https://www.ea.com/ea-app) | Logs |
+| 10 | [Epic Games Launcher](https://store.epicgames.com/en-US/download) | Logs |
+| 11 | GTA San Andreas | Images, Logs |
+| 12 | [Genshin Impact](https://genshin.hoyoverse.com) | Crashes, Documentation, Logs |
+| 13 | [Lords Mobile](https://lordsmobile.igg.com/pc) | Logs |
+| 14 | [Melissia Games Launcher](https://melissia.games) | Documentation, Logs |
+| 15 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
+| 16 | [Roblox](https://www.roblox.com/download) | Logs |
+| 17 | Rockstar Games | Crashes |
+| 18 | [Rust](https://store.steampowered.com/app/252490/Rust) | Game |
+| 19 | [Schedule I](https://store.steampowered.com/app/3164500/Schedule_I) | Game, Logs |
+| 20 | Sephiria | Logs |
+| 21 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
+| 22 | [Terraria](https://terraria.org) | Game |
+| 23 | [The Powder Toy](https://powdertoy.co.uk) | Game |
+| 24 | [Ultrakill](https://store.steampowered.com/app/1229490/ULTRAKILL) | Logs |
+| 25 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game |
+| 26 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
+| 27 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game, Logs |
 
 
 ## ISO
@@ -235,13 +239,14 @@
 | --- | --- | --- |
 | 1 | [Discord](https://discord.com) | Cache, Crashes, Logs |
 | 2 | [Element](https://element.io) | Documentation, Logs |
-| 3 | [Guilded](https://www.guilded.gg) | Logs |
-| 4 | [MAX](https://max.ru) | Cache |
-| 5 | [Signal](https://signal.org) | Cache, Logs |
-| 6 | [Telegram](https://desktop.telegram.org) | Accounts, Cache, Logs |
-| 7 | [Thunderbird](https://www.thunderbird.net) | Crashes |
-| 8 | [Vesktop](https://vesktop.dev) | Documentation |
-| 9 | [qTox](https://qtox.github.io) | Logs |
+| 3 | [Fluxer](http://fluxer.app) | Documentation |
+| 4 | [Guilded](https://www.guilded.gg) | Logs |
+| 5 | [MAX](https://max.ru) | Cache |
+| 6 | [Signal](https://signal.org) | Cache, Logs |
+| 7 | [Telegram](https://desktop.telegram.org) | Accounts, Cache, Logs |
+| 8 | [Thunderbird](https://www.thunderbird.net) | Crashes |
+| 9 | [Vesktop](https://vesktop.dev) | Documentation |
+| 10 | [qTox](https://qtox.github.io) | Logs |
 
 
 ## Minecraft Launcher
@@ -273,7 +278,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Blender | Documentation |
+| 1 | [Blender](https://www.blender.org) | Documentation |
 
 
 ## Optimization
@@ -310,7 +315,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | FlowLauncher | Cache, LastActivity, Logs |
+| 1 | [Flow Launcher](https://www.flowlauncher.com/) | Cache, LastActivity, Logs |
 
 
 ## SSH
@@ -320,6 +325,13 @@
 | 1 | PuTTY | Documentation |
 
 
+## Screen Share
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | RustDesk | Documentation |
+
+
 ## Security
 
 | № | Program | Categories |
@@ -327,7 +339,7 @@
 | 1 | [360 Total Security](https://www.360totalsecurity.com) | Logs |
 | 2 | [4uKey for Android](https://www.tenorshare.ru/products/android-password-reset-tool.html) | Logs |
 | 3 | [Avast](https://www.avast.ru) | Documentation, Logs |
-| 4 | DNSCrypt | Documentation |
+| 4 | [DNSCrypt](https://www.dnscrypt.org) | Documentation |
 | 5 | [Doctor Web Cureit](https://free.drweb.ru/download+cureit+free) | Logs |
 | 6 | [GnuPG](https://www.gnupg.org/download/index.html) | Documentation |
 | 7 | [Gpg4win](https://www.gpg4win.org) | Documentation |
@@ -415,8 +427,7 @@
 | 4 | [Everything](https://www.voidtools.com) | Documentation, LastActivity |
 | 5 | [MiniBin](https://github.com/king-tri-ton/minibin) | Logs |
 | 6 | [PowerToys](https://github.com/microsoft/PowerToys) | Documentation |
-| 7 | RustDesk | Documentation |
-| 8 | [Unlocker](http://www.emptyloop.com/unlocker) | Documentation |
+| 7 | [Unlocker](http://www.emptyloop.com/unlocker) | Documentation |
 
 
 ## VPN
