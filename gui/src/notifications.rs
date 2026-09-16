@@ -156,7 +156,7 @@ impl Notification for UpdateNotification {
                     crate::sounds::click();
                     // eframe's native backend ignores egui's OpenUrl command,
                     // so open the release page through the system browser.
-                    crate::open_in_browser(&self.release.url);
+                    crate::title_bar::open_in_browser(&self.release.url);
                 }
                 if ui.button("Changelog").clicked() {
                     crate::sounds::click();
