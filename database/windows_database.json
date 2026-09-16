@@ -1374,6 +1374,37 @@
     "remove_files": true
   },
   {
+    "path": "{drive}GOG Games\\Dungeon Keeper 2",
+    "class": "Game",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Dungeon Keeper 2",
+    "files_to_remove": [
+      "EAMSEULA.txt",
+      "EULA.txt"
+    ]
+  },
+  {
+    "path": "{drive}GOG Games\\Dungeon Keeper 2",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "Dungeon Keeper 2",
+    "files_to_remove": [
+      "manual.pdf",
+      "ReadMe.txt",
+      "reference_card.pdf"
+    ]
+  },
+  {
+    "path": "{drive}GOG Games\\Dungeon Keeper 2",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Dungeon Keeper 2",
+    "files_to_remove": [
+      "MESSAGE.LOG"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\EasyAntiCheat\\*.log",
     "class": "AntiCheat",
     "category": "Logs",
@@ -1675,6 +1706,27 @@
     "files_to_remove": [
       "History.json",
       "History.json.bak"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\fluxer_desktop_canary\\current",
+    "class": "Messanger",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Fluxer",
+    "files_to_remove": [
+      "LICENSE.electron.txt",
+      "LICENSES.chromium.html"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\fluxer_desktop_canary",
+    "class": "Messanger",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Fluxer",
+    "files_to_remove": [
+      "velopack.log"
     ]
   },
   {
@@ -4948,6 +5000,16 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\RustRover*",
+    "class": "Developing",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "RustRover",
+    "directories_to_remove": [
+      "license"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.Salwyrr\\launcher",
     "class": "Minecraft Launcher",
     "category": "Documentation",
@@ -5020,6 +5082,16 @@
     "files_to_remove": [
       "CHANGELOG.md",
       "README.md"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\TEAMHORAY\\Sephiria",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Sephiria",
+    "files_to_remove": [
+      "Player-prev.log",
+      "Player.log"
     ]
   },
   {
@@ -5471,6 +5543,26 @@
     "category": "Logs",
     "program": "Topaz Video AI",
     "remove_files": true
+  },
+  {
+    "path": "{drive}Program Files\\totalcmd",
+    "class": "File Manager",
+    "category": "Documentation",
+    "program": "Total Commander",
+    "files_to_remove": [
+      "HISTORY.TXT",
+      "KEYBOARD.TXT"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\totalcmd\\FILTER64",
+    "class": "File Manager",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Total Commander",
+    "files_to_remove": [
+      "SoundTouchDLL_License.txt"
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\.Tribler\\*.log",
@@ -6490,98 +6582,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\fluxer_desktop_canary\\current",
-    "class": "Messanger",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "Fluxer",
-    "files_to_remove": [
-      "LICENSE.electron.txt",
-      "LICENSES.chromium.html"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\fluxer_desktop_canary",
-    "class": "Messanger",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "Fluxer",
-    "files_to_remove": [
-      "velopack.log"
-    ]
-  },
-  {
-    "path": "{drive}GOG Games\\Dungeon Keeper 2",
-    "class": "Game",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "Dungeon Keeper 2",
-    "files_to_remove": [
-      "EAMSEULA.txt",
-      "EULA.txt"
-    ]
-  },
-  {
-    "path": "{drive}GOG Games\\Dungeon Keeper 2",
-    "class": "Game",
-    "category": "Documentation",
-    "program": "Dungeon Keeper 2",
-    "files_to_remove": [
-      "manual.pdf",
-      "ReadMe.txt",
-      "reference_card.pdf"
-    ]
-  },
-  {
-    "path": "{drive}GOG Games\\Dungeon Keeper 2",
-    "class": "Game",
-    "category": "Logs",
-    "program": "Dungeon Keeper 2",
-    "files_to_remove": [
-      "MESSAGE.LOG"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\TEAMHORAY\\Sephiria",
-    "class": "Game",
-    "category": "Logs",
-    "program": "Sephiria",
-    "files_to_remove": [
-      "Player-prev.log",
-      "Player.log"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\RustRover*",
-    "class": "Developing",
-    "category": "Documentation",
-	"sub_category": "Licenses",
-    "program": "RustRover",
-    "directories_to_remove": [
-      "license"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\totalcmd",
-    "class": "File Manager",
-    "category": "Documentation",
-    "program": "Total Commander",
-    "files_to_remove": [
-      "HISTORY.TXT",
-	  "KEYBOARD.TXT"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\totalcmd\\FILTER64",
-    "class": "File Manager",
-    "category": "Documentation",
-	"sub_category": "Licenses",
-    "program": "Total Commander",
-    "files_to_remove": [
-      "SoundTouchDLL_License.txt"
     ]
   }
 ]
