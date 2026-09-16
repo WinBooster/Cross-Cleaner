@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.3.4
+# Windows Clearing Programs Catalog v2.0.3.5
 **Total categories in database:** 12
 
-**Total programs in database:** 246
+**Total programs in database:** 250
 
-**Total pathes in database:** 539
+**Total pathes in database:** 547
 
 ## AI
 
@@ -142,6 +142,13 @@
 | 29 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
 
 
+## Disk Analyzer
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | TreeSize | Documentation |
+
+
 ## Driver
 
 | № | Program | Categories |
@@ -170,7 +177,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [MTT File Manager](https://github.com/MTTamurex/MTT-File-Manager-RUST) | Documentation |
-| 2 | Total Commander | Documentation |
+| 2 | [Total Commander](https://www.ghisler.com) | Documentation |
 
 
 ## Files Transport
@@ -425,9 +432,12 @@
 | 2 | [CPU-Z](https://www.cpuid.com) | Documentation |
 | 3 | [CrystalDiskInfo](https://crystalmark.info) | Documentation |
 | 4 | [Everything](https://www.voidtools.com) | Documentation, LastActivity |
-| 5 | [MiniBin](https://github.com/king-tri-ton/minibin) | Logs |
-| 6 | [PowerToys](https://github.com/microsoft/PowerToys) | Documentation |
-| 7 | [Unlocker](http://www.emptyloop.com/unlocker) | Documentation |
+| 5 | FastStone Image Viewer | Documentation |
+| 6 | [HWiNFO](https://www.hwinfo.com) | Documentation |
+| 7 | [MiniBin](https://github.com/king-tri-ton/minibin) | Logs |
+| 8 | [PowerToys](https://github.com/microsoft/PowerToys) | Documentation |
+| 9 | [Unlocker](http://www.emptyloop.com/unlocker) | Documentation |
+| 10 | [Windhawk](https://windhawk.net) | Documentation |
 
 
 ## VPN
