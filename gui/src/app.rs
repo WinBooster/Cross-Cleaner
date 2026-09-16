@@ -60,13 +60,10 @@ pub struct MyApp {
     pub icon_texture: Option<egui::TextureHandle>,
 
     pub update_receiver: Option<std::sync::mpsc::Receiver<Result<Option<NewRelease>, String>>>,
-    /// Background size scan: (category -> bytes, (category, sub) -> bytes).
-    pub size_receiver:
-        Option<std::sync::mpsc::Receiver<(HashMap<String, u64>, HashMap<(String, String), u64>)>>,
-    /// Bytes each category can free (filled by the startup scan).
-    pub category_sizes: HashMap<String, u64>,
-    /// Bytes each (category, sub_category) can free (filled by the startup scan).
-    pub sub_sizes: HashMap<(String, String), u64>,
+    /// Number of database paths per category.
+    pub category_counts: HashMap<String, usize>,
+    /// Number of database paths per (category, sub_category).
+    pub sub_counts: HashMap<(String, String), usize>,
     /// All currently visible notifications (update banner, etc.).
     pub notifications: NotificationManager,
     /// Shared slot filled by the background changelog fetch.
@@ -102,11 +99,17 @@ impl MyApp {
     ) -> Self {
         let mut cat_to_subs: HashMap<String, HashSet<String>> = HashMap::new();
         let mut cat_has_empty: HashMap<String, bool> = HashMap::new();
+        let mut category_counts: HashMap<String, usize> = HashMap::new();
+        let mut sub_counts: HashMap<(String, String), usize> = HashMap::new();
         // Ensure all categories appear even if no sub_category
         for data in database.iter() {
             cat_to_subs.entry(data.category.clone()).or_default();
             cat_has_empty.entry(data.category.clone()).or_insert(false);
+            *category_counts.entry(data.category.clone()).or_insert(0) += 1;
             let sub = effective_sub(&data.class, &data.sub_category);
+            *sub_counts
+                .entry((data.category.clone(), sub.clone()))
+                .or_insert(0) += 1;
             if !sub.is_empty() {
                 cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
             } else {
@@ -116,7 +119,11 @@ impl MyApp {
         for data in custom_database.iter() {
             cat_to_subs.entry(data.category.clone()).or_default();
             cat_has_empty.entry(data.category.clone()).or_insert(false);
+            *category_counts.entry(data.category.clone()).or_insert(0) += 1;
             let sub = effective_sub("", &data.sub_category);
+            *sub_counts
+                .entry((data.category.clone(), sub.clone()))
+                .or_insert(0) += 1;
             if !sub.is_empty() {
                 cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
             } else {
@@ -129,7 +136,11 @@ impl MyApp {
             }
             cat_to_subs.entry(data.category.clone()).or_default();
             cat_has_empty.entry(data.category.clone()).or_insert(false);
+            *category_counts.entry(data.category.clone()).or_insert(0) += 1;
             let sub = effective_sub(&data.class, &data.sub_category);
+            *sub_counts
+                .entry((data.category.clone(), sub.clone()))
+                .or_insert(0) += 1;
             if !sub.is_empty() {
                 cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
             } else {
@@ -209,9 +220,8 @@ impl MyApp {
             icon_texture: None,
 
             update_receiver: None,
-            size_receiver: None,
-            category_sizes: HashMap::new(),
-            sub_sizes: HashMap::new(),
+            category_counts,
+            sub_counts,
             notifications: NotificationManager::default(),
             changelog: None,
             changelog_handle: None,
@@ -228,10 +238,16 @@ impl MyApp {
     ) -> Self {
         let mut cat_to_subs: HashMap<String, HashSet<String>> = HashMap::new();
         let mut cat_has_empty: HashMap<String, bool> = HashMap::new();
+        let mut category_counts: HashMap<String, usize> = HashMap::new();
+        let mut sub_counts: HashMap<(String, String), usize> = HashMap::new();
         for data in database.iter() {
             cat_to_subs.entry(data.category.clone()).or_default();
             cat_has_empty.entry(data.category.clone()).or_insert(false);
+            *category_counts.entry(data.category.clone()).or_insert(0) += 1;
             let sub = effective_sub(&data.class, &data.sub_category);
+            *sub_counts
+                .entry((data.category.clone(), sub.clone()))
+                .or_insert(0) += 1;
             if !sub.is_empty() {
                 cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
             } else {
@@ -241,7 +257,11 @@ impl MyApp {
         for data in custom_database.iter() {
             cat_to_subs.entry(data.category.clone()).or_default();
             cat_has_empty.entry(data.category.clone()).or_insert(false);
+            *category_counts.entry(data.category.clone()).or_insert(0) += 1;
             let sub = effective_sub("", &data.sub_category);
+            *sub_counts
+                .entry((data.category.clone(), sub.clone()))
+                .or_insert(0) += 1;
             if !sub.is_empty() {
                 cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
             } else {
@@ -320,9 +340,8 @@ impl MyApp {
             icon_texture: None,
 
             update_receiver: None,
-            size_receiver: None,
-            category_sizes: HashMap::new(),
-            sub_sizes: HashMap::new(),
+            category_counts,
+            sub_counts,
             notifications: NotificationManager::default(),
             changelog: None,
             changelog_handle: None,
@@ -565,23 +584,6 @@ impl eframe::App for MyApp {
                     self.update_receiver = None;
                 }
                 Err(std::sync::mpsc::TryRecvError::Empty) => {}
-            }
-        }
-
-        if let Some(receiver) = &mut self.size_receiver {
-            match receiver.try_recv() {
-                Ok((cat_sizes, sub_sizes)) => {
-                    self.category_sizes = cat_sizes;
-                    self.sub_sizes = sub_sizes;
-                    self.size_receiver = None;
-                    ctx.request_repaint();
-                }
-                Err(std::sync::mpsc::TryRecvError::Empty) => {
-                    ctx.request_repaint_after(std::time::Duration::from_millis(250));
-                }
-                Err(std::sync::mpsc::TryRecvError::Disconnected) => {
-                    self.size_receiver = None;
-                }
             }
         }
 
@@ -900,21 +902,30 @@ impl eframe::App for MyApp {
                                     if self.search_query.is_empty()
                                         || program.to_lowercase().contains(&self.search_query)
                                     {
-                                        let mut value = checkbox.borrow_mut();
+                                        let master = *checkbox.borrow();
+                                        let is_checked =
+                                            master && self.program_disabled[i].is_empty();
+                                        let is_indet = master && !self.program_disabled[i].is_empty();
                                         let column = &mut columns[col_index % 2];
                                         column.horizontal(|ui| {
-                                            let resp = ui.checkbox(&mut *value, program);
-                                            if resp.changed() {
-                                                if *value {
-                                                    sounds::check();
-                                                } else {
+                                            let (_resp, clicked) = tristate_checkbox(
+                                                ui, is_checked, is_indet, program,
+                                            );
+                                            if clicked {
+                                                if is_checked || is_indet {
+                                                    *checkbox.borrow_mut() = false;
+                                                    self.program_disabled[i].clear();
                                                     sounds::uncheck();
+                                                } else {
+                                                    *checkbox.borrow_mut() = true;
+                                                    self.program_disabled[i].clear();
+                                                    sounds::check();
                                                 }
                                             }
                                             // Per-program popup: disable individual
                                             // categories for this program only.
                                             if let Some(cats) = self.program_categories.get(i) {
-                                                if !cats.is_empty() {
+                                                if cats.len() > 1 {
                                                     let menu_image =
                                                         egui::Image::from_texture(
                                                             egui::load::SizedTexture::new(
@@ -1071,45 +1082,16 @@ impl eframe::App for MyApp {
                     }
                     let menu_tex = self.menu_texture.clone().unwrap();
 
-                    // Size suffix right after the checkbox text, e.g. "Cache (1.2 MB)".
-                    // While the startup scan is running show animated dots:
-                    // (.), (..), (...). The slot always reserves the same fixed
-                    // width (left-aligned content), so the popup menu icon that
-                    // follows it never shifts while the animation runs.
-                    let scanning = self.size_receiver.is_some();
-                    let dot = if scanning {
-                        let t = ui.input(|i| i.time);
-                        format!("({})", ".".repeat(((t * 2.0) as usize % 3) + 1))
-                    } else {
-                        String::new()
-                    };
-                    let size_slot = |ui: &mut egui::Ui, text: &str| {
-                        ui.allocate_ui_with_layout(
-                            egui::vec2(56.0, 16.0),
-                            egui::Layout::left_to_right(egui::Align::Center),
-                            |ui| {
-                                if !text.is_empty() {
-                                    ui.add(
-                                        egui::Label::new(
-                                            egui::RichText::new(text).weak().small(),
-                                        )
-                                        .truncate(),
-                                    );
-                                }
-                            },
-                        );
-                    };
-                    let cat_size_labels: Vec<String> = self
+                    // Path count per category, e.g. "Cache (12)"
+                    let cat_labels: Vec<String> = self
                         .categories
                         .iter()
-                        .map(|cat| match self.category_sizes.get(&cat.name).copied() {
-                            Some(s) if s > 0 => format!("({})", get_file_size_string(s)),
-                            Some(_) => String::new(),
-                            None if scanning => dot.clone(),
-                            None => String::new(),
+                        .map(|cat| match self.category_counts.get(&cat.name).copied() {
+                            Some(n) if n > 0 => format!("{} ({})", cat.name, n),
+                            _ => cat.name.clone(),
                         })
                         .collect();
-                    let sub_sizes = self.sub_sizes.clone();
+                    let sub_counts = self.sub_counts.clone();
 
                     ui.columns(3, |columns| {
                         for (idx, cat) in self.categories.iter_mut().enumerate() {
@@ -1120,7 +1102,7 @@ impl eframe::App for MyApp {
                             columns[column_index].horizontal(|ui| {
                                 // Tristate checkbox with square for indeterminate
                                 let (resp, clicked) =
-                                    tristate_checkbox(ui, is_checked, is_indet, &cat.name);
+                                    tristate_checkbox(ui, is_checked, is_indet, &cat_labels[idx]);
                                 if clicked {
                                     if is_checked || is_indet {
                                         cat.selected.clear();
@@ -1136,7 +1118,6 @@ impl eframe::App for MyApp {
                                         sounds::check();
                                     }
                                 }
-                                size_slot(ui, &cat_size_labels[idx]);
                                 // menu image only if sub-categories exist (embedded menu.png)
                                 if !cat.subs.is_empty() {
                                     let menu_image =
@@ -1167,29 +1148,17 @@ impl eframe::App for MyApp {
                                                 |ui| {
                                                     for sub in cat.subs.clone() {
                                                         let key = (cat.name.clone(), sub.clone());
-                                                        let size_text = match sub_sizes.get(&key).copied()
-                                                        {
-                                                            Some(s) if s > 0 => {
-                                                                format!(
-                                                                    "({})",
-                                                                    get_file_size_string(s)
-                                                                )
-                                                            }
-                                                            Some(_) => String::new(),
-                                                            None if scanning => dot.clone(),
-                                                            None => String::new(),
-                                                        };
+                                                        let label =
+                                                            match sub_counts.get(&key).copied() {
+                                                                Some(n) if n > 0 => format!(
+                                                                    "{} ({})",
+                                                                    sub, n
+                                                                ),
+                                                                _ => sub.clone(),
+                                                            };
                                                         let mut is_sel =
                                                             cat.selected.contains(&sub);
-                                                        let resp = ui
-                                                            .horizontal(|ui| {
-                                                                let resp = ui
-                                                                    .checkbox(&mut is_sel, &sub);
-                                                                size_slot(ui, &size_text);
-                                                                resp
-                                                            })
-                                                            .inner;
-                                                        if resp.changed()
+                                                        if ui.checkbox(&mut is_sel, &label).changed()
                                                         {
                                                             if is_sel {
                                                                 cat.selected.insert(sub.clone());
@@ -1204,30 +1173,21 @@ impl eframe::App for MyApp {
                                                     if cat.has_empty {
                                                         let key =
                                                             (cat.name.clone(), String::new());
-                                                        let size_text = match sub_sizes.get(&key)
+                                                        let label = match sub_counts
+                                                            .get(&key)
                                                             .copied()
                                                         {
-                                                            Some(s) if s > 0 => format!(
-                                                                "({})",
-                                                                get_file_size_string(s)
+                                                            Some(n) if n > 0 => format!(
+                                                                "Uncategorized ({})",
+                                                                n
                                                             ),
-                                                            Some(_) => String::new(),
-                                                            None if scanning => dot.clone(),
-                                                            None => String::new(),
+                                                            _ => String::from("Uncategorized"),
                                                         };
                                                         let mut is_uncat =
                                                             cat.selected.contains("");
-                                                        let resp = ui
-                                                            .horizontal(|ui| {
-                                                                let resp = ui.checkbox(
-                                                                    &mut is_uncat,
-                                                                    "Uncategorized",
-                                                                );
-                                                                size_slot(ui, &size_text);
-                                                                resp
-                                                            })
-                                                            .inner;
-                                                        if resp.changed()
+                                                        if ui
+                                                            .checkbox(&mut is_uncat, &label)
+                                                            .changed()
                                                         {
                                                             if is_uncat {
                                                                 cat.selected.insert(String::new());
