@@ -26,6 +26,7 @@ pub async fn work(
     custom_database: &[CustomCleaner],
     #[cfg(windows)] registry_database: &[CleanerDataRegistry],
     excluded_programs: HashSet<String>,
+    excluded_program_categories: HashSet<(String, String)>,
 ) -> (u64, u64, u64, Vec<Cleared>) {
     let mut current_task = 0;
 
@@ -48,7 +49,11 @@ pub async fn work(
         for data in registry_database.iter() {
             let eff = effective_sub(&data.class, &data.sub_category);
             if let Some(subs) = selected_map.get(&data.category) {
-                if subs.contains(&eff) && !excluded_programs.contains(&data.program) {
+                if subs.contains(&eff)
+                    && !excluded_programs.contains(&data.program)
+                    && !excluded_program_categories
+                        .contains(&(data.program.clone(), data.category.clone()))
+                {
                     let data = data.clone();
                     let sender = progress_sender.clone();
                     let name_msg = data.program.clone();
@@ -67,7 +72,11 @@ pub async fn work(
     for data in custom_database.iter() {
         let eff = effective_sub("", &data.sub_category);
         if let Some(subs) = selected_map.get(&data.category) {
-            if subs.contains(&eff) && !excluded_programs.contains(&data.program) {
+            if subs.contains(&eff)
+                && !excluded_programs.contains(&data.program)
+                && !excluded_program_categories
+                    .contains(&(data.program.clone(), data.category.clone()))
+            {
                 let data = data.clone();
                 let sender = progress_sender.clone();
                 let name_msg = data.id.clone();
@@ -97,7 +106,11 @@ pub async fn work(
     for data in database.iter() {
         let eff = effective_sub(&data.class, &data.sub_category);
         if let Some(subs) = selected_map.get(&data.category) {
-            if subs.contains(&eff) && !excluded_programs.contains(&data.program) {
+            if subs.contains(&eff)
+                && !excluded_programs.contains(&data.program)
+                && !excluded_program_categories
+                    .contains(&(data.program.clone(), data.category.clone()))
+            {
                 let data = data.clone();
                 let sender = progress_sender.clone();
                 let path_msg = data.program.clone();

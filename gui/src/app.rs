@@ -40,6 +40,10 @@ pub struct MyApp {
 
     pub show_program_selection: bool,
     pub program_checkboxes: Vec<(Rc<RefCell<bool>>, String)>,
+    /// Selected categories that apply to each program (parallel to program_checkboxes).
+    pub program_categories: Vec<Vec<String>>,
+    /// Categories the user disabled per program (parallel to program_checkboxes).
+    pub program_disabled: Vec<HashSet<String>>,
     pub search_query: String,
     pub search_query_visible: String,
     pub excluded_programs: HashSet<String>,
@@ -192,6 +196,8 @@ impl MyApp {
 
             show_program_selection: false,
             program_checkboxes: vec![],
+            program_categories: vec![],
+            program_disabled: vec![],
             search_query: String::new(),
             search_query_visible: String::new(),
             excluded_programs: HashSet::new(),
@@ -301,6 +307,8 @@ impl MyApp {
 
             show_program_selection: false,
             program_checkboxes: vec![],
+            program_categories: vec![],
+            program_disabled: vec![],
             search_query: String::new(),
             search_query_visible: String::new(),
             excluded_programs: HashSet::new(),
@@ -872,25 +880,96 @@ impl eframe::App for MyApp {
 
                     ui.separator();
 
+                    if self.menu_texture.is_none() {
+                        self.menu_texture = Some(ctx.load_texture(
+                            "menu",
+                            load_asset_image(MENU_BYTES),
+                            egui::TextureOptions::LINEAR,
+                        ));
+                    }
+                    let menu_tex = self.menu_texture.clone().unwrap();
+
                     egui::ScrollArea::vertical()
                         .max_height(scroll_height)
                         .show(ui, |ui| {
                             ui.columns(2, |columns| {
                                 let mut col_index = 0;
-                                for (checkbox, program) in self.program_checkboxes.iter() {
+                                for (i, (checkbox, program)) in
+                                    self.program_checkboxes.iter().enumerate()
+                                {
                                     if self.search_query.is_empty()
                                         || program.to_lowercase().contains(&self.search_query)
                                     {
                                         let mut value = checkbox.borrow_mut();
-                                        let resp =
-                                            columns[col_index % 2].checkbox(&mut *value, program);
-                                        if resp.changed() {
-                                            if *value {
-                                                sounds::check();
-                                            } else {
-                                                sounds::uncheck();
+                                        let column = &mut columns[col_index % 2];
+                                        column.horizontal(|ui| {
+                                            let resp = ui.checkbox(&mut *value, program);
+                                            if resp.changed() {
+                                                if *value {
+                                                    sounds::check();
+                                                } else {
+                                                    sounds::uncheck();
+                                                }
                                             }
-                                        }
+                                            // Per-program popup: disable individual
+                                            // categories for this program only.
+                                            if let Some(cats) = self.program_categories.get(i) {
+                                                if !cats.is_empty() {
+                                                    let menu_image =
+                                                        egui::Image::from_texture(
+                                                            egui::load::SizedTexture::new(
+                                                                menu_tex.id(),
+                                                                menu_tex.size_vec2(),
+                                                            ),
+                                                        )
+                                                        .fit_to_exact_size(egui::vec2(16.0, 16.0))
+                                                        .tint(ui.visuals().text_color())
+                                                        .sense(egui::Sense::click());
+                                                    let menu_resp = ui.add_sized(
+                                                        egui::vec2(16.0, 16.0),
+                                                        menu_image,
+                                                    );
+                                                    if menu_resp.clicked() {
+                                                        sounds::pop();
+                                                    }
+
+                                                    let frame = egui::Frame::popup(ui.style());
+                                                    egui::Popup::menu(&menu_resp)
+                                                        .close_behavior(
+                                                            egui::PopupCloseBehavior::CloseOnClickOutside,
+                                                        )
+                                                        .frame(frame)
+                                                        .show(|ui| {
+                                                            ui.set_min_width(180.0);
+                                                            egui::ScrollArea::vertical()
+                                                                .max_height(300.0)
+                                                                .show(ui, |ui| {
+                                                                    for cat in cats.clone() {
+                                                                        let mut enabled =
+                                                                            !self.program_disabled[i]
+                                                                                .contains(&cat);
+                                                                        if ui
+                                                                            .checkbox(
+                                                                                &mut enabled,
+                                                                                &cat,
+                                                                            )
+                                                                            .changed()
+                                                                        {
+                                                                            if enabled {
+                                                                                self.program_disabled[i]
+                                                                                    .remove(&cat);
+                                                                            } else {
+                                                                                self.program_disabled[i]
+                                                                                    .insert(cat.clone());
+                                                                                sounds::uncheck();
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                });
+                                                        });
+                                                }
+                                            }
+                                        });
                                         col_index += 1;
                                     }
                                 }
@@ -912,6 +991,22 @@ impl eframe::App for MyApp {
                             for (checkbox, program) in &self.program_checkboxes {
                                 if !*checkbox.borrow() {
                                     self.excluded_programs.insert(program.clone());
+                                }
+                            }
+
+                            // Per-program category exclusions from the popups
+                            let mut excluded_program_categories: HashSet<(String, String)> =
+                                HashSet::new();
+                            for (i, (checkbox, program)) in
+                                self.program_checkboxes.iter().enumerate()
+                            {
+                                if *checkbox.borrow() {
+                                    if let Some(disabled) = self.program_disabled.get(i) {
+                                        for cat in disabled {
+                                            excluded_program_categories
+                                                .insert((program.clone(), cat.clone()));
+                                        }
+                                    }
                                 }
                             }
 
@@ -940,6 +1035,7 @@ impl eframe::App for MyApp {
                                     #[cfg(windows)]
                                     &reg_database,
                                     excluded_programs,
+                                    excluded_program_categories,
                                 )
                                 .await
                             });
@@ -1160,20 +1256,32 @@ impl eframe::App for MyApp {
                         sounds::click();
                         if self.has_selection() {
                             let selected_map = self.selected_map();
-                            let mut programs: Vec<String> = Vec::new();
+                            let mut programs: Vec<(String, Vec<String>)> = Vec::new();
+                            let mut add = |program: &str, category: &str| {
+                                if let Some(entry) =
+                                    programs.iter_mut().find(|(p, _)| p == program)
+                                {
+                                    if !entry.1.iter().any(|c| c == category) {
+                                        entry.1.push(category.to_string());
+                                    }
+                                } else {
+                                    programs
+                                        .push((program.to_string(), vec![category.to_string()]));
+                                }
+                            };
                             for data in self.database.iter() {
                                 let eff = effective_sub(&data.class, &data.sub_category);
                                 if let Some(subs) = selected_map.get(&data.category) {
-                                    if subs.contains(&eff) && !programs.contains(&data.program) {
-                                        programs.push(data.program.clone());
+                                    if subs.contains(&eff) {
+                                        add(&data.program, &data.category);
                                     }
                                 }
                             }
                             for data in self.custom_database.iter() {
                                 let eff = effective_sub("", &data.sub_category);
                                 if let Some(subs) = selected_map.get(&data.category) {
-                                    if subs.contains(&eff) && !programs.contains(&data.program) {
-                                        programs.push(data.program.clone());
+                                    if subs.contains(&eff) {
+                                        add(&data.program, &data.category);
                                     }
                                 }
                             }
@@ -1182,19 +1290,25 @@ impl eframe::App for MyApp {
                                 for data in self.regisry_database.iter() {
                                     let eff = effective_sub(&data.class, &data.sub_category);
                                     if let Some(subs) = selected_map.get(&data.category) {
-                                        if subs.contains(&eff) && !programs.contains(&data.program)
-                                        {
-                                            programs.push(data.program.clone());
+                                        if subs.contains(&eff) {
+                                            add(&data.program, &data.category);
                                         }
                                     }
                                 }
                             }
-                            programs.sort();
+                            programs.sort_by(|a, b| a.0.cmp(&b.0));
+                            for (_, cats) in programs.iter_mut() {
+                                cats.sort();
+                            }
 
                             self.program_checkboxes.clear();
-                            for program in programs {
+                            self.program_categories.clear();
+                            self.program_disabled.clear();
+                            for (program, cats) in programs {
                                 self.program_checkboxes
                                     .push((Rc::new(RefCell::new(true)), program));
+                                self.program_categories.push(cats);
+                                self.program_disabled.push(HashSet::new());
                             }
 
                             self.show_program_selection = true;
