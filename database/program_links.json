@@ -70,6 +70,7 @@
   
   "Blender": "https://www.blender.org",
 
+  "CrystalCry": "https://crystalcry.org",
   "HiAlgo Boost": "https://www.hialgo.com",
   "Mem Reduct": "https://github.com/henrypp/memreduct",
   "Winutil": "https://github.com/ChrisTitusTech/winutil",
@@ -83,7 +84,11 @@
   "KeePass 2": "https://keepass.info/download.html",
   "KeePassXC": "https://keepassxc.org/download",
   
-  "Flow Launcher": "https://www.flowlauncher.com/",
+  "Flow Launcher": "https://www.flowlauncher.com",
+  
+  "PuTTY": "https://putty.org",
+  
+  "RustDesk": "https://rustdesk.com"
 
   "Future Client": "https://futureclient.net",
   "Cheat Engine": "https://www.cheatengine.org/downloads.php",
