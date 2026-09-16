@@ -149,8 +149,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-setup
+          if-no-files-found: error
           path: |
-            innosetup\compiler\Cross_Cleaner_Setup_exe
+            innosetup\compiler\Cross_Cleaner_Setup.exe
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -217,14 +218,9 @@ jobs:
             ![Downloads](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}/total) ![Version](https://img.shields.io/badge/version-${{ env.APP_VERSION }}-blue) ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux|%20MacOS-orange)
 
             ## ✨ What's New
-
-            ### 🪟 Windows Enhancements
-            - **HWiNFO** Added documentation clearing
-            - **TreeSize** Added documentation clearing
-            - **Windhawk** Added documentation clearing
-
+            
             ### 🛠 Technical Updates
-            - Added sounds to UI interaction
+            - Inno setup fixes
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
