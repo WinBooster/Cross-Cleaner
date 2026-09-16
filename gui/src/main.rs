@@ -8,6 +8,7 @@
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
 mod notifications;
+mod sounds;
 mod taskbar;
 
 use clap::{ArgAction, Parser};
@@ -64,6 +65,9 @@ async fn main() -> eframe::Result {
     let icon = load_icon_from_bytes(&icon_bytes).expect("Failed to load icon");
 
     let args = Args::parse();
+
+    // INFO: Initialize UI sounds (no-op without an audio device)
+    sounds::init();
 
     // INFO: Register all built-in custom cleanings (functions in cleaner::custom_cleaners)
     cleaner::custom_cleaners::register_all();
@@ -216,11 +220,13 @@ fn title_bar(
                 // Glyphs are painted manually (default egui font has no check/cross glyphs).
                 let close = title_bar_button(ui);
                 if close.clicked() {
+                    sounds::click();
                     ctx.send_viewport_cmd(egui::ViewportCommand::Close);
                 }
                 paint_close_glyph(ui, close.rect);
                 let minimize = title_bar_button(ui);
                 if minimize.clicked() {
+                    sounds::click();
                     ctx.send_viewport_cmd(egui::ViewportCommand::Minimized(true));
                 }
                 paint_minimize_glyph(ui, minimize.rect);
@@ -240,6 +246,7 @@ fn title_bar(
                 // that opens the project repository.
                 let github = title_bar_button(ui);
                 if github.clicked() {
+                    sounds::click();
                     open_in_browser(GITHUB_URL);
                 }
                 paint_glyph(ui, github.rect, "\u{e624}");
@@ -249,6 +256,7 @@ fn title_bar(
                 // that opens the project repository.
                 let donations = title_bar_button(ui);
                 if donations.clicked() {
+                    sounds::click();
                     open_in_browser(DONATE_URL);
                 }
                 paint_glyph(ui, donations.rect, "\u{24}");
@@ -266,6 +274,7 @@ fn title_bar(
                     if show_back {
                         let back = title_bar_button(ui);
                         if back.clicked() {
+                            sounds::click();
                             *back_clicked.borrow_mut() = true;
                         }
                         paint_back_glyph(ui, back.rect);
@@ -1244,6 +1253,7 @@ impl eframe::App for MyApp {
                 self.show_results = true;
                 self.results_window_resized = false; // Reset flag for new results
                 self.result_receiver = None; // Consume the result once
+                sounds::done();
                 ctx.request_repaint();
             }
         }
@@ -1569,7 +1579,15 @@ impl eframe::App for MyApp {
                                         || program.to_lowercase().contains(&self.search_query)
                                     {
                                         let mut value = checkbox.borrow_mut();
-                                        columns[col_index % 2].checkbox(&mut *value, program);
+                                        let resp =
+                                            columns[col_index % 2].checkbox(&mut *value, program);
+                                        if resp.changed() {
+                                            if *value {
+                                                sounds::check();
+                                            } else {
+                                                sounds::uncheck();
+                                            }
+                                        }
                                         col_index += 1;
                                     }
                                 }
@@ -1584,6 +1602,7 @@ impl eframe::App for MyApp {
                             .add_sized([available_width, 25.0], egui::Button::new("Start Cleaning"))
                             .clicked()
                         {
+                            sounds::click();
                             let selected_map = self.selected_map();
 
                             self.excluded_programs.clear();
@@ -1666,6 +1685,7 @@ impl eframe::App for MyApp {
                                 if clicked {
                                     if is_checked || is_indet {
                                         cat.selected.clear();
+                                        sounds::uncheck();
                                     } else {
                                         cat.selected = cat.subs.iter().cloned().collect();
                                         if cat.has_empty {
@@ -1674,6 +1694,7 @@ impl eframe::App for MyApp {
                                         if cat.subs.is_empty() && !cat.has_empty {
                                             cat.selected.insert(String::new());
                                         }
+                                        sounds::check();
                                     }
                                 }
                                 // menu image only if sub-categories exist (embedded menu.png)
@@ -1688,6 +1709,9 @@ impl eframe::App for MyApp {
                                         .sense(egui::Sense::click());
                                     let menu_resp =
                                         ui.add_sized(egui::vec2(16.0, 16.0), menu_image);
+                                    if menu_resp.clicked() {
+                                        sounds::pop();
+                                    }
 
                                     // Popup with sub_category checkboxes - shifted to right-bottom corner of image so it doesn't cover the button
                                     let frame = egui::Frame::popup(ui.style());
@@ -1708,8 +1732,10 @@ impl eframe::App for MyApp {
                                                         {
                                                             if is_sel {
                                                                 cat.selected.insert(sub.clone());
+                                                                sounds::check();
                                                             } else {
                                                                 cat.selected.remove(&sub);
+                                                                sounds::uncheck();
                                                             }
                                                         }
                                                     }
@@ -1726,8 +1752,10 @@ impl eframe::App for MyApp {
                                                         {
                                                             if is_uncat {
                                                                 cat.selected.insert(String::new());
+                                                                sounds::check();
                                                             } else {
                                                                 cat.selected.remove(&String::new());
+                                                                sounds::uncheck();
                                                             }
                                                         }
                                                     }
@@ -1746,6 +1774,7 @@ impl eframe::App for MyApp {
                         .add_sized([available_width, 25.0], egui::Button::new("Next"))
                         .clicked()
                     {
+                        sounds::click();
                         if self.has_selection() {
                             let selected_map = self.selected_map();
                             let mut programs: Vec<String> = Vec::new();
@@ -1801,7 +1830,7 @@ mod tests {
     #[test]
     fn test_load_icon_from_bytes() {
         let icon_data = database::ICON_BYTES;
-        let result = load_icon_from_bytes(&icon_data);
+        let result = load_icon_from_bytes(&icon_data[..]);
 
         assert!(result.is_ok(), "Icon should load successfully");
         let icon = result.unwrap();

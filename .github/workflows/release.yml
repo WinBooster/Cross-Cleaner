@@ -215,15 +215,15 @@ jobs:
             ## ✨ What's New
 
             ### 🪟 Windows Enhancements
-            - **Helium** Added browser clearing
-            - **CrystalCry** Added logs clearing
-            - **Bleander** Added documentation clearing
-            - **CMake** Added documentation clearing
-            - **FreeCAD** Added documentation, logs, clearing
-            - **PuTTY** Added documentation clearing
+            - **Fluxer** Added documentation clearing
+            - **Dungeon Keeper 2** Added documentation, logs clearing
+            - **Sephiria** Added logs clearing
+            - **Audacity** Added Audacity 4 documentation clearing
+            - **Zed** Improved logs clearing
+            - **Total Commander** Added documentation clearing
 
             ### 🛠 Technical Updates
-            - Fixed download buttun in update notification
+            - Added sounds to UI interaction
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:

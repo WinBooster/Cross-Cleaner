@@ -443,6 +443,16 @@
     ]
   },
   {
+    "path": "{drive}Program Files\\Audacity 4",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Audacity",
+    "class": "Audio",
+    "directories_to_remove": [
+      "licenses"
+    ]
+  },
+  {
     "path": "{drive}Program Files\\ProgramData\\Avast Software\\Icarus",
     "class": "Security",
     "category": "Logs",
@@ -4920,7 +4930,7 @@
   },
   {
     "path": "{drive}Program Files\\RustDesk\\usbmmidd_v2",
-    "class": "Utility",
+    "class": "Screen Share",
     "category": "Documentation",
     "sub_category": "Licenses",
     "program": "RustDesk",
@@ -4930,7 +4940,7 @@
   },
   {
     "path": "{drive}Program Files\\RustDesk\\usbmmidd_v2",
-    "class": "Utility",
+    "class": "Screen Share",
     "category": "Documentation",
     "program": "RustDesk",
     "files_to_remove": [
@@ -6422,6 +6432,15 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Zed\\tools",
+    "class": "Text",
+    "category": "Logs",
+    "program": "Zed",
+    "files_to_remove": [
+      "auto_update_helper.log"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Local\\Zed\\zed-crash-handler*",
     "class": "Text",
     "category": "Crashes",
@@ -6471,6 +6490,98 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\fluxer_desktop_canary\\current",
+    "class": "Messanger",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Fluxer",
+    "files_to_remove": [
+      "LICENSE.electron.txt",
+      "LICENSES.chromium.html"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\fluxer_desktop_canary",
+    "class": "Messanger",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Fluxer",
+    "files_to_remove": [
+      "velopack.log"
+    ]
+  },
+  {
+    "path": "{drive}GOG Games\\Dungeon Keeper 2",
+    "class": "Game",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Dungeon Keeper 2",
+    "files_to_remove": [
+      "EAMSEULA.txt",
+      "EULA.txt"
+    ]
+  },
+  {
+    "path": "{drive}GOG Games\\Dungeon Keeper 2",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "Dungeon Keeper 2",
+    "files_to_remove": [
+      "manual.pdf",
+      "ReadMe.txt",
+      "reference_card.pdf"
+    ]
+  },
+  {
+    "path": "{drive}GOG Games\\Dungeon Keeper 2",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Dungeon Keeper 2",
+    "files_to_remove": [
+      "MESSAGE.LOG"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\TEAMHORAY\\Sephiria",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Sephiria",
+    "files_to_remove": [
+      "Player-prev.log",
+      "Player.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\RustRover*",
+    "class": "Developing",
+    "category": "Documentation",
+	"sub_category": "Licenses",
+    "program": "RustRover",
+    "directories_to_remove": [
+      "license"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\totalcmd",
+    "class": "File Manager",
+    "category": "Documentation",
+    "program": "Total Commander",
+    "files_to_remove": [
+      "HISTORY.TXT",
+	  "KEYBOARD.TXT"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\totalcmd\\FILTER64",
+    "class": "File Manager",
+    "category": "Documentation",
+	"sub_category": "Licenses",
+    "program": "Total Commander",
+    "files_to_remove": [
+      "SoundTouchDLL_License.txt"
     ]
   }
 ]

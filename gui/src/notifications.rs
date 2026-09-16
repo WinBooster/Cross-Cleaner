@@ -144,6 +144,7 @@ impl Notification for UpdateNotification {
             ui.horizontal(|ui| {
                 ui.strong(format!("New version available: v{}", self.release.version));
                 if ui.small_button("x").clicked() {
+                    crate::sounds::click();
                     action = NotificationAction::Close;
                 }
             });
@@ -152,11 +153,13 @@ impl Notification for UpdateNotification {
                 // Left-to-right so the buttons read Download, Changelog; the
                 // row hugs the left edge of the (content-sized) notification.
                 if ui.button("Download").clicked() {
+                    crate::sounds::click();
                     // eframe's native backend ignores egui's OpenUrl command,
                     // so open the release page through the system browser.
                     crate::open_in_browser(&self.release.url);
                 }
                 if ui.button("Changelog").clicked() {
+                    crate::sounds::click();
                     action = NotificationAction::ShowChangelog;
                 }
             });

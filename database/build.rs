@@ -63,9 +63,10 @@ fn main() {
     #[cfg(target_os = "macos")]
     process_database("macos_database.json", "macos_database.min.json.gz");
 
-    println!("cargo:rerun-if-changed=registry_database.json");
-    #[cfg(windows)]
-    println!("cargo:rerun-if-changed=windows_database.json");
+    #[cfg(windows)] {
+        println!("cargo:rerun-if-changed=registry_database.json");
+        println!("cargo:rerun-if-changed=windows_database.json");
+    }
     #[cfg(target_os = "linux")]
     println!("cargo:rerun-if-changed=linux_database.json");
     #[cfg(target_os = "macos")]

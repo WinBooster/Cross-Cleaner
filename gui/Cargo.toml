@@ -13,6 +13,7 @@ image = { version = "0.25.10", default-features = false, features = ["png", "ico
 tempfile = "3.27"
 clap = { version = "4.6", features = ["derive"] }
 flate2 = "1.1"
+rodio = "0.22"
 
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }

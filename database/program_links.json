@@ -13,6 +13,7 @@
   "MAX": "https://max.ru",
   "Vesktop": "https://vesktop.dev",
   "qTox": "https://qtox.github.io",
+  "Fluxer": "http://fluxer.app",
 
   "7-Zip": "https://www.7-zip.org/download.html",
   "WinRaR": "https://www.win-rar.com/predownload.html",
@@ -66,6 +67,8 @@
   "SimpleMinecraft": "https://simpleminecraft.ru/start.html",
   "X Minecraft Launcher": "https://xmcl.app",
   "LabyMod": "https://laby.net/client",
+  
+  "Blender": "https://www.blender.org",
 
   "HiAlgo Boost": "https://www.hialgo.com",
   "Mem Reduct": "https://github.com/henrypp/memreduct",
@@ -138,6 +141,7 @@
   "Gameloop": "https://www.gameloop.com",
   "Memu": "https://www.memuplay.com/download.html",
   "Nox": "https://bignox.com/nox-app-player",
+  "Ruffle": "https://github.com/ruffle-rs/ruffle",
 
   "Lutris": "https://lutris.net/downloads",
   "Garry's mod": "https://store.steampowered.com/app/4000/Garrys_Mod",
@@ -174,6 +178,8 @@
   "ShareX": "https://getsharex.com/downloads",
   "Tonfotos Telegram Connector": "https://tonfotos.com",
   "Paint.NET": "https://paint.net",
+  "Kilo Code": "https://kilo.ai",	
+  "OpenCode": "https://opencode.ai/download",
   "OpenCode Desktop": "https://opencode.ai/download",
   "Greenshot": "https://github.com/greenshot/greenshot",
 
@@ -198,6 +204,7 @@
   "TG WS Proxy": "https://github.com/Flowseal/tg-ws-proxy",
   "VeraCrypt": "https://veracrypt.io",
   "Wireshark": "https://www.wireshark.org",
+  "DNSCrypt": "https://www.dnscrypt.org",
 
   "Cursor": "https://www.cursor.com/downloads",
   "JetBrains": "https://www.jetbrains.com/?var=1",
