@@ -106,6 +106,10 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           cache-on-failure: true
+      - name: Install ALSA dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev
       - name: Build linux
         run: cargo +nightly build --release
       - name: Move linux binaries
