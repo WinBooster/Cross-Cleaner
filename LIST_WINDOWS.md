@@ -9,8 +9,8 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Cherry Studio | Logs |
-| 2 | [Copilot](https://copilot.microsoft.com/) | Logs |
+| 1 | [Cherry Studio](https://github.com/cherryhq/cherry-studio) | Logs |
+| 2 | [Copilot](https://copilot.microsoft.com) | Logs |
 | 3 | [Kilo Code](https://kilo.ai) | Logs |
 | 4 | [LM Studio](https://lmstudio.ai/download) | LastActivity, Logs |
 | 5 | [Microsoft Lobe](https://github.com/orgs/lobe) | Logs |
@@ -136,7 +136,7 @@
 | 23 | [Python](https://www.python.org/downloads) | Documentation |
 | 24 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
 | 25 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
-| 26 | RustRover | Documentation |
+| 26 | [RustRover](https://www.jetbrains.com/rust) | Documentation |
 | 27 | [Unity Hub](https://unity.com/download) | Documentation |
 | 28 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk) | Documentation |
 | 29 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
@@ -285,7 +285,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | CrystalCry | Logs |
+| 1 | [CrystalCry](https://crystalcry.org) | Logs |
 | 2 | [HiAlgo Boost](https://www.hialgo.com) | Documentation, Logs |
 | 3 | [Mem Reduct](https://github.com/henrypp/memreduct) | Documentation |
 | 4 | [Winutil](https://github.com/ChrisTitusTech/winutil) | Logs |
@@ -315,21 +315,21 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [Flow Launcher](https://www.flowlauncher.com/) | Cache, LastActivity, Logs |
+| 1 | [Flow Launcher](https://www.flowlauncher.com) | Cache, LastActivity, Logs |
 
 
 ## SSH
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | PuTTY | Documentation |
+| 1 | [PuTTY](https://putty.org) | Documentation |
 
 
 ## Screen Share
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | RustDesk | Documentation |
+| 1 | [RustDesk](https://rustdesk.com) | Documentation |
 
 
 ## Security
