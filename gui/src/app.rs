@@ -1,6 +1,7 @@
 //! Application state and the main UI (categories, program selection,
 //! progress, results, changelog viewport).
 
+use crate::notifications::{NotificationAction, NotificationManager, UpdateNotification};
 use database::get_version;
 #[cfg(windows)]
 use database::structures::CleanerDataRegistry;
@@ -8,7 +9,6 @@ use database::structures::{CleanerData, Cleared, CustomCleaner};
 use database::utils::get_file_size_string;
 use database::version::{Changelog, NewRelease, fetch_changelogs};
 use eframe::egui;
-use crate::notifications::{NotificationAction, NotificationManager, UpdateNotification};
 use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
 use std::rc::Rc;
