@@ -123,6 +123,7 @@
   "Python": "https://www.python.org/downloads",
   "Recaf": "https://github.com/Col-E/Recaf",
   "Rust Language": "https://www.rust-lang.org/tools/install",
+  "RustRover": "https://www.jetbrains.com/rust",
   "Unity Hub": "https://unity.com/download",
   "Windows Kits": "https://developer.microsoft.com/windows/downloads/windows-sdk",
   "Insomnia": "https://insomnia.rest",
@@ -265,5 +266,6 @@
   "Windows": "https://www.microsoft.com/download/windows",
   "Windows Defender": "https://www.microsoft.com/download/windows",
   "OnionShare": "https://onionshare.org",
-  "Copilot": "https://copilot.microsoft.com/"
+  "Copilot": "https://copilot.microsoft.com"
+  "Cherry Studio": "https://github.com/cherryhq/cherry-studio"
 }
