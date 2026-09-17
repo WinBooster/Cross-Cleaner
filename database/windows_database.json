@@ -6681,5 +6681,34 @@
     "directories_to_remove": [
       "LOGS"
     ]
+  },
+  {
+    "path": "{drive}Program Files\\BCUninstaller",
+    "class": "Unistaller",
+    "category": "Documentation",
+	"sub_category": "Licenses",
+    "program": "Bulk Crap Uninstaller",
+    "files_to_remove": [
+      "Licence.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\BCUninstaller",
+    "class": "Unistaller",
+    "category": "Documentation",
+    "program": "Bulk Crap Uninstaller",
+    "files_to_remove": [
+      "NOTICE",
+	  "PrivacyPolicy.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\BCUninstaller",
+    "class": "Unistaller",
+    "category": "Logs",
+    "program": "Bulk Crap Uninstaller",
+    "files_to_remove": [
+      "BCUninstaller.log"
+    ]
   }
 ]

@@ -68,7 +68,7 @@ async fn main() -> eframe::Result {
         Arc::from(database::custom_cleaners::get_custom_cleaners())
     };
 
-    let database: Vec<CleanerData> = if let Some(db_path) = &args.database_path {
+    let database: Arc<[CleanerData]> = if let Some(db_path) = &args.database_path {
         match database::cleaner_database::get_database_from_file(db_path) {
             Ok(db) => db,
             Err(e) => {
@@ -77,11 +77,11 @@ async fn main() -> eframe::Result {
             }
         }
     } else {
-        database::cleaner_database::get_default_database().to_vec()
+        database::cleaner_database::get_default_database()
     };
 
     #[cfg(windows)]
-    let registry_database: Vec<CleanerDataRegistry> = {
+    let registry_database: Arc<[CleanerDataRegistry]> = {
         if let Some(db_path) = &args.registry_database_path {
             match database::registry_database::get_database_from_file(db_path) {
                 Ok(db) => db,
@@ -91,17 +91,13 @@ async fn main() -> eframe::Result {
                 }
             }
         } else {
-            database::registry_database::get_default_database().to_vec()
+            database::registry_database::get_default_database()
         }
     };
     #[cfg(windows)]
-    let app = MyApp::from_database(
-        Arc::from(database),
-        Arc::from(registry_database),
-        custom_database,
-    );
+    let app = MyApp::from_database(database, registry_database, custom_database);
     #[cfg(not(windows))]
-    let app = MyApp::from_database(Arc::from(database), custom_database);
+    let app = MyApp::from_database(database, custom_database);
     let checkbox_count = app.categories.len();
     let rows = checkbox_count.div_ceil(3);
     // INFO: 20px for 1 checkbox, 45px for button, 32px for custom title bar

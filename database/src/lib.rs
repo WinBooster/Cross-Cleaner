@@ -246,7 +246,7 @@ mod tests {
         use std::sync::Arc;
         use std::thread;
 
-        let database = Arc::new(get_default_database().clone());
+        let database = get_default_database();
         let mut handles = vec![];
 
         // Spawn 10 threads that all read the database simultaneously
@@ -270,7 +270,7 @@ mod tests {
         use std::mem::size_of_val;
 
         let database = get_default_database();
-        let total_size = size_of_val(database.as_slice());
+        let total_size = size_of_val(&*database);
 
         // Database should be reasonably sized in memory
         assert!(total_size > 0, "Database should occupy memory");

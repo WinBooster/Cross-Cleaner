@@ -1,5 +1,7 @@
 use std::error::Error;
-use std::fs;
+use std::fs::File;
+use std::io::BufReader;
+use std::sync::Arc;
 use std::sync::OnceLock;
 
 #[cfg(windows)]
@@ -11,47 +13,42 @@ use crate::registry_utils::{
 use crate::structures::CleanerDataRegistry;
 #[cfg(windows)]
 use crate::structures::CleanerResult;
+#[cfg(windows)]
 use flate2::read::GzDecoder;
-use std::io::Read;
 #[cfg(windows)]
 use winreg::RegKey;
 #[cfg(windows)]
 use winreg::enums::*;
 
 #[cfg(windows)]
-static DATABASE: OnceLock<Vec<CleanerDataRegistry>> = OnceLock::new();
+static DATABASE: OnceLock<Arc<[CleanerDataRegistry]>> = OnceLock::new();
 
 #[cfg(windows)]
-pub fn get_default_database() -> &'static Vec<CleanerDataRegistry> {
-    DATABASE.get_or_init(|| {
-        let compressed_data =
-            include_bytes!(concat!(env!("OUT_DIR"), "/registry_database.min.json.gz"));
+pub fn get_default_database() -> Arc<[CleanerDataRegistry]> {
+    DATABASE
+        .get_or_init(|| {
+            let compressed_data =
+                include_bytes!(concat!(env!("OUT_DIR"), "/registry_database.min.json.gz"));
 
-        // NOTE: Decompress the data
-        let mut decoder = GzDecoder::new(&compressed_data[..]);
-        // INFO: Read decompressed data
-        let mut json_data = String::new();
-        decoder
-            .read_to_string(&mut json_data)
-            .expect("Failed to decompress database");
-        // INFO: Deserialization JSON to Vec<CleanerDataRegistry>
-        let database: Vec<CleanerDataRegistry> =
-            serde_json::from_str::<Vec<CleanerDataRegistry>>(&json_data)
-                .expect("Failed to parse database");
+            // NOTE: Stream-decompress and deserialize directly into Vec (no full JSON string in RAM)
+            let decoder = GzDecoder::new(&compressed_data[..]);
+            let database: Vec<CleanerDataRegistry> =
+                serde_json::from_reader(decoder).expect("Failed to parse database");
 
-        database
-    })
+            database.into()
+        })
+        .clone()
 }
 
 #[cfg(windows)]
-pub fn get_database_from_file(file_path: &str) -> Result<Vec<CleanerDataRegistry>, Box<dyn Error>> {
-    // INFO: Read file
-    let data = fs::read_to_string(file_path)?;
+pub fn get_database_from_file(
+    file_path: &str,
+) -> Result<Arc<[CleanerDataRegistry]>, Box<dyn Error>> {
+    // INFO: Stream-read and deserialize directly from the file
+    let reader = BufReader::new(File::open(file_path)?);
+    let database: Vec<CleanerDataRegistry> = serde_json::from_reader(reader)?;
 
-    // INFO: Deserialization JSON to Vec<CleanerDataRegistry>
-    let database: Vec<CleanerDataRegistry> = serde_json::from_str(&data)?;
-
-    Ok(database)
+    Ok(database.into())
 }
 
 #[cfg(windows)]
