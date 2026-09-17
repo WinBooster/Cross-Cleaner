@@ -3740,7 +3740,8 @@
     "category": "Documentation",
     "program": "MTT File Manager",
     "files_to_remove": [
-      "NOTICE"
+      "NOTICE",
+	  "THIRD_PARTY_NOTICES.md"
     ]
   },
   {
