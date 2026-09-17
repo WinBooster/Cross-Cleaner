@@ -77,6 +77,14 @@ impl NotificationManager {
         }
 
         let mut actions = Vec::new();
+        // While a notification is fading in or out we need smooth frames;
+        // otherwise a slow cadence is enough to advance the auto-hide
+        // countdown without burning CPU.
+        let animating = self.active.iter().any(|n| {
+            let elapsed = n.shown_at.elapsed().as_secs_f32();
+            let remaining = NOTIFICATION_LIFETIME.as_secs_f32() - elapsed;
+            elapsed < NOTIFICATION_FADE_SECS || remaining < NOTIFICATION_FADE_SECS
+        });
         egui::Area::new(egui::Id::new("notification_stack"))
             .order(egui::Order::Foreground)
             .anchor(
@@ -115,7 +123,12 @@ impl NotificationManager {
                 }
             });
         // Keep animating fades and the auto-hide countdown.
-        ctx.request_repaint_after(std::time::Duration::from_millis(16));
+        let delay = if animating {
+            std::time::Duration::from_millis(16)
+        } else {
+            std::time::Duration::from_millis(100)
+        };
+        ctx.request_repaint_after(delay);
         actions
     }
 }

@@ -77,6 +77,9 @@ pub struct MyApp {
     pub show_changelog: bool,
     /// Windows taskbar progress (no-op on other platforms).
     pub taskbar: Option<taskbar::TaskbarProgress>,
+    /// Last inner size sent to the viewport, used to avoid re-issuing
+    /// `ViewportCommand::InnerSize` every frame (which forces a repaint).
+    pub last_inner_size: Option<egui::Vec2>,
 }
 
 impl MyApp {
@@ -233,6 +236,7 @@ impl MyApp {
             changelog_open: None,
             show_changelog: false,
             taskbar: None,
+            last_inner_size: None,
         }
     }
 
@@ -355,6 +359,18 @@ impl MyApp {
             changelog_open: None,
             show_changelog: false,
             taskbar: None,
+            last_inner_size: None,
+        }
+    }
+
+    /// Sends `ViewportCommand::InnerSize` only when the requested size
+    /// actually changed. `send_viewport_cmd` triggers an immediate repaint, so
+    /// calling it unconditionally every frame would keep the app rendering at
+    /// full frame rate even while idle.
+    fn set_window_size(&mut self, ctx: &egui::Context, size: egui::Vec2) {
+        if self.last_inner_size != Some(size) {
+            ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(size));
+            self.last_inner_size = Some(size);
         }
     }
 
@@ -653,10 +669,10 @@ impl eframe::App for MyApp {
             )
             .show(ui, |ui| {
                 if self.task_handle.is_some() {
-                    ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
-                        560.0,
-                        100.0 + TITLE_BAR_HEIGHT,
-                    )));
+                    self.set_window_size(
+                        &ctx,
+                        egui::Vec2::new(560.0, 100.0 + TITLE_BAR_HEIGHT),
+                    );
                     // Panel gives 8px, text adds 12px from the screen edges
                     ui.vertical(|ui| {
                         ui.add_space(4.0);
@@ -745,9 +761,12 @@ impl eframe::App for MyApp {
 
                         // Resize window only once when results are first shown
                         if !self.results_window_resized {
-                            ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(
-                                egui::Vec2::new(total_width, total_height + TITLE_BAR_HEIGHT),
-                            ));
+                            let size =
+                                egui::Vec2::new(total_width, total_height + TITLE_BAR_HEIGHT);
+                            if self.last_inner_size != Some(size) {
+                                ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(size));
+                                self.last_inner_size = Some(size);
+                            }
                             self.results_window_resized = true;
                         }
 
@@ -865,10 +884,10 @@ impl eframe::App for MyApp {
                         content_height.min(max_scroll_height).max(min_scroll_height);
                     let window_height = base_height + scroll_height;
 
-                    ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
-                        500.0,
-                        window_height + TITLE_BAR_HEIGHT,
-                    )));
+                    self.set_window_size(
+                        &ctx,
+                        egui::Vec2::new(500.0, window_height + TITLE_BAR_HEIGHT),
+                    );
 
                     ui.vertical_centered(|ui| {
                         ui.heading("Select Programs to Clean");
@@ -1075,10 +1094,10 @@ impl eframe::App for MyApp {
                     let dynamic_height = base_height + (rows as f32 * row_height);
                     let window_height = dynamic_height.max(20.0).min(500.0); // Clamp between 200 and 500
 
-                    ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(egui::Vec2::new(
-                        560.0,
-                        window_height + TITLE_BAR_HEIGHT,
-                    )));
+                    self.set_window_size(
+                        &ctx,
+                        egui::Vec2::new(560.0, window_height + TITLE_BAR_HEIGHT),
+                    );
 
                     if self.menu_texture.is_none() {
                         self.menu_texture = Some(ctx.load_texture(

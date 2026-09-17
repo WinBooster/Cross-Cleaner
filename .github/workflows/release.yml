@@ -227,6 +227,7 @@ jobs:
             
             ### 🛠 Technical Updates
             - Less RAM usage
+            - Less CPU usage
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
