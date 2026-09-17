@@ -45,11 +45,7 @@ fn expansion() -> &'static ExpansionContext {
 
 /// Expand {username}, {steam} and {drive} in an owned entry, invoking `f` for
 /// each resulting entry ({drive} yields one entry per drive letter).
-fn expand_into<F: FnMut(CleanerData)>(
-    mut entry: CleanerData,
-    ctx: &ExpansionContext,
-    f: &mut F,
-) {
+fn expand_into<F: FnMut(CleanerData)>(mut entry: CleanerData, ctx: &ExpansionContext, f: &mut F) {
     entry.path = entry.path.replace("{username}", &ctx.username);
     entry.path = entry.path.replace("{steam}", &ctx.steam);
 

@@ -1,5 +1,5 @@
-use serde::de::{DeserializeOwned, SeqAccess, Visitor};
 use serde::Deserializer as _;
+use serde::de::{DeserializeOwned, SeqAccess, Visitor};
 use std::fmt;
 use std::io::Read;
 use std::marker::PhantomData;

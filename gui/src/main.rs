@@ -3,8 +3,6 @@
     windows_subsystem = "windows"
 )]
 
-
-
 mod app;
 mod categories;
 mod cleaning;
