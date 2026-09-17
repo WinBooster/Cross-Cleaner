@@ -219,8 +219,11 @@ jobs:
 
             ## ✨ What's New
             
+            ### 🪟 Windows Enhancements
+            - **Bulk Crap Uninstaller** - Added documentation clearing
+            
             ### 🛠 Technical Updates
-            - Inno setup fixes
+            - Less RAM usage
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
