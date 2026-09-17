@@ -221,6 +221,9 @@ jobs:
             
             ### 🪟 Windows Enhancements
             - **Bulk Crap Uninstaller** - Added documentation clearing
+            - **WhySoSlow** - Added documentation clearing
+            - **Open Video Downloader** - Added documentation clearing
+            - **JOPDF**- Added documentation clearing
             
             ### 🛠 Technical Updates
             - Less RAM usage
@@ -258,7 +261,7 @@ jobs:
           version: ${{ env.APP_VERSION }}
           release-tag: v${{ env.APP_VERSION }}
           release-notes-url: https://github.com/${{ github.repository }}/releases/tag/v${{ env.APP_VERSION }}
-          installers-regex: '^Cross\.Cleaner\.Setup\.exe$'
+          installers-regex: '^Cross_Cleaner_Setup\.exe$'
           max-versions-to-keep: 0
           fork-user: Nekiplay
           token: ${{ secrets.WINGET_TOKEN }}

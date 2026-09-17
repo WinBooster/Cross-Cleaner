@@ -6711,5 +6711,43 @@
     "directories_to_remove": [
       "LOGS"
     ]
+  },
+  {
+    "path": "{drive}Program Files\\WhySoSlow",
+    "class": "Optimization",
+    "category": "Documentation",
+	"sub_category": "Licenses",
+    "program": "WhySoSlow",
+    "files_to_remove": [
+      "LICENSE.TXT"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\WhySoSlow",
+    "class": "Optimization",
+    "category": "Documentation",
+    "program": "WhySoSlow",
+    "files_to_remove": [
+      "WhySoSlow.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Open Video Downloader",
+    "class": "Video",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Open Video Downloader",
+    "directories_to_remove": [
+      "licenses"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\JOPDF",
+    "class": "PDF",
+    "category": "Documentation",
+    "program": "JOPDF",
+    "directories_to_remove": [
+      "docs"
+    ]
   }
 ]
