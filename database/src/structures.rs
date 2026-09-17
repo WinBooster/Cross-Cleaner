@@ -96,6 +96,57 @@ pub struct CleanerDataRegistry {
     pub remove_trees: String,
 }
 
+// INFO: Lightweight projection of CleanerData used for category scans. Unknown
+// fields (files_to_remove, directories_to_remove, flags, class, ...) are ignored
+// by serde and never allocated. `path` is kept only to detect the {drive}
+// placeholder so entry counts stay identical to the full database.
+#[derive(Deserialize, Clone)]
+pub struct CleanerIndex {
+    #[serde(default)]
+    pub path: String,
+    #[serde(default)]
+    pub category: String,
+    #[serde(default)]
+    pub program: String,
+    #[serde(default, alias = "sub_class", alias = "subCategory")]
+    pub sub_category: String,
+}
+
+impl From<&CleanerData> for CleanerIndex {
+    fn from(data: &CleanerData) -> Self {
+        Self {
+            path: data.path.clone(),
+            category: data.category.clone(),
+            program: data.program.clone(),
+            sub_category: data.sub_category.clone(),
+        }
+    }
+}
+
+// INFO: Lightweight projection of CleanerDataRegistry for category scans.
+// WARN: Windows only
+#[cfg(windows)]
+#[derive(Deserialize, Clone)]
+pub struct RegistryIndex {
+    #[serde(default)]
+    pub category: String,
+    #[serde(default)]
+    pub program: String,
+    #[serde(default, alias = "sub_class")]
+    pub sub_category: String,
+}
+
+#[cfg(windows)]
+impl From<&CleanerDataRegistry> for RegistryIndex {
+    fn from(data: &CleanerDataRegistry) -> Self {
+        Self {
+            category: data.category.clone(),
+            program: data.program.clone(),
+            sub_category: data.sub_category.clone(),
+        }
+    }
+}
+
 fn default_class() -> String {
     String::from("Other")
 }

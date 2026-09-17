@@ -2,8 +2,9 @@
 //! reports progress through an mpsc channel.
 
 use cleaner::clear_data;
+use database::cleaner_database::CleanerDatabase;
 #[cfg(windows)]
-use database::registry_database::clear_registry;
+use database::registry_database::{RegistryDatabase, clear_registry};
 #[cfg(windows)]
 use database::structures::CleanerDataRegistry;
 use database::structures::{CleanerData, CleanerResult, Cleared, CustomCleaner};
@@ -22,9 +23,9 @@ use crate::categories::effective_sub;
 pub async fn work(
     selected_map: HashMap<String, HashSet<String>>,
     progress_sender: mpsc::Sender<String>,
-    database: &[CleanerData],
+    database: &CleanerDatabase,
     custom_database: &[CustomCleaner],
-    #[cfg(windows)] registry_database: &[CleanerDataRegistry],
+    #[cfg(windows)] registry_database: &RegistryDatabase,
     excluded_programs: HashSet<String>,
     excluded_program_categories: HashSet<(String, String)>,
 ) -> (u64, u64, u64, Vec<Cleared>) {
@@ -34,7 +35,7 @@ pub async fn work(
     let mut bytes_cleared: u64 = 0;
     let mut removed_files: u64 = 0;
     let mut removed_directories: u64 = 0;
-    let mut cleared_programs = Vec::<Cleared>::with_capacity(database.len());
+    let mut cleared_programs = Vec::<Cleared>::new();
 
     // C: limit to 16 concurrent cleaners
     let sem = Arc::new(tokio::sync::Semaphore::new(16));
@@ -46,7 +47,9 @@ pub async fn work(
     // WARN: Windows only - show what is being cleaned right now
     #[cfg(windows)]
     {
-        for data in registry_database.iter() {
+        // INFO: Stream the registry database and keep only the selected entries.
+        let mut registry_matches: Vec<CleanerDataRegistry> = Vec::new();
+        let _ = registry_database.for_each(|data| {
             let eff = effective_sub(&data.class, &data.sub_category);
             if let Some(subs) = selected_map.get(&data.category) {
                 if subs.contains(&eff)
@@ -54,17 +57,20 @@ pub async fn work(
                     && !excluded_program_categories
                         .contains(&(data.program.clone(), data.category.clone()))
                 {
-                    let data = data.clone();
-                    let sender = progress_sender.clone();
-                    let name_msg = data.program.clone();
-                    let sem = sem.clone();
-                    futures.push(Box::pin(async move {
-                        let _p = sem.acquire_owned().await.unwrap();
-                        let _ = sender.send(format!("Cleaning: {}", name_msg)).await;
-                        clear_registry(&data)
-                    }));
+                    registry_matches.push(data);
                 }
             }
+        });
+
+        for data in registry_matches {
+            let sender = progress_sender.clone();
+            let name_msg = data.program.clone();
+            let sem = sem.clone();
+            futures.push(Box::pin(async move {
+                let _p = sem.acquire_owned().await.unwrap();
+                let _ = sender.send(format!("Cleaning: {}", name_msg)).await;
+                clear_registry(&data)
+            }));
         }
     }
 
@@ -103,7 +109,9 @@ pub async fn work(
         }
     }
 
-    for data in database.iter() {
+    // INFO: Stream the database and keep only the selected entries.
+    let mut database_matches: Vec<CleanerData> = Vec::new();
+    let _ = database.for_each(|data| {
         let eff = effective_sub(&data.class, &data.sub_category);
         if let Some(subs) = selected_map.get(&data.category) {
             if subs.contains(&eff)
@@ -111,17 +119,20 @@ pub async fn work(
                 && !excluded_program_categories
                     .contains(&(data.program.clone(), data.category.clone()))
             {
-                let data = data.clone();
-                let sender = progress_sender.clone();
-                let path_msg = data.program.clone();
-                let sem = sem.clone();
-                futures.push(Box::pin(async move {
-                    let _p = sem.acquire_owned().await.unwrap();
-                    let _ = sender.send(format!("Cleaning: {}", path_msg)).await;
-                    clear_data(&data).await
-                }));
+                database_matches.push(data);
             }
         }
+    });
+
+    for data in database_matches {
+        let sender = progress_sender.clone();
+        let path_msg = data.program.clone();
+        let sem = sem.clone();
+        futures.push(Box::pin(async move {
+            let _p = sem.acquire_owned().await.unwrap();
+            let _ = sender.send(format!("Cleaning: {}", path_msg)).await;
+            clear_data(&data).await
+        }));
     }
 
     let total_tasks = futures.len();

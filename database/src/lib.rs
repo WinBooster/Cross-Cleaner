@@ -4,6 +4,7 @@ pub mod cleaner_database;
 pub mod custom_cleaners;
 pub mod registry_database;
 mod registry_utils;
+mod streaming;
 pub mod structures;
 pub mod utils;
 pub mod version;
@@ -17,7 +18,7 @@ pub const ICON_BYTES: &'static [u8; 38078] = include_bytes!("../../assets/icon.i
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::cleaner_database::{get_database_from_file, get_default_database};
+    use crate::cleaner_database::{CleanerDatabase, get_database_from_file, get_default_database};
     use crate::structures::CleanerData;
     use crate::utils::get_file_size_string;
     use std::io::Write;
@@ -365,6 +366,77 @@ mod tests {
         assert!(
             second_duration <= first_duration,
             "Subsequent calls should be as fast or faster"
+        );
+    }
+
+    #[test]
+    fn test_provider_streams_same_count_as_full_load() {
+        let full = get_default_database();
+        let mut count = 0usize;
+        CleanerDatabase::default_source()
+            .for_each(|_| count += 1)
+            .expect("streaming failed");
+        assert_eq!(
+            count,
+            full.len(),
+            "streamed entry count should match full load"
+        );
+    }
+
+    #[test]
+    fn test_provider_expands_placeholders() {
+        CleanerDatabase::default_source()
+            .for_each(|entry| {
+                assert!(
+                    !entry.path.contains("{username}"),
+                    "username placeholder should be expanded: {}",
+                    entry.path
+                );
+                assert!(
+                    !entry.path.contains("{steam}"),
+                    "steam placeholder should be expanded: {}",
+                    entry.path
+                );
+            })
+            .expect("streaming failed");
+    }
+
+    #[test]
+    fn test_provider_from_vec_matches() {
+        let entries: Vec<CleanerData> = get_default_database().to_vec();
+        let expected = entries.len();
+        let mut count = 0usize;
+        CleanerDatabase::from_vec(entries)
+            .for_each(|_| count += 1)
+            .expect("streaming failed");
+        assert_eq!(count, expected);
+    }
+
+    #[test]
+    fn test_index_stream_matches_full_stream() {
+        use std::collections::BTreeMap;
+
+        let mut full: BTreeMap<(String, String), usize> = BTreeMap::new();
+        CleanerDatabase::default_source()
+            .for_each(|entry| {
+                *full
+                    .entry((entry.category, entry.sub_category))
+                    .or_insert(0) += 1;
+            })
+            .expect("streaming failed");
+
+        let mut index: BTreeMap<(String, String), usize> = BTreeMap::new();
+        CleanerDatabase::default_source()
+            .for_each_index(|entry| {
+                *index
+                    .entry((entry.category, entry.sub_category))
+                    .or_insert(0) += 1;
+            })
+            .expect("streaming failed");
+
+        assert_eq!(
+            full, index,
+            "index projection must aggregate exactly like the full database"
         );
     }
 

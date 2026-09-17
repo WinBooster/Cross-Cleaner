@@ -2,10 +2,11 @@
 //! progress, results, changelog viewport).
 
 use crate::notifications::{NotificationAction, NotificationManager, UpdateNotification};
+use database::cleaner_database::CleanerDatabase;
 use database::get_version;
 #[cfg(windows)]
-use database::structures::CleanerDataRegistry;
-use database::structures::{CleanerData, Cleared, CustomCleaner};
+use database::registry_database::RegistryDatabase;
+use database::structures::{Cleared, CustomCleaner};
 use database::utils::get_file_size_string;
 use database::version::{Changelog, NewRelease, fetch_changelogs};
 use eframe::egui;
@@ -52,10 +53,10 @@ pub struct MyApp {
     pub result_sender: Option<mpsc::Sender<(u64, u64, u64, Vec<Cleared>)>>,
     pub result_receiver: Option<mpsc::Receiver<(u64, u64, u64, Vec<Cleared>)>>,
 
-    pub database: Arc<[CleanerData]>,
+    pub database: CleanerDatabase,
     pub custom_database: Arc<[CustomCleaner]>,
     #[cfg(windows)]
-    pub regisry_database: Arc<[CleanerDataRegistry]>,
+    pub regisry_database: RegistryDatabase,
     pub menu_texture: Option<egui::TextureHandle>,
     pub icon_texture: Option<egui::TextureHandle>,
 
@@ -93,8 +94,8 @@ impl MyApp {
 
     #[cfg(windows)]
     pub(crate) fn from_database(
-        database: Arc<[CleanerData]>,
-        reg_database: Arc<[CleanerDataRegistry]>,
+        database: CleanerDatabase,
+        reg_database: RegistryDatabase,
         custom_database: Arc<[CustomCleaner]>,
     ) -> Self {
         let mut cat_to_subs: HashMap<String, HashSet<String>> = HashMap::new();
@@ -102,20 +103,22 @@ impl MyApp {
         let mut category_counts: HashMap<String, usize> = HashMap::new();
         let mut sub_counts: HashMap<(String, String), usize> = HashMap::new();
         // Ensure all categories appear even if no sub_category
-        for data in database.iter() {
-            cat_to_subs.entry(data.category.clone()).or_default();
-            cat_has_empty.entry(data.category.clone()).or_insert(false);
-            *category_counts.entry(data.category.clone()).or_insert(0) += 1;
-            let sub = effective_sub(&data.class, &data.sub_category);
-            *sub_counts
-                .entry((data.category.clone(), sub.clone()))
-                .or_insert(0) += 1;
-            if !sub.is_empty() {
-                cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
-            } else {
-                *cat_has_empty.get_mut(&data.category).unwrap() = true;
-            }
-        }
+        database
+            .for_each_index(|data| {
+                cat_to_subs.entry(data.category.clone()).or_default();
+                cat_has_empty.entry(data.category.clone()).or_insert(false);
+                *category_counts.entry(data.category.clone()).or_insert(0) += 1;
+                let sub = effective_sub("", &data.sub_category);
+                *sub_counts
+                    .entry((data.category.clone(), sub.clone()))
+                    .or_insert(0) += 1;
+                if !sub.is_empty() {
+                    cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
+                } else {
+                    *cat_has_empty.get_mut(&data.category).unwrap() = true;
+                }
+            })
+            .expect("Failed to read cleaner database");
         for data in custom_database.iter() {
             cat_to_subs.entry(data.category.clone()).or_default();
             cat_has_empty.entry(data.category.clone()).or_insert(false);
@@ -130,23 +133,25 @@ impl MyApp {
                 *cat_has_empty.get_mut(&data.category).unwrap() = true;
             }
         }
-        for data in reg_database.iter() {
-            if data.category.is_empty() {
-                continue;
-            }
-            cat_to_subs.entry(data.category.clone()).or_default();
-            cat_has_empty.entry(data.category.clone()).or_insert(false);
-            *category_counts.entry(data.category.clone()).or_insert(0) += 1;
-            let sub = effective_sub(&data.class, &data.sub_category);
-            *sub_counts
-                .entry((data.category.clone(), sub.clone()))
-                .or_insert(0) += 1;
-            if !sub.is_empty() {
-                cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
-            } else {
-                *cat_has_empty.get_mut(&data.category).unwrap() = true;
-            }
-        }
+        reg_database
+            .for_each_index(|data| {
+                if data.category.is_empty() {
+                    return;
+                }
+                cat_to_subs.entry(data.category.clone()).or_default();
+                cat_has_empty.entry(data.category.clone()).or_insert(false);
+                *category_counts.entry(data.category.clone()).or_insert(0) += 1;
+                let sub = effective_sub("", &data.sub_category);
+                *sub_counts
+                    .entry((data.category.clone(), sub.clone()))
+                    .or_insert(0) += 1;
+                if !sub.is_empty() {
+                    cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
+                } else {
+                    *cat_has_empty.get_mut(&data.category).unwrap() = true;
+                }
+            })
+            .expect("Failed to read registry database");
         let mut options: Vec<String> = cat_to_subs.keys().cloned().collect();
 
         let priority = |s: &str| match s {
@@ -233,27 +238,29 @@ impl MyApp {
 
     #[cfg(not(windows))]
     pub(crate) fn from_database(
-        database: Arc<[CleanerData]>,
+        database: CleanerDatabase,
         custom_database: Arc<[CustomCleaner]>,
     ) -> Self {
         let mut cat_to_subs: HashMap<String, HashSet<String>> = HashMap::new();
         let mut cat_has_empty: HashMap<String, bool> = HashMap::new();
         let mut category_counts: HashMap<String, usize> = HashMap::new();
         let mut sub_counts: HashMap<(String, String), usize> = HashMap::new();
-        for data in database.iter() {
-            cat_to_subs.entry(data.category.clone()).or_default();
-            cat_has_empty.entry(data.category.clone()).or_insert(false);
-            *category_counts.entry(data.category.clone()).or_insert(0) += 1;
-            let sub = effective_sub(&data.class, &data.sub_category);
-            *sub_counts
-                .entry((data.category.clone(), sub.clone()))
-                .or_insert(0) += 1;
-            if !sub.is_empty() {
-                cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
-            } else {
-                *cat_has_empty.get_mut(&data.category).unwrap() = true;
-            }
-        }
+        database
+            .for_each_index(|data| {
+                cat_to_subs.entry(data.category.clone()).or_default();
+                cat_has_empty.entry(data.category.clone()).or_insert(false);
+                *category_counts.entry(data.category.clone()).or_insert(0) += 1;
+                let sub = effective_sub("", &data.sub_category);
+                *sub_counts
+                    .entry((data.category.clone(), sub.clone()))
+                    .or_insert(0) += 1;
+                if !sub.is_empty() {
+                    cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
+                } else {
+                    *cat_has_empty.get_mut(&data.category).unwrap() = true;
+                }
+            })
+            .expect("Failed to read cleaner database");
         for data in custom_database.iter() {
             cat_to_subs.entry(data.category.clone()).or_default();
             cat_has_empty.entry(data.category.clone()).or_insert(false);
@@ -1032,10 +1039,10 @@ impl eframe::App for MyApp {
                             self.progress_start = None;
                             self.results_window_resized = false;
 
-                            let database = Arc::clone(&self.database);
+                            let database = self.database.clone();
                             let custom_database = Arc::clone(&self.custom_database);
                             #[cfg(windows)]
-                            let reg_database = Arc::clone(&self.regisry_database);
+                            let reg_database = self.regisry_database.clone();
                             let excluded_programs = self.excluded_programs.clone();
                             let handle = tokio::spawn(async move {
                                 work(
@@ -1229,14 +1236,14 @@ impl eframe::App for MyApp {
                                         .push((program.to_string(), vec![category.to_string()]));
                                 }
                             };
-                            for data in self.database.iter() {
-                                let eff = effective_sub(&data.class, &data.sub_category);
+                            let _ = self.database.for_each_index(|data| {
+                                let eff = effective_sub("", &data.sub_category);
                                 if let Some(subs) = selected_map.get(&data.category) {
                                     if subs.contains(&eff) {
                                         add(&data.program, &data.category);
                                     }
                                 }
-                            }
+                            });
                             for data in self.custom_database.iter() {
                                 let eff = effective_sub("", &data.sub_category);
                                 if let Some(subs) = selected_map.get(&data.category) {
@@ -1247,14 +1254,14 @@ impl eframe::App for MyApp {
                             }
                             #[cfg(windows)]
                             {
-                                for data in self.regisry_database.iter() {
-                                    let eff = effective_sub(&data.class, &data.sub_category);
+                                let _ = self.regisry_database.for_each_index(|data| {
+                                    let eff = effective_sub("", &data.sub_category);
                                     if let Some(subs) = selected_map.get(&data.category) {
                                         if subs.contains(&eff) {
                                             add(&data.program, &data.category);
                                         }
                                     }
-                                }
+                                });
                             }
                             programs.sort_by(|a, b| a.0.cmp(&b.0));
                             for (_, cats) in programs.iter_mut() {

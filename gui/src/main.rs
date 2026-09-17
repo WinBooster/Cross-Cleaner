@@ -18,10 +18,11 @@ mod title_bar;
 
 use app::MyApp;
 use clap::{ArgAction, Parser};
+use database::cleaner_database::CleanerDatabase;
 use database::get_version;
 #[cfg(windows)]
-use database::structures::CleanerDataRegistry;
-use database::structures::{CleanerData, CustomCleaner};
+use database::registry_database::RegistryDatabase;
+use database::structures::CustomCleaner;
 use database::version::check_new_version;
 use eframe::egui;
 use icons::{ico_bytes_to_png_bytes, load_icon_from_bytes};
@@ -68,31 +69,29 @@ async fn main() -> eframe::Result {
         Arc::from(database::custom_cleaners::get_custom_cleaners())
     };
 
-    let database: Arc<[CleanerData]> = if let Some(db_path) = &args.database_path {
-        match database::cleaner_database::get_database_from_file(db_path) {
-            Ok(db) => db,
-            Err(e) => {
-                eprintln!("Failed to load database from file: {}", e);
-                std::process::exit(1);
-            }
+    // INFO: Validate a user-supplied database early; the entries themselves are
+    // streamed on demand (see CleanerDatabase::for_each).
+    let database = if let Some(db_path) = &args.database_path {
+        let database = CleanerDatabase::from_file(db_path);
+        if let Err(e) = database.for_each(|_| {}) {
+            eprintln!("Failed to load database from file: {}", e);
+            std::process::exit(1);
         }
+        database
     } else {
-        database::cleaner_database::get_default_database()
+        CleanerDatabase::default_source()
     };
 
     #[cfg(windows)]
-    let registry_database: Arc<[CleanerDataRegistry]> = {
-        if let Some(db_path) = &args.registry_database_path {
-            match database::registry_database::get_database_from_file(db_path) {
-                Ok(db) => db,
-                Err(e) => {
-                    eprintln!("Failed to load database from file: {}", e);
-                    std::process::exit(1);
-                }
-            }
-        } else {
-            database::registry_database::get_default_database()
+    let registry_database = if let Some(db_path) = &args.registry_database_path {
+        let database = RegistryDatabase::from_file(db_path);
+        if let Err(e) = database.for_each(|_| {}) {
+            eprintln!("Failed to load database from file: {}", e);
+            std::process::exit(1);
         }
+        database
+    } else {
+        RegistryDatabase::default_source()
     };
     #[cfg(windows)]
     let app = MyApp::from_database(database, registry_database, custom_database);
@@ -138,7 +137,7 @@ async fn main() -> eframe::Result {
 mod tests {
     use super::*;
     use categories::CategoryState;
-    use database::structures::CleanerData;
+    use database::structures::{CleanerData, CleanerDataRegistry};
     use std::collections::HashSet;
 
     #[test]
@@ -197,8 +196,8 @@ mod tests {
         }];
 
         let app = MyApp::from_database(
-            Arc::from(database.into_boxed_slice()),
-            Arc::from(registry_database.into_boxed_slice()),
+            CleanerDatabase::from_vec(database),
+            RegistryDatabase::from_vec(registry_database),
             Arc::from(Vec::new()),
         );
 
@@ -283,8 +282,8 @@ mod tests {
         }];
 
         let app = MyApp::from_database(
-            Arc::from(database.into_boxed_slice()),
-            Arc::from(registry_database.into_boxed_slice()),
+            CleanerDatabase::from_vec(database),
+            RegistryDatabase::from_vec(registry_database),
             Arc::from(Vec::new()),
         );
 
@@ -320,8 +319,8 @@ mod tests {
         let registry_database: Vec<CleanerDataRegistry> = vec![];
 
         let app = MyApp::from_database(
-            Arc::from(database.into_boxed_slice()),
-            Arc::from(registry_database.into_boxed_slice()),
+            CleanerDatabase::from_vec(database),
+            RegistryDatabase::from_vec(registry_database),
             Arc::from(Vec::new()),
         );
 
@@ -391,8 +390,8 @@ mod tests {
         ];
         let registry_database: Vec<CleanerDataRegistry> = vec![];
         let app = MyApp::from_database(
-            Arc::from(database.into_boxed_slice()),
-            Arc::from(registry_database.into_boxed_slice()),
+            CleanerDatabase::from_vec(database),
+            RegistryDatabase::from_vec(registry_database),
             Arc::from(Vec::new()),
         );
         assert_eq!(app.categories.len(), 1);

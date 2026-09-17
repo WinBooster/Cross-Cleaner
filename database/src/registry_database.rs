@@ -1,24 +1,129 @@
-use std::error::Error;
-use std::fs::File;
-use std::io::BufReader;
-use std::sync::Arc;
-use std::sync::OnceLock;
-
 #[cfg(windows)]
 use crate::registry_utils::{
     expand_registry_path_pattern, remove_all_in_registry, remove_all_in_tree_in_registry,
     remove_key_in_registry, remove_trees_matching_in_registry, remove_values_matching_in_registry,
 };
 #[cfg(windows)]
+use crate::streaming::for_each_array;
+#[cfg(windows)]
 use crate::structures::CleanerDataRegistry;
 #[cfg(windows)]
 use crate::structures::CleanerResult;
 #[cfg(windows)]
+use crate::structures::RegistryIndex;
+#[cfg(windows)]
 use flate2::read::GzDecoder;
+#[cfg(windows)]
+use std::error::Error;
+#[cfg(windows)]
+use std::fs::File;
+#[cfg(windows)]
+use std::io::BufReader;
+#[cfg(windows)]
+use std::path::PathBuf;
+#[cfg(windows)]
+use std::sync::Arc;
+#[cfg(windows)]
+use std::sync::OnceLock;
 #[cfg(windows)]
 use winreg::RegKey;
 #[cfg(windows)]
 use winreg::enums::*;
+
+/// Where the registry database is read from.
+#[cfg(windows)]
+#[derive(Clone)]
+enum RegistrySource {
+    /// Built-in database compiled into the binary (minified + gzip).
+    Default,
+    /// Database file supplied on the command line (plain JSON array).
+    File(PathBuf),
+    /// In-memory database (tests).
+    Memory(Arc<[CleanerDataRegistry]>),
+}
+
+/// Lazy handle over the registry database. Stores only the source; entries are
+/// streamed on demand via [`RegistryDatabase::for_each`].
+#[cfg(windows)]
+#[derive(Clone)]
+pub struct RegistryDatabase {
+    source: RegistrySource,
+}
+
+#[cfg(windows)]
+impl RegistryDatabase {
+    pub fn default_source() -> Self {
+        Self {
+            source: RegistrySource::Default,
+        }
+    }
+
+    pub fn from_file<P: Into<PathBuf>>(path: P) -> Self {
+        Self {
+            source: RegistrySource::File(path.into()),
+        }
+    }
+
+    pub fn from_vec(entries: Vec<CleanerDataRegistry>) -> Self {
+        Self {
+            source: RegistrySource::Memory(entries.into()),
+        }
+    }
+
+    /// Stream every entry through `f`. Re-reads and re-decompresses the source
+    /// on each call; only one entry is alive at a time.
+    pub fn for_each<F>(&self, mut f: F) -> Result<(), Box<dyn Error>>
+    where
+        F: FnMut(CleanerDataRegistry),
+    {
+        match &self.source {
+            RegistrySource::Default => {
+                let compressed_data =
+                    include_bytes!(concat!(env!("OUT_DIR"), "/registry_database.min.json.gz"));
+                let decoder = GzDecoder::new(&compressed_data[..]);
+                for_each_array(decoder, &mut f)?;
+            }
+            RegistrySource::File(path) => {
+                let reader = BufReader::new(File::open(path)?);
+                for_each_array(reader, &mut f)?;
+            }
+            RegistrySource::Memory(entries) => {
+                for entry in entries.iter().cloned() {
+                    f(entry);
+                }
+            }
+        }
+
+        Ok(())
+    }
+
+    /// Stream lightweight index entries ([`RegistryIndex`]); only category,
+    /// program and sub_category are deserialized.
+    pub fn for_each_index<F>(&self, mut f: F) -> Result<(), Box<dyn Error>>
+    where
+        F: FnMut(RegistryIndex),
+    {
+        match &self.source {
+            RegistrySource::Default => {
+                let compressed_data =
+                    include_bytes!(concat!(env!("OUT_DIR"), "/registry_database.min.json.gz"));
+                let decoder = GzDecoder::new(&compressed_data[..]);
+                for_each_array(decoder, &mut f)?;
+            }
+            RegistrySource::File(path) => {
+                let reader = BufReader::new(File::open(path)?);
+                for_each_array(reader, &mut f)?;
+            }
+            RegistrySource::Memory(entries) => {
+                for entry in entries.iter() {
+                    f(RegistryIndex::from(entry));
+                }
+            }
+        }
+
+        Ok(())
+    }
+}
 
 #[cfg(windows)]
 static DATABASE: OnceLock<Arc<[CleanerDataRegistry]>> = OnceLock::new();
@@ -27,15 +132,11 @@ static DATABASE: OnceLock<Arc<[CleanerDataRegistry]>> = OnceLock::new();
 pub fn get_default_database() -> Arc<[CleanerDataRegistry]> {
     DATABASE
         .get_or_init(|| {
-            let compressed_data =
-                include_bytes!(concat!(env!("OUT_DIR"), "/registry_database.min.json.gz"));
-
-            // NOTE: Stream-decompress and deserialize directly into Vec (no full JSON string in RAM)
-            let decoder = GzDecoder::new(&compressed_data[..]);
-            let database: Vec<CleanerDataRegistry> =
-                serde_json::from_reader(decoder).expect("Failed to parse database");
-
-            database.into()
+            let mut entries = Vec::new();
+            RegistryDatabase::default_source()
+                .for_each(|entry| entries.push(entry))
+                .expect("Failed to parse database");
+            entries.into()
         })
         .clone()
 }
@@ -44,11 +145,9 @@ pub fn get_default_database() -> Arc<[CleanerDataRegistry]> {
 pub fn get_database_from_file(
     file_path: &str,
 ) -> Result<Arc<[CleanerDataRegistry]>, Box<dyn Error>> {
-    // INFO: Stream-read and deserialize directly from the file
-    let reader = BufReader::new(File::open(file_path)?);
-    let database: Vec<CleanerDataRegistry> = serde_json::from_reader(reader)?;
-
-    Ok(database.into())
+    let mut entries = Vec::new();
+    RegistryDatabase::from_file(file_path).for_each(|entry| entries.push(entry))?;
+    Ok(entries.into())
 }
 
 #[cfg(windows)]
