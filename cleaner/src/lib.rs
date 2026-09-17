@@ -1,9 +1,8 @@
 use database::structures::{CleanerData, CleanerResult};
-use futures::stream::{FuturesUnordered, StreamExt};
+use futures::stream::{self, StreamExt};
 use glob::glob;
-use std::future::Future;
 use std::path::{Component, Path, PathBuf};
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 use tokio::io;
 use tokio::sync::Semaphore;
 
@@ -30,35 +29,36 @@ fn safe_join(base: &Path, name: &str) -> Option<PathBuf> {
     if any { Some(out) } else { None }
 }
 
-// B: blocking fast helpers - use cap-std inside spawn_blocking
-async fn remove_file_fast(path: PathBuf) -> io::Result<u64> {
-    tokio::task::spawn_blocking(move || {
-        let authority = cap_std::ambient_authority();
-        let name = path
-            .file_name()
-            .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "no file name in path"))?;
-        let parent = path.parent().unwrap_or_else(|| Path::new(""));
-        let dir = if parent.as_os_str().is_empty() {
-            cap_std::fs::Dir::open_ambient_dir(".", authority)?
-        } else {
-            cap_std::fs::Dir::open_ambient_dir(parent, authority)?
-        };
-        let meta = dir.symlink_metadata(&name)?;
-        if meta.is_symlink() {
-            return Err(io::Error::new(
-                io::ErrorKind::InvalidInput,
-                "symlink not supported",
-            ));
-        }
-        if !meta.is_file() {
-            return Err(io::Error::new(io::ErrorKind::InvalidInput, "not a file"));
-        }
-        let len = meta.len();
-        dir.remove_file(&name)?;
-        Ok(len)
-    })
-    .await
-    .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("join: {e}")))?
+// PERF: Global cap on concurrently-running blocking filesystem operations across
+// all cleaners. Bounds the tokio blocking pool (threads + per-thread allocator
+// state) instead of letting every cleaner spawn its own pool of tasks.
+static BLOCKING: LazyLock<Arc<Semaphore>> = LazyLock::new(|| Arc::new(Semaphore::new(32)));
+
+// B: blocking fast helper - uses cap-std for TOCTOU-safe removal.
+fn remove_file_sync(path: &Path) -> io::Result<u64> {
+    let authority = cap_std::ambient_authority();
+    let name = path
+        .file_name()
+        .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "no file name in path"))?;
+    let parent = path.parent().unwrap_or_else(|| Path::new(""));
+    let dir = if parent.as_os_str().is_empty() {
+        cap_std::fs::Dir::open_ambient_dir(".", authority)?
+    } else {
+        cap_std::fs::Dir::open_ambient_dir(parent, authority)?
+    };
+    let meta = dir.symlink_metadata(&name)?;
+    if meta.is_symlink() {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "symlink not supported",
+        ));
+    }
+    if !meta.is_file() {
+        return Err(io::Error::new(io::ErrorKind::InvalidInput, "not a file"));
+    }
+    let len = meta.len();
+    dir.remove_file(&name)?;
+    Ok(len)
 }
 
 fn remove_dir_sync(root: PathBuf) -> io::Result<(u64, u64, u64)> {
@@ -143,20 +143,123 @@ fn remove_dir_recursive(dir: &cap_std::fs::Dir) -> io::Result<(u64, u64, u64)> {
     Ok((files, folders, bytes))
 }
 
-async fn remove_dir_fast(path: PathBuf) -> io::Result<(u64, u64, u64)> {
-    tokio::task::spawn_blocking(move || remove_dir_sync(path))
-        .await
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("join: {e}")))?
+#[derive(Default)]
+struct PathStats {
+    files: u64,
+    folders: u64,
+    bytes: u64,
+    working: bool,
 }
 
-async fn remove_dir_all_fast(path: PathBuf) -> io::Result<()> {
-    tokio::task::spawn_blocking(move || std::fs::remove_dir_all(&path))
-        .await
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("join: {e}")))?
+impl PathStats {
+    fn add(&mut self, files: u64, folders: u64, bytes: u64) {
+        self.files += files;
+        self.folders += folders;
+        self.bytes += bytes;
+        self.working = true;
+    }
+}
+
+// INFO: All filesystem work for one matched path, executed inside a single
+// blocking task. Uses the same cap-std operations as before (no TOCTOU window).
+fn clean_path_sync(path: &Path, data: &CleanerData) -> PathStats {
+    let mut stats = PathStats::default();
+
+    for fname in &data.files_to_remove {
+        let Some(fpath) = safe_join(path, fname) else {
+            eprintln!(
+                "cleaner: skipping unsafe file name {:?} in {}",
+                fname, data.path
+            );
+            continue;
+        };
+        match remove_file_sync(&fpath) {
+            Ok(b) => stats.add(1, 0, b),
+            Err(e) => eprintln!("cleaner: remove_file {}: {}", fpath.display(), e),
+        }
+    }
+
+    for dname in &data.directories_to_remove {
+        let Some(dpath) = safe_join(path, dname) else {
+            eprintln!(
+                "cleaner: skipping unsafe dir name {:?} in {}",
+                dname, data.path
+            );
+            continue;
+        };
+        match remove_dir_sync(dpath.clone()) {
+            Ok((f, fo, b)) => stats.add(f, fo, b),
+            Err(e) => eprintln!("cleaner: remove_dir {}: {}", dpath.display(), e),
+        }
+    }
+
+    if data.remove_all_in_dir {
+        // try fast; skip is_dir check for speed (A)
+        if let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf()) {
+            stats.add(f, fo, b);
+        }
+    }
+
+    if data.remove_files {
+        if let Ok(b) = remove_file_sync(path) {
+            stats.add(1, 0, b);
+        }
+    }
+
+    if data.remove_directories {
+        if let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf()) {
+            stats.add(f, fo, b);
+        }
+    }
+
+    if data.remove_directory_after_clean {
+        if std::fs::remove_dir_all(path).is_ok() {
+            stats.folders += 1;
+            stats.working = true;
+        }
+    }
+
+    stats
+}
+
+// PERF: Cap on simultaneously-live per-path futures inside a single cleaner.
+// Prevents a huge glob result (e.g. `**`) from allocating one future per path.
+const MAX_PATHS_IN_FLIGHT: usize = 64;
+
+/// Clean one glob-matched path for a single database entry. `data` is shared
+/// across every path of the entry (Arc); all filesystem work for the path runs
+/// in a single blocking task, bounded by the global `BLOCKING` semaphore (B2).
+async fn clean_one_path(path: PathBuf, data: Arc<CleanerData>) -> CleanerResult {
+    let path_string = path.to_string_lossy().to_string();
+    let program = data.program.clone();
+    let category = data.category.clone();
+    let sub_category = data.sub_category.clone();
+
+    // B2: bound global blocking concurrency. The permit is held until the
+    // blocking task finishes, so at most `BLOCKING` permits run at once.
+    let _permit = BLOCKING.clone().acquire_owned().await.ok();
+
+    // Every failure mode (join error, etc.) falls back to a non-working result,
+    // matching the previous per-operation error handling.
+    let stats = match tokio::task::spawn_blocking(move || clean_path_sync(&path, &data)).await {
+        Ok(stats) => stats,
+        Err(_) => PathStats::default(),
+    };
+
+    CleanerResult {
+        files: stats.files,
+        folders: stats.folders,
+        bytes: stats.bytes,
+        working: stats.working,
+        path: path_string,
+        program,
+        category,
+        sub_category,
+    }
 }
 
 // NOTE: The main function for data cleansing.
-// PERF: A (parallel intra-entry) + B (spawn_blocking) + C (Semaphore 32)
+// PERF: one blocking task per matched path, bounded globally by `BLOCKING`.
 pub async fn clear_data(data: &CleanerData) -> CleanerResult {
     let mut out = CleanerResult {
         files: 0,
@@ -177,156 +280,20 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
         return out;
     }
 
-    let paths: Vec<PathBuf> = match glob(&data.path) {
-        Ok(g) => g.filter_map(Result::ok).collect(),
+    let glob_iter = match glob(&data.path) {
+        Ok(g) => g,
         Err(_) => return out,
     };
-    if paths.is_empty() {
-        return out;
-    }
 
-    // C: global limit inside cleaner
-    let sem = Arc::new(Semaphore::new(32));
-    let mut path_futs: FuturesUnordered<
-        std::pin::Pin<Box<dyn Future<Output = CleanerResult> + Send>>,
-    > = FuturesUnordered::new();
+    // PERF: share one DB entry across all matched paths (Arc) instead of a full
+    // clone per path, and keep at most MAX_PATHS_IN_FLIGHT futures alive.
+    let data = Arc::new(data.clone());
 
-    for path in paths {
-        let data = data.clone();
-        let sem = sem.clone();
-        path_futs.push(Box::pin(async move {
-            let mut local = CleanerResult {
-                files: 0,
-                folders: 0,
-                bytes: 0,
-                working: false,
-                path: path.to_string_lossy().to_string(),
-                program: data.program.clone(),
-                category: data.category.clone(),
-                sub_category: data.sub_category.clone(),
-            };
+    let mut path_stream = stream::iter(glob_iter.filter_map(Result::ok))
+        .map(|path| clean_one_path(path, Arc::clone(&data)))
+        .buffer_unordered(MAX_PATHS_IN_FLIGHT);
 
-            // A: parallel files_to_remove with C limit
-            if !data.files_to_remove.is_empty() {
-                let mut inner: FuturesUnordered<
-                    std::pin::Pin<Box<dyn Future<Output = Option<u64>> + Send>>,
-                > = FuturesUnordered::new();
-                for fname in &data.files_to_remove {
-                    let Some(fpath) = safe_join(&path, fname) else {
-                        eprintln!(
-                            "cleaner: skipping unsafe file name {:?} in {}",
-                            fname, data.path
-                        );
-                        continue;
-                    };
-                    let sem2 = sem.clone();
-                    inner.push(Box::pin(async move {
-                        let _p = sem2.acquire_owned().await.unwrap();
-                        match remove_file_fast(fpath.clone()).await {
-                            Ok(b) => Some(b),
-                            Err(e) => {
-                                eprintln!("cleaner: remove_file {}: {}", fpath.display(), e);
-                                None
-                            }
-                        }
-                    }));
-                }
-                while let Some(opt) = inner.next().await {
-                    if let Some(b) = opt {
-                        local.files += 1;
-                        local.bytes += b;
-                        local.working = true;
-                    }
-                }
-            }
-
-            // A: parallel directories_to_remove
-            if !data.directories_to_remove.is_empty() {
-                let mut inner: FuturesUnordered<
-                    std::pin::Pin<Box<dyn Future<Output = Option<(u64, u64, u64)>> + Send>>,
-                > = FuturesUnordered::new();
-                for dname in &data.directories_to_remove {
-                    let Some(dpath) = safe_join(&path, dname) else {
-                        eprintln!(
-                            "cleaner: skipping unsafe dir name {:?} in {}",
-                            dname, data.path
-                        );
-                        continue;
-                    };
-                    let sem2 = sem.clone();
-                    inner.push(Box::pin(async move {
-                        let _p = sem2.acquire_owned().await.unwrap();
-                        match remove_dir_fast(dpath.clone()).await {
-                            Ok(v) => Some(v),
-                            Err(e) => {
-                                eprintln!("cleaner: remove_dir {}: {}", dpath.display(), e);
-                                None
-                            }
-                        }
-                    }));
-                }
-                while let Some(opt) = inner.next().await {
-                    if let Some((f, fo, b)) = opt {
-                        local.files += f;
-                        local.folders += fo;
-                        local.bytes += b;
-                        local.working = true;
-                    }
-                }
-            }
-
-            // remove_all_in_dir - single, needs semaphore
-            if data.remove_all_in_dir {
-                let sem2 = sem.clone();
-                let _p = sem2.acquire_owned().await.unwrap();
-                // try fast; skip is_dir check for speed (A)
-                if let Ok((f, fo, b)) = remove_dir_fast(path.clone()).await {
-                    local.files += f;
-                    local.folders += fo;
-                    local.bytes += b;
-                    local.working = true;
-                    // path now gone, following ops will quickly fail (NotFound) - keep for semantics
-                }
-            }
-
-            // remove_files (path itself is file)
-            if data.remove_files {
-                let sem2 = sem.clone();
-                let _p = sem2.acquire_owned().await.unwrap();
-                if let Ok(b) = remove_file_fast(path.clone()).await {
-                    local.files += 1;
-                    local.bytes += b;
-                    local.working = true;
-                }
-            }
-
-            // remove_directories
-            if data.remove_directories {
-                let sem2 = sem.clone();
-                let _p = sem2.acquire_owned().await.unwrap();
-                if let Ok((f, fo, b)) = remove_dir_fast(path.clone()).await {
-                    local.files += f;
-                    local.folders += fo;
-                    local.bytes += b;
-                    local.working = true;
-                }
-            }
-
-            // remove_directory_after_clean - B via spawn_blocking, no counting bytes/files
-            if data.remove_directory_after_clean {
-                let sem2 = sem.clone();
-                let _p = sem2.acquire_owned().await.unwrap();
-                if remove_dir_all_fast(path.clone()).await.is_ok() {
-                    local.folders += 1;
-                    local.working = true;
-                }
-            }
-
-            local
-        }));
-    }
-
-    while let Some(partial) = path_futs.next().await {
+    while let Some(partial) = path_stream.next().await {
         if partial.working {
             out.working = true;
             out.files += partial.files;

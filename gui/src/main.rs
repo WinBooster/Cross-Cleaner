@@ -3,9 +3,7 @@
     windows_subsystem = "windows"
 )]
 
-// PERFORMANCE: Use mimalloc for blazing fast memory allocation
-#[global_allocator]
-static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+
 
 mod app;
 mod categories;

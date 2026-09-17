@@ -18,9 +18,6 @@ rodio = "0.22"
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }
 
-# Performance: Fast memory allocator
-mimalloc = "0.1"
-
 [build-dependencies]
 flate2 = "1.1"
 

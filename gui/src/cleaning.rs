@@ -37,8 +37,8 @@ pub async fn work(
     let mut removed_directories: u64 = 0;
     let mut cleared_programs = Vec::<Cleared>::new();
 
-    // C: limit to 16 concurrent cleaners
-    let sem = Arc::new(tokio::sync::Semaphore::new(16));
+    // C: limit to 8 concurrent cleaners
+    let sem = Arc::new(tokio::sync::Semaphore::new(8));
     let mut futures: FuturesUnordered<
         Pin<Box<dyn Future<Output = database::structures::CleanerResult> + Send>>,
     > = FuturesUnordered::new();
@@ -109,8 +109,9 @@ pub async fn work(
         }
     }
 
-    // INFO: Stream the database and keep only the selected entries.
-    let mut database_matches: Vec<CleanerData> = Vec::new();
+    // INFO: Stream the database and keep only the selected entries. Each entry
+    // is shared as an Arc so the per-path work inside clear_data does not clone it.
+    let mut database_matches: Vec<Arc<CleanerData>> = Vec::new();
     let _ = database.for_each(|data| {
         let eff = effective_sub(&data.class, &data.sub_category);
         if let Some(subs) = selected_map.get(&data.category) {
@@ -119,7 +120,7 @@ pub async fn work(
                 && !excluded_program_categories
                     .contains(&(data.program.clone(), data.category.clone()))
             {
-                database_matches.push(data);
+                database_matches.push(Arc::new(data));
             }
         }
     });
