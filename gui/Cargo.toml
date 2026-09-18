@@ -14,6 +14,7 @@ tempfile = "3.27"
 clap = { version = "4.6", features = ["derive"] }
 flate2 = "1.1"
 rodio = "0.22"
+winit = { version = "0.30.13", default-features = false, features = ["rwh_06"] }
 
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }

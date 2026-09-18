@@ -61,10 +61,13 @@ pub struct MyApp {
     pub icon_texture: Option<egui::TextureHandle>,
 
     pub update_receiver: Option<std::sync::mpsc::Receiver<Result<Option<NewRelease>, String>>>,
-    /// Number of database paths per category.
-    pub category_counts: HashMap<String, usize>,
     /// Number of database paths per (category, sub_category).
     pub sub_counts: HashMap<(String, String), usize>,
+    /// Precomputed checkbox labels like `"Cache (12)"`, parallel to `categories`.
+    /// Computed once so the UI does not rebuild them every frame.
+    pub category_labels: Vec<String>,
+    /// Precomputed window title.
+    pub window_title: String,
     /// All currently visible notifications (update banner, etc.).
     pub notifications: NotificationManager,
     /// Shared slot filled by the background changelog fetch.
@@ -195,6 +198,17 @@ impl MyApp {
             });
         }
 
+        let category_labels: Vec<String> = categories
+            .iter()
+            .map(
+                |cat| match category_counts.get(&cat.name).copied() {
+                    Some(n) if n > 0 => format!("{} ({})", cat.name, n),
+                    _ => cat.name.clone(),
+                },
+            )
+            .collect();
+        let window_title = format!("Cross Cleaner GUI v{}", get_version());
+
         let (result_sender, result_receiver) = mpsc::channel(1);
 
         Self {
@@ -228,8 +242,9 @@ impl MyApp {
             icon_texture: None,
 
             update_receiver: None,
-            category_counts,
             sub_counts,
+            category_labels,
+            window_title,
             notifications: NotificationManager::default(),
             changelog: None,
             changelog_handle: None,
@@ -320,6 +335,17 @@ impl MyApp {
             });
         }
 
+        let category_labels: Vec<String> = categories
+            .iter()
+            .map(
+                |cat| match category_counts.get(&cat.name).copied() {
+                    Some(n) if n > 0 => format!("{} ({})", cat.name, n),
+                    _ => cat.name.clone(),
+                },
+            )
+            .collect();
+        let window_title = format!("Cross Cleaner GUI v{}", get_version());
+
         let (result_sender, result_receiver) = mpsc::channel(1);
 
         Self {
@@ -351,8 +377,9 @@ impl MyApp {
             icon_texture: None,
 
             update_receiver: None,
-            category_counts,
             sub_counts,
+            category_labels,
+            window_title,
             notifications: NotificationManager::default(),
             changelog: None,
             changelog_handle: None,
@@ -556,7 +583,11 @@ impl eframe::App for MyApp {
         };
         paint_window_border(&ctx, "main_window_border", border_color);
         if let Some(receiver) = &mut self.progress_receiver {
-            if let Ok(message) = receiver.try_recv() {
+            // Drain everything that is ready, but repaint on a slower cadence
+            // (see the `task_handle` branch): cleaning can emit many messages
+            // per second, and an immediate repaint for each would keep the
+            // software renderer busy.
+            while let Ok(message) = receiver.try_recv() {
                 if message.starts_with("PROGRESS:") {
                     let parts: Vec<&str> = message.split(':').collect();
                     if parts.len() == 4 {
@@ -579,7 +610,6 @@ impl eframe::App for MyApp {
                 } else {
                     self.progress_message = message;
                 }
-                ctx.request_repaint();
             }
         }
 
@@ -640,7 +670,6 @@ impl eframe::App for MyApp {
         }
         self.show_changelog_window(&ctx);
 
-        let title = format!("Cross Cleaner GUI v{}", get_version());
         if self.icon_texture.is_none() {
             self.icon_texture = Some(ctx.load_texture(
                 "app_icon",
@@ -650,7 +679,13 @@ impl eframe::App for MyApp {
         }
         let show_back =
             (self.show_results && self.cleared_data.is_some()) || self.show_program_selection;
-        let back_clicked = title_bar(ui, &ctx, &title, self.icon_texture.as_ref(), show_back);
+        let back_clicked = title_bar(
+            ui,
+            &ctx,
+            &self.window_title,
+            self.icon_texture.as_ref(),
+            show_back,
+        );
         if back_clicked {
             if self.show_program_selection {
                 self.show_program_selection = false;
@@ -697,7 +732,7 @@ impl eframe::App for MyApp {
                                 [ui.available_width(), 20.0],
                                 egui::ProgressBar::new(progress)
                                     .show_percentage()
-                                    .animate(true),
+                                    .animate(false),
                             );
                             ui.add_space(4.0);
 
@@ -738,6 +773,9 @@ impl eframe::App for MyApp {
                             ui.spinner();
                         }
                     });
+                    // Keep polling the cleaning task / progress channel at a
+                    // modest rate instead of repainting on every message.
+                    ctx.request_repaint_after(std::time::Duration::from_millis(100));
                     return;
                 }
 
@@ -1108,17 +1146,6 @@ impl eframe::App for MyApp {
                     }
                     let menu_tex = self.menu_texture.clone().unwrap();
 
-                    // Path count per category, e.g. "Cache (12)"
-                    let cat_labels: Vec<String> = self
-                        .categories
-                        .iter()
-                        .map(|cat| match self.category_counts.get(&cat.name).copied() {
-                            Some(n) if n > 0 => format!("{} ({})", cat.name, n),
-                            _ => cat.name.clone(),
-                        })
-                        .collect();
-                    let sub_counts = self.sub_counts.clone();
-
                     ui.columns(3, |columns| {
                         for (idx, cat) in self.categories.iter_mut().enumerate() {
                             let column_index = idx % 3;
@@ -1127,8 +1154,12 @@ impl eframe::App for MyApp {
 
                             columns[column_index].horizontal(|ui| {
                                 // Tristate checkbox with square for indeterminate
-                                let (resp, clicked) =
-                                    tristate_checkbox(ui, is_checked, is_indet, &cat_labels[idx]);
+                                let (resp, clicked) = tristate_checkbox(
+                                    ui,
+                                    is_checked,
+                                    is_indet,
+                                    &self.category_labels[idx],
+                                );
                                 if clicked {
                                     if is_checked || is_indet {
                                         cat.selected.clear();
@@ -1175,7 +1206,7 @@ impl eframe::App for MyApp {
                                                     for sub in cat.subs.clone() {
                                                         let key = (cat.name.clone(), sub.clone());
                                                         let label =
-                                                            match sub_counts.get(&key).copied() {
+                                                            match self.sub_counts.get(&key).copied() {
                                                                 Some(n) if n > 0 => format!(
                                                                     "{} ({})",
                                                                     sub, n
@@ -1199,7 +1230,8 @@ impl eframe::App for MyApp {
                                                     if cat.has_empty {
                                                         let key =
                                                             (cat.name.clone(), String::new());
-                                                        let label = match sub_counts
+                                                        let label = match self
+                                                            .sub_counts
                                                             .get(&key)
                                                             .copied()
                                                         {

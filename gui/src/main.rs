@@ -21,9 +21,111 @@ use database::registry_database::RegistryDatabase;
 use database::structures::CustomCleaner;
 use database::version::check_new_version;
 use eframe::egui;
+use eframe::UserEvent;
 use icons::{ico_bytes_to_png_bytes, load_icon_from_bytes};
 use std::sync::Arc;
+use std::time::{Duration, Instant};
 use title_bar::TITLE_BAR_HEIGHT;
+use winit::application::ApplicationHandler;
+use winit::event::{DeviceEvent, DeviceId, StartCause, WindowEvent};
+use winit::event_loop::{ActiveEventLoop, EventLoop};
+use winit::window::WindowId;
+
+/// Minimum interval between repaints caused purely by pointer movement.
+///
+/// Software rendering (e.g. Windows Sandbox without a GPU) is CPU-bound, and
+/// `egui-winit` requests an immediate repaint for every `CursorMoved` event.
+/// Coalescing them keeps the UI responsive without burning a whole core while
+/// the mouse is being moved. Hover/hit-testing uses `CursorMoved`, so only that
+/// event is throttled; raw `DeviceEvent::MouseMotion` is dropped entirely (see
+/// `device_event`) because it arrives at the mouse polling rate and adds no
+/// useful information here.
+const POINTER_REPAINT_INTERVAL: Duration = Duration::from_millis(50);
+
+/// Wraps eframe's winit application and drops surplus `CursorMoved` events so
+/// that moving the mouse cannot force a repaint on every OS event.
+struct PointerThrottle<'a> {
+    inner: eframe::EframeWinitApplication<'a>,
+    last_pointer_repaint: Option<Instant>,
+}
+
+impl<'a> PointerThrottle<'a> {
+    fn new(inner: eframe::EframeWinitApplication<'a>) -> Self {
+        Self {
+            inner,
+            last_pointer_repaint: None,
+        }
+    }
+
+    fn allow_pointer_move(&mut self) -> bool {
+        let now = Instant::now();
+        match self.last_pointer_repaint {
+            Some(last) if now.duration_since(last) < POINTER_REPAINT_INTERVAL => false,
+            _ => {
+                self.last_pointer_repaint = Some(now);
+                true
+            }
+        }
+    }
+}
+
+impl ApplicationHandler<UserEvent> for PointerThrottle<'_> {
+    fn resumed(&mut self, event_loop: &ActiveEventLoop) {
+        self.inner.resumed(event_loop);
+    }
+
+    fn window_event(
+        &mut self,
+        event_loop: &ActiveEventLoop,
+        window_id: WindowId,
+        event: WindowEvent,
+    ) {
+        if matches!(event, WindowEvent::CursorMoved { .. }) && !self.allow_pointer_move() {
+            return;
+        }
+        self.inner.window_event(event_loop, window_id, event);
+    }
+
+    fn new_events(&mut self, event_loop: &ActiveEventLoop, cause: StartCause) {
+        self.inner.new_events(event_loop, cause);
+    }
+
+    fn user_event(&mut self, event_loop: &ActiveEventLoop, event: UserEvent) {
+        self.inner.user_event(event_loop, event);
+    }
+
+    fn device_event(
+        &mut self,
+        event_loop: &ActiveEventLoop,
+        device_id: DeviceId,
+        event: DeviceEvent,
+    ) {
+        // Raw mouse motion is delivered at the mouse polling rate (up to
+        // 1000 Hz) and also forces a repaint, but carries no information the UI
+        // needs: pointer position and hover come from `CursorMoved`. Dropping
+        // it prevents the cursor-position event from being starved.
+        if matches!(event, DeviceEvent::MouseMotion { .. }) {
+            return;
+        }
+        self.inner.device_event(event_loop, device_id, event);
+    }
+
+    fn about_to_wait(&mut self, event_loop: &ActiveEventLoop) {
+        self.inner.about_to_wait(event_loop);
+    }
+
+    fn suspended(&mut self, event_loop: &ActiveEventLoop) {
+        self.inner.suspended(event_loop);
+    }
+
+    fn exiting(&mut self, event_loop: &ActiveEventLoop) {
+        self.inner.exiting(event_loop);
+    }
+
+    fn memory_warning(&mut self, event_loop: &ActiveEventLoop) {
+        self.inner.memory_warning(event_loop);
+    }
+}
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -119,14 +221,25 @@ async fn main() -> eframe::Result {
         ..Default::default()
     };
 
-    eframe::run_native(
+    // INFO: Run on our own event loop so surplus pointer-movement events can be
+    // coalesced (see `PointerThrottle`). `eframe::run_native` gives no such hook.
+    let event_loop = EventLoop::<UserEvent>::with_user_event()
+        .build()
+        .map_err(eframe::Error::WinitEventLoop)?;
+
+    let mut native_app = PointerThrottle::new(eframe::create_native(
         &format!("Cross Cleaner GUI v{}", get_version()),
         options,
         Box::new(|_cc| {
             _cc.egui_ctx.set_visuals(egui::Visuals::dark());
             Ok(Box::new(app))
         }),
-    )
+        &event_loop,
+    ));
+
+    event_loop
+        .run_app(&mut native_app)
+        .map_err(eframe::Error::WinitEventLoop)
 }
 
 #[cfg(test)]
