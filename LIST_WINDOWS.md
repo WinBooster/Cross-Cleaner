@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.3.5.1
+# Windows Clearing Programs Catalog v2.0.3.6
 **Total categories in database:** 12
 
-**Total programs in database:** 250
+**Total programs in database:** 254
 
-**Total pathes in database:** 547
+**Total pathes in database:** 551
 
 ## AI
 
@@ -295,8 +295,16 @@
 | 1 | [CrystalCry](https://crystalcry.org) | Logs |
 | 2 | [HiAlgo Boost](https://www.hialgo.com) | Documentation, Logs |
 | 3 | [Mem Reduct](https://github.com/henrypp/memreduct) | Documentation |
-| 4 | [Winutil](https://github.com/ChrisTitusTech/winutil) | Logs |
-| 5 | [ССleaner](https://www.ccleaner.com) | Logs |
+| 4 | WhySoSlow | Documentation |
+| 5 | [Winutil](https://github.com/ChrisTitusTech/winutil) | Logs |
+| 6 | [ССleaner](https://www.ccleaner.com) | Logs |
+
+
+## PDF
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | JOPDF | Documentation |
 
 
 ## Packet Manager
@@ -424,6 +432,13 @@
 | 2 | [qBittorrent](https://www.qbittorrent.org/download) | Logs |
 
 
+## Unistaller
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Bulk Crap Uninstaller | Documentation, Logs |
+
+
 ## Utility
 
 | № | Program | Categories |
@@ -461,10 +476,11 @@
 | 1 | [AVCLabs Video Enhancer AI](https://www.avclabs.com/video-enhancer-ai.html) | Logs |
 | 2 | [HandBrake](https://handbrake.fr/downloads.php) | Documentation, Logs |
 | 3 | [OBS Studio](https://obsproject.com/download) | Logs |
-| 4 | [Rave](https://rave.io) | Cache, Logs |
-| 5 | [Topaz Video AI](https://www.topazlabs.com/topaz-video-ai) | Logs |
-| 6 | [VLC](https://www.videolan.org/vlc) | Documentation, Logs |
-| 7 | [iTop Screen Recorder](https://recorder.itopvpn.com) | Logs |
+| 4 | Open Video Downloader | Documentation |
+| 5 | [Rave](https://rave.io) | Cache, Logs |
+| 6 | [Topaz Video AI](https://www.topazlabs.com/topaz-video-ai) | Logs |
+| 7 | [VLC](https://www.videolan.org/vlc) | Documentation, Logs |
+| 8 | [iTop Screen Recorder](https://recorder.itopvpn.com) | Logs |
 
 
 ## Uncategorized
