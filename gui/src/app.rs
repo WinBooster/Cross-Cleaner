@@ -204,12 +204,10 @@ impl MyApp {
 
         let category_labels: Vec<String> = categories
             .iter()
-            .map(
-                |cat| match category_counts.get(&cat.name).copied() {
-                    Some(n) if n > 0 => format!("{} ({})", cat.name, n),
-                    _ => cat.name.clone(),
-                },
-            )
+            .map(|cat| match category_counts.get(&cat.name).copied() {
+                Some(n) if n > 0 => format!("{} ({})", cat.name, n),
+                _ => cat.name.clone(),
+            })
             .collect();
         let window_title = format!("Cross Cleaner GUI v{}", get_version());
 
@@ -342,12 +340,10 @@ impl MyApp {
 
         let category_labels: Vec<String> = categories
             .iter()
-            .map(
-                |cat| match category_counts.get(&cat.name).copied() {
-                    Some(n) if n > 0 => format!("{} ({})", cat.name, n),
-                    _ => cat.name.clone(),
-                },
-            )
+            .map(|cat| match category_counts.get(&cat.name).copied() {
+                Some(n) if n > 0 => format!("{} ({})", cat.name, n),
+                _ => cat.name.clone(),
+            })
             .collect();
         let window_title = format!("Cross Cleaner GUI v{}", get_version());
 
