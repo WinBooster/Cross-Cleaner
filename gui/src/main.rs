@@ -27,9 +27,7 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 use title_bar::TITLE_BAR_HEIGHT;
 use winit::application::ApplicationHandler;
-use winit::event::{
-    DeviceEvent, DeviceId, MouseScrollDelta, StartCause, TouchPhase, WindowEvent,
-};
+use winit::event::{DeviceEvent, DeviceId, MouseScrollDelta, StartCause, TouchPhase, WindowEvent};
 use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop};
 use winit::window::WindowId;
 
