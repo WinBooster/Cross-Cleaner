@@ -27,26 +27,70 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 use title_bar::TITLE_BAR_HEIGHT;
 use winit::application::ApplicationHandler;
-use winit::event::{DeviceEvent, DeviceId, StartCause, WindowEvent};
-use winit::event_loop::{ActiveEventLoop, EventLoop};
+use winit::event::{
+    DeviceEvent, DeviceId, MouseScrollDelta, StartCause, TouchPhase, WindowEvent,
+};
+use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop};
 use winit::window::WindowId;
 
-/// Minimum interval between repaints caused purely by pointer movement.
+/// Minimum interval between repaints caused purely by pointer movement or by
+/// scroll-wheel input.
 ///
 /// Software rendering (e.g. Windows Sandbox without a GPU) is CPU-bound, and
-/// `egui-winit` requests an immediate repaint for every `CursorMoved` event.
-/// Coalescing them keeps the UI responsive without burning a whole core while
-/// the mouse is being moved. Hover/hit-testing uses `CursorMoved`, so only that
-/// event is throttled; raw `DeviceEvent::MouseMotion` is dropped entirely (see
-/// `device_event`) because it arrives at the mouse polling rate and adds no
-/// useful information here.
+/// `egui-winit` requests an immediate repaint for every `CursorMoved` and every
+/// `MouseWheel` event. High-resolution wheels and touchpads emit those at a
+/// very high rate, so they are coalesced here. Hover/hit-testing uses
+/// `CursorMoved`, so only that event is throttled by dropping; wheel deltas are
+/// accumulated and forwarded together so scrolling is not lost. Raw
+/// `DeviceEvent::MouseMotion` is dropped entirely (see `device_event`) because
+/// it arrives at the mouse polling rate and adds no useful information here.
 const POINTER_REPAINT_INTERVAL: Duration = Duration::from_millis(50);
 
-/// Wraps eframe's winit application and drops surplus `CursorMoved` events so
-/// that moving the mouse cannot force a repaint on every OS event.
+/// Interval between flushed scroll-wheel deltas. Higher than the pointer
+/// interval because each flush translates into a full (software-rendered)
+/// redraw of the scroll area.
+const WHEEL_REPAINT_INTERVAL: Duration = Duration::from_millis(100);
+
+/// Global cap for repaints initiated by egui itself (animations, smooth
+/// scrolling, timers, ...). egui requests an immediate repaint on every frame
+/// while its internal scroll smoothing is active, which keeps the software
+/// renderer at full frame rate for as long as a scroll is in flight. Input
+/// repaints do not go through this path, so the UI still reacts immediately.
+const MIN_REPAINT_INTERVAL: Duration = Duration::from_millis(33);
+
+/// A scroll-wheel event waiting to be flushed.
+struct PendingWheel {
+    window_id: WindowId,
+    device_id: DeviceId,
+    delta: MouseScrollDelta,
+    phase: TouchPhase,
+}
+
+/// Adds `delta` to `acc` when both use the same unit. Returns `false` if the
+/// variants differ (in which case the caller forwards them separately).
+fn merge_scroll(acc: &mut MouseScrollDelta, delta: &MouseScrollDelta) -> bool {
+    match (acc, delta) {
+        (MouseScrollDelta::LineDelta(ax, ay), MouseScrollDelta::LineDelta(bx, by)) => {
+            *ax += *bx;
+            *ay += *by;
+            true
+        }
+        (MouseScrollDelta::PixelDelta(a), MouseScrollDelta::PixelDelta(b)) => {
+            a.x += b.x;
+            a.y += b.y;
+            true
+        }
+        _ => false,
+    }
+}
+
+/// Wraps eframe's winit application and coalesces pointer-movement and
+/// scroll-wheel events so they cannot force a repaint on every OS event.
 struct PointerThrottle<'a> {
     inner: eframe::EframeWinitApplication<'a>,
     last_pointer_repaint: Option<Instant>,
+    pending_wheel: Option<PendingWheel>,
+    last_wheel_flush: Option<Instant>,
 }
 
 impl<'a> PointerThrottle<'a> {
@@ -54,6 +98,8 @@ impl<'a> PointerThrottle<'a> {
         Self {
             inner,
             last_pointer_repaint: None,
+            pending_wheel: None,
+            last_wheel_flush: None,
         }
     }
 
@@ -66,6 +112,19 @@ impl<'a> PointerThrottle<'a> {
                 true
             }
         }
+    }
+
+    fn forward_wheel(&mut self, event_loop: &ActiveEventLoop, wheel: PendingWheel) {
+        self.last_wheel_flush = Some(Instant::now());
+        self.inner.window_event(
+            event_loop,
+            wheel.window_id,
+            WindowEvent::MouseWheel {
+                device_id: wheel.device_id,
+                delta: wheel.delta,
+                phase: wheel.phase,
+            },
+        );
     }
 }
 
@@ -80,17 +139,106 @@ impl ApplicationHandler<UserEvent> for PointerThrottle<'_> {
         window_id: WindowId,
         event: WindowEvent,
     ) {
-        if matches!(event, WindowEvent::CursorMoved { .. }) && !self.allow_pointer_move() {
-            return;
+        match &event {
+            WindowEvent::CursorMoved { .. } => {
+                if !self.allow_pointer_move() {
+                    return;
+                }
+            }
+            WindowEvent::MouseWheel {
+                device_id,
+                delta,
+                phase,
+            } => {
+                let (device_id, delta, phase) = (*device_id, *delta, *phase);
+                let now = Instant::now();
+                let interval_elapsed = self
+                    .last_wheel_flush
+                    .is_none_or(|last| now.duration_since(last) >= WHEEL_REPAINT_INTERVAL);
+
+                if interval_elapsed && self.pending_wheel.is_none() {
+                    self.last_wheel_flush = Some(now);
+                    self.inner.window_event(
+                        event_loop,
+                        window_id,
+                        WindowEvent::MouseWheel {
+                            device_id,
+                            delta,
+                            phase,
+                        },
+                    );
+                    return;
+                }
+
+                let merged = match self.pending_wheel.as_mut() {
+                    Some(pending) if pending.window_id == window_id => {
+                        merge_scroll(&mut pending.delta, &delta)
+                    }
+                    _ => false,
+                };
+                if merged {
+                    let pending = self.pending_wheel.as_mut().expect("pending exists");
+                    pending.device_id = device_id;
+                    pending.phase = phase;
+                } else if interval_elapsed {
+                    // Different unit: cannot merge, so forward this one now and
+                    // let the pending accumulation flush on the next tick.
+                    self.inner.window_event(
+                        event_loop,
+                        window_id,
+                        WindowEvent::MouseWheel {
+                            device_id,
+                            delta,
+                            phase,
+                        },
+                    );
+                } else {
+                    self.pending_wheel = Some(PendingWheel {
+                        window_id,
+                        device_id,
+                        delta,
+                        phase,
+                    });
+                }
+                return;
+            }
+            _ => {}
         }
         self.inner.window_event(event_loop, window_id, event);
     }
 
     fn new_events(&mut self, event_loop: &ActiveEventLoop, cause: StartCause) {
+        // A scheduled wheel flush woke us up: deliver it before eframe computes
+        // its next repaint time, so the redraw is requested in this iteration.
+        if matches!(cause, StartCause::ResumeTimeReached { .. }) {
+            if let Some(wheel) = self.pending_wheel.take() {
+                self.forward_wheel(event_loop, wheel);
+            }
+        }
         self.inner.new_events(event_loop, cause);
     }
 
     fn user_event(&mut self, event_loop: &ActiveEventLoop, event: UserEvent) {
+        // Clamp egui's own repaint requests to a minimum interval. This is what
+        // stops "smooth scroll" (and other continuous animations) from
+        // repainting at the display refresh rate.
+        let event = match event {
+            UserEvent::RequestRepaint {
+                viewport_id,
+                when,
+                cumulative_pass_nr,
+            } => {
+                let floor = Instant::now() + MIN_REPAINT_INTERVAL;
+                UserEvent::RequestRepaint {
+                    viewport_id,
+                    when: when.max(floor),
+                    cumulative_pass_nr,
+                }
+            }
+            // The `accesskit` feature adds more variants.
+            #[allow(unreachable_patterns)]
+            other => other,
+        };
         self.inner.user_event(event_loop, event);
     }
 
@@ -112,6 +260,28 @@ impl ApplicationHandler<UserEvent> for PointerThrottle<'_> {
 
     fn about_to_wait(&mut self, event_loop: &ActiveEventLoop) {
         self.inner.about_to_wait(event_loop);
+
+        if self.pending_wheel.is_none() {
+            return;
+        }
+        let deadline = self
+            .last_wheel_flush
+            .map_or_else(Instant::now, |last| last + WHEEL_REPAINT_INTERVAL);
+        if Instant::now() >= deadline {
+            let wheel = self.pending_wheel.take().expect("pending exists");
+            self.forward_wheel(event_loop, wheel);
+            // Make sure eframe processes the freshly scheduled repaint.
+            event_loop.set_control_flow(ControlFlow::WaitUntil(Instant::now()));
+        } else {
+            let should_set = match event_loop.control_flow() {
+                ControlFlow::Wait => true,
+                ControlFlow::WaitUntil(existing) => deadline < existing,
+                ControlFlow::Poll => false,
+            };
+            if should_set {
+                event_loop.set_control_flow(ControlFlow::WaitUntil(deadline));
+            }
+        }
     }
 
     fn suspended(&mut self, event_loop: &ActiveEventLoop) {

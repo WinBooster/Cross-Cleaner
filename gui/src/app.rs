@@ -47,6 +47,10 @@ pub struct MyApp {
     pub program_disabled: Vec<HashSet<String>>,
     pub search_query: String,
     pub search_query_visible: String,
+    /// Indices into `program_checkboxes` matching `search_query`, in order.
+    /// Recomputed only when the query or the program list changes, so the UI
+    /// never has to scan/to-lowercase the whole list every frame.
+    pub filtered_programs: Vec<usize>,
     pub excluded_programs: HashSet<String>,
     pub results_window_resized: bool,
 
@@ -233,6 +237,7 @@ impl MyApp {
             program_disabled: vec![],
             search_query: String::new(),
             search_query_visible: String::new(),
+            filtered_programs: Vec::new(),
             excluded_programs: HashSet::new(),
             results_window_resized: false,
 
@@ -368,6 +373,7 @@ impl MyApp {
             program_disabled: vec![],
             search_query: String::new(),
             search_query_visible: String::new(),
+            filtered_programs: Vec::new(),
             excluded_programs: HashSet::new(),
             results_window_resized: false,
 
@@ -399,6 +405,22 @@ impl MyApp {
             ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(size));
             self.last_inner_size = Some(size);
         }
+    }
+
+    /// Recomputes `filtered_programs` from `program_checkboxes` and
+    /// `search_query`. Cheap and only called when one of them changes.
+    fn rebuild_filtered_programs(&mut self) {
+        if self.search_query.is_empty() {
+            self.filtered_programs = (0..self.program_checkboxes.len()).collect();
+            return;
+        }
+        self.filtered_programs = self
+            .program_checkboxes
+            .iter()
+            .enumerate()
+            .filter(|(_, (_, program))| program.to_lowercase().contains(&self.search_query))
+            .map(|(i, _)| i)
+            .collect();
     }
 
     fn selected_map(&self) -> HashMap<String, HashSet<String>> {
@@ -851,12 +873,14 @@ impl eframe::App for MyApp {
                             });
                             ui.separator();
 
-                            // Scrollable table content
+                            // Scrollable, virtualized table content: only the
+                            // visible rows are laid out each frame.
                             egui::ScrollArea::vertical()
                                 .max_height(total_height)
-                                .show(ui, |ui| {
-                                    for cleared in cleared {
-                                        ui.horizontal(|ui| {
+                                .show_rows(ui, 21.0, cleared.len(), |ui, row_range| {
+                                    for idx in row_range {
+                                        let cleared = &cleared[idx];
+                                        let row = ui.horizontal(|ui| {
                                             ui.style_mut().spacing.item_spacing =
                                                 egui::vec2(0.0, 0.0);
 
@@ -900,7 +924,15 @@ impl eframe::App for MyApp {
                                                 .wrap(),
                                             );
                                         });
-                                        ui.separator();
+                                        // Row separator, painted instead of a
+                                        // `ui.separator()` so it does not add
+                                        // height and break row virtualization.
+                                        let rect = row.response.rect;
+                                        ui.painter().hline(
+                                            rect.min.x..=rect.max.x,
+                                            rect.bottom(),
+                                            ui.visuals().widgets.noninteractive.bg_stroke,
+                                        );
                                     }
                                 });
                         });
@@ -909,8 +941,8 @@ impl eframe::App for MyApp {
                 }
 
                 if self.show_program_selection {
-                    // Dynamic window sizing based on number of programs
-                    let num_programs = self.program_checkboxes.len();
+                    // Dynamic window sizing based on number of (filtered) programs
+                    let num_programs = self.filtered_programs.len();
                     let rows = (num_programs + 1) / 2; // 2 columns
                     let row_height = 20.0;
                     let base_height = 120.0; // Heading, search, buttons, separators
@@ -941,6 +973,7 @@ impl eframe::App for MyApp {
                         );
                         if search_response.changed() {
                             self.search_query = self.search_query_visible.to_lowercase();
+                            self.rebuild_filtered_programs();
                         }
                     });
 
@@ -955,23 +988,26 @@ impl eframe::App for MyApp {
                     }
                     let menu_tex = self.menu_texture.clone().unwrap();
 
+                    // Only lay out the rows that are actually visible; the
+                    // program list can be huge, and building every checkbox
+                    // (plus its category popup) each frame is very expensive.
+                    let total_rows = self.filtered_programs.len().div_ceil(2);
                     egui::ScrollArea::vertical()
                         .max_height(scroll_height)
-                        .show(ui, |ui| {
-                            ui.columns(2, |columns| {
-                                let mut col_index = 0;
-                                for (i, (checkbox, program)) in
-                                    self.program_checkboxes.iter().enumerate()
-                                {
-                                    if self.search_query.is_empty()
-                                        || program.to_lowercase().contains(&self.search_query)
-                                    {
+                        .show_rows(ui, row_height, total_rows, |ui, row_range| {
+                            for row in row_range {
+                                ui.columns(2, |columns| {
+                                    for col in 0..2 {
+                                        let Some(&i) = self.filtered_programs.get(row * 2 + col)
+                                        else {
+                                            break;
+                                        };
+                                        let (checkbox, program) = &self.program_checkboxes[i];
                                         let master = *checkbox.borrow();
                                         let is_checked =
                                             master && self.program_disabled[i].is_empty();
                                         let is_indet = master && !self.program_disabled[i].is_empty();
-                                        let column = &mut columns[col_index % 2];
-                                        column.horizontal(|ui| {
+                                        columns[col].horizontal(|ui| {
                                             let (_resp, clicked) = tristate_checkbox(
                                                 ui, is_checked, is_indet, program,
                                             );
@@ -1045,10 +1081,9 @@ impl eframe::App for MyApp {
                                                 }
                                             }
                                         });
-                                        col_index += 1;
                                     }
-                                }
-                            });
+                                });
+                            }
                         });
 
                     ui.separator();
@@ -1329,6 +1364,7 @@ impl eframe::App for MyApp {
                                 self.program_disabled.push(HashSet::new());
                             }
 
+                            self.rebuild_filtered_programs();
                             self.show_program_selection = true;
                         }
                     }
