@@ -218,15 +218,8 @@ jobs:
             ![Downloads](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}/total) ![Version](https://img.shields.io/badge/version-${{ env.APP_VERSION }}-blue) ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux|%20MacOS-orange)
 
             ## ✨ What's New
-            
-            ### 🪟 Windows Enhancements
-            - **Bulk Crap Uninstaller** - Added documentation clearing
-            - **WhySoSlow** - Added documentation clearing
-            - **Open Video Downloader** - Added documentation clearing
-            - **JOPDF**- Added documentation clearing
-            
+
             ### 🛠 Technical Updates
-            - Less RAM usage
             - Less CPU usage
 
             ## 👏 Contributors Hall of Fame
