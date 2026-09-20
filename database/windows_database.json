@@ -1670,7 +1670,7 @@
   },
   {
     "path": "{drive}Program Files (x86)\\FastStone Image Viewer",
-    "class": "Utility",
+    "class": "Image",
     "category": "Documentation",
     "program": "FastStone Image Viewer",
     "files_to_remove": [
@@ -5250,6 +5250,15 @@
     ]
   },
   {
+    "path": "{drive}Program Files (x86)\\Common Files\\Steam",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Steam",
+    "files_to_remove": [
+      "service_log.txt"
+    ]
+  },
+  {
     "path": "{steam}\\*.log",
     "class": "Game",
     "category": "Logs",
@@ -6748,6 +6757,70 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Jitsi\\jre",
+    "class": "Messanger",
+    "category": "Documentation",
+	"sub_category": "Licenses",
+    "program": "Jitsi",
+    "files_to_remove": [
+      "LICENSE",
+	  "THIRDPARTYLICENSEREADME.txt",
+	  "THIRDPARTYLICENSEREADME-JAVAFX.txt",
+	  "COPYRIGHT"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\Jitsi\\jre",
+    "class": "Messanger",
+    "category": "Documentation",
+    "program": "Jitsi",
+    "files_to_remove": [
+      "Welcome.html",
+	  "README.txt"
+    ]
+  },
+  {
+    "path": "{drive}ProgramData\\Windhawk\\UIData\\user-data",
+    "class": "Utility",
+    "category": "Logs",
+    "program": "Windhawk",
+    "directories_to_remove": [
+      "logs"
+    ]
+  },
+  {
+    "path": "{drive}ProgramData\\Windhawk\\UIData\\user-data",
+    "class": "Utility",
+    "category": "Backups",
+    "program": "Windhawk",
+    "directories_to_remove": [
+      "Backups"
+    ]
+  },
+  {
+    "path": "{drive}ProgramData\\Windhawk\\UIData\\user-data",
+    "class": "Utility",
+    "category": "Cache",
+    "program": "Windhawk",
+    "directories_to_remove": [
+      "Cache",
+	  "CachedData",
+	  "CachedExtensions",
+	  "Code Cache",
+	  "GPUCache"
+    ]
+  },
+  {
+    "path": "{drive}ProgramData\\Windhawk\\UIData\\user-data\\Network",
+    "class": "Utility",
+    "category": "Cache",
+    "program": "Windhawk",
+    "directories_to_remove": [
+      "Cookies",
+	  "Cookies-journal"
     ]
   }
 ]

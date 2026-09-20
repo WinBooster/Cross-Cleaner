@@ -219,9 +219,11 @@ jobs:
 
             ## ✨ What's New
 
-            ### 🛠 Technical Updates
-            - Less CPU usage
-
+            ### 🪟 Windows Enhancements
+            - **Jitsi** Added documentation clearing
+            - **Steam** Improved logs clearing
+            - **Windhawk** Added logs, cache clearing
+            
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
             - **@Nekiplay** - Core improvements and feature implementations
