@@ -263,11 +263,11 @@ pub fn register_all() {
     #[cfg(windows)]
     let _ = custom_glob_cleaner! {
         id: "Optimize pictures",
-        program: "Image Optimize",
+        program: "Windows",
         category: "Images",
         sub_category: "Compress",
         os: ["windows"],
-        glob: "{drive}/Users/{username}/Pictures/**",
+        glob: "{drive}\\Users\\{username}\\Pictures\\**",
         |path| {
             crate::image_optimizer::optimize_single(path)
         }
@@ -277,11 +277,25 @@ pub fn register_all() {
     #[cfg(windows)]
     let _ = custom_glob_cleaner! {
         id: "Optimize pictures in ShareX",
-        program: "Image Optimize",
+        program: "ShareX",
         category: "Images",
         sub_category: "Compress",
         os: ["windows"],
-        glob: "{drive}/Users/{username}/Documents/ShareX/Screenshots/**",
+        glob: "{drive}\\Users\\{username}\\Documents\\ShareX\\Screenshots\\**",
+        |path| {
+            crate::image_optimizer::optimize_single(path)
+        }
+    };
+	
+	// Image optimizer: Namida Screenshots recursive
+    #[cfg(windows)]
+    let _ = custom_glob_cleaner! {
+        id: "Optimize pictures in Namida",
+        program: "Namida",
+        category: "Images",
+        sub_category: "Compress",
+        os: ["windows"],
+        glob: "{drive}\\Users\\{username}\\.namida\\Artworks\\*",
         |path| {
             crate::image_optimizer::optimize_single(path)
         }
