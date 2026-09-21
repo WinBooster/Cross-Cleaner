@@ -85,13 +85,13 @@ pub async fn work(
             {
                 let data = data.clone();
                 let sender = progress_sender.clone();
-                let name_msg = data.id.clone();
+                let _name_msg = data.id.clone();
                 let sem = sem.clone();
                 futures.push(Box::pin(async move {
                     let _p = sem.acquire_owned().await.unwrap();
-                    let _ = sender.send(format!("Cleaning: {}", name_msg)).await;
+                    let progress_for_cleaner = sender.clone();
                     tokio::task::spawn_blocking(move || {
-                        database::custom_cleaners::run_custom_cleaner(&data)
+                        database::custom_cleaners::run_custom_cleaner(&data, Some(progress_for_cleaner))
                     })
                     .await
                     .unwrap_or_else(|_| CleanerResult {

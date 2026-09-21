@@ -1,6 +1,7 @@
 use crate::structures::{CleanerResult, CustomCleaner};
 use std::collections::HashMap;
 use std::sync::{OnceLock, RwLock};
+use tokio::sync::mpsc;
 
 type Registry = RwLock<HashMap<String, CustomCleaner>>;
 
@@ -61,8 +62,8 @@ pub fn custom_cleaner_ids() -> Vec<String> {
 }
 
 /// Execute the cleaning function of a custom cleaner.
-pub fn run_custom_cleaner(cleaner: &CustomCleaner) -> CleanerResult {
-    (cleaner.function)(cleaner)
+pub fn run_custom_cleaner(cleaner: &CustomCleaner, sender: Option<mpsc::Sender<String>>) -> CleanerResult {
+    (cleaner.function)(cleaner, sender)
 }
 
 /// Expand placeholders: {username}, {drive} (one entry per drive letter).
@@ -103,7 +104,7 @@ mod tests {
             path: String::from("{username}/test.log"),
             args: vec![],
             os: vec![],
-            function: |_| CleanerResult {
+            function: |_, _| CleanerResult {
                 files: 0,
                 folders: 0,
                 bytes: 0,
@@ -145,7 +146,7 @@ mod tests {
     #[test]
     fn test_run_custom_cleaner() {
         let mut cleaner = test_cleaner("run_test_1");
-        cleaner.function = |data| {
+        cleaner.function = |data, _sender| {
             let mut r = CleanerResult {
                 files: 0,
                 folders: 0,
@@ -161,7 +162,7 @@ mod tests {
             r
         };
 
-        let result = run_custom_cleaner(&cleaner);
+        let result = run_custom_cleaner(&cleaner, None);
         assert!(result.working);
         assert_eq!(result.files, 1);
         assert_eq!(result.program, "TestProgram");

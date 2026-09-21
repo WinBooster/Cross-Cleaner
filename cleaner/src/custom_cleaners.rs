@@ -78,7 +78,12 @@ macro_rules! custom_glob_cleaner {
 
         fn __custom_glob_wrapper(
             data: &$crate::database::structures::CustomCleaner,
+            sender: Option<tokio::sync::mpsc::Sender<String>>,
         ) -> $crate::database::structures::CleanerResult {
+            use std::sync::atomic::{AtomicU64, Ordering};
+            use rayon::iter::IntoParallelIterator;
+            use rayon::iter::ParallelIterator;
+
             let mut result = $crate::database::structures::CleanerResult {
                 files: 0,
                 folders: 0,
@@ -90,22 +95,52 @@ macro_rules! custom_glob_cleaner {
                 sub_category: data.sub_category.clone(),
             };
 
-            let entries = match ::glob::glob(&data.path) {
-                Ok(g) => g,
+            let entries: Vec<std::path::PathBuf> = match ::glob::glob(&data.path) {
+                Ok(g) => g.filter_map(Result::ok).collect(),
                 Err(_) => return result,
             };
 
-            for entry in entries {
-                let Ok(entry_path) = entry else { continue };
+            let total = entries.len();
+            if total == 0 {
+                return result;
+            }
+
+            if let Some(ref s) = sender {
+                let _ = s.blocking_send(format!("Compressing {} files...", total));
+            }
+
+            let completed = AtomicU64::new(0);
+            let total_bytes = AtomicU64::new(0);
+            let total_files = AtomicU64::new(0);
+            let total_folders = AtomicU64::new(0);
+
+            entries.into_par_iter().for_each(|entry_path| {
                 if let Ok(stats) = __custom_glob_entry(&entry_path, &data.args) {
                     if stats.files > 0 || stats.folders > 0 || stats.bytes > 0 {
-                        result.working = true;
-                        result.files += stats.files;
-                        result.folders += stats.folders;
-                        result.bytes += stats.bytes;
+                        total_files.fetch_add(stats.files, Ordering::Relaxed);
+                        total_folders.fetch_add(stats.folders, Ordering::Relaxed);
+                        total_bytes.fetch_add(stats.bytes, Ordering::Relaxed);
                     }
                 }
-            }
+
+                let cur = completed.fetch_add(1, Ordering::Relaxed) + 1;
+                if cur % 5 == 0 || cur == total as u64 {
+                    let bytes = total_bytes.load(Ordering::Relaxed);
+                    if let Some(ref s) = sender {
+                        let _ = s.blocking_send(format!(
+                            "Compressing {}/{} files... {}",
+                            cur,
+                            total as u64,
+                            $crate::database::utils::get_file_size_string(bytes)
+                        ));
+                    }
+                }
+            });
+
+            result.files = total_files.load(Ordering::Relaxed);
+            result.folders = total_folders.load(Ordering::Relaxed);
+            result.bytes = total_bytes.load(Ordering::Relaxed);
+            result.working = result.files > 0 || result.folders > 0;
 
             result
         }
@@ -199,7 +234,7 @@ pub fn register_all() {
     // from Visual Studio ApplicationPrivateSettings.xml
     #[cfg(windows)]
     let _ = custom_glob_cleaner! {
-        id: "vs_code_containers_offline",
+        id: "VSCode clearing recent projects",
         program: "Visual Studio",
         category: "LastActivity",
         sub_category: "",
@@ -213,7 +248,7 @@ pub fn register_all() {
     // Removes the FileLists section (recent files list) from dnSpy.xml
     #[cfg(windows)]
     let _ = custom_glob_cleaner! {
-        id: "dnspy_recent_files",
+        id: "dnSpy clearing recent files",
         program: "dnSpy",
         category: "LastActivity",
         sub_category: "",
@@ -221,6 +256,34 @@ pub fn register_all() {
         glob: "{drive}/Users/{username}/AppData/Roaming/dnSpy/dnSpy.xml",
         |path| {
             remove_dnspy_file_lists(path)
+        }
+    };
+
+    // Image optimizer: Pictures top-level
+    #[cfg(windows)]
+    let _ = custom_glob_cleaner! {
+        id: "Optimize pictures",
+        program: "Image Optimize",
+        category: "Images",
+        sub_category: "Compress",
+        os: ["windows"],
+        glob: "{drive}/Users/{username}/Pictures/*",
+        |path| {
+            crate::image_optimizer::optimize_single(path)
+        }
+    };
+
+    // Image optimizer: ShareX Screenshots recursive
+    #[cfg(windows)]
+    let _ = custom_glob_cleaner! {
+        id: "Optimize pictures in ShareX",
+        program: "Image Optimize",
+        category: "Images",
+        sub_category: "Compress",
+        os: ["windows"],
+        glob: "{drive}/Users/{username}/Documents/ShareX/Screenshots/**/*",
+        |path| {
+            crate::image_optimizer::optimize_single(path)
         }
     };
 }

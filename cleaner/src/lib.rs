@@ -7,6 +7,7 @@ use tokio::io;
 use tokio::sync::Semaphore;
 
 pub mod custom_cleaners;
+pub mod image_optimizer;
 
 // INFO: Re-export so macro_rules! ($crate::database::...) resolves in any consumer crate
 pub use database;
