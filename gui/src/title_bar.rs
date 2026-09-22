@@ -147,9 +147,10 @@ pub fn title_bar(
                                 sounds::click();
                                 *settings_clicked.borrow_mut() = true;
                             }
-                            let icon = egui::Image::from_texture(
-                                egui::load::SizedTexture::new(tex.id(), tex.size_vec2()),
-                            )
+                            let icon = egui::Image::from_texture(egui::load::SizedTexture::new(
+                                tex.id(),
+                                tex.size_vec2(),
+                            ))
                             .fit_to_exact_size(egui::vec2(16.0, 16.0))
                             .tint(ui.visuals().text_color());
                             ui.put(

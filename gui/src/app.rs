@@ -1247,7 +1247,7 @@ impl eframe::App for MyApp {
                             changed = true;
                         }
                     });
-					
+
                     if changed {
                         crate::config::update(|c| *c = cfg);
                     }
