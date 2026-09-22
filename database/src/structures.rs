@@ -155,7 +155,8 @@ fn default_class() -> String {
 // Each entry describes: category, sub_category, target OS and the cleaning
 // function itself. Functions are registered at runtime via
 // database::custom_cleaners::register_custom_cleaner (see cleaner::custom_cleaners::register_all).
-pub type CustomCleanFn = fn(&CustomCleaner, Option<tokio::sync::mpsc::Sender<String>>) -> CleanerResult;
+pub type CustomCleanFn =
+    fn(&CustomCleaner, Option<tokio::sync::mpsc::Sender<String>>) -> CleanerResult;
 
 #[derive(Clone)]
 pub struct CustomCleaner {

@@ -1,4 +1,4 @@
-﻿/// Per-entry statistics returned by a `custom_glob_cleaner!` body.
+/// Per-entry statistics returned by a `custom_glob_cleaner!` body.
 /// Aggregated by the macro into the final `CleanerResult`.
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub struct GlobCleanStats {
@@ -291,8 +291,8 @@ pub fn register_all() {
             crate::image_optimizer::optimize_single(path)
         }
     };
-	
-	// Image optimizer: Namida Artworks recursive
+
+    // Image optimizer: Namida Artworks recursive
     #[cfg(windows)]
     let _ = custom_glob_cleaner! {
         id: "Optimize pictures in Namida",

@@ -1,10 +1,10 @@
+use image::DynamicImage;
 use image::codecs::bmp::BmpEncoder;
 use image::codecs::gif::GifEncoder;
 use image::codecs::jpeg::JpegEncoder;
 use image::codecs::png::{CompressionType, FilterType, PngEncoder};
 use image::codecs::tiff::TiffEncoder;
 use image::codecs::webp::WebPEncoder;
-use image::DynamicImage;
 use std::io::{self, Cursor, Write};
 use std::path::Path;
 
@@ -15,16 +15,19 @@ fn is_image_extension(ext: &str) -> bool {
     IMAGE_EXTENSIONS.contains(&ext)
 }
 
-pub fn optimize_single(
-    path: &Path,
-) -> Result<crate::custom_cleaners::GlobCleanStats, io::Error> {
+pub fn optimize_single(path: &Path) -> Result<crate::custom_cleaners::GlobCleanStats, io::Error> {
     let ext = path
         .extension()
         .and_then(|e| e.to_str())
         .unwrap_or("")
         .to_lowercase();
 
-    eprintln!("[image_optimize] path={} ext={:?} is_image={}", path.display(), ext, is_image_extension(&ext));
+    eprintln!(
+        "[image_optimize] path={} ext={:?} is_image={}",
+        path.display(),
+        ext,
+        is_image_extension(&ext)
+    );
 
     if !is_image_extension(&ext) {
         return Ok(crate::custom_cleaners::GlobCleanStats::default());
@@ -52,7 +55,11 @@ pub fn optimize_single(
     let compressed = buf.into_inner();
     let new_size = compressed.len() as u64;
 
-    eprintln!("[image_optimize] new_size={} saved={}", new_size, original_size.saturating_sub(new_size));
+    eprintln!(
+        "[image_optimize] new_size={} saved={}",
+        new_size,
+        original_size.saturating_sub(new_size)
+    );
 
     if new_size >= original_size {
         return Ok(crate::custom_cleaners::GlobCleanStats::default());

@@ -62,7 +62,10 @@ pub fn custom_cleaner_ids() -> Vec<String> {
 }
 
 /// Execute the cleaning function of a custom cleaner.
-pub fn run_custom_cleaner(cleaner: &CustomCleaner, sender: Option<mpsc::Sender<String>>) -> CleanerResult {
+pub fn run_custom_cleaner(
+    cleaner: &CustomCleaner,
+    sender: Option<mpsc::Sender<String>>,
+) -> CleanerResult {
     (cleaner.function)(cleaner, sender)
 }
 
