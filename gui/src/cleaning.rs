@@ -75,6 +75,7 @@ pub async fn work(
     }
 
     // INFO: Run built-in custom cleanings (functions defined in cleaner::custom_cleaners)
+    let mut sequential_cleaners: Vec<CustomCleaner> = Vec::new();
     for data in custom_database.iter() {
         let eff = effective_sub("", &data.sub_category);
         if let Some(subs) = selected_map.get(&data.category) {
@@ -83,28 +84,33 @@ pub async fn work(
                 && !excluded_program_categories
                     .contains(&(data.program.clone(), data.category.clone()))
             {
-                let data = data.clone();
-                let sender = progress_sender.clone();
-                let _name_msg = data.id.clone();
-                let sem = sem.clone();
-                futures.push(Box::pin(async move {
-                    let _p = sem.acquire_owned().await.unwrap();
-                    let progress_for_cleaner = sender.clone();
-                    tokio::task::spawn_blocking(move || {
-                        database::custom_cleaners::run_custom_cleaner(&data, Some(progress_for_cleaner))
-                    })
-                    .await
-                    .unwrap_or_else(|_| CleanerResult {
-                        files: 0,
-                        folders: 0,
-                        bytes: 0,
-                        working: false,
-                        path: String::new(),
-                        program: String::new(),
-                        category: String::new(),
-                        sub_category: String::new(),
-                    })
-                }));
+                if data.sequential {
+                    sequential_cleaners.push(data.clone());
+                } else {
+                    let data = data.clone();
+                    let sender = progress_sender.clone();
+                    let name_msg = data.id.clone();
+                    let sem = sem.clone();
+                    futures.push(Box::pin(async move {
+                        let _p = sem.acquire_owned().await.unwrap();
+                        let _ = sender.send(format!("Cleaning: {}", name_msg)).await;
+                        let progress_for_cleaner = sender.clone();
+                        tokio::task::spawn_blocking(move || {
+                            database::custom_cleaners::run_custom_cleaner(&data, Some(progress_for_cleaner))
+                        })
+                        .await
+                        .unwrap_or_else(|_| CleanerResult {
+                            files: 0,
+                            folders: 0,
+                            bytes: 0,
+                            working: false,
+                            path: String::new(),
+                            program: String::new(),
+                            category: String::new(),
+                            sub_category: String::new(),
+                        })
+                    }));
+                }
             }
         }
     }
@@ -136,7 +142,7 @@ pub async fn work(
         }));
     }
 
-    let total_tasks = futures.len();
+    let total_tasks = futures.len() + sequential_cleaners.len();
     let _ = progress_sender
         .send(format!("PROGRESS:0:{}:0", total_tasks))
         .await;
@@ -171,6 +177,64 @@ pub async fn work(
         }
 
         // Send only progress and cleared bytes; the program name was already sent before cleaning
+        let _ = progress_sender
+            .send(format!(
+                "PROGRESS:{}:{}:{}",
+                current_task, total_tasks, bytes_cleared
+            ))
+            .await;
+    }
+
+    // Run sequential cleaners one at a time (image optimizers, etc.)
+    for data in sequential_cleaners {
+        current_task += 1;
+        let _ = progress_sender
+            .send(format!("Cleaning: {}", data.id))
+            .await;
+        let result = tokio::task::spawn_blocking({
+            let sender = progress_sender.clone();
+            move || {
+                database::custom_cleaners::run_custom_cleaner(&data, Some(sender))
+            }
+        })
+        .await
+        .unwrap_or_else(|_| CleanerResult {
+            files: 0,
+            folders: 0,
+            bytes: 0,
+            working: false,
+            path: String::new(),
+            program: String::new(),
+            category: String::new(),
+            sub_category: String::new(),
+        });
+
+        if result.working {
+            bytes_cleared += result.bytes;
+            removed_files += result.files;
+            removed_directories += result.folders;
+
+            if let Some(cleared) = cleared_programs
+                .iter_mut()
+                .find(|c| c.program == result.program)
+            {
+                cleared.removed_bytes += result.bytes;
+                cleared.removed_files += result.files;
+                cleared.removed_directories += result.folders;
+                if !cleared.affected_categories.contains(&result.category) {
+                    cleared.affected_categories.push(result.category);
+                }
+            } else {
+                cleared_programs.push(Cleared {
+                    program: result.program,
+                    removed_bytes: result.bytes,
+                    removed_files: result.files,
+                    removed_directories: result.folders,
+                    affected_categories: vec![result.category],
+                });
+            }
+        }
+
         let _ = progress_sender
             .send(format!(
                 "PROGRESS:{}:{}:{}",

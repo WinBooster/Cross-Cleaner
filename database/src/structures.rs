@@ -173,6 +173,9 @@ pub struct CustomCleaner {
     pub os: Vec<String>,
     /// The cleaning function that performs the custom cleanup
     pub function: CustomCleanFn,
+    /// If true, this cleaner runs sequentially (not concurrent with others)
+    /// so that its progress messages don't mix with other cleaners.
+    pub sequential: bool,
 }
 
 impl CustomCleaner {

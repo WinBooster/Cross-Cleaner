@@ -40,13 +40,14 @@ impl GlobCleanStats {
 ///
 /// Forms:
 /// ```ignore
-/// // Full: with os filter and args
+/// // Full: with os filter, args, and sequential flag
 /// let _ = cleaner::custom_glob_cleaner! {
 ///     id: "my_cleaner",
 ///     program: "Custom: My cleaner",
 ///     category: "Logs",
 ///     sub_category: "Logs",
 ///     os: ["windows"],                    // [] = all OS
+///     sequential: false,                  // true = runs one at a time
 ///     args: ["7"],                        // [] = no args
 ///     glob: "C:/ProgramData/MyApp/*.tmp",
 ///     |path, args| {
@@ -67,7 +68,7 @@ macro_rules! custom_glob_cleaner {
         category: $category:expr,
         sub_category: $sub_category:expr,
         os: [$($os:expr),* $(,)?],
-        args: [$($arg:expr),* $(,)?],
+        sequential: $seq:expr,
         glob: $pattern:expr,
         |$path:ident, $args:ident| $body:block
     ) => {{
@@ -106,7 +107,7 @@ macro_rules! custom_glob_cleaner {
             }
 
             if let Some(ref s) = sender {
-                let _ = s.blocking_send(format!("Compressing {} files...", total));
+                let _ = s.blocking_send(format!("Found {} files, compressing...", total));
             }
 
             let completed = AtomicU64::new(0);
@@ -152,12 +153,35 @@ macro_rules! custom_glob_cleaner {
                 category: String::from($category),
                 sub_category: String::from($sub_category),
                 path: String::from($pattern),
-                args: vec![$(String::from($arg)),*],
+                args: vec![],
                 os: vec![$(String::from($os)),*],
                 function: __custom_glob_wrapper,
+                sequential: $seq,
             },
         )
     }};
+
+    (
+        id: $id:expr,
+        program: $program:expr,
+        category: $category:expr,
+        sub_category: $sub_category:expr,
+        os: [$($os:expr),* $(,)?],
+        sequential: $seq:expr,
+        glob: $pattern:expr,
+        |$path:ident| $body:block
+    ) => {
+        $crate::custom_glob_cleaner! {
+            id: $id,
+            program: $program,
+            category: $category,
+            sub_category: $sub_category,
+            os: [$($os),*],
+            sequential: $seq,
+            glob: $pattern,
+            |$path, __custom_glob_ignored_args| $body
+        }
+    };
 
     (
         id: $id:expr,
@@ -174,30 +198,9 @@ macro_rules! custom_glob_cleaner {
             category: $category,
             sub_category: $sub_category,
             os: [$($os),*],
-            args: [],
+            sequential: false,
             glob: $pattern,
             |$path, __custom_glob_ignored_args| $body
-        }
-    };
-
-    (
-        id: $id:expr,
-        program: $program:expr,
-        category: $category:expr,
-        sub_category: $sub_category:expr,
-        args: [$($arg:expr),* $(,)?],
-        glob: $pattern:expr,
-        |$path:ident, $args:ident| $body:block
-    ) => {
-        $crate::custom_glob_cleaner! {
-            id: $id,
-            program: $program,
-            category: $category,
-            sub_category: $sub_category,
-            os: [],
-            args: [$($arg),*],
-            glob: $pattern,
-            |$path, $args| $body
         }
     };
 
@@ -215,7 +218,7 @@ macro_rules! custom_glob_cleaner {
             category: $category,
             sub_category: $sub_category,
             os: [],
-            args: [],
+            sequential: false,
             glob: $pattern,
             |$path, __custom_glob_ignored_args| $body
         }
@@ -267,6 +270,7 @@ pub fn register_all() {
         category: "Images",
         sub_category: "Compress",
         os: ["windows"],
+        sequential: true,
         glob: "{drive}\\Users\\{username}\\Pictures\\**",
         |path| {
             crate::image_optimizer::optimize_single(path)
@@ -281,13 +285,14 @@ pub fn register_all() {
         category: "Images",
         sub_category: "Compress",
         os: ["windows"],
+        sequential: true,
         glob: "{drive}\\Users\\{username}\\Documents\\ShareX\\Screenshots\\**",
         |path| {
             crate::image_optimizer::optimize_single(path)
         }
     };
 	
-	// Image optimizer: Namida Screenshots recursive
+	// Image optimizer: Namida Artworks recursive
     #[cfg(windows)]
     let _ = custom_glob_cleaner! {
         id: "Optimize pictures in Namida",
@@ -295,6 +300,7 @@ pub fn register_all() {
         category: "Images",
         sub_category: "Compress",
         os: ["windows"],
+        sequential: true,
         glob: "{drive}\\Users\\{username}\\.namida\\Artworks\\*",
         |path| {
             crate::image_optimizer::optimize_single(path)

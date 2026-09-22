@@ -104,6 +104,7 @@ mod tests {
             path: String::from("{username}/test.log"),
             args: vec![],
             os: vec![],
+            sequential: false,
             function: |_, _| CleanerResult {
                 files: 0,
                 folders: 0,
