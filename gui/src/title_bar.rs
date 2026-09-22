@@ -140,22 +140,26 @@ pub fn title_bar(
                             *back_clicked.borrow_mut() = true;
                         }
                         paint_back_glyph(ui, back.rect);
-                        ui.add_space(0.0);
                     } else if show_settings {
                         if let Some(tex) = settings_texture {
-                            let settings_image = egui::Image::from_texture(
-                                egui::load::SizedTexture::new(tex.id(), tex.size_vec2()),
-                            )
-                            .fit_to_exact_size(egui::vec2(16.0, 16.0))
-                            .tint(ui.visuals().text_color())
-                            .sense(egui::Sense::click());
-                            let settings_resp =
-                                ui.add_sized(egui::vec2(16.0, 16.0), settings_image);
-                            if settings_resp.clicked() {
+                            let settings = title_bar_button(ui);
+                            if settings.clicked() {
                                 sounds::click();
                                 *settings_clicked.borrow_mut() = true;
                             }
-                            settings_resp.on_hover_text("Settings");
+                            let icon = egui::Image::from_texture(
+                                egui::load::SizedTexture::new(tex.id(), tex.size_vec2()),
+                            )
+                            .fit_to_exact_size(egui::vec2(16.0, 16.0))
+                            .tint(ui.visuals().text_color());
+                            ui.put(
+                                egui::Rect::from_center_size(
+                                    settings.rect.center(),
+                                    egui::vec2(16.0, 16.0),
+                                ),
+                                icon,
+                            );
+                            settings.on_hover_text("Settings");
                         }
                     }
                     ui.add_space(2.0);

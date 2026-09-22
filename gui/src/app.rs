@@ -27,6 +27,7 @@ use crate::title_bar::{TITLE_BAR_HEIGHT, paint_window_border, title_bar};
 pub enum Page {
     Main,
     ProgramSelection,
+    Clearing,
     Results,
     Settings,
 }
@@ -751,7 +752,7 @@ impl eframe::App for MyApp {
                     .fill(ui.visuals().panel_fill),
             )
             .show(ui, |ui| {
-                if self.task_handle.is_some() {
+                if self.current_page == Page::Clearing {
                     self.set_window_size(
                         &ctx,
                         egui::Vec2::new(560.0, 100.0 + TITLE_BAR_HEIGHT),
@@ -1177,7 +1178,7 @@ impl eframe::App for MyApp {
                             });
                             self.task_handle = Some(handle);
 
-                            self.current_page = Page::Main;
+                            self.current_page = Page::Clearing;
                             // clear selection
                             for cat in &mut self.categories {
                                 cat.selected.clear();
@@ -1187,13 +1188,8 @@ impl eframe::App for MyApp {
                 } else if self.current_page == Page::Settings {
                     self.set_window_size(
                         &ctx,
-                        egui::Vec2::new(500.0, 190.0 + TITLE_BAR_HEIGHT),
+                        egui::Vec2::new(500.0, 120.0 + TITLE_BAR_HEIGHT),
                     );
-
-                    ui.vertical_centered(|ui| {
-                        ui.heading("Settings");
-                    });
-                    ui.separator();
 
                     let mut cfg = crate::config::get();
                     let mut changed = false;
@@ -1251,20 +1247,7 @@ impl eframe::App for MyApp {
                             changed = true;
                         }
                     });
-
-                    ui.add_space(8.0);
-                    ui.separator();
-                    ui.add_space(4.0);
-                    ui.horizontal(|ui| {
-                        ui.add_space(4.0);
-                        if ui
-                            .add_sized([ui.available_width(), 25.0], egui::Button::new("Test click"))
-                            .clicked()
-                        {
-                            sounds::click();
-                        }
-                    });
-
+					
                     if changed {
                         crate::config::update(|c| *c = cfg);
                     }
