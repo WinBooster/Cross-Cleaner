@@ -220,16 +220,9 @@ jobs:
             ![Downloads](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}/total) ![Version](https://img.shields.io/badge/version-${{ env.APP_VERSION }}-blue) ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux|%20MacOS-orange)
 
             ## ✨ What's New
-
-            ### 🪟 Windows Enhancements
-            - **Jitsi** Added documentation clearing
-            - **Steam** Improved logs clearing
-            - **Windhawk** Added logs, cache clearing
-            - **ShareX** Added image compression 
-            - **Windows** Added image compression
             
             ### 🛠 Technical Updates
-            - Added sounds volume settings
+            - Added updater and auto update setting
             
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
