@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.3.6.1
+# Windows Clearing Programs Catalog v2.0.3.7.1
 **Total categories in database:** 12
 
-**Total programs in database:** 254
+**Total programs in database:** 255
 
-**Total pathes in database:** 551
+**Total pathes in database:** 555
 
 ## AI
 
@@ -104,20 +104,20 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | DBeaver | Documentation |
+| 1 | [DBeaver](https://dbeaver.io) | Documentation |
 
 
 ## Developing
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Anaconda | Documentation, Logs |
+| 1 | [Anaconda](https://www.anaconda.com/download) | Documentation, Logs |
 | 2 | [BoxedAppPacker](https://www.boxedapp.com/boxedapppacker/download.html) | Documentation |
-| 3 | CMake | Documentation |
+| 3 | [CMake](https://cmake.org) | Documentation |
 | 4 | [Docker](https://www.docker.com/products/docker-desktop) | Logs |
 | 5 | [DotNet](https://dotnet.microsoft.com/en-us/download) | Logs |
 | 6 | [Enigma Virtual Box](https://enigmaprotector.com/en/downloads.html) | Documentation |
-| 7 | FreeCAD | Documentation, Logs |
+| 7 | [FreeCAD](https://www.freecad.org) | Documentation, Logs |
 | 8 | [Ghidra](https://github.com/NationalSecurityAgency/ghidra) | Logs |
 | 9 | [Git](https://git-scm.com/downloads) | Documentation |
 | 10 | [GitHub Desktop](https://desktop.github.com/download) | Logs |
@@ -146,7 +146,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | TreeSize | Documentation |
+| 1 | [TreeSize](https://www.jam-software.com/treesize) | Documentation |
 
 
 ## Driver
@@ -231,13 +231,14 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [Greenshot](https://github.com/greenshot/greenshot) | Logs |
-| 2 | [ImageGlass](https://imageglass.org) | Cache, Documentation |
-| 3 | [InkSpace](https://inkscape.org) | Documentation, Logs |
-| 4 | [Magpie](https://github.com/Blinue/Magpie) | Cache, Logs |
-| 5 | [Paint.NET](https://paint.net) | Documentation |
-| 6 | [ShareX](https://getsharex.com/downloads) | Backups, Images, Logs |
-| 7 | [Tonfotos Telegram Connector](https://tonfotos.com) | Images |
+| 1 | [FastStone Image Viewer](https://www.faststone.org) | Documentation |
+| 2 | [Greenshot](https://github.com/greenshot/greenshot) | Logs |
+| 3 | [ImageGlass](https://imageglass.org) | Cache, Documentation |
+| 4 | [InkSpace](https://inkscape.org) | Documentation, Logs |
+| 5 | [Magpie](https://github.com/Blinue/Magpie) | Cache, Logs |
+| 6 | [Paint.NET](https://paint.net) | Documentation |
+| 7 | [ShareX](https://getsharex.com/downloads) | Backups, Images, Logs |
+| 8 | [Tonfotos Telegram Connector](https://tonfotos.com) | Images |
 
 
 ## Messanger
@@ -248,12 +249,13 @@
 | 2 | [Element](https://element.io) | Documentation, Logs |
 | 3 | [Fluxer](http://fluxer.app) | Documentation |
 | 4 | [Guilded](https://www.guilded.gg) | Logs |
-| 5 | [MAX](https://max.ru) | Cache |
-| 6 | [Signal](https://signal.org) | Cache, Logs |
-| 7 | [Telegram](https://desktop.telegram.org) | Accounts, Cache, Logs |
-| 8 | [Thunderbird](https://www.thunderbird.net) | Crashes |
-| 9 | [Vesktop](https://vesktop.dev) | Documentation |
-| 10 | [qTox](https://qtox.github.io) | Logs |
+| 5 | [Jitsi](https://desktop.jitsi.org) | Documentation |
+| 6 | [MAX](https://max.ru) | Cache |
+| 7 | [Signal](https://signal.org) | Cache, Logs |
+| 8 | [Telegram](https://desktop.telegram.org) | Accounts, Cache, Logs |
+| 9 | [Thunderbird](https://www.thunderbird.net) | Crashes |
+| 10 | [Vesktop](https://vesktop.dev) | Documentation |
+| 11 | [qTox](https://qtox.github.io) | Logs |
 
 
 ## Minecraft Launcher
@@ -295,7 +297,7 @@
 | 1 | [CrystalCry](https://crystalcry.org) | Logs |
 | 2 | [HiAlgo Boost](https://www.hialgo.com) | Documentation, Logs |
 | 3 | [Mem Reduct](https://github.com/henrypp/memreduct) | Documentation |
-| 4 | WhySoSlow | Documentation |
+| 4 | [WhySoSlow](https://www.resplendence.com/whysoslow) | Documentation |
 | 5 | [Winutil](https://github.com/ChrisTitusTech/winutil) | Logs |
 | 6 | [ССleaner](https://www.ccleaner.com) | Logs |
 
@@ -436,7 +438,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Bulk Crap Uninstaller | Documentation, Logs |
+| 1 | [Bulk Crap Uninstaller](https://github.com/BCUninstaller/Bulk-Crap-Uninstaller) | Documentation, Logs |
 
 
 ## Utility
@@ -447,12 +449,11 @@
 | 2 | [CPU-Z](https://www.cpuid.com) | Documentation |
 | 3 | [CrystalDiskInfo](https://crystalmark.info) | Documentation |
 | 4 | [Everything](https://www.voidtools.com) | Documentation, LastActivity |
-| 5 | FastStone Image Viewer | Documentation |
-| 6 | [HWiNFO](https://www.hwinfo.com) | Documentation |
-| 7 | [MiniBin](https://github.com/king-tri-ton/minibin) | Logs |
-| 8 | [PowerToys](https://github.com/microsoft/PowerToys) | Documentation |
-| 9 | [Unlocker](http://www.emptyloop.com/unlocker) | Documentation |
-| 10 | [Windhawk](https://windhawk.net) | Documentation |
+| 5 | [HWiNFO](https://www.hwinfo.com) | Documentation |
+| 6 | [MiniBin](https://github.com/king-tri-ton/minibin) | Logs |
+| 7 | [PowerToys](https://github.com/microsoft/PowerToys) | Documentation |
+| 8 | [Unlocker](http://www.emptyloop.com/unlocker) | Documentation |
+| 9 | [Windhawk](https://windhawk.net) | Backups, Cache, Documentation, Logs |
 
 
 ## VPN
@@ -500,3 +501,5 @@
 | --- | --- | --- | --- |
 | 1 | Visual Studio | LastActivity | windows |
 | 2 | dnSpy | LastActivity | windows |
+| 3 | Windows | Images | windows |
+| 4 | ShareX | Images | windows |
