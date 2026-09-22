@@ -1,4 +1,4 @@
-# Windows Clearing Programs Catalog v2.0.3.7.1
+# Windows Clearing Programs Catalog v2.0.3.7.2
 **Total categories in database:** 12
 
 **Total programs in database:** 255
