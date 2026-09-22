@@ -661,6 +661,35 @@ impl eframe::App for MyApp {
                 Ok(check) => {
                     self.update_receiver = None;
                     if let Ok(Some(release)) = check {
+                        // Auto-update: if enabled, launch updater silently immediately (Windows only)
+                        #[cfg(windows)]
+                        if crate::config::get().auto_update {
+                            let current = get_version();
+                            let try_spawn = || -> Option<()> {
+                                let exe = std::env::current_exe().ok()?;
+                                let dir = exe.parent()?;
+                                // Match names from release.yml: updater.exe (local) + Windows-updater.exe (release asset)
+                                let updater = ["updater.exe", "Windows-updater.exe"]
+                                    .into_iter()
+                                    .map(|n| dir.join(n))
+                                    .find(|p| p.exists())?;
+                                let _ = std::process::Command::new(updater)
+                                    .args([
+                                        "--mode",
+                                        "silent",
+                                        "--yes",
+                                        "--current-version",
+                                        current,
+                                        "--asset",
+                                        "Cross_Cleaner_Setup.exe",
+                                    ])
+                                    .spawn()
+                                    .ok()?;
+                                Some(())
+                            };
+                            // If spawn succeeded we still show notification as feedback; if failed, fall back to notification
+                            let _ = try_spawn();
+                        }
                         self.notifications.push(UpdateNotification::new(release));
                         ctx.request_repaint();
                     }

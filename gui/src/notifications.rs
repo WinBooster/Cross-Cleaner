@@ -8,7 +8,10 @@
 
 use eframe::egui;
 
+use database::get_version;
 use database::version::NewRelease;
+#[cfg(windows)]
+use std::path::PathBuf;
 
 /// How long a notification stays visible before it starts fading out.
 const NOTIFICATION_LIFETIME: std::time::Duration = std::time::Duration::from_secs(15);
@@ -144,6 +147,55 @@ impl UpdateNotification {
     }
 }
 
+#[cfg(windows)]
+fn has_updater_next_to_exe() -> bool {
+    const CANDIDATES: &[&str] = &["updater.exe", "Windows-updater.exe"];
+    if let Ok(exe) = std::env::current_exe()
+        && let Some(dir) = exe.parent()
+    {
+        for name in CANDIDATES {
+            if dir.join(name).exists() {
+                return true;
+            }
+        }
+    }
+    false
+}
+
+#[cfg(windows)]
+fn find_updater() -> Option<PathBuf> {
+    // Names as published in release.yml (windows-binaries) + local cargo name
+    const CANDIDATES: &[&str] = &["updater.exe", "Windows-updater.exe"];
+    if let Ok(exe) = std::env::current_exe()
+        && let Some(dir) = exe.parent()
+    {
+        for name in CANDIDATES {
+            let candidate = dir.join(name);
+            if candidate.exists() {
+                return Some(candidate);
+            }
+        }
+    }
+    // Fallback: Program Files location (when GUI is run from elsewhere)
+    if let Ok(pf) = std::env::var("ProgramFiles") {
+        for name in CANDIDATES {
+            let p = PathBuf::from(pf.clone()).join(format!("Cross Cleaner/{name}"));
+            if p.exists() {
+                return Some(p);
+            }
+        }
+    }
+    if let Ok(pf) = std::env::var("ProgramFiles(x86)") {
+        for name in CANDIDATES {
+            let p = PathBuf::from(pf.clone()).join(format!("Cross Cleaner/{name}"));
+            if p.exists() {
+                return Some(p);
+            }
+        }
+    }
+    None
+}
+
 impl Notification for UpdateNotification {
     fn id(&self) -> egui::Id {
         egui::Id::new("update_notification")
@@ -163,8 +215,39 @@ impl Notification for UpdateNotification {
             });
             ui.add_space(4.0);
             ui.horizontal(|ui| {
-                // Left-to-right so the buttons read Download, Changelog; the
-                // row hugs the left edge of the (content-sized) notification.
+                // Install — visible only if updater.exe is next to the GUI exe (release.yml contract).
+                #[cfg(windows)]
+                {
+                    if has_updater_next_to_exe() && ui.button("Install").clicked() {
+                        crate::sounds::click();
+                        if let Some(updater) = find_updater() {
+                            let current = get_version();
+                            let res = std::process::Command::new(&updater)
+                                .args([
+                                    "--mode",
+                                    "silent",
+                                    "--yes",
+                                    "--current-version",
+                                    current,
+                                    "--asset",
+                                    "Cross_Cleaner_Setup.exe",
+                                ])
+                                .spawn();
+                            if res.is_err() {
+                                crate::title_bar::open_in_browser(&self.release.url);
+                            } else {
+                                action = NotificationAction::Close;
+                            }
+                        } else {
+                            crate::title_bar::open_in_browser(&self.release.url);
+                        }
+                    }
+                }
+                #[cfg(not(windows))]
+                {
+                    // No updater on non-Windows — Install just opens browser fallback
+                    let _ = &self.release;
+                }
                 if ui.button("Download").clicked() {
                     crate::sounds::click();
                     // eframe's native backend ignores egui's OpenUrl command,

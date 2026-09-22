@@ -74,33 +74,33 @@ fn get() -> Option<&'static Sounds> {
 /// Button click.
 pub fn click() {
     if let Some(s) = get() {
-        s.play(&CLICK_BYTES, config::get().click_volume);
+        s.play(&CLICK_BYTES, config::get().volume.click);
     }
 }
 
 /// Checkbox became checked.
 pub fn check() {
     if let Some(s) = get() {
-        s.play(&CHECK_BYTES, config::get().check_volume);
+        s.play(&CHECK_BYTES, config::get().volume.checkbox);
     }
 }
 
 /// Checkbox became unchecked.
 pub fn uncheck() {
     if let Some(s) = get() {
-        s.play(&UNCHECK_BYTES, config::get().check_volume);
+        s.play(&UNCHECK_BYTES, config::get().volume.checkbox);
     }
 }
 
 /// Cleaning finished.
 pub fn done() {
     if let Some(s) = get() {
-        s.play(&DONE_BYTES, config::get().done_volume);
+        s.play(&DONE_BYTES, config::get().volume.done);
     }
 }
 
 pub fn pop() {
     if let Some(s) = get() {
-        s.play(&POP_BYTES, config::get().sound_volume);
+        s.play(&POP_BYTES, config::get().volume.popup);
     }
 }

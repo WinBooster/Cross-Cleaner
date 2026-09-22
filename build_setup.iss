@@ -23,6 +23,9 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 UninstallDisplayIcon={app}\{#MyAppExeName}
+CloseApplications=yes
+CloseApplicationsFilter=*.exe,*.dll,*.so
+RestartApplications=yes
 ; "ArchitecturesAllowed=x64compatible" specifies that Setup cannot run on anything but x64 and Windows 11 on Arm.
 ArchitecturesAllowed=x64compatible
 ; "ArchitecturesInstallIn64BitMode=x64compatible" requests that the install be done in "64-bit mode" on x64 or Windows 11 on Arm.
@@ -49,7 +52,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "target\release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "target\release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion closeapplications
+Source: "target\release\updater.exe"; DestDir: "{app}"; Flags: ignoreversion closeapplications
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files.
 
 [Icons]

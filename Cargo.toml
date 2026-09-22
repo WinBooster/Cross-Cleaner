@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["gui"]
+members = ["gui", "updater"]
 
 # wgpu-hal 30.0.1 requires windows 0.62, but the crates.io gpu-allocator 0.28.0
 # release resolves to windows 0.61 (pulled in by notify-rust -> tauri-winrt-notification).
