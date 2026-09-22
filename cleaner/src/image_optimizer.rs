@@ -74,36 +74,30 @@ pub fn optimize_single(path: &Path) -> Result<crate::custom_cleaners::GlobCleanS
 
 fn encode_png(w: &mut impl Write, img: &DynamicImage) -> io::Result<()> {
     let encoder = PngEncoder::new_with_quality(w, CompressionType::Best, FilterType::Adaptive);
-    img.write_with_encoder(encoder)
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, e))
+    img.write_with_encoder(encoder).map_err(io::Error::other)
 }
 
 fn encode_jpeg(w: &mut impl Write, img: &DynamicImage) -> io::Result<()> {
     let encoder = JpegEncoder::new_with_quality(w, JPEG_QUALITY);
-    img.write_with_encoder(encoder)
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, e))
+    img.write_with_encoder(encoder).map_err(io::Error::other)
 }
 
 fn encode_webp(w: &mut impl Write, img: &DynamicImage) -> io::Result<()> {
     let encoder = WebPEncoder::new_lossless(w);
-    img.write_with_encoder(encoder)
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, e))
+    img.write_with_encoder(encoder).map_err(io::Error::other)
 }
 
 fn encode_gif(w: &mut impl Write, img: &DynamicImage) -> io::Result<()> {
     let encoder = GifEncoder::new(w);
-    img.write_with_encoder(encoder)
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, e))
+    img.write_with_encoder(encoder).map_err(io::Error::other)
 }
 
 fn encode_bmp(w: &mut impl Write, img: &DynamicImage) -> io::Result<()> {
     let encoder = BmpEncoder::new(w);
-    img.write_with_encoder(encoder)
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, e))
+    img.write_with_encoder(encoder).map_err(io::Error::other)
 }
 
 fn encode_tiff(w: &mut Cursor<Vec<u8>>, img: &DynamicImage) -> io::Result<()> {
     let encoder = TiffEncoder::new(w);
-    img.write_with_encoder(encoder)
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, e))
+    img.write_with_encoder(encoder).map_err(io::Error::other)
 }

@@ -47,7 +47,7 @@ fn remove_file_sync(path: &Path) -> io::Result<u64> {
     } else {
         cap_std::fs::Dir::open_ambient_dir(parent, authority)?
     };
-    let meta = dir.symlink_metadata(&name)?;
+    let meta = dir.symlink_metadata(name)?;
     if meta.is_symlink() {
         return Err(io::Error::new(
             io::ErrorKind::InvalidInput,
@@ -58,7 +58,7 @@ fn remove_file_sync(path: &Path) -> io::Result<u64> {
         return Err(io::Error::new(io::ErrorKind::InvalidInput, "not a file"));
     }
     let len = meta.len();
-    dir.remove_file(&name)?;
+    dir.remove_file(name)?;
     Ok(len)
 }
 
@@ -201,24 +201,21 @@ fn clean_path_sync(path: &Path, data: &CleanerData) -> PathStats {
         }
     }
 
-    if data.remove_files {
-        if let Ok(b) = remove_file_sync(path) {
+    if data.remove_files
+        && let Ok(b) = remove_file_sync(path) {
             stats.add(1, 0, b);
         }
-    }
 
-    if data.remove_directories {
-        if let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf()) {
+    if data.remove_directories
+        && let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf()) {
             stats.add(f, fo, b);
         }
-    }
 
-    if data.remove_directory_after_clean {
-        if std::fs::remove_dir_all(path).is_ok() {
+    if data.remove_directory_after_clean
+        && std::fs::remove_dir_all(path).is_ok() {
             stats.folders += 1;
             stats.working = true;
         }
-    }
 
     stats
 }
@@ -242,10 +239,9 @@ async fn clean_one_path(path: PathBuf, data: Arc<CleanerData>) -> CleanerResult 
 
     // Every failure mode (join error, etc.) falls back to a non-working result,
     // matching the previous per-operation error handling.
-    let stats = match tokio::task::spawn_blocking(move || clean_path_sync(&path, &data)).await {
-        Ok(stats) => stats,
-        Err(_) => PathStats::default(),
-    };
+    let stats = tokio::task::spawn_blocking(move || clean_path_sync(&path, &data))
+        .await
+        .unwrap_or_default();
 
     CleanerResult {
         files: stats.files,

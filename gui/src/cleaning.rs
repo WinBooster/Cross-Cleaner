@@ -51,15 +51,14 @@ pub async fn work(
         let mut registry_matches: Vec<CleanerDataRegistry> = Vec::new();
         let _ = registry_database.for_each(|data| {
             let eff = effective_sub(&data.class, &data.sub_category);
-            if let Some(subs) = selected_map.get(&data.category) {
-                if subs.contains(&eff)
+            if let Some(subs) = selected_map.get(&data.category)
+                && subs.contains(&eff)
                     && !excluded_programs.contains(&data.program)
                     && !excluded_program_categories
                         .contains(&(data.program.clone(), data.category.clone()))
                 {
                     registry_matches.push(data);
                 }
-            }
         });
 
         for data in registry_matches {
@@ -78,8 +77,8 @@ pub async fn work(
     let mut sequential_cleaners: Vec<CustomCleaner> = Vec::new();
     for data in custom_database.iter() {
         let eff = effective_sub("", &data.sub_category);
-        if let Some(subs) = selected_map.get(&data.category) {
-            if subs.contains(&eff)
+        if let Some(subs) = selected_map.get(&data.category)
+            && subs.contains(&eff)
                 && !excluded_programs.contains(&data.program)
                 && !excluded_program_categories
                     .contains(&(data.program.clone(), data.category.clone()))
@@ -115,7 +114,6 @@ pub async fn work(
                     }));
                 }
             }
-        }
     }
 
     // INFO: Stream the database and keep only the selected entries. Each entry
@@ -123,15 +121,14 @@ pub async fn work(
     let mut database_matches: Vec<Arc<CleanerData>> = Vec::new();
     let _ = database.for_each(|data| {
         let eff = effective_sub(&data.class, &data.sub_category);
-        if let Some(subs) = selected_map.get(&data.category) {
-            if subs.contains(&eff)
+        if let Some(subs) = selected_map.get(&data.category)
+            && subs.contains(&eff)
                 && !excluded_programs.contains(&data.program)
                 && !excluded_program_categories
                     .contains(&(data.program.clone(), data.category.clone()))
             {
                 database_matches.push(Arc::new(data));
             }
-        }
     });
 
     for data in database_matches {

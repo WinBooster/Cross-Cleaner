@@ -198,9 +198,7 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
     };
 
     // INFO: Main logic
-    if root.is_some() && path.is_some() {
-        let root = root.unwrap();
-        let path = path.unwrap();
+    if let (Some(root), Some(path)) = (root, path) {
 
         // INFO: Expand glob pattern in main path ("*" and "?" per segment)
         let paths: Vec<String> = if path.contains('*') || path.contains('?') {

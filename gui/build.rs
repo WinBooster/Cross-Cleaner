@@ -22,7 +22,7 @@ fn sound_compressor(asset: &str) {
 
     let mut encoder = GzEncoder::new(Vec::new(), Compression::best());
     encoder
-        .write_all(&*bytes)
+        .write_all(&bytes)
         .expect("Failed to compress sound");
     let compressed = encoder
         .finish()
@@ -49,7 +49,7 @@ fn asset_compressor(asset: &str) {
         .expect("Failed read asset");
 
     let mut encoder = GzEncoder::new(Vec::new(), Compression::best());
-    encoder.write_all(&*bytes).expect("Failed to compress");
+    encoder.write_all(&bytes).expect("Failed to compress");
     let compressed = encoder.finish().expect("Failed to finalize compression");
     std::fs::write(format!("assets/{}{}", asset, ".gz"), compressed).unwrap();
 }
@@ -76,7 +76,7 @@ fn main() {
             .map(|s| s.parse().unwrap_or(0))
             .collect();
 
-        let version_num = version_numbers.get(0).copied().unwrap_or(0) << 48
+        let version_num = version_numbers.first().copied().unwrap_or(0) << 48
             | version_numbers.get(1).copied().unwrap_or(0) << 32
             | version_numbers.get(2).copied().unwrap_or(0) << 16
             | version_numbers.get(3).copied().unwrap_or(0);

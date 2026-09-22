@@ -34,7 +34,7 @@ mod imp {
         /// Creates the progress controller for the main eframe window.
         /// Call once from the GUI thread (e.g. the first `ui` frame).
         pub fn new(frame: &eframe::Frame) -> Self {
-            let hwnd = hwnd_from_frame(frame).unwrap_or(HWND::default());
+            let hwnd = hwnd_from_frame(frame).unwrap_or_default();
             let taskbar = Self::create_taskbar();
             Self { taskbar, hwnd }
         }

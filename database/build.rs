@@ -30,9 +30,9 @@ fn process_database(input_path: &str, output_name: &str) {
     let out_dir = env::var("OUT_DIR").unwrap();
 
     let mut json_data: serde_json::Value = serde_json::from_str(
-        &fs::read_to_string(input_path).expect(&format!("Failed to read {}", input_path)),
+        &fs::read_to_string(input_path).unwrap_or_else(|_| panic!("Failed to read {}", input_path)),
     )
-    .expect(&format!("Failed to parse JSON from {}", input_path));
+    .unwrap_or_else(|_| panic!("Failed to parse JSON from {}", input_path));
 
     remove_class_fields(&mut json_data);
 
@@ -49,7 +49,7 @@ fn process_database(input_path: &str, output_name: &str) {
     );
 
     fs::write(&out_path, &compressed)
-        .expect(&format!("Failed to write compressed {}", output_name));
+        .unwrap_or_else(|_| panic!("Failed to write compressed {}", output_name));
 }
 
 fn main() {

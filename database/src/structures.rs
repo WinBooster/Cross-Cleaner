@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use tabled::Tabled;
 
 // INFO: Struct for GUI table
-#[derive(PartialEq, Tabled)]
+#[derive(PartialEq, Clone, Tabled)]
 pub struct Cleared {
     #[tabled(rename = "Program")]
     pub program: String,
@@ -21,7 +21,7 @@ fn display_removed_bytes(size: &u64) -> String {
     utils::get_file_size_string(*size)
 }
 
-fn display_categories(categories: &Vec<String>) -> String {
+fn display_categories(categories: &[String]) -> String {
     categories.join(", ")
 }
 

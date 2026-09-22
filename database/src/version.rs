@@ -308,10 +308,9 @@ Special thanks to our amazing contributors who made this release possible:\n\
         assert_eq!(merged.groups[0].title, "\u{E61F} Windows Enhancements");
         assert_eq!(merged.groups[0].items.len(), 3);
         assert!(
-            !merged.groups[0]
+            merged.groups[0]
                 .items
                 .contains(&"Audacity Added documentation clearing".to_string())
-                == false
         );
         // 🐧 is kept: it renders fine via the bundled NotoEmoji font.
         assert_eq!(merged.groups[1].title, "🐧 Linux Enhancements");

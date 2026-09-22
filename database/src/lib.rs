@@ -13,7 +13,7 @@ pub fn get_version() -> &'static str {
     option_env!("APP_VERSION").unwrap_or("2.0.2.2")
 }
 
-pub const ICON_BYTES: &'static [u8; 38078] = include_bytes!("../../assets/icon.ico");
+pub const ICON_BYTES: &[u8; 38078] = include_bytes!("../../assets/icon.ico");
 
 #[cfg(test)]
 mod tests {
@@ -167,7 +167,7 @@ mod tests {
             .collect();
 
         // Check that common categories exist
-        assert!(categories.len() > 0, "Should have at least one category");
+        assert!(!categories.is_empty(), "Should have at least one category");
     }
 
     #[test]
@@ -311,7 +311,7 @@ mod tests {
             .collect();
         let duration = start.elapsed();
 
-        assert!(filtered.len() > 0, "Should find some entries");
+        assert!(!filtered.is_empty(), "Should find some entries");
         assert!(
             duration.as_micros() < 10000,
             "Filtering should be fast (< 10ms), took {:?}",

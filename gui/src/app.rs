@@ -7,7 +7,7 @@ use database::get_version;
 #[cfg(windows)]
 use database::registry_database::RegistryDatabase;
 use database::structures::{Cleared, CustomCleaner};
-use database::utils::get_file_size_string;
+
 use database::version::{Changelog, NewRelease, fetch_changelogs};
 use eframe::egui;
 use std::cell::RefCell;
@@ -16,12 +16,14 @@ use std::rc::Rc;
 use std::sync::Arc;
 use tokio::sync::mpsc;
 
-use crate::categories::{CategoryState, effective_sub, tristate_checkbox};
-use crate::cleaning::work;
-use crate::icons::{MENU_BYTES, SETTINGS_BYTES, load_asset_image, load_icon_color_image};
+use crate::categories::{CategoryState, effective_sub};
+
+use crate::icons::{SETTINGS_BYTES, load_asset_image, load_icon_color_image};
 use crate::sounds;
 use crate::taskbar;
-use crate::title_bar::{TITLE_BAR_HEIGHT, paint_window_border, title_bar};
+use crate::title_bar::{paint_window_border, title_bar};
+
+type CleanResult = (u64, u64, u64, Vec<Cleared>);
 
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum Page {
@@ -38,7 +40,7 @@ pub struct MyApp {
     /// We keep checked_boxes as deprecated view for tests via method, but store as categories.
     /// For internal compat we also expose checked_boxes as computed (not stored). However test expects field.
     /// So we add a helper method and keep field via Deref? Instead keep both via getter.
-    pub task_handle: Option<tokio::task::JoinHandle<(u64, u64, u64, Vec<Cleared>)>>,
+    pub task_handle: Option<tokio::task::JoinHandle<CleanResult>>,
     pub progress_message: String,
     pub progress_receiver: Option<mpsc::Receiver<String>>,
     pub cleared_data: Option<(u64, u64, u64, Vec<Cleared>)>,
@@ -62,8 +64,8 @@ pub struct MyApp {
     pub excluded_programs: HashSet<String>,
     pub results_window_resized: bool,
 
-    pub result_sender: Option<mpsc::Sender<(u64, u64, u64, Vec<Cleared>)>>,
-    pub result_receiver: Option<mpsc::Receiver<(u64, u64, u64, Vec<Cleared>)>>,
+    pub result_sender: Option<mpsc::Sender<CleanResult>>,
+    pub result_receiver: Option<mpsc::Receiver<CleanResult>>,
 
     pub database: CleanerDatabase,
     pub custom_database: Arc<[CustomCleaner]>,
@@ -405,7 +407,7 @@ impl MyApp {
     /// actually changed. `send_viewport_cmd` triggers an immediate repaint, so
     /// calling it unconditionally every frame would keep the app rendering at
     /// full frame rate even while idle.
-    fn set_window_size(&mut self, ctx: &egui::Context, size: egui::Vec2) {
+    pub(crate) fn set_window_size(&mut self, ctx: &egui::Context, size: egui::Vec2) {
         if self.last_inner_size != Some(size) {
             ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(size));
             self.last_inner_size = Some(size);
@@ -414,7 +416,7 @@ impl MyApp {
 
     /// Recomputes `filtered_programs` from `program_checkboxes` and
     /// `search_query`. Cheap and only called when one of them changes.
-    fn rebuild_filtered_programs(&mut self) {
+    pub(crate) fn rebuild_filtered_programs(&mut self) {
         if self.search_query.is_empty() {
             self.filtered_programs = (0..self.program_checkboxes.len()).collect();
             return;
@@ -428,7 +430,7 @@ impl MyApp {
             .collect();
     }
 
-    fn selected_map(&self) -> HashMap<String, HashSet<String>> {
+    pub(crate) fn selected_map(&self) -> HashMap<String, HashSet<String>> {
         let mut map = HashMap::new();
         for cat in &self.categories {
             if !cat.selected.is_empty() {
@@ -438,7 +440,7 @@ impl MyApp {
         map
     }
 
-    fn has_selection(&self) -> bool {
+    pub(crate) fn has_selection(&self) -> bool {
         self.categories.iter().any(|c| !c.selected.is_empty())
     }
 
@@ -472,15 +474,12 @@ impl MyApp {
         // Mark the slot as done once the fetch thread finishes, so the window
         // stops showing the spinner even if nothing was parsed.
         let shared = self.changelog.clone().expect("changelog slot exists");
-        if let Some(handle) = self.changelog_handle.as_ref() {
-            if handle.is_finished() {
-                if let Ok(mut slot) = shared.lock() {
-                    if slot.is_none() {
+        if let Some(handle) = self.changelog_handle.as_ref()
+            && handle.is_finished()
+                && let Ok(mut slot) = shared.lock()
+                    && slot.is_none() {
                         *slot = Some(Changelog::default());
                     }
-                }
-            }
-        }
 
         let shared_open = self
             .changelog_open
@@ -633,14 +632,13 @@ impl eframe::App for MyApp {
                             self.progress_start = Some(std::time::Instant::now());
                         }
                         // Mirror the cleaning progress on the Windows taskbar.
-                        if self.total_tasks > 0 {
-                            if let Some(taskbar) = &self.taskbar {
+                        if self.total_tasks > 0
+                            && let Some(taskbar) = &self.taskbar {
                                 taskbar.set_progress(
                                     self.current_task as u64,
                                     self.total_tasks as u64,
                                 );
                             }
-                        }
                     }
                 } else {
                     self.progress_message = message;
@@ -648,8 +646,8 @@ impl eframe::App for MyApp {
             }
         }
 
-        if let Some(receiver) = &mut self.result_receiver {
-            if let Ok(result) = receiver.try_recv() {
+        if let Some(receiver) = &mut self.result_receiver
+            && let Ok(result) = receiver.try_recv() {
                 self.cleared_data = Some(result);
                 self.current_page = Page::Results;
                 self.results_window_resized = false;
@@ -657,7 +655,6 @@ impl eframe::App for MyApp {
                 sounds::done();
                 ctx.request_repaint();
             }
-        }
 
         if let Some(receiver) = &mut self.update_receiver {
             match receiver.try_recv() {
@@ -675,8 +672,8 @@ impl eframe::App for MyApp {
             }
         }
 
-        if let Some(handle) = &mut self.task_handle {
-            if handle.is_finished() {
+        if let Some(handle) = &mut self.task_handle
+            && handle.is_finished() {
                 // Cleaning is done: clear the taskbar progress indicator.
                 if let Some(taskbar) = &self.taskbar {
                     taskbar.remove();
@@ -693,7 +690,6 @@ impl eframe::App for MyApp {
                     });
                 }
             }
-        }
 
         // INFO: Floating notifications (right side, above everything else)
         for (id, action) in self.notifications.update(&ctx) {
@@ -753,714 +749,20 @@ impl eframe::App for MyApp {
             )
             .show(ui, |ui| {
                 if self.current_page == Page::Clearing {
-                    self.set_window_size(
-                        &ctx,
-                        egui::Vec2::new(560.0, 100.0 + TITLE_BAR_HEIGHT),
-                    );
-                    // Panel gives 8px, text adds 12px from the screen edges
-                    ui.vertical(|ui| {
-                        ui.add_space(4.0);
-                        // Top left: name of the program currently being cleaned
-                        let program = self
-                            .progress_message
-                            .strip_prefix("Cleaning: ")
-                            .unwrap_or(&self.progress_message)
-                            .to_string();
-                        if !program.is_empty() {
-                            ui.horizontal(|ui| {
-                                ui.add_space(4.0);
-                                ui.strong(&program);
-                            });
-                        }
-                        ui.add_space(4.0);
-
-                        if self.total_tasks > 0 {
-                            let progress = self.current_task as f32 / self.total_tasks as f32;
-                            // Progress bar: 8px from the screen edges
-                            ui.add_sized(
-                                [ui.available_width(), 20.0],
-                                egui::ProgressBar::new(progress)
-                                    .show_percentage()
-                                    .animate(false),
-                            );
-                            ui.add_space(4.0);
-
-                            let eta = self.progress_start.and_then(|start| {
-                                if self.current_task == 0 || self.current_task >= self.total_tasks {
-                                    None
-                                } else {
-                                    let elapsed = start.elapsed().as_secs_f64();
-                                    let per_task = elapsed / self.current_task as f64;
-                                    let remaining =
-                                        per_task * (self.total_tasks - self.current_task) as f64;
-                                    let mins = (remaining / 60.0).floor() as u64;
-                                    let secs = (remaining % 60.0).round() as u64;
-                                    if mins > 0 {
-                                        Some(format!("~{}m {:02}s", mins, secs))
-                                    } else {
-                                        Some(format!("~{}s", secs))
-                                    }
-                                }
-                            });
-
-                            ui.horizontal(|ui| {
-                                ui.add_space(4.0);
-                                // Bottom left: amount cleaned so far
-                                ui.label(get_file_size_string(self.cleaned_bytes));
-                                // Bottom right: remaining time
-                                ui.with_layout(
-                                    egui::Layout::right_to_left(egui::Align::Min),
-                                    |ui| {
-                                        if let Some(eta) = eta {
-                                            ui.label(eta);
-                                        }
-                                        ui.add_space(4.0);
-                                    },
-                                );
-                            });
-                        } else {
-                            ui.spinner();
-                        }
-                    });
-                    // Keep polling the cleaning task / progress channel at a
-                    // modest rate instead of repainting on every message.
-                    ctx.request_repaint_after(std::time::Duration::from_millis(100));
+                    self.render_clearing(&ctx, ui);
                     return;
                 }
 
-                if self.current_page == Page::Results {
-                    if let Some((bytes, files, dirs, cleared)) = &self.cleared_data {
-                        ui.vertical_centered(|ui| {
-                            ui.heading("Cleaning Results");
-                            ui.heading(format!(
-                                "Size: {}, Files: {}, Dirs: {}",
-                                get_file_size_string(*bytes),
-                                files,
-                                dirs
-                            ));
-                        });
-                        ui.separator();
-
-                        // Fixed column widths
-                        let column_widths = [150.0, 80.0, 80.0, 170.0];
-                        let total_width = column_widths.iter().sum::<f32>() + 120.0;
-                        let total_height = 500.0;
-
-                        // Resize window only once when results are first shown
-                        if !self.results_window_resized {
-                            let size =
-                                egui::Vec2::new(total_width, total_height + TITLE_BAR_HEIGHT);
-                            if self.last_inner_size != Some(size) {
-                                ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(size));
-                                self.last_inner_size = Some(size);
-                            }
-                            self.results_window_resized = true;
-                        }
-
-                        // Outer container for the table
-                        ui.vertical(|ui| {
-                            // Table headers
-                            ui.horizontal(|ui| {
-                                ui.style_mut().spacing.item_spacing = egui::vec2(0.0, 0.0);
-
-                                // Program column
-                                ui.add_sized(
-                                    egui::vec2(column_widths[0], 20.0),
-                                    egui::Label::new(egui::RichText::new("Program").heading()),
-                                )
-                                .on_hover_text("Program name");
-
-                                // Size column
-                                ui.add_sized(
-                                    egui::vec2(column_widths[1], 20.0),
-                                    egui::Label::new(egui::RichText::new("Size").heading()),
-                                )
-                                .on_hover_text("Deleted data size");
-
-                                // Files column
-                                ui.add_sized(
-                                    egui::vec2(column_widths[2], 20.0),
-                                    egui::Label::new(egui::RichText::new("Files").heading()),
-                                )
-                                .on_hover_text("Number of files");
-
-                                // Dirs column
-                                ui.add_sized(
-                                    egui::vec2(column_widths[2], 20.0),
-                                    egui::Label::new(egui::RichText::new("Dirs").heading()),
-                                )
-                                .on_hover_text("Number of folders");
-
-                                // Categories column
-                                ui.add_sized(
-                                    egui::vec2(column_widths[3], 20.0),
-                                    egui::Label::new(egui::RichText::new("Categories").heading()),
-                                )
-                                .on_hover_text("Data categories");
-                            });
-                            ui.separator();
-
-                            // Scrollable, virtualized table content: only the
-                            // visible rows are laid out each frame.
-                            egui::ScrollArea::vertical()
-                                .max_height(total_height)
-                                .show_rows(ui, 21.0, cleared.len(), |ui, row_range| {
-                                    for idx in row_range {
-                                        let cleared = &cleared[idx];
-                                        let row = ui.horizontal(|ui| {
-                                            ui.style_mut().spacing.item_spacing =
-                                                egui::vec2(0.0, 0.0);
-
-                                            // Program column
-                                            ui.add_sized(
-                                                egui::vec2(column_widths[0], 20.0),
-                                                egui::Label::new(&cleared.program).truncate(),
-                                            );
-
-                                            // Size column
-                                            ui.add_sized(
-                                                egui::vec2(column_widths[1], 20.0),
-                                                egui::Label::new(get_file_size_string(
-                                                    cleared.removed_bytes,
-                                                ))
-                                                .truncate(),
-                                            );
-
-                                            // Files column
-                                            ui.add_sized(
-                                                egui::vec2(column_widths[2], 20.0),
-                                                egui::Label::new(cleared.removed_files.to_string())
-                                                    .truncate(),
-                                            );
-
-                                            // Dirs column
-                                            ui.add_sized(
-                                                egui::vec2(column_widths[2], 20.0),
-                                                egui::Label::new(
-                                                    cleared.removed_directories.to_string(),
-                                                )
-                                                .truncate(),
-                                            );
-
-                                            // Categories column
-                                            ui.add_sized(
-                                                egui::vec2(column_widths[3], 20.0),
-                                                egui::Label::new(
-                                                    cleared.affected_categories.join(", "),
-                                                )
-                                                .wrap(),
-                                            );
-                                        });
-                                        // Row separator, painted instead of a
-                                        // `ui.separator()` so it does not add
-                                        // height and break row virtualization.
-                                        let rect = row.response.rect;
-                                        ui.painter().hline(
-                                            rect.min.x..=rect.max.x,
-                                            rect.bottom(),
-                                            ui.visuals().widgets.noninteractive.bg_stroke,
-                                        );
-                                    }
-                                });
-                        });
-                        return;
-                    }
+                if self.current_page == Page::Results && self.render_results(&ctx, ui) {
+                    return;
                 }
 
                 if self.current_page == Page::ProgramSelection {
-                    // Dynamic window sizing based on number of (filtered) programs
-                    let num_programs = self.filtered_programs.len();
-                    let rows = (num_programs + 1) / 2; // 2 columns
-                    let row_height = 20.0;
-                    let base_height = 120.0; // Heading, search, buttons, separators
-                    let min_scroll_height = 20.0;
-                    let max_scroll_height = 400.0;
-
-                    let content_height = rows as f32 * row_height;
-                    let scroll_height =
-                        content_height.min(max_scroll_height).max(min_scroll_height);
-                    let window_height = base_height + scroll_height;
-
-                    self.set_window_size(
-                        &ctx,
-                        egui::Vec2::new(500.0, window_height + TITLE_BAR_HEIGHT),
-                    );
-
-                    ui.vertical_centered(|ui| {
-                        ui.heading("Select Programs to Clean");
-                    });
-                    ui.separator();
-
-                    ui.horizontal(|ui| {
-                        ui.label("Search:");
-                        let available_width = ui.available_width();
-                        let search_response = ui.add_sized(
-                            [available_width, 20.0],
-                            egui::TextEdit::singleline(&mut self.search_query_visible),
-                        );
-                        if search_response.changed() {
-                            self.search_query = self.search_query_visible.to_lowercase();
-                            self.rebuild_filtered_programs();
-                        }
-                    });
-
-                    ui.separator();
-
-                    if self.menu_texture.is_none() {
-                        self.menu_texture = Some(ctx.load_texture(
-                            "menu",
-                            load_asset_image(MENU_BYTES),
-                            egui::TextureOptions::LINEAR,
-                        ));
-                    }
-                    let menu_tex = self.menu_texture.clone().unwrap();
-
-                    // Only lay out the rows that are actually visible; the
-                    // program list can be huge, and building every checkbox
-                    // (plus its category popup) each frame is very expensive.
-                    let total_rows = self.filtered_programs.len().div_ceil(2);
-                    egui::ScrollArea::vertical()
-                        .max_height(scroll_height)
-                        .show_rows(ui, row_height, total_rows, |ui, row_range| {
-                            for row in row_range {
-                                ui.columns(2, |columns| {
-                                    for col in 0..2 {
-                                        let Some(&i) = self.filtered_programs.get(row * 2 + col)
-                                        else {
-                                            break;
-                                        };
-                                        let (checkbox, program) = &self.program_checkboxes[i];
-                                        let master = *checkbox.borrow();
-                                        let is_checked =
-                                            master && self.program_disabled[i].is_empty();
-                                        let is_indet = master && !self.program_disabled[i].is_empty();
-                                        columns[col].horizontal(|ui| {
-                                            let (_resp, clicked) = tristate_checkbox(
-                                                ui, is_checked, is_indet, program,
-                                            );
-                                            if clicked {
-                                                if is_checked || is_indet {
-                                                    *checkbox.borrow_mut() = false;
-                                                    self.program_disabled[i].clear();
-                                                    sounds::uncheck();
-                                                } else {
-                                                    *checkbox.borrow_mut() = true;
-                                                    self.program_disabled[i].clear();
-                                                    sounds::check();
-                                                }
-                                            }
-                                            // Per-program popup: disable individual
-                                            // categories for this program only.
-                                            if let Some(cats) = self.program_categories.get(i) {
-                                                if cats.len() > 1 {
-                                                    let menu_image =
-                                                        egui::Image::from_texture(
-                                                            egui::load::SizedTexture::new(
-                                                                menu_tex.id(),
-                                                                menu_tex.size_vec2(),
-                                                            ),
-                                                        )
-                                                        .fit_to_exact_size(egui::vec2(16.0, 16.0))
-                                                        .tint(ui.visuals().text_color())
-                                                        .sense(egui::Sense::click());
-                                                    let menu_resp = ui.add_sized(
-                                                        egui::vec2(16.0, 16.0),
-                                                        menu_image,
-                                                    );
-                                                    if menu_resp.clicked() {
-                                                        sounds::pop();
-                                                    }
-
-                                                    let frame = egui::Frame::popup(ui.style());
-                                                    egui::Popup::menu(&menu_resp)
-                                                        .close_behavior(
-                                                            egui::PopupCloseBehavior::CloseOnClickOutside,
-                                                        )
-                                                        .frame(frame)
-                                                        .show(|ui| {
-                                                            ui.set_min_width(180.0);
-                                                            egui::ScrollArea::vertical()
-                                                                .max_height(300.0)
-                                                                .show(ui, |ui| {
-                                                                    for cat in cats.clone() {
-                                                                        let mut enabled =
-                                                                            !self.program_disabled[i]
-                                                                                .contains(&cat);
-                                                                        if ui
-                                                                            .checkbox(
-                                                                                &mut enabled,
-                                                                                &cat,
-                                                                            )
-                                                                            .changed()
-                                                                        {
-                                                                            if enabled {
-                                                                                self.program_disabled[i]
-                                                                                    .remove(&cat);
-                                                                            } else {
-                                                                                self.program_disabled[i]
-                                                                                    .insert(cat.clone());
-                                                                                sounds::uncheck();
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                });
-                                                        });
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-
-                    ui.separator();
-
-                    let available_width = ui.available_width();
-                    ui.horizontal(|ui| {
-                        if ui
-                            .add_sized([available_width, 25.0], egui::Button::new("Start Cleaning"))
-                            .clicked()
-                        {
-                            sounds::click();
-                            let selected_map = self.selected_map();
-
-                            self.excluded_programs.clear();
-                            for (checkbox, program) in &self.program_checkboxes {
-                                if !*checkbox.borrow() {
-                                    self.excluded_programs.insert(program.clone());
-                                }
-                            }
-
-                            // Per-program category exclusions from the popups
-                            let mut excluded_program_categories: HashSet<(String, String)> =
-                                HashSet::new();
-                            for (i, (checkbox, program)) in
-                                self.program_checkboxes.iter().enumerate()
-                            {
-                                if *checkbox.borrow() {
-                                    if let Some(disabled) = self.program_disabled.get(i) {
-                                        for cat in disabled {
-                                            excluded_program_categories
-                                                .insert((program.clone(), cat.clone()));
-                                        }
-                                    }
-                                }
-                            }
-
-                            let (progress_sender, progress_receiver) = mpsc::channel(32);
-                            self.progress_receiver = Some(progress_receiver);
-                            let (result_sender, result_receiver) = mpsc::channel(1);
-                            self.result_sender = Some(result_sender);
-                            self.result_receiver = Some(result_receiver);
-                            self.current_task = 0;
-                            self.total_tasks = 0;
-                            self.cleaned_bytes = 0;
-                            self.progress_start = None;
-                            self.results_window_resized = false;
-
-                            let database = self.database.clone();
-                            let custom_database = Arc::clone(&self.custom_database);
-                            #[cfg(windows)]
-                            let reg_database = self.regisry_database.clone();
-                            let excluded_programs = self.excluded_programs.clone();
-                            let handle = tokio::spawn(async move {
-                                work(
-                                    selected_map,
-                                    progress_sender,
-                                    &database,
-                                    &custom_database,
-                                    #[cfg(windows)]
-                                    &reg_database,
-                                    excluded_programs,
-                                    excluded_program_categories,
-                                )
-                                .await
-                            });
-                            self.task_handle = Some(handle);
-
-                            self.current_page = Page::Clearing;
-                            // clear selection
-                            for cat in &mut self.categories {
-                                cat.selected.clear();
-                            }
-                        }
-                    });
+                    self.render_program_selection(&ctx, ui);
                 } else if self.current_page == Page::Settings {
-                    self.set_window_size(
-                        &ctx,
-                        egui::Vec2::new(500.0, 120.0 + TITLE_BAR_HEIGHT),
-                    );
-
-                    let mut cfg = crate::config::get();
-                    let mut changed = false;
-
-                    ui.add_space(8.0);
-                    ui.horizontal(|ui| {
-                        ui.label("Popup sound:");
-                        if ui
-                            .add(
-                                egui::Slider::new(&mut cfg.sound_volume, 0.0..=1.0)
-                                    .show_value(true)
-                                    .text("Volume"),
-                            )
-                            .changed()
-                        {
-                            changed = true;
-                        }
-                    });
-                    ui.horizontal(|ui| {
-                        ui.label("Click sound:");
-                        if ui
-                            .add(
-                                egui::Slider::new(&mut cfg.click_volume, 0.0..=1.0)
-                                    .show_value(true)
-                                    .text("Volume"),
-                            )
-                            .changed()
-                        {
-                            changed = true;
-                        }
-                    });
-                    ui.horizontal(|ui| {
-                        ui.label("Check sound:");
-                        if ui
-                            .add(
-                                egui::Slider::new(&mut cfg.check_volume, 0.0..=1.0)
-                                    .show_value(true)
-                                    .text("Volume"),
-                            )
-                            .changed()
-                        {
-                            changed = true;
-                        }
-                    });
-                    ui.horizontal(|ui| {
-                        ui.label("Done sound:");
-                        if ui
-                            .add(
-                                egui::Slider::new(&mut cfg.done_volume, 0.0..=1.0)
-                                    .show_value(true)
-                                    .text("Volume"),
-                            )
-                            .changed()
-                        {
-                            changed = true;
-                        }
-                    });
-
-                    if changed {
-                        crate::config::update(|c| *c = cfg);
-                    }
+                    self.render_settings(&ctx, ui);
                 } else {
-                    // Calculate dynamic window height based on number of categories
-                    let num_categories = self.categories.len();
-                    let rows = (num_categories + 2) / 3; // Round up division by 3 (3 columns)
-                    let row_height = 20.0; // Approximate height per row
-                    let base_height = 45.0; // Space for heading, margins, and button
-                    let dynamic_height = base_height + (rows as f32 * row_height);
-                    let window_height = dynamic_height.max(20.0).min(500.0); // Clamp between 200 and 500
-
-                    self.set_window_size(
-                        &ctx,
-                        egui::Vec2::new(560.0, window_height + TITLE_BAR_HEIGHT),
-                    );
-
-                    if self.menu_texture.is_none() {
-                        self.menu_texture = Some(ctx.load_texture(
-                            "menu",
-                            load_asset_image(MENU_BYTES),
-                            egui::TextureOptions::LINEAR,
-                        ));
-                    }
-                    let menu_tex = self.menu_texture.clone().unwrap();
-
-                    ui.columns(3, |columns| {
-                        for (idx, cat) in self.categories.iter_mut().enumerate() {
-                            let column_index = idx % 3;
-                            let is_checked = cat.is_checked();
-                            let is_indet = cat.is_indeterminate();
-
-                            columns[column_index].horizontal(|ui| {
-                                // Tristate checkbox with square for indeterminate
-                                let (resp, clicked) = tristate_checkbox(
-                                    ui,
-                                    is_checked,
-                                    is_indet,
-                                    &self.category_labels[idx],
-                                );
-                                if clicked {
-                                    if is_checked || is_indet {
-                                        cat.selected.clear();
-                                        sounds::uncheck();
-                                    } else {
-                                        cat.selected = cat.subs.iter().cloned().collect();
-                                        if cat.has_empty {
-                                            cat.selected.insert(String::new());
-                                        }
-                                        if cat.subs.is_empty() && !cat.has_empty {
-                                            cat.selected.insert(String::new());
-                                        }
-                                        sounds::check();
-                                    }
-                                }
-                                // menu image only if sub-categories exist (embedded menu.png)
-                                if !cat.subs.is_empty() {
-                                    let menu_image =
-                                        egui::Image::from_texture(egui::load::SizedTexture::new(
-                                            menu_tex.id(),
-                                            menu_tex.size_vec2(),
-                                        ))
-                                        .fit_to_exact_size(egui::vec2(16.0, 16.0))
-                                        .tint(ui.visuals().text_color())
-                                        .sense(egui::Sense::click());
-                                    let menu_resp =
-                                        ui.add_sized(egui::vec2(16.0, 16.0), menu_image);
-                                    if menu_resp.clicked() {
-                                        sounds::pop();
-                                    }
-
-                                    // Popup with sub_category checkboxes - shifted to right-bottom corner of image so it doesn't cover the button
-                                    let frame = egui::Frame::popup(ui.style());
-                                    egui::Popup::menu(&menu_resp)
-                                        .close_behavior(
-                                            egui::PopupCloseBehavior::CloseOnClickOutside,
-                                        )
-                                        .frame(frame)
-                                        .show(|ui| {
-                                            ui.set_min_width(200.0);
-                                            egui::ScrollArea::vertical().max_height(300.0).show(
-                                                ui,
-                                                |ui| {
-                                                    for sub in cat.subs.clone() {
-                                                        let key = (cat.name.clone(), sub.clone());
-                                                        let label =
-                                                            match self.sub_counts.get(&key).copied() {
-                                                                Some(n) if n > 0 => format!(
-                                                                    "{} ({})",
-                                                                    sub, n
-                                                                ),
-                                                                _ => sub.clone(),
-                                                            };
-                                                        let mut is_sel =
-                                                            cat.selected.contains(&sub);
-                                                        if ui.checkbox(&mut is_sel, &label).changed()
-                                                        {
-                                                            if is_sel {
-                                                                cat.selected.insert(sub.clone());
-                                                                sounds::check();
-                                                            } else {
-                                                                cat.selected.remove(&sub);
-                                                                sounds::uncheck();
-                                                            }
-                                                        }
-                                                    }
-                                                    // Show Uncategorized for objects without sub_category, only if category has >= 1 real sub
-                                                    if cat.has_empty {
-                                                        let key =
-                                                            (cat.name.clone(), String::new());
-                                                        let label = match self
-                                                            .sub_counts
-                                                            .get(&key)
-                                                            .copied()
-                                                        {
-                                                            Some(n) if n > 0 => format!(
-                                                                "Uncategorized ({})",
-                                                                n
-                                                            ),
-                                                            _ => String::from("Uncategorized"),
-                                                        };
-                                                        let mut is_uncat =
-                                                            cat.selected.contains("");
-                                                        if ui
-                                                            .checkbox(&mut is_uncat, &label)
-                                                            .changed()
-                                                        {
-                                                            if is_uncat {
-                                                                cat.selected.insert(String::new());
-                                                                sounds::check();
-                                                            } else {
-                                                                cat.selected.remove(&String::new());
-                                                                sounds::uncheck();
-                                                            }
-                                                        }
-                                                    }
-                                                 },
-                                             );
-                                         });
-                                 }
-                                 let _ = resp;
-                            });
-                        }
-                    });
-
-                    let available_width = ui.available_width();
-
-                    if ui
-                        .add_sized([available_width, 25.0], egui::Button::new("Next"))
-                        .clicked()
-                    {
-                        sounds::click();
-                        if self.has_selection() {
-                            let selected_map = self.selected_map();
-                            let mut programs: Vec<(String, Vec<String>)> = Vec::new();
-                            let mut add = |program: &str, category: &str| {
-                                if let Some(entry) =
-                                    programs.iter_mut().find(|(p, _)| p == program)
-                                {
-                                    if !entry.1.iter().any(|c| c == category) {
-                                        entry.1.push(category.to_string());
-                                    }
-                                } else {
-                                    programs
-                                        .push((program.to_string(), vec![category.to_string()]));
-                                }
-                            };
-                            let _ = self.database.for_each_index(|data| {
-                                let eff = effective_sub("", &data.sub_category);
-                                if let Some(subs) = selected_map.get(&data.category) {
-                                    if subs.contains(&eff) {
-                                        add(&data.program, &data.category);
-                                    }
-                                }
-                            });
-                            for data in self.custom_database.iter() {
-                                let eff = effective_sub("", &data.sub_category);
-                                if let Some(subs) = selected_map.get(&data.category) {
-                                    if subs.contains(&eff) {
-                                        add(&data.program, &data.category);
-                                    }
-                                }
-                            }
-                            #[cfg(windows)]
-                            {
-                                let _ = self.regisry_database.for_each_index(|data| {
-                                    let eff = effective_sub("", &data.sub_category);
-                                    if let Some(subs) = selected_map.get(&data.category) {
-                                        if subs.contains(&eff) {
-                                            add(&data.program, &data.category);
-                                        }
-                                    }
-                                });
-                            }
-                            programs.sort_by(|a, b| a.0.cmp(&b.0));
-                            for (_, cats) in programs.iter_mut() {
-                                cats.sort();
-                            }
-
-                            self.program_checkboxes.clear();
-                            self.program_categories.clear();
-                            self.program_disabled.clear();
-                            for (program, cats) in programs {
-                                self.program_checkboxes
-                                    .push((Rc::new(RefCell::new(true)), program));
-                                self.program_categories.push(cats);
-                                self.program_disabled.push(HashSet::new());
-                            }
-
-                            self.rebuild_filtered_programs();
-                            self.current_page = Page::ProgramSelection;
-                        }
-                    }
+                    self.render_main(&ctx, ui);
                 }
             });
     }

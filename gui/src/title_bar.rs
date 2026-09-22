@@ -140,8 +140,8 @@ pub fn title_bar(
                             *back_clicked.borrow_mut() = true;
                         }
                         paint_back_glyph(ui, back.rect);
-                    } else if show_settings {
-                        if let Some(tex) = settings_texture {
+                    } else if show_settings
+                        && let Some(tex) = settings_texture {
                             let settings = title_bar_button(ui);
                             if settings.clicked() {
                                 sounds::click();
@@ -162,7 +162,6 @@ pub fn title_bar(
                             );
                             settings.on_hover_text("Settings");
                         }
-                    }
                     ui.add_space(2.0);
                     if let Some(tex) = icon_texture {
                         let icon = egui::Image::from_texture(egui::load::SizedTexture::new(
