@@ -211,9 +211,10 @@ impl ApplicationHandler<UserEvent> for PointerThrottle<'_> {
         // A scheduled wheel flush woke us up: deliver it before eframe computes
         // its next repaint time, so the redraw is requested in this iteration.
         if matches!(cause, StartCause::ResumeTimeReached { .. })
-            && let Some(wheel) = self.pending_wheel.take() {
-                self.forward_wheel(event_loop, wheel);
-            }
+            && let Some(wheel) = self.pending_wheel.take()
+        {
+            self.forward_wheel(event_loop, wheel);
+        }
         self.inner.new_events(event_loop, cause);
     }
 

@@ -8,10 +8,7 @@ use crate::title_bar::TITLE_BAR_HEIGHT;
 
 impl MyApp {
     pub(crate) fn render_clearing(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
-        self.set_window_size(
-            ctx,
-            egui::Vec2::new(560.0, 100.0 + TITLE_BAR_HEIGHT),
-        );
+        self.set_window_size(ctx, egui::Vec2::new(560.0, 100.0 + TITLE_BAR_HEIGHT));
         // Panel gives 8px, text adds 12px from the screen edges
         ui.vertical(|ui| {
             ui.add_space(4.0);
@@ -46,8 +43,7 @@ impl MyApp {
                     } else {
                         let elapsed = start.elapsed().as_secs_f64();
                         let per_task = elapsed / self.current_task as f64;
-                        let remaining =
-                            per_task * (self.total_tasks - self.current_task) as f64;
+                        let remaining = per_task * (self.total_tasks - self.current_task) as f64;
                         let mins = (remaining / 60.0).floor() as u64;
                         let secs = (remaining % 60.0).round() as u64;
                         if mins > 0 {
@@ -63,15 +59,12 @@ impl MyApp {
                     // Bottom left: amount cleaned so far
                     ui.label(get_file_size_string(self.cleaned_bytes));
                     // Bottom right: remaining time
-                    ui.with_layout(
-                        egui::Layout::right_to_left(egui::Align::Min),
-                        |ui| {
-                            if let Some(eta) = eta {
-                                ui.label(eta);
-                            }
-                            ui.add_space(4.0);
-                        },
-                    );
+                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Min), |ui| {
+                        if let Some(eta) = eta {
+                            ui.label(eta);
+                        }
+                        ui.add_space(4.0);
+                    });
                 });
             } else {
                 ui.spinner();

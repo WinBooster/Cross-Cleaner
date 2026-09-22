@@ -202,20 +202,21 @@ fn clean_path_sync(path: &Path, data: &CleanerData) -> PathStats {
     }
 
     if data.remove_files
-        && let Ok(b) = remove_file_sync(path) {
-            stats.add(1, 0, b);
-        }
+        && let Ok(b) = remove_file_sync(path)
+    {
+        stats.add(1, 0, b);
+    }
 
     if data.remove_directories
-        && let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf()) {
-            stats.add(f, fo, b);
-        }
+        && let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf())
+    {
+        stats.add(f, fo, b);
+    }
 
-    if data.remove_directory_after_clean
-        && std::fs::remove_dir_all(path).is_ok() {
-            stats.folders += 1;
-            stats.working = true;
-        }
+    if data.remove_directory_after_clean && std::fs::remove_dir_all(path).is_ok() {
+        stats.folders += 1;
+        stats.working = true;
+    }
 
     stats
 }

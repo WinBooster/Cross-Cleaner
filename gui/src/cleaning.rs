@@ -53,12 +53,12 @@ pub async fn work(
             let eff = effective_sub(&data.class, &data.sub_category);
             if let Some(subs) = selected_map.get(&data.category)
                 && subs.contains(&eff)
-                    && !excluded_programs.contains(&data.program)
-                    && !excluded_program_categories
-                        .contains(&(data.program.clone(), data.category.clone()))
-                {
-                    registry_matches.push(data);
-                }
+                && !excluded_programs.contains(&data.program)
+                && !excluded_program_categories
+                    .contains(&(data.program.clone(), data.category.clone()))
+            {
+                registry_matches.push(data);
+            }
         });
 
         for data in registry_matches {
@@ -79,41 +79,40 @@ pub async fn work(
         let eff = effective_sub("", &data.sub_category);
         if let Some(subs) = selected_map.get(&data.category)
             && subs.contains(&eff)
-                && !excluded_programs.contains(&data.program)
-                && !excluded_program_categories
-                    .contains(&(data.program.clone(), data.category.clone()))
-            {
-                if data.sequential {
-                    sequential_cleaners.push(data.clone());
-                } else {
-                    let data = data.clone();
-                    let sender = progress_sender.clone();
-                    let name_msg = data.id.clone();
-                    let sem = sem.clone();
-                    futures.push(Box::pin(async move {
-                        let _p = sem.acquire_owned().await.unwrap();
-                        let _ = sender.send(format!("Cleaning: {}", name_msg)).await;
-                        let progress_for_cleaner = sender.clone();
-                        tokio::task::spawn_blocking(move || {
-                            database::custom_cleaners::run_custom_cleaner(
-                                &data,
-                                Some(progress_for_cleaner),
-                            )
-                        })
-                        .await
-                        .unwrap_or_else(|_| CleanerResult {
-                            files: 0,
-                            folders: 0,
-                            bytes: 0,
-                            working: false,
-                            path: String::new(),
-                            program: String::new(),
-                            category: String::new(),
-                            sub_category: String::new(),
-                        })
-                    }));
-                }
+            && !excluded_programs.contains(&data.program)
+            && !excluded_program_categories.contains(&(data.program.clone(), data.category.clone()))
+        {
+            if data.sequential {
+                sequential_cleaners.push(data.clone());
+            } else {
+                let data = data.clone();
+                let sender = progress_sender.clone();
+                let name_msg = data.id.clone();
+                let sem = sem.clone();
+                futures.push(Box::pin(async move {
+                    let _p = sem.acquire_owned().await.unwrap();
+                    let _ = sender.send(format!("Cleaning: {}", name_msg)).await;
+                    let progress_for_cleaner = sender.clone();
+                    tokio::task::spawn_blocking(move || {
+                        database::custom_cleaners::run_custom_cleaner(
+                            &data,
+                            Some(progress_for_cleaner),
+                        )
+                    })
+                    .await
+                    .unwrap_or_else(|_| CleanerResult {
+                        files: 0,
+                        folders: 0,
+                        bytes: 0,
+                        working: false,
+                        path: String::new(),
+                        program: String::new(),
+                        category: String::new(),
+                        sub_category: String::new(),
+                    })
+                }));
             }
+        }
     }
 
     // INFO: Stream the database and keep only the selected entries. Each entry
@@ -123,12 +122,11 @@ pub async fn work(
         let eff = effective_sub(&data.class, &data.sub_category);
         if let Some(subs) = selected_map.get(&data.category)
             && subs.contains(&eff)
-                && !excluded_programs.contains(&data.program)
-                && !excluded_program_categories
-                    .contains(&(data.program.clone(), data.category.clone()))
-            {
-                database_matches.push(Arc::new(data));
-            }
+            && !excluded_programs.contains(&data.program)
+            && !excluded_program_categories.contains(&(data.program.clone(), data.category.clone()))
+        {
+            database_matches.push(Arc::new(data));
+        }
     });
 
     for data in database_matches {

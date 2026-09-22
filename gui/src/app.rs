@@ -476,10 +476,11 @@ impl MyApp {
         let shared = self.changelog.clone().expect("changelog slot exists");
         if let Some(handle) = self.changelog_handle.as_ref()
             && handle.is_finished()
-                && let Ok(mut slot) = shared.lock()
-                    && slot.is_none() {
-                        *slot = Some(Changelog::default());
-                    }
+            && let Ok(mut slot) = shared.lock()
+            && slot.is_none()
+        {
+            *slot = Some(Changelog::default());
+        }
 
         let shared_open = self
             .changelog_open
@@ -633,12 +634,10 @@ impl eframe::App for MyApp {
                         }
                         // Mirror the cleaning progress on the Windows taskbar.
                         if self.total_tasks > 0
-                            && let Some(taskbar) = &self.taskbar {
-                                taskbar.set_progress(
-                                    self.current_task as u64,
-                                    self.total_tasks as u64,
-                                );
-                            }
+                            && let Some(taskbar) = &self.taskbar
+                        {
+                            taskbar.set_progress(self.current_task as u64, self.total_tasks as u64);
+                        }
                     }
                 } else {
                     self.progress_message = message;
@@ -647,14 +646,15 @@ impl eframe::App for MyApp {
         }
 
         if let Some(receiver) = &mut self.result_receiver
-            && let Ok(result) = receiver.try_recv() {
-                self.cleared_data = Some(result);
-                self.current_page = Page::Results;
-                self.results_window_resized = false;
-                self.result_receiver = None;
-                sounds::done();
-                ctx.request_repaint();
-            }
+            && let Ok(result) = receiver.try_recv()
+        {
+            self.cleared_data = Some(result);
+            self.current_page = Page::Results;
+            self.results_window_resized = false;
+            self.result_receiver = None;
+            sounds::done();
+            ctx.request_repaint();
+        }
 
         if let Some(receiver) = &mut self.update_receiver {
             match receiver.try_recv() {
@@ -673,23 +673,24 @@ impl eframe::App for MyApp {
         }
 
         if let Some(handle) = &mut self.task_handle
-            && handle.is_finished() {
-                // Cleaning is done: clear the taskbar progress indicator.
-                if let Some(taskbar) = &self.taskbar {
-                    taskbar.remove();
-                }
-                let handle = self.task_handle.take().unwrap();
-                if let Some(sender) = self.result_sender.take() {
-                    tokio::spawn(async move {
-                        match handle.await {
-                            Ok(result) => {
-                                let _ = sender.send(result).await;
-                            }
-                            Err(e) => eprintln!("Task failed: {:?}", e),
-                        }
-                    });
-                }
+            && handle.is_finished()
+        {
+            // Cleaning is done: clear the taskbar progress indicator.
+            if let Some(taskbar) = &self.taskbar {
+                taskbar.remove();
             }
+            let handle = self.task_handle.take().unwrap();
+            if let Some(sender) = self.result_sender.take() {
+                tokio::spawn(async move {
+                    match handle.await {
+                        Ok(result) => {
+                            let _ = sender.send(result).await;
+                        }
+                        Err(e) => eprintln!("Task failed: {:?}", e),
+                    }
+                });
+            }
+        }
 
         // INFO: Floating notifications (right side, above everything else)
         for (id, action) in self.notifications.update(&ctx) {

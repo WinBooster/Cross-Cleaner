@@ -21,9 +21,7 @@ fn sound_compressor(asset: &str) {
         .unwrap_or_else(|e| panic!("Failed to read sound asset {}: {}", asset, e));
 
     let mut encoder = GzEncoder::new(Vec::new(), Compression::best());
-    encoder
-        .write_all(&bytes)
-        .expect("Failed to compress sound");
+    encoder.write_all(&bytes).expect("Failed to compress sound");
     let compressed = encoder
         .finish()
         .expect("Failed to finalize sound compression");

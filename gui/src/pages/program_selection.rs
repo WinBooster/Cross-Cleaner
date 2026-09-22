@@ -15,11 +15,7 @@ use crate::sounds;
 use crate::title_bar::TITLE_BAR_HEIGHT;
 
 impl MyApp {
-    pub(crate) fn render_program_selection(
-        &mut self,
-        ctx: &egui::Context,
-        ui: &mut egui::Ui,
-    ) {
+    pub(crate) fn render_program_selection(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
         // Dynamic window sizing based on number of (filtered) programs
         let num_programs = self.filtered_programs.len();
         let rows = num_programs.div_ceil(2); // 2 columns
@@ -29,8 +25,7 @@ impl MyApp {
         let max_scroll_height = 400.0;
 
         let content_height = rows as f32 * row_height;
-        let scroll_height =
-            content_height.min(max_scroll_height).max(min_scroll_height);
+        let scroll_height = content_height.min(max_scroll_height).max(min_scroll_height);
         let window_height = base_height + scroll_height;
 
         self.set_window_size(
@@ -77,19 +72,16 @@ impl MyApp {
                 for row in row_range {
                     ui.columns(2, |columns| {
                         for (col, column) in columns.iter_mut().enumerate().take(2) {
-                            let Some(&i) = self.filtered_programs.get(row * 2 + col)
-                            else {
+                            let Some(&i) = self.filtered_programs.get(row * 2 + col) else {
                                 break;
                             };
                             let (checkbox, program) = &self.program_checkboxes[i];
                             let master = *checkbox.borrow();
-                            let is_checked =
-                                master && self.program_disabled[i].is_empty();
+                            let is_checked = master && self.program_disabled[i].is_empty();
                             let is_indet = master && !self.program_disabled[i].is_empty();
                             column.horizontal(|ui| {
-                                let (_resp, clicked) = tristate_checkbox(
-                                    ui, is_checked, is_indet, program,
-                                );
+                                let (_resp, clicked) =
+                                    tristate_checkbox(ui, is_checked, is_indet, program);
                                 if clicked {
                                     if is_checked || is_indet {
                                         *checkbox.borrow_mut() = false;
@@ -104,58 +96,53 @@ impl MyApp {
                                 // Per-program popup: disable individual
                                 // categories for this program only.
                                 if let Some(cats) = self.program_categories.get(i)
-                                    && cats.len() > 1 {
-                                        let menu_image =
-                                            egui::Image::from_texture(
-                                                egui::load::SizedTexture::new(
-                                                    menu_tex.id(),
-                                                    menu_tex.size_vec2(),
-                                                ),
-                                            )
-                                            .fit_to_exact_size(egui::vec2(16.0, 16.0))
-                                            .tint(ui.visuals().text_color())
-                                            .sense(egui::Sense::click());
-                                        let menu_resp = ui.add_sized(
-                                            egui::vec2(16.0, 16.0),
-                                            menu_image,
-                                        );
-                                        if menu_resp.clicked() {
-                                            sounds::pop();
-                                        }
+                                    && cats.len() > 1
+                                {
+                                    let menu_image =
+                                        egui::Image::from_texture(egui::load::SizedTexture::new(
+                                            menu_tex.id(),
+                                            menu_tex.size_vec2(),
+                                        ))
+                                        .fit_to_exact_size(egui::vec2(16.0, 16.0))
+                                        .tint(ui.visuals().text_color())
+                                        .sense(egui::Sense::click());
+                                    let menu_resp =
+                                        ui.add_sized(egui::vec2(16.0, 16.0), menu_image);
+                                    if menu_resp.clicked() {
+                                        sounds::pop();
+                                    }
 
-                                        let frame = egui::Frame::popup(ui.style());
-                                        egui::Popup::menu(&menu_resp)
-                                            .close_behavior(
-                                                egui::PopupCloseBehavior::CloseOnClickOutside,
-                                            )
-                                            .frame(frame)
-                                            .show(|ui| {
-                                                ui.set_min_width(180.0);
-                                                egui::ScrollArea::vertical()
-                                                    .max_height(300.0)
-                                                    .show(ui, |ui| {
-                                                        for cat in cats.clone() {
-                                                            let mut enabled =
-                                                                !self.program_disabled[i]
-                                                                    .contains(&cat);
-                                                            if ui
-                                                                .checkbox(&mut enabled, &cat)
-                                                                .changed()
-                                                            {
-                                                                if enabled {
-                                                                    self.program_disabled[i]
-                                                                        .remove(&cat);
-                                                                    sounds::uncheck();
-                                                                } else {
-                                                                    self.program_disabled[i]
-                                                                        .insert(cat.clone());
-                                                                    sounds::uncheck();
-                                                                }
+                                    let frame = egui::Frame::popup(ui.style());
+                                    egui::Popup::menu(&menu_resp)
+                                        .close_behavior(
+                                            egui::PopupCloseBehavior::CloseOnClickOutside,
+                                        )
+                                        .frame(frame)
+                                        .show(|ui| {
+                                            ui.set_min_width(180.0);
+                                            egui::ScrollArea::vertical().max_height(300.0).show(
+                                                ui,
+                                                |ui| {
+                                                    for cat in cats.clone() {
+                                                        let mut enabled = !self.program_disabled[i]
+                                                            .contains(&cat);
+                                                        if ui.checkbox(&mut enabled, &cat).changed()
+                                                        {
+                                                            if enabled {
+                                                                self.program_disabled[i]
+                                                                    .remove(&cat);
+                                                                sounds::uncheck();
+                                                            } else {
+                                                                self.program_disabled[i]
+                                                                    .insert(cat.clone());
+                                                                sounds::uncheck();
                                                             }
                                                         }
-                                                    });
-                                            });
-                                    }
+                                                    }
+                                                },
+                                            );
+                                        });
+                                }
                             });
                         }
                     });
@@ -187,18 +174,15 @@ impl MyApp {
         }
 
         // Per-program category exclusions from the popups
-        let mut excluded_program_categories: HashSet<(String, String)> =
-            HashSet::new();
-        for (i, (checkbox, program)) in
-            self.program_checkboxes.iter().enumerate()
-        {
+        let mut excluded_program_categories: HashSet<(String, String)> = HashSet::new();
+        for (i, (checkbox, program)) in self.program_checkboxes.iter().enumerate() {
             if *checkbox.borrow()
-                && let Some(disabled) = self.program_disabled.get(i) {
-                    for cat in disabled {
-                        excluded_program_categories
-                            .insert((program.clone(), cat.clone()));
-                    }
+                && let Some(disabled) = self.program_disabled.get(i)
+            {
+                for cat in disabled {
+                    excluded_program_categories.insert((program.clone(), cat.clone()));
                 }
+            }
         }
 
         let (progress_sender, progress_receiver) = mpsc::channel(32);
@@ -239,4 +223,3 @@ impl MyApp {
         }
     }
 }
-

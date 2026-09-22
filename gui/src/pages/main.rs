@@ -45,12 +45,8 @@ impl MyApp {
 
                 columns[column_index].horizontal(|ui| {
                     // Tristate checkbox with square for indeterminate
-                    let (resp, clicked) = tristate_checkbox(
-                        ui,
-                        is_checked,
-                        is_indet,
-                        &self.category_labels[idx],
-                    );
+                    let (resp, clicked) =
+                        tristate_checkbox(ui, is_checked, is_indet, &self.category_labels[idx]);
                     if clicked {
                         if is_checked || is_indet {
                             cat.selected.clear();
@@ -68,16 +64,14 @@ impl MyApp {
                     }
                     // menu image only if sub-categories exist (embedded menu.png)
                     if !cat.subs.is_empty() {
-                        let menu_image =
-                            egui::Image::from_texture(egui::load::SizedTexture::new(
-                                menu_tex.id(),
-                                menu_tex.size_vec2(),
-                            ))
-                            .fit_to_exact_size(egui::vec2(16.0, 16.0))
-                            .tint(ui.visuals().text_color())
-                            .sense(egui::Sense::click());
-                        let menu_resp =
-                            ui.add_sized(egui::vec2(16.0, 16.0), menu_image);
+                        let menu_image = egui::Image::from_texture(egui::load::SizedTexture::new(
+                            menu_tex.id(),
+                            menu_tex.size_vec2(),
+                        ))
+                        .fit_to_exact_size(egui::vec2(16.0, 16.0))
+                        .tint(ui.visuals().text_color())
+                        .sense(egui::Sense::click());
+                        let menu_resp = ui.add_sized(egui::vec2(16.0, 16.0), menu_image);
                         if menu_resp.clicked() {
                             sounds::pop();
                         }
@@ -85,9 +79,7 @@ impl MyApp {
                         // Popup with sub_category checkboxes - shifted to right-bottom corner of image so it doesn't cover the button
                         let frame = egui::Frame::popup(ui.style());
                         egui::Popup::menu(&menu_resp)
-                            .close_behavior(
-                                egui::PopupCloseBehavior::CloseOnClickOutside,
-                            )
+                            .close_behavior(egui::PopupCloseBehavior::CloseOnClickOutside)
                             .frame(frame)
                             .show(|ui| {
                                 ui.set_min_width(200.0);
@@ -96,17 +88,12 @@ impl MyApp {
                                     .show(ui, |ui| {
                                         for sub in cat.subs.clone() {
                                             let key = (cat.name.clone(), sub.clone());
-                                            let label =
-                                                match self.sub_counts.get(&key).copied() {
-                                                    Some(n) if n > 0 => format!(
-                                                        "{} ({})",
-                                                        sub, n
-                                                    ),
-                                                    _ => sub.clone(),
-                                                };
+                                            let label = match self.sub_counts.get(&key).copied() {
+                                                Some(n) if n > 0 => format!("{} ({})", sub, n),
+                                                _ => sub.clone(),
+                                            };
                                             let mut is_sel = cat.selected.contains(&sub);
-                                            if ui.checkbox(&mut is_sel, &label).changed()
-                                            {
+                                            if ui.checkbox(&mut is_sel, &label).changed() {
                                                 if is_sel {
                                                     cat.selected.insert(sub.clone());
                                                     sounds::check();
@@ -118,25 +105,15 @@ impl MyApp {
                                         }
                                         // Show Uncategorized for objects without sub_category, only if category has >= 1 real sub
                                         if cat.has_empty {
-                                            let key =
-                                                (cat.name.clone(), String::new());
-                                            let label = match self
-                                                .sub_counts
-                                                .get(&key)
-                                                .copied()
-                                            {
-                                                Some(n) if n > 0 => format!(
-                                                    "Uncategorized ({})",
-                                                    n
-                                                ),
+                                            let key = (cat.name.clone(), String::new());
+                                            let label = match self.sub_counts.get(&key).copied() {
+                                                Some(n) if n > 0 => {
+                                                    format!("Uncategorized ({})", n)
+                                                }
                                                 _ => String::from("Uncategorized"),
                                             };
-                                            let mut is_uncat =
-                                                cat.selected.contains("");
-                                            if ui
-                                                .checkbox(&mut is_uncat, &label)
-                                                .changed()
-                                            {
+                                            let mut is_uncat = cat.selected.contains("");
+                                            if ui.checkbox(&mut is_uncat, &label).changed() {
                                                 if is_uncat {
                                                     cat.selected.insert(String::new());
                                                     sounds::check();
@@ -146,11 +123,10 @@ impl MyApp {
                                                 }
                                             }
                                         }
-                                     },
-                                 );
-                             });
-                     }
-                     let _ = resp;
+                                    });
+                            });
+                    }
+                    let _ = resp;
                 });
             }
         });
@@ -166,39 +142,39 @@ impl MyApp {
                 let selected_map = self.selected_map();
                 let mut programs: Vec<(String, Vec<String>)> = Vec::new();
                 let mut add = |program: &str, category: &str| {
-                    if let Some(entry) =
-                        programs.iter_mut().find(|(p, _)| p == program)
-                    {
+                    if let Some(entry) = programs.iter_mut().find(|(p, _)| p == program) {
                         if !entry.1.iter().any(|c| c == category) {
                             entry.1.push(category.to_string());
                         }
                     } else {
-                        programs
-                            .push((program.to_string(), vec![category.to_string()]));
+                        programs.push((program.to_string(), vec![category.to_string()]));
                     }
                 };
                 let _ = self.database.for_each_index(|data| {
                     let eff = effective_sub("", &data.sub_category);
                     if let Some(subs) = selected_map.get(&data.category)
-                        && subs.contains(&eff) {
-                            add(&data.program, &data.category);
-                        }
+                        && subs.contains(&eff)
+                    {
+                        add(&data.program, &data.category);
+                    }
                 });
                 for data in self.custom_database.iter() {
                     let eff = effective_sub("", &data.sub_category);
                     if let Some(subs) = selected_map.get(&data.category)
-                        && subs.contains(&eff) {
-                            add(&data.program, &data.category);
-                        }
+                        && subs.contains(&eff)
+                    {
+                        add(&data.program, &data.category);
+                    }
                 }
                 #[cfg(windows)]
                 {
                     let _ = self.regisry_database.for_each_index(|data| {
                         let eff = effective_sub("", &data.sub_category);
                         if let Some(subs) = selected_map.get(&data.category)
-                            && subs.contains(&eff) {
-                                add(&data.program, &data.category);
-                            }
+                            && subs.contains(&eff)
+                        {
+                            add(&data.program, &data.category);
+                        }
                     });
                 }
                 programs.sort_by(|a, b| a.0.cmp(&b.0));
