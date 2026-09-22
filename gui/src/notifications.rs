@@ -203,62 +203,75 @@ impl Notification for UpdateNotification {
 
     fn ui(&mut self, ui: &mut egui::Ui) -> NotificationAction {
         let mut action = NotificationAction::None;
+        // When auto-update is enabled the notification becomes a progress notice:
+        // text "Update is being installed. Please wait" and only Changelog button.
+        let is_auto = crate::config::get().auto_update;
         ui.vertical(|ui| {
-            // Plain left-to-right rows keep the frame exactly content-sized;
-            // the anchored Area aligns it to the right window edge.
             ui.horizontal(|ui| {
-                ui.strong(format!("New version available: v{}", self.release.version));
+                if is_auto {
+                    ui.strong("Update is being installed.");
+                } else {
+                    ui.strong(format!("New version available: v{}", self.release.version));
+                }
                 if ui.small_button("x").clicked() {
                     crate::sounds::click();
                     action = NotificationAction::Close;
                 }
             });
-            ui.add_space(4.0);
-            ui.horizontal(|ui| {
-                // Install — visible only if updater.exe is next to the GUI exe (release.yml contract).
-                #[cfg(windows)]
-                {
-                    if has_updater_next_to_exe() && ui.button("Install").clicked() {
+            if is_auto {
+                ui.label("Please wait");
+                ui.add_space(4.0);
+                ui.horizontal(|ui| {
+                    if ui.button("Changelog").clicked() {
                         crate::sounds::click();
-                        if let Some(updater) = find_updater() {
-                            let current = get_version();
-                            let res = std::process::Command::new(&updater)
-                                .args([
-                                    "--mode",
-                                    "silent",
-                                    "--yes",
-                                    "--current-version",
-                                    current,
-                                    "--asset",
-                                    "Cross_Cleaner_Setup.exe",
-                                ])
-                                .spawn();
-                            if res.is_err() {
-                                crate::title_bar::open_in_browser(&self.release.url);
+                        action = NotificationAction::ShowChangelog;
+                    }
+                });
+            } else {
+                ui.add_space(4.0);
+                ui.horizontal(|ui| {
+                    // Install — visible only if updater.exe is next to the GUI exe (release.yml contract).
+                    #[cfg(windows)]
+                    {
+                        if has_updater_next_to_exe() && ui.button("Install").clicked() {
+                            crate::sounds::click();
+                            if let Some(updater) = find_updater() {
+                                let current = get_version();
+                                let res = std::process::Command::new(&updater)
+                                    .args([
+                                        "--mode",
+                                        "silent",
+                                        "--yes",
+                                        "--current-version",
+                                        current,
+                                        "--asset",
+                                        "Cross_Cleaner_Setup.exe",
+                                    ])
+                                    .spawn();
+                                if res.is_err() {
+                                    crate::title_bar::open_in_browser(&self.release.url);
+                                } else {
+                                    action = NotificationAction::Close;
+                                }
                             } else {
-                                action = NotificationAction::Close;
+                                crate::title_bar::open_in_browser(&self.release.url);
                             }
-                        } else {
-                            crate::title_bar::open_in_browser(&self.release.url);
                         }
                     }
-                }
-                #[cfg(not(windows))]
-                {
-                    // No updater on non-Windows — Install just opens browser fallback
-                    let _ = &self.release;
-                }
-                if ui.button("Download").clicked() {
-                    crate::sounds::click();
-                    // eframe's native backend ignores egui's OpenUrl command,
-                    // so open the release page through the system browser.
-                    crate::title_bar::open_in_browser(&self.release.url);
-                }
-                if ui.button("Changelog").clicked() {
-                    crate::sounds::click();
-                    action = NotificationAction::ShowChangelog;
-                }
-            });
+                    #[cfg(not(windows))]
+                    {
+                        let _ = &self.release;
+                    }
+                    if ui.button("Download").clicked() {
+                        crate::sounds::click();
+                        crate::title_bar::open_in_browser(&self.release.url);
+                    }
+                    if ui.button("Changelog").clicked() {
+                        crate::sounds::click();
+                        action = NotificationAction::ShowChangelog;
+                    }
+                });
+            }
         });
         action
     }
