@@ -223,6 +223,11 @@ jobs:
             - **Jitsi** Added documentation clearing
             - **Steam** Improved logs clearing
             - **Windhawk** Added logs, cache clearing
+            - **ShareX** Added image compression 
+            - **Windows** Added image compression
+            
+            ### 🛠 Technical Updates
+            - Added sounds volume settings
             
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:

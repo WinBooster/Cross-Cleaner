@@ -262,7 +262,7 @@ pub fn register_all() {
         }
     };
 
-    // Image optimizer: Pictures top-level
+    // Image optimizer: Pictures recursive
     #[cfg(windows)]
     let _ = custom_glob_cleaner! {
         id: "Optimize pictures",
@@ -287,21 +287,6 @@ pub fn register_all() {
         os: ["windows"],
         sequential: true,
         glob: "{drive}\\Users\\{username}\\Documents\\ShareX\\Screenshots\\**",
-        |path| {
-            crate::image_optimizer::optimize_single(path)
-        }
-    };
-
-    // Image optimizer: Namida Artworks recursive
-    #[cfg(windows)]
-    let _ = custom_glob_cleaner! {
-        id: "Optimize pictures in Namida",
-        program: "Namida",
-        category: "Images",
-        sub_category: "Compress",
-        os: ["windows"],
-        sequential: true,
-        glob: "{drive}\\Users\\{username}\\.namida\\Artworks\\*",
         |path| {
             crate::image_optimizer::optimize_single(path)
         }

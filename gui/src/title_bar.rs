@@ -56,15 +56,18 @@ pub fn paint_window_border(ctx: &egui::Context, id: &str, color: egui::Color32) 
 }
 
 /// Custom window title bar: drag-to-move, minimize and close buttons.
-/// Optionally shows a back button (returns whether it was clicked).
+/// Optionally shows a back button or settings button (returns (back_clicked, settings_clicked)).
 pub fn title_bar(
     ui: &mut egui::Ui,
     ctx: &egui::Context,
     title: &str,
     icon_texture: Option<&egui::TextureHandle>,
     show_back: bool,
-) -> bool {
+    show_settings: bool,
+    settings_texture: Option<&egui::TextureHandle>,
+) -> (bool, bool) {
     let back_clicked = RefCell::new(false);
+    let settings_clicked = RefCell::new(false);
     let panel_frame = egui::Frame::new()
         .inner_margin(egui::Margin::symmetric(8, 0))
         .fill(ui.visuals().window_fill);
@@ -138,6 +141,24 @@ pub fn title_bar(
                         }
                         paint_back_glyph(ui, back.rect);
                         ui.add_space(0.0);
+                    } else if show_settings {
+                        if let Some(tex) = settings_texture {
+                            let settings_image =
+                                egui::Image::from_texture(egui::load::SizedTexture::new(
+                                    tex.id(),
+                                    tex.size_vec2(),
+                                ))
+                                .fit_to_exact_size(egui::vec2(16.0, 16.0))
+                                .tint(ui.visuals().text_color())
+                                .sense(egui::Sense::click());
+                            let settings_resp =
+                                ui.add_sized(egui::vec2(16.0, 16.0), settings_image);
+                            if settings_resp.clicked() {
+                                sounds::click();
+                                *settings_clicked.borrow_mut() = true;
+                            }
+                            settings_resp.on_hover_text("Settings");
+                        }
                     }
                     ui.add_space(2.0);
                     if let Some(tex) = icon_texture {
@@ -153,11 +174,12 @@ pub fn title_bar(
             });
         });
     let back_clicked = back_clicked.into_inner();
+    let settings_clicked = settings_clicked.into_inner();
 
     // Drag area: whole bar except the button zone on the right, so buttons
     // get a single click instead of the drag overlay swallowing it.
     let bar_rect = title_bar.response.rect;
-    let left_reserved = if show_back { 44.0 } else { 0.0 };
+    let left_reserved = if show_back || show_settings { 44.0 } else { 0.0 };
     let drag_rect = egui::Rect::from_min_max(
         egui::pos2(
             (bar_rect.min.x + left_reserved).min(bar_rect.max.x),
@@ -177,7 +199,7 @@ pub fn title_bar(
         ctx.send_viewport_cmd(egui::ViewportCommand::StartDrag);
     }
 
-    back_clicked
+    (back_clicked, settings_clicked)
 }
 
 /// A flat click area in the title bar (hover highlight, no frame).

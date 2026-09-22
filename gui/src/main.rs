@@ -6,6 +6,7 @@
 mod app;
 mod categories;
 mod cleaning;
+mod config;
 mod icons;
 mod notifications;
 mod sounds;
@@ -413,6 +414,7 @@ async fn main() -> eframe::Result {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use app::Page;
     use categories::CategoryState;
     use database::structures::{CleanerData, CleanerDataRegistry};
     use std::collections::HashSet;
@@ -483,13 +485,9 @@ mod tests {
             app.task_handle.is_none(),
             "Task handle should be None initially"
         );
-        assert!(!app.show_results, "Should not show results initially");
+        assert_eq!(app.current_page, Page::Main, "Should start on Main page");
         assert_eq!(app.current_task, 0, "Current task should be 0");
         assert_eq!(app.total_tasks, 0, "Total tasks should be 0");
-        assert!(
-            !app.show_program_selection,
-            "Should not show program selection initially"
-        );
         assert!(
             app.program_checkboxes.is_empty(),
             "Program checkboxes should be empty"

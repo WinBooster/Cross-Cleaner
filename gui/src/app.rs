@@ -18,10 +18,18 @@ use tokio::sync::mpsc;
 
 use crate::categories::{CategoryState, effective_sub, tristate_checkbox};
 use crate::cleaning::work;
-use crate::icons::{MENU_BYTES, load_asset_image, load_icon_color_image};
+use crate::icons::{MENU_BYTES, SETTINGS_BYTES, load_asset_image, load_icon_color_image};
 use crate::sounds;
 use crate::taskbar;
 use crate::title_bar::{TITLE_BAR_HEIGHT, paint_window_border, title_bar};
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum Page {
+    Main,
+    ProgramSelection,
+    Results,
+    Settings,
+}
 
 pub struct MyApp {
     pub categories: Vec<CategoryState>,
@@ -33,13 +41,12 @@ pub struct MyApp {
     pub progress_message: String,
     pub progress_receiver: Option<mpsc::Receiver<String>>,
     pub cleared_data: Option<(u64, u64, u64, Vec<Cleared>)>,
-    pub show_results: bool,
+    pub current_page: Page,
     pub current_task: usize,
     pub total_tasks: usize,
     pub cleaned_bytes: u64,
     pub progress_start: Option<std::time::Instant>,
 
-    pub show_program_selection: bool,
     pub program_checkboxes: Vec<(Rc<RefCell<bool>>, String)>,
     /// Selected categories that apply to each program (parallel to program_checkboxes).
     pub program_categories: Vec<Vec<String>>,
@@ -63,6 +70,7 @@ pub struct MyApp {
     pub regisry_database: RegistryDatabase,
     pub menu_texture: Option<egui::TextureHandle>,
     pub icon_texture: Option<egui::TextureHandle>,
+    pub settings_texture: Option<egui::TextureHandle>,
 
     pub update_receiver: Option<std::sync::mpsc::Receiver<Result<Option<NewRelease>, String>>>,
     /// Number of database paths per (category, sub_category).
@@ -223,13 +231,12 @@ impl MyApp {
             progress_message: String::new(),
             progress_receiver: None,
             cleared_data: None,
-            show_results: false,
+            current_page: Page::Main,
             current_task: 0,
             total_tasks: 0,
             cleaned_bytes: 0,
             progress_start: None,
 
-            show_program_selection: false,
             program_checkboxes: vec![],
             program_categories: vec![],
             program_disabled: vec![],
@@ -243,6 +250,7 @@ impl MyApp {
             result_receiver: Some(result_receiver),
             menu_texture: None,
             icon_texture: None,
+            settings_texture: None,
 
             update_receiver: None,
             sub_counts,
@@ -357,13 +365,12 @@ impl MyApp {
             progress_message: String::new(),
             progress_receiver: None,
             cleared_data: None,
-            show_results: false,
+            current_page: Page::Main,
             current_task: 0,
             total_tasks: 0,
             cleaned_bytes: 0,
             progress_start: None,
 
-            show_program_selection: false,
             program_checkboxes: vec![],
             program_categories: vec![],
             program_disabled: vec![],
@@ -377,6 +384,7 @@ impl MyApp {
             result_receiver: Some(result_receiver),
             menu_texture: None,
             icon_texture: None,
+            settings_texture: None,
 
             update_receiver: None,
             sub_counts,
@@ -504,7 +512,7 @@ impl MyApp {
                         // Same custom title bar as the main window (drag, GitHub,
                         // minimize & close buttons). Close sends ViewportCommand::Close
                         // to this viewport, which is handled above.
-                        title_bar(ui, &ctx, "Cross Cleaner - What's New", icon.as_ref(), false);
+                        title_bar(ui, &ctx, "Cross Cleaner - What's New", icon.as_ref(), false, false, None);
                         // Same 2px outline as the main window.
                         let focused = ctx.input(|i| i.viewport().focused.unwrap_or(false));
                         let border_color = if focused {
@@ -634,9 +642,9 @@ impl eframe::App for MyApp {
         if let Some(receiver) = &mut self.result_receiver {
             if let Ok(result) = receiver.try_recv() {
                 self.cleared_data = Some(result);
-                self.show_results = true;
-                self.results_window_resized = false; // Reset flag for new results
-                self.result_receiver = None; // Consume the result once
+                self.current_page = Page::Results;
+                self.results_window_resized = false;
+                self.result_receiver = None;
                 sounds::done();
                 ctx.request_repaint();
             }
@@ -695,23 +703,37 @@ impl eframe::App for MyApp {
                 egui::TextureOptions::LINEAR,
             ));
         }
-        let show_back =
-            (self.show_results && self.cleared_data.is_some()) || self.show_program_selection;
-        let back_clicked = title_bar(
+        if self.settings_texture.is_none() {
+            self.settings_texture = Some(ctx.load_texture(
+                "settings",
+                load_asset_image(SETTINGS_BYTES),
+                egui::TextureOptions::LINEAR,
+            ));
+        }
+        let prev_page = self.current_page;
+        let show_back = matches!(
+            self.current_page,
+            Page::Results | Page::ProgramSelection | Page::Settings
+        );
+        let show_settings = self.current_page == Page::Main;
+        let (back_clicked, settings_clicked) = title_bar(
             ui,
             &ctx,
             &self.window_title,
             self.icon_texture.as_ref(),
             show_back,
+            show_settings,
+            self.settings_texture.as_ref(),
         );
         if back_clicked {
-            if self.show_program_selection {
-                self.show_program_selection = false;
-            } else {
-                self.show_results = false;
+            if prev_page == Page::Results {
                 self.cleared_data = None;
                 self.results_window_resized = false;
             }
+            self.current_page = Page::Main;
+        }
+        if settings_clicked {
+            self.current_page = Page::Settings;
         }
         let inner_margin = 8;
         egui::CentralPanel::default()
@@ -797,7 +819,7 @@ impl eframe::App for MyApp {
                     return;
                 }
 
-                if self.show_results {
+                if self.current_page == Page::Results {
                     if let Some((bytes, files, dirs, cleared)) = &self.cleared_data {
                         ui.vertical_centered(|ui| {
                             ui.heading("Cleaning Results");
@@ -936,7 +958,7 @@ impl eframe::App for MyApp {
                     }
                 }
 
-                if self.show_program_selection {
+                if self.current_page == Page::ProgramSelection {
                     // Dynamic window sizing based on number of (filtered) programs
                     let num_programs = self.filtered_programs.len();
                     let rows = (num_programs + 1) / 2; // 2 columns
@@ -1147,13 +1169,97 @@ impl eframe::App for MyApp {
                             });
                             self.task_handle = Some(handle);
 
-                            self.show_program_selection = false;
+                            self.current_page = Page::Main;
                             // clear selection
                             for cat in &mut self.categories {
                                 cat.selected.clear();
                             }
                         }
                     });
+                } else if self.current_page == Page::Settings {
+                    self.set_window_size(
+                        &ctx,
+                        egui::Vec2::new(500.0, 190.0 + TITLE_BAR_HEIGHT),
+                    );
+
+                    ui.vertical_centered(|ui| {
+                        ui.heading("Settings");
+                    });
+                    ui.separator();
+
+                    let mut cfg = crate::config::get();
+                    let mut changed = false;
+
+                    ui.add_space(8.0);
+                    ui.horizontal(|ui| {
+                        ui.label("Popup sound:");
+                        if ui
+                            .add(
+                                egui::Slider::new(&mut cfg.sound_volume, 0.0..=1.0)
+                                    .show_value(true)
+                                    .text("Volume"),
+                            )
+                            .changed()
+                        {
+                            changed = true;
+                        }
+                    });
+                    ui.horizontal(|ui| {
+                        ui.label("Click sound:");
+                        if ui
+                            .add(
+                                egui::Slider::new(&mut cfg.click_volume, 0.0..=1.0)
+                                    .show_value(true)
+                                    .text("Volume"),
+                            )
+                            .changed()
+                        {
+                            changed = true;
+                        }
+                    });
+                    ui.horizontal(|ui| {
+                        ui.label("Check sound:");
+                        if ui
+                            .add(
+                                egui::Slider::new(&mut cfg.check_volume, 0.0..=1.0)
+                                    .show_value(true)
+                                    .text("Volume"),
+                            )
+                            .changed()
+                        {
+                            changed = true;
+                        }
+                    });
+                    ui.horizontal(|ui| {
+                        ui.label("Done sound:");
+                        if ui
+                            .add(
+                                egui::Slider::new(&mut cfg.done_volume, 0.0..=1.0)
+                                    .show_value(true)
+                                    .text("Volume"),
+                            )
+                            .changed()
+                        {
+                            changed = true;
+                        }
+                    });
+
+                    ui.add_space(8.0);
+                    ui.separator();
+                    ui.add_space(4.0);
+                    ui.horizontal(|ui| {
+                        ui.add_space(4.0);
+                        if ui
+                            .add_sized([ui.available_width(), 25.0], egui::Button::new("Test click"))
+                            .clicked()
+                        {
+                            sounds::click();
+                        }
+                    });
+
+                    if changed {
+                        crate::config::update(|c| *c = cfg);
+                    }
                 } else {
                     // Calculate dynamic window height based on number of categories
                     let num_categories = self.categories.len();
@@ -1361,7 +1467,7 @@ impl eframe::App for MyApp {
                             }
 
                             self.rebuild_filtered_programs();
-                            self.show_program_selection = true;
+                            self.current_page = Page::ProgramSelection;
                         }
                     }
                 }

@@ -113,6 +113,7 @@ fn main() {
             std::process::exit(1);
         }
 
-        asset_compressor("menu.png")
+        asset_compressor("menu.png");
+        asset_compressor("settings.png");
     }
 }

@@ -18,6 +18,8 @@ dependencies = [
  "notify-rust",
  "raw-window-handle",
  "rodio",
+ "serde",
+ "serde_json",
  "tempfile",
  "tokio",
  "windows 0.62.2",
