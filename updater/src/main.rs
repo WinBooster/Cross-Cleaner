@@ -121,11 +121,15 @@ const UNINSTALL_SUBKEY: &str = r"SOFTWARE\Microsoft\Windows\CurrentVersion\Unins
 
 #[cfg(windows)]
 fn read_registry_version() -> Option<String> {
-    use winreg::enums::{HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE};
     use winreg::RegKey;
+    use winreg::enums::{HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE};
 
     for hive in [HKEY_LOCAL_MACHINE, HKEY_CURRENT_USER] {
-        for view in [winreg::enums::KEY_READ | winreg::enums::KEY_WOW64_64KEY, winreg::enums::KEY_READ | winreg::enums::KEY_WOW64_32KEY, winreg::enums::KEY_READ] {
+        for view in [
+            winreg::enums::KEY_READ | winreg::enums::KEY_WOW64_64KEY,
+            winreg::enums::KEY_READ | winreg::enums::KEY_WOW64_32KEY,
+            winreg::enums::KEY_READ,
+        ] {
             let hk = RegKey::predef(hive);
             if let Ok(key) = hk.open_subkey_with_flags(UNINSTALL_SUBKEY, view)
                 && let Ok(v) = key.get_value::<String, _>("DisplayVersion")
@@ -138,11 +142,15 @@ fn read_registry_version() -> Option<String> {
         }
         // Fallback: enumerate Uninstall and match by DisplayName / AppId if GUID changes
         let hk = RegKey::predef(hive);
-        if let Ok(uninstall) = hk.open_subkey_with_flags(r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", winreg::enums::KEY_READ) {
+        if let Ok(uninstall) = hk.open_subkey_with_flags(
+            r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
+            winreg::enums::KEY_READ,
+        ) {
             for name in uninstall.enum_keys().flatten() {
                 if let Ok(k) = uninstall.open_subkey(&name) {
                     let dn: Result<String, _> = k.get_value("DisplayName");
-                    let id_match = name.contains("63C69122") || dn.as_deref().is_ok_and(|s| s == "Cross Cleaner");
+                    let id_match = name.contains("63C69122")
+                        || dn.as_deref().is_ok_and(|s| s == "Cross Cleaner");
                     if id_match && let Ok(v) = k.get_value::<String, _>("DisplayVersion") {
                         let v = v.trim().to_string();
                         if !v.is_empty() {
@@ -235,10 +243,10 @@ struct Release {
 
 #[derive(Debug, Clone)]
 struct UpdateInfo {
-    version: String,       // without leading v
-    tag: String,           // raw tag e.g. v2.0.2.8.2
-    page_url: String,      // html_url
-    download_url: String,  // browser_download_url for asset
+    version: String,      // without leading v
+    tag: String,          // raw tag e.g. v2.0.2.8.2
+    page_url: String,     // html_url
+    download_url: String, // browser_download_url for asset
     asset_name: String,
     asset_size: Option<u64>,
 }
@@ -247,7 +255,10 @@ fn fetch_latest_release(repo: &str, asset_name: &str) -> Result<UpdateInfo, Stri
     let api = format!("https://api.github.com/repos/{repo}/releases/latest");
     let json: serde_json::Value = ureq::get(&api)
         .timeout(Duration::from_secs(15))
-        .set("User-Agent", concat!("Cross-Cleaner-updater/", env!("CARGO_PKG_VERSION")))
+        .set(
+            "User-Agent",
+            concat!("Cross-Cleaner-updater/", env!("CARGO_PKG_VERSION")),
+        )
         .set("Accept", "application/vnd.github+json")
         .call()
         .map_err(|e| format!("GitHub API request failed ({api}): {e}"))?
@@ -258,12 +269,21 @@ fn fetch_latest_release(repo: &str, asset_name: &str) -> Result<UpdateInfo, Stri
         .map_err(|e| format!("Unexpected GitHub response shape: {e}"))?;
 
     let tag = release.tag_name.clone();
-    let version = tag.trim().trim_start_matches('v').trim_start_matches('V').to_string();
+    let version = tag
+        .trim()
+        .trim_start_matches('v')
+        .trim_start_matches('V')
+        .to_string();
     let asset = release
         .assets
         .iter()
         .find(|a| a.name == asset_name)
-        .or_else(|| release.assets.iter().find(|a| a.name.eq_ignore_ascii_case(asset_name)))
+        .or_else(|| {
+            release
+                .assets
+                .iter()
+                .find(|a| a.name.eq_ignore_ascii_case(asset_name))
+        })
         .ok_or_else(|| {
             let names: Vec<_> = release.assets.iter().map(|a| a.name.as_str()).collect();
             format!(
@@ -297,7 +317,10 @@ fn download_file(url: &str, dest: &Path) -> Result<u64, String> {
 
     let resp = ureq::get(url)
         .timeout(Duration::from_secs(300))
-        .set("User-Agent", concat!("Cross-Cleaner-updater/", env!("CARGO_PKG_VERSION")))
+        .set(
+            "User-Agent",
+            concat!("Cross-Cleaner-updater/", env!("CARGO_PKG_VERSION")),
+        )
         .call()
         .map_err(|e| format!("download request failed: {e}"))?;
 
@@ -358,7 +381,10 @@ fn download_file(url: &str, dest: &Path) -> Result<u64, String> {
         ));
     }
 
-    println!("Download complete: {downloaded} bytes in {:.1}s", start.elapsed().as_secs_f64());
+    println!(
+        "Download complete: {downloaded} bytes in {:.1}s",
+        start.elapsed().as_secs_f64()
+    );
     Ok(downloaded)
 }
 
@@ -445,7 +471,10 @@ fn launch_installer(installer: &Path, args: &[String]) -> Result<(), String> {
             let code = status.code().unwrap_or(-1);
             if code == 1 {
                 eprintln!("Hint: installer code 1 often means the app is still running.");
-                eprintln!("      Close Cross Cleaner manually and run: {} /SILENT", installer.display());
+                eprintln!(
+                    "      Close Cross Cleaner manually and run: {} /SILENT",
+                    installer.display()
+                );
             }
             return Err(format!("installer exited with code {code}"));
         }
@@ -470,7 +499,9 @@ fn main() {
     #[cfg(not(windows))]
     {
         if !args.check && !args.json {
-            eprintln!("Note: Inno Setup installer is Windows-only. Only --check is supported on this OS.");
+            eprintln!(
+                "Note: Inno Setup installer is Windows-only. Only --check is supported on this OS."
+            );
         }
     }
 
@@ -503,7 +534,11 @@ fn main() {
     println!("Release page: {}", update.page_url);
     println!("Download URL: {}", update.download_url);
     if let Some(sz) = update.asset_size {
-        println!("Asset size: {} bytes ({:.1} MiB)", sz, sz as f64 / 1024.0 / 1024.0);
+        println!(
+            "Asset size: {} bytes ({:.1} MiB)",
+            sz,
+            sz as f64 / 1024.0 / 1024.0
+        );
     }
 
     let newer = is_newer(&update.version, &current);
@@ -530,7 +565,10 @@ fn main() {
         }
     } else {
         if !will_update {
-            println!("Already on latest version ({}). Use --force to reinstall.", current);
+            println!(
+                "Already on latest version ({}). Use --force to reinstall.",
+                current
+            );
             if args.check {
                 std::process::exit(2);
             }
@@ -539,7 +577,10 @@ fn main() {
         if newer {
             println!("Update available: {} -> {}", current, update.version);
         } else {
-            println!("Forcing reinstall of {} (current {})", update.version, current);
+            println!(
+                "Forcing reinstall of {} (current {})",
+                update.version, current
+            );
         }
         if args.check {
             // --check should not proceed to download
@@ -562,10 +603,7 @@ fn main() {
     }
 
     // Resolve output path
-    let out_dir = args
-        .out_dir
-        .clone()
-        .unwrap_or_else(std::env::temp_dir);
+    let out_dir = args.out_dir.clone().unwrap_or_else(std::env::temp_dir);
     let dest = out_dir.join(format!(
         "Cross_Cleaner_Setup_{}.exe",
         update.version.replace('.', "_")
@@ -586,7 +624,10 @@ fn main() {
     let _ = std::fs::copy(&dest, &canonical);
 
     if args.download_only {
-        println!("Downloaded to {} (download-only mode, not launching)", dest.display());
+        println!(
+            "Downloaded to {} (download-only mode, not launching)",
+            dest.display()
+        );
         if args.json {
             println!(
                 "{}",
@@ -597,7 +638,8 @@ fn main() {
     }
 
     // Launch installer
-    let installer_args = build_installer_args(args.mode, args.installer_args.as_deref(), args.no_launch);
+    let installer_args =
+        build_installer_args(args.mode, args.installer_args.as_deref(), args.no_launch);
 
     match launch_installer(&dest, &installer_args) {
         Ok(()) => {

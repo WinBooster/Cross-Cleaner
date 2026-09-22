@@ -96,12 +96,12 @@ impl<'de> Deserialize<'de> for AppConfig {
             volume.done = v;
         }
 
-        let auto_update = raw
-            .auto_update
-            .or(raw.auto_updates)
-            .unwrap_or(false);
+        let auto_update = raw.auto_update.or(raw.auto_updates).unwrap_or(false);
 
-        Ok(Self { volume, auto_update })
+        Ok(Self {
+            volume,
+            auto_update,
+        })
     }
 }
 
