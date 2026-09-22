@@ -454,6 +454,34 @@ fn close_running_gui() {
     std::thread::sleep(Duration::from_millis(500));
 }
 
+fn launch_installed_app() {
+    #[cfg(windows)]
+    {
+        let candidates: Vec<PathBuf> = {
+            let mut v = Vec::new();
+            if let Ok(pf) = std::env::var("ProgramFiles") {
+                v.push(PathBuf::from(pf).join("Cross Cleaner/Cross_Cleaner_GUI.exe"));
+            }
+            if let Ok(pf) = std::env::var("ProgramFiles(x86)") {
+                v.push(PathBuf::from(pf).join("Cross Cleaner/Cross_Cleaner_GUI.exe"));
+            }
+            if let Ok(exe) = std::env::current_exe() {
+                if let Some(dir) = exe.parent() {
+                    v.push(dir.join("Cross_Cleaner_GUI.exe"));
+                }
+            }
+            v
+        };
+        for p in candidates {
+            if p.exists() {
+                println!("Starting installed app: {}", p.display());
+                let _ = std::process::Command::new(p).spawn();
+                break;
+            }
+        }
+    }
+}
+
 fn launch_installer(installer: &Path, args: &[String]) -> Result<(), String> {
     println!("Launching installer:");
     println!("  {} {}", installer.display(), args.join(" "));
@@ -645,6 +673,9 @@ fn main() {
         Ok(()) => {
             println!("Installer finished successfully.");
             println!("Cross Cleaner {} installed.", update.version);
+            // Fallback launch: installer with `skipifsilent` removed should already start app,
+            // but ensure it runs even if [Run] is skipped.
+            launch_installed_app();
         }
         Err(e) => {
             eprintln!("Installer error: {e}");

@@ -52,8 +52,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "target\release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "target\release\updater.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "target\release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion restartreplace
+Source: "target\release\updater.exe"; DestDir: "{app}"; Flags: ignoreversion restartreplace
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files.
 
 [Icons]
@@ -63,5 +63,5 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 ; Verb: runas запрашивает права администратора (UAC) перед запуском exe (требуется Inno Setup 6.3+)
-Filename: "{app}\{#MyAppExeName}"; Verb: runas; Description: "{cm:LaunchProgram,{#DoubleAmp(MyAppName)}}"; Flags: nowait postinstall skipifsilent shellexec
+Filename: "{app}\{#MyAppExeName}"; Verb: runas; Description: "{cm:LaunchProgram,{#DoubleAmp(MyAppName)}}"; Flags: nowait postinstall shellexec
 
