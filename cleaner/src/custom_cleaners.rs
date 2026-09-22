@@ -271,7 +271,7 @@ pub fn register_all() {
         sub_category: "Compress",
         os: ["windows"],
         sequential: true,
-        glob: "{drive}\\Users\\{username}\\Pictures\\**",
+        glob: "{drive}\\Users\\{username}\\Pictures\\**\\*",
         |path| {
             crate::image_optimizer::optimize_single(path)
         }
@@ -286,7 +286,7 @@ pub fn register_all() {
         sub_category: "Compress",
         os: ["windows"],
         sequential: true,
-        glob: "{drive}\\Users\\{username}\\Documents\\ShareX\\Screenshots\\**",
+        glob: "{drive}\\Users\\{username}\\Documents\\ShareX\\Screenshots\\*\\*",
         |path| {
             crate::image_optimizer::optimize_single(path)
         }
