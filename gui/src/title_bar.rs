@@ -143,14 +143,12 @@ pub fn title_bar(
                         ui.add_space(0.0);
                     } else if show_settings {
                         if let Some(tex) = settings_texture {
-                            let settings_image =
-                                egui::Image::from_texture(egui::load::SizedTexture::new(
-                                    tex.id(),
-                                    tex.size_vec2(),
-                                ))
-                                .fit_to_exact_size(egui::vec2(16.0, 16.0))
-                                .tint(ui.visuals().text_color())
-                                .sense(egui::Sense::click());
+                            let settings_image = egui::Image::from_texture(
+                                egui::load::SizedTexture::new(tex.id(), tex.size_vec2()),
+                            )
+                            .fit_to_exact_size(egui::vec2(16.0, 16.0))
+                            .tint(ui.visuals().text_color())
+                            .sense(egui::Sense::click());
                             let settings_resp =
                                 ui.add_sized(egui::vec2(16.0, 16.0), settings_image);
                             if settings_resp.clicked() {
@@ -179,7 +177,11 @@ pub fn title_bar(
     // Drag area: whole bar except the button zone on the right, so buttons
     // get a single click instead of the drag overlay swallowing it.
     let bar_rect = title_bar.response.rect;
-    let left_reserved = if show_back || show_settings { 44.0 } else { 0.0 };
+    let left_reserved = if show_back || show_settings {
+        44.0
+    } else {
+        0.0
+    };
     let drag_rect = egui::Rect::from_min_max(
         egui::pos2(
             (bar_rect.min.x + left_reserved).min(bar_rect.max.x),

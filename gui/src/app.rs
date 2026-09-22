@@ -512,7 +512,15 @@ impl MyApp {
                         // Same custom title bar as the main window (drag, GitHub,
                         // minimize & close buttons). Close sends ViewportCommand::Close
                         // to this viewport, which is handled above.
-                        title_bar(ui, &ctx, "Cross Cleaner - What's New", icon.as_ref(), false, false, None);
+                        title_bar(
+                            ui,
+                            &ctx,
+                            "Cross Cleaner - What's New",
+                            icon.as_ref(),
+                            false,
+                            false,
+                            None,
+                        );
                         // Same 2px outline as the main window.
                         let focused = ctx.input(|i| i.viewport().focused.unwrap_or(false));
                         let border_color = if focused {
