@@ -1,14 +1,15 @@
+use image::AnimationDecoder;
 use image::DynamicImage;
 use image::codecs::bmp::BmpEncoder;
-use image::codecs::gif::GifEncoder;
+use image::codecs::gif::{GifDecoder, GifEncoder};
 use image::codecs::jpeg::JpegEncoder;
 use image::codecs::png::{CompressionType, FilterType, PngEncoder};
-use image::codecs::tiff::TiffEncoder;
 use image::codecs::webp::WebPEncoder;
-use std::io::{self, Cursor, Write};
+use std::fs::File;
+use std::io::{self, BufReader, Cursor, Write};
 use std::path::Path;
 
-const IMAGE_EXTENSIONS: &[&str] = &["png", "jpg", "jpeg", "webp", "gif", "bmp", "tiff"];
+const IMAGE_EXTENSIONS: &[&str] = &["png", "jpg", "jpeg", "webp", "gif", "bmp"];
 const JPEG_QUALITY: u8 = 85;
 
 fn is_image_extension(ext: &str) -> bool {
@@ -33,8 +34,29 @@ pub fn optimize_single(path: &Path) -> Result<crate::custom_cleaners::GlobCleanS
         return Ok(crate::custom_cleaners::GlobCleanStats::default());
     }
 
-    let original_size = std::fs::metadata(path)?.len();
+    let parent = path.parent().unwrap_or_else(|| Path::new("."));
+    let _parent_dir = crate::open_dir_without_links(parent)?;
+    let original = std::fs::symlink_metadata(path)?;
+    if original.is_symlink() || !original.is_file() {
+        return Ok(crate::custom_cleaners::GlobCleanStats::default());
+    }
+    let original_size = original.len();
     eprintln!("[image_optimize] original_size={}", original_size);
+
+    if ext == "gif" {
+        let decoder =
+            GifDecoder::new(BufReader::new(File::open(path)?)).map_err(io::Error::other)?;
+        let mut frames = decoder.into_frames();
+        frames.next().transpose().map_err(io::Error::other)?;
+        if frames
+            .next()
+            .transpose()
+            .map_err(io::Error::other)?
+            .is_some()
+        {
+            return Ok(crate::custom_cleaners::GlobCleanStats::default());
+        }
+    }
 
     let img = image::open(path).map_err(|e| {
         eprintln!("[image_optimize] open failed: {}", e);
@@ -48,7 +70,6 @@ pub fn optimize_single(path: &Path) -> Result<crate::custom_cleaners::GlobCleanS
         "webp" => encode_webp(&mut buf, &img)?,
         "gif" => encode_gif(&mut buf, &img)?,
         "bmp" => encode_bmp(&mut buf, &img)?,
-        "tiff" => encode_tiff(&mut buf, &img)?,
         _ => return Ok(crate::custom_cleaners::GlobCleanStats::default()),
     }
 
@@ -65,7 +86,13 @@ pub fn optimize_single(path: &Path) -> Result<crate::custom_cleaners::GlobCleanS
         return Ok(crate::custom_cleaners::GlobCleanStats::default());
     }
 
-    std::fs::write(path, &compressed)?;
+    let mut replacement = tempfile::NamedTempFile::new_in(parent)?;
+    replacement.write_all(&compressed)?;
+    replacement.as_file().sync_all()?;
+    replacement
+        .as_file()
+        .set_permissions(original.permissions())?;
+    replacement.persist(path).map_err(|e| e.error)?;
 
     let saved = original_size - new_size;
     eprintln!("[image_optimize] WRITTEN saved={}", saved);
@@ -97,7 +124,68 @@ fn encode_bmp(w: &mut impl Write, img: &DynamicImage) -> io::Result<()> {
     img.write_with_encoder(encoder).map_err(io::Error::other)
 }
 
-fn encode_tiff(w: &mut Cursor<Vec<u8>>, img: &DynamicImage) -> io::Result<()> {
-    let encoder = TiffEncoder::new(w);
-    img.write_with_encoder(encoder).map_err(io::Error::other)
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use image::{Frame, ImageEncoder, Rgba, RgbaImage};
+
+    #[test]
+    fn optimized_png_replaces_original_with_same_pixels() {
+        let temp_dir = tempfile::tempdir().unwrap();
+        let path = temp_dir.path().join("image.png");
+        let image = RgbaImage::from_fn(256, 256, |x, y| {
+            Rgba([x as u8, y as u8, (x + y) as u8, 255])
+        });
+        let file = File::create(&path).unwrap();
+        PngEncoder::new_with_quality(file, CompressionType::Fast, FilterType::NoFilter)
+            .write_image(image.as_raw(), 256, 256, image::ExtendedColorType::Rgba8)
+            .unwrap();
+        let original_size = std::fs::metadata(&path).unwrap().len();
+
+        let result = optimize_single(&path).unwrap();
+        assert_eq!(result.files, 1);
+        assert_eq!(
+            result.bytes,
+            original_size - std::fs::metadata(&path).unwrap().len()
+        );
+        assert_eq!(image::open(&path).unwrap().to_rgba8(), image);
+    }
+
+    #[test]
+    fn animated_gif_is_left_unchanged() {
+        let temp_dir = tempfile::tempdir().unwrap();
+        let path = temp_dir.path().join("animated.gif");
+        let file = std::fs::File::create(&path).unwrap();
+        let mut encoder = GifEncoder::new(file);
+        let frames = [Rgba([255, 0, 0, 255]), Rgba([0, 0, 255, 255])]
+            .into_iter()
+            .map(|color| Frame::new(RgbaImage::from_pixel(64, 64, color)));
+        encoder.encode_frames(frames).unwrap();
+        drop(encoder);
+
+        let original = std::fs::read(&path).unwrap();
+        assert_eq!(optimize_single(&path).unwrap().files, 0);
+        assert_eq!(std::fs::read(&path).unwrap(), original);
+    }
+
+    #[cfg(any(windows, unix))]
+    #[test]
+    fn linked_image_parent_is_refused() {
+        #[cfg(unix)]
+        use std::os::unix::fs::symlink as symlink_dir;
+        #[cfg(windows)]
+        use std::os::windows::fs::symlink_dir;
+
+        let temp_dir = tempfile::tempdir().unwrap();
+        let outside = temp_dir.path().join("outside");
+        std::fs::create_dir(&outside).unwrap();
+        let image = outside.join("image.png");
+        RgbaImage::new(2, 2).save(&image).unwrap();
+        let original = std::fs::read(&image).unwrap();
+        let link = temp_dir.path().join("link");
+        symlink_dir(&outside, &link).unwrap();
+
+        assert!(optimize_single(&link.join("image.png")).is_err());
+        assert_eq!(std::fs::read(&image).unwrap(), original);
+    }
 }

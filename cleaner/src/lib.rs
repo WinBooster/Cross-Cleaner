@@ -12,11 +12,10 @@ pub mod image_optimizer;
 // INFO: Re-export so macro_rules! ($crate::database::...) resolves in any consumer crate
 pub use database;
 
-// INFO: Safe join for untrusted names (from DB): only plain relative components.
 // Rejects "..", ".", absolute paths, Windows prefixes (C:\, \\?\) and empty names.
-fn safe_join(base: &Path, name: &str) -> Option<PathBuf> {
+fn safe_relative_path(name: &str) -> Option<PathBuf> {
     let rel = Path::new(name);
-    let mut out = base.to_path_buf();
+    let mut out = PathBuf::new();
     let mut any = false;
     for c in rel.components() {
         match c {
@@ -35,18 +34,47 @@ fn safe_join(base: &Path, name: &str) -> Option<PathBuf> {
 // state) instead of letting every cleaner spawn its own pool of tasks.
 static BLOCKING: LazyLock<Arc<Semaphore>> = LazyLock::new(|| Arc::new(Semaphore::new(32)));
 
-// B: blocking fast helper - uses cap-std for TOCTOU-safe removal.
-fn remove_file_sync(path: &Path) -> io::Result<u64> {
-    let authority = cap_std::ambient_authority();
-    let name = path
-        .file_name()
-        .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "no file name in path"))?;
-    let parent = path.parent().unwrap_or_else(|| Path::new(""));
-    let dir = if parent.as_os_str().is_empty() {
-        cap_std::fs::Dir::open_ambient_dir(".", authority)?
+// macOS uses /var as a system link. Start at the first path component so those
+// paths still work, then reject links below it while walking directory handles.
+fn open_dir_without_links(path: &Path) -> io::Result<cap_std::fs::Dir> {
+    let mut components = path.components().peekable();
+    let mut anchor = PathBuf::new();
+    if path.is_absolute() {
+        while matches!(
+            components.peek(),
+            Some(Component::Prefix(_) | Component::RootDir)
+        ) {
+            anchor.push(components.next().unwrap().as_os_str());
+        }
+        if let Some(Component::Normal(top_level)) = components.peek() {
+            anchor.push(top_level);
+            components.next();
+        }
     } else {
-        cap_std::fs::Dir::open_ambient_dir(parent, authority)?
-    };
+        anchor.push(".");
+    }
+
+    let mut dir = cap_std::fs::Dir::open_ambient_dir(&anchor, cap_std::ambient_authority())?;
+    for component in components {
+        match component {
+            Component::CurDir => {}
+            Component::Normal(name) => {
+                let meta = dir.symlink_metadata(name)?;
+                if meta.is_symlink() || !meta.is_dir() {
+                    return Err(io::Error::new(
+                        io::ErrorKind::InvalidInput,
+                        "linked or non-directory path component",
+                    ));
+                }
+                dir = dir.open_dir(name)?;
+            }
+            _ => return Err(io::Error::new(io::ErrorKind::InvalidInput, "unsafe path")),
+        }
+    }
+    Ok(dir)
+}
+
+fn remove_file_in_dir(dir: &cap_std::fs::Dir, name: &Path) -> io::Result<u64> {
     let meta = dir.symlink_metadata(name)?;
     if meta.is_symlink() {
         return Err(io::Error::new(
@@ -62,19 +90,16 @@ fn remove_file_sync(path: &Path) -> io::Result<u64> {
     Ok(len)
 }
 
-fn remove_dir_sync(root: PathBuf) -> io::Result<(u64, u64, u64)> {
-    let authority = cap_std::ambient_authority();
-    let name = root.file_name().ok_or_else(|| {
-        io::Error::new(io::ErrorKind::InvalidInput, "cannot remove filesystem root")
-    })?;
-    let parent = root.parent().unwrap_or_else(|| Path::new("."));
-    // Open the parent as a capability handle (dirfd on Unix, HANDLE on Windows).
-    // Every further operation is resolved against open handles, so paths swapped
-    // in mid-traversal cannot escape the parent's tree - this closes the TOCTOU
-    // window that plain name-based std::fs calls have.
-    let parent_dir = cap_std::fs::Dir::open_ambient_dir(parent, authority)?;
-    // Refuse a symlinked root: check the final component with lstat semantics
-    // before opening it relative to the parent handle.
+fn remove_file_sync(path: &Path) -> io::Result<u64> {
+    let name = path
+        .file_name()
+        .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "no file name in path"))?;
+    let parent = path.parent().unwrap_or_else(|| Path::new("."));
+    let dir = open_dir_without_links(parent)?;
+    remove_file_in_dir(&dir, Path::new(name))
+}
+
+fn remove_dir_in_dir(parent_dir: &cap_std::fs::Dir, name: &Path) -> io::Result<(u64, u64, u64)> {
     let meta = parent_dir.symlink_metadata(name)?;
     if meta.is_symlink() {
         return Err(io::Error::new(
@@ -89,6 +114,15 @@ fn remove_dir_sync(root: PathBuf) -> io::Result<(u64, u64, u64)> {
     drop(dir);
     parent_dir.remove_dir(name)?; // root is now empty; counts itself
     Ok((files, folders + 1, bytes))
+}
+
+fn remove_dir_sync(root: PathBuf) -> io::Result<(u64, u64, u64)> {
+    let name = root.file_name().ok_or_else(|| {
+        io::Error::new(io::ErrorKind::InvalidInput, "cannot remove filesystem root")
+    })?;
+    let parent = root.parent().unwrap_or_else(|| Path::new("."));
+    let parent_dir = open_dir_without_links(parent)?;
+    remove_dir_in_dir(&parent_dir, Path::new(name))
 }
 
 // INFO: Depth-first deletion relative to open handles. Entry types come from
@@ -166,29 +200,45 @@ impl PathStats {
 fn clean_path_sync(path: &Path, data: &CleanerData) -> PathStats {
     let mut stats = PathStats::default();
 
+    let named_dir = if data.files_to_remove.is_empty() && data.directories_to_remove.is_empty() {
+        None
+    } else {
+        match open_dir_without_links(path) {
+            Ok(dir) => Some(dir),
+            Err(e) => {
+                eprintln!("cleaner: open_dir {}: {}", path.display(), e);
+                None
+            }
+        }
+    };
+
     for fname in &data.files_to_remove {
-        let Some(fpath) = safe_join(path, fname) else {
+        let Some(relative) = safe_relative_path(fname) else {
             eprintln!(
                 "cleaner: skipping unsafe file name {:?} in {}",
                 fname, data.path
             );
             continue;
         };
-        match remove_file_sync(&fpath) {
+        let Some(dir) = &named_dir else { break };
+        let fpath = path.join(&relative);
+        match remove_file_in_dir(dir, &relative) {
             Ok(b) => stats.add(1, 0, b),
             Err(e) => eprintln!("cleaner: remove_file {}: {}", fpath.display(), e),
         }
     }
 
     for dname in &data.directories_to_remove {
-        let Some(dpath) = safe_join(path, dname) else {
+        let Some(relative) = safe_relative_path(dname) else {
             eprintln!(
                 "cleaner: skipping unsafe dir name {:?} in {}",
                 dname, data.path
             );
             continue;
         };
-        match remove_dir_sync(dpath.clone()) {
+        let Some(dir) = &named_dir else { break };
+        let dpath = path.join(&relative);
+        match remove_dir_in_dir(dir, &relative) {
             Ok((f, fo, b)) => stats.add(f, fo, b),
             Err(e) => eprintln!("cleaner: remove_dir {}: {}", dpath.display(), e),
         }
@@ -213,9 +263,10 @@ fn clean_path_sync(path: &Path, data: &CleanerData) -> PathStats {
         stats.add(f, fo, b);
     }
 
-    if data.remove_directory_after_clean && std::fs::remove_dir_all(path).is_ok() {
-        stats.folders += 1;
-        stats.working = true;
+    if data.remove_directory_after_clean
+        && let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf())
+    {
+        stats.add(f, fo, b);
     }
 
     stats
@@ -433,6 +484,25 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn test_clear_data_specific_nested_names() {
+        let temp_dir = TempDir::new().unwrap();
+        let base = temp_dir.path().join("base");
+        let nested = base.join("nested");
+        fs::create_dir_all(nested.join("cache")).unwrap();
+        fs::write(nested.join("old.log"), b"log").unwrap();
+        fs::write(nested.join("cache").join("cache.dat"), b"cache").unwrap();
+        fs::write(nested.join("keep.txt"), b"keep").unwrap();
+
+        let mut data = create_test_data(base.to_string_lossy().into_owned());
+        data.files_to_remove = vec!["nested/old.log".into()];
+        data.directories_to_remove = vec!["nested/cache".into()];
+
+        let result = clear_data(&data).await;
+        assert_eq!((result.files, result.folders, result.bytes), (2, 1, 8));
+        assert!(nested.join("keep.txt").exists());
+    }
+
+    #[tokio::test]
     async fn test_clear_data_glob_pattern() {
         let temp_dir = TempDir::new().unwrap();
         fs::write(temp_dir.path().join("file1.tmp"), b"temp1").unwrap();
@@ -591,6 +661,97 @@ mod tests {
         assert!(outside.exists());
     }
 
+    #[cfg(any(windows, unix))]
+    #[tokio::test]
+    async fn test_clear_data_named_paths_do_not_follow_directory_links() {
+        #[cfg(unix)]
+        use std::os::unix::fs::symlink as symlink_dir;
+        #[cfg(windows)]
+        use std::os::windows::fs::symlink_dir;
+
+        let temp_dir = TempDir::new().unwrap();
+        let base = temp_dir.path().join("base");
+        let outside = temp_dir.path().join("outside");
+        fs::create_dir(&base).unwrap();
+        fs::create_dir(&outside).unwrap();
+        fs::write(outside.join("keep.txt"), b"keep").unwrap();
+        fs::create_dir(outside.join("keep_dir")).unwrap();
+        symlink_dir(&outside, base.join("link")).unwrap();
+
+        let mut data = create_test_data(base.to_string_lossy().into_owned());
+        data.files_to_remove = vec!["link/keep.txt".into()];
+        data.directories_to_remove = vec!["link/keep_dir".into()];
+
+        let result = clear_data(&data).await;
+        assert!(!result.working);
+        assert!(outside.join("keep.txt").exists());
+        assert!(outside.join("keep_dir").exists());
+    }
+
+    #[cfg(any(windows, unix))]
+    #[tokio::test]
+    async fn test_clear_data_does_not_follow_linked_match_parent() {
+        #[cfg(unix)]
+        use std::os::unix::fs::symlink as symlink_dir;
+        #[cfg(windows)]
+        use std::os::windows::fs::symlink_dir;
+
+        let temp_dir = TempDir::new().unwrap();
+        let base = temp_dir.path().join("base");
+        let outside = temp_dir.path().join("outside");
+        fs::create_dir(&base).unwrap();
+        fs::create_dir(&outside).unwrap();
+        let keep = outside.join("keep.tmp");
+        fs::write(&keep, b"keep").unwrap();
+        symlink_dir(&outside, base.join("link")).unwrap();
+
+        let mut data = create_test_data(format!("{}/link/*.tmp", base.display()));
+        data.remove_files = true;
+
+        let result = clear_data(&data).await;
+        assert!(!result.working);
+        assert!(keep.exists());
+    }
+
+    #[cfg(any(windows, unix))]
+    #[tokio::test]
+    async fn test_clear_data_named_paths_refuse_linked_root() {
+        #[cfg(unix)]
+        use std::os::unix::fs::symlink as symlink_dir;
+        #[cfg(windows)]
+        use std::os::windows::fs::symlink_dir;
+
+        let temp_dir = TempDir::new().unwrap();
+        let outside = temp_dir.path().join("outside");
+        fs::create_dir(&outside).unwrap();
+        let keep = outside.join("keep.txt");
+        fs::write(&keep, b"keep").unwrap();
+        let link = temp_dir.path().join("link");
+        symlink_dir(&outside, &link).unwrap();
+
+        let mut data = create_test_data(link.to_string_lossy().into_owned());
+        data.files_to_remove = vec!["keep.txt".into()];
+
+        let result = clear_data(&data).await;
+        assert!(!result.working);
+        assert!(keep.exists());
+    }
+
+    #[tokio::test]
+    async fn test_remove_directory_after_clean_counts_deleted_contents() {
+        let temp_dir = TempDir::new().unwrap();
+        let target = temp_dir.path().join("target");
+        fs::create_dir(&target).unwrap();
+        fs::write(target.join("file.txt"), b"content").unwrap();
+
+        let mut data = create_test_data(target.to_string_lossy().into_owned());
+        data.remove_directory_after_clean = true;
+
+        let result = clear_data(&data).await;
+        assert_eq!((result.files, result.folders, result.bytes), (1, 1, 7));
+        assert!(!target.exists());
+    }
+
     #[tokio::test]
     async fn test_clear_data_rejects_parent_in_pattern() {
         let temp_dir = TempDir::new().unwrap();
@@ -698,6 +859,7 @@ mod tests {
 
         let mut data = create_test_data(link.to_str().unwrap().to_string());
         data.remove_all_in_dir = true;
+        data.remove_directory_after_clean = true;
 
         let result = clear_data(&data).await;
 
@@ -721,6 +883,7 @@ mod tests {
 
         let mut data = create_test_data(link.to_str().unwrap().to_string());
         data.remove_all_in_dir = true;
+        data.remove_directory_after_clean = true;
 
         let result = clear_data(&data).await;
 
