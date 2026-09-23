@@ -10,8 +10,8 @@ rayon = "1.12"
 futures = "0.3"
 tokio = { version = "1", features = ["fs", "rt", "rt-multi-thread", "macros", "sync"] }
 database = { path = "../database" }
-image = { version = "0.25.10", default-features = false, features = ["png", "ico", "jpeg", "webp", "bmp", "gif", "tiff"] }
+image = { version = "0.25.10", default-features = false, features = ["png", "ico", "jpeg", "webp", "bmp", "gif"] }
+tempfile = "3.27"
 
 [dev-dependencies]
-tempfile = "3.27"
 proptest = "1.11"

@@ -258,13 +258,28 @@ fn paint_glyph(ui: &egui::Ui, rect: egui::Rect, glyph: &str) {
 /// Opens a URL in the system browser.
 #[cfg(windows)]
 pub(crate) fn open_in_browser(url: &str) {
-    use std::os::windows::process::CommandExt;
-    const CREATE_NO_WINDOW: u32 = 0x08000000;
+    use windows::Win32::UI::Shell::ShellExecuteW;
+    use windows::Win32::UI::WindowsAndMessaging::SW_SHOWNORMAL;
+    use windows::core::{PCWSTR, w};
 
-    let _ = std::process::Command::new("cmd")
-        .args(["/C", "start", "", url])
-        .creation_flags(CREATE_NO_WINDOW)
-        .spawn();
+    if !url.starts_with("https://") {
+        eprintln!("Refusing to open non-HTTPS URL: {url}");
+        return;
+    }
+    let wide_url: Vec<u16> = url.encode_utf16().chain(std::iter::once(0)).collect();
+    let result = unsafe {
+        ShellExecuteW(
+            None,
+            w!("open"),
+            PCWSTR(wide_url.as_ptr()),
+            PCWSTR::null(),
+            PCWSTR::null(),
+            SW_SHOWNORMAL,
+        )
+    };
+    if result.0 as isize <= 32 {
+        eprintln!("Failed to open URL in browser: {url}");
+    }
 }
 
 #[cfg(target_os = "linux")]
