@@ -7,7 +7,7 @@ use database::cleaner_database::CleanerDatabase;
 use database::registry_database::{RegistryDatabase, clear_registry};
 #[cfg(windows)]
 use database::structures::CleanerDataRegistry;
-use database::structures::{CleanerData, CleanerResult, Cleared, CustomCleaner};
+use database::structures::{CleanerData, Cleared, CustomCleaner};
 use database::utils::get_file_size_string;
 use futures::stream::{FuturesUnordered, StreamExt};
 use std::collections::{HashMap, HashSet};
@@ -93,23 +93,8 @@ pub async fn work(
                     let _p = sem.acquire_owned().await.unwrap();
                     let _ = sender.send(format!("Cleaning: {}", name_msg)).await;
                     let progress_for_cleaner = sender.clone();
-                    tokio::task::spawn_blocking(move || {
-                        database::custom_cleaners::run_custom_cleaner(
-                            &data,
-                            Some(progress_for_cleaner),
-                        )
-                    })
-                    .await
-                    .unwrap_or_else(|_| CleanerResult {
-                        files: 0,
-                        folders: 0,
-                        bytes: 0,
-                        working: false,
-                        path: String::new(),
-                        program: String::new(),
-                        category: String::new(),
-                        sub_category: String::new(),
-                    })
+                    database::custom_cleaners::run_custom_cleaner(&data, Some(progress_for_cleaner))
+                        .await
                 }));
             }
         }
@@ -187,21 +172,9 @@ pub async fn work(
     for data in sequential_cleaners {
         current_task += 1;
         let _ = progress_sender.send(format!("Cleaning: {}", data.id)).await;
-        let result = tokio::task::spawn_blocking({
-            let sender = progress_sender.clone();
-            move || database::custom_cleaners::run_custom_cleaner(&data, Some(sender))
-        })
-        .await
-        .unwrap_or_else(|_| CleanerResult {
-            files: 0,
-            folders: 0,
-            bytes: 0,
-            working: false,
-            path: String::new(),
-            program: String::new(),
-            category: String::new(),
-            sub_category: String::new(),
-        });
+        let result =
+            database::custom_cleaners::run_custom_cleaner(&data, Some(progress_sender.clone()))
+                .await;
 
         if result.working {
             bytes_cleared += result.bytes;

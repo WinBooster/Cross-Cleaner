@@ -62,11 +62,11 @@ pub fn custom_cleaner_ids() -> Vec<String> {
 }
 
 /// Execute the cleaning function of a custom cleaner.
-pub fn run_custom_cleaner(
+pub async fn run_custom_cleaner(
     cleaner: &CustomCleaner,
     sender: Option<mpsc::Sender<String>>,
 ) -> CleanerResult {
-    (cleaner.function)(cleaner, sender)
+    (cleaner.function)(cleaner, sender).await
 }
 
 /// Expand placeholders: {username}, {drive} (one entry per drive letter).
@@ -108,15 +108,19 @@ mod tests {
             args: vec![],
             os: vec![],
             sequential: false,
-            function: |_, _| CleanerResult {
-                files: 0,
-                folders: 0,
-                bytes: 0,
-                working: false,
-                path: String::new(),
-                program: String::new(),
-                category: String::new(),
-                sub_category: String::new(),
+            function: |_, _| {
+                Box::pin(async move {
+                    CleanerResult {
+                        files: 0,
+                        folders: 0,
+                        bytes: 0,
+                        working: false,
+                        path: String::new(),
+                        program: String::new(),
+                        category: String::new(),
+                        sub_category: String::new(),
+                    }
+                })
             },
         }
     }
@@ -147,26 +151,29 @@ mod tests {
         assert!(all.iter().any(|c| c.id == "ids_test_1"));
     }
 
-    #[test]
-    fn test_run_custom_cleaner() {
+    #[tokio::test]
+    async fn test_run_custom_cleaner() {
         let mut cleaner = test_cleaner("run_test_1");
         cleaner.function = |data, _sender| {
-            let mut r = CleanerResult {
-                files: 0,
-                folders: 0,
-                bytes: 0,
-                working: false,
-                path: data.path.clone(),
-                program: data.program.clone(),
-                category: data.category.clone(),
-                sub_category: data.sub_category.clone(),
-            };
-            r.working = true;
-            r.files = 1;
-            r
+            let data = data.clone();
+            Box::pin(async move {
+                let mut r = CleanerResult {
+                    files: 0,
+                    folders: 0,
+                    bytes: 0,
+                    working: false,
+                    path: data.path.clone(),
+                    program: data.program.clone(),
+                    category: data.category.clone(),
+                    sub_category: data.sub_category.clone(),
+                };
+                r.working = true;
+                r.files = 1;
+                r
+            })
         };
 
-        let result = run_custom_cleaner(&cleaner, None);
+        let result = run_custom_cleaner(&cleaner, None).await;
         assert!(result.working);
         assert_eq!(result.files, 1);
         assert_eq!(result.program, "TestProgram");

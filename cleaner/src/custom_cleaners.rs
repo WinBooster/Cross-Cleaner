@@ -80,70 +80,73 @@ macro_rules! custom_glob_cleaner {
         fn __custom_glob_wrapper(
             data: &$crate::database::structures::CustomCleaner,
             sender: Option<tokio::sync::mpsc::Sender<String>>,
-        ) -> $crate::database::structures::CleanerResult {
-            use std::sync::atomic::{AtomicU64, Ordering};
-            use rayon::iter::IntoParallelIterator;
-            use rayon::iter::ParallelIterator;
+        ) -> std::pin::Pin<Box<dyn std::future::Future<Output = $crate::database::structures::CleanerResult> + Send>> {
+            let data = data.clone();
+            Box::pin(async move {
+                use std::sync::atomic::{AtomicU64, Ordering};
+                use rayon::iter::IntoParallelIterator;
+                use rayon::iter::ParallelIterator;
 
-            let mut result = $crate::database::structures::CleanerResult {
-                files: 0,
-                folders: 0,
-                bytes: 0,
-                working: false,
-                path: data.path.clone(),
-                program: data.program.clone(),
-                category: data.category.clone(),
-                sub_category: data.sub_category.clone(),
-            };
+                let mut result = $crate::database::structures::CleanerResult {
+                    files: 0,
+                    folders: 0,
+                    bytes: 0,
+                    working: false,
+                    path: data.path.clone(),
+                    program: data.program.clone(),
+                    category: data.category.clone(),
+                    sub_category: data.sub_category.clone(),
+                };
 
-            let entries: Vec<std::path::PathBuf> = match ::glob::glob(&data.path) {
-                Ok(g) => g.filter_map(Result::ok).collect(),
-                Err(_) => return result,
-            };
+                let entries: Vec<std::path::PathBuf> = match ::glob::glob(&data.path) {
+                    Ok(g) => g.filter_map(Result::ok).collect(),
+                    Err(_) => return result,
+                };
 
-            let total = entries.len();
-            if total == 0 {
-                return result;
-            }
-
-            if let Some(ref s) = sender {
-                let _ = s.blocking_send(format!("Found {} files, compressing...", total));
-            }
-
-            let completed = AtomicU64::new(0);
-            let total_bytes = AtomicU64::new(0);
-            let total_files = AtomicU64::new(0);
-            let total_folders = AtomicU64::new(0);
-
-            entries.into_par_iter().for_each(|entry_path| {
-                if let Ok(stats) = __custom_glob_entry(&entry_path, &data.args) {
-                    if stats.files > 0 || stats.folders > 0 || stats.bytes > 0 {
-                        total_files.fetch_add(stats.files, Ordering::Relaxed);
-                        total_folders.fetch_add(stats.folders, Ordering::Relaxed);
-                        total_bytes.fetch_add(stats.bytes, Ordering::Relaxed);
-                    }
+                let total = entries.len();
+                if total == 0 {
+                    return result;
                 }
 
-                let cur = completed.fetch_add(1, Ordering::Relaxed) + 1;
-                if cur % 5 == 0 || cur == total as u64 {
-                    let bytes = total_bytes.load(Ordering::Relaxed);
-                    if let Some(ref s) = sender {
-                        let _ = s.blocking_send(format!(
-                            "Compressing {}/{} files... {}",
-                            cur,
-                            total as u64,
-                            $crate::database::utils::get_file_size_string(bytes)
-                        ));
-                    }
+                if let Some(ref s) = sender {
+                    let _ = s.send(format!("Found {} files, compressing...", total)).await;
                 }
-            });
 
-            result.files = total_files.load(Ordering::Relaxed);
-            result.folders = total_folders.load(Ordering::Relaxed);
-            result.bytes = total_bytes.load(Ordering::Relaxed);
-            result.working = result.files > 0 || result.folders > 0;
+                let completed = AtomicU64::new(0);
+                let total_bytes = AtomicU64::new(0);
+                let total_files = AtomicU64::new(0);
+                let total_folders = AtomicU64::new(0);
 
-            result
+                entries.into_par_iter().for_each(|entry_path| {
+                    if let Ok(stats) = __custom_glob_entry(&entry_path, &data.args) {
+                        if stats.files > 0 || stats.folders > 0 || stats.bytes > 0 {
+                            total_files.fetch_add(stats.files, Ordering::Relaxed);
+                            total_folders.fetch_add(stats.folders, Ordering::Relaxed);
+                            total_bytes.fetch_add(stats.bytes, Ordering::Relaxed);
+                        }
+                    }
+
+                    let cur = completed.fetch_add(1, Ordering::Relaxed) + 1;
+                    if cur % 5 == 0 || cur == total as u64 {
+                        let bytes = total_bytes.load(Ordering::Relaxed);
+                        if let Some(ref s) = sender {
+                            let _ = s.blocking_send(format!(
+                                "Compressing {}/{} files... {}",
+                                cur,
+                                total as u64,
+                                $crate::database::utils::get_file_size_string(bytes)
+                            ));
+                        }
+                    }
+                });
+
+                result.files = total_files.load(Ordering::Relaxed);
+                result.folders = total_folders.load(Ordering::Relaxed);
+                result.bytes = total_bytes.load(Ordering::Relaxed);
+                result.working = result.files > 0 || result.folders > 0;
+
+                result
+            })
         }
 
         $crate::database::custom_cleaners::register_custom_cleaner(

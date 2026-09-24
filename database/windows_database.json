@@ -16,15 +16,6 @@
     ]
   },
   {
-    "path": "{drive}Program Files (x86)\\360\\Total Security",
-    "class": "Security",
-    "category": "Logs",
-    "program": "360 Total Security",
-    "directories_to_remove": [
-      "Logs"
-    ]
-  },
-  {
     "path": "{drive}ProgramData\\360TotalSecurity",
     "class": "Security",
     "category": "Logs",
@@ -410,9 +401,7 @@
     "program": "ATLauncher",
     "directories_to_remove": [
       "licenses"
-    ],
-    "remove_directories": true,
-    "remove_files": true
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher",
@@ -421,9 +410,7 @@
     "program": "ATLauncher",
     "directories_to_remove": [
       "logs"
-    ],
-    "remove_directories": true,
-    "remove_files": true
+    ]
   },
   {
     "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\*log*",
@@ -560,7 +547,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\crash-reports/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\crash-reports\\*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "Badlion Client",
@@ -568,7 +555,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\saves/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\saves\\*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -577,7 +564,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\screenshots/*",
+    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\screenshots\\*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "Badlion Client",
@@ -646,9 +633,7 @@
     "program": "BlueStacks 5",
     "directories_to_remove": [
       "Dumps"
-    ],
-    "remove_directories": true,
-    "remove_files": true
+    ]
   },
   {
     "path": "{drive}Program Files\\BlueStacks_nxt",
@@ -1004,7 +989,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.cristalix\\updates\\*\\crash-reports/*",
+    "path": "{drive}Users\\{username}\\.cristalix\\updates\\*\\crash-reports\\*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "Cristalix",
@@ -1012,7 +997,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.cristalix\\updates\\*\\saves/*",
+    "path": "{drive}Users\\{username}\\.cristalix\\updates\\*\\saves\\*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -1021,7 +1006,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.cristalix\\updates\\*\\screenshots/*",
+    "path": "{drive}Users\\{username}\\.cristalix\\updates\\*\\screenshots\\*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "Cristalix",
@@ -1098,7 +1083,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install\\game-cache/*",
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install\\game-cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "CurseForge",
@@ -1106,7 +1091,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install\\cache/*",
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install\\cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "CurseForge",
@@ -1128,7 +1113,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\*\\crash-reports/*",
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\*\\crash-reports\\*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "CurseForge",
@@ -1136,7 +1121,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\*\\saves/*",
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\*\\saves\\*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -1145,7 +1130,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\*\\screenshots/*",
+    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\*\\screenshots\\*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "CurseForge",
