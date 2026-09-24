@@ -200,8 +200,6 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
       - name: Install cargo-apk2
         run: cargo install cargo-apk2 --locked
       - name: Install Android targets
