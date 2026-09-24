@@ -1,19 +1,5 @@
 [
   {
-    "path": "/storage/emulated/0/Download/*",
-    "category": "Downloads",
-    "program": "System",
-    "remove_files": true,
-    "remove_directories": true
-  },
-  {
-    "path": "/storage/emulated/0/Movies/TikTok/*",
-    "category": "Downloads",
-    "program": "TikTok",
-    "remove_files": true,
-    "remove_directories": true
-  },
-  {
     "path": "/storage/emulated/0/DCIM/Camera/*",
     "category": "Images",
     "program": "Camera",
@@ -27,9 +13,16 @@
     "remove_files": true
   },
   {
+    "path": "/storage/emulated/0/Download/*",
+    "category": "Downloads",
+    "program": "System",
+    "remove_files": true,
+    "remove_directories": true
+  },
+  {
     "path": "/storage/emulated/0/Pictures/Screenshots/*",
     "category": "Images",
-	"sub_category": "Screenshots",
+    "sub_category": "Screenshots",
     "program": "System",
     "remove_files": true
   },
@@ -48,5 +41,12 @@
     "directories_to_remove": [
       "cache"
     ]
+  },
+  {
+    "path": "/storage/emulated/0/Movies/TikTok/*",
+    "category": "Downloads",
+    "program": "TikTok",
+    "remove_files": true,
+    "remove_directories": true
   }
 ]
