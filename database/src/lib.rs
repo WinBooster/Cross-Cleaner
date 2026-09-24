@@ -8,6 +8,9 @@ mod streaming;
 pub mod structures;
 pub mod utils;
 pub mod version;
+// string-interner used for category/program dedup in future streaming paths
+#[allow(unused_imports)]
+pub use string_interner;
 
 pub fn get_version() -> &'static str {
     option_env!("APP_VERSION").unwrap_or("2.0.2.2")

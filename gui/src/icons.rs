@@ -12,6 +12,7 @@ use image::{ImageError, ImageFormat, ImageReader, load_from_memory};
 pub const MENU_BYTES: &[u8] = include_bytes!("../assets/menu.png.gz");
 pub const SETTINGS_BYTES: &[u8] = include_bytes!("../assets/settings.png.gz");
 
+#[allow(dead_code)]
 pub fn ico_bytes_to_png_bytes(ico_data: &[u8]) -> Result<Vec<u8>, ImageError> {
     // Decode the ICO into a DynamicImage
     let img = load_from_memory(ico_data)?;
@@ -27,16 +28,21 @@ pub fn ico_bytes_to_png_bytes(ico_data: &[u8]) -> Result<Vec<u8>, ImageError> {
     Ok(cursor.into_inner())
 }
 
+/// Direct ICO → RGBA without PNG intermediate (avoids extra alloc + decode).
+fn decode_ico_rgba(ico_data: &[u8]) -> Result<(Vec<u8>, u32, u32), ImageError> {
+    let rgba = load_from_memory(ico_data)?.to_rgba8();
+    let (w, h) = rgba.dimensions();
+    Ok((rgba.into_raw(), w, h))
+}
+
 /// Decodes the application icon into an egui texture (original colors).
 pub fn load_icon_color_image() -> egui::ColorImage {
-    let img = ImageReader::new(std::io::Cursor::new(
-        ico_bytes_to_png_bytes(database::ICON_BYTES).unwrap(),
-    ))
-    .with_guessed_format()
-    .expect("app icon format")
-    .decode()
-    .expect("decode app icon")
-    .to_rgba8();
+    let (rgba, w, h) = decode_ico_rgba(database::ICON_BYTES).expect("decode app icon");
+    // Reconstruct RgbaImage view without re-decoding PNG
+    let img = {
+        use image::RgbaImage;
+        RgbaImage::from_raw(w, h, rgba).expect("rgba size")
+    };
     let (w, h) = (img.width() as usize, img.height() as usize);
     egui::ColorImage {
         size: [w, h],
@@ -48,6 +54,7 @@ pub fn load_icon_color_image() -> egui::ColorImage {
     }
 }
 
+#[allow(dead_code)]
 pub fn load_icon_from_bytes(bytes: &[u8]) -> Result<Arc<IconData>, image::ImageError> {
     let img = ImageReader::new(std::io::Cursor::new(bytes))
         .with_guessed_format()?
@@ -61,6 +68,12 @@ pub fn load_icon_from_bytes(bytes: &[u8]) -> Result<Arc<IconData>, image::ImageE
         width,
         height,
     }))
+}
+
+/// Fast path for ICO bytes directly → IconData without PNG round-trip.
+pub fn load_icon_from_ico_bytes(ico_data: &[u8]) -> Result<Arc<IconData>, image::ImageError> {
+    let (rgba, width, height) = decode_ico_rgba(ico_data)?;
+    Ok(Arc::new(IconData { rgba, width, height }))
 }
 
 pub fn load_asset_image(data: &[u8]) -> egui::ColorImage {

@@ -11,6 +11,8 @@ use std::path::Path;
 
 const IMAGE_EXTENSIONS: &[&str] = &["png", "jpg", "jpeg", "webp", "gif", "bmp"];
 const JPEG_QUALITY: u8 = 85;
+/// Hard cap: images larger than this are skipped to bound peak RAM.
+const MAX_IMAGE_BYTES: u64 = 50 * 1024 * 1024;
 
 fn is_image_extension(ext: &str) -> bool {
     IMAGE_EXTENSIONS.contains(&ext)
@@ -41,6 +43,9 @@ pub fn optimize_single(path: &Path) -> Result<crate::custom_cleaners::GlobCleanS
         return Ok(crate::custom_cleaners::GlobCleanStats::default());
     }
     let original_size = original.len();
+    if original_size > MAX_IMAGE_BYTES {
+        return Ok(crate::custom_cleaners::GlobCleanStats::default());
+    }
     eprintln!("[image_optimize] original_size={}", original_size);
 
     if ext == "gif" {
@@ -62,18 +67,26 @@ pub fn optimize_single(path: &Path) -> Result<crate::custom_cleaners::GlobCleanS
         eprintln!("[image_optimize] open failed: {}", e);
         io::Error::new(io::ErrorKind::InvalidData, e)
     })?;
-
-    let mut buf = Cursor::new(Vec::new());
-    match ext.as_str() {
-        "png" => encode_png(&mut buf, &img)?,
-        "jpg" | "jpeg" => encode_jpeg(&mut buf, &img)?,
-        "webp" => encode_webp(&mut buf, &img)?,
-        "gif" => encode_gif(&mut buf, &img)?,
-        "bmp" => encode_bmp(&mut buf, &img)?,
-        _ => return Ok(crate::custom_cleaners::GlobCleanStats::default()),
+    // Bound peak: reject huge decoded pixel buffers (e.g. 5000x5000 RGBA ~100MB).
+    let (w, h) = (img.width() as u64, img.height() as u64);
+    if w.checked_mul(h).unwrap_or(u64::MAX).saturating_mul(4) > MAX_IMAGE_BYTES {
+        return Ok(crate::custom_cleaners::GlobCleanStats::default());
     }
 
-    let compressed = buf.into_inner();
+    let compressed = {
+        let mut buf = Cursor::new(Vec::new());
+        match ext.as_str() {
+            "png" => encode_png(&mut buf, &img)?,
+            "jpg" | "jpeg" => encode_jpeg(&mut buf, &img)?,
+            "webp" => encode_webp(&mut buf, &img)?,
+            "gif" => encode_gif(&mut buf, &img)?,
+            "bmp" => encode_bmp(&mut buf, &img)?,
+            _ => return Ok(crate::custom_cleaners::GlobCleanStats::default()),
+        }
+        buf.into_inner()
+    };
+    // Release decoded image before allocating replacement file buffer.
+    drop(img);
     let new_size = compressed.len() as u64;
 
     eprintln!(

@@ -84,7 +84,7 @@ macro_rules! custom_glob_cleaner {
             let data = data.clone();
             Box::pin(async move {
                 use std::sync::atomic::{AtomicU64, Ordering};
-                use rayon::iter::IntoParallelIterator;
+                use rayon::iter::IntoParallelRefIterator;
                 use rayon::iter::ParallelIterator;
 
                 let mut result = $crate::database::structures::CleanerResult {
@@ -98,47 +98,84 @@ macro_rules! custom_glob_cleaner {
                     sub_category: data.sub_category.clone(),
                 };
 
-                let entries: Vec<std::path::PathBuf> = match ::glob::glob(&data.path) {
-                    Ok(g) => g.filter_map(Result::ok).collect(),
+                // Stream glob without materializing full Vec<PathBuf> at once.
+                // Entries are processed in bounded chunks (1024) to limit peak RAM
+                // when glob expands to tens of thousands of files (e.g. Pictures/**/*).
+                let glob_iter = match ::glob::glob(&data.path) {
+                    Ok(g) => g,
                     Err(_) => return result,
                 };
-
-                let total = entries.len();
-                if total == 0 {
-                    return result;
-                }
-
-                if let Some(ref s) = sender {
-                    let _ = s.send(format!("Found {} files, compressing...", total)).await;
-                }
 
                 let completed = AtomicU64::new(0);
                 let total_bytes = AtomicU64::new(0);
                 let total_files = AtomicU64::new(0);
                 let total_folders = AtomicU64::new(0);
+                let mut total: u64 = 0;
 
-                entries.into_par_iter().for_each(|entry_path| {
-                    if let Ok(stats) = __custom_glob_entry(&entry_path, &data.args) {
-                        if stats.files > 0 || stats.folders > 0 || stats.bytes > 0 {
-                            total_files.fetch_add(stats.files, Ordering::Relaxed);
-                            total_folders.fetch_add(stats.folders, Ordering::Relaxed);
-                            total_bytes.fetch_add(stats.bytes, Ordering::Relaxed);
-                        }
+                // Bounded chunk to keep peak PathBuf allocation low.
+                let mut chunk: Vec<std::path::PathBuf> = Vec::with_capacity(1024);
+                let mut any = false;
+                for entry in glob_iter.filter_map(Result::ok) {
+                    any = true;
+                    chunk.push(entry);
+                    if chunk.len() == 1024 {
+                        total += chunk.len() as u64;
+                        let completed_ref = &completed;
+                        let total_bytes_ref = &total_bytes;
+                        let total_files_ref = &total_files;
+                        let total_folders_ref = &total_folders;
+                        let sender_ref = &sender;
+                        chunk.par_iter().for_each(|entry_path| {
+                            if let Ok(stats) = __custom_glob_entry(entry_path, &data.args) {
+                                if stats.files > 0 || stats.folders > 0 || stats.bytes > 0 {
+                                    total_files_ref.fetch_add(stats.files, Ordering::Relaxed);
+                                    total_folders_ref.fetch_add(stats.folders, Ordering::Relaxed);
+                                    total_bytes_ref.fetch_add(stats.bytes, Ordering::Relaxed);
+                                }
+                            }
+                            let cur = completed_ref.fetch_add(1, Ordering::Relaxed) + 1;
+                            if cur % 5 == 0 {
+                                let bytes = total_bytes_ref.load(Ordering::Relaxed);
+                                if let Some(s) = sender_ref.as_ref() {
+                                    let _ = s.blocking_send(format!(
+                                        "Compressing {}/{} files... {}",
+                                        cur,
+                                        cur,
+                                        $crate::database::utils::get_file_size_string(bytes)
+                                    ));
+                                }
+                            }
+                        });
+                        chunk.clear();
                     }
+                }
+                if !any {
+                    return result;
+                }
+                if !chunk.is_empty() {
+                    total += chunk.len() as u64;
+                    chunk.par_iter().for_each(|entry_path| {
+                        if let Ok(stats) = __custom_glob_entry(entry_path, &data.args) {
+                            if stats.files > 0 || stats.folders > 0 || stats.bytes > 0 {
+                                total_files.fetch_add(stats.files, Ordering::Relaxed);
+                                total_folders.fetch_add(stats.folders, Ordering::Relaxed);
+                                total_bytes.fetch_add(stats.bytes, Ordering::Relaxed);
+                            }
+                        }
+                        let _ = completed.fetch_add(1, Ordering::Relaxed);
+                    });
+                }
 
-                    let cur = completed.fetch_add(1, Ordering::Relaxed) + 1;
-                    if cur % 5 == 0 || cur == total as u64 {
-                        let bytes = total_bytes.load(Ordering::Relaxed);
-                        if let Some(ref s) = sender {
-                            let _ = s.blocking_send(format!(
-                                "Compressing {}/{} files... {}",
-                                cur,
-                                total as u64,
-                                $crate::database::utils::get_file_size_string(bytes)
-                            ));
-                        }
-                    }
-                });
+                if let Some(s) = sender.as_ref() {
+                    let bytes = total_bytes.load(Ordering::Relaxed);
+                    let done = completed.load(Ordering::Relaxed);
+                    let _ = s.blocking_send(format!(
+                        "Compressing {}/{} files... {}",
+                        done,
+                        total,
+                        $crate::database::utils::get_file_size_string(bytes)
+                    ));
+                }
 
                 result.files = total_files.load(Ordering::Relaxed);
                 result.folders = total_folders.load(Ordering::Relaxed);

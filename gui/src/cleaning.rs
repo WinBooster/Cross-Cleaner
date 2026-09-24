@@ -5,9 +5,7 @@ use cleaner::clear_data;
 use database::cleaner_database::CleanerDatabase;
 #[cfg(windows)]
 use database::registry_database::{RegistryDatabase, clear_registry};
-#[cfg(windows)]
-use database::structures::CleanerDataRegistry;
-use database::structures::{CleanerData, Cleared, CustomCleaner};
+use database::structures::{Cleared, CustomCleaner};
 use database::utils::get_file_size_string;
 use futures::stream::{FuturesUnordered, StreamExt};
 use std::collections::{HashMap, HashSet};
@@ -45,10 +43,9 @@ pub async fn work(
 
     // INFO: Clear LastActivity from Registry
     // WARN: Windows only - show what is being cleaned right now
+    // Streams directly into FuturesUnordered to avoid buffering all matches in RAM.
     #[cfg(windows)]
     {
-        // INFO: Stream the registry database and keep only the selected entries.
-        let mut registry_matches: Vec<CleanerDataRegistry> = Vec::new();
         let _ = registry_database.for_each(|data| {
             let eff = effective_sub(&data.class, &data.sub_category);
             if let Some(subs) = selected_map.get(&data.category)
@@ -57,20 +54,16 @@ pub async fn work(
                 && !excluded_program_categories
                     .contains(&(data.program.clone(), data.category.clone()))
             {
-                registry_matches.push(data);
+                let sender = progress_sender.clone();
+                let name_msg = data.program.clone();
+                let sem = sem.clone();
+                futures.push(Box::pin(async move {
+                    let _p = sem.acquire_owned().await.unwrap();
+                    let _ = sender.send(format!("Cleaning: {}", name_msg)).await;
+                    clear_registry(&data)
+                }));
             }
         });
-
-        for data in registry_matches {
-            let sender = progress_sender.clone();
-            let name_msg = data.program.clone();
-            let sem = sem.clone();
-            futures.push(Box::pin(async move {
-                let _p = sem.acquire_owned().await.unwrap();
-                let _ = sender.send(format!("Cleaning: {}", name_msg)).await;
-                clear_registry(&data)
-            }));
-        }
     }
 
     // INFO: Run built-in custom cleanings (functions defined in cleaner::custom_cleaners)
@@ -100,9 +93,8 @@ pub async fn work(
         }
     }
 
-    // INFO: Stream the database and keep only the selected entries. Each entry
-    // is shared as an Arc so the per-path work inside clear_data does not clone it.
-    let mut database_matches: Vec<Arc<CleanerData>> = Vec::new();
+    // INFO: Stream the database and keep only the selected entries directly into
+    // FuturesUnordered to avoid buffering Vec<Arc<CleanerData>> in RAM.
     let _ = database.for_each(|data| {
         let eff = effective_sub(&data.class, &data.sub_category);
         if let Some(subs) = selected_map.get(&data.category)
@@ -110,20 +102,17 @@ pub async fn work(
             && !excluded_programs.contains(&data.program)
             && !excluded_program_categories.contains(&(data.program.clone(), data.category.clone()))
         {
-            database_matches.push(Arc::new(data));
+            let data = Arc::new(data);
+            let sender = progress_sender.clone();
+            let path_msg = data.program.clone();
+            let sem = sem.clone();
+            futures.push(Box::pin(async move {
+                let _p = sem.acquire_owned().await.unwrap();
+                let _ = sender.send(format!("Cleaning: {}", path_msg)).await;
+                clear_data(&data).await
+            }));
         }
     });
-
-    for data in database_matches {
-        let sender = progress_sender.clone();
-        let path_msg = data.program.clone();
-        let sem = sem.clone();
-        futures.push(Box::pin(async move {
-            let _p = sem.acquire_owned().await.unwrap();
-            let _ = sender.send(format!("Cleaning: {}", path_msg)).await;
-            clear_data(&data).await
-        }));
-    }
 
     let total_tasks = futures.len() + sequential_cleaners.len();
     let _ = progress_sender

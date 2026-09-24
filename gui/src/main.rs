@@ -24,7 +24,6 @@ use database::structures::CustomCleaner;
 use database::version::check_new_version;
 use eframe::UserEvent;
 use eframe::egui;
-use icons::{ico_bytes_to_png_bytes, load_icon_from_bytes};
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 use title_bar::TITLE_BAR_HEIGHT;
@@ -319,9 +318,7 @@ struct Args {
 
 #[tokio::main]
 async fn main() -> eframe::Result {
-    let icon_bytes =
-        ico_bytes_to_png_bytes(database::ICON_BYTES).expect("Failed to convert icon bytes to PNG");
-    let icon = load_icon_from_bytes(&icon_bytes).expect("Failed to load icon");
+    let icon = icons::load_icon_from_ico_bytes(database::ICON_BYTES).expect("Failed to load icon");
 
     let args = Args::parse();
 
@@ -423,7 +420,7 @@ mod tests {
     #[test]
     fn test_load_icon_from_bytes() {
         let icon_data = database::ICON_BYTES;
-        let result = load_icon_from_bytes(&icon_data[..]);
+        let result = icons::load_icon_from_bytes(&icon_data[..]);
 
         assert!(result.is_ok(), "Icon should load successfully");
         let icon = result.unwrap();

@@ -1,29 +1,14 @@
-use crate::utils;
 use bitflags::bitflags;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use tabled::Tabled;
 
-// INFO: Struct for GUI table
-#[derive(PartialEq, Clone, Tabled)]
+// INFO: Struct for GUI table (tabled removed - CLI table not used)
+#[derive(PartialEq, Clone)]
 pub struct Cleared {
-    #[tabled(rename = "Program")]
     pub program: String,
-    #[tabled(display = "display_removed_bytes", rename = "Size")]
     pub removed_bytes: u64,
-    #[tabled(rename = "Files")]
     pub removed_files: u64,
-    #[tabled(rename = "Dirs")]
     pub removed_directories: u64,
-    #[tabled(display = "display_categories", rename = "Categories")]
     pub affected_categories: Vec<String>,
-}
-
-fn display_removed_bytes(size: &u64) -> String {
-    utils::get_file_size_string(*size)
-}
-
-fn display_categories(categories: &[String]) -> String {
-    categories.join(", ")
 }
 
 impl PartialEq<Option<Cleared>> for &Cleared {
