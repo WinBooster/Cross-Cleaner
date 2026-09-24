@@ -146,8 +146,8 @@ mod tests {
             program: std::sync::Arc::from("TestApp"),
             class: std::sync::Arc::from("Application"),
             sub_category: std::sync::Arc::from("TestSub"),
-            files_to_remove: vec![String::from("*.tmp")],
-            directories_to_remove: vec![String::from("cache")],
+            files_to_remove: vec![std::sync::Arc::from("*.tmp")],
+            directories_to_remove: vec![std::sync::Arc::from("cache")],
             flags: crate::structures::CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN
                 | crate::structures::CleanerFlags::REMOVE_DIRECTORIES
                 | crate::structures::CleanerFlags::REMOVE_FILES,

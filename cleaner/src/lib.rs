@@ -448,7 +448,7 @@ mod tests {
         fs::write(target_dir.join("keep_me.txt"), b"keep").unwrap();
 
         let mut data = create_test_data(target_dir.to_str().unwrap().to_string());
-        data.files_to_remove = vec![String::from("remove_me.tmp")];
+        data.files_to_remove = vec![std::sync::Arc::from("remove_me.tmp")];
 
         let result = clear_data(&data).await;
 
@@ -472,7 +472,7 @@ mod tests {
         fs::create_dir(&keep_dir).unwrap();
 
         let mut data = create_test_data(target_dir.to_str().unwrap().to_string());
-        data.directories_to_remove = vec![String::from("cache")];
+        data.directories_to_remove = vec![std::sync::Arc::from("cache")];
 
         let result = clear_data(&data).await;
 
@@ -602,8 +602,8 @@ mod tests {
         fs::write(cache_dir.join("cache.dat"), b"cache").unwrap();
 
         let mut data = create_test_data(target_dir.to_str().unwrap().to_string());
-        data.files_to_remove = vec![String::from("temp.tmp")];
-        data.directories_to_remove = vec![String::from("cache")];
+        data.files_to_remove = vec![std::sync::Arc::from("temp.tmp")];
+        data.directories_to_remove = vec![std::sync::Arc::from("cache")];
 
         let result = clear_data(&data).await;
 
@@ -627,8 +627,8 @@ mod tests {
         fs::write(&secret, b"secret").unwrap();
 
         let mut data = create_test_data(base.to_str().unwrap().to_string());
-        data.files_to_remove = vec![String::from("../outside/secret.txt")];
-        data.directories_to_remove = vec![String::from("../outside")];
+        data.files_to_remove = vec![std::sync::Arc::from("../outside/secret.txt")];
+        data.directories_to_remove = vec![std::sync::Arc::from("../outside")];
 
         let result = clear_data(&data).await;
 
@@ -650,8 +650,8 @@ mod tests {
         fs::write(&secret, b"secret").unwrap();
 
         let mut data = create_test_data(base.to_str().unwrap().to_string());
-        data.files_to_remove = vec![secret.to_string_lossy().to_string()];
-        data.directories_to_remove = vec![outside.to_string_lossy().to_string()];
+        data.files_to_remove = vec![std::sync::Arc::from(secret.to_string_lossy().to_string())];
+        data.directories_to_remove = vec![std::sync::Arc::from(outside.to_string_lossy().to_string())];
 
         let result = clear_data(&data).await;
 
@@ -781,7 +781,7 @@ mod tests {
         fs::write(base.join("ok.txt"), b"x").unwrap();
 
         let mut data = create_test_data(base.to_str().unwrap().to_string());
-        data.files_to_remove = vec![String::from("."), String::from("")];
+        data.files_to_remove = vec![std::sync::Arc::from("."), std::sync::Arc::from("")];
 
         let result = clear_data(&data).await;
 
@@ -1084,7 +1084,7 @@ mod proptests {
                 program: std::sync::Arc::from("Test"),
                 class: std::sync::Arc::from("Test"),
                 sub_category: std::sync::Arc::from("Test"),
-                files_to_remove: vec![filename.clone()],
+                files_to_remove: vec![std::sync::Arc::from(filename.clone())],
                 directories_to_remove: vec![],
                 flags: CleanerFlags::empty(),
             };

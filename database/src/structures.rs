@@ -81,6 +81,14 @@ fn default_class_arc() -> Arc<str> {
     intern_arc("Other")
 }
 
+fn deserialize_vec_arc<'de, D>(deserializer: D) -> Result<Vec<Arc<str>>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let v = Vec::<String>::deserialize(deserializer)?;
+    Ok(v.into_iter().map(|s| intern_arc(&s)).collect())
+}
+
 // INFO: Struct for GUI table (tabled removed - CLI table not used)
 #[derive(PartialEq, Clone)]
 pub struct Cleared {
@@ -136,8 +144,8 @@ pub struct CleanerData {
     pub program: Arc<str>,
     pub class: Arc<str>,
     pub sub_category: Arc<str>,
-    pub files_to_remove: Vec<String>,
-    pub directories_to_remove: Vec<String>,
+    pub files_to_remove: Vec<Arc<str>>,
+    pub directories_to_remove: Vec<Arc<str>>,
     pub flags: CleanerFlags,
 }
 
@@ -232,8 +240,12 @@ impl<'de> Deserialize<'de> for CleanerData {
             program: intern_arc(&h.program),
             class: intern_arc(&h.class),
             sub_category: intern_arc(&h.sub_category),
-            files_to_remove: h.files_to_remove,
-            directories_to_remove: h.directories_to_remove,
+            files_to_remove: h.files_to_remove.into_iter().map(|s| intern_arc(&s)).collect(),
+            directories_to_remove: h
+                .directories_to_remove
+                .into_iter()
+                .map(|s| intern_arc(&s))
+                .collect(),
             flags: CleanerFlags::from_bits_truncate(bits),
         })
     }
@@ -325,11 +337,11 @@ pub struct CleanerDataRegistry {
     #[serde(default)]
     pub path: String,
 
-    #[serde(default)]
-    pub values_to_remove: Vec<String>,
+    #[serde(default, deserialize_with = "deserialize_vec_arc")]
+    pub values_to_remove: Vec<Arc<str>>,
 
-    #[serde(default)]
-    pub keys_to_remove: Vec<String>,
+    #[serde(default, deserialize_with = "deserialize_vec_arc")]
+    pub keys_to_remove: Vec<Arc<str>>,
 
     // INFO: Glob matched against the last segment(s) of resolved paths:
     // value names for remove_values, subkey names for remove_trees.

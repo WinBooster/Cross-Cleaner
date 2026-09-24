@@ -358,55 +358,216 @@ async fn main() -> eframe::Result {
     } else {
         RegistryDatabase::default_source()
     };
+    // Keep original databases for the fallback loop (they are Clone and cheap).
+    // `app` is only needed to compute window height.
     #[cfg(windows)]
-    let app = MyApp::from_database(database, registry_database, custom_database);
+    let app_for_size = MyApp::from_database(
+        database.clone(),
+        registry_database.clone(),
+        custom_database.clone(),
+    );
     #[cfg(not(windows))]
-    let app = MyApp::from_database(database, custom_database);
-    let checkbox_count = app.categories.len();
+    let app_for_size = MyApp::from_database(database.clone(), custom_database.clone());
+    let checkbox_count = app_for_size.categories.len();
     let rows = checkbox_count.div_ceil(3);
     // INFO: 20px for 1 checkbox, 45px for button, 32px for custom title bar
     let height = (rows * 20) + 45 + TITLE_BAR_HEIGHT as usize;
 
-    // INFO: Check for a new version in the background
-    let (update_sender, update_receiver) = std::sync::mpsc::channel();
-    let mut app = app;
-    app.update_receiver = Some(update_receiver);
-    std::thread::spawn(move || {
-        let _ = update_sender.send(check_new_version());
-    });
-
     let size = egui::vec2(470.0, height as f32);
-    let options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default()
-            .with_inner_size(size)
-            .with_min_inner_size(size)
-            .with_max_inner_size(size)
-            .with_resizable(false)
-            .with_maximize_button(false)
-            .with_decorations(false)
-            .with_icon(icon),
-        ..Default::default()
+
+    // --- Renderer fallback chain: glow (OpenGL) -> vulkan -> DirectX 12 ---
+    // Default: glow (smaller binary, good for older GPUs).
+    // If glow is not available, fall back to wgpu with Vulkan, then DX12.
+    // Probe wgpu backends without creating a window so we can pick the best
+    // available before building NativeOptions. Runtime fallback (window
+    // creation failure) is also handled by retrying the next candidate.
+    #[cfg(target_os = "windows")]
+    fn is_wgpu_backend_available(backend: eframe::wgpu::Backends) -> bool {
+        let mut setup = eframe::egui_wgpu::WgpuSetupCreateNew::without_display_handle();
+        setup.instance_descriptor.backends = backend;
+        let desc = eframe::wgpu::InstanceDescriptor {
+            backends: setup.instance_descriptor.backends,
+            flags: setup.instance_descriptor.flags,
+            backend_options: setup.instance_descriptor.backend_options.clone(),
+            memory_budget_thresholds: setup.instance_descriptor.memory_budget_thresholds,
+            display: None,
+        };
+        let instance = eframe::wgpu::Instance::new(desc);
+        let adapters = futures::executor::block_on(instance.enumerate_adapters(backend));
+        !adapters.is_empty()
+    }
+
+    #[cfg(target_os = "windows")]
+    fn configure_wgpu_backend(
+        options: &mut eframe::NativeOptions,
+        backend: eframe::wgpu::Backends,
+    ) {
+        let mut wgpu_cfg = eframe::egui_wgpu::WgpuConfiguration::default();
+        let mut setup = eframe::egui_wgpu::WgpuSetupCreateNew::without_display_handle();
+        setup.instance_descriptor.backends = backend;
+        wgpu_cfg.wgpu_setup = eframe::egui_wgpu::WgpuSetup::CreateNew(setup);
+        options.wgpu_options = wgpu_cfg;
+    }
+
+    // Build ordered candidates. Glow first, then Vulkan, then DX12.
+    let mut candidates: Vec<(eframe::Renderer, Option<eframe::wgpu::Backends>, &str)> = Vec::new();
+    #[cfg(target_os = "windows")]
+    {
+        // Windows: eframe built with both glow and wgpu
+        candidates.push((eframe::Renderer::Glow, None, "glow"));
+        candidates.push((
+            eframe::Renderer::Wgpu,
+            Some(eframe::wgpu::Backends::VULKAN),
+            "vulkan",
+        ));
+        candidates.push((
+            eframe::Renderer::Wgpu,
+            Some(eframe::wgpu::Backends::DX12),
+            "dx12",
+        ));
+        candidates.push((eframe::Renderer::Wgpu, None, "wgpu-auto"));
+    }
+    #[cfg(target_os = "linux")]
+    {
+        // Linux: only glow is enabled (per Cargo.toml)
+        candidates.push((eframe::Renderer::Glow, None, "glow"));
+    }
+    #[cfg(target_os = "macos")]
+    {
+        candidates.push((eframe::Renderer::Glow, None, "glow"));
+        candidates.push((eframe::Renderer::Wgpu, None, "wgpu-auto"));
+    }
+    #[cfg(not(any(target_os = "windows", target_os = "linux", target_os = "macos")))]
+    {
+        candidates.push((eframe::Renderer::default(), None, "default"));
+    }
+    // Fallback if no renderer feature is detected (should not happen)
+    if candidates.is_empty() {
+        candidates.push((eframe::Renderer::default(), None, "default"));
+    }
+
+    // Filter by probe: keep glow always (cheap, assume available),
+    // for wgpu candidates skip if that exact backend has no adapter.
+    #[cfg(target_os = "windows")]
+    let candidates: Vec<_> = candidates
+        .into_iter()
+        .filter(|(_, backend, _)| {
+            if let Some(b) = backend {
+                if *b == eframe::wgpu::Backends::VULKAN || *b == eframe::wgpu::Backends::DX12 {
+                    is_wgpu_backend_available(*b)
+                } else {
+                    true
+                }
+            } else {
+                true // glow / auto
+            }
+        })
+        .collect();
+
+    // Ensure at least glow remains even if probes filtered everything
+    let candidates = if candidates.is_empty() {
+        vec![(eframe::Renderer::Glow, None, "glow")]
+    } else {
+        candidates
     };
 
-    // INFO: Run on our own event loop so surplus pointer-movement events can be
-    // coalesced (see `PointerThrottle`). `eframe::run_native` gives no such hook.
-    let event_loop = EventLoop::<UserEvent>::with_user_event()
-        .build()
-        .map_err(eframe::Error::WinitEventLoop)?;
+    let app_title = format!("Cross Cleaner GUI v{}", get_version());
 
-    let mut native_app = PointerThrottle::new(eframe::create_native(
-        &format!("Cross Cleaner GUI v{}", get_version()),
-        options,
-        Box::new(|_cc| {
-            _cc.egui_ctx.set_visuals(egui::Visuals::dark());
-            Ok(Box::new(app))
-        }),
-        &event_loop,
-    ));
+    // Try each candidate sequentially. First successful `run_app` returns Ok
+    // and the process exits with the app; if window creation fails (e.g.
+    // NoGlutinConfigs for glow, or RequestAdapterError for wgpu) we log and
+    // try the next backend.
+    let mut last_err: Option<eframe::Error> = None;
+    for (renderer, wgpu_backend, name) in candidates {
+        let icon_clone = icon.clone();
+        let mut options = eframe::NativeOptions {
+            viewport: egui::ViewportBuilder::default()
+                .with_inner_size(size)
+                .with_min_inner_size(size)
+                .with_max_inner_size(size)
+                .with_resizable(false)
+                .with_maximize_button(false)
+                .with_decorations(false)
+                .with_icon(icon_clone),
+            renderer,
+            ..Default::default()
+        };
+        if let Some(backend) = wgpu_backend {
+            #[cfg(target_os = "windows")]
+            configure_wgpu_backend(&mut options, backend);
+            #[cfg(not(target_os = "windows"))]
+            {
+                let _ = backend;
+            }
+        }
+        // Also apply vsync etc from default wgpu config when using wgpu
+        eprintln!("Trying renderer: {name} ({renderer})");
 
-    event_loop
-        .run_app(&mut native_app)
-        .map_err(eframe::Error::WinitEventLoop)
+        // Need fresh app instance per attempt (MyApp is moved into closure)
+        // Re-create from the same databases (they are Clone and cheap).
+        let db_clone = database.clone();
+        #[cfg(windows)]
+        let reg_clone = registry_database.clone();
+        let custom_clone = custom_database.clone();
+        let title_clone = app_title.clone();
+
+        // We use our own EventLoop + PointerThrottle so pointer events are
+        // coalesced. To still get proper eframe error propagation (glow
+        // NoGlutinConfigs, wgpu RequestAdapterError) we wrap the inner
+        // creation in a catch: `create_native` itself is infallible, but the
+        // error surfaces as `WinitEventLoop` or as early exit. We treat any
+        // `run_app` error as a signal to fallback.
+        let event_loop = match EventLoop::<UserEvent>::with_user_event().build() {
+            Ok(el) => el,
+            Err(e) => {
+                eprintln!("Failed to create event loop for {name}: {e}");
+                last_err = Some(eframe::Error::WinitEventLoop(e));
+                continue;
+            }
+        };
+
+        // Move app into closure; update_receiver is set per-attempt
+        let app_for_closure = {
+            #[cfg(windows)]
+            let mut a = MyApp::from_database(db_clone, reg_clone, custom_clone);
+            #[cfg(not(windows))]
+            let mut a = MyApp::from_database(db_clone, custom_clone);
+            let (tx, rx) = std::sync::mpsc::channel();
+            a.update_receiver = Some(rx);
+            std::thread::spawn(move || {
+                let _ = tx.send(check_new_version());
+            });
+            a
+        };
+
+        let mut native_app = PointerThrottle::new(eframe::create_native(
+            &title_clone,
+            options,
+            Box::new(move |_cc| {
+                _cc.egui_ctx.set_visuals(egui::Visuals::dark());
+                Ok(Box::new(app_for_closure))
+            }),
+            &event_loop,
+        ));
+
+        match event_loop.run_app(&mut native_app) {
+            Ok(()) => return Ok(()),
+            Err(e) => {
+                let err = eframe::Error::WinitEventLoop(e);
+                eprintln!("Renderer {name} failed: {err} -> trying next fallback");
+                last_err = Some(err);
+                continue;
+            }
+        }
+    }
+
+    // All candidates failed
+    Err(last_err.unwrap_or_else(|| {
+        eframe::Error::AppCreation(Box::new(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "no renderer available (glow, vulkan, dx12 all failed)",
+        )))
+    }))
 }
 
 #[cfg(test)]
