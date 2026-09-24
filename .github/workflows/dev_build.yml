@@ -208,8 +208,6 @@ jobs:
         run: |
           rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
           sdkmanager "platforms;android-35" "build-tools;35.0.0" "ndk;27.0.12077973"
-      - name: Check android target
-        run: cargo check -p android --target aarch64-linux-android
       - name: Build APK debug (cargo apk2)
         env:
           ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/27.0.12077973
