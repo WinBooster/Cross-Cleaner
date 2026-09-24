@@ -48,11 +48,11 @@ pub async fn work(
     {
         let _ = registry_database.for_each(|data| {
             let eff = effective_sub(&data.class, &data.sub_category);
-            if let Some(subs) = selected_map.get(&data.category)
+            if let Some(subs) = selected_map.get(data.category.as_ref())
                 && subs.contains(&eff)
-                && !excluded_programs.contains(&data.program)
+                && !excluded_programs.contains(data.program.as_ref())
                 && !excluded_program_categories
-                    .contains(&(data.program.clone(), data.category.clone()))
+                    .contains(&(data.program.to_string(), data.category.to_string()))
             {
                 let sender = progress_sender.clone();
                 let name_msg = data.program.clone();
@@ -70,10 +70,10 @@ pub async fn work(
     let mut sequential_cleaners: Vec<CustomCleaner> = Vec::new();
     for data in custom_database.iter() {
         let eff = effective_sub("", &data.sub_category);
-        if let Some(subs) = selected_map.get(&data.category)
+        if let Some(subs) = selected_map.get(data.category.as_ref())
             && subs.contains(&eff)
-            && !excluded_programs.contains(&data.program)
-            && !excluded_program_categories.contains(&(data.program.clone(), data.category.clone()))
+            && !excluded_programs.contains(data.program.as_ref())
+            && !excluded_program_categories.contains(&(data.program.to_string(), data.category.to_string()))
         {
             if data.sequential {
                 sequential_cleaners.push(data.clone());
@@ -97,10 +97,10 @@ pub async fn work(
     // FuturesUnordered to avoid buffering Vec<Arc<CleanerData>> in RAM.
     let _ = database.for_each(|data| {
         let eff = effective_sub(&data.class, &data.sub_category);
-        if let Some(subs) = selected_map.get(&data.category)
+        if let Some(subs) = selected_map.get(data.category.as_ref())
             && subs.contains(&eff)
-            && !excluded_programs.contains(&data.program)
-            && !excluded_program_categories.contains(&(data.program.clone(), data.category.clone()))
+            && !excluded_programs.contains(data.program.as_ref())
+            && !excluded_program_categories.contains(&(data.program.to_string(), data.category.to_string()))
         {
             let data = Arc::new(data);
             let sender = progress_sender.clone();
@@ -129,21 +129,21 @@ pub async fn work(
 
             if let Some(cleared) = cleared_programs
                 .iter_mut()
-                .find(|c| c.program == result.program)
+                .find(|c| c.program == result.program.as_ref())
             {
                 cleared.removed_bytes += result.bytes;
                 cleared.removed_files += result.files;
                 cleared.removed_directories += result.folders;
-                if !cleared.affected_categories.contains(&result.category) {
-                    cleared.affected_categories.push(result.category);
+                if !cleared.affected_categories.contains(&result.category.to_string()) {
+                    cleared.affected_categories.push(result.category.to_string());
                 }
             } else {
                 cleared_programs.push(Cleared {
-                    program: result.program,
+                    program: result.program.to_string(),
                     removed_bytes: result.bytes,
                     removed_files: result.files,
                     removed_directories: result.folders,
-                    affected_categories: vec![result.category],
+                    affected_categories: vec![result.category.to_string()],
                 });
             }
         }
@@ -172,21 +172,21 @@ pub async fn work(
 
             if let Some(cleared) = cleared_programs
                 .iter_mut()
-                .find(|c| c.program == result.program)
+                .find(|c| c.program == result.program.as_ref())
             {
                 cleared.removed_bytes += result.bytes;
                 cleared.removed_files += result.files;
                 cleared.removed_directories += result.folders;
-                if !cleared.affected_categories.contains(&result.category) {
-                    cleared.affected_categories.push(result.category);
+                if !cleared.affected_categories.contains(&result.category.to_string()) {
+                    cleared.affected_categories.push(result.category.to_string());
                 }
             } else {
                 cleared_programs.push(Cleared {
-                    program: result.program,
+                    program: result.program.to_string(),
                     removed_bytes: result.bytes,
                     removed_files: result.files,
                     removed_directories: result.folders,
-                    affected_categories: vec![result.category],
+                    affected_categories: vec![result.category.to_string()],
                 });
             }
         }

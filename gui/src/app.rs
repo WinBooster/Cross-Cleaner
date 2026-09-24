@@ -126,32 +126,32 @@ impl MyApp {
         // Ensure all categories appear even if no sub_category
         database
             .for_each_index(|data| {
-                cat_to_subs.entry(data.category.clone()).or_default();
-                cat_has_empty.entry(data.category.clone()).or_insert(false);
-                *category_counts.entry(data.category.clone()).or_insert(0) += 1;
+                cat_to_subs.entry(data.category.to_string()).or_default();
+                cat_has_empty.entry(data.category.to_string()).or_insert(false);
+                *category_counts.entry(data.category.to_string()).or_insert(0) += 1;
                 let sub = effective_sub("", &data.sub_category);
                 *sub_counts
-                    .entry((data.category.clone(), sub.clone()))
+                    .entry((data.category.to_string(), sub.clone()))
                     .or_insert(0) += 1;
                 if !sub.is_empty() {
-                    cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
+                    cat_to_subs.get_mut(data.category.as_ref()).unwrap().insert(sub);
                 } else {
-                    *cat_has_empty.get_mut(&data.category).unwrap() = true;
+                    *cat_has_empty.get_mut(data.category.as_ref()).unwrap() = true;
                 }
             })
             .expect("Failed to read cleaner database");
         for data in custom_database.iter() {
-            cat_to_subs.entry(data.category.clone()).or_default();
-            cat_has_empty.entry(data.category.clone()).or_insert(false);
-            *category_counts.entry(data.category.clone()).or_insert(0) += 1;
+            cat_to_subs.entry(data.category.to_string()).or_default();
+            cat_has_empty.entry(data.category.to_string()).or_insert(false);
+            *category_counts.entry(data.category.to_string()).or_insert(0) += 1;
             let sub = effective_sub("", &data.sub_category);
             *sub_counts
-                .entry((data.category.clone(), sub.clone()))
+                .entry((data.category.to_string(), sub.clone()))
                 .or_insert(0) += 1;
             if !sub.is_empty() {
-                cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
+                cat_to_subs.get_mut(data.category.as_ref()).unwrap().insert(sub);
             } else {
-                *cat_has_empty.get_mut(&data.category).unwrap() = true;
+                *cat_has_empty.get_mut(data.category.as_ref()).unwrap() = true;
             }
         }
         reg_database
@@ -159,17 +159,17 @@ impl MyApp {
                 if data.category.is_empty() {
                     return;
                 }
-                cat_to_subs.entry(data.category.clone()).or_default();
-                cat_has_empty.entry(data.category.clone()).or_insert(false);
-                *category_counts.entry(data.category.clone()).or_insert(0) += 1;
+                cat_to_subs.entry(data.category.to_string()).or_default();
+                cat_has_empty.entry(data.category.to_string()).or_insert(false);
+                *category_counts.entry(data.category.to_string()).or_insert(0) += 1;
                 let sub = effective_sub("", &data.sub_category);
                 *sub_counts
-                    .entry((data.category.clone(), sub.clone()))
+                    .entry((data.category.to_string(), sub.clone()))
                     .or_insert(0) += 1;
                 if !sub.is_empty() {
-                    cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
+                    cat_to_subs.get_mut(data.category.as_ref()).unwrap().insert(sub);
                 } else {
-                    *cat_has_empty.get_mut(&data.category).unwrap() = true;
+                    *cat_has_empty.get_mut(data.category.as_ref()).unwrap() = true;
                 }
             })
             .expect("Failed to read registry database");
@@ -280,32 +280,32 @@ impl MyApp {
         let mut sub_counts: HashMap<(String, String), usize> = HashMap::new();
         database
             .for_each_index(|data| {
-                cat_to_subs.entry(data.category.clone()).or_default();
-                cat_has_empty.entry(data.category.clone()).or_insert(false);
-                *category_counts.entry(data.category.clone()).or_insert(0) += 1;
+                cat_to_subs.entry(data.category.to_string()).or_default();
+                cat_has_empty.entry(data.category.to_string()).or_insert(false);
+                *category_counts.entry(data.category.to_string()).or_insert(0) += 1;
                 let sub = effective_sub("", &data.sub_category);
                 *sub_counts
-                    .entry((data.category.clone(), sub.clone()))
+                    .entry((data.category.to_string(), sub.clone()))
                     .or_insert(0) += 1;
                 if !sub.is_empty() {
-                    cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
+                    cat_to_subs.get_mut(data.category.as_ref()).unwrap().insert(sub);
                 } else {
-                    *cat_has_empty.get_mut(&data.category).unwrap() = true;
+                    *cat_has_empty.get_mut(data.category.as_ref()).unwrap() = true;
                 }
             })
             .expect("Failed to read cleaner database");
         for data in custom_database.iter() {
-            cat_to_subs.entry(data.category.clone()).or_default();
-            cat_has_empty.entry(data.category.clone()).or_insert(false);
-            *category_counts.entry(data.category.clone()).or_insert(0) += 1;
+            cat_to_subs.entry(data.category.to_string()).or_default();
+            cat_has_empty.entry(data.category.to_string()).or_insert(false);
+            *category_counts.entry(data.category.to_string()).or_insert(0) += 1;
             let sub = effective_sub("", &data.sub_category);
             *sub_counts
-                .entry((data.category.clone(), sub.clone()))
+                .entry((data.category.to_string(), sub.clone()))
                 .or_insert(0) += 1;
             if !sub.is_empty() {
-                cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
+                cat_to_subs.get_mut(data.category.as_ref()).unwrap().insert(sub);
             } else {
-                *cat_has_empty.get_mut(&data.category).unwrap() = true;
+                *cat_has_empty.get_mut(data.category.as_ref()).unwrap() = true;
             }
         }
 

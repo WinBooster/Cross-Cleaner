@@ -1,5 +1,83 @@
 use bitflags::bitflags;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use std::sync::{Arc, OnceLock, RwLock};
+use string_interner::{DefaultBackend, DefaultSymbol, StringInterner};
+
+// ── string-interner backed dedup for category/program/class/sub_category ──
+static INTERNER: OnceLock<RwLock<StringInterner<DefaultBackend>>> = OnceLock::new();
+static ARC_POOL: OnceLock<RwLock<std::collections::HashMap<DefaultSymbol, Arc<str>>>> =
+    OnceLock::new();
+
+fn interner() -> &'static RwLock<StringInterner<DefaultBackend>> {
+    INTERNER.get_or_init(|| RwLock::new(StringInterner::new()))
+}
+fn arc_pool() -> &'static RwLock<std::collections::HashMap<DefaultSymbol, Arc<str>>> {
+    ARC_POOL.get_or_init(|| RwLock::new(std::collections::HashMap::new()))
+}
+
+/// Intern `s` via `string_interner` and return shared `Arc<str>`.
+/// Same string returns same allocation (pointer equality after dedup).
+pub fn intern_arc(s: &str) -> Arc<str> {
+    if s.is_empty() {
+        return Arc::from("");
+    }
+    // Fast path: read interner to see if already present
+    let sym = {
+        let mut w = interner().write().unwrap();
+        w.get_or_intern(s)
+    };
+    // Check Arc pool
+    {
+        let r = arc_pool().read().unwrap();
+        if let Some(arc) = r.get(&sym) {
+            return Arc::clone(arc);
+        }
+    }
+    let mut w = arc_pool().write().unwrap();
+    // double-check
+    if let Some(arc) = w.get(&sym) {
+        return Arc::clone(arc);
+    }
+    let resolved = {
+        let r = interner().read().unwrap();
+        r.resolve(sym).unwrap().to_owned()
+    };
+    let arc: Arc<str> = Arc::from(resolved);
+    w.insert(sym, Arc::clone(&arc));
+    arc
+}
+
+fn deserialize_shared_str<'de, D>(deserializer: D) -> Result<Arc<str>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let s = String::deserialize(deserializer)?;
+    Ok(intern_arc(&s))
+}
+fn deserialize_shared_str_default<'de, D>(deserializer: D) -> Result<Arc<str>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let opt = Option::<String>::deserialize(deserializer)?;
+    Ok(opt.map(|s| intern_arc(&s)).unwrap_or_else(|| intern_arc("Other")))
+}
+fn deserialize_shared_opt<'de, D>(deserializer: D) -> Result<Arc<str>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let opt = Option::<String>::deserialize(deserializer)?;
+    Ok(opt.map(|s| intern_arc(&s)).unwrap_or_else(|| Arc::from("")))
+}
+
+fn serialize_arc_str<S>(val: &Arc<str>, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    serializer.serialize_str(val)
+}
+fn default_class_arc() -> Arc<str> {
+    intern_arc("Other")
+}
 
 // INFO: Struct for GUI table (tabled removed - CLI table not used)
 #[derive(PartialEq, Clone)]
@@ -52,10 +130,10 @@ impl BoolOrU8 {
 #[derive(Clone)]
 pub struct CleanerData {
     pub path: String,
-    pub category: String,
-    pub program: String,
-    pub class: String,
-    pub sub_category: String,
+    pub category: Arc<str>,
+    pub program: Arc<str>,
+    pub class: Arc<str>,
+    pub sub_category: Arc<str>,
     pub files_to_remove: Vec<String>,
     pub directories_to_remove: Vec<String>,
     pub flags: CleanerFlags,
@@ -148,10 +226,10 @@ impl<'de> Deserialize<'de> for CleanerData {
 
         Ok(CleanerData {
             path: h.path,
-            category: h.category,
-            program: h.program,
-            class: h.class,
-            sub_category: h.sub_category,
+            category: intern_arc(&h.category),
+            program: intern_arc(&h.program),
+            class: intern_arc(&h.class),
+            sub_category: intern_arc(&h.sub_category),
             files_to_remove: h.files_to_remove,
             directories_to_remove: h.directories_to_remove,
             flags: CleanerFlags::from_bits_truncate(bits),
@@ -213,12 +291,14 @@ impl Serialize for CleanerData {
 #[cfg(windows)]
 #[derive(Serialize, Deserialize, Clone)]
 pub struct CleanerDataRegistry {
-    pub category: String,
-    pub program: String,
-    #[serde(default = "default_class")]
-    pub class: String,
-    #[serde(default, alias = "sub_class")]
-    pub sub_category: String,
+    #[serde(deserialize_with = "deserialize_shared_str", serialize_with = "serialize_arc_str")]
+    pub category: Arc<str>,
+    #[serde(deserialize_with = "deserialize_shared_str", serialize_with = "serialize_arc_str")]
+    pub program: Arc<str>,
+    #[serde(default = "default_class_arc", deserialize_with = "deserialize_shared_str_default", serialize_with = "serialize_arc_str")]
+    pub class: Arc<str>,
+    #[serde(default, deserialize_with = "deserialize_shared_opt", serialize_with = "serialize_arc_str", alias = "sub_class")]
+    pub sub_category: Arc<str>,
 
     #[serde(default)]
     pub remove_all_in_tree: bool,
@@ -252,21 +332,21 @@ pub struct CleanerDataRegistry {
 pub struct CleanerIndex {
     #[serde(default)]
     pub path: String,
-    #[serde(default)]
-    pub category: String,
-    #[serde(default)]
-    pub program: String,
-    #[serde(default, alias = "sub_class", alias = "subCategory")]
-    pub sub_category: String,
+    #[serde(default, deserialize_with = "deserialize_shared_opt", serialize_with = "serialize_arc_str")]
+    pub category: Arc<str>,
+    #[serde(default, deserialize_with = "deserialize_shared_opt", serialize_with = "serialize_arc_str")]
+    pub program: Arc<str>,
+    #[serde(default, deserialize_with = "deserialize_shared_opt", serialize_with = "serialize_arc_str", alias = "sub_class", alias = "subCategory")]
+    pub sub_category: Arc<str>,
 }
 
 impl From<&CleanerData> for CleanerIndex {
     fn from(data: &CleanerData) -> Self {
         Self {
             path: data.path.clone(),
-            category: data.category.clone(),
-            program: data.program.clone(),
-            sub_category: data.sub_category.clone(),
+            category: Arc::clone(&data.category),
+            program: Arc::clone(&data.program),
+            sub_category: Arc::clone(&data.sub_category),
         }
     }
 }
@@ -276,21 +356,21 @@ impl From<&CleanerData> for CleanerIndex {
 #[cfg(windows)]
 #[derive(Deserialize, Clone)]
 pub struct RegistryIndex {
-    #[serde(default)]
-    pub category: String,
-    #[serde(default)]
-    pub program: String,
-    #[serde(default, alias = "sub_class")]
-    pub sub_category: String,
+    #[serde(default, deserialize_with = "deserialize_shared_opt", serialize_with = "serialize_arc_str")]
+    pub category: Arc<str>,
+    #[serde(default, deserialize_with = "deserialize_shared_opt", serialize_with = "serialize_arc_str")]
+    pub program: Arc<str>,
+    #[serde(default, deserialize_with = "deserialize_shared_opt", serialize_with = "serialize_arc_str", alias = "sub_class")]
+    pub sub_category: Arc<str>,
 }
 
 #[cfg(windows)]
 impl From<&CleanerDataRegistry> for RegistryIndex {
     fn from(data: &CleanerDataRegistry) -> Self {
         Self {
-            category: data.category.clone(),
-            program: data.program.clone(),
-            sub_category: data.sub_category.clone(),
+            category: Arc::clone(&data.category),
+            program: Arc::clone(&data.program),
+            sub_category: Arc::clone(&data.sub_category),
         }
     }
 }
@@ -312,9 +392,9 @@ pub type CustomCleanFn = fn(
 pub struct CustomCleaner {
     /// Unique id, used to enable/disable this cleaner from CLI/GUI
     pub id: String,
-    pub program: String,
-    pub category: String,
-    pub sub_category: String,
+    pub program: Arc<str>,
+    pub category: Arc<str>,
+    pub sub_category: Arc<str>,
     /// Target file or directory. Supports {username} placeholder
     pub path: String,
     /// Extra arguments passed to the cleaning function
@@ -352,7 +432,7 @@ pub struct CleanerResult {
     pub bytes: u64,
     pub working: bool,
     pub path: String,
-    pub program: String,
-    pub category: String,
-    pub sub_category: String,
+    pub program: Arc<str>,
+    pub category: Arc<str>,
+    pub sub_category: Arc<str>,
 }

@@ -189,9 +189,9 @@ macro_rules! custom_glob_cleaner {
         $crate::database::custom_cleaners::register_custom_cleaner(
             $crate::database::structures::CustomCleaner {
                 id: String::from($id),
-                program: String::from($program),
-                category: String::from($category),
-                sub_category: String::from($sub_category),
+                program: $crate::database::structures::intern_arc($program),
+                category: $crate::database::structures::intern_arc($category),
+                sub_category: $crate::database::structures::intern_arc($sub_category),
                 path: String::from($pattern),
                 args: vec![],
                 os: vec![$(String::from($os)),*],

@@ -366,10 +366,10 @@ mod tests {
     fn create_test_data(path: String) -> CleanerData {
         CleanerData {
             path,
-            category: String::from("TestCategory"),
-            program: String::from("TestProgram"),
-            class: String::from("TestClass"),
-            sub_category: String::from("TestSub"),
+            category: std::sync::Arc::from("TestCategory"),
+            program: std::sync::Arc::from("TestProgram"),
+            class: std::sync::Arc::from("TestClass"),
+            sub_category: std::sync::Arc::from("TestSub"),
             files_to_remove: vec![],
             directories_to_remove: vec![],
             flags: CleanerFlags::empty(),
@@ -550,8 +550,8 @@ mod tests {
 
         let result = clear_data(&data).await;
 
-        assert_eq!(result.program, "TestProgram");
-        assert_eq!(result.category, "TestCategory");
+        assert_eq!(result.program.as_ref(), "TestProgram");
+        assert_eq!(result.category.as_ref(), "TestCategory");
         assert_eq!(result.path, file_path.to_str().unwrap());
         assert!(result.working);
     }
@@ -922,10 +922,10 @@ mod proptests {
 
             let data = CleanerData {
                 path: file_path.to_str().unwrap().to_string(),
-                category: String::from("Test"),
-                program: String::from("Test"),
-                class: String::from("Test"),
-                sub_category: String::from("Test"),
+                category: std::sync::Arc::from("Test"),
+                program: std::sync::Arc::from("Test"),
+                class: std::sync::Arc::from("Test"),
+                sub_category: std::sync::Arc::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 flags: CleanerFlags::REMOVE_FILES,
@@ -949,10 +949,10 @@ mod proptests {
             let pattern = format!("{}/*.txt", target_dir.to_str().unwrap());
             let data = CleanerData {
                 path: pattern,
-                category: String::from("Test"),
-                program: String::from("Test"),
-                class: String::from("Test"),
-                sub_category: String::from("Test"),
+                category: std::sync::Arc::from("Test"),
+                program: std::sync::Arc::from("Test"),
+                class: std::sync::Arc::from("Test"),
+                sub_category: std::sync::Arc::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 flags: CleanerFlags::REMOVE_FILES,
@@ -968,10 +968,10 @@ mod proptests {
             let non_existent = format!("/tmp/nonexistent_{}/file.txt", path);
             let data = CleanerData {
                 path: non_existent,
-                category: String::from("Test"),
-                program: String::from("Test"),
-                class: String::from("Test"),
-                sub_category: String::from("Test"),
+                category: std::sync::Arc::from("Test"),
+                program: std::sync::Arc::from("Test"),
+                class: std::sync::Arc::from("Test"),
+                sub_category: std::sync::Arc::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 flags: CleanerFlags::REMOVE_FILES,
@@ -997,10 +997,10 @@ mod proptests {
             let pattern = format!("{}/*", temp_dir.path().to_str().unwrap());
             let data = CleanerData {
                 path: pattern,
-                category: String::from("Test"),
-                program: String::from("Test"),
-                class: String::from("Test"),
-                sub_category: String::from("Test"),
+                category: std::sync::Arc::from("Test"),
+                program: std::sync::Arc::from("Test"),
+                class: std::sync::Arc::from("Test"),
+                sub_category: std::sync::Arc::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 flags: CleanerFlags::REMOVE_DIRECTORIES,
@@ -1020,18 +1020,18 @@ mod proptests {
 
             let data = CleanerData {
                 path: file_path.to_str().unwrap().to_string(),
-                category: category.clone(),
-                program: program.clone(),
-                class: String::from("Test"),
-                sub_category: String::from("Test"),
+                category: std::sync::Arc::from(category.clone()),
+                program: std::sync::Arc::from(program.clone()),
+                class: std::sync::Arc::from("Test"),
+                sub_category: std::sync::Arc::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 flags: CleanerFlags::REMOVE_FILES,
             };
 
             let result = run_async(clear_data(&data));
-            prop_assert_eq!(result.program, program);
-            prop_assert_eq!(result.category, category);
+            prop_assert_eq!(result.program.as_ref(), program.as_str());
+            prop_assert_eq!(result.category.as_ref(), category.as_str());
         }
 
         /// Property: nested directory deletion should count all subdirectories
@@ -1049,10 +1049,10 @@ mod proptests {
             let start_dir = temp_dir.path().join("level_0");
             let data = CleanerData {
                 path: start_dir.to_str().unwrap().to_string(),
-                category: String::from("Test"),
-                program: String::from("Test"),
-                class: String::from("Test"),
-                sub_category: String::from("Test"),
+                category: std::sync::Arc::from("Test"),
+                program: std::sync::Arc::from("Test"),
+                class: std::sync::Arc::from("Test"),
+                sub_category: std::sync::Arc::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 flags: CleanerFlags::REMOVE_DIRECTORIES,
@@ -1077,10 +1077,10 @@ mod proptests {
 
             let data = CleanerData {
                 path: target_dir.to_str().unwrap().to_string(),
-                category: String::from("Test"),
-                program: String::from("Test"),
-                class: String::from("Test"),
-                sub_category: String::from("Test"),
+                category: std::sync::Arc::from("Test"),
+                program: std::sync::Arc::from("Test"),
+                class: std::sync::Arc::from("Test"),
+                sub_category: std::sync::Arc::from("Test"),
                 files_to_remove: vec![filename.clone()],
                 directories_to_remove: vec![],
                 flags: CleanerFlags::empty(),
@@ -1110,10 +1110,10 @@ mod proptests {
             let pattern = format!("{}/*.dat", target_dir.to_str().unwrap());
             let data = CleanerData {
                 path: pattern,
-                category: String::from("Test"),
-                program: String::from("Test"),
-                class: String::from("Test"),
-                sub_category: String::from("Test"),
+                category: std::sync::Arc::from("Test"),
+                program: std::sync::Arc::from("Test"),
+                class: std::sync::Arc::from("Test"),
+                sub_category: std::sync::Arc::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
                 flags: CleanerFlags::REMOVE_FILES,

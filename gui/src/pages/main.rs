@@ -152,7 +152,7 @@ impl MyApp {
                 };
                 let _ = self.database.for_each_index(|data| {
                     let eff = effective_sub("", &data.sub_category);
-                    if let Some(subs) = selected_map.get(&data.category)
+                    if let Some(subs) = selected_map.get(data.category.as_ref())
                         && subs.contains(&eff)
                     {
                         add(&data.program, &data.category);
@@ -160,7 +160,7 @@ impl MyApp {
                 });
                 for data in self.custom_database.iter() {
                     let eff = effective_sub("", &data.sub_category);
-                    if let Some(subs) = selected_map.get(&data.category)
+                    if let Some(subs) = selected_map.get(data.category.as_ref())
                         && subs.contains(&eff)
                     {
                         add(&data.program, &data.category);
@@ -170,7 +170,7 @@ impl MyApp {
                 {
                     let _ = self.regisry_database.for_each_index(|data| {
                         let eff = effective_sub("", &data.sub_category);
-                        if let Some(subs) = selected_map.get(&data.category)
+                        if let Some(subs) = selected_map.get(data.category.as_ref())
                             && subs.contains(&eff)
                         {
                             add(&data.program, &data.category);

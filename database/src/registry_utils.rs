@@ -337,10 +337,10 @@ mod tests {
         // INFO: remove_values with glob "*name" - removes values ending on name
         let data = CleanerDataRegistry {
             path: format!("HKEY_CURRENT_USER\\{}\\*\\Histo*", test_base),
-            category: String::from("Test"),
-            program: String::from("Test"),
-            class: String::from("Test"),
-            sub_category: String::new(),
+            category: std::sync::Arc::from("Test"),
+            program: std::sync::Arc::from("Test"),
+            class: std::sync::Arc::from("Test"),
+            sub_category: std::sync::Arc::from(""),
             remove_all_in_tree: false,
             remove_all_in_registry: false,
             values_to_remove: vec![],
@@ -388,10 +388,10 @@ mod tests {
         // INFO: remove_values = "true" removes all values
         let data = CleanerDataRegistry {
             path: format!("HKEY_CURRENT_USER\\{}\\History", test_base),
-            category: String::from("Test"),
-            program: String::from("Test"),
-            class: String::from("Test"),
-            sub_category: String::new(),
+            category: std::sync::Arc::from("Test"),
+            program: std::sync::Arc::from("Test"),
+            class: std::sync::Arc::from("Test"),
+            sub_category: std::sync::Arc::from(""),
             remove_all_in_tree: false,
             remove_all_in_registry: false,
             values_to_remove: vec![],
@@ -431,10 +431,10 @@ mod tests {
         // INFO: remove_trees with glob "Hist*" - deletes matched subkey trees
         let data = CleanerDataRegistry {
             path: format!("HKEY_CURRENT_USER\\{}\\*", test_base),
-            category: String::from("Test"),
-            program: String::from("Test"),
-            class: String::from("Test"),
-            sub_category: String::new(),
+            category: std::sync::Arc::from("Test"),
+            program: std::sync::Arc::from("Test"),
+            class: std::sync::Arc::from("Test"),
+            sub_category: std::sync::Arc::from(""),
             remove_all_in_tree: false,
             remove_all_in_registry: false,
             values_to_remove: vec![],

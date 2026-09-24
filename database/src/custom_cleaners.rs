@@ -101,9 +101,9 @@ mod tests {
     fn test_cleaner(id: &str) -> CustomCleaner {
         CustomCleaner {
             id: String::from(id),
-            program: String::from("TestProgram"),
-            category: String::from("Logs"),
-            sub_category: String::from("Logs"),
+            program: std::sync::Arc::from("TestProgram"),
+            category: std::sync::Arc::from("Logs"),
+            sub_category: std::sync::Arc::from("Logs"),
             path: String::from("{username}/test.log"),
             args: vec![],
             os: vec![],
@@ -116,9 +116,9 @@ mod tests {
                         bytes: 0,
                         working: false,
                         path: String::new(),
-                        program: String::new(),
-                        category: String::new(),
-                        sub_category: String::new(),
+                        program: std::sync::Arc::from(""),
+                        category: std::sync::Arc::from(""),
+                        sub_category: std::sync::Arc::from(""),
                     }
                 })
             },
@@ -176,7 +176,7 @@ mod tests {
         let result = run_custom_cleaner(&cleaner, None).await;
         assert!(result.working);
         assert_eq!(result.files, 1);
-        assert_eq!(result.program, "TestProgram");
+        assert_eq!(result.program.as_ref(), "TestProgram");
     }
 
     #[test]

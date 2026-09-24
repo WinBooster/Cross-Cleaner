@@ -123,8 +123,8 @@ mod tests {
 
         let database = result.unwrap();
         assert_eq!(database.len(), 1, "Should have one entry");
-        assert_eq!(database[0].program, "TestProgram");
-        assert_eq!(database[0].category, "TestCategory");
+        assert_eq!(database[0].program.as_ref(), "TestProgram");
+        assert_eq!(database[0].category.as_ref(), "TestCategory");
     }
 
     #[test]
@@ -142,18 +142,18 @@ mod tests {
     fn test_cleaner_data_structure() {
         let data = CleanerData {
             path: String::from("test/path"),
-            category: String::from("Cache"),
-            program: String::from("TestApp"),
-            class: String::from("Application"),
-            sub_category: String::from("TestSub"),
+            category: std::sync::Arc::from("Cache"),
+            program: std::sync::Arc::from("TestApp"),
+            class: std::sync::Arc::from("Application"),
+            sub_category: std::sync::Arc::from("TestSub"),
             files_to_remove: vec![String::from("*.tmp")],
             directories_to_remove: vec![String::from("cache")],
             flags: crate::structures::CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN | crate::structures::CleanerFlags::REMOVE_DIRECTORIES | crate::structures::CleanerFlags::REMOVE_FILES,
         };
 
         assert_eq!(data.path, "test/path");
-        assert_eq!(data.category, "Cache");
-        assert_eq!(data.program, "TestApp");
+        assert_eq!(data.category.as_ref(), "Cache");
+        assert_eq!(data.program.as_ref(), "TestApp");
         assert!(data.flags.contains(crate::structures::CleanerFlags::REMOVE_FILES));
         assert!(data.flags.contains(crate::structures::CleanerFlags::REMOVE_DIRECTORIES));
     }
@@ -161,9 +161,9 @@ mod tests {
     #[test]
     fn test_database_categories_exist() {
         let database = get_default_database();
-        let categories: std::collections::HashSet<String> = database
-            .iter()
-            .map(|entry| entry.category.clone())
+        let categories: std::collections::HashSet<std::sync::Arc<str>> = database
+                .iter()
+                .map(|entry| std::sync::Arc::clone(&entry.category))
             .collect();
 
         // Check that common categories exist
@@ -173,8 +173,8 @@ mod tests {
     #[test]
     fn test_database_programs_exist() {
         let database = get_default_database();
-        let programs: std::collections::HashSet<String> =
-            database.iter().map(|entry| entry.program.clone()).collect();
+        let programs: std::collections::HashSet<std::sync::Arc<str>> =
+                database.iter().map(|entry| std::sync::Arc::clone(&entry.program)).collect();
 
         assert!(
             programs.len() > 10,
@@ -307,7 +307,7 @@ mod tests {
         let start = Instant::now();
         let filtered: Vec<&CleanerData> = database
             .iter()
-            .filter(|data| categories.contains(&data.category))
+            .filter(|data| categories.contains(data.category.as_ref()))
             .collect();
         let duration = start.elapsed();
 
@@ -420,7 +420,7 @@ mod tests {
         CleanerDatabase::default_source()
             .for_each(|entry| {
                 *full
-                    .entry((entry.category, entry.sub_category))
+                    .entry((entry.category.to_string(), entry.sub_category.to_string()))
                     .or_insert(0) += 1;
             })
             .expect("streaming failed");
@@ -429,7 +429,7 @@ mod tests {
         CleanerDatabase::default_source()
             .for_each_index(|entry| {
                 *index
-                    .entry((entry.category, entry.sub_category))
+                    .entry((entry.category.to_string(), entry.sub_category.to_string()))
                     .or_insert(0) += 1;
             })
             .expect("streaming failed");
@@ -444,10 +444,10 @@ mod tests {
     fn test_cleaner_data_default_values() {
         let data = CleanerData {
             path: String::new(),
-            category: String::new(),
-            program: String::new(),
-            class: String::new(),
-            sub_category: String::new(),
+            category: std::sync::Arc::from(""),
+            program: std::sync::Arc::from(""),
+            class: std::sync::Arc::from(""),
+            sub_category: std::sync::Arc::from(""),
             files_to_remove: vec![],
             directories_to_remove: vec![],
             flags: crate::structures::CleanerFlags::empty(),
