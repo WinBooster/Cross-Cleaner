@@ -56,11 +56,9 @@ impl MyApp {
                             cat.selected = cat.subs.iter().cloned().collect();
                             if cat.has_empty {
                                 cat.selected.insert(Arc::from(""));
-
                             }
                             if cat.subs.is_empty() && !cat.has_empty {
                                 cat.selected.insert(Arc::from(""));
-
                             }
                             sounds::check();
                         }
@@ -146,7 +144,10 @@ impl MyApp {
                 let selected_map = self.selected_map();
                 let mut programs: Vec<(Arc<str>, Vec<Arc<str>>)> = Vec::new();
                 let mut add = |program: Arc<str>, category: Arc<str>| {
-                    if let Some(entry) = programs.iter_mut().find(|(p, _)| p.as_ref() == program.as_ref()) {
+                    if let Some(entry) = programs
+                        .iter_mut()
+                        .find(|(p, _)| p.as_ref() == program.as_ref())
+                    {
                         if !entry.1.iter().any(|c| c.as_ref() == category.as_ref()) {
                             entry.1.push(category);
                         }

@@ -59,7 +59,9 @@ where
     D: Deserializer<'de>,
 {
     let opt = Option::<String>::deserialize(deserializer)?;
-    Ok(opt.map(|s| intern_arc(&s)).unwrap_or_else(|| intern_arc("Other")))
+    Ok(opt
+        .map(|s| intern_arc(&s))
+        .unwrap_or_else(|| intern_arc("Other")))
 }
 fn deserialize_shared_opt<'de, D>(deserializer: D) -> Result<Arc<str>, D::Error>
 where
@@ -144,7 +146,8 @@ impl CleanerData {
         self.flags.contains(CleanerFlags::REMOVE_ALL_IN_DIR)
     }
     pub fn remove_directory_after_clean(&self) -> bool {
-        self.flags.contains(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN)
+        self.flags
+            .contains(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN)
     }
     pub fn remove_directories(&self) -> bool {
         self.flags.contains(CleanerFlags::REMOVE_DIRECTORIES)
@@ -153,8 +156,7 @@ impl CleanerData {
         self.flags.contains(CleanerFlags::REMOVE_FILES)
     }
     pub fn set_remove_all_in_dir(&mut self, v: bool) {
-        self.flags
-            .set(CleanerFlags::REMOVE_ALL_IN_DIR, v);
+        self.flags.set(CleanerFlags::REMOVE_ALL_IN_DIR, v);
     }
     pub fn set_remove_directory_after_clean(&mut self, v: bool) {
         self.flags
@@ -291,13 +293,28 @@ impl Serialize for CleanerData {
 #[cfg(windows)]
 #[derive(Serialize, Deserialize, Clone)]
 pub struct CleanerDataRegistry {
-    #[serde(deserialize_with = "deserialize_shared_str", serialize_with = "serialize_arc_str")]
+    #[serde(
+        deserialize_with = "deserialize_shared_str",
+        serialize_with = "serialize_arc_str"
+    )]
     pub category: Arc<str>,
-    #[serde(deserialize_with = "deserialize_shared_str", serialize_with = "serialize_arc_str")]
+    #[serde(
+        deserialize_with = "deserialize_shared_str",
+        serialize_with = "serialize_arc_str"
+    )]
     pub program: Arc<str>,
-    #[serde(default = "default_class_arc", deserialize_with = "deserialize_shared_str_default", serialize_with = "serialize_arc_str")]
+    #[serde(
+        default = "default_class_arc",
+        deserialize_with = "deserialize_shared_str_default",
+        serialize_with = "serialize_arc_str"
+    )]
     pub class: Arc<str>,
-    #[serde(default, deserialize_with = "deserialize_shared_opt", serialize_with = "serialize_arc_str", alias = "sub_class")]
+    #[serde(
+        default,
+        deserialize_with = "deserialize_shared_opt",
+        serialize_with = "serialize_arc_str",
+        alias = "sub_class"
+    )]
     pub sub_category: Arc<str>,
 
     #[serde(default)]
@@ -332,11 +349,25 @@ pub struct CleanerDataRegistry {
 pub struct CleanerIndex {
     #[serde(default)]
     pub path: String,
-    #[serde(default, deserialize_with = "deserialize_shared_opt", serialize_with = "serialize_arc_str")]
+    #[serde(
+        default,
+        deserialize_with = "deserialize_shared_opt",
+        serialize_with = "serialize_arc_str"
+    )]
     pub category: Arc<str>,
-    #[serde(default, deserialize_with = "deserialize_shared_opt", serialize_with = "serialize_arc_str")]
+    #[serde(
+        default,
+        deserialize_with = "deserialize_shared_opt",
+        serialize_with = "serialize_arc_str"
+    )]
     pub program: Arc<str>,
-    #[serde(default, deserialize_with = "deserialize_shared_opt", serialize_with = "serialize_arc_str", alias = "sub_class", alias = "subCategory")]
+    #[serde(
+        default,
+        deserialize_with = "deserialize_shared_opt",
+        serialize_with = "serialize_arc_str",
+        alias = "sub_class",
+        alias = "subCategory"
+    )]
     pub sub_category: Arc<str>,
 }
 
@@ -356,11 +387,24 @@ impl From<&CleanerData> for CleanerIndex {
 #[cfg(windows)]
 #[derive(Deserialize, Clone)]
 pub struct RegistryIndex {
-    #[serde(default, deserialize_with = "deserialize_shared_opt", serialize_with = "serialize_arc_str")]
+    #[serde(
+        default,
+        deserialize_with = "deserialize_shared_opt",
+        serialize_with = "serialize_arc_str"
+    )]
     pub category: Arc<str>,
-    #[serde(default, deserialize_with = "deserialize_shared_opt", serialize_with = "serialize_arc_str")]
+    #[serde(
+        default,
+        deserialize_with = "deserialize_shared_opt",
+        serialize_with = "serialize_arc_str"
+    )]
     pub program: Arc<str>,
-    #[serde(default, deserialize_with = "deserialize_shared_opt", serialize_with = "serialize_arc_str", alias = "sub_class")]
+    #[serde(
+        default,
+        deserialize_with = "deserialize_shared_opt",
+        serialize_with = "serialize_arc_str",
+        alias = "sub_class"
+    )]
     pub sub_category: Arc<str>,
 }
 
@@ -383,10 +427,11 @@ fn default_class() -> String {
 // Each entry describes: category, sub_category, target OS and the cleaning
 // function itself. Functions are registered at runtime via
 // database::custom_cleaners::register_custom_cleaner (see cleaner::custom_cleaners::register_all).
-pub type CustomCleanFn = fn(
-    &CustomCleaner,
-    Option<tokio::sync::mpsc::Sender<String>>,
-) -> std::pin::Pin<Box<dyn std::future::Future<Output = CleanerResult> + Send>>;
+pub type CustomCleanFn =
+    fn(
+        &CustomCleaner,
+        Option<tokio::sync::mpsc::Sender<String>>,
+    ) -> std::pin::Pin<Box<dyn std::future::Future<Output = CleanerResult> + Send>>;
 
 #[derive(Clone)]
 pub struct CustomCleaner {

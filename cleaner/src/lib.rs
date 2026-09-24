@@ -744,7 +744,8 @@ mod tests {
         fs::write(target.join("file.txt"), b"content").unwrap();
 
         let mut data = create_test_data(target.to_string_lossy().into_owned());
-        data.flags.insert(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN);
+        data.flags
+            .insert(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN);
 
         let result = clear_data(&data).await;
         assert_eq!((result.files, result.folders, result.bytes), (1, 1, 7));
@@ -858,7 +859,8 @@ mod tests {
 
         let mut data = create_test_data(link.to_str().unwrap().to_string());
         data.flags.insert(CleanerFlags::REMOVE_ALL_IN_DIR);
-        data.flags.insert(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN);
+        data.flags
+            .insert(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN);
 
         let result = clear_data(&data).await;
 
@@ -882,7 +884,8 @@ mod tests {
 
         let mut data = create_test_data(link.to_str().unwrap().to_string());
         data.flags.insert(CleanerFlags::REMOVE_ALL_IN_DIR);
-        data.flags.insert(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN);
+        data.flags
+            .insert(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN);
 
         let result = clear_data(&data).await;
 

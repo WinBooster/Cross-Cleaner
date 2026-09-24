@@ -73,7 +73,8 @@ pub async fn work(
         if let Some(subs) = selected_map.get(data.category.as_ref())
             && subs.contains(&eff)
             && !excluded_programs.contains(data.program.as_ref())
-            && !excluded_program_categories.contains(&(Arc::clone(&data.program), Arc::clone(&data.category)))
+            && !excluded_program_categories
+                .contains(&(Arc::clone(&data.program), Arc::clone(&data.category)))
         {
             if data.sequential {
                 sequential_cleaners.push(data.clone());
@@ -100,7 +101,8 @@ pub async fn work(
         if let Some(subs) = selected_map.get(data.category.as_ref())
             && subs.contains(&eff)
             && !excluded_programs.contains(data.program.as_ref())
-            && !excluded_program_categories.contains(&(Arc::clone(&data.program), Arc::clone(&data.category)))
+            && !excluded_program_categories
+                .contains(&(Arc::clone(&data.program), Arc::clone(&data.category)))
         {
             let data = Arc::new(data);
             let sender = progress_sender.clone();
@@ -134,8 +136,13 @@ pub async fn work(
                 cleared.removed_bytes += result.bytes;
                 cleared.removed_files += result.files;
                 cleared.removed_directories += result.folders;
-                if !cleared.affected_categories.contains(&result.category.to_string()) {
-                    cleared.affected_categories.push(result.category.to_string());
+                if !cleared
+                    .affected_categories
+                    .contains(&result.category.to_string())
+                {
+                    cleared
+                        .affected_categories
+                        .push(result.category.to_string());
                 }
             } else {
                 cleared_programs.push(Cleared {
@@ -177,8 +184,13 @@ pub async fn work(
                 cleared.removed_bytes += result.bytes;
                 cleared.removed_files += result.files;
                 cleared.removed_directories += result.folders;
-                if !cleared.affected_categories.contains(&result.category.to_string()) {
-                    cleared.affected_categories.push(result.category.to_string());
+                if !cleared
+                    .affected_categories
+                    .contains(&result.category.to_string())
+                {
+                    cleared
+                        .affected_categories
+                        .push(result.category.to_string());
                 }
             } else {
                 cleared_programs.push(Cleared {

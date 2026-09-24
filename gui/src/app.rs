@@ -127,8 +127,12 @@ impl MyApp {
         database
             .for_each_index(|data| {
                 cat_to_subs.entry(Arc::clone(&data.category)).or_default();
-                cat_has_empty.entry(Arc::clone(&data.category)).or_insert(false);
-                *category_counts.entry(Arc::clone(&data.category)).or_insert(0) += 1;
+                cat_has_empty
+                    .entry(Arc::clone(&data.category))
+                    .or_insert(false);
+                *category_counts
+                    .entry(Arc::clone(&data.category))
+                    .or_insert(0) += 1;
                 let sub = effective_sub("", &data.sub_category);
                 *sub_counts
                     .entry((Arc::clone(&data.category), Arc::clone(&sub)))
@@ -142,8 +146,12 @@ impl MyApp {
             .expect("Failed to read cleaner database");
         for data in custom_database.iter() {
             cat_to_subs.entry(Arc::clone(&data.category)).or_default();
-            cat_has_empty.entry(Arc::clone(&data.category)).or_insert(false);
-            *category_counts.entry(Arc::clone(&data.category)).or_insert(0) += 1;
+            cat_has_empty
+                .entry(Arc::clone(&data.category))
+                .or_insert(false);
+            *category_counts
+                .entry(Arc::clone(&data.category))
+                .or_insert(0) += 1;
             let sub = effective_sub("", &data.sub_category);
             *sub_counts
                 .entry((Arc::clone(&data.category), Arc::clone(&sub)))
@@ -160,8 +168,12 @@ impl MyApp {
                     return;
                 }
                 cat_to_subs.entry(Arc::clone(&data.category)).or_default();
-                cat_has_empty.entry(Arc::clone(&data.category)).or_insert(false);
-                *category_counts.entry(Arc::clone(&data.category)).or_insert(0) += 1;
+                cat_has_empty
+                    .entry(Arc::clone(&data.category))
+                    .or_insert(false);
+                *category_counts
+                    .entry(Arc::clone(&data.category))
+                    .or_insert(0) += 1;
                 let sub = effective_sub("", &data.sub_category);
                 *sub_counts
                     .entry((Arc::clone(&data.category), Arc::clone(&sub)))
@@ -281,8 +293,12 @@ impl MyApp {
         database
             .for_each_index(|data| {
                 cat_to_subs.entry(Arc::clone(&data.category)).or_default();
-                cat_has_empty.entry(Arc::clone(&data.category)).or_insert(false);
-                *category_counts.entry(Arc::clone(&data.category)).or_insert(0) += 1;
+                cat_has_empty
+                    .entry(Arc::clone(&data.category))
+                    .or_insert(false);
+                *category_counts
+                    .entry(Arc::clone(&data.category))
+                    .or_insert(0) += 1;
                 let sub = effective_sub("", &data.sub_category);
                 *sub_counts
                     .entry((Arc::clone(&data.category), Arc::clone(&sub)))
@@ -296,8 +312,12 @@ impl MyApp {
             .expect("Failed to read cleaner database");
         for data in custom_database.iter() {
             cat_to_subs.entry(Arc::clone(&data.category)).or_default();
-            cat_has_empty.entry(Arc::clone(&data.category)).or_insert(false);
-            *category_counts.entry(Arc::clone(&data.category)).or_insert(0) += 1;
+            cat_has_empty
+                .entry(Arc::clone(&data.category))
+                .or_insert(false);
+            *category_counts
+                .entry(Arc::clone(&data.category))
+                .or_insert(0) += 1;
             let sub = effective_sub("", &data.sub_category);
             *sub_counts
                 .entry((Arc::clone(&data.category), Arc::clone(&sub)))

@@ -73,7 +73,11 @@ pub fn load_icon_from_bytes(bytes: &[u8]) -> Result<Arc<IconData>, image::ImageE
 /// Fast path for ICO bytes directly → IconData without PNG round-trip.
 pub fn load_icon_from_ico_bytes(ico_data: &[u8]) -> Result<Arc<IconData>, image::ImageError> {
     let (rgba, width, height) = decode_ico_rgba(ico_data)?;
-    Ok(Arc::new(IconData { rgba, width, height }))
+    Ok(Arc::new(IconData {
+        rgba,
+        width,
+        height,
+    }))
 }
 
 pub fn load_asset_image(data: &[u8]) -> egui::ColorImage {

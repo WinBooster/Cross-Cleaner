@@ -148,22 +148,30 @@ mod tests {
             sub_category: std::sync::Arc::from("TestSub"),
             files_to_remove: vec![String::from("*.tmp")],
             directories_to_remove: vec![String::from("cache")],
-            flags: crate::structures::CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN | crate::structures::CleanerFlags::REMOVE_DIRECTORIES | crate::structures::CleanerFlags::REMOVE_FILES,
+            flags: crate::structures::CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN
+                | crate::structures::CleanerFlags::REMOVE_DIRECTORIES
+                | crate::structures::CleanerFlags::REMOVE_FILES,
         };
 
         assert_eq!(data.path, "test/path");
         assert_eq!(data.category.as_ref(), "Cache");
         assert_eq!(data.program.as_ref(), "TestApp");
-        assert!(data.flags.contains(crate::structures::CleanerFlags::REMOVE_FILES));
-        assert!(data.flags.contains(crate::structures::CleanerFlags::REMOVE_DIRECTORIES));
+        assert!(
+            data.flags
+                .contains(crate::structures::CleanerFlags::REMOVE_FILES)
+        );
+        assert!(
+            data.flags
+                .contains(crate::structures::CleanerFlags::REMOVE_DIRECTORIES)
+        );
     }
 
     #[test]
     fn test_database_categories_exist() {
         let database = get_default_database();
         let categories: std::collections::HashSet<std::sync::Arc<str>> = database
-                .iter()
-                .map(|entry| std::sync::Arc::clone(&entry.category))
+            .iter()
+            .map(|entry| std::sync::Arc::clone(&entry.category))
             .collect();
 
         // Check that common categories exist
@@ -173,8 +181,10 @@ mod tests {
     #[test]
     fn test_database_programs_exist() {
         let database = get_default_database();
-        let programs: std::collections::HashSet<std::sync::Arc<str>> =
-                database.iter().map(|entry| std::sync::Arc::clone(&entry.program)).collect();
+        let programs: std::collections::HashSet<std::sync::Arc<str>> = database
+            .iter()
+            .map(|entry| std::sync::Arc::clone(&entry.program))
+            .collect();
 
         assert!(
             programs.len() > 10,
@@ -453,10 +463,26 @@ mod tests {
             flags: crate::structures::CleanerFlags::empty(),
         };
 
-        assert!(!data.flags.contains(crate::structures::CleanerFlags::REMOVE_FILES));
-        assert!(!data.flags.contains(crate::structures::CleanerFlags::REMOVE_DIRECTORIES));
-        assert!(!data.flags.contains(crate::structures::CleanerFlags::REMOVE_ALL_IN_DIR));
-        assert!(!data.flags.contains(crate::structures::CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN));
+        assert!(
+            !data
+                .flags
+                .contains(crate::structures::CleanerFlags::REMOVE_FILES)
+        );
+        assert!(
+            !data
+                .flags
+                .contains(crate::structures::CleanerFlags::REMOVE_DIRECTORIES)
+        );
+        assert!(
+            !data
+                .flags
+                .contains(crate::structures::CleanerFlags::REMOVE_ALL_IN_DIR)
+        );
+        assert!(
+            !data
+                .flags
+                .contains(crate::structures::CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN)
+        );
         assert_eq!(data.files_to_remove.len(), 0);
         assert_eq!(data.directories_to_remove.len(), 0);
     }

@@ -414,7 +414,7 @@ mod tests {
     use super::*;
     use app::Page;
     use categories::CategoryState;
-    use database::structures::{CleanerData, CleanerFlags, CleanerDataRegistry};
+    use database::structures::{CleanerData, CleanerDataRegistry, CleanerFlags};
     use std::collections::HashSet;
 
     #[test]
@@ -546,10 +546,19 @@ mod tests {
         );
 
         // Categories should be sorted with Cache first, then Logs, then Documentation
-        assert_eq!(app.categories[0].name.as_ref(), "Cache", "First should be Cache");
-        assert_eq!(app.categories[1].name.as_ref(), "Logs", "Second should be Logs");
         assert_eq!(
-            app.categories[2].name.as_ref(), "Documentation",
+            app.categories[0].name.as_ref(),
+            "Cache",
+            "First should be Cache"
+        );
+        assert_eq!(
+            app.categories[1].name.as_ref(),
+            "Logs",
+            "Second should be Logs"
+        );
+        assert_eq!(
+            app.categories[2].name.as_ref(),
+            "Documentation",
             "Third should be Documentation"
         );
     }

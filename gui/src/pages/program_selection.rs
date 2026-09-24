@@ -126,7 +126,9 @@ impl MyApp {
                                                     for cat in cats.clone() {
                                                         let mut enabled = !self.program_disabled[i]
                                                             .contains(&cat);
-                                                        if ui.checkbox(&mut enabled, &*cat).changed()
+                                                        if ui
+                                                            .checkbox(&mut enabled, &*cat)
+                                                            .changed()
                                                         {
                                                             if enabled {
                                                                 self.program_disabled[i]
