@@ -1,0 +1,74 @@
+[package]
+name = "android"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+gui = { path = "../gui" }
+database = { path = "../database" }
+cleaner = { path = "../cleaner" }
+egui = "0.36"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync"] }
+futures = "0.3"
+notify-rust = "4"
+image = { version = "0.25.10", default-features = false, features = ["png", "ico"] }
+tempfile = "3.27"
+flate2 = "1.1"
+serde = { version = "1", features = ["derive", "rc"] }
+serde_json = "1"
+winit = { version = "0.30.13", default-features = false, features = ["rwh_06", "android-native-activity"] }
+ndk-context = "0.1"
+jni = "0.21"
+
+[target.'cfg(target_os = "android")'.dependencies]
+eframe = { version = "0.36", default-features = false, features = [
+    "wgpu",
+    "default_fonts",
+    "android-native-activity",
+] }
+
+[target.'cfg(not(target_os = "android"))'.dependencies]
+rodio = "0.22"
+eframe = { version = "0.36", default-features = false, features = [
+    "wgpu",
+    "glow",
+    "default_fonts",
+] }
+# cargo-apk / cargo-apk2 metadata (single-package manifest)
+[package.metadata.android]
+package = "com.winbooster.crosscleaner"
+assets = "../gui/assets"
+resources = "resources" 
+
+[package.metadata.android.sdk]
+min_sdk_version = 24
+target_sdk_version = 35
+
+[package.metadata.android.application]
+debuggable = true
+label = "Cross Cleaner"
+icon = "@mipmap/ic_launcher"
+
+[[package.metadata.android.uses_permission]]
+name = "android.permission.READ_EXTERNAL_STORAGE"
+
+[[package.metadata.android.uses_permission]]
+name = "android.permission.WRITE_EXTERNAL_STORAGE"
+
+[[package.metadata.android.uses_permission]]
+name = "android.permission.MANAGE_EXTERNAL_STORAGE"
+
+[[package.metadata.android.application.activity]]
+name = "android.app.NativeActivity"
+exported = true
+
+[[package.metadata.android.application.activity.meta_data]]
+name = "android.app.lib_name"
+value = "android"
+
+[[package.metadata.android.application.activity.intent_filter]]
+actions = ["android.intent.action.MAIN"]
+categories = ["android.intent.category.LAUNCHER"]

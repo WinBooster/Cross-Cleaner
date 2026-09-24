@@ -33,7 +33,7 @@ jobs:
         run: |
           sudo apt-get -y install jq
 
-          JSON_FILES=("database/linux_database.json" "database/windows_database.json" "database/registry_database.json" "database/macos_database.json")
+          JSON_FILES=("database/linux_database.json" "database/windows_database.json" "database/registry_database.json" "database/macos_database.json" "database/android_database.json")
           for JSON_FILE in "${JSON_FILES[@]}"; do
             echo "Processing $JSON_FILE..."
 
@@ -315,74 +315,136 @@ jobs:
           fi
 
           # Header
-          echo "# Linux Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_MACOS.md
-          total_categories=$(jq -r 'map(.category) | unique | length' database/macos_database.json)
-          total_programs=$(jq -r 'map(.program) | unique | length' database/macos_database.json)
-          total_pathes=$(jq -r 'map(.path) | unique | length' database/macos_database.json)
-          echo -e "**Total categories in database:** $total_categories\n" >> LIST_MACOS.md
-          echo -e "**Total programs in database:** $total_programs\n" >> LIST_MACOS.md
-          echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_MACOS.md
+           echo "# Linux Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_MACOS.md
+           total_categories=$(jq -r 'map(.category) | unique | length' database/macos_database.json)
+           total_programs=$(jq -r 'map(.program) | unique | length' database/macos_database.json)
+           total_pathes=$(jq -r 'map(.path) | unique | length' database/macos_database.json)
+           echo -e "**Total categories in database:** $total_categories\n" >> LIST_MACOS.md
+           echo -e "**Total programs in database:** $total_programs\n" >> LIST_MACOS.md
+           echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_MACOS.md
 
-          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/macos_database.json | while IFS= read -r class; do
-            echo -e "## $class\n" >> LIST_MACOS.md
+           jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/macos_database.json | while IFS= read -r class; do
+             echo -e "## $class\n" >> LIST_MACOS.md
 
-            # Get programs for this class
-            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/macos_database.json)
+             # Get programs for this class
+             programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/macos_database.json)
 
-            if [ -n "$programs" ]; then
-              echo "| № | Program | Categories |" >> LIST_MACOS.md
-              echo "| --- | --- | --- |" >> LIST_MACOS.md
+             if [ -n "$programs" ]; then
+               echo "| № | Program | Categories |" >> LIST_MACOS.md
+               echo "| --- | --- | --- |" >> LIST_MACOS.md
 
-              i=0
-              while IFS= read -r line; do
-                program=$(echo "$line" | jq -r '.[0].program')
-                # Check if program has a link
-                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
-                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
-                if [ -n "$program_link" ]; then
-                  displayed_program="[$program]($program_link)"
-                else
-                  displayed_program="$program"
-                fi
-                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_MACOS.md
-              done <<< "$programs"
-            else
-              echo "*No programs found for this class*" >> LIST_MACOS.md
+               i=0
+               while IFS= read -r line; do
+                 program=$(echo "$line" | jq -r '.[0].program')
+                 # Check if program has a link
+                 program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                 program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                 if [ -n "$program_link" ]; then
+                   displayed_program="[$program]($program_link)"
+                 else
+                   displayed_program="$program"
+                 fi
+                 categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                 echo "| $((++i)) | $displayed_program | $categories |" >> LIST_MACOS.md
+               done <<< "$programs"
+             else
+               echo "*No programs found for this class*" >> LIST_MACOS.md
+             fi
+
+             echo -e "\n" >> LIST_MACOS.md
+           done
+
+           # Handle null class separately if needed
+           if jq -e '.[] | select(.class == null)' database/macos_database.json >/dev/null; then
+             echo -e "## Uncategorized\n" >> LIST_MACOS.md
+             programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/macos_database.json)
+
+             if [ -n "$programs" ]; then
+               echo "| № | Program | Categories |" >> LIST_MACOS.md
+               echo "| --- | --- | --- |" >> LIST_MACOS.md
+
+               i=0
+               while IFS= read -r line; do
+                 program=$(echo "$line" | jq -r '.[0].program')
+                 # Check if program has a link
+                 program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                 program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                 if [ -n "$program_link" ]; then
+                   displayed_program="[$program]($program_link)"
+                 else
+                   displayed_program="$program"
+                 fi
+                 categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                 echo "| $((++i)) | $displayed_program | $categories |" >> LIST_MACOS.md
+               done <<< "$programs"
+             else
+               echo "*No uncategorized programs found*" >> LIST_MACOS.md
+             fi
+           fi
+
+       - name: Process Android data
+         run: |
+           if [ -f "database/program_links.json" ]; then
+             program_links=$(jq -r '.' database/program_links.json)
+           else
+             program_links="{}"
+           fi
+           echo "# Android Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_ANDROID.md
+           total_categories=$(jq -r 'map(.category) | unique | length' database/android_database.json)
+           total_programs=$(jq -r 'map(.program) | unique | length' database/android_database.json)
+           total_pathes=$(jq -r 'map(.path) | unique | length' database/android_database.json)
+           echo -e "**Total categories in database:** $total_categories\n" >> LIST_ANDROID.md
+           echo -e "**Total programs in database:** $total_programs\n" >> LIST_ANDROID.md
+           echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_ANDROID.md
+           jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/android_database.json | while IFS= read -r class; do
+             echo -e "## $class\n" >> LIST_ANDROID.md
+             programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/android_database.json)
+             if [ -n "$programs" ]; then
+               echo "| № | Program | Categories |" >> LIST_ANDROID.md
+               echo "| --- | --- | --- |" >> LIST_ANDROID.md
+               i=0
+               while IFS= read -r line; do
+                 program=$(echo "$line" | jq -r '.[0].program')
+                 program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                 program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                 if [ -n "$program_link" ]; then
+                   displayed_program="[$program]($program_link)"
+                 else
+                   displayed_program="$program"
+                 fi
+                 categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                 echo "| $((++i)) | $displayed_program | $categories |" >> LIST_ANDROID.md
+               done <<< "$programs"
+             else
+               echo "*No programs found for this class*" >> LIST_ANDROID.md
+             fi
+             echo -e "\n" >> LIST_ANDROID.md
+           done
+           if jq -e '.[] | select(.class == null)' database/android_database.json >/dev/null; then
+             echo -e "## Uncategorized\n" >> LIST_ANDROID.md
+             programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/android_database.json)
+             if [ -n "$programs" ]; then
+               echo "| № | Program | Categories |" >> LIST_ANDROID.md
+               echo "| --- | --- | --- |" >> LIST_ANDROID.md
+               i=0
+               while IFS= read -r line; do
+                 program=$(echo "$line" | jq -r '.[0].program')
+                 program_clean=$(echo "$program" | sed 's/ (Wine)//g')
+                 program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
+                 if [ -n "$program_link" ]; then
+                   displayed_program="[$program]($program_link)"
+                 else
+                   displayed_program="$program"
+                 fi
+                 categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
+                 echo "| $((++i)) | $displayed_program | $categories |" >> LIST_ANDROID.md
+               done <<< "$programs"
+             else
+               echo "*No uncategorized programs found*" >> LIST_ANDROID.md
+             fi
             fi
 
-            echo -e "\n" >> LIST_MACOS.md
-          done
-
-          # Handle null class separately if needed
-          if jq -e '.[] | select(.class == null)' database/macos_database.json >/dev/null; then
-            echo -e "## Uncategorized\n" >> LIST_MACOS.md
-            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/macos_database.json)
-
-            if [ -n "$programs" ]; then
-              echo "| № | Program | Categories |" >> LIST_MACOS.md
-              echo "| --- | --- | --- |" >> LIST_MACOS.md
-
-              i=0
-              while IFS= read -r line; do
-                program=$(echo "$line" | jq -r '.[0].program')
-                # Check if program has a link
-                program_clean=$(echo "$program" | sed 's/ (Wine)//g')
-                program_link=$(echo "$program_links" | jq -r --arg program "$program_clean" '.[$program] // empty')
-                if [ -n "$program_link" ]; then
-                  displayed_program="[$program]($program_link)"
-                else
-                  displayed_program="$program"
-                fi
-                categories=$(echo "$line" | jq -r 'map(.category) | unique | join(", ")')
-                echo "| $((++i)) | $displayed_program | $categories |" >> LIST_MACOS.md
-              done <<< "$programs"
-            else
-              echo "*No uncategorized programs found*" >> LIST_MACOS.md
-            fi
-          fi
-
-      - name: Generate custom cleanings lists
+        - name: Generate custom cleanings lists
         run: |
           APP_VERSION="${{ env.APP_VERSION }}" python3 << 'EOF'
           import os, re
@@ -466,10 +528,11 @@ jobs:
               f.write(table(entries) + '\n')
 
           appendix = {
-              'LIST_WINDOWS.md': 'windows',
-              'LIST_LINUX.md': 'linux',
-              'LIST_MACOS.md': 'macos',
-          }
+               'LIST_WINDOWS.md': 'windows',
+               'LIST_LINUX.md': 'linux',
+               'LIST_MACOS.md': 'macos',
+               'LIST_ANDROID.md': 'android',
+           }
           for fname, osname in appendix.items():
               sel = [e for e in entries if os_matches(e, osname)]
               with open(fname, 'a', encoding='utf-8') as f:

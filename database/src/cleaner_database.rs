@@ -137,6 +137,13 @@ impl CleanerDatabase {
                 // NOTE: DataBase for MacOS (minified and compressed at compile time)
                 let compressed_data =
                     include_bytes!(concat!(env!("OUT_DIR"), "/macos_database.min.json.gz"));
+                #[cfg(target_os = "android")]
+                // NOTE: DataBase for Android (minified and compressed at compile time)
+                let compressed_data =
+                    include_bytes!(concat!(env!("OUT_DIR"), "/android_database.min.json.gz"));
+                #[cfg(not(any(target_os = "linux", target_os = "windows", target_os = "macos", target_os = "android")))]
+                let compressed_data: &[u8] =
+                    include_bytes!(concat!(env!("OUT_DIR"), "/linux_database.min.json.gz"));
 
                 let decoder = GzDecoder::new(&compressed_data[..]);
                 for_each_array(decoder, |entry| expand_into(entry, ctx, &mut f))?;
@@ -175,6 +182,12 @@ impl CleanerDatabase {
                 #[cfg(target_os = "macos")]
                 let compressed_data =
                     include_bytes!(concat!(env!("OUT_DIR"), "/macos_database.min.json.gz"));
+                #[cfg(target_os = "android")]
+                let compressed_data =
+                    include_bytes!(concat!(env!("OUT_DIR"), "/android_database.min.json.gz"));
+                #[cfg(not(any(target_os = "linux", target_os = "windows", target_os = "macos", target_os = "android")))]
+                let compressed_data: &[u8] =
+                    include_bytes!(concat!(env!("OUT_DIR"), "/linux_database.min.json.gz"));
 
                 let decoder = GzDecoder::new(&compressed_data[..]);
                 for_each_array(decoder, |entry| emit_index(entry, ctx, &mut f))?;

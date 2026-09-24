@@ -1,35 +1,24 @@
 [package]
-name = "gui"
+name = "desktop"
 version = "1.0.0"
 edition = "2024"
 
-[lib]
-name = "gui"
-path = "src/lib.rs"
-
 [dependencies]
+gui = { path = "../gui" }
+database = { path = "../database" }
+cleaner = { path = "../cleaner" }
 egui = "0.36"
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync"] }
 futures = "0.3"
 notify-rust = "4"
 image = { version = "0.25.10", default-features = false, features = ["png", "ico"] }
 tempfile = "3.27"
-flate2 = "1.1"
+clap = { version = "4.6", features = ["derive"] }
+rodio = "0.22"
 serde = { version = "1", features = ["derive", "rc"] }
 serde_json = "1"
 winit = { version = "0.30.13", default-features = false, features = ["rwh_06"] }
-database = { path = "../database" }
-cleaner = { path = "../cleaner" }
 
-[target.'cfg(not(target_os = "android"))'.dependencies]
-rodio = "0.22"
-
-[build-dependencies]
-flate2 = "1.1"
-
-# Windows: OpenGL (glow) — компактный рендерер.
-# Linux: glow + X11/Wayland.
-# macOS: Apple deprecated OpenGL, поэтому wgpu (Metal).
 [target.'cfg(windows)'.dependencies]
 eframe = { version = "0.36", default-features = false, features = [
     "wgpu",
@@ -63,11 +52,11 @@ eframe = { version = "0.36", default-features = false, features = [
     "default_fonts",
 ] }
 
-[target.'cfg(target_os = "android")'.dependencies]
-eframe = { version = "0.36", default-features = false, features = [
-    "wgpu",
-    "default_fonts",
-    "android-native-activity",
-] }
+[target.'cfg(windows)'.build-dependencies]
+winres = "0.1.12"
 
-
+[package.metadata.winres]
+FileDescription = "Cross Cleaner"
+OriginalFilename = "Cross Cleaner.exe"
+LegalCopyright = "Copyright Monolith Development © 2026"
+ProductName = "Cross Cleaner"

@@ -6,7 +6,7 @@
 #define MyAppVersion "2.0.2.8.2"
 #define MyAppPublisher "Neki_play"
 #define MyAppURL "https://github.com/WinBooster/Cross-Cleaner"
-#define MyAppExeName "Cross_Cleaner_GUI.exe"
+#define MyAppExeName "desktop.exe"
 #define DoubleAmp(Value) StringChange(Value, "&", "&&")
 #define EscapeConstArgument(Value) StringChange(StringChange(StringChange(Value, "%", "%25"), ",", "%2c"), "}", "%7d")
 

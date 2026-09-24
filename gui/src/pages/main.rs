@@ -16,18 +16,26 @@ use crate::title_bar::TITLE_BAR_HEIGHT;
 
 impl MyApp {
     pub(crate) fn render_main(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
+        // Responsive columns: desktop 3, android landscape 2, portrait 1
+        let columns_count = crate::category_columns(ctx);
         // Calculate dynamic window height based on number of categories
         let num_categories = self.categories.len();
-        let rows = num_categories.div_ceil(3); // Round up division by 3 (3 columns)
+        let rows = crate::category_rows(num_categories, columns_count);
         let row_height = 20.0; // Approximate height per row
         let base_height = 45.0; // Space for heading, margins, and button
         let dynamic_height = base_height + (rows as f32 * row_height);
         let window_height = dynamic_height.clamp(20.0, 500.0); // Clamp between 200 and 500
 
+        // On Android window is fullscreen, don't enforce fixed size
+        #[cfg(not(target_os = "android"))]
         self.set_window_size(
             ctx,
             egui::Vec2::new(560.0, window_height + TITLE_BAR_HEIGHT),
         );
+        #[cfg(target_os = "android")]
+        {
+            let _ = (window_height, TITLE_BAR_HEIGHT);
+        }
 
         if self.menu_texture.is_none() {
             self.menu_texture = Some(ctx.load_texture(
@@ -38,9 +46,9 @@ impl MyApp {
         }
         let menu_tex = self.menu_texture.clone().unwrap();
 
-        ui.columns(3, |columns| {
+        ui.columns(columns_count, |columns| {
             for (idx, cat) in self.categories.iter_mut().enumerate() {
-                let column_index = idx % 3;
+                let column_index = idx % columns_count;
                 let is_checked = cat.is_checked();
                 let is_indet = cat.is_indeterminate();
 

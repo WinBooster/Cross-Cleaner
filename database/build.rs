@@ -53,23 +53,35 @@ fn process_database(input_path: &str, output_name: &str) {
 }
 
 fn main() {
-    #[cfg(windows)]
-    {
-        process_database("registry_database.json", "registry_database.min.json.gz");
-        process_database("windows_database.json", "windows_database.min.json.gz");
-    }
-    #[cfg(target_os = "linux")]
-    process_database("linux_database.json", "linux_database.min.json.gz");
-    #[cfg(target_os = "macos")]
-    process_database("macos_database.json", "macos_database.min.json.gz");
+    // Generate compressed databases for ALL targets so cross-compilation
+    // (cargo apk2 for aarch64-linux-android on windows host) always finds its file.
+    // Previous #[cfg(target_os = "...")] on build script checked HOST, not TARGET,
+    // so android file was missing when building on windows.
+    let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap_or_default();
+    let is_android = target_os == "android";
 
-    #[cfg(windows)]
-    {
-        println!("cargo:rerun-if-changed=registry_database.json");
-        println!("cargo:rerun-if-changed=windows_database.json");
+    // Always generate every DB — cheap and ensures OUT_DIR contains needed file for any target
+    for (src, out) in [
+        ("registry_database.json", "registry_database.min.json.gz"),
+        ("windows_database.json", "windows_database.min.json.gz"),
+        ("linux_database.json", "linux_database.min.json.gz"),
+        ("macos_database.json", "macos_database.min.json.gz"),
+        ("android_database.json", "android_database.min.json.gz"),
+    ] {
+        // On host builds avoid panic if some OS json not relevant? All exist now.
+        // But generate unconditionally; skip only if target is android and file is registry? No, generate all.
+        process_database(src, out);
     }
-    #[cfg(target_os = "linux")]
+
+    // Ensure rerun triggers for any DB change regardless of target
+    println!("cargo:rerun-if-changed=registry_database.json");
+    println!("cargo:rerun-if-changed=windows_database.json");
     println!("cargo:rerun-if-changed=linux_database.json");
-    #[cfg(target_os = "macos")]
     println!("cargo:rerun-if-changed=macos_database.json");
+    println!("cargo:rerun-if-changed=android_database.json");
+
+    // Hint for cross targets
+    if is_android {
+        println!("cargo:warning=building for android target, all DBs generated");
+    }
 }

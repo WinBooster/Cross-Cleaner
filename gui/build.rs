@@ -6,9 +6,6 @@ use std::fs::File;
 use std::io::{Read, Write};
 use std::path::Path;
 
-#[cfg(windows)]
-extern crate winres;
-
 /// Compresses a sound from the repo-root `assets/` into `OUT_DIR` so the
 /// embedded bytes are gz-compressed inside the binary (same approach as
 /// `database/build.rs`).
@@ -67,50 +64,6 @@ fn main() {
 
     #[cfg(windows)]
     {
-        let version_str = env::var("APP_VERSION").unwrap_or_else(|_| "1.0.0".to_string());
-
-        let version_numbers: Vec<u64> = version_str
-            .split('.')
-            .map(|s| s.parse().unwrap_or(0))
-            .collect();
-
-        let version_num = version_numbers.first().copied().unwrap_or(0) << 48
-            | version_numbers.get(1).copied().unwrap_or(0) << 32
-            | version_numbers.get(2).copied().unwrap_or(0) << 16
-            | version_numbers.get(3).copied().unwrap_or(0);
-
-        let mut res = winres::WindowsResource::new();
-        res.set_icon("..\\assets\\icon.ico");
-
-        // Only require admin for release builds, not for tests
-        let profile = env::var("PROFILE").unwrap_or_else(|_| String::from("debug"));
-        if profile == "release" {
-            res.set_manifest(
-                r#"
-    <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
-    <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
-        <security>
-            <requestedPrivileges>
-                <requestedExecutionLevel level="requireAdministrator" uiAccess="false" />
-            </requestedPrivileges>
-        </security>
-    </trustInfo>
-    </assembly>
-    "#,
-            );
-        }
-
-        // Hide console window
-        res.set("NO_CONSOLE", "1");
-
-        res.set_version_info(winres::VersionInfo::PRODUCTVERSION, version_num)
-            .set_version_info(winres::VersionInfo::FILEVERSION, version_num);
-
-        if let Err(e) = res.compile() {
-            eprintln!("Error: {}", e);
-            std::process::exit(1);
-        }
-
         asset_compressor("menu.png");
         asset_compressor("settings.png");
     }

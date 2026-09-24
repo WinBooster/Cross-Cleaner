@@ -18,6 +18,14 @@ pub fn get_version() -> &'static str {
 
 pub const ICON_BYTES: &[u8; 38078] = include_bytes!("../../assets/icon.ico");
 
+/// Android-specific database file (used via CleanerDatabase::default_source on target_os = "android").
+///
+/// On Android `CleanerDatabase::default_source()` loads `android_database.json`
+/// (cache/logs for Chrome, Telegram, Gallery etc.) compiled via `database/build.rs`.
+/// The file lives at `database/android_database.json` and is gzip-compressed at build time
+/// into `OUT_DIR/android_database.min.json.gz` (see `cleaner_database.rs`).
+pub const ANDROID_DATABASE_PATH: &str = "android_database.json";
+
 #[cfg(test)]
 mod tests {
     use super::*;

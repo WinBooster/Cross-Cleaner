@@ -3,18 +3,6 @@
     windows_subsystem = "windows"
 )]
 
-mod app;
-mod categories;
-mod cleaning;
-mod config;
-mod icons;
-mod notifications;
-mod pages;
-mod sounds;
-mod taskbar;
-mod title_bar;
-
-use app::MyApp;
 use clap::{ArgAction, Parser};
 use database::cleaner_database::CleanerDatabase;
 use database::get_version;
@@ -24,9 +12,12 @@ use database::structures::CustomCleaner;
 use database::version::check_new_version;
 use eframe::UserEvent;
 use eframe::egui;
+use gui::app::MyApp;
+use gui::icons;
+use gui::sounds;
+use gui::title_bar::TITLE_BAR_HEIGHT;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
-use title_bar::TITLE_BAR_HEIGHT;
 use winit::application::ApplicationHandler;
 use winit::event::{DeviceEvent, DeviceId, MouseScrollDelta, StartCause, TouchPhase, WindowEvent};
 use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop};
@@ -573,9 +564,9 @@ async fn main() -> eframe::Result {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use app::Page;
-    use categories::CategoryState;
     use database::structures::{CleanerData, CleanerDataRegistry, CleanerFlags};
+    use gui::app::Page;
+    use gui::categories::CategoryState;
     use std::collections::HashSet;
 
     #[test]

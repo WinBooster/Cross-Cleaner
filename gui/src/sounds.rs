@@ -1,7 +1,11 @@
+#[cfg(not(target_os = "android"))]
 use rodio::mixer::Mixer;
+#[cfg(not(target_os = "android"))]
 use rodio::stream::play;
+#[cfg(not(target_os = "android"))]
 use rodio::{DeviceSinkBuilder, MixerDeviceSink};
 use std::io::{Cursor, Read};
+#[cfg(not(target_os = "android"))]
 use std::sync::OnceLock;
 
 use flate2::read::GzDecoder;
@@ -29,11 +33,13 @@ fn gunzip(data: &[u8]) -> Vec<u8> {
 /// Convenience wrapper around rodio for playing short embedded UI sounds.
 /// Keeps the output device sink alive; each sound is decoded and played on a
 /// detached player so it never blocks the UI thread.
+#[cfg(not(target_os = "android"))]
 pub struct Sounds {
     _sink: MixerDeviceSink,
     mixer: Mixer,
 }
 
+#[cfg(not(target_os = "android"))]
 impl Sounds {
     /// Opens the default output device. Returns `None` when audio is not
     /// available (no device, headless CI, etc.) so the app keeps working
@@ -54,22 +60,28 @@ impl Sounds {
     }
 }
 
+#[cfg(not(target_os = "android"))]
 static SOUNDS: OnceLock<Sounds> = OnceLock::new();
 
 /// Initializes the audio device once. Safe to call multiple times; failures
 /// (no audio device, headless CI) leave the app working silently.
+#[cfg(not(target_os = "android"))]
 pub fn init() {
     if let Some(s) = Sounds::new() {
         let _ = SOUNDS.set(s);
     }
 }
+#[cfg(target_os = "android")]
+pub fn init() {}
 
+#[cfg(not(target_os = "android"))]
 fn get() -> Option<&'static Sounds> {
     SOUNDS.get()
 }
 
 /// Button click.
 pub fn click() {
+    #[cfg(not(target_os = "android"))]
     if let Some(s) = get() {
         s.play_gz(CLICK_GZ, config::get().click_volume);
     }
@@ -77,6 +89,7 @@ pub fn click() {
 
 /// Checkbox became checked.
 pub fn check() {
+    #[cfg(not(target_os = "android"))]
     if let Some(s) = get() {
         s.play_gz(CHECK_GZ, config::get().check_volume);
     }
@@ -84,6 +97,7 @@ pub fn check() {
 
 /// Checkbox became unchecked.
 pub fn uncheck() {
+    #[cfg(not(target_os = "android"))]
     if let Some(s) = get() {
         s.play_gz(UNCHECK_GZ, config::get().check_volume);
     }
@@ -91,12 +105,14 @@ pub fn uncheck() {
 
 /// Cleaning finished.
 pub fn done() {
+    #[cfg(not(target_os = "android"))]
     if let Some(s) = get() {
         s.play_gz(DONE_GZ, config::get().done_volume);
     }
 }
 
 pub fn pop() {
+    #[cfg(not(target_os = "android"))]
     if let Some(s) = get() {
         s.play_gz(POP_GZ, config::get().sound_volume);
     }

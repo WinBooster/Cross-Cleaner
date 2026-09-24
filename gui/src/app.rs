@@ -114,7 +114,7 @@ impl MyApp {
     }
 
     #[cfg(windows)]
-    pub(crate) fn from_database(
+    pub fn from_database(
         database: CleanerDatabase,
         reg_database: RegistryDatabase,
         custom_database: Arc<[CustomCleaner]>,
@@ -282,7 +282,7 @@ impl MyApp {
     }
 
     #[cfg(not(windows))]
-    pub(crate) fn from_database(
+    pub fn from_database(
         database: CleanerDatabase,
         custom_database: Arc<[CustomCleaner]>,
     ) -> Self {
@@ -427,7 +427,14 @@ impl MyApp {
     /// actually changed. `send_viewport_cmd` triggers an immediate repaint, so
     /// calling it unconditionally every frame would keep the app rendering at
     /// full frame rate even while idle.
+    /// On Android window is fullscreen, so this is a no-op.
     pub(crate) fn set_window_size(&mut self, ctx: &egui::Context, size: egui::Vec2) {
+        #[cfg(target_os = "android")]
+        {
+            let _ = (ctx, size);
+            return;
+        }
+        #[cfg(not(target_os = "android"))]
         if self.last_inner_size != Some(size) {
             ctx.send_viewport_cmd(egui::ViewportCommand::InnerSize(size));
             self.last_inner_size = Some(size);
@@ -533,6 +540,17 @@ impl MyApp {
                         // Same custom title bar as the main window (drag, GitHub,
                         // minimize & close buttons). Close sends ViewportCommand::Close
                         // to this viewport, which is handled above.
+						#[cfg(target_os = "android")]
+						{
+							let pad = 40.0;
+							let rect = egui::Rect::from_min_size(
+								ui.cursor().min,
+								egui::vec2(ui.available_width(), pad),
+							);
+							ui.painter().rect_filled(rect, 0.0, ui.visuals().panel_fill);
+							ui.add_space(pad);
+						}
+						
                         title_bar(
                             ui,
                             &ctx,
@@ -549,6 +567,7 @@ impl MyApp {
                         } else {
                             ui.visuals().text_color()
                         };
+						#[cfg(not(target_os = "android"))]
                         paint_window_border(&ctx, "changelog_window_border", border_color);
                         ui.add_space(8.0);
                         // Inner padding around the scroll content, matching
@@ -636,6 +655,7 @@ impl eframe::App for MyApp {
         } else {
             ui.visuals().text_color()
         };
+		#[cfg(not(target_os = "android"))]
         paint_window_border(&ctx, "main_window_border", border_color);
         if let Some(receiver) = &mut self.progress_receiver {
             // Drain everything that is ready, but repaint on a slower cadence
@@ -742,6 +762,16 @@ impl eframe::App for MyApp {
             Page::Results | Page::ProgramSelection | Page::Settings
         );
         let show_settings = self.current_page == Page::Main;
+		#[cfg(target_os = "android")]
+		{
+			let pad = 40.0;
+			let rect = egui::Rect::from_min_size(
+				ui.cursor().min,
+				egui::vec2(ui.available_width(), pad),
+			);
+			ui.painter().rect_filled(rect, 0.0, ui.visuals().panel_fill);
+			ui.add_space(pad);
+		}
         let (back_clicked, settings_clicked) = title_bar(
             ui,
             &ctx,
