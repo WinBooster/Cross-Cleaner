@@ -651,7 +651,8 @@ mod tests {
 
         let mut data = create_test_data(base.to_str().unwrap().to_string());
         data.files_to_remove = vec![std::sync::Arc::from(secret.to_string_lossy().to_string())];
-        data.directories_to_remove = vec![std::sync::Arc::from(outside.to_string_lossy().to_string())];
+        data.directories_to_remove =
+            vec![std::sync::Arc::from(outside.to_string_lossy().to_string())];
 
         let result = clear_data(&data).await;
 

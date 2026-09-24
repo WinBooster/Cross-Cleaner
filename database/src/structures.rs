@@ -240,7 +240,11 @@ impl<'de> Deserialize<'de> for CleanerData {
             program: intern_arc(&h.program),
             class: intern_arc(&h.class),
             sub_category: intern_arc(&h.sub_category),
-            files_to_remove: h.files_to_remove.into_iter().map(|s| intern_arc(&s)).collect(),
+            files_to_remove: h
+                .files_to_remove
+                .into_iter()
+                .map(|s| intern_arc(&s))
+                .collect(),
             directories_to_remove: h
                 .directories_to_remove
                 .into_iter()
