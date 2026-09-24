@@ -137,7 +137,7 @@ macro_rules! custom_glob_cleaner {
                             if cur % 5 == 0 {
                                 let bytes = total_bytes_ref.load(Ordering::Relaxed);
                                 if let Some(s) = sender_ref.as_ref() {
-                                    let _ = s.blocking_send(format!(
+                                    let _ = s.try_send(format!(
                                         "Compressing {}/{} files... {}",
                                         cur,
                                         cur,
@@ -169,7 +169,7 @@ macro_rules! custom_glob_cleaner {
                 if let Some(s) = sender.as_ref() {
                     let bytes = total_bytes.load(Ordering::Relaxed);
                     let done = completed.load(Ordering::Relaxed);
-                    let _ = s.blocking_send(format!(
+                    let _ = s.try_send(format!(
                         "Compressing {}/{} files... {}",
                         done,
                         total,
