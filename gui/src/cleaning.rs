@@ -19,13 +19,13 @@ use tokio::sync::mpsc;
 use crate::categories::effective_sub;
 
 pub async fn work(
-    selected_map: HashMap<String, HashSet<String>>,
+    selected_map: HashMap<Arc<str>, HashSet<Arc<str>>>,
     progress_sender: mpsc::Sender<String>,
     database: &CleanerDatabase,
     custom_database: &[CustomCleaner],
     #[cfg(windows)] registry_database: &RegistryDatabase,
-    excluded_programs: HashSet<String>,
-    excluded_program_categories: HashSet<(String, String)>,
+    excluded_programs: HashSet<Arc<str>>,
+    excluded_program_categories: HashSet<(Arc<str>, Arc<str>)>,
 ) -> (u64, u64, u64, Vec<Cleared>) {
     let mut current_task = 0;
 
@@ -52,7 +52,7 @@ pub async fn work(
                 && subs.contains(&eff)
                 && !excluded_programs.contains(data.program.as_ref())
                 && !excluded_program_categories
-                    .contains(&(data.program.to_string(), data.category.to_string()))
+                    .contains(&(Arc::clone(&data.program), Arc::clone(&data.category)))
             {
                 let sender = progress_sender.clone();
                 let name_msg = data.program.clone();
@@ -73,7 +73,7 @@ pub async fn work(
         if let Some(subs) = selected_map.get(data.category.as_ref())
             && subs.contains(&eff)
             && !excluded_programs.contains(data.program.as_ref())
-            && !excluded_program_categories.contains(&(data.program.to_string(), data.category.to_string()))
+            && !excluded_program_categories.contains(&(Arc::clone(&data.program), Arc::clone(&data.category)))
         {
             if data.sequential {
                 sequential_cleaners.push(data.clone());
@@ -100,7 +100,7 @@ pub async fn work(
         if let Some(subs) = selected_map.get(data.category.as_ref())
             && subs.contains(&eff)
             && !excluded_programs.contains(data.program.as_ref())
-            && !excluded_program_categories.contains(&(data.program.to_string(), data.category.to_string()))
+            && !excluded_program_categories.contains(&(Arc::clone(&data.program), Arc::clone(&data.category)))
         {
             let data = Arc::new(data);
             let sender = progress_sender.clone();

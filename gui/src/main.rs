@@ -546,10 +546,10 @@ mod tests {
         );
 
         // Categories should be sorted with Cache first, then Logs, then Documentation
-        assert_eq!(app.categories[0].name, "Cache", "First should be Cache");
-        assert_eq!(app.categories[1].name, "Logs", "Second should be Logs");
+        assert_eq!(app.categories[0].name.as_ref(), "Cache", "First should be Cache");
+        assert_eq!(app.categories[1].name.as_ref(), "Logs", "Second should be Logs");
         assert_eq!(
-            app.categories[2].name, "Documentation",
+            app.categories[2].name.as_ref(), "Documentation",
             "Third should be Documentation"
         );
     }
@@ -597,19 +597,19 @@ mod tests {
     #[test]
     fn test_tristate_logic() {
         let mut cat = CategoryState {
-            name: "Cache".to_string(),
-            subs: vec!["A".to_string(), "B".to_string(), "C".to_string()],
+            name: Arc::from("Cache"),
+            subs: vec![Arc::from("A"), Arc::from("B"), Arc::from("C")],
             has_empty: false,
             selected: HashSet::new(),
         };
         assert!(cat.is_unchecked());
         assert!(!cat.is_checked());
         assert!(!cat.is_indeterminate());
-        cat.selected.insert("A".to_string());
+        cat.selected.insert(Arc::from("A"));
         assert!(cat.is_indeterminate());
         assert!(!cat.is_checked());
-        cat.selected.insert("B".to_string());
-        cat.selected.insert("C".to_string());
+        cat.selected.insert(Arc::from("B"));
+        cat.selected.insert(Arc::from("C"));
         assert!(cat.is_checked());
         assert!(!cat.is_indeterminate());
         cat.selected.clear();
@@ -648,7 +648,7 @@ mod tests {
         );
         assert_eq!(app.categories.len(), 1);
         assert_eq!(app.categories[0].subs.len(), 2);
-        assert!(app.categories[0].subs.contains(&"Browser".to_string()));
-        assert!(app.categories[0].subs.contains(&"Game".to_string()));
+        assert!(app.categories[0].subs.contains(&Arc::from("Browser")));
+        assert!(app.categories[0].subs.contains(&Arc::from("Game")));
     }
 }

@@ -81,7 +81,7 @@ impl MyApp {
                             let is_indet = master && !self.program_disabled[i].is_empty();
                             column.horizontal(|ui| {
                                 let (_resp, clicked) =
-                                    tristate_checkbox(ui, is_checked, is_indet, program);
+                                    tristate_checkbox(ui, is_checked, is_indet, &*program);
                                 if clicked {
                                     if is_checked || is_indet {
                                         *checkbox.borrow_mut() = false;
@@ -126,7 +126,7 @@ impl MyApp {
                                                     for cat in cats.clone() {
                                                         let mut enabled = !self.program_disabled[i]
                                                             .contains(&cat);
-                                                        if ui.checkbox(&mut enabled, &cat).changed()
+                                                        if ui.checkbox(&mut enabled, &*cat).changed()
                                                         {
                                                             if enabled {
                                                                 self.program_disabled[i]
@@ -174,13 +174,13 @@ impl MyApp {
         }
 
         // Per-program category exclusions from the popups
-        let mut excluded_program_categories: HashSet<(String, String)> = HashSet::new();
+        let mut excluded_program_categories: HashSet<(Arc<str>, Arc<str>)> = HashSet::new();
         for (i, (checkbox, program)) in self.program_checkboxes.iter().enumerate() {
             if *checkbox.borrow()
                 && let Some(disabled) = self.program_disabled.get(i)
             {
                 for cat in disabled {
-                    excluded_program_categories.insert((program.clone(), cat.clone()));
+                    excluded_program_categories.insert((Arc::clone(&program), Arc::clone(&cat)));
                 }
             }
         }

@@ -4,6 +4,7 @@
 use std::cell::RefCell;
 use std::collections::HashSet;
 use std::rc::Rc;
+use std::sync::Arc;
 
 use eframe::egui;
 
@@ -54,10 +55,12 @@ impl MyApp {
                         } else {
                             cat.selected = cat.subs.iter().cloned().collect();
                             if cat.has_empty {
-                                cat.selected.insert(String::new());
+                                cat.selected.insert(Arc::from(""));
+
                             }
                             if cat.subs.is_empty() && !cat.has_empty {
-                                cat.selected.insert(String::new());
+                                cat.selected.insert(Arc::from(""));
+
                             }
                             sounds::check();
                         }
@@ -90,7 +93,7 @@ impl MyApp {
                                             let key = (cat.name.clone(), sub.clone());
                                             let label = match self.sub_counts.get(&key).copied() {
                                                 Some(n) if n > 0 => format!("{} ({})", sub, n),
-                                                _ => sub.clone(),
+                                                _ => sub.to_string(),
                                             };
                                             let mut is_sel = cat.selected.contains(&sub);
                                             if ui.checkbox(&mut is_sel, &label).changed() {
@@ -105,7 +108,7 @@ impl MyApp {
                                         }
                                         // Show Uncategorized for objects without sub_category, only if category has >= 1 real sub
                                         if cat.has_empty {
-                                            let key = (cat.name.clone(), String::new());
+                                            let key = (Arc::clone(&cat.name), Arc::from(""));
                                             let label = match self.sub_counts.get(&key).copied() {
                                                 Some(n) if n > 0 => {
                                                     format!("Uncategorized ({})", n)
@@ -115,10 +118,11 @@ impl MyApp {
                                             let mut is_uncat = cat.selected.contains("");
                                             if ui.checkbox(&mut is_uncat, &label).changed() {
                                                 if is_uncat {
-                                                    cat.selected.insert(String::new());
+                                                    cat.selected.insert(Arc::from(""));
+
                                                     sounds::check();
                                                 } else {
-                                                    cat.selected.remove(&String::new());
+                                                    cat.selected.remove("");
                                                     sounds::uncheck();
                                                 }
                                             }
@@ -140,14 +144,14 @@ impl MyApp {
             sounds::click();
             if self.has_selection() {
                 let selected_map = self.selected_map();
-                let mut programs: Vec<(String, Vec<String>)> = Vec::new();
-                let mut add = |program: &str, category: &str| {
-                    if let Some(entry) = programs.iter_mut().find(|(p, _)| p == program) {
-                        if !entry.1.iter().any(|c| c == category) {
-                            entry.1.push(category.to_string());
+                let mut programs: Vec<(Arc<str>, Vec<Arc<str>>)> = Vec::new();
+                let mut add = |program: Arc<str>, category: Arc<str>| {
+                    if let Some(entry) = programs.iter_mut().find(|(p, _)| p.as_ref() == program.as_ref()) {
+                        if !entry.1.iter().any(|c| c.as_ref() == category.as_ref()) {
+                            entry.1.push(category);
                         }
                     } else {
-                        programs.push((program.to_string(), vec![category.to_string()]));
+                        programs.push((program, vec![category]));
                     }
                 };
                 let _ = self.database.for_each_index(|data| {
@@ -155,7 +159,7 @@ impl MyApp {
                     if let Some(subs) = selected_map.get(data.category.as_ref())
                         && subs.contains(&eff)
                     {
-                        add(&data.program, &data.category);
+                        add(Arc::clone(&data.program), Arc::clone(&data.category));
                     }
                 });
                 for data in self.custom_database.iter() {
@@ -163,7 +167,7 @@ impl MyApp {
                     if let Some(subs) = selected_map.get(data.category.as_ref())
                         && subs.contains(&eff)
                     {
-                        add(&data.program, &data.category);
+                        add(Arc::clone(&data.program), Arc::clone(&data.category));
                     }
                 }
                 #[cfg(windows)]
@@ -173,7 +177,7 @@ impl MyApp {
                         if let Some(subs) = selected_map.get(data.category.as_ref())
                             && subs.contains(&eff)
                         {
-                            add(&data.program, &data.category);
+                            add(Arc::clone(&data.program), Arc::clone(&data.category));
                         }
                     });
                 }

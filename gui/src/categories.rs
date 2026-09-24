@@ -1,15 +1,15 @@
 //! Category selection model and the tristate checkbox widget.
 
-use std::collections::HashSet;
+use std::sync::Arc;
 
 use eframe::egui;
 
 #[derive(Clone, Debug)]
 pub struct CategoryState {
-    pub name: String,
-    pub subs: Vec<String>,
+    pub name: std::sync::Arc<str>,
+    pub subs: Vec<std::sync::Arc<str>>,
     pub has_empty: bool,
-    pub selected: HashSet<String>,
+    pub selected: std::collections::HashSet<std::sync::Arc<str>>,
 }
 
 impl CategoryState {
@@ -37,8 +37,8 @@ impl CategoryState {
     }
 }
 
-pub fn effective_sub(_class: &str, sub_category: &str) -> String {
-    sub_category.to_string()
+pub fn effective_sub(_class: &str, sub_category: &str) -> Arc<str> {
+    database::structures::intern_arc(sub_category)
 }
 
 /// Tristate checkbox with square (filled rect) for indeterminate state.

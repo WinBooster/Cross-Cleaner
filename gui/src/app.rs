@@ -50,18 +50,18 @@ pub struct MyApp {
     pub cleaned_bytes: u64,
     pub progress_start: Option<std::time::Instant>,
 
-    pub program_checkboxes: Vec<(Rc<RefCell<bool>>, String)>,
+    pub program_checkboxes: Vec<(Rc<RefCell<bool>>, Arc<str>)>,
     /// Selected categories that apply to each program (parallel to program_checkboxes).
-    pub program_categories: Vec<Vec<String>>,
+    pub program_categories: Vec<Vec<Arc<str>>>,
     /// Categories the user disabled per program (parallel to program_checkboxes).
-    pub program_disabled: Vec<HashSet<String>>,
+    pub program_disabled: Vec<HashSet<Arc<str>>>,
     pub search_query: String,
     pub search_query_visible: String,
     /// Indices into `program_checkboxes` matching `search_query`, in order.
     /// Recomputed only when the query or the program list changes, so the UI
     /// never has to scan/to-lowercase the whole list every frame.
     pub filtered_programs: Vec<usize>,
-    pub excluded_programs: HashSet<String>,
+    pub excluded_programs: HashSet<Arc<str>>,
     pub results_window_resized: bool,
 
     pub result_sender: Option<mpsc::Sender<CleanResult>>,
@@ -77,7 +77,7 @@ pub struct MyApp {
 
     pub update_receiver: Option<std::sync::mpsc::Receiver<Result<Option<NewRelease>, String>>>,
     /// Number of database paths per (category, sub_category).
-    pub sub_counts: HashMap<(String, String), usize>,
+    pub sub_counts: HashMap<(Arc<str>, Arc<str>), usize>,
     /// Precomputed checkbox labels like `"Cache (12)"`, parallel to `categories`.
     /// Computed once so the UI does not rebuild them every frame.
     pub category_labels: Vec<String>,
@@ -103,12 +103,12 @@ pub struct MyApp {
 impl MyApp {
     // Helper for legacy test code: checked_boxes view
     #[allow(dead_code)]
-    pub fn checked_boxes(&self) -> Vec<(Rc<RefCell<bool>>, String)> {
+    pub fn checked_boxes(&self) -> Vec<(Rc<RefCell<bool>>, Arc<str>)> {
         self.categories
             .iter()
             .map(|c| {
                 let b = c.is_checked();
-                (Rc::new(RefCell::new(b)), c.name.clone())
+                (Rc::new(RefCell::new(b)), Arc::clone(&c.name))
             })
             .collect()
     }
@@ -119,39 +119,39 @@ impl MyApp {
         reg_database: RegistryDatabase,
         custom_database: Arc<[CustomCleaner]>,
     ) -> Self {
-        let mut cat_to_subs: HashMap<String, HashSet<String>> = HashMap::new();
-        let mut cat_has_empty: HashMap<String, bool> = HashMap::new();
-        let mut category_counts: HashMap<String, usize> = HashMap::new();
-        let mut sub_counts: HashMap<(String, String), usize> = HashMap::new();
+        let mut cat_to_subs: HashMap<Arc<str>, HashSet<Arc<str>>> = HashMap::new();
+        let mut cat_has_empty: HashMap<Arc<str>, bool> = HashMap::new();
+        let mut category_counts: HashMap<Arc<str>, usize> = HashMap::new();
+        let mut sub_counts: HashMap<(Arc<str>, Arc<str>), usize> = HashMap::new();
         // Ensure all categories appear even if no sub_category
         database
             .for_each_index(|data| {
-                cat_to_subs.entry(data.category.to_string()).or_default();
-                cat_has_empty.entry(data.category.to_string()).or_insert(false);
-                *category_counts.entry(data.category.to_string()).or_insert(0) += 1;
+                cat_to_subs.entry(Arc::clone(&data.category)).or_default();
+                cat_has_empty.entry(Arc::clone(&data.category)).or_insert(false);
+                *category_counts.entry(Arc::clone(&data.category)).or_insert(0) += 1;
                 let sub = effective_sub("", &data.sub_category);
                 *sub_counts
-                    .entry((data.category.to_string(), sub.clone()))
+                    .entry((Arc::clone(&data.category), Arc::clone(&sub)))
                     .or_insert(0) += 1;
                 if !sub.is_empty() {
-                    cat_to_subs.get_mut(data.category.as_ref()).unwrap().insert(sub);
+                    cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
                 } else {
-                    *cat_has_empty.get_mut(data.category.as_ref()).unwrap() = true;
+                    *cat_has_empty.get_mut(&data.category).unwrap() = true;
                 }
             })
             .expect("Failed to read cleaner database");
         for data in custom_database.iter() {
-            cat_to_subs.entry(data.category.to_string()).or_default();
-            cat_has_empty.entry(data.category.to_string()).or_insert(false);
-            *category_counts.entry(data.category.to_string()).or_insert(0) += 1;
+            cat_to_subs.entry(Arc::clone(&data.category)).or_default();
+            cat_has_empty.entry(Arc::clone(&data.category)).or_insert(false);
+            *category_counts.entry(Arc::clone(&data.category)).or_insert(0) += 1;
             let sub = effective_sub("", &data.sub_category);
             *sub_counts
-                .entry((data.category.to_string(), sub.clone()))
+                .entry((Arc::clone(&data.category), Arc::clone(&sub)))
                 .or_insert(0) += 1;
             if !sub.is_empty() {
-                cat_to_subs.get_mut(data.category.as_ref()).unwrap().insert(sub);
+                cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
             } else {
-                *cat_has_empty.get_mut(data.category.as_ref()).unwrap() = true;
+                *cat_has_empty.get_mut(&data.category).unwrap() = true;
             }
         }
         reg_database
@@ -159,21 +159,21 @@ impl MyApp {
                 if data.category.is_empty() {
                     return;
                 }
-                cat_to_subs.entry(data.category.to_string()).or_default();
-                cat_has_empty.entry(data.category.to_string()).or_insert(false);
-                *category_counts.entry(data.category.to_string()).or_insert(0) += 1;
+                cat_to_subs.entry(Arc::clone(&data.category)).or_default();
+                cat_has_empty.entry(Arc::clone(&data.category)).or_insert(false);
+                *category_counts.entry(Arc::clone(&data.category)).or_insert(0) += 1;
                 let sub = effective_sub("", &data.sub_category);
                 *sub_counts
-                    .entry((data.category.to_string(), sub.clone()))
+                    .entry((Arc::clone(&data.category), Arc::clone(&sub)))
                     .or_insert(0) += 1;
                 if !sub.is_empty() {
-                    cat_to_subs.get_mut(data.category.as_ref()).unwrap().insert(sub);
+                    cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
                 } else {
-                    *cat_has_empty.get_mut(data.category.as_ref()).unwrap() = true;
+                    *cat_has_empty.get_mut(&data.category).unwrap() = true;
                 }
             })
             .expect("Failed to read registry database");
-        let mut options: Vec<String> = cat_to_subs.keys().cloned().collect();
+        let mut options: Vec<Arc<str>> = cat_to_subs.keys().cloned().collect();
 
         let priority = |s: &str| match s {
             "Cache" => 0,
@@ -198,7 +198,7 @@ impl MyApp {
 
         let mut categories = vec![];
         for opt in options {
-            let mut subs: Vec<String> = cat_to_subs
+            let mut subs: Vec<Arc<str>> = cat_to_subs
                 .remove(&opt)
                 .unwrap_or_default()
                 .into_iter()
@@ -217,7 +217,7 @@ impl MyApp {
             .iter()
             .map(|cat| match category_counts.get(&cat.name).copied() {
                 Some(n) if n > 0 => format!("{} ({})", cat.name, n),
-                _ => cat.name.clone(),
+                _ => cat.name.to_string(),
             })
             .collect();
         let window_title = format!("Cross Cleaner GUI v{}", get_version());
@@ -274,42 +274,42 @@ impl MyApp {
         database: CleanerDatabase,
         custom_database: Arc<[CustomCleaner]>,
     ) -> Self {
-        let mut cat_to_subs: HashMap<String, HashSet<String>> = HashMap::new();
-        let mut cat_has_empty: HashMap<String, bool> = HashMap::new();
-        let mut category_counts: HashMap<String, usize> = HashMap::new();
-        let mut sub_counts: HashMap<(String, String), usize> = HashMap::new();
+        let mut cat_to_subs: HashMap<Arc<str>, HashSet<Arc<str>>> = HashMap::new();
+        let mut cat_has_empty: HashMap<Arc<str>, bool> = HashMap::new();
+        let mut category_counts: HashMap<Arc<str>, usize> = HashMap::new();
+        let mut sub_counts: HashMap<(Arc<str>, Arc<str>), usize> = HashMap::new();
         database
             .for_each_index(|data| {
-                cat_to_subs.entry(data.category.to_string()).or_default();
-                cat_has_empty.entry(data.category.to_string()).or_insert(false);
-                *category_counts.entry(data.category.to_string()).or_insert(0) += 1;
+                cat_to_subs.entry(Arc::clone(&data.category)).or_default();
+                cat_has_empty.entry(Arc::clone(&data.category)).or_insert(false);
+                *category_counts.entry(Arc::clone(&data.category)).or_insert(0) += 1;
                 let sub = effective_sub("", &data.sub_category);
                 *sub_counts
-                    .entry((data.category.to_string(), sub.clone()))
+                    .entry((Arc::clone(&data.category), Arc::clone(&sub)))
                     .or_insert(0) += 1;
                 if !sub.is_empty() {
-                    cat_to_subs.get_mut(data.category.as_ref()).unwrap().insert(sub);
+                    cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
                 } else {
-                    *cat_has_empty.get_mut(data.category.as_ref()).unwrap() = true;
+                    *cat_has_empty.get_mut(&data.category).unwrap() = true;
                 }
             })
             .expect("Failed to read cleaner database");
         for data in custom_database.iter() {
-            cat_to_subs.entry(data.category.to_string()).or_default();
-            cat_has_empty.entry(data.category.to_string()).or_insert(false);
-            *category_counts.entry(data.category.to_string()).or_insert(0) += 1;
+            cat_to_subs.entry(Arc::clone(&data.category)).or_default();
+            cat_has_empty.entry(Arc::clone(&data.category)).or_insert(false);
+            *category_counts.entry(Arc::clone(&data.category)).or_insert(0) += 1;
             let sub = effective_sub("", &data.sub_category);
             *sub_counts
-                .entry((data.category.to_string(), sub.clone()))
+                .entry((Arc::clone(&data.category), Arc::clone(&sub)))
                 .or_insert(0) += 1;
             if !sub.is_empty() {
-                cat_to_subs.get_mut(data.category.as_ref()).unwrap().insert(sub);
+                cat_to_subs.get_mut(&data.category).unwrap().insert(sub);
             } else {
-                *cat_has_empty.get_mut(data.category.as_ref()).unwrap() = true;
+                *cat_has_empty.get_mut(&data.category).unwrap() = true;
             }
         }
 
-        let mut options: Vec<String> = cat_to_subs.keys().cloned().collect();
+        let mut options: Vec<Arc<str>> = cat_to_subs.keys().cloned().collect();
 
         let priority = |s: &str| match s {
             "Cache" => 0,
@@ -334,7 +334,7 @@ impl MyApp {
 
         let mut categories = vec![];
         for opt in options {
-            let mut subs: Vec<String> = cat_to_subs
+            let mut subs: Vec<Arc<str>> = cat_to_subs
                 .remove(&opt)
                 .unwrap_or_default()
                 .into_iter()
@@ -353,7 +353,7 @@ impl MyApp {
             .iter()
             .map(|cat| match category_counts.get(&cat.name).copied() {
                 Some(n) if n > 0 => format!("{} ({})", cat.name, n),
-                _ => cat.name.clone(),
+                _ => cat.name.to_string(),
             })
             .collect();
         let window_title = format!("Cross Cleaner GUI v{}", get_version());
@@ -430,11 +430,11 @@ impl MyApp {
             .collect();
     }
 
-    pub(crate) fn selected_map(&self) -> HashMap<String, HashSet<String>> {
+    pub(crate) fn selected_map(&self) -> HashMap<Arc<str>, HashSet<Arc<str>>> {
         let mut map = HashMap::new();
         for cat in &self.categories {
             if !cat.selected.is_empty() {
-                map.insert(cat.name.clone(), cat.selected.clone());
+                map.insert(Arc::clone(&cat.name), cat.selected.clone());
             }
         }
         map
