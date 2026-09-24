@@ -51,6 +51,7 @@ features = [
 [target.'cfg(target_os = "linux")'.dependencies]
 eframe = { version = "0.36", default-features = false, features = [
     "glow",
+	"wgpu",
     "default_fonts",
     "x11",
     "wayland",
