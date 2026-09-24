@@ -20,8 +20,8 @@ use winit::platform::android::activity::AndroidApp;
 
 #[cfg(target_os = "android")]
 fn ensure_manage_external_storage() {
-    use jni::objects::{JObject, JValue};
     use jni::JavaVM;
+    use jni::objects::{JObject, JValue};
 
     let ctx = ndk_context::android_context();
     let vm = match unsafe { JavaVM::from_raw(ctx.vm().cast()) } {
@@ -210,15 +210,17 @@ fn run_eframe(event_loop: winit::event_loop::EventLoop<eframe::UserEvent>) -> ef
         }),
         &event_loop,
     );
-    event_loop.run_app(&mut native_app).map_err(eframe::Error::WinitEventLoop)
+    event_loop
+        .run_app(&mut native_app)
+        .map_err(eframe::Error::WinitEventLoop)
 }
 
 #[cfg(target_os = "android")]
 #[unsafe(no_mangle)]
 fn android_main(app: AndroidApp) {
-	#[cfg(target_os = "android")]
-	ensure_manage_external_storage();
-	
+    #[cfg(target_os = "android")]
+    ensure_manage_external_storage();
+
     // Android entry point called by NativeActivity.
     // Build event loop that is tied to the AndroidApp.
     use winit::event_loop::EventLoop;
@@ -235,10 +237,11 @@ fn android_main(app: AndroidApp) {
 
     rt.block_on(async {
         // EventLoop must be created on the main thread with android app
-        let event_loop: EventLoop<eframe::UserEvent> = EventLoop::<eframe::UserEvent>::with_user_event()
-            .with_android_app(app)
-            .build()
-            .expect("android event loop");
+        let event_loop: EventLoop<eframe::UserEvent> =
+            EventLoop::<eframe::UserEvent>::with_user_event()
+                .with_android_app(app)
+                .build()
+                .expect("android event loop");
         // run is blocking, but we are inside tokio async context – use spawn_blocking?
         // eframe's run will block current thread, which is okay because we are on main thread.
         // We need to run without blocking tokio executor, so use blocking thread.

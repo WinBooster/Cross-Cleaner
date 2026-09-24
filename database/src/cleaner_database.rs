@@ -141,7 +141,12 @@ impl CleanerDatabase {
                 // NOTE: DataBase for Android (minified and compressed at compile time)
                 let compressed_data =
                     include_bytes!(concat!(env!("OUT_DIR"), "/android_database.min.json.gz"));
-                #[cfg(not(any(target_os = "linux", target_os = "windows", target_os = "macos", target_os = "android")))]
+                #[cfg(not(any(
+                    target_os = "linux",
+                    target_os = "windows",
+                    target_os = "macos",
+                    target_os = "android"
+                )))]
                 let compressed_data: &[u8] =
                     include_bytes!(concat!(env!("OUT_DIR"), "/linux_database.min.json.gz"));
 
@@ -185,7 +190,12 @@ impl CleanerDatabase {
                 #[cfg(target_os = "android")]
                 let compressed_data =
                     include_bytes!(concat!(env!("OUT_DIR"), "/android_database.min.json.gz"));
-                #[cfg(not(any(target_os = "linux", target_os = "windows", target_os = "macos", target_os = "android")))]
+                #[cfg(not(any(
+                    target_os = "linux",
+                    target_os = "windows",
+                    target_os = "macos",
+                    target_os = "android"
+                )))]
                 let compressed_data: &[u8] =
                     include_bytes!(concat!(env!("OUT_DIR"), "/linux_database.min.json.gz"));
 
