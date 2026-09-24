@@ -1,4 +1,4 @@
-use database::structures::{CleanerData, CleanerResult};
+use database::structures::{CleanerData, CleanerFlags, CleanerResult};
 use futures::stream::{self, StreamExt};
 use glob::glob;
 use std::path::{Component, Path, PathBuf};
@@ -244,26 +244,28 @@ fn clean_path_sync(path: &Path, data: &CleanerData) -> PathStats {
         }
     }
 
-    if data.remove_all_in_dir {
+    if data.flags.contains(CleanerFlags::REMOVE_ALL_IN_DIR) {
         // try fast; skip is_dir check for speed (A)
         if let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf()) {
             stats.add(f, fo, b);
         }
     }
 
-    if data.remove_files
+    if data.flags.contains(CleanerFlags::REMOVE_FILES)
         && let Ok(b) = remove_file_sync(path)
     {
         stats.add(1, 0, b);
     }
 
-    if data.remove_directories
+    if data.flags.contains(CleanerFlags::REMOVE_DIRECTORIES)
         && let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf())
     {
         stats.add(f, fo, b);
     }
 
-    if data.remove_directory_after_clean
+    if data
+        .flags
+        .contains(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN)
         && let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf())
     {
         stats.add(f, fo, b);
@@ -370,10 +372,7 @@ mod tests {
             sub_category: String::from("TestSub"),
             files_to_remove: vec![],
             directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            remove_directories: false,
-            remove_files: false,
+            flags: CleanerFlags::empty(),
         }
     }
 
@@ -395,7 +394,7 @@ mod tests {
         fs::write(&file_path, b"test content").unwrap();
 
         let mut data = create_test_data(file_path.to_str().unwrap().to_string());
-        data.remove_files = true;
+        data.flags.insert(CleanerFlags::REMOVE_FILES);
 
         let result = clear_data(&data).await;
 
@@ -413,7 +412,7 @@ mod tests {
         fs::write(sub_dir.join("file.txt"), b"content").unwrap();
 
         let mut data = create_test_data(sub_dir.to_str().unwrap().to_string());
-        data.remove_directories = true;
+        data.flags.insert(CleanerFlags::REMOVE_DIRECTORIES);
 
         let result = clear_data(&data).await;
 
@@ -431,7 +430,7 @@ mod tests {
         fs::write(target_dir.join("file2.txt"), b"content2").unwrap();
 
         let mut data = create_test_data(target_dir.to_str().unwrap().to_string());
-        data.remove_all_in_dir = true;
+        data.flags.insert(CleanerFlags::REMOVE_ALL_IN_DIR);
 
         let result = clear_data(&data).await;
 
@@ -511,7 +510,7 @@ mod tests {
 
         let pattern = format!("{}/*.tmp", temp_dir.path().to_str().unwrap());
         let mut data = create_test_data(pattern);
-        data.remove_files = true;
+        data.flags.insert(CleanerFlags::REMOVE_FILES);
 
         let result = clear_data(&data).await;
 
@@ -531,7 +530,7 @@ mod tests {
 
         let mut data =
             create_test_data(temp_dir.path().join("level1").to_str().unwrap().to_string());
-        data.remove_directories = true;
+        data.flags.insert(CleanerFlags::REMOVE_DIRECTORIES);
 
         let result = clear_data(&data).await;
 
@@ -547,7 +546,7 @@ mod tests {
         fs::write(&file_path, b"test").unwrap();
 
         let mut data = create_test_data(file_path.to_str().unwrap().to_string());
-        data.remove_files = true;
+        data.flags.insert(CleanerFlags::REMOVE_FILES);
 
         let result = clear_data(&data).await;
 
@@ -564,7 +563,7 @@ mod tests {
         fs::create_dir(&empty_dir).unwrap();
 
         let mut data = create_test_data(empty_dir.to_str().unwrap().to_string());
-        data.remove_directories = true;
+        data.flags.insert(CleanerFlags::REMOVE_DIRECTORIES);
 
         let result = clear_data(&data).await;
 
@@ -581,7 +580,7 @@ mod tests {
         fs::write(&file_path, content).unwrap();
 
         let mut data = create_test_data(file_path.to_str().unwrap().to_string());
-        data.remove_files = true;
+        data.flags.insert(CleanerFlags::REMOVE_FILES);
 
         let result = clear_data(&data).await;
 
@@ -706,7 +705,7 @@ mod tests {
         symlink_dir(&outside, base.join("link")).unwrap();
 
         let mut data = create_test_data(format!("{}/link/*.tmp", base.display()));
-        data.remove_files = true;
+        data.flags.insert(CleanerFlags::REMOVE_FILES);
 
         let result = clear_data(&data).await;
         assert!(!result.working);
@@ -745,7 +744,7 @@ mod tests {
         fs::write(target.join("file.txt"), b"content").unwrap();
 
         let mut data = create_test_data(target.to_string_lossy().into_owned());
-        data.remove_directory_after_clean = true;
+        data.flags.insert(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN);
 
         let result = clear_data(&data).await;
         assert_eq!((result.files, result.folders, result.bytes), (1, 1, 7));
@@ -765,7 +764,7 @@ mod tests {
             temp_dir.path().join("base").to_str().unwrap()
         );
         let mut data = create_test_data(pattern);
-        data.remove_files = true;
+        data.flags.insert(CleanerFlags::REMOVE_FILES);
 
         let result = clear_data(&data).await;
 
@@ -808,7 +807,7 @@ mod tests {
         symlink_dir(&target, &link).unwrap();
 
         let mut data = create_test_data(base.to_str().unwrap().to_string());
-        data.remove_all_in_dir = true;
+        data.flags.insert(CleanerFlags::REMOVE_ALL_IN_DIR);
 
         let result = clear_data(&data).await;
 
@@ -834,7 +833,7 @@ mod tests {
         symlink(&target, &link).unwrap();
 
         let mut data = create_test_data(base.to_str().unwrap().to_string());
-        data.remove_all_in_dir = true;
+        data.flags.insert(CleanerFlags::REMOVE_ALL_IN_DIR);
 
         let result = clear_data(&data).await;
 
@@ -858,8 +857,8 @@ mod tests {
         symlink_dir(&target, &link).unwrap();
 
         let mut data = create_test_data(link.to_str().unwrap().to_string());
-        data.remove_all_in_dir = true;
-        data.remove_directory_after_clean = true;
+        data.flags.insert(CleanerFlags::REMOVE_ALL_IN_DIR);
+        data.flags.insert(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN);
 
         let result = clear_data(&data).await;
 
@@ -882,8 +881,8 @@ mod tests {
         symlink(&target, &link).unwrap();
 
         let mut data = create_test_data(link.to_str().unwrap().to_string());
-        data.remove_all_in_dir = true;
-        data.remove_directory_after_clean = true;
+        data.flags.insert(CleanerFlags::REMOVE_ALL_IN_DIR);
+        data.flags.insert(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN);
 
         let result = clear_data(&data).await;
 
@@ -929,10 +928,7 @@ mod proptests {
                 sub_category: String::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: false,
-                remove_files: true,
+                flags: CleanerFlags::REMOVE_FILES,
             };
 
             let result = run_async(clear_data(&data));
@@ -959,10 +955,7 @@ mod proptests {
                 sub_category: String::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: false,
-                remove_files: true,
+                flags: CleanerFlags::REMOVE_FILES,
             };
 
             let result = run_async(clear_data(&data));
@@ -981,10 +974,7 @@ mod proptests {
                 sub_category: String::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: false,
-                remove_files: true,
+                flags: CleanerFlags::REMOVE_FILES,
             };
 
             let result = run_async(clear_data(&data));
@@ -1013,10 +1003,7 @@ mod proptests {
                 sub_category: String::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: true,
-                remove_files: false,
+                flags: CleanerFlags::REMOVE_DIRECTORIES,
             };
 
             let result = run_async(clear_data(&data));
@@ -1039,10 +1026,7 @@ mod proptests {
                 sub_category: String::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: false,
-                remove_files: true,
+                flags: CleanerFlags::REMOVE_FILES,
             };
 
             let result = run_async(clear_data(&data));
@@ -1071,10 +1055,7 @@ mod proptests {
                 sub_category: String::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: true,
-                remove_files: false,
+                flags: CleanerFlags::REMOVE_DIRECTORIES,
             };
 
             let result = run_async(clear_data(&data));
@@ -1102,10 +1083,7 @@ mod proptests {
                 sub_category: String::from("Test"),
                 files_to_remove: vec![filename.clone()],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: false,
-                remove_files: false,
+                flags: CleanerFlags::empty(),
             };
 
             let result = run_async(clear_data(&data));
@@ -1138,10 +1116,7 @@ mod proptests {
                 sub_category: String::from("Test"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: false,
-                remove_files: true,
+                flags: CleanerFlags::REMOVE_FILES,
             };
 
             let result = run_async(clear_data(&data));

@@ -145,17 +145,14 @@ mod tests {
             sub_category: String::from("TestSub"),
             files_to_remove: vec![String::from("*.tmp")],
             directories_to_remove: vec![String::from("cache")],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: true,
-            remove_directories: true,
-            remove_files: true,
+            flags: crate::structures::CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN | crate::structures::CleanerFlags::REMOVE_DIRECTORIES | crate::structures::CleanerFlags::REMOVE_FILES,
         };
 
         assert_eq!(data.path, "test/path");
         assert_eq!(data.category, "Cache");
         assert_eq!(data.program, "TestApp");
-        assert!(data.remove_files);
-        assert!(data.remove_directories);
+        assert!(data.flags.contains(crate::structures::CleanerFlags::REMOVE_FILES));
+        assert!(data.flags.contains(crate::structures::CleanerFlags::REMOVE_DIRECTORIES));
     }
 
     #[test]
@@ -450,16 +447,13 @@ mod tests {
             sub_category: String::new(),
             files_to_remove: vec![],
             directories_to_remove: vec![],
-            remove_all_in_dir: false,
-            remove_directory_after_clean: false,
-            remove_directories: false,
-            remove_files: false,
+            flags: crate::structures::CleanerFlags::empty(),
         };
 
-        assert!(!data.remove_files);
-        assert!(!data.remove_directories);
-        assert!(!data.remove_all_in_dir);
-        assert!(!data.remove_directory_after_clean);
+        assert!(!data.flags.contains(crate::structures::CleanerFlags::REMOVE_FILES));
+        assert!(!data.flags.contains(crate::structures::CleanerFlags::REMOVE_DIRECTORIES));
+        assert!(!data.flags.contains(crate::structures::CleanerFlags::REMOVE_ALL_IN_DIR));
+        assert!(!data.flags.contains(crate::structures::CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN));
         assert_eq!(data.files_to_remove.len(), 0);
         assert_eq!(data.directories_to_remove.len(), 0);
     }

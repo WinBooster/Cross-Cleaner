@@ -417,7 +417,7 @@ mod tests {
     use super::*;
     use app::Page;
     use categories::CategoryState;
-    use database::structures::{CleanerData, CleanerDataRegistry};
+    use database::structures::{CleanerData, CleanerFlags, CleanerDataRegistry};
     use std::collections::HashSet;
 
     #[test]
@@ -441,10 +441,7 @@ mod tests {
                 sub_category: String::from("Browser"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: false,
-                remove_files: false,
+                flags: CleanerFlags::empty(),
             },
             CleanerData {
                 path: String::from("test/path2"),
@@ -454,10 +451,7 @@ mod tests {
                 sub_category: String::from("System"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: false,
-                remove_files: false,
+                flags: CleanerFlags::empty(),
             },
         ];
 
@@ -510,10 +504,7 @@ mod tests {
                 sub_category: String::new(),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: false,
-                remove_files: false,
+                flags: CleanerFlags::empty(),
             },
             CleanerData {
                 path: String::from("test2"),
@@ -523,10 +514,7 @@ mod tests {
                 sub_category: String::new(),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: false,
-                remove_files: false,
+                flags: CleanerFlags::empty(),
             },
             CleanerData {
                 path: String::from("test3"),
@@ -536,10 +524,7 @@ mod tests {
                 sub_category: String::new(),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: false,
-                remove_files: false,
+                flags: CleanerFlags::empty(),
             },
         ];
 
@@ -645,10 +630,7 @@ mod tests {
                 sub_category: String::from("Browser"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: false,
-                remove_files: false,
+                flags: CleanerFlags::empty(),
             },
             CleanerData {
                 path: String::from("p2"),
@@ -658,10 +640,7 @@ mod tests {
                 sub_category: String::from("Game"),
                 files_to_remove: vec![],
                 directories_to_remove: vec![],
-                remove_all_in_dir: false,
-                remove_directory_after_clean: false,
-                remove_directories: false,
-                remove_files: false,
+                flags: CleanerFlags::empty(),
             },
         ];
         let registry_database: Vec<CleanerDataRegistry> = vec![];
