@@ -362,6 +362,7 @@ pub fn register_all() {
 }
 
 // Visual Studio
+#[cfg(windows)]
 fn remove_code_containers_offline(
     path: &std::path::Path,
 ) -> std::io::Result<crate::custom_cleaners::GlobCleanStats> {
@@ -393,6 +394,7 @@ fn remove_code_containers_offline(
 /// element (with nested FileList/File entries - the recent files list)
 /// from dnSpy.xml. Handles nested `<section>` blocks and self-closing
 /// `<section ... />` tags.
+#[cfg(windows)]
 fn remove_dnspy_file_lists(
     path: &std::path::Path,
 ) -> std::io::Result<crate::custom_cleaners::GlobCleanStats> {
