@@ -331,6 +331,34 @@ pub fn register_all() {
             crate::image_optimizer::optimize_single(path)
         }
     };
+	
+	#[cfg(target_os = "android")]
+    let _ = custom_glob_cleaner! {
+        id: "Optimize pictures in Screenshots",
+        program: "System",
+        category: "Images",
+        sub_category: "Compress",
+        os: ["android"],
+        sequential: true,
+        glob: "/storage/emulated/0/Pictures/Screenshots/*",
+        |path| {
+            crate::image_optimizer::optimize_single(path)
+        }
+    };
+	
+	#[cfg(target_os = "android")]
+    let _ = custom_glob_cleaner! {
+        id: "Optimize pictures in System",
+        program: "System",
+        category: "Images",
+        sub_category: "Compress",
+        os: ["android"],
+        sequential: true,
+        glob: "/storage/emulated/0/Pictures/*",
+        |path| {
+            crate::image_optimizer::optimize_single(path)
+        }
+    };
 }
 
 // Visual Studio
