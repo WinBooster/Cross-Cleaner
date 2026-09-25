@@ -189,6 +189,12 @@ jobs:
         run: |
           rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
           sdkmanager "platforms;android-35" "build-tools;35.0.0" "ndk;27.0.12077973"
+      - name: Generate release keystore
+        run: |
+          keytool -genkey -v -keystore android/release.keystore -storepass android -alias androidreleasekey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Release,O=Android,C=US"
+          echo "CARGO_APK_RELEASE_KEYSTORE=$GITHUB_WORKSPACE/android/release.keystore" >> $GITHUB_ENV
+          echo "CARGO_APK_RELEASE_KEYSTORE_PASSWORD=android" >> $GITHUB_ENV
+          ls -lh android/release.keystore
       - name: Build APK (cargo-apk2)
         env:
           ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/27.0.12077973

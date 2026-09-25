@@ -41,7 +41,11 @@ eframe = { version = "0.36", default-features = false, features = [
 [package.metadata.android]
 package = "com.winbooster.crosscleaner"
 assets = "../gui/assets"
-resources = "resources" 
+resources = "resources"
+
+[package.metadata.android.signing.release]
+path = "release.keystore"
+keystore_password = "android"
 
 [package.metadata.android.sdk]
 min_sdk_version = 24
