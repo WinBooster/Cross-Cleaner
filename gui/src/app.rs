@@ -438,6 +438,24 @@ impl MyApp {
         }
     }
 
+    /// Android system back / title bar back handler.
+    /// Returns true if navigation happened.
+    pub fn go_back(&mut self) -> bool {
+        match self.current_page {
+            Page::Results => {
+                self.cleared_data = None;
+                self.results_window_resized = false;
+                self.current_page = Page::Main;
+                true
+            }
+            Page::ProgramSelection | Page::Settings | Page::Clearing => {
+                self.current_page = Page::Main;
+                true
+            }
+            Page::Main => false,
+        }
+    }
+
     /// Recomputes `filtered_programs` from `program_checkboxes` and
     /// `search_query`. Cheap and only called when one of them changes.
     pub(crate) fn rebuild_filtered_programs(&mut self) {
@@ -753,7 +771,6 @@ impl eframe::App for MyApp {
                 egui::TextureOptions::LINEAR,
             ));
         }
-        let prev_page = self.current_page;
         let show_back = matches!(
             self.current_page,
             Page::Results | Page::ProgramSelection | Page::Settings
@@ -777,11 +794,7 @@ impl eframe::App for MyApp {
             self.settings_texture.as_ref(),
         );
         if back_clicked {
-            if prev_page == Page::Results {
-                self.cleared_data = None;
-                self.results_window_resized = false;
-            }
-            self.current_page = Page::Main;
+            self.go_back();
         }
         if settings_clicked {
             self.current_page = Page::Settings;

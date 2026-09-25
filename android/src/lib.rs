@@ -170,6 +170,28 @@ fn create_myapp() -> MyApp {
     }
 }
 
+#[cfg(target_os = "android")]
+struct AndroidWrapper {
+    app: MyApp,
+}
+
+#[cfg(target_os = "android")]
+impl eframe::App for AndroidWrapper {
+    fn ui(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame) {
+        // System back on Android: winit maps AKEYCODE_BACK to Escape / close_requested.
+        let ctx = ui.ctx().clone();
+        let back_via_key = ctx.input(|i| i.key_pressed(egui::Key::Escape));
+        let back_via_close = ctx.input(|i| i.viewport().close_requested());
+        if back_via_key || back_via_close {
+            if self.app.go_back() {
+                // Cancel the pending close if we consumed the back as navigation.
+                ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);
+            }
+        }
+        self.app.ui(ui, frame);
+    }
+}
+
 /// Common eframe run helper used both on Android and for `cargo run -p android` on desktop (for testing).
 fn run_eframe(event_loop: winit::event_loop::EventLoop<eframe::UserEvent>) -> eframe::Result {
     let app_title = format!("Cross Cleaner v{}", get_version());
@@ -206,7 +228,14 @@ fn run_eframe(event_loop: winit::event_loop::EventLoop<eframe::UserEvent>) -> ef
         options,
         Box::new(move |cc| {
             cc.egui_ctx.set_visuals(egui::Visuals::dark());
-            Ok(Box::new(app_for_closure))
+            #[cfg(target_os = "android")]
+            {
+                Ok(Box::new(AndroidWrapper { app: app_for_closure }) as Box<dyn eframe::App>)
+            }
+            #[cfg(not(target_os = "android"))]
+            {
+                Ok(Box::new(app_for_closure) as Box<dyn eframe::App>)
+            }
         }),
         &event_loop,
     );
