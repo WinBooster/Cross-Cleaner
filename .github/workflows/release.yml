@@ -219,17 +219,13 @@ jobs:
             echo "APK not found!"
             exit 1
           fi
-          mkdir -p android-release
-          cp "$APK" android-release/Cross_Cleaner_Android.apk
           cp "$APK" Cross_Cleaner_Android.apk
-          ls -lh android-release/
       - name: Upload Android artifacts
         uses: actions/upload-artifact@v4
         with:
           name: android-apk
           path: |
             Cross_Cleaner_Android.apk
-            android-release/Cross_Cleaner_Android.apk
   create_release:
     needs: [build_linux, build_windows, build_macos_arm64, build_android]
     runs-on: ubuntu-latest
