@@ -49,29 +49,6 @@ fn asset_compressor(asset: &str) {
     std::fs::write(format!("assets/{}{}", asset, ".gz"), &compressed).unwrap();
 }
 
-#[cfg(target_os = "android")]
-fn asset_compressor(asset: &str) {
-    let mut bytes: Vec<u8> = vec![];
-    File::open(format!("assets/{}", asset))
-        .unwrap()
-        .read_to_end(&mut bytes)
-        .expect("Failed read asset");
-
-    let mut encoder = GzEncoder::new(Vec::new(), Compression::best());
-    encoder.write_all(&bytes).expect("Failed to compress");
-    let compressed = encoder.finish().expect("Failed to finalize compression");
-
-    // Mirror picture into ../android/assets (APK asset dir).
-    let android_assets = Path::new("../android/assets");
-    fs::create_dir_all(android_assets).expect("Failed to create android/assets");
-    fs::write(android_assets.join(asset), &bytes).expect("Failed to copy asset to android/assets");
-    fs::write(
-        android_assets.join(format!("{}.gz", asset)),
-        &compressed,
-    )
-    .expect("Failed to copy compressed asset to android/assets");
-}
-
 fn main() {
     // Sounds from the repo-root assets/ (all platforms).
     for sound in [
@@ -85,7 +62,7 @@ fn main() {
         sound_compressor(sound);
     }
 
-    #[cfg(any(windows, target_os = "android"))]
+    #[cfg(windows)]
     {
         for asset in ["menu.png", "settings.png"] {
             println!("cargo:rerun-if-changed=assets/{}", asset);

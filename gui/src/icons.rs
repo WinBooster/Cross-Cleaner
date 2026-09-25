@@ -9,8 +9,15 @@ use flate2::read::GzDecoder;
 use image::{ImageError, ImageFormat, ImageReader, load_from_memory};
 
 // Embedded menu image bytes (required to be embedded)
+#[cfg(any(windows, target_os = "unix"))]
 pub const MENU_BYTES: &[u8] = include_bytes!("../assets/menu.png.gz");
+#[cfg(any(windows, target_os = "unix"))]
 pub const SETTINGS_BYTES: &[u8] = include_bytes!("../assets/settings.png.gz");
+
+#[cfg(target_os = "android")]
+pub const MENU_BYTES: &[u8] = include_bytes!("../../android/assets/menu.png.gz");
+#[cfg(target_os = "android")]
+pub const SETTINGS_BYTES: &[u8] = include_bytes!("../../android/assets/menu.png.gz");
 
 #[allow(dead_code)]
 pub fn ico_bytes_to_png_bytes(ico_data: &[u8]) -> Result<Vec<u8>, ImageError> {
