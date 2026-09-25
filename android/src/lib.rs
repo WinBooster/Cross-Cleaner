@@ -178,14 +178,29 @@ struct AndroidWrapper {
 #[cfg(target_os = "android")]
 impl eframe::App for AndroidWrapper {
     fn ui(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame) {
-        // System back on Android: winit maps AKEYCODE_BACK to Escape / close_requested.
+        // System back on Android: winit maps AKEYCODE_BACK -> BrowserBack (egui::Key::BrowserBack)
+        // Some devices also send Escape / ViewportClose. Check all.
         let ctx = ui.ctx().clone();
-        let back_via_key = ctx.input(|i| i.key_pressed(egui::Key::Escape));
+        let back_via_key = ctx.input(|i| {
+            i.key_pressed(egui::Key::Escape)
+                || i.key_pressed(egui::Key::BrowserBack)
+                || i.events.iter().any(|e| matches!(
+                    e,
+                    egui::Event::Key {
+                        key: egui::Key::Escape | egui::Key::BrowserBack,
+                        pressed: true,
+                        ..
+                    }
+                ))
+        });
         let back_via_close = ctx.input(|i| i.viewport().close_requested());
+        // Back gesture / hardware key
         if back_via_key || back_via_close {
             if self.app.go_back() {
-                // Cancel the pending close if we consumed the back as navigation.
+                // Cancel close if we handled it as in-app navigation (matches title_bar back)
                 ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);
+                // Consume the key so it doesn't bubble
+                // (egui already consumed via key_pressed, no extra action needed)
             }
         }
         self.app.ui(ui, frame);
