@@ -9,9 +9,9 @@ use flate2::read::GzDecoder;
 use image::{ImageError, ImageFormat, ImageReader, load_from_memory};
 
 // Embedded menu image bytes (required to be embedded)
-#[cfg(any(windows, target_os = "linux"))]
+#[cfg(not(target_os = "android"))]
 pub const MENU_BYTES: &[u8] = include_bytes!("../assets/menu.png.gz");
-#[cfg(any(windows, target_os = "linux"))]
+#[cfg(not(target_os = "android"))]
 pub const SETTINGS_BYTES: &[u8] = include_bytes!("../assets/settings.png.gz");
 
 #[cfg(target_os = "android")]
