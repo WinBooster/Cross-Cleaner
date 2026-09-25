@@ -65,7 +65,6 @@ jobs:
     needs: [sort_json]
     permissions:
       contents: write
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4

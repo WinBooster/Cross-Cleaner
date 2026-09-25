@@ -195,10 +195,10 @@ jobs:
       - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
+          distribution: zulu
           java-version: "17"
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
       - name: Install cargo-apk2
         run: cargo install cargo-apk2 --locked
       - name: Install Android targets
