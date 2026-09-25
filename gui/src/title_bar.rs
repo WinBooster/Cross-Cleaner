@@ -306,8 +306,90 @@ pub(crate) fn open_in_browser(url: &str) {
 }
 
 #[cfg(target_os = "android")]
-pub(crate) fn open_in_browser(_url: &str) {
-    // Android: browser intent not available in egui desktop context; no-op
+pub(crate) fn open_in_browser(url: &str) {
+    if !url.starts_with("https://") {
+        eprintln!("Refusing to open non-HTTPS URL: {url}");
+        return;
+    }
+    use jni::objects::{JObject, JValue};
+    use jni::JavaVM;
+
+    let ctx = ndk_context::android_context();
+    let vm = match unsafe { JavaVM::from_raw(ctx.vm().cast()) } {
+        Ok(vm) => vm,
+        Err(err) => {
+            eprintln!("[browser] Failed to get JavaVM: {err:?}");
+            return;
+        }
+    };
+    let mut env = match vm.attach_current_thread() {
+        Ok(e) => e,
+        Err(err) => {
+            eprintln!("[browser] JNI attach failed: {err:?}");
+            return;
+        }
+    };
+
+    let result: Result<(), jni::errors::Error> = (|| {
+        let activity = unsafe { JObject::from_raw(ctx.context().cast()) };
+
+        // Uri.parse(url)
+        let uri_class = env.find_class("android/net/Uri")?;
+        let jurl = env.new_string(url)?;
+        let uri = env
+            .call_static_method(
+                &uri_class,
+                "parse",
+                "(Ljava/lang/String;)Landroid/net/Uri;",
+                &[JValue::Object(&jurl)],
+            )?
+            .l()?;
+
+        // new Intent(Intent.ACTION_VIEW, uri)
+        let intent_class = env.find_class("android/content/Intent")?;
+        let action_view = env
+            .get_static_field(&intent_class, "ACTION_VIEW", "Ljava/lang/String;")?
+            .l()?;
+        let intent = env.new_object(
+            &intent_class,
+            "(Ljava/lang/String;Landroid/net/Uri;)V",
+            &[JValue::Object(&action_view), JValue::Object(&uri)],
+        )?;
+
+        // FLAG_ACTIVITY_NEW_TASK
+        let flag = env
+            .get_static_field(&intent_class, "FLAG_ACTIVITY_NEW_TASK", "I")?
+            .i()?;
+        env.call_method(
+            &intent,
+            "addFlags",
+            "(I)Landroid/content/Intent;",
+            &[JValue::Int(flag)],
+        )?;
+
+        env.call_method(
+            &activity,
+            "startActivity",
+            "(Landroid/content/Intent;)V",
+            &[JValue::Object(&intent)],
+        )?;
+
+        // check exception
+        if env.exception_check()? {
+            env.exception_describe()?;
+            env.exception_clear()?;
+            return Err(jni::errors::Error::JavaException);
+        }
+        Ok(())
+    })();
+
+    if let Err(e) = result {
+        eprintln!("[browser] Failed to open URL {url}: {e:?}");
+        // best effort: try to clear exception if still pending
+        if let Ok(mut env2) = vm.attach_current_thread() {
+            let _ = env2.exception_clear();
+        }
+    }
 }
 
 #[cfg(not(any(

@@ -67,5 +67,7 @@ eframe = { version = "0.36", default-features = false, features = [
     "default_fonts",
     "android-native-activity",
 ] }
+jni = "0.21"
+ndk-context = "0.1"
 
 
