@@ -46,7 +46,17 @@ fn asset_compressor(asset: &str) {
     let mut encoder = GzEncoder::new(Vec::new(), Compression::best());
     encoder.write_all(&bytes).expect("Failed to compress");
     let compressed = encoder.finish().expect("Failed to finalize compression");
-    std::fs::write(format!("assets/{}{}", asset, ".gz"), compressed).unwrap();
+    std::fs::write(format!("assets/{}{}", asset, ".gz"), &compressed).unwrap();
+
+    // Mirror picture into ../android/assets (APK asset dir).
+    let android_assets = Path::new("../android/assets");
+    fs::create_dir_all(android_assets).expect("Failed to create android/assets");
+    fs::write(android_assets.join(asset), &bytes).expect("Failed to copy asset to android/assets");
+    fs::write(
+        android_assets.join(format!("{}.gz", asset)),
+        &compressed,
+    )
+    .expect("Failed to copy compressed asset to android/assets");
 }
 
 fn main() {
@@ -64,7 +74,9 @@ fn main() {
 
     #[cfg(windows)]
     {
-        asset_compressor("menu.png");
-        asset_compressor("settings.png");
+        for asset in ["menu.png", "settings.png"] {
+            println!("cargo:rerun-if-changed=assets/{}", asset);
+            asset_compressor(asset);
+        }
     }
 }

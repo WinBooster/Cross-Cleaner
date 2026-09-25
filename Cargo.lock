@@ -66,7 +66,7 @@ checksum = "e9d4ee0d472d1cd2e28c97dfa124b3d8d992e10eb0a035f33f5d12e3a177ba3b"
 
 [[package]]
 name = "android"
-version = "2.0.1"
+version = "2.0.3"
 dependencies = [
  "cleaner",
  "database",
@@ -648,7 +648,7 @@ checksum = "1c133bc6a41be0d194c306b5506d15e6feeea7b1d6604bd3f8310dfb2ca96486"
 
 [[package]]
 name = "cleaner"
-version = "2.0.1"
+version = "2.0.3"
 dependencies = [
  "cap-std",
  "database",
@@ -903,7 +903,7 @@ checksum = "0c87e182de0887fd5361989c677c4e8f5000cd9491d6d563161a8f3a5519fc7f"
 
 [[package]]
 name = "database"
-version = "2.0.1"
+version = "2.0.3"
 dependencies = [
  "bitflags 2.13.2",
  "disk-name",
@@ -926,7 +926,7 @@ checksum = "7cd812cc2bc1d69d4764bd80df88b4317eaef9e773c75226407d9bc0876b211c"
 
 [[package]]
 name = "desktop"
-version = "2.0.1"
+version = "2.0.3"
 dependencies = [
  "clap",
  "cleaner",
@@ -1669,7 +1669,7 @@ dependencies = [
 
 [[package]]
 name = "gui"
-version = "2.0.1"
+version = "2.0.3"
 dependencies = [
  "cleaner",
  "database",
