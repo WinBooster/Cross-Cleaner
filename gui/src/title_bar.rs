@@ -78,32 +78,33 @@ pub fn title_bar(
         .frame(panel_frame)
         .show(ui, |ui| {
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                // Windows order: close rightmost, minimize to its left.
-                // Glyphs are painted manually (default egui font has no check/cross glyphs).
-                let close = title_bar_button(ui);
-                if close.clicked() {
-                    sounds::click();
-                    ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+                // Window controls (close/minimize) — hidden on Android (no window chrome).
+                if !cfg!(target_os = "android") {
+                    // Windows order: close rightmost, minimize to its left.
+                    // Glyphs are painted manually (default egui font has no check/cross glyphs).
+                    let close = title_bar_button(ui);
+                    if close.clicked() {
+                        sounds::click();
+                        ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+                    }
+                    paint_close_glyph(ui, close.rect);
+                    let minimize = title_bar_button(ui);
+                    if minimize.clicked() {
+                        sounds::click();
+                        ctx.send_viewport_cmd(egui::ViewportCommand::Minimized(true));
+                    }
+                    paint_minimize_glyph(ui, minimize.rect);
+                    // Vertical separator between window controls and the GitHub button.
+                    let (sep_rect, _sep) =
+                        ui.allocate_exact_size(egui::vec2(1.0, TITLE_BAR_HEIGHT), egui::Sense::hover());
+                    ui.painter().line_segment(
+                        [
+                            egui::pos2(sep_rect.center().x, sep_rect.min.y),
+                            egui::pos2(sep_rect.center().x, sep_rect.max.y),
+                        ],
+                        egui::Stroke::new(1.0, ui.visuals().widgets.noninteractive.bg_stroke.color),
+                    );
                 }
-                paint_close_glyph(ui, close.rect);
-                let minimize = title_bar_button(ui);
-                if minimize.clicked() {
-                    sounds::click();
-                    ctx.send_viewport_cmd(egui::ViewportCommand::Minimized(true));
-                }
-                paint_minimize_glyph(ui, minimize.rect);
-                // Vertical separator between window controls and the GitHub button.
-                // Spans the full title bar height: from the top window border
-                // down to the bottom of the title bar.
-                let (sep_rect, _sep) =
-                    ui.allocate_exact_size(egui::vec2(1.0, TITLE_BAR_HEIGHT), egui::Sense::hover());
-                ui.painter().line_segment(
-                    [
-                        egui::pos2(sep_rect.center().x, sep_rect.min.y),
-                        egui::pos2(sep_rect.center().x, sep_rect.max.y),
-                    ],
-                    egui::Stroke::new(1.0, ui.visuals().widgets.noninteractive.bg_stroke.color),
-                );
                 // GitHub icon (U+E624 from the built-in emoji-icon-font)
                 // that opens the project repository.
                 let github = title_bar_button(ui);
@@ -188,13 +189,20 @@ pub fn title_bar(
     } else {
         0.0
     };
+    // On Android close/minimize are hidden, so reserve less on the right
+    let buttons_width = if cfg!(target_os = "android") {
+        // GitHub + Donate + separators (~62)
+        70.0
+    } else {
+        TITLE_BAR_BUTTONS_WIDTH
+    };
     let drag_rect = egui::Rect::from_min_max(
         egui::pos2(
             (bar_rect.min.x + left_reserved).min(bar_rect.max.x),
             bar_rect.min.y,
         ),
         egui::pos2(
-            (bar_rect.max.x - TITLE_BAR_BUTTONS_WIDTH).max(bar_rect.min.x),
+            (bar_rect.max.x - buttons_width).max(bar_rect.min.x),
             bar_rect.max.y,
         ),
     );
