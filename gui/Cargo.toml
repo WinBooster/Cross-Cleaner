@@ -38,7 +38,7 @@ eframe = { version = "0.36", default-features = false, features = [
 ] }
 winreg = "0.56.0"
 raw-window-handle = "0.6"
-windows = { version = "0.62.2"
+windows = { version = "0.62.2",
 features = [
     "Win32_Foundation",
     "Win32_System_Com",
