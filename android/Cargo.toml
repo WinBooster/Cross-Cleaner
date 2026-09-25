@@ -20,10 +20,10 @@ flate2 = "1.1"
 serde = { version = "1", features = ["derive", "rc"] }
 serde_json = "1"
 winit = { version = "0.30.13", default-features = false, features = ["rwh_06", "android-native-activity"] }
-ndk-context = "0.1"
-jni = "0.22"
 
 [target.'cfg(target_os = "android")'.dependencies]
+ndk-context = "0.1"
+jni = "0.22"
 eframe = { version = "0.36", default-features = false, features = [
     "wgpu",
     "default_fonts",

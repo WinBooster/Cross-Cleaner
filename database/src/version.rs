@@ -62,16 +62,21 @@ pub fn is_newer(remote: &str, current: &str) -> bool {
 /// Checks GitHub for the latest release and returns it when its tag
 /// (e.g. `v2.0.2.8.1`) is newer than the current version.
 pub fn check_new_version() -> Result<Option<NewRelease>, String> {
-    let json: Value = ureq::get(LATEST_RELEASE_API_URL)
-        .timeout(Duration::from_secs(10))
-        .set(
+    let agent: ureq::Agent = ureq::Agent::config_builder()
+        .timeout_global(Some(Duration::from_secs(10)))
+        .build()
+        .into();
+    let json: Value = agent
+        .get(LATEST_RELEASE_API_URL)
+        .header(
             "User-Agent",
             concat!("Cross-Cleaner/", env!("CARGO_PKG_VERSION")),
         )
-        .set("Accept", "application/vnd.github+json")
+        .header("Accept", "application/vnd.github+json")
         .call()
         .map_err(|e| format!("Failed to request latest release: {}", e))?
-        .into_json()
+        .body_mut()
+        .read_json()
         .map_err(|e| format!("Failed to parse latest release response: {}", e))?;
 
     let tag = json
@@ -210,16 +215,21 @@ fn merge_changelog_groups(changelog: &mut Changelog, other: Changelog) {
 /// Fetches release notes of every release newer than `current_version`
 /// and merges identical groups into one changelog (newest release first).
 pub fn fetch_changelogs(current_version: &str) -> Result<Changelog, String> {
-    let json: Value = ureq::get(RELEASES_LIST_API_URL)
-        .timeout(Duration::from_secs(10))
-        .set(
+    let agent: ureq::Agent = ureq::Agent::config_builder()
+        .timeout_global(Some(Duration::from_secs(10)))
+        .build()
+        .into();
+    let json: Value = agent
+        .get(RELEASES_LIST_API_URL)
+        .header(
             "User-Agent",
             concat!("Cross-Cleaner/", env!("CARGO_PKG_VERSION")),
         )
-        .set("Accept", "application/vnd.github+json")
+        .header("Accept", "application/vnd.github+json")
         .call()
         .map_err(|e| format!("Failed to request releases: {}", e))?
-        .into_json()
+        .body_mut()
+        .read_json()
         .map_err(|e| format!("Failed to parse releases response: {}", e))?;
 
     let releases = json
