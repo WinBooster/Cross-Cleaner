@@ -20,8 +20,8 @@ use winit::platform::android::activity::AndroidApp;
 
 #[cfg(target_os = "android")]
 fn ensure_manage_external_storage() {
-    use jni::objects::{JObject, JValue};
     use jni::JavaVM;
+    use jni::objects::{JObject, JValue};
     use jni::{jni_sig, jni_str};
 
     let ctx = ndk_context::android_context();
@@ -65,7 +65,9 @@ fn ensure_manage_external_storage() {
             .call_static_method(
                 &uri_class,
                 jni_str!("fromParts"),
-                jni_sig!("(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Landroid/net/Uri;"),
+                jni_sig!(
+                    "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Landroid/net/Uri;"
+                ),
                 &[
                     JValue::Object(&scheme),
                     JValue::Object(&package_name),
@@ -91,7 +93,11 @@ fn ensure_manage_external_storage() {
         )?;
 
         let flag = env
-            .get_static_field(&intent_class, jni_str!("FLAG_ACTIVITY_NEW_TASK"), jni_sig!("I"))?
+            .get_static_field(
+                &intent_class,
+                jni_str!("FLAG_ACTIVITY_NEW_TASK"),
+                jni_sig!("I"),
+            )?
             .i()?;
         env.call_method(
             &intent,

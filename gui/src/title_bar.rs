@@ -321,8 +321,8 @@ pub(crate) fn open_in_browser(url: &str) {
         eprintln!("Refusing to open non-HTTPS URL: {url}");
         return;
     }
-    use jni::objects::{JObject, JValue};
     use jni::JavaVM;
+    use jni::objects::{JObject, JValue};
     use jni::{jni_sig, jni_str};
 
     let ctx = ndk_context::android_context();
@@ -346,7 +346,11 @@ pub(crate) fn open_in_browser(url: &str) {
         // new Intent(Intent.ACTION_VIEW, uri)
         let intent_class = env.find_class(jni_str!("android/content/Intent"))?;
         let action_view = env
-            .get_static_field(&intent_class, jni_str!("ACTION_VIEW"), jni_sig!("Ljava/lang/String;"))?
+            .get_static_field(
+                &intent_class,
+                jni_str!("ACTION_VIEW"),
+                jni_sig!("Ljava/lang/String;"),
+            )?
             .l()?;
         let intent = env.new_object(
             &intent_class,
@@ -356,7 +360,11 @@ pub(crate) fn open_in_browser(url: &str) {
 
         // FLAG_ACTIVITY_NEW_TASK
         let flag = env
-            .get_static_field(&intent_class, jni_str!("FLAG_ACTIVITY_NEW_TASK"), jni_sig!("I"))?
+            .get_static_field(
+                &intent_class,
+                jni_str!("FLAG_ACTIVITY_NEW_TASK"),
+                jni_sig!("I"),
+            )?
             .i()?;
         env.call_method(
             &intent,

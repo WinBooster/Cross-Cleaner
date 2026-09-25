@@ -331,8 +331,8 @@ pub fn register_all() {
             crate::image_optimizer::optimize_single(path)
         }
     };
-	
-	#[cfg(target_os = "android")]
+
+    #[cfg(target_os = "android")]
     let _ = custom_glob_cleaner! {
         id: "Optimize pictures in Screenshots",
         program: "System",
@@ -345,8 +345,8 @@ pub fn register_all() {
             crate::image_optimizer::optimize_single(path)
         }
     };
-	
-	#[cfg(target_os = "android")]
+
+    #[cfg(target_os = "android")]
     let _ = custom_glob_cleaner! {
         id: "Optimize pictures in System",
         program: "System",
