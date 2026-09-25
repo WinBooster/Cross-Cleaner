@@ -230,7 +230,9 @@ fn run_eframe(event_loop: winit::event_loop::EventLoop<eframe::UserEvent>) -> ef
             cc.egui_ctx.set_visuals(egui::Visuals::dark());
             #[cfg(target_os = "android")]
             {
-                Ok(Box::new(AndroidWrapper { app: app_for_closure }) as Box<dyn eframe::App>)
+                Ok(Box::new(AndroidWrapper {
+                    app: app_for_closure,
+                }) as Box<dyn eframe::App>)
             }
             #[cfg(not(target_os = "android"))]
             {
