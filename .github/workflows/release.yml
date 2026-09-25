@@ -21,7 +21,18 @@ jobs:
       - uses: actions/checkout@v4
       - name: Update Cargo.toml version
         run: |
-          find . -name Cargo.toml -exec sed -i 's/^version = .*/version = "${{ env.APP_VERSION }}"/' {} +
+          CARGO_VERSION=$(echo "${{ env.APP_VERSION }}" | cut -d. -f1-3)
+          # fallback: keep original if cut fails
+          if [ -z "$CARGO_VERSION" ]; then CARGO_VERSION="${{ env.APP_VERSION }}"; fi
+          echo "APP_VERSION=${{ env.APP_VERSION }} -> CARGO_VERSION=$CARGO_VERSION"
+          # Validate semver (cargo will reject 4 parts like 2.0.3.8)
+          if ! echo "$CARGO_VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$'; then
+            echo "ERROR: CARGO_VERSION $CARGO_VERSION is not valid semver"
+            exit 1
+          fi
+          find . -name Cargo.toml -exec sed -i "s/^version = .*/version = \"$CARGO_VERSION\"/" {} +
+          echo "Updated Cargo.toml files to $CARGO_VERSION:"
+          grep -r "^version = " --include="Cargo.toml" .
       - name: Formating code
         run: cargo fmt
       - name: Commit changes
