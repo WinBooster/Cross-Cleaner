@@ -40,7 +40,7 @@ eframe = { version = "0.36", default-features = false, features = [
 # cargo-apk / cargo-apk2 metadata (single-package manifest)
 [package.metadata.android]
 package = "com.winbooster.crosscleaner"
-assets = "../android/assets"
+assets = "assets"
 resources = "resources"
 
 [package.metadata.android.signing.release]
