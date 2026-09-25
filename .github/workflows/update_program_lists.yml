@@ -64,7 +64,7 @@ jobs:
     name: Generating clearing programs list
     needs: [sort_json]
     permissions:
-      - contents: write
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
