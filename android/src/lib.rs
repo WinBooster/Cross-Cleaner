@@ -184,14 +184,16 @@ impl eframe::App for AndroidWrapper {
         let back_via_key = ctx.input(|i| {
             i.key_pressed(egui::Key::Escape)
                 || i.key_pressed(egui::Key::BrowserBack)
-                || i.events.iter().any(|e| matches!(
-                    e,
-                    egui::Event::Key {
-                        key: egui::Key::Escape | egui::Key::BrowserBack,
-                        pressed: true,
-                        ..
-                    }
-                ))
+                || i.events.iter().any(|e| {
+                    matches!(
+                        e,
+                        egui::Event::Key {
+                            key: egui::Key::Escape | egui::Key::BrowserBack,
+                            pressed: true,
+                            ..
+                        }
+                    )
+                })
         });
         let back_via_close = ctx.input(|i| i.viewport().close_requested());
         // Back gesture / hardware key
@@ -245,7 +247,9 @@ fn run_eframe(event_loop: winit::event_loop::EventLoop<eframe::UserEvent>) -> ef
             cc.egui_ctx.set_visuals(egui::Visuals::dark());
             #[cfg(target_os = "android")]
             {
-                Ok(Box::new(AndroidWrapper { app: app_for_closure }) as Box<dyn eframe::App>)
+                Ok(Box::new(AndroidWrapper {
+                    app: app_for_closure,
+                }) as Box<dyn eframe::App>)
             }
             #[cfg(not(target_os = "android"))]
             {

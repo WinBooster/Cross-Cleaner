@@ -95,8 +95,10 @@ pub fn title_bar(
                     }
                     paint_minimize_glyph(ui, minimize.rect);
                     // Vertical separator between window controls and the GitHub button.
-                    let (sep_rect, _sep) =
-                        ui.allocate_exact_size(egui::vec2(1.0, TITLE_BAR_HEIGHT), egui::Sense::hover());
+                    let (sep_rect, _sep) = ui.allocate_exact_size(
+                        egui::vec2(1.0, TITLE_BAR_HEIGHT),
+                        egui::Sense::hover(),
+                    );
                     ui.painter().line_segment(
                         [
                             egui::pos2(sep_rect.center().x, sep_rect.min.y),
