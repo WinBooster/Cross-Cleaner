@@ -311,8 +311,8 @@ pub(crate) fn open_in_browser(url: &str) {
         eprintln!("Refusing to open non-HTTPS URL: {url}");
         return;
     }
-    use jni::objects::{JObject, JValue};
     use jni::JavaVM;
+    use jni::objects::{JObject, JValue};
 
     let ctx = ndk_context::android_context();
     let vm = match unsafe { JavaVM::from_raw(ctx.vm().cast()) } {
