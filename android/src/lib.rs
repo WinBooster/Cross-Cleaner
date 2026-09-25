@@ -20,54 +20,52 @@ use winit::platform::android::activity::AndroidApp;
 
 #[cfg(target_os = "android")]
 fn ensure_manage_external_storage() {
-    use jni::JavaVM;
     use jni::objects::{JObject, JValue};
+    use jni::JavaVM;
+    use jni::{jni_sig, jni_str};
 
     let ctx = ndk_context::android_context();
-    let vm = match unsafe { JavaVM::from_raw(ctx.vm().cast()) } {
-        Ok(vm) => vm,
-        Err(err) => {
-            eprintln!("[perms] Failed to get JavaVM: {err:?}");
-            return;
-        }
-    };
-    let mut env = match vm.attach_current_thread() {
-        Ok(e) => e,
-        Err(err) => {
-            eprintln!("[perms] JNI attach failed: {err:?}");
-            return;
-        }
-    };
-    eprintln!("[perms] JNI attached ok");
-
-    let already = (|| -> jni::errors::Result<bool> {
-        let class = env.find_class("android/os/Environment")?;
-        let res = env.call_static_method(class, "isExternalStorageManager", "()Z", &[])?;
-        Ok(res.z()?)
-    })()
-    .unwrap_or(false);
+    let vm = unsafe { JavaVM::from_raw(ctx.vm().cast()) };
+    // Check if already has permission (inside attach)
+    let already = vm
+        .attach_current_thread(|env| {
+            let class = env.find_class(jni_str!("android/os/Environment"))?;
+            let res = env.call_static_method(
+                class,
+                jni_str!("isExternalStorageManager"),
+                jni_sig!("()Z"),
+                &[],
+            )?;
+            Ok::<bool, jni::errors::Error>(res.z()?)
+        })
+        .unwrap_or(false);
     eprintln!("[perms] isExternalStorageManager = {already}");
 
     if already {
         return;
     }
 
-    let run = (|| -> jni::errors::Result<()> {
-        let activity = unsafe { JObject::from_raw(ctx.context().cast()) };
+    let run = vm.attach_current_thread(|env| {
+        let activity = unsafe { JObject::from_raw(env, ctx.context().cast()) };
 
         // package:com.winbooster.crosscleaner
         let package_name = env
-            .call_method(&activity, "getPackageName", "()Ljava/lang/String;", &[])?
+            .call_method(
+                &activity,
+                jni_str!("getPackageName"),
+                jni_sig!("()Ljava/lang/String;"),
+                &[],
+            )?
             .l()?;
 
-        let uri_class = env.find_class("android/net/Uri")?;
+        let uri_class = env.find_class(jni_str!("android/net/Uri"))?;
         let scheme = env.new_string("package")?;
         let null = JObject::null();
         let uri = env
             .call_static_method(
                 &uri_class,
-                "fromParts",
-                "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Landroid/net/Uri;",
+                jni_str!("fromParts"),
+                jni_sig!("(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Landroid/net/Uri;"),
                 &[
                     JValue::Object(&scheme),
                     JValue::Object(&package_name),
@@ -76,37 +74,37 @@ fn ensure_manage_external_storage() {
             )?
             .l()?;
 
-        let settings_class = env.find_class("android/provider/Settings")?;
+        let settings_class = env.find_class(jni_str!("android/provider/Settings"))?;
         let action = env
             .get_static_field(
                 &settings_class,
-                "ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION",
-                "Ljava/lang/String;",
+                jni_str!("ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION"),
+                jni_sig!("Ljava/lang/String;"),
             )?
             .l()?;
 
-        let intent_class = env.find_class("android/content/Intent")?;
+        let intent_class = env.find_class(jni_str!("android/content/Intent"))?;
         let intent = env.new_object(
             &intent_class,
-            "(Ljava/lang/String;Landroid/net/Uri;)V",
+            jni_sig!("(Ljava/lang/String;Landroid/net/Uri;)V"),
             &[JValue::Object(&action), JValue::Object(&uri)],
         )?;
 
         let flag = env
-            .get_static_field(&intent_class, "FLAG_ACTIVITY_NEW_TASK", "I")?
+            .get_static_field(&intent_class, jni_str!("FLAG_ACTIVITY_NEW_TASK"), jni_sig!("I"))?
             .i()?;
         env.call_method(
             &intent,
-            "addFlags",
-            "(I)Landroid/content/Intent;",
+            jni_str!("addFlags"),
+            jni_sig!("(I)Landroid/content/Intent;"),
             &[JValue::Int(flag)],
         )?;
 
         // === ГЛАВНОЕ: открыть экран настроек ===
         let res = env.call_method(
             &activity,
-            "startActivity",
-            "(Landroid/content/Intent;)V",
+            jni_str!("startActivity"),
+            jni_sig!("(Landroid/content/Intent;)V"),
             &[JValue::Object(&intent)],
         );
         match res {
@@ -117,32 +115,32 @@ fn ensure_manage_external_storage() {
                 let global_action = env
                     .get_static_field(
                         &settings_class,
-                        "ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION",
-                        "Ljava/lang/String;",
+                        jni_str!("ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION"),
+                        jni_sig!("Ljava/lang/String;"),
                     )?
                     .l()?;
                 let intent2 = env.new_object(
                     &intent_class,
-                    "(Ljava/lang/String;)V",
+                    jni_sig!("(Ljava/lang/String;)V"),
                     &[JValue::Object(&global_action)],
                 )?;
                 env.call_method(
                     &intent2,
-                    "addFlags",
-                    "(I)Landroid/content/Intent;",
+                    jni_str!("addFlags"),
+                    jni_sig!("(I)Landroid/content/Intent;"),
                     &[JValue::Int(flag)],
                 )?;
                 env.call_method(
                     &activity,
-                    "startActivity",
-                    "(Landroid/content/Intent;)V",
+                    jni_str!("startActivity"),
+                    jni_sig!("(Landroid/content/Intent;)V"),
                     &[JValue::Object(&intent2)],
                 )?;
                 eprintln!("[perms] global settings intent sent");
             }
         }
-        Ok(())
-    })();
+        Ok::<(), jni::errors::Error>(())
+    });
 
     if let Err(e) = run {
         eprintln!("[perms] Failed to request MANAGE_EXTERNAL_STORAGE: {e:?}");
