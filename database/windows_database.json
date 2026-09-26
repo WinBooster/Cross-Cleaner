@@ -6807,5 +6807,103 @@
     "directories_to_remove": [
       "LOGS"
     ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\exifcleaner",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "ExifCleaner",
+    "files_to_remove": [
+      "LICENSE.electron.txt",
+      "LICENSES.chromium.html"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\VOVSOFT\\Text Edit Plus",
+    "class": "Text",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Text Edit Plus",
+    "files_to_remove": [
+      "license.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\VOVSOFT\\Text Edit Plus",
+    "class": "Text",
+    "category": "Documentation",
+    "program": "Text Edit Plus",
+    "files_to_remove": [
+      "extract_help.htm"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\QtPass",
+    "class": "Password Manager",
+    "category": "Documentation",
+	"sub_category": "Licenses",
+    "program": "QtPass",
+    "files_to_remove": [
+      "LICENSE.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\QtPass",
+    "class": "Password Manager",
+    "category": "Documentation",
+    "program": "QtPass",
+    "files_to_remove": [
+      "README.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Tabby",
+    "class": "Terminal Emulator",
+    "category": "Documentation",
+	"sub_category": "Licenses",
+    "program": "Tabby",
+    "files_to_remove": [
+      "LICENSE.electron.txt",
+	  "LICENSES.chromium.html"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\blockwork",
+    "class": "Automatization",
+    "category": "Logs",
+    "program": "Blockwork",
+    "files_to_remove": [
+      "daemon.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\HomeBank",
+    "class": "Finance",
+    "category": "Documentation",
+	"sub_category": "Licenses",
+    "program": "HomeBank",
+    "files_to_remove": [
+      "Copying.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\HomeBank",
+    "class": "Finance",
+    "category": "Documentation",
+	"sub_category": "Change logs",
+    "program": "HomeBank",
+    "files_to_remove": [
+      "ChangeLog.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\HomeBank\\share\\homebank",
+    "class": "Finance",
+    "category": "Documentation",
+    "program": "HomeBank",
+	"directories_to_remove": [
+		"help"
+	]
   }
 ]

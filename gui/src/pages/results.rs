@@ -91,6 +91,7 @@ impl MyApp {
             egui::ScrollArea::vertical()
                 .max_height(total_height)
                 .show_rows(ui, 21.0, cleared.len(), |ui, row_range| {
+                    let content_right = ui.max_rect().right();
                     for idx in row_range {
                         let cleared: &Cleared = &cleared[idx];
                         let row = ui.horizontal(|ui| {
@@ -133,7 +134,7 @@ impl MyApp {
                         // height and break row virtualization.
                         let rect = row.response.rect;
                         ui.painter().hline(
-                            rect.min.x..=rect.max.x,
+                            rect.min.x..=content_right.max(rect.max.x),
                             rect.bottom(),
                             ui.visuals().widgets.noninteractive.bg_stroke,
                         );

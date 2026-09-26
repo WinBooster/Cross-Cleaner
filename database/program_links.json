@@ -223,6 +223,7 @@
   "VeraCrypt": "https://veracrypt.io",
   "Wireshark": "https://www.wireshark.org",
   "DNSCrypt": "https://www.dnscrypt.org",
+  "ExifCleaner": "https://github.com/szTheory/exifcleaner",
 
   "Cursor": "https://www.cursor.com/downloads",
   "JetBrains": "https://www.jetbrains.com/?var=1",
@@ -237,6 +238,7 @@
   "Pcre": "https://www.pcre.org",
   "Zed": "https://zed.dev",
   "Visual Studio": "https://visualstudio.microsoft.com",
+  "Text Edit Plus": "https://vovsoft.com/software/text-edit-plus",
 
   "GlazeWM": "https://visualstudio.microsoft.com",
 
