@@ -221,7 +221,10 @@ mod tests {
                     "no placeholder left: {}",
                     e.path
                 );
-                assert!(e.path.to_string().starts_with('\\') || e.path.as_string().as_bytes()[1] == b':');
+                assert!(
+                    e.path.to_string().starts_with('\\')
+                        || e.path.as_string().as_bytes()[1] == b':'
+                );
             }
             let paths: std::collections::HashSet<crate::structures::SharedPath> =
                 expanded.iter().map(|e| e.path.clone()).collect();

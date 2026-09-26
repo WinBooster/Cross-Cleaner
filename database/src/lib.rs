@@ -430,11 +430,7 @@ mod tests {
             .zip(segs_b.iter())
             .filter(|(x, y)| Arc::ptr_eq(x, y))
             .count();
-        assert!(
-            shared >= 4,
-            "expected >= 4 shared segments, got {}",
-            shared
-        );
+        assert!(shared >= 4, "expected >= 4 shared segments, got {}", shared);
     }
 
     #[test]
