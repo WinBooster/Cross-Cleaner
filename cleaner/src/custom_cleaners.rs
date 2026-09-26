@@ -355,7 +355,35 @@ pub fn register_all() {
         sub_category: "Compress",
         os: ["android"],
         sequential: true,
-        glob: "/storage/emulated/0/Pictures/*",
+        glob: "/storage/emulated/0/Pictures/**/*",
+        |path| {
+            crate::image_optimizer::optimize_single(path)
+        }
+    };
+
+    #[cfg(target_os = "linux")]
+    let _ = custom_glob_cleaner! {
+        id: "Optimize pictures",
+        program: "System",
+        category: "Images",
+        sub_category: "Compress",
+        os: ["linux"],
+        sequential: true,
+        glob: "/home/{username}/Pictures/**/*",
+        |path| {
+            crate::image_optimizer::optimize_single(path)
+        }
+    };
+
+    #[cfg(target_os = "linux")]
+    let _ = custom_glob_cleaner! {
+        id: "Optimize pictures",
+        program: "System",
+        category: "Images",
+        sub_category: "Compress",
+        os: ["linux"],
+        sequential: true,
+        glob: "/home/{username}/.local/state/omarchy/clipboard-images/*",
         |path| {
             crate::image_optimizer::optimize_single(path)
         }

@@ -275,7 +275,12 @@ jobs:
             - **Text Edit Plus** Added documentation clearing
             - **QtPass** Added documentation clearing
             - **HomeBank** Added documentation clearing
-            
+
+            ### 🐧 Linux Improvements
+            - **Zed** Added logs clearing
+            - **OpenCode** Added last activity clearing
+            - **Omarchy** added last activity, images clearing
+
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
             - **@Nekiplay** - Core improvements and feature implementations

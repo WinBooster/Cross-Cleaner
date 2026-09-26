@@ -639,7 +639,8 @@
   {
     "path": "/home/{username}/.librewolf/**/",
     "class": "Browser",
-    "category": "Browser history",
+    "category": "Browser",
+    "sub_category": "History",
     "program": "LibreWolf",
     "files_to_remove": [
       "favicons.sqlite",
@@ -945,7 +946,8 @@
   {
     "path": "/home/{username}/.mozilla/firefox/**/",
     "class": "Browser",
-    "category": "Browser cookies",
+    "category": "Browser",
+    "sub_category":"Cookies",
     "program": "Mozilla Firefox",
     "files_to_remove": [
       "cookies.sqlite",
@@ -963,7 +965,8 @@
   {
     "path": "/home/{username}/.mozilla/firefox/**/",
     "class": "Browser",
-    "category": "Browser history",
+    "category": "Browser",
+    "sub_category": "History",
     "program": "Mozilla Firefox",
     "files_to_remove": [
       "formhistory.sqlite",
@@ -1637,5 +1640,72 @@
     "directories_to_remove": [
       ".git"
     ]
+  },
+  {
+    "path": "/home/{username}/Downloads",
+    "class": "System",
+    "category": "Downloads",
+    "program": "System",
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": true
+  },
+  {
+    "path": "/home/{username}/.local/share/zed",
+    "class": "Text",
+    "category": "Logs",
+    "program": "Zed",
+    "directories_to_remove": [
+      "logs"
+    ]
+  },
+  {
+    "path": "/home/{username}/.local/state/opencode",
+    "class": "AI",
+    "category": "LastActivity",
+    "program": "OpenCode",
+    "files_to_remove": [
+      "prompt-history.json"
+    ]
+  },
+  {
+    "path": "/home/{username}/.local/share/opencode/tool-output/",
+    "class": "AI",
+    "category": "LastActivity",
+    "program": "OpenCode",
+    "files_to_remove": [
+      "prompt-history.json"
+    ]
+  },
+  {
+    "path": "/home/roman/.local/share/opencode",
+    "class": "AI",
+    "category": "Logs",
+    "program": "OpenCode",
+    "directories_to_remove": [
+      "log"
+    ]
+  },
+  {
+    "path": "/home/{username}/.local/state/omarchy/notifications/history/*",
+    "class": "System",
+    "category": "LastActivity",
+    "program": "Omarchy",
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/state/omarchy",
+    "class": "System",
+    "category": "LastActivity",
+    "program": "Omarchy",
+    "files_to_remove": [
+      "clipboard-history.json"
+    ]
+  },
+  {
+    "path": "/home/{username}/.local/state/omarchy/clipboard-images/*",
+    "class": "System",
+    "category": "Images",
+    "program": "Omarchy",
+    "remove_files":true
   }
 ]
