@@ -947,7 +947,7 @@
     "path": "/home/{username}/.mozilla/firefox/**/",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"Cookies",
+    "sub_category": "Cookies",
     "program": "Mozilla Firefox",
     "files_to_remove": [
       "cookies.sqlite",
@@ -1089,6 +1089,56 @@
     "directories_to_remove": [
       "nvidia",
       "nvidia-utils"
+    ]
+  },
+  {
+    "path": "/home/{username}/.local/state/omarchy/notifications/history/*",
+    "class": "System",
+    "category": "LastActivity",
+    "program": "Omarchy",
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/state/omarchy",
+    "class": "System",
+    "category": "LastActivity",
+    "program": "Omarchy",
+    "files_to_remove": [
+      "clipboard-history.json"
+    ]
+  },
+  {
+    "path": "/home/{username}/.local/state/omarchy/clipboard-images/*",
+    "class": "System",
+    "category": "Images",
+    "program": "Omarchy",
+    "remove_files": true
+  },
+  {
+    "path": "/home/{username}/.local/state/opencode",
+    "class": "AI",
+    "category": "LastActivity",
+    "program": "OpenCode",
+    "files_to_remove": [
+      "prompt-history.json"
+    ]
+  },
+  {
+    "path": "/home/{username}/.local/share/opencode/tool-output/",
+    "class": "AI",
+    "category": "LastActivity",
+    "program": "OpenCode",
+    "files_to_remove": [
+      "prompt-history.json"
+    ]
+  },
+  {
+    "path": "/home/roman/.local/share/opencode",
+    "class": "AI",
+    "category": "Logs",
+    "program": "OpenCode",
+    "directories_to_remove": [
+      "log"
     ]
   },
   {
@@ -1460,6 +1510,14 @@
     ]
   },
   {
+    "path": "/home/{username}/Downloads",
+    "class": "System",
+    "category": "Downloads",
+    "program": "System",
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": true
+  },
+  {
     "path": "/home/{username}/.local/share/TelegramDesktop/*.log",
     "class": "Messanger",
     "category": "Logs",
@@ -1642,14 +1700,6 @@
     ]
   },
   {
-    "path": "/home/{username}/Downloads",
-    "class": "System",
-    "category": "Downloads",
-    "program": "System",
-    "remove_all_in_dir": true,
-    "remove_directory_after_clean": true
-  },
-  {
     "path": "/home/{username}/.local/share/zed",
     "class": "Text",
     "category": "Logs",
@@ -1657,55 +1707,5 @@
     "directories_to_remove": [
       "logs"
     ]
-  },
-  {
-    "path": "/home/{username}/.local/state/opencode",
-    "class": "AI",
-    "category": "LastActivity",
-    "program": "OpenCode",
-    "files_to_remove": [
-      "prompt-history.json"
-    ]
-  },
-  {
-    "path": "/home/{username}/.local/share/opencode/tool-output/",
-    "class": "AI",
-    "category": "LastActivity",
-    "program": "OpenCode",
-    "files_to_remove": [
-      "prompt-history.json"
-    ]
-  },
-  {
-    "path": "/home/roman/.local/share/opencode",
-    "class": "AI",
-    "category": "Logs",
-    "program": "OpenCode",
-    "directories_to_remove": [
-      "log"
-    ]
-  },
-  {
-    "path": "/home/{username}/.local/state/omarchy/notifications/history/*",
-    "class": "System",
-    "category": "LastActivity",
-    "program": "Omarchy",
-    "remove_files": true
-  },
-  {
-    "path": "/home/{username}/.local/state/omarchy",
-    "class": "System",
-    "category": "LastActivity",
-    "program": "Omarchy",
-    "files_to_remove": [
-      "clipboard-history.json"
-    ]
-  },
-  {
-    "path": "/home/{username}/.local/state/omarchy/clipboard-images/*",
-    "class": "System",
-    "category": "Images",
-    "program": "Omarchy",
-    "remove_files":true
   }
 ]
