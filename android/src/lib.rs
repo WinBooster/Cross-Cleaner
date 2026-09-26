@@ -3,9 +3,7 @@
 //! This crate builds as cdylib and is loaded by NativeActivity.
 //!
 //! Responsive categories grid:
-//! - desktop: 3 columns (see `gui::category_columns`)
-//! - android landscape (width > height): 2 columns
-//! - android portrait: 1 column
+//! - 2 columns everywhere (see `gui::category_columns`)
 
 use database::cleaner_database::CleanerDatabase;
 use database::get_version;
@@ -345,10 +343,10 @@ mod tests {
 
     #[test]
     fn test_category_columns_desktop() {
-        // On host (not android) category_columns should return 3
+        // On host (not android) category_columns should return 2
         let ctx = egui::Context::default();
-        // screen_rect on default context is zero, fallback still returns 3 on non-android
-        assert_eq!(gui::category_columns(&ctx), 3);
+        // screen_rect on default context is zero, fallback still returns 2
+        assert_eq!(gui::category_columns(&ctx), 2);
     }
 
     #[test]

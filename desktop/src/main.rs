@@ -423,9 +423,9 @@ async fn run(backend: BackendChoice) -> eframe::Result {
     let checkbox_count = app_for_size.categories.len();
     let rows = checkbox_count.div_ceil(3);
     // INFO: 20px for 1 checkbox, 45px for button, 32px for custom title bar
-    let height = (rows * 20) + 45 + TITLE_BAR_HEIGHT as usize;
+    let height = (rows * 20) + 445 + TITLE_BAR_HEIGHT as usize;
 
-    let size = egui::vec2(470.0, height as f32);
+    let size = egui::vec2(570.0, height as f32);
 
     // --- Renderer fallback chain: glow (OpenGL) -> vulkan -> DirectX 12 ---
     // Default: glow (smaller binary, good for older GPUs).
