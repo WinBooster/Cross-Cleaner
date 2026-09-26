@@ -1,9 +1,16 @@
-# Linux Clearing Programs Catalog v2.0.3.7.5
+# Linux Clearing Programs Catalog v2.0.3.9
 **Total categories in database:** 12
 
-**Total programs in database:** 63
+**Total programs in database:** 67
 
-**Total pathes in database:** 145
+**Total pathes in database:** 153
+
+## AI
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | [OpenCode](https://opencode.ai/download) | LastActivity, Logs |
+
 
 ## Audio
 
@@ -19,8 +26,8 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [LibreWolf](https://librewolf.net/installation) | Browser history, Cache |
-| 2 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser cookies, Browser history, Cache |
+| 1 | [LibreWolf](https://librewolf.net/installation) | Browser, Cache |
+| 2 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser, Cache |
 
 
 ## Cheat
@@ -131,6 +138,8 @@
 | --- | --- | --- |
 | 1 | [CachyOS](https://cachyos.org) | Logs |
 | 2 | [Linux](https://www.kernel.org) | Cache, Trash |
+| 3 | Omarchy | Images, LastActivity |
+| 4 | System | Downloads |
 
 
 ## Text
@@ -146,6 +155,7 @@
 | 7 | [Pcre](https://www.pcre.org) | Documentation |
 | 8 | [Thunderbird](https://www.thunderbird.net) | Logs |
 | 9 | [VS Code](https://code.visualstudio.com/download) | Documentation, Logs |
+| 10 | [Zed](https://zed.dev) | Logs |
 
 
 ## Uncategorized
@@ -161,4 +171,7 @@
 
 ## Built-in custom cleanings
 
-*No custom cleanings for this OS*
+| № | Program | Category | OS |
+| --- | --- | --- | --- |
+| 1 | System | Images | linux |
+| 2 | System | Images | linux |

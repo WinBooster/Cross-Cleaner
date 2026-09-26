@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.3.7.5
+# Windows Clearing Programs Catalog v2.0.3.9
 **Total categories in database:** 12
 
-**Total programs in database:** 255
+**Total programs in database:** 261
 
-**Total pathes in database:** 555
+**Total pathes in database:** 562
 
 ## AI
 
@@ -51,6 +51,13 @@
 | 9 | [Spotify](https://open.spotify.com/download) | Cache, Logs |
 | 10 | [WaveFlow](https://github.com/InstaZDLL/WaveFlow) | Cache |
 | 11 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
+
+
+## Automatization
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Blockwork | Logs |
 
 
 ## Browser
@@ -185,6 +192,13 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [OnionShare](https://onionshare.org) | Documentation |
+
+
+## Finance
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | HomeBank | Documentation |
 
 
 ## Game
@@ -326,6 +340,7 @@
 | 1 | [1Password](https://1password.com/) | Logs |
 | 2 | [KeePass 2](https://keepass.info/download.html) | Logs |
 | 3 | [KeePassXC](https://keepassxc.org/download) | Documentation |
+| 4 | QtPass | Documentation |
 
 
 ## Program Launcher
@@ -358,23 +373,24 @@
 | 3 | [Avast](https://www.avast.ru) | Documentation, Logs |
 | 4 | [DNSCrypt](https://www.dnscrypt.org) | Documentation |
 | 5 | [Doctor Web Cureit](https://free.drweb.ru/download+cureit+free) | Logs |
-| 6 | [GnuPG](https://www.gnupg.org/download/index.html) | Documentation |
-| 7 | [Gpg4win](https://www.gpg4win.org) | Documentation |
-| 8 | [I2P Easy Bundle](https://geti2p.net/download) | Documentation, Logs |
-| 9 | [IObit Malware Fighter](https://www.iobit.com/en/malware-fighter.php) | Logs |
-| 10 | [NetLimiter](https://www.netlimiter.com/download) | Logs |
-| 11 | [OONI Probe](https://ooni.org/install) | Logs |
-| 12 | [Panda Security](https://www.pandasecurity.com) | Logs |
-| 13 | [Process Hacker 2](https://systeminformer.sourceforge.io/downloads) | Documentation |
-| 14 | [Process Lasso](https://bitsum.com) | Logs |
-| 15 | [Sandboxie+](https://sandboxie-plus.com) | Documentation |
-| 16 | [SystemInformer](https://systeminformer.com/downloads) | Documentation |
-| 17 | [TG WS Proxy](https://github.com/Flowseal/tg-ws-proxy) | Logs |
-| 18 | [VeraCrypt](https://veracrypt.io) | Documentation |
-| 19 | [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | Documentation, Logs |
-| 20 | [Wireshark](https://www.wireshark.org) | Documentation |
-| 21 | [Zapret](https://github.com/bol-van/zapret) | Logs |
-| 22 | [Zapret Universal Interface](https://github.com/AmantesNihilo/zapret-universal-interface) | Logs |
+| 6 | [ExifCleaner](https://github.com/szTheory/exifcleaner) | Documentation |
+| 7 | [GnuPG](https://www.gnupg.org/download/index.html) | Documentation |
+| 8 | [Gpg4win](https://www.gpg4win.org) | Documentation |
+| 9 | [I2P Easy Bundle](https://geti2p.net/download) | Documentation, Logs |
+| 10 | [IObit Malware Fighter](https://www.iobit.com/en/malware-fighter.php) | Logs |
+| 11 | [NetLimiter](https://www.netlimiter.com/download) | Logs |
+| 12 | [OONI Probe](https://ooni.org/install) | Logs |
+| 13 | [Panda Security](https://www.pandasecurity.com) | Logs |
+| 14 | [Process Hacker 2](https://systeminformer.sourceforge.io/downloads) | Documentation |
+| 15 | [Process Lasso](https://bitsum.com) | Logs |
+| 16 | [Sandboxie+](https://sandboxie-plus.com) | Documentation |
+| 17 | [SystemInformer](https://systeminformer.com/downloads) | Documentation |
+| 18 | [TG WS Proxy](https://github.com/Flowseal/tg-ws-proxy) | Logs |
+| 19 | [VeraCrypt](https://veracrypt.io) | Documentation |
+| 20 | [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | Documentation, Logs |
+| 21 | [Wireshark](https://www.wireshark.org) | Documentation |
+| 22 | [Zapret](https://github.com/bol-van/zapret) | Logs |
+| 23 | [Zapret Universal Interface](https://github.com/AmantesNihilo/zapret-universal-interface) | Logs |
 
 
 ## Spyware
@@ -402,6 +418,13 @@
 | 5 | Windows PowerShell | LastActivity |
 
 
+## Terminal Emulator
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Tabby | Documentation |
+
+
 ## Text
 
 | № | Program | Categories |
@@ -414,9 +437,10 @@
 | 6 | [NeoVim](https://github.com/neovim/neovim/blob/master/INSTALL.md) | Documentation, Logs |
 | 7 | [Notepad++](https://notepad-plus-plus.org/downloads) | Documentation |
 | 8 | [Sublime Text](https://www.sublimetext.com/download) | Logs |
-| 9 | [VS Code](https://code.visualstudio.com/download) | Browser, Documentation, Logs |
-| 10 | [Visual Studio](https://visualstudio.microsoft.com) | Documentation |
-| 11 | [Zed](https://zed.dev) | Crashes, Logs |
+| 9 | [Text Edit Plus](https://vovsoft.com/software/text-edit-plus) | Documentation |
+| 10 | [VS Code](https://code.visualstudio.com/download) | Browser, Documentation, Logs |
+| 11 | [Visual Studio](https://visualstudio.microsoft.com) | Documentation |
+| 12 | [Zed](https://zed.dev) | Crashes, Logs |
 
 
 ## Tiling Manager
