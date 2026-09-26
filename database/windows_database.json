@@ -627,6 +627,15 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\blockwork",
+    "class": "Automatization",
+    "category": "Logs",
+    "program": "Blockwork",
+    "files_to_remove": [
+      "daemon.log"
+    ]
+  },
+  {
     "path": "{drive}ProgramData\\BlueStacks_nxt",
     "class": "Emulator",
     "category": "Logs",
@@ -1621,6 +1630,17 @@
     "remove_directory_after_clean": true
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\exifcleaner",
+    "class": "Security",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "ExifCleaner",
+    "files_to_remove": [
+      "LICENSE.electron.txt",
+      "LICENSES.chromium.html"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\AppData\\Local\\exodus\\*.log",
     "class": "Crypto Wallet",
     "category": "Logs",
@@ -2288,6 +2308,35 @@
     "program": "HiAlgo Boost",
     "files_to_remove": [
       "Update Boost.log"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\HomeBank",
+    "class": "Finance",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "HomeBank",
+    "files_to_remove": [
+      "Copying.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\HomeBank",
+    "class": "Finance",
+    "category": "Documentation",
+    "sub_category": "Change logs",
+    "program": "HomeBank",
+    "files_to_remove": [
+      "ChangeLog.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\HomeBank\\share\\homebank",
+    "class": "Finance",
+    "category": "Documentation",
+    "program": "HomeBank",
+    "directories_to_remove": [
+      "help"
     ]
   },
   {
@@ -4925,6 +4974,25 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\QtPass",
+    "class": "Password Manager",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "QtPass",
+    "files_to_remove": [
+      "LICENSE.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\QtPass",
+    "class": "Password Manager",
+    "category": "Documentation",
+    "program": "QtPass",
+    "files_to_remove": [
+      "README.txt"
+    ]
+  },
+  {
     "path": "{drive}Program Files (x86)\\Radmin VPN",
     "class": "VPN",
     "category": "Logs",
@@ -5386,6 +5454,17 @@
     ]
   },
   {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Tabby",
+    "class": "Terminal Emulator",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Tabby",
+    "files_to_remove": [
+      "LICENSE.electron.txt",
+      "LICENSES.chromium.html"
+    ]
+  },
+  {
     "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher",
     "class": "Minecraft Launcher",
     "category": "Accounts",
@@ -5540,6 +5619,25 @@
     "files_to_remove": [
       "config.json",
       "input profiles.json"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\VOVSOFT\\Text Edit Plus",
+    "class": "Text",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Text Edit Plus",
+    "files_to_remove": [
+      "license.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\VOVSOFT\\Text Edit Plus",
+    "class": "Text",
+    "category": "Documentation",
+    "program": "Text Edit Plus",
+    "files_to_remove": [
+      "extract_help.htm"
     ]
   },
   {
@@ -6807,103 +6905,5 @@
     "directories_to_remove": [
       "LOGS"
     ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\exifcleaner",
-    "class": "Security",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "ExifCleaner",
-    "files_to_remove": [
-      "LICENSE.electron.txt",
-      "LICENSES.chromium.html"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\VOVSOFT\\Text Edit Plus",
-    "class": "Text",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "Text Edit Plus",
-    "files_to_remove": [
-      "license.txt"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\VOVSOFT\\Text Edit Plus",
-    "class": "Text",
-    "category": "Documentation",
-    "program": "Text Edit Plus",
-    "files_to_remove": [
-      "extract_help.htm"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\QtPass",
-    "class": "Password Manager",
-    "category": "Documentation",
-	"sub_category": "Licenses",
-    "program": "QtPass",
-    "files_to_remove": [
-      "LICENSE.txt"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\QtPass",
-    "class": "Password Manager",
-    "category": "Documentation",
-    "program": "QtPass",
-    "files_to_remove": [
-      "README.txt"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Tabby",
-    "class": "Terminal Emulator",
-    "category": "Documentation",
-	"sub_category": "Licenses",
-    "program": "Tabby",
-    "files_to_remove": [
-      "LICENSE.electron.txt",
-	  "LICENSES.chromium.html"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\blockwork",
-    "class": "Automatization",
-    "category": "Logs",
-    "program": "Blockwork",
-    "files_to_remove": [
-      "daemon.log"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\HomeBank",
-    "class": "Finance",
-    "category": "Documentation",
-	"sub_category": "Licenses",
-    "program": "HomeBank",
-    "files_to_remove": [
-      "Copying.txt"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\HomeBank",
-    "class": "Finance",
-    "category": "Documentation",
-	"sub_category": "Change logs",
-    "program": "HomeBank",
-    "files_to_remove": [
-      "ChangeLog.txt"
-    ]
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\HomeBank\\share\\homebank",
-    "class": "Finance",
-    "category": "Documentation",
-    "program": "HomeBank",
-	"directories_to_remove": [
-		"help"
-	]
   }
 ]
