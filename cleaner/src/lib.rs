@@ -318,20 +318,21 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
         bytes: 0,
         working: false,
         program: data.program.clone(),
-        path: data.path.clone(),
+        path: data.path.to_string(),
         category: data.category.clone(),
         sub_category: data.sub_category.clone(),
     };
 
     // INFO: Reject parent-dir traversal in the DB-supplied glob pattern
-    if Path::new(&data.path)
+    let path_str = data.path.to_string();
+    if Path::new(&path_str)
         .components()
         .any(|c| matches!(c, Component::ParentDir))
     {
         return out;
     }
 
-    let glob_iter = match glob(&data.path) {
+    let glob_iter = match glob(&path_str) {
         Ok(g) => g,
         Err(_) => return out,
     };
@@ -365,7 +366,7 @@ mod tests {
 
     fn create_test_data(path: String) -> CleanerData {
         CleanerData {
-            path,
+            path: path.into(),
             category: std::sync::Arc::from("TestCategory"),
             program: std::sync::Arc::from("TestProgram"),
             class: std::sync::Arc::from("TestClass"),
@@ -925,7 +926,7 @@ mod proptests {
             fs::write(&file_path, &content).unwrap();
 
             let data = CleanerData {
-                path: file_path.to_str().unwrap().to_string(),
+                path: file_path.to_str().unwrap().to_string().into(),
                 category: std::sync::Arc::from("Test"),
                 program: std::sync::Arc::from("Test"),
                 class: std::sync::Arc::from("Test"),
@@ -952,7 +953,7 @@ mod proptests {
 
             let pattern = format!("{}/*.txt", target_dir.to_str().unwrap());
             let data = CleanerData {
-                path: pattern,
+                path: pattern.into(),
                 category: std::sync::Arc::from("Test"),
                 program: std::sync::Arc::from("Test"),
                 class: std::sync::Arc::from("Test"),
@@ -971,7 +972,7 @@ mod proptests {
         fn prop_nonexistent_path_safe(path in "[a-z]{1,20}/[a-z]{1,20}") {
             let non_existent = format!("/tmp/nonexistent_{}/file.txt", path);
             let data = CleanerData {
-                path: non_existent,
+                path: non_existent.into(),
                 category: std::sync::Arc::from("Test"),
                 program: std::sync::Arc::from("Test"),
                 class: std::sync::Arc::from("Test"),
@@ -1000,7 +1001,7 @@ mod proptests {
 
             let pattern = format!("{}/*", temp_dir.path().to_str().unwrap());
             let data = CleanerData {
-                path: pattern,
+                path: pattern.into(),
                 category: std::sync::Arc::from("Test"),
                 program: std::sync::Arc::from("Test"),
                 class: std::sync::Arc::from("Test"),
@@ -1023,7 +1024,7 @@ mod proptests {
             fs::write(&file_path, b"test").unwrap();
 
             let data = CleanerData {
-                path: file_path.to_str().unwrap().to_string(),
+                path: file_path.to_str().unwrap().to_string().into(),
                 category: std::sync::Arc::from(category.clone()),
                 program: std::sync::Arc::from(program.clone()),
                 class: std::sync::Arc::from("Test"),
@@ -1052,7 +1053,7 @@ mod proptests {
 
             let start_dir = temp_dir.path().join("level_0");
             let data = CleanerData {
-                path: start_dir.to_str().unwrap().to_string(),
+                path: start_dir.to_str().unwrap().to_string().into(),
                 category: std::sync::Arc::from("Test"),
                 program: std::sync::Arc::from("Test"),
                 class: std::sync::Arc::from("Test"),
@@ -1080,7 +1081,7 @@ mod proptests {
             fs::write(target_dir.join("keep2.txt"), b"keep").unwrap();
 
             let data = CleanerData {
-                path: target_dir.to_str().unwrap().to_string(),
+                path: target_dir.to_str().unwrap().to_string().into(),
                 category: std::sync::Arc::from("Test"),
                 program: std::sync::Arc::from("Test"),
                 class: std::sync::Arc::from("Test"),
@@ -1113,7 +1114,7 @@ mod proptests {
 
             let pattern = format!("{}/*.dat", target_dir.to_str().unwrap());
             let data = CleanerData {
-                path: pattern,
+                path: pattern.into(),
                 category: std::sync::Arc::from("Test"),
                 program: std::sync::Arc::from("Test"),
                 class: std::sync::Arc::from("Test"),

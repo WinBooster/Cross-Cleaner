@@ -104,7 +104,7 @@ mod tests {
             program: std::sync::Arc::from("TestProgram"),
             category: std::sync::Arc::from("Logs"),
             sub_category: std::sync::Arc::from("Logs"),
-            path: String::from("{username}/test.log"),
+            path: String::from("{username}/test.log").into(),
             args: vec![],
             os: vec![],
             sequential: false,
@@ -162,7 +162,7 @@ mod tests {
                     folders: 0,
                     bytes: 0,
                     working: false,
-                    path: data.path.clone(),
+                    path: data.path.to_string(),
                     program: data.program.clone(),
                     category: data.category.clone(),
                     sub_category: data.sub_category.clone(),
@@ -203,7 +203,7 @@ mod tests {
     #[test]
     fn test_expand_placeholders_drive() {
         let mut cleaner = test_cleaner("drive_test_1");
-        cleaner.path = String::from("{drive}/Users/{username}/data");
+        cleaner.path = String::from("{drive}/Users/{username}/data").into();
 
         let expanded = expand_placeholders(cleaner);
 
@@ -221,10 +221,10 @@ mod tests {
                     "no placeholder left: {}",
                     e.path
                 );
-                assert!(e.path.starts_with('\\') || e.path.as_bytes()[1] == b':');
+                assert!(e.path.to_string().starts_with('\\') || e.path.as_string().as_bytes()[1] == b':');
             }
-            let paths: std::collections::HashSet<&String> =
-                expanded.iter().map(|e| &e.path).collect();
+            let paths: std::collections::HashSet<crate::structures::SharedPath> =
+                expanded.iter().map(|e| e.path.clone()).collect();
             assert_eq!(paths.len(), expanded.len(), "each drive = unique path");
             assert!(expanded.iter().all(|e| e.id == "drive_test_1"));
         } else {
@@ -249,7 +249,7 @@ mod tests {
     #[test]
     fn test_get_custom_cleaners_expands_drive() {
         let mut cleaner = test_cleaner("drive_multi_test_1");
-        cleaner.path = String::from("{drive}/some/path.log");
+        cleaner.path = String::from("{drive}/some/path.log").into();
         register_custom_cleaner(cleaner);
 
         let all = get_custom_cleaners();

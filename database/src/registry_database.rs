@@ -161,7 +161,7 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
         folders: 0,
         bytes: 0,
         working: false,
-        path: data.path.clone(),
+        path: data.path.to_string(),
         program: data.program.clone(),
         category: data.category.clone(),
         sub_category: data.sub_category.clone(),
@@ -184,15 +184,15 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
 
     // INFO: Removing registry key from path
     let path = if data.path.starts_with("HKEY_CURRENT_USER\\") {
-        Some(data.path.replace("HKEY_CURRENT_USER\\", ""))
+        Some(data.path.as_string().replace("HKEY_CURRENT_USER\\", ""))
     } else if data.path.starts_with("HKEY_LOCAL_MACHINE\\") {
-        Some(data.path.replace("HKEY_LOCAL_MACHINE\\", ""))
+        Some(data.path.as_string().replace("HKEY_LOCAL_MACHINE\\", ""))
     } else if data.path.starts_with("HKEY_CLASSES_ROOT\\") {
-        Some(data.path.replace("HKEY_CLASSES_ROOT\\", ""))
+        Some(data.path.as_string().replace("HKEY_CLASSES_ROOT\\", ""))
     } else if data.path.starts_with("HKEY_USERS\\") {
-        Some(data.path.replace("HKEY_USERS\\", ""))
+        Some(data.path.as_string().replace("HKEY_USERS\\", ""))
     } else if data.path.starts_with("HKEY_CURRENT_CONFIG\\") {
-        Some(data.path.replace("HKEY_CURRENT_CONFIG\\", ""))
+        Some(data.path.as_string().replace("HKEY_CURRENT_CONFIG\\", ""))
     } else {
         None
     };

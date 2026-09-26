@@ -336,7 +336,7 @@ mod tests {
 
         // INFO: remove_values with glob "*name" - removes values ending on name
         let data = CleanerDataRegistry {
-            path: format!("HKEY_CURRENT_USER\\{}\\*\\Histo*", test_base),
+            path: format!("HKEY_CURRENT_USER\\{}\\*\\Histo*", test_base).into(),
             category: std::sync::Arc::from("Test"),
             program: std::sync::Arc::from("Test"),
             class: std::sync::Arc::from("Test"),
@@ -387,7 +387,7 @@ mod tests {
 
         // INFO: remove_values = "true" removes all values
         let data = CleanerDataRegistry {
-            path: format!("HKEY_CURRENT_USER\\{}\\History", test_base),
+            path: format!("HKEY_CURRENT_USER\\{}\\History", test_base).into(),
             category: std::sync::Arc::from("Test"),
             program: std::sync::Arc::from("Test"),
             class: std::sync::Arc::from("Test"),
@@ -430,7 +430,7 @@ mod tests {
 
         // INFO: remove_trees with glob "Hist*" - deletes matched subkey trees
         let data = CleanerDataRegistry {
-            path: format!("HKEY_CURRENT_USER\\{}\\*", test_base),
+            path: format!("HKEY_CURRENT_USER\\{}\\*", test_base).into(),
             category: std::sync::Arc::from("Test"),
             program: std::sync::Arc::from("Test"),
             class: std::sync::Arc::from("Test"),

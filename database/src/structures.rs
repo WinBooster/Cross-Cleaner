@@ -81,6 +81,123 @@ fn default_class_arc() -> Arc<str> {
     intern_arc("Other")
 }
 
+// ── segment-interned shared path ──
+
+/// Path stored as interned separator-delimited segments. Near-identical paths
+/// (e.g. 100 `{drive}Users\{username}\AppData\...` entries) share every common
+/// segment — only the differing tail is stored anew. Concatenating the segments
+/// reproduces the original string byte-for-byte, so JSON output is unchanged.
+#[derive(Clone, Debug, Default, PartialEq, Eq, Hash)]
+pub struct SharedPath {
+    segs: Arc<[Arc<str>]>,
+}
+
+impl SharedPath {
+    /// Split `s` after every `/` or `\` (separator stays at the end of its
+    /// segment) and intern each segment. Concatenation == original `s`.
+    pub fn new(s: &str) -> Self {
+        if s.is_empty() {
+            return Self::default();
+        }
+        let mut segs: Vec<Arc<str>> = Vec::new();
+        let mut start = 0;
+        for (i, ch) in s.char_indices() {
+            if ch == '/' || ch == '\\' {
+                segs.push(intern_arc(&s[start..=i]));
+                start = i + ch.len_utf8();
+            }
+        }
+        if start < s.len() {
+            segs.push(intern_arc(&s[start..]));
+        }
+        Self { segs: segs.into() }
+    }
+
+    /// Rebuild the original path string (byte-for-byte round-trip).
+    pub fn as_string(&self) -> String {
+        let mut out = String::new();
+        for seg in self.segs.iter() {
+            out.push_str(seg);
+        }
+        out
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.segs.is_empty()
+    }
+
+    /// Interned segments (separator stays at the end of its segment).
+    pub fn segments(&self) -> &[Arc<str>] {
+        &self.segs
+    }
+
+    pub fn contains(&self, needle: &str) -> bool {
+        self.as_string().contains(needle)
+    }
+
+    pub fn starts_with(&self, prefix: &str) -> bool {
+        self.as_string().starts_with(prefix)
+    }
+
+    pub fn replace(&self, from: &str, to: &str) -> SharedPath {
+        SharedPath::new(&self.as_string().replace(from, to))
+    }
+}
+
+impl From<&str> for SharedPath {
+    fn from(s: &str) -> Self {
+        SharedPath::new(s)
+    }
+}
+impl From<String> for SharedPath {
+    fn from(s: String) -> Self {
+        SharedPath::new(&s)
+    }
+}
+
+impl std::fmt::Display for SharedPath {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        for seg in self.segs.iter() {
+            f.write_str(seg)?;
+        }
+        Ok(())
+    }
+}
+
+impl PartialEq<str> for SharedPath {
+    fn eq(&self, other: &str) -> bool {
+        self.as_string() == other
+    }
+}
+impl PartialEq<&str> for SharedPath {
+    fn eq(&self, other: &&str) -> bool {
+        self.as_string() == *other
+    }
+}
+impl PartialEq<String> for SharedPath {
+    fn eq(&self, other: &String) -> bool {
+        self.as_string() == *other
+    }
+}
+
+impl Serialize for SharedPath {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(&self.as_string())
+    }
+}
+
+impl<'de> Deserialize<'de> for SharedPath {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        Ok(SharedPath::new(&String::deserialize(deserializer)?))
+    }
+}
+
 fn deserialize_vec_arc<'de, D>(deserializer: D) -> Result<Vec<Arc<str>>, D::Error>
 where
     D: Deserializer<'de>,
@@ -139,7 +256,7 @@ impl BoolOrU8 {
 // INFO: Struct for clearing files and folders
 #[derive(Clone)]
 pub struct CleanerData {
-    pub path: String,
+    pub path: SharedPath,
     pub category: Arc<str>,
     pub program: Arc<str>,
     pub class: Arc<str>,
@@ -235,7 +352,7 @@ impl<'de> Deserialize<'de> for CleanerData {
         }
 
         Ok(CleanerData {
-            path: h.path,
+            path: h.path.into(),
             category: intern_arc(&h.category),
             program: intern_arc(&h.program),
             class: intern_arc(&h.class),
@@ -339,7 +456,7 @@ pub struct CleanerDataRegistry {
     pub remove_all_in_registry: bool,
 
     #[serde(default)]
-    pub path: String,
+    pub path: SharedPath,
 
     #[serde(default, deserialize_with = "deserialize_vec_arc")]
     pub values_to_remove: Vec<Arc<str>>,
@@ -364,7 +481,7 @@ pub struct CleanerDataRegistry {
 #[derive(Deserialize, Clone)]
 pub struct CleanerIndex {
     #[serde(default)]
-    pub path: String,
+    pub path: SharedPath,
     #[serde(
         default,
         deserialize_with = "deserialize_shared_opt",
@@ -457,7 +574,7 @@ pub struct CustomCleaner {
     pub category: Arc<str>,
     pub sub_category: Arc<str>,
     /// Target file or directory. Supports {username} placeholder
-    pub path: String,
+    pub path: SharedPath,
     /// Extra arguments passed to the cleaning function
     pub args: Vec<String>,
     /// Operating systems this cleaning applies to (empty = all)

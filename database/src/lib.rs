@@ -149,7 +149,7 @@ mod tests {
     #[test]
     fn test_cleaner_data_structure() {
         let data = CleanerData {
-            path: String::from("test/path"),
+            path: String::from("test/path").into(),
             category: std::sync::Arc::from("Cache"),
             program: std::sync::Arc::from("TestApp"),
             class: std::sync::Arc::from("Application"),
@@ -368,6 +368,76 @@ mod tests {
     }
 
     #[test]
+    fn test_shared_path_round_trip() {
+        use crate::structures::SharedPath;
+
+        let samples = [
+            "",
+            "C:\\Users\\user\\AppData\\Local\\Temp\\*",
+            "{drive}Program Files (x86)\\Adobe\\*\\Legal\\*\\*.html",
+            "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion",
+            "/storage/emulated/0/Pictures/*",
+            "mixed\\separator/path//with..double.sep",
+            "trailing\\sep\\",
+            "..\\parent\\escape",
+        ];
+
+        for s in samples {
+            let p = SharedPath::new(s);
+            assert_eq!(p.as_string(), s, "byte-for-byte round-trip");
+
+            // Serialize must emit the original JSON string
+            let json = serde_json::to_string(&p).unwrap();
+            let expected = serde_json::to_string(s).unwrap();
+            assert_eq!(json, expected, "JSON must not change for {:?}", s);
+
+            // Deserialize must restore the exact string
+            let back: SharedPath = serde_json::from_str(&json).unwrap();
+            assert_eq!(back.as_string(), s);
+
+            // serde field round-trip through CleanerData
+            let data = CleanerData {
+                path: p.clone(),
+                category: std::sync::Arc::from("C"),
+                program: std::sync::Arc::from("P"),
+                class: std::sync::Arc::from("Cl"),
+                sub_category: std::sync::Arc::from("S"),
+                files_to_remove: vec![],
+                directories_to_remove: vec![],
+                flags: crate::structures::CleanerFlags::empty(),
+            };
+            let json = serde_json::to_string(&data).unwrap();
+            let back: CleanerData = serde_json::from_str(&json).unwrap();
+            assert_eq!(back.path.as_string(), s, "CleanerData path field");
+        }
+    }
+
+    #[test]
+    fn test_shared_path_segments_shared() {
+        use crate::structures::SharedPath;
+        use std::sync::Arc;
+
+        // Two near-identical paths must share every common segment allocation
+        let a = SharedPath::new("{drive}Users\\u\\AppData\\Local\\Foo\\cache");
+        let b = SharedPath::new("{drive}Users\\u\\AppData\\Local\\Bar\\cache");
+
+        let segs_a = a.segments();
+        let segs_b = b.segments();
+        assert_eq!(segs_a.len(), segs_b.len());
+        // "Users\", "u\", "AppData\", "Local\" are shared (pointer equality)
+        let shared = segs_a
+            .iter()
+            .zip(segs_b.iter())
+            .filter(|(x, y)| Arc::ptr_eq(x, y))
+            .count();
+        assert!(
+            shared >= 4,
+            "expected >= 4 shared segments, got {}",
+            shared
+        );
+    }
+
+    #[test]
     fn test_database_cache_efficiency() {
         use std::time::Instant;
 
@@ -461,7 +531,7 @@ mod tests {
     #[test]
     fn test_cleaner_data_default_values() {
         let data = CleanerData {
-            path: String::new(),
+            path: String::new().into(),
             category: std::sync::Arc::from(""),
             program: std::sync::Arc::from(""),
             class: std::sync::Arc::from(""),

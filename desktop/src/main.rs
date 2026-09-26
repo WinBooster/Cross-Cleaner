@@ -583,7 +583,7 @@ mod tests {
     fn test_myapp_from_database() {
         let database: Vec<CleanerData> = vec![
             CleanerData {
-                path: String::from("test/path1"),
+                path: String::from("test/path1").into(),
                 category: std::sync::Arc::from("Cache"),
                 program: std::sync::Arc::from("TestApp1"),
                 class: std::sync::Arc::from("Application"),
@@ -593,7 +593,7 @@ mod tests {
                 flags: CleanerFlags::empty(),
             },
             CleanerData {
-                path: String::from("test/path2"),
+                path: String::from("test/path2").into(),
                 category: std::sync::Arc::from("Logs"),
                 program: std::sync::Arc::from("TestApp2"),
                 class: std::sync::Arc::from("Application"),
@@ -611,7 +611,7 @@ mod tests {
             sub_category: std::sync::Arc::from(""),
             remove_all_in_tree: false,
             remove_all_in_registry: false,
-            path: String::new(),
+            path: String::new().into(),
             values_to_remove: vec![],
             keys_to_remove: vec![],
             remove_values: String::new(),
@@ -646,7 +646,7 @@ mod tests {
     fn test_myapp_category_sorting() {
         let database: Vec<CleanerData> = vec![
             CleanerData {
-                path: String::from("test1"),
+                path: String::from("test1").into(),
                 category: std::sync::Arc::from("Documentation"),
                 program: std::sync::Arc::from("App1"),
                 class: std::sync::Arc::from("App"),
@@ -656,7 +656,7 @@ mod tests {
                 flags: CleanerFlags::empty(),
             },
             CleanerData {
-                path: String::from("test2"),
+                path: String::from("test2").into(),
                 category: std::sync::Arc::from("Cache"),
                 program: std::sync::Arc::from("App2"),
                 class: std::sync::Arc::from("App"),
@@ -666,7 +666,7 @@ mod tests {
                 flags: CleanerFlags::empty(),
             },
             CleanerData {
-                path: String::from("test3"),
+                path: String::from("test3").into(),
                 category: std::sync::Arc::from("Logs"),
                 program: std::sync::Arc::from("App3"),
                 class: std::sync::Arc::from("App"),
@@ -684,7 +684,7 @@ mod tests {
             sub_category: std::sync::Arc::from(""),
             remove_all_in_tree: false,
             remove_all_in_registry: false,
-            path: String::new(),
+            path: String::new().into(),
             values_to_remove: vec![],
             keys_to_remove: vec![],
             remove_values: String::new(),
@@ -781,7 +781,7 @@ mod tests {
     fn test_subcategory_selection() {
         let database: Vec<CleanerData> = vec![
             CleanerData {
-                path: String::from("p1"),
+                path: String::from("p1").into(),
                 category: std::sync::Arc::from("Cache"),
                 program: std::sync::Arc::from("App1"),
                 class: std::sync::Arc::from("Browser"),
@@ -791,7 +791,7 @@ mod tests {
                 flags: CleanerFlags::empty(),
             },
             CleanerData {
-                path: String::from("p2"),
+                path: String::from("p2").into(),
                 category: std::sync::Arc::from("Cache"),
                 program: std::sync::Arc::from("App2"),
                 class: std::sync::Arc::from("Game"),

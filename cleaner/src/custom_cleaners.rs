@@ -92,7 +92,7 @@ macro_rules! custom_glob_cleaner {
                     folders: 0,
                     bytes: 0,
                     working: false,
-                    path: data.path.clone(),
+                    path: data.path.to_string(),
                     program: data.program.clone(),
                     category: data.category.clone(),
                     sub_category: data.sub_category.clone(),
@@ -101,7 +101,8 @@ macro_rules! custom_glob_cleaner {
                 // Stream glob without materializing full Vec<PathBuf> at once.
                 // Entries are processed in bounded chunks (1024) to limit peak RAM
                 // when glob expands to tens of thousands of files (e.g. Pictures/**/*).
-                let glob_iter = match ::glob::glob(&data.path) {
+                let path_str = data.path.to_string();
+                let glob_iter = match ::glob::glob(&path_str) {
                     Ok(g) => g,
                     Err(_) => return result,
                 };
@@ -192,7 +193,7 @@ macro_rules! custom_glob_cleaner {
                 program: $crate::database::structures::intern_arc($program),
                 category: $crate::database::structures::intern_arc($category),
                 sub_category: $crate::database::structures::intern_arc($sub_category),
-                path: String::from($pattern),
+                path: String::from($pattern).into(),
                 args: vec![],
                 os: vec![$(String::from($os)),*],
                 function: __custom_glob_wrapper,
