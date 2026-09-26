@@ -19,9 +19,12 @@ use gui::title_bar::TITLE_BAR_HEIGHT;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 use winit::application::ApplicationHandler;
+use winit::error::EventLoopError;
 use winit::event::{DeviceEvent, DeviceId, MouseScrollDelta, StartCause, TouchPhase, WindowEvent};
 use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop};
 use winit::window::WindowId;
+
+mod display;
 
 /// Minimum interval between repaints caused purely by pointer movement or by
 /// scroll-wheel input.
@@ -307,8 +310,66 @@ struct Args {
     registry_database_path: Option<String>,
 }
 
-#[tokio::main]
-async fn main() -> eframe::Result {
+/// Shown when no display server can be reached at all, i.e. neither a
+/// compositor socket nor a usable X server was found.
+const DISPLAY_HINT: &str = "\
+Cross Cleaner could not reach a display server. Start it from your desktop \
+session; when elevating, keep the session environment \
+(`sudo -E Cross_Cleaner_GUI`).";
+
+/// Backend [`display::detect`] picked before the event loop was created.
+#[cfg(target_os = "linux")]
+type BackendChoice = Option<display::Backend>;
+/// No backend choice on platforms where winit has a single display server.
+#[cfg(not(target_os = "linux"))]
+type BackendChoice = ();
+
+/// Creates the event loop, forcing the backend chosen by [`prepare_display`].
+#[allow(unused_variables)]
+fn build_event_loop(backend: BackendChoice) -> Result<EventLoop<UserEvent>, EventLoopError> {
+    #[allow(unused_mut)]
+    let mut builder = EventLoop::<UserEvent>::with_user_event();
+    #[cfg(target_os = "linux")]
+    match backend {
+        Some(display::Backend::Wayland) => {
+            use winit::platform::wayland::EventLoopBuilderExtWayland;
+            builder.with_wayland();
+        }
+        Some(display::Backend::X11) => {
+            use winit::platform::x11::EventLoopBuilderExtX11;
+            builder.with_x11();
+        }
+        None => {}
+    }
+    builder.build()
+}
+
+fn main() -> eframe::Result {
+    // INFO: `std::env::set_var` is `unsafe` in edition 2024 and must not race
+    // with other threads reading the environment, so the display has to be
+    // prepared before the tokio runtime spawns its workers. That is why `main`
+    // is not `#[tokio::main]`.
+    let backend = prepare_display();
+
+    tokio::runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()
+        .map_err(|e| eframe::Error::AppCreation(Box::new(e)))?
+        .block_on(run(backend))
+}
+
+/// Picks the window backend and restores the session variables it needs.
+#[cfg(target_os = "linux")]
+fn prepare_display() -> BackendChoice {
+    let display = display::detect();
+    display.apply();
+    display.backend
+}
+
+#[cfg(not(target_os = "linux"))]
+fn prepare_display() -> BackendChoice {}
+
+async fn run(backend: BackendChoice) -> eframe::Result {
     let icon = icons::load_icon_from_ico_bytes(database::ICON_BYTES).expect("Failed to load icon");
 
     let args = Args::parse();
@@ -464,104 +525,85 @@ async fn main() -> eframe::Result {
 
     let app_title = format!("Cross Cleaner GUI v{}", get_version());
 
-    // Try each candidate sequentially. First successful `run_app` returns Ok
-    // and the process exits with the app; if window creation fails (e.g.
-    // NoGlutinConfigs for glow, or RequestAdapterError for wgpu) we log and
-    // try the next backend.
-    let mut last_err: Option<eframe::Error> = None;
-    for (renderer, wgpu_backend, name) in candidates {
-        let icon_clone = icon.clone();
-        let mut options = eframe::NativeOptions {
-            viewport: egui::ViewportBuilder::default()
-                .with_inner_size(size)
-                .with_min_inner_size(size)
-                .with_max_inner_size(size)
-                .with_resizable(false)
-                .with_maximize_button(false)
-                .with_decorations(false)
-                .with_icon(icon_clone),
-            renderer,
-            ..Default::default()
-        };
-        if let Some(backend) = wgpu_backend {
-            #[cfg(target_os = "windows")]
-            configure_wgpu_backend(&mut options, backend);
-            #[cfg(not(target_os = "windows"))]
-            {
-                let _ = backend;
-            }
-        }
-        // Also apply vsync etc from default wgpu config when using wgpu
-        eprintln!("Trying renderer: {name} ({renderer})");
+    // INFO: winit allows exactly one event loop per process, and it is
+    // consumed by `run_app`, so a renderer that fails at runtime (glow
+    // NoGlutinConfigs, wgpu RequestAdapterError) cannot be retried with the
+    // next candidate: every later `build` returns `RecreationAttempt`. The
+    // probes above are therefore what the fallback chain is made of, and only
+    // the first surviving candidate is used.
+    let (renderer, wgpu_backend, name) = candidates
+        .into_iter()
+        .next()
+        .expect("candidates is never empty");
 
-        // Need fresh app instance per attempt (MyApp is moved into closure)
-        // Re-create from the same databases (they are Clone and cheap).
-        let db_clone = database.clone();
-        #[cfg(windows)]
-        let reg_clone = registry_database.clone();
-        let custom_clone = custom_database.clone();
-        let title_clone = app_title.clone();
-
-        // We use our own EventLoop + PointerThrottle so pointer events are
-        // coalesced. To still get proper eframe error propagation (glow
-        // NoGlutinConfigs, wgpu RequestAdapterError) we wrap the inner
-        // creation in a catch: `create_native` itself is infallible, but the
-        // error surfaces as `WinitEventLoop` or as early exit. We treat any
-        // `run_app` error as a signal to fallback.
-        let event_loop = match EventLoop::<UserEvent>::with_user_event().build() {
-            Ok(el) => el,
-            Err(e) => {
-                eprintln!("Failed to create event loop for {name}: {e}");
-                last_err = Some(eframe::Error::WinitEventLoop(e));
-                continue;
-            }
-        };
-
-        // Move app into closure; update_receiver is set per-attempt
-        let app_for_closure = {
-            #[cfg(windows)]
-            let mut a = MyApp::from_database(db_clone, reg_clone, custom_clone);
-            #[cfg(not(windows))]
-            let mut a = MyApp::from_database(db_clone, custom_clone);
-            let (tx, rx) = std::sync::mpsc::channel();
-            a.update_receiver = Some(rx);
-            std::thread::spawn(move || {
-                let _ = tx.send(check_new_version());
-            });
-            a
-        };
-
-        let mut native_app = PointerThrottle::new(eframe::create_native(
-            &title_clone,
-            options,
-            Box::new(move |_cc| {
-                _cc.egui_ctx.set_visuals(egui::Visuals::dark());
-                Ok(Box::new(app_for_closure))
-            }),
-            &event_loop,
-        ));
-
-        match event_loop.run_app(&mut native_app) {
-            Ok(()) => return Ok(()),
-            Err(e) => {
-                let err = eframe::Error::WinitEventLoop(e);
-                eprintln!("Renderer {name} failed: {err} -> trying next fallback");
-                last_err = Some(err);
-                continue;
-            }
+    #[allow(unused_mut)]
+    let mut options = eframe::NativeOptions {
+        viewport: egui::ViewportBuilder::default()
+            .with_inner_size(size)
+            .with_min_inner_size(size)
+            .with_max_inner_size(size)
+            .with_resizable(false)
+            .with_maximize_button(false)
+            .with_decorations(false)
+            .with_icon(icon.clone()),
+        renderer,
+        ..Default::default()
+    };
+    if let Some(backend) = wgpu_backend {
+        #[cfg(target_os = "windows")]
+        configure_wgpu_backend(&mut options, backend);
+        #[cfg(not(target_os = "windows"))]
+        {
+            let _ = backend;
         }
     }
+    // Also apply vsync etc from default wgpu config when using wgpu
+    eprintln!("Using renderer: {name} ({renderer})");
 
-    // All candidates failed
-    Err(last_err.unwrap_or_else(|| {
-        eframe::Error::AppCreation(Box::new(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            "no renderer available (glow, vulkan, dx12 all failed)",
-        )))
-    }))
+    // We use our own EventLoop + PointerThrottle so pointer events are
+    // coalesced. `create_native` itself is infallible; a failure to reach a
+    // display server surfaces here as `WinitEventLoop`.
+    let event_loop = match build_event_loop(backend) {
+        Ok(el) => el,
+        Err(e) => {
+            eprintln!("Failed to create the {name} event loop: {e}");
+            eprintln!("{DISPLAY_HINT}");
+            return Err(eframe::Error::WinitEventLoop(e));
+        }
+    };
+
+    // Move app into the closure; update_receiver is filled in the background
+    let app_for_closure = {
+        #[cfg(windows)]
+        let mut a = MyApp::from_database(database, registry_database, custom_database);
+        #[cfg(not(windows))]
+        let mut a = MyApp::from_database(database, custom_database);
+        let (tx, rx) = std::sync::mpsc::channel();
+        a.update_receiver = Some(rx);
+        std::thread::spawn(move || {
+            let _ = tx.send(check_new_version());
+        });
+        a
+    };
+
+    let mut native_app = PointerThrottle::new(eframe::create_native(
+        &app_title,
+        options,
+        Box::new(move |_cc| {
+            _cc.egui_ctx.set_visuals(egui::Visuals::dark());
+            Ok(Box::new(app_for_closure))
+        }),
+        &event_loop,
+    ));
+
+    event_loop
+        .run_app(&mut native_app)
+        .map_err(eframe::Error::WinitEventLoop)
 }
 
-#[cfg(test)]
+// INFO: every test below builds a `RegistryDatabase`, which only exists on
+// Windows, so the module is compiled there only.
+#[cfg(all(test, windows))]
 mod tests {
     use super::*;
     use database::structures::{CleanerData, CleanerDataRegistry, CleanerFlags};
