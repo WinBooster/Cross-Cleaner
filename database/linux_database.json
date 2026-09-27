@@ -566,6 +566,13 @@
     ]
   },
   {
+    "path": "/home/*/.cache/hyprland/hyperlandCrashReport*.txt",
+    "class": "Tiling Manager",
+    "category": "Crashes",
+    "program": "Hyperland",
+    "remove_files": true
+  },
+  {
     "path": "/usr/share/",
     "category": "Documentation",
     "program": "Info",
@@ -696,6 +703,14 @@
       "files",
       "info"
     ]
+  },
+  {
+    "path": "/home/*/Downloads",
+    "class": "System",
+    "category": "Downloads",
+    "program": "Linux",
+    "remove_all_in_dir": true,
+    "remove_directory_after_clean": true
   },
   {
     "path": "/home/*/.wine/drive_c/users/roman/AppData/Roaming/.loliland/java",
@@ -951,7 +966,7 @@
     "path": "/home/*/.mozilla/firefox/**/",
     "class": "Browser",
     "category": "Browser",
-    "sub_category":"Cookies",
+    "sub_category": "Cookies",
     "program": "Mozilla Firefox",
     "files_to_remove": [
       "cookies.sqlite",
@@ -1094,6 +1109,56 @@
     "directories_to_remove": [
       "nvidia",
       "nvidia-utils"
+    ]
+  },
+  {
+    "path": "/home/*/.local/state/omarchy/notifications/history/*",
+    "class": "System",
+    "category": "LastActivity",
+    "program": "Omarchy",
+    "remove_files": true
+  },
+  {
+    "path": "/home/*/.local/state/omarchy",
+    "class": "System",
+    "category": "LastActivity",
+    "program": "Omarchy",
+    "files_to_remove": [
+      "clipboard-history.json"
+    ]
+  },
+  {
+    "path": "/home/*/.local/state/omarchy/clipboard-images/*",
+    "class": "System",
+    "category": "Images",
+    "program": "Omarchy",
+    "remove_files": true
+  },
+  {
+    "path": "/home/*/.local/state/opencode",
+    "class": "AI",
+    "category": "LastActivity",
+    "program": "OpenCode",
+    "files_to_remove": [
+      "prompt-history.json"
+    ]
+  },
+  {
+    "path": "/home/*/.local/share/opencode/tool-output/",
+    "class": "AI",
+    "category": "LastActivnity",
+    "program": "OpenCode",
+    "files_to_remove": [
+      "prompt-history.json"
+    ]
+  },
+  {
+    "path": "/home/roman/.local/share/opencode",
+    "class": "AI",
+    "category": "Logs",
+    "program": "OpenCode",
+    "directories_to_remove": [
+      "log"
     ]
   },
   {
@@ -1400,6 +1465,15 @@
     ]
   },
   {
+    "path": "/home/*/.local/share/sddm",
+    "class": "Desktop Display Manager",
+    "category": "Logs",
+    "program": "SDDM",
+    "files_to_remove": [
+      "wayland-session.log"
+    ]
+  },
+  {
     "path": "/home/*/SIMPLEMINECRAFT/",
     "class": "Minecraft Launcher",
     "category": "Logs",
@@ -1657,86 +1731,12 @@
     ]
   },
   {
-    "path": "/home/*/Downloads",
-    "class": "System",
-    "category": "Downloads",
-    "program": "Linux",
-    "remove_all_in_dir": true,
-    "remove_directory_after_clean": true
-  },
-  {
     "path": "/home/*/.local/share/zed",
     "class": "Text",
     "category": "Logs",
     "program": "Zed",
     "directories_to_remove": [
       "logs"
-    ]
-  },
-  {
-    "path": "/home/*/.local/state/opencode",
-    "class": "AI",
-    "category": "LastActivity",
-    "program": "OpenCode",
-    "files_to_remove": [
-      "prompt-history.json"
-    ]
-  },
-  {
-    "path": "/home/*/.local/share/opencode/tool-output/",
-    "class": "AI",
-    "category": "LastActivnity",
-    "program": "OpenCode",
-    "files_to_remove": [
-      "prompt-history.json"
-    ]
-  },
-  {
-    "path": "/home/roman/.local/share/opencode",
-    "class": "AI",
-    "category": "Logs",
-    "program": "OpenCode",
-    "directories_to_remove": [
-      "log"
-    ]
-  },
-  {
-    "path": "/home/*/.local/state/omarchy/notifications/history/*",
-    "class": "System",
-    "category": "LastActivity",
-    "program": "Omarchy",
-    "remove_files": true
-  },
-  {
-    "path": "/home/*/.local/state/omarchy",
-    "class": "System",
-    "category": "LastActivity",
-    "program": "Omarchy",
-    "files_to_remove": [
-      "clipboard-history.json"
-    ]
-  },
-  {
-    "path": "/home/*/.local/state/omarchy/clipboard-images/*",
-    "class": "System",
-    "category": "Images",
-    "program": "Omarchy",
-    "remove_files":true
-  },
-  {
-    "path": "/home/*/.cache/hyprland/hyperlandCrashReport*.txt",
-    "class": "Tiling Manager",
-    "category": "Crashes",
-    "program": "Hyperland",
-    "remove_files":true
-  },
-  {
-    "path": "/home/*/.local/share/sddm",
-    "class": "Desktop Display Manager",
-    "category": "Logs",
-    "program": "SDDM",
-    "files_to_remove": [
-      "wayland-session.log"
     ]
   }
 ]
