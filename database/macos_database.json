@@ -1,6 +1,6 @@
 [
   {
-    "path": "/Users/{username}/.Trash/*",
+    "path": "/Users/*/.Trash/*",
     "class": "System",
     "category": "Trash",
     "program": "System",
@@ -8,7 +8,7 @@
     "remove_directories": true
   },
   {
-    "path": "/Users/{username}/Library/Logs/DiagnosticReports/*",
+    "path": "/Users/*/Library/Logs/DiagnosticReports/*",
     "class": "System",
     "category": "Crashes",
     "program": "System",
@@ -16,7 +16,7 @@
     "remove_directories": true
   },
   {
-    "path": "/Library/Logs/DiagnosticReports/*",
+    "path": "/Users/*/Library/Logs/DiagnosticReports/*",
     "class": "System",
     "category": "Crashes",
     "program": "System",
@@ -24,7 +24,7 @@
     "remove_directories": true
   },
   {
-    "path": "/Library/logs/*",
+    "path": "/Users/*/Library/logs/*",
     "class": "System",
     "category": "Logs",
     "program": "System",
@@ -32,7 +32,7 @@
     "remove_directories": true
   },
   {
-    "path": "/Users/{username}/Library/logs/*",
+    "path": "/Users/*/Library/logs/*",
     "class": "System",
     "category": "Logs",
     "program": "System",
@@ -40,7 +40,7 @@
     "remove_directories": true
   },
   {
-    "path": "/Users/{username}/Library/Caches/*",
+    "path": "/Users/*/Library/Caches/*",
     "class": "System",
     "category": "Cache",
     "program": "System",

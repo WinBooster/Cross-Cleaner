@@ -1,6 +1,6 @@
 [
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\1Password\\logs\\setup\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Local\\1Password\\logs\\setup\\*.log",
     "category": "Logs",
     "program": "1Password",
     "class": "Password Manager",
@@ -34,7 +34,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\360safe",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\360safe",
     "class": "Security",
     "category": "Logs",
     "program": "360 Total Security",
@@ -51,14 +51,14 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\TSMonitor\\4uKey for Android\\logs\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\TSMonitor\\4uKey for Android\\logs\\*",
     "class": "Security",
     "category": "Logs",
     "program": "4uKey for Android",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Postman-Agent\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Local\\Postman-Agent\\*.log",
     "category": "Logs",
     "program": "4uKey for Android",
     "remove_files": true
@@ -100,7 +100,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\Sandbox Interactive GmbH\\Albion Online Client",
+    "path": "{drive}Users\\*\\AppData\\LocalLow\\Sandbox Interactive GmbH\\Albion Online Client",
     "class": "Game",
     "category": "Logs",
     "program": "Albion Online",
@@ -110,7 +110,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Sandbox Interactive GmbH\\Albion Online Launcher",
+    "path": "{drive}Users\\*\\AppData\\Local\\Sandbox Interactive GmbH\\Albion Online Launcher",
     "class": "Game",
     "category": "Logs",
     "program": "Albion Online",
@@ -119,7 +119,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Sandbox Interactive GmbH\\Albion Online Launcher",
+    "path": "{drive}Users\\*\\AppData\\Local\\Sandbox Interactive GmbH\\Albion Online Launcher",
     "class": "Game",
     "category": "Cache",
     "program": "Albion Online",
@@ -128,7 +128,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\AltSnap",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\AltSnap",
     "class": "Utility",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -138,7 +138,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\AltSnap",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\AltSnap",
     "class": "Utility",
     "category": "Documentation",
     "program": "AltSnap",
@@ -195,7 +195,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\anaconda3",
+    "path": "{drive}Users\\*\\anaconda3",
     "class": "Developing",
     "category": "Logs",
     "program": "Anaconda",
@@ -204,7 +204,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\anaconda3",
+    "path": "{drive}Users\\*\\anaconda3",
     "class": "Developing",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -215,7 +215,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\anarchyloader",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\anarchyloader",
     "class": "Cheat",
     "category": "Logs",
     "program": "AnarchyLoader",
@@ -224,7 +224,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming",
+    "path": "{drive}Users\\*\\AppData\\Roaming",
     "class": "Cheat",
     "category": "Cheats",
     "program": "AnarchyLoader",
@@ -247,7 +247,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\*\\crashlog\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\*\\crashlog\\*",
     "class": "Game",
     "category": "Crashes",
     "program": "Arizona Games Launcher",
@@ -255,7 +255,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\Arizona Games Launcher",
     "class": "Game",
     "category": "Logs",
     "program": "Arizona Games Launcher",
@@ -264,7 +264,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\*\\moonloader",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\*\\moonloader",
     "class": "Game",
     "category": "Logs",
     "program": "Arizona Games Launcher",
@@ -273,7 +273,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\*\\SAMPFUNCS",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\*\\SAMPFUNCS",
     "class": "Game",
     "category": "Logs",
     "program": "Arizona Games Launcher",
@@ -282,7 +282,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\Arizona Games Launcher\\bin\\**",
     "class": "Game",
     "category": "Logs",
     "program": "Arizona Games Launcher",
@@ -293,7 +293,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\GTA San Andreas User Files\\SAMP\\arizona",
+    "path": "{drive}Users\\*\\Documents\\GTA San Andreas User Files\\SAMP\\arizona",
     "class": "Game",
     "category": "Logs",
     "program": "Arizona Games Launcher",
@@ -302,7 +302,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\GTA San Andreas User Files\\SAMP\\arizona",
+    "path": "{drive}Users\\*\\Documents\\GTA San Andreas User Files\\SAMP\\arizona",
     "class": "Game",
     "category": "Images",
     "program": "Arizona Games Launcher",
@@ -320,7 +320,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ATLauncher",
     "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "ATLauncher",
@@ -330,7 +330,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\game-cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ATLauncher\\game-cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "ATLauncher",
@@ -338,7 +338,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ATLauncher\\cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "ATLauncher",
@@ -346,7 +346,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ATLauncher\\instances\\*",
     "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "ATLauncher",
@@ -360,7 +360,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\*\\crash-reports\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ATLauncher\\instances\\*\\crash-reports\\*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "ATLauncher",
@@ -368,7 +368,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\*\\saves\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ATLauncher\\instances\\*\\saves\\*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -377,7 +377,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\*\\screenshots\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ATLauncher\\instances\\*\\screenshots\\*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "ATLauncher",
@@ -385,7 +385,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\instances\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ATLauncher\\instances\\*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "ATLauncher",
@@ -394,7 +394,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ATLauncher",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -404,7 +404,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ATLauncher",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "ATLauncher",
@@ -413,7 +413,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ATLauncher\\*log*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ATLauncher\\*log*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "ATLauncher",
@@ -500,14 +500,14 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\AVCLabs Video Enhancer AI\\logs\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\AVCLabs Video Enhancer AI\\logs\\*.log",
     "class": "Video",
     "category": "Logs",
     "program": "AVCLabs Video Enhancer AI",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Badlion Client",
     "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "Badlion Client",
@@ -517,7 +517,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\game-cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Badlion Client\\game-cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Badlion Client",
@@ -525,7 +525,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Badlion Client\\cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Badlion Client",
@@ -533,7 +533,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Badlion Client",
     "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "Badlion Client",
@@ -547,7 +547,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\crash-reports\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Badlion Client\\crash-reports\\*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "Badlion Client",
@@ -555,7 +555,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\saves\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Badlion Client\\saves\\*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -564,7 +564,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\screenshots\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Badlion Client\\screenshots\\*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "Badlion Client",
@@ -572,7 +572,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Badlion Client",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Badlion Client",
@@ -581,7 +581,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Clien",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Badlion Clien",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -591,7 +591,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Badlion Client",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Badlion Client",
@@ -600,7 +600,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Badlion Client\\*log*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Badlion Client\\*log*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Badlion Client",
@@ -627,7 +627,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\blockwork",
+    "path": "{drive}Users\\*\\AppData\\Local\\blockwork",
     "class": "Automatization",
     "category": "Logs",
     "program": "Blockwork",
@@ -672,14 +672,14 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\Pictures\\BlueStacks\\*.png",
+    "path": "{drive}Users\\*\\Pictures\\BlueStacks\\*.png",
     "class": "Emulator",
     "category": "Images",
     "program": "BlueStacks 5",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\My Games\\Borderlands 2\\WillowGame",
+    "path": "{drive}Users\\*\\Documents\\My Games\\Borderlands 2\\WillowGame",
     "class": "Game",
     "category": "Game",
     "sub_category": "Saves",
@@ -689,7 +689,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\My Games\\Borderlands 2\\WillowGame",
+    "path": "{drive}Users\\*\\Documents\\My Games\\Borderlands 2\\WillowGame",
     "class": "Game",
     "category": "Logs",
     "program": "Borderlands 2",
@@ -698,7 +698,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\My Games\\Borderlands 2\\WillowGame",
+    "path": "{drive}Users\\*\\Documents\\My Games\\Borderlands 2\\WillowGame",
     "class": "Game",
     "category": "Game",
     "sub_category": "Settings",
@@ -728,7 +728,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Network",
+    "path": "{drive}Users\\*\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Network",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -739,7 +739,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default",
+    "path": "{drive}Users\\*\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Passwords",
@@ -752,7 +752,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\DawnCache",
+    "path": "{drive}Users\\*\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\DawnCache",
     "class": "Browser",
     "category": "Cache",
     "program": "Brave Browser",
@@ -765,7 +765,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\GPUCache",
+    "path": "{drive}Users\\*\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\GPUCache",
     "class": "Browser",
     "category": "Cache",
     "program": "Brave Browser",
@@ -778,7 +778,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default",
+    "path": "{drive}Users\\*\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -844,7 +844,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\CherryStudio",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\CherryStudio",
     "class": "AI",
     "category": "Logs",
     "program": "Cherry Studio",
@@ -883,7 +883,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\cliamp",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\cliamp",
     "class": "Audio",
     "category": "Logs",
     "program": "Cliamp",
@@ -892,7 +892,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Cloudflare\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Local\\Cloudflare\\*.log",
     "class": "VPN",
     "category": "Logs",
     "program": "CloudFlare",
@@ -915,7 +915,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\CollapseLoader",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\CollapseLoader",
     "class": "Cheat",
     "category": "Accounts",
     "program": "CollapseLoader",
@@ -924,7 +924,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\CollapseLoader",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\CollapseLoader",
     "class": "Cheat",
     "category": "Cache",
     "program": "CollapseLoader",
@@ -933,7 +933,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming",
+    "path": "{drive}Users\\*\\AppData\\Roaming",
     "class": "Cheat",
     "category": "Cheats",
     "program": "CollapseLoader",
@@ -942,7 +942,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.copilot",
+    "path": "{drive}Users\\*\\.copilot",
     "class": "AI",
     "category": "Logs",
     "program": "Copilot",
@@ -951,7 +951,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\cossacks\\profiles\\*\\saves\\*.map",
+    "path": "{drive}Users\\*\\Documents\\cossacks\\profiles\\*\\saves\\*.map",
     "class": "Game",
     "category": "Game",
     "sub_category": "Saves",
@@ -959,7 +959,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\cossacks\\profiles\\*",
+    "path": "{drive}Users\\*\\Documents\\cossacks\\profiles\\*",
     "class": "Game",
     "category": "Game",
     "sub_category": "Settings",
@@ -998,7 +998,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.cristalix\\updates\\*\\crash-reports\\*",
+    "path": "{drive}Users\\*\\.cristalix\\updates\\*\\crash-reports\\*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "Cristalix",
@@ -1006,7 +1006,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.cristalix\\updates\\*\\saves\\*",
+    "path": "{drive}Users\\*\\.cristalix\\updates\\*\\saves\\*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -1015,7 +1015,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.cristalix\\updates\\*\\screenshots\\*",
+    "path": "{drive}Users\\*\\.cristalix\\updates\\*\\screenshots\\*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "Cristalix",
@@ -1023,7 +1023,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.cristalix\\updates\\*",
+    "path": "{drive}Users\\*\\.cristalix\\updates\\*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Cristalix",
@@ -1032,7 +1032,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.cristalix",
+    "path": "{drive}Users\\*\\.cristalix",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Cristalix",
@@ -1060,7 +1060,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\cubixworld\\updates\\*\\",
+    "path": "{drive}Users\\*\\cubixworld\\updates\\*\\",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -1070,7 +1070,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\cubixworld\\updates\\*\\",
+    "path": "{drive}Users\\*\\cubixworld\\updates\\*\\",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "CubixWorld",
@@ -1082,7 +1082,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install",
+    "path": "{drive}Users\\*\\curseforge\\minecraft\\Install",
     "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "CurseForge",
@@ -1092,7 +1092,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install\\game-cache\\*",
+    "path": "{drive}Users\\*\\curseforge\\minecraft\\Install\\game-cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "CurseForge",
@@ -1100,7 +1100,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install\\cache\\*",
+    "path": "{drive}Users\\*\\curseforge\\minecraft\\Install\\cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "CurseForge",
@@ -1108,7 +1108,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\*",
+    "path": "{drive}Users\\*\\curseforge\\minecraft\\Instances\\*",
     "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "CurseForge",
@@ -1122,7 +1122,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\*\\crash-reports\\*",
+    "path": "{drive}Users\\*\\curseforge\\minecraft\\Instances\\*\\crash-reports\\*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "CurseForge",
@@ -1130,7 +1130,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\*\\saves\\*",
+    "path": "{drive}Users\\*\\curseforge\\minecraft\\Instances\\*\\saves\\*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -1139,7 +1139,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\*\\screenshots\\*",
+    "path": "{drive}Users\\*\\curseforge\\minecraft\\Instances\\*\\screenshots\\*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "CurseForge",
@@ -1147,7 +1147,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Instances\\*",
+    "path": "{drive}Users\\*\\curseforge\\minecraft\\Instances\\*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "CurseForge",
@@ -1156,7 +1156,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install",
+    "path": "{drive}Users\\*\\curseforge\\minecraft\\Install",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -1168,7 +1168,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install",
+    "path": "{drive}Users\\*\\curseforge\\minecraft\\Install",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "CurseForge",
@@ -1179,14 +1179,14 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\curseforge\\minecraft\\Install\\*log*",
+    "path": "{drive}Users\\*\\curseforge\\minecraft\\Install\\*log*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "CurseForge",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.cursor\\extensions\\*",
+    "path": "{drive}Users\\*\\.cursor\\extensions\\*",
     "class": "Text",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -1198,7 +1198,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.cursor\\extensions\\*",
+    "path": "{drive}Users\\*\\.cursor\\extensions\\*",
     "class": "Text",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -1209,7 +1209,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.cursor\\extensions\\*",
+    "path": "{drive}Users\\*\\.cursor\\extensions\\*",
     "class": "Text",
     "category": "Documentation",
     "sub_category": "Change logs",
@@ -1220,7 +1220,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Cursor",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Cursor",
     "category": "Logs",
     "program": "Cursor",
     "directories_to_remove": [
@@ -1228,7 +1228,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Cursor",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Cursor",
     "category": "Cache",
     "program": "Cursor",
     "directories_to_remove": [
@@ -1240,7 +1240,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\DBeaver",
+    "path": "{drive}Users\\*\\AppData\\Local\\DBeaver",
     "class": "Data Base",
     "category": "Documentation",
     "program": "DBeaver",
@@ -1249,7 +1249,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\DBeaver",
+    "path": "{drive}Users\\*\\AppData\\Local\\DBeaver",
     "class": "Data Base",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -1259,28 +1259,28 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\DeepL_SE\\cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\DeepL_SE\\cache\\*",
     "class": "Text",
     "category": "Cache",
     "program": "DeepL",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\DeepL_SE\\logs\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\DeepL_SE\\logs\\*",
     "class": "Text",
     "category": "Logs",
     "program": "DeepL",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Discord\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Local\\Discord\\*.log",
     "class": "Messanger",
     "category": "Logs",
     "program": "Discord",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\discord",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\discord",
     "class": "Messanger",
     "category": "Cache",
     "program": "Discord",
@@ -1293,7 +1293,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\discord",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\discord",
     "class": "Messanger",
     "category": "Logs",
     "program": "Discord",
@@ -1302,7 +1302,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\discord\\module_data",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\discord\\module_data",
     "class": "Messanger",
     "category": "Crashes",
     "program": "Discord",
@@ -1337,7 +1337,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Docker\\log\\*\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\Docker\\log\\*\\*",
     "class": "Developing",
     "category": "Logs",
     "program": "Docker",
@@ -1345,14 +1345,14 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Docker\\*.txt",
+    "path": "{drive}Users\\*\\AppData\\Local\\Docker\\*.txt",
     "class": "Developing",
     "category": "Logs",
     "program": "Docker",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\Doctor Web",
+    "path": "{drive}Users\\*\\Doctor Web",
     "class": "Security",
     "category": "Logs",
     "program": "Doctor Web Cureit",
@@ -1383,7 +1383,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.dotnet\\TelemetryStorageService\\*",
+    "path": "{drive}Users\\*\\.dotnet\\TelemetryStorageService\\*",
     "class": "Developing",
     "category": "Logs",
     "program": "DotNet",
@@ -1428,14 +1428,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\EasyAntiCheat\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\EasyAntiCheat\\*.log",
     "class": "AntiCheat",
     "category": "Logs",
     "program": "EasyAntiCheat",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\*",
     "category": "Documentation",
     "sub_category": "Licenses",
     "program": "Electron App's",
@@ -1445,7 +1445,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ow-electron\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ow-electron\\*",
     "category": "Logs",
     "program": "Electron App's",
     "directories_to_remove": [
@@ -1453,7 +1453,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Electronic Arts\\EA Desktop",
+    "path": "{drive}Users\\*\\AppData\\Local\\Electronic Arts\\EA Desktop",
     "class": "Game",
     "category": "Logs",
     "program": "Electronic Arts Desktop",
@@ -1471,14 +1471,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\element-desktop\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Local\\element-desktop\\*.log",
     "class": "Messanger",
     "category": "Logs",
     "program": "Element",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\element-desktop\\app*",
+    "path": "{drive}Users\\*\\AppData\\Local\\element-desktop\\app*",
     "class": "Messanger",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -1489,7 +1489,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\element-desktop\\app*",
+    "path": "{drive}Users\\*\\AppData\\Local\\element-desktop\\app*",
     "class": "Messanger",
     "category": "Logs",
     "program": "Element",
@@ -1566,7 +1566,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\EpicGamesLauncher\\Saved",
+    "path": "{drive}Users\\*\\AppData\\Local\\EpicGamesLauncher\\Saved",
     "class": "Game",
     "category": "Logs",
     "program": "Epic Games Launcher",
@@ -1575,7 +1575,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\EpicOnlineServicesUIHelper\\Saved",
+    "path": "{drive}Users\\*\\AppData\\Local\\EpicOnlineServicesUIHelper\\Saved",
     "class": "Game",
     "category": "Logs",
     "program": "Epic Games Launcher",
@@ -1613,7 +1613,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Everything",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Everything",
     "class": "Utility",
     "category": "LastActivity",
     "program": "Everything",
@@ -1630,7 +1630,7 @@
     "remove_directory_after_clean": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\exifcleaner",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\exifcleaner",
     "class": "Security",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -1641,14 +1641,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\exodus\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Local\\exodus\\*.log",
     "class": "Crypto Wallet",
     "category": "Logs",
     "program": "Exodus Crypto Wallet",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\exodus\\**",
+    "path": "{drive}Users\\*\\AppData\\Local\\exodus\\**",
     "class": "Crypto Wallet",
     "category": "Logs",
     "program": "Exodus Crypto Wallet",
@@ -1658,7 +1658,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\exodus",
+    "path": "{drive}Users\\*\\AppData\\Local\\exodus",
     "class": "Crypto Wallet",
     "category": "Logs",
     "program": "Exodus Crypto Wallet",
@@ -1735,7 +1735,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\FlowLauncher",
     "class": "Program Launcher",
     "category": "Logs",
     "program": "Flow Launcher",
@@ -1744,7 +1744,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\FlowLauncher",
     "class": "Program Launcher",
     "category": "Cache",
     "program": "Flow Launcher",
@@ -1753,7 +1753,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\FlowLauncher\\Settings",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\FlowLauncher\\Settings",
     "class": "Program Launcher",
     "category": "LastActivity",
     "program": "Flow Launcher",
@@ -1763,7 +1763,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\fluxer_desktop_canary\\current",
+    "path": "{drive}Users\\*\\AppData\\Local\\fluxer_desktop_canary\\current",
     "class": "Messanger",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -1774,7 +1774,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\fluxer_desktop_canary",
+    "path": "{drive}Users\\*\\AppData\\Local\\fluxer_desktop_canary",
     "class": "Messanger",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -1819,7 +1819,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\com.gametop.launcher",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\com.gametop.launcher",
     "class": "Emulator",
     "category": "Logs",
     "program": "Gameloop",
@@ -1828,7 +1828,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\miHoYo\\Genshin Impact",
+    "path": "{drive}Users\\*\\AppData\\LocalLow\\miHoYo\\Genshin Impact",
     "category": "Documentation",
     "program": "Genshin Impact",
     "class": "Game",
@@ -1837,7 +1837,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\miHoYo\\Genshin Impact",
+    "path": "{drive}Users\\*\\AppData\\LocalLow\\miHoYo\\Genshin Impact",
     "category": "Logs",
     "program": "Genshin Impact",
     "class": "Game",
@@ -1850,7 +1850,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\miHoYo\\Genshin Impact",
+    "path": "{drive}Users\\*\\AppData\\LocalLow\\miHoYo\\Genshin Impact",
     "category": "Logs",
     "program": "Genshin Impact",
     "class": "Game",
@@ -1859,7 +1859,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\miHoYo\\Genshin Impact",
+    "path": "{drive}Users\\*\\AppData\\LocalLow\\miHoYo\\Genshin Impact",
     "category": "Crashes",
     "program": "Genshin Impact",
     "class": "Game",
@@ -1868,14 +1868,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\GME\\GenshinImpact.exe\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\GME\\GenshinImpact.exe\\*.log",
     "category": "Logs",
     "program": "Genshin Impact",
     "class": "Game",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ghidra\\ghidra*\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ghidra\\ghidra*\\*.log",
     "class": "Developing",
     "category": "Logs",
     "program": "Ghidra",
@@ -1901,28 +1901,28 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\GitHub Desktop\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\GitHub Desktop\\*.log",
     "class": "Developing",
     "category": "Logs",
     "program": "GitHub Desktop",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\GitHub Desktop\\logs\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\GitHub Desktop\\logs\\*.log",
     "class": "Developing",
     "category": "Logs",
     "program": "GitHub Desktop",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\GitHubDesktop\\**\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Local\\GitHubDesktop\\**\\*.log",
     "class": "Developing",
     "category": "Logs",
     "program": "GitHub Desktop",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.glzr\\glazewm",
+    "path": "{drive}Users\\*\\.glzr\\glazewm",
     "class": "Tiling Manager",
     "category": "Logs",
     "program": "GlazeWM",
@@ -1931,7 +1931,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.glzr\\glazewm",
+    "path": "{drive}Users\\*\\.glzr\\glazewm",
     "class": "Tiling Manager",
     "category": "Logs",
     "program": "GlazeWM",
@@ -1976,7 +1976,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Network",
+    "path": "{drive}Users\\*\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Network",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -1987,7 +1987,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
+    "path": "{drive}Users\\*\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Passwords",
@@ -2000,7 +2000,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
+    "path": "{drive}Users\\*\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -2049,7 +2049,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.gradle",
+    "path": "{drive}Users\\*\\.gradle",
     "category": "Cache",
     "program": "Gradle",
     "class": "Developing",
@@ -2058,7 +2058,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Appdata\\Local\\Greenshot",
+    "path": "{drive}Users\\*\\Appdata\\Local\\Greenshot",
     "class": "Image",
     "category": "Logs",
     "program": "Greenshot",
@@ -2067,7 +2067,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\bin",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland\\bin",
     "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "GribLand",
@@ -2077,7 +2077,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland",
     "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "GribLand",
@@ -2087,7 +2087,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\bin\\game-cache/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland\\bin\\game-cache/*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "GribLand",
@@ -2095,7 +2095,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\bin\\cache/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland\\bin\\cache/*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "GribLand",
@@ -2103,7 +2103,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\game-cache/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland\\game-cache/*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "GribLand",
@@ -2111,7 +2111,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\cache/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland\\cache/*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "GribLand",
@@ -2119,7 +2119,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\*\\crash-reports/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland\\*\\crash-reports/*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "GribLand",
@@ -2127,7 +2127,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\*\\saves/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland\\*\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -2136,7 +2136,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\*\\screenshots/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland\\*\\screenshots/*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "GribLand",
@@ -2144,7 +2144,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland\\*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "GribLand",
@@ -2153,7 +2153,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\bin",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland\\bin",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -2163,7 +2163,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\bin",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland\\bin",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "GribLand",
@@ -2172,14 +2172,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\bin\\*log*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland\\bin\\*log*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "GribLand",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -2189,7 +2189,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "GribLand",
@@ -2198,14 +2198,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.gribland\\*log*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.gribland\\*log*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "GribLand",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\GTA San Andreas User Files\\SAMP",
+    "path": "{drive}Users\\*\\Documents\\GTA San Andreas User Files\\SAMP",
     "class": "Game",
     "category": "Images",
     "program": "GTA San Andreas",
@@ -2214,7 +2214,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\GTA San Andreas User Files\\SAMP",
+    "path": "{drive}Users\\*\\Documents\\GTA San Andreas User Files\\SAMP",
     "class": "Game",
     "category": "Logs",
     "program": "GTA San Andreas",
@@ -2223,14 +2223,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Guilded\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Guilded\\*.log",
     "class": "Messanger",
     "category": "Logs",
     "program": "Guilded",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\HandBrake\\logs\\*.txt",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\HandBrake\\logs\\*.txt",
     "class": "Video",
     "category": "Logs",
     "program": "HandBrake",
@@ -2246,7 +2246,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\imput\\Helium\\User Data\\Default",
+    "path": "{drive}Users\\*\\AppData\\Local\\imput\\Helium\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -2259,7 +2259,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\imput\\Helium\\User Data\\Default",
+    "path": "{drive}Users\\*\\AppData\\Local\\imput\\Helium\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -2270,7 +2270,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\imput\\Helium\\User Data\\Default",
+    "path": "{drive}Users\\*\\AppData\\Local\\imput\\Helium\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Passwords",
@@ -2311,7 +2311,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\HomeBank",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\HomeBank",
     "class": "Finance",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -2321,7 +2321,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\HomeBank",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\HomeBank",
     "class": "Finance",
     "category": "Documentation",
     "sub_category": "Change logs",
@@ -2331,7 +2331,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\HomeBank\\share\\homebank",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\HomeBank\\share\\homebank",
     "class": "Finance",
     "category": "Documentation",
     "program": "HomeBank",
@@ -2367,7 +2367,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy\\addressbook",
+    "path": "{drive}Users\\*\\AppData\\Local\\i2peasy\\addressbook",
     "class": "Security",
     "category": "Logs",
     "program": "I2P Easy Bundle",
@@ -2376,7 +2376,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy",
+    "path": "{drive}Users\\*\\AppData\\Local\\i2peasy",
     "class": "Security",
     "category": "Logs",
     "program": "I2P Easy Bundle",
@@ -2389,7 +2389,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy",
+    "path": "{drive}Users\\*\\AppData\\Local\\i2peasy",
     "class": "Security",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -2399,7 +2399,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy\\app",
+    "path": "{drive}Users\\*\\AppData\\Local\\i2peasy\\app",
     "class": "Security",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -2409,7 +2409,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy\\runtime",
+    "path": "{drive}Users\\*\\AppData\\Local\\i2peasy\\runtime",
     "class": "Security",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -2419,7 +2419,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\i2peasy\\config",
+    "path": "{drive}Users\\*\\AppData\\Local\\i2peasy\\config",
     "class": "Security",
     "category": "Logs",
     "program": "I2P Easy Bundle",
@@ -2432,21 +2432,21 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Hex-Rays\\IDA Pro\\*.lst",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Hex-Rays\\IDA Pro\\*.lst",
     "class": "Developing",
     "category": "Cache",
     "program": "IDA Pro",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\ImageGlass\\ThumbnailsCache\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\ImageGlass\\ThumbnailsCache\\*",
     "class": "Image",
     "category": "Cache",
     "program": "ImageGlass",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\ImageGlass\\ThumbnailsCache\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\ImageGlass\\ThumbnailsCache\\*",
     "class": "Image",
     "category": "Cache",
     "program": "ImageGlass",
@@ -2503,7 +2503,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ImgBurn",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ImgBurn",
     "class": "ISO",
     "category": "Logs",
     "program": "ImgBurn",
@@ -2540,7 +2540,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\inkscape\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\inkscape\\*.log",
     "class": "Image",
     "category": "Logs",
     "program": "InkSpace",
@@ -2574,7 +2574,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Insomnia",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Insomnia",
     "category": "Logs",
     "program": "Insomnia",
     "class": "Developing",
@@ -2583,7 +2583,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Insomnia",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Insomnia",
     "category": "Cache",
     "program": "Insomnia",
     "class": "Developing",
@@ -2593,7 +2593,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming",
+    "path": "{drive}Users\\*\\AppData\\Roaming",
     "class": "Cheat",
     "category": "Cheats",
     "program": "INTERIUM",
@@ -2602,7 +2602,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Microsoft\\Internet Explorer",
+    "path": "{drive}Users\\*\\AppData\\Local\\Microsoft\\Internet Explorer",
     "class": "System",
     "category": "Logs",
     "program": "Internet Explorer",
@@ -2613,7 +2613,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\IObit\\Driver Booster",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\IObit\\Driver Booster",
     "class": "Driver",
     "category": "Logs",
     "program": "IObit Driver Booster",
@@ -2648,7 +2648,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\iTop Screen Recorder\\Logs\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\iTop Screen Recorder\\Logs\\*.log",
     "class": "Video",
     "category": "Logs",
     "program": "iTop Screen Recorder",
@@ -2665,7 +2665,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.jdks\\*",
+    "path": "{drive}Users\\*\\.jdks\\*",
     "class": "Developing",
     "category": "Documentation",
     "program": "Java",
@@ -2675,7 +2675,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.jdks\\*",
+    "path": "{drive}Users\\*\\.jdks\\*",
     "class": "Developing",
     "category": "Documentation",
     "program": "Java",
@@ -2698,7 +2698,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.jdks\\*",
+    "path": "{drive}Users\\*\\.jdks\\*",
     "class": "Developing",
     "category": "Documentation",
     "program": "Java",
@@ -2811,7 +2811,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.lunarclient\\jre\\*\\*",
+    "path": "{drive}Users\\*\\.lunarclient\\jre\\*\\*",
     "class": "Developing",
     "category": "Documentation",
     "program": "Java",
@@ -2834,7 +2834,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixclient\\runtimes\\*",
+    "path": "{drive}Users\\*\\.tecknixsoftware\\tecknixclient\\runtimes\\*",
     "class": "Developing",
     "category": "Documentation",
     "program": "Java",
@@ -2857,7 +2857,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MCSkill\\updates\\*",
     "class": "Developing",
     "category": "Documentation",
     "program": "Java",
@@ -2925,7 +2925,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\JetBrains\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\JetBrains\\*",
     "class": "Text",
     "category": "Logs",
     "program": "JetBrains",
@@ -2966,7 +2966,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\kache",
+    "path": "{drive}Users\\*\\AppData\\Local\\kache",
     "class": "Developing",
     "category": "Logs",
     "program": "Kache",
@@ -2991,7 +2991,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.local\\share\\kilo",
+    "path": "{drive}Users\\*\\.local\\share\\kilo",
     "class": "AI",
     "category": "Logs",
     "program": "Kilo Code",
@@ -3000,7 +3000,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming",
+    "path": "{drive}Users\\*\\AppData\\Roaming",
     "class": "Cheat",
     "category": "Cheats",
     "program": "Krnl",
@@ -3009,7 +3009,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\LabyMod",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\LabyMod",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "LabyMod",
@@ -3018,7 +3018,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim-data\\lazy\\*",
+    "path": "{drive}Users\\*\\Appdata\\Local\\nvim-data\\lazy\\*",
     "class": "Text",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -3028,7 +3028,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim-data\\lazy\\*",
+    "path": "{drive}Users\\*\\Appdata\\Local\\nvim-data\\lazy\\*",
     "class": "Text",
     "category": "Documentation",
     "program": "LazyVim",
@@ -3081,7 +3081,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\librewolf\\Profiles\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\librewolf\\Profiles\\*",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -3093,7 +3093,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\librewolf\\Profiles\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\librewolf\\Profiles\\*",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -3105,7 +3105,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\librewolf\\Profiles\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\librewolf\\Profiles\\*",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -3117,7 +3117,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\LM Studio",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\LM Studio",
     "class": "AI",
     "category": "Logs",
     "program": "LM Studio",
@@ -3126,7 +3126,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.lmstudio",
+    "path": "{drive}Users\\*\\.lmstudio",
     "class": "AI",
     "category": "Logs",
     "program": "LM Studio",
@@ -3135,7 +3135,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.lmstudio",
+    "path": "{drive}Users\\*\\.lmstudio",
     "class": "AI",
     "category": "LastActivity",
     "program": "LM Studio",
@@ -3144,7 +3144,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.loliland\\java",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.loliland\\java",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "program": "LoliLand",
@@ -3162,7 +3162,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.loliland\\java",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.loliland\\java",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -3176,7 +3176,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.loliland\\java",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.loliland\\java",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "Change logs",
@@ -3229,21 +3229,21 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\IGG\\Lords Mobile PC\\*.log",
+    "path": "{drive}Users\\*\\AppData\\LocalLow\\IGG\\Lords Mobile PC\\*.log",
     "class": "Game",
     "category": "Logs",
     "program": "Lords Mobile",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\IGG\\Lords Mobile\\*.log",
+    "path": "{drive}Users\\*\\AppData\\LocalLow\\IGG\\Lords Mobile\\*.log",
     "class": "Game",
     "category": "Logs",
     "program": "Lords Mobile",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.lunarclient",
+    "path": "{drive}Users\\*\\.lunarclient",
     "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "Lunar Client",
@@ -3253,7 +3253,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.lunarclient\\game-cache\\*",
+    "path": "{drive}Users\\*\\.lunarclient\\game-cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Lunar Client",
@@ -3261,7 +3261,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.lunarclient\\cache/*",
+    "path": "{drive}Users\\*\\.lunarclient\\cache/*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Lunar Client",
@@ -3269,7 +3269,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.lunarclient",
+    "path": "{drive}Users\\*\\.lunarclient",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -3279,7 +3279,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.lunarclient",
+    "path": "{drive}Users\\*\\.lunarclient",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Lunar Client",
@@ -3288,7 +3288,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.lunarclient\\*log*",
+    "path": "{drive}Users\\*\\.lunarclient\\*log*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Lunar Client",
@@ -3340,7 +3340,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\max",
+    "path": "{drive}Users\\*\\AppData\\Local\\max",
     "class": "Messanger",
     "category": "Cache",
     "program": "MAX",
@@ -3349,21 +3349,21 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.mcreator\\logs\\*.log",
+    "path": "{drive}Users\\*\\.mcreator\\logs\\*.log",
     "class": "Developing",
     "category": "Logs",
     "program": "MCCreator",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.mclaunch\\launcher_crashreports\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.mclaunch\\launcher_crashreports\\*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "McLaunch",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\*\\crash-reports/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MCSkill\\updates\\*\\crash-reports/*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "MCSkill",
@@ -3371,7 +3371,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\*\\saves/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MCSkill\\updates\\*\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -3380,7 +3380,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\*\\screenshots/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MCSkill\\updates\\*\\screenshots/*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "MCSkill",
@@ -3388,7 +3388,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MCSkill\\updates\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MCSkill\\updates\\*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "MCSkill",
@@ -3397,7 +3397,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\MelissiaGamesLauncher\\GameFolder\\_logs\\*.log",
+    "path": "{drive}Users\\*\\AppData\\LocalLow\\MelissiaGamesLauncher\\GameFolder\\_logs\\*.log",
     "class": "Game",
     "category": "Logs",
     "program": "Melissia Games Launcher",
@@ -3450,7 +3450,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.MemuHyperv\\*log*",
+    "path": "{drive}Users\\*\\.MemuHyperv\\*log*",
     "class": "Emulator",
     "category": "Logs",
     "program": "Memu",
@@ -3476,7 +3476,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\Edge\\User Data",
+    "path": "{drive}Users\\*\\AppData\\Local\\Windows\\Edge\\User Data",
     "class": "Browser",
     "category": "Cache",
     "program": "Microsoft Edge",
@@ -3487,7 +3487,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\Edge\\User Data\\Default",
+    "path": "{drive}Users\\*\\AppData\\Local\\Windows\\Edge\\User Data\\Default",
     "class": "Browser",
     "category": "Cache",
     "program": "Microsoft Edge",
@@ -3498,7 +3498,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\Edge\\User Data\\Default\\Network",
+    "path": "{drive}Users\\*\\AppData\\Local\\Windows\\Edge\\User Data\\Default\\Network",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -3509,7 +3509,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\Edge\\User Data\\Default",
+    "path": "{drive}Users\\*\\AppData\\Local\\Windows\\Edge\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -3531,14 +3531,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Lobe\\logs\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Lobe\\logs\\*",
     "class": "AI",
     "category": "Logs",
     "program": "Microsoft Lobe",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.minecraft",
     "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "Minecraft",
@@ -3552,7 +3552,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft\\crash-reports/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.minecraft\\crash-reports/*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "Minecraft",
@@ -3560,7 +3560,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft\\saves/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.minecraft\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -3569,7 +3569,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft\\screenshots\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.minecraft\\screenshots\\*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "Minecraft",
@@ -3577,7 +3577,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.minecraft",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.minecraft",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Minecraft",
@@ -3619,7 +3619,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ModrinthApp",
     "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "Modrinth",
@@ -3629,7 +3629,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp\\game-cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ModrinthApp\\game-cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Modrinth",
@@ -3637,7 +3637,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp\\cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ModrinthApp\\cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Modrinth",
@@ -3645,7 +3645,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ModrinthApp",
     "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "Modrinth",
@@ -3659,7 +3659,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp\\crash-reports\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ModrinthApp\\crash-reports\\*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "Modrinth",
@@ -3667,7 +3667,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp\\saves\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ModrinthApp\\saves\\*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -3676,7 +3676,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp\\screenshots\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ModrinthApp\\screenshots\\*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "Modrinth",
@@ -3684,7 +3684,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ModrinthApp",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Modrinth",
@@ -3693,7 +3693,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ModrinthApp",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -3703,7 +3703,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ModrinthApp",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Modrinth",
@@ -3712,14 +3712,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ModrinthApp\\*log*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ModrinthApp\\*log*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Modrinth",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\*",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -3731,7 +3731,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\*",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -3743,14 +3743,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**\\shader-cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\**\\shader-cache\\*",
     "class": "Browser",
     "category": "Cache",
     "program": "Mozilla Firefox",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\*",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -3811,7 +3811,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MultiMC",
     "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "MultiMC",
@@ -3821,7 +3821,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\game-cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MultiMC\\game-cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "MultiMC",
@@ -3829,7 +3829,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MultiMC\\cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "MultiMC",
@@ -3837,7 +3837,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\*\\minecraft",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MultiMC\\instances\\*\\minecraft",
     "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "MultiMC",
@@ -3851,7 +3851,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\*\\minecraft\\crash-reports\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MultiMC\\instances\\*\\minecraft\\crash-reports\\*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "MultiMC",
@@ -3859,7 +3859,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\*\\minecraft\\saves/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MultiMC\\instances\\*\\minecraft\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -3868,7 +3868,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\*\\minecraft\\screenshots/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MultiMC\\instances\\*\\minecraft\\screenshots/*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "MultiMC",
@@ -3876,7 +3876,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\instances\\*\\minecraft",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MultiMC\\instances\\*\\minecraft",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "MultiMC",
@@ -3885,7 +3885,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MultiMC",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -3895,7 +3895,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MultiMC",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "MultiMC",
@@ -3904,14 +3904,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\MultiMC\\*log*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\MultiMC\\*log*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "MultiMC",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Murglar\\data",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Murglar\\data",
     "category": "Logs",
     "program": "Murglar",
     "class": "Audio",
@@ -3929,7 +3929,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.namida",
+    "path": "{drive}Users\\*\\.namida",
     "class": "Audio",
     "category": "Logs",
     "program": "Namida",
@@ -3938,7 +3938,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.namida",
+    "path": "{drive}Users\\*\\.namida",
     "class": "Audio",
     "category": "LastActivity",
     "program": "Namida",
@@ -3956,7 +3956,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim",
+    "path": "{drive}Users\\*\\Appdata\\Local\\nvim",
     "class": "Text",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -3966,7 +3966,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim",
+    "path": "{drive}Users\\*\\Appdata\\Local\\nvim",
     "class": "Text",
     "category": "Documentation",
     "program": "NeoVim",
@@ -3975,7 +3975,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Appdata\\Local\\nvim-data",
+    "path": "{drive}Users\\*\\Appdata\\Local\\nvim-data",
     "class": "Text",
     "category": "Logs",
     "program": "NeoVim",
@@ -3995,7 +3995,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\npm-cache",
+    "path": "{drive}Users\\*\\AppData\\Local\\npm-cache",
     "class": "Developing",
     "category": "Logs",
     "program": "Node JS",
@@ -4004,7 +4004,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\npm-cache",
+    "path": "{drive}Users\\*\\AppData\\Local\\npm-cache",
     "class": "Developing",
     "category": "Cache",
     "program": "Node JS",
@@ -4013,7 +4013,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\node_modules",
+    "path": "{drive}Users\\*\\node_modules",
     "class": "Developing",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -4023,7 +4023,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\node_modules",
+    "path": "{drive}Users\\*\\node_modules",
     "class": "Developing",
     "category": "Documentation",
     "program": "Node JS",
@@ -4091,14 +4091,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\vmlogs\\*",
+    "path": "{drive}Users\\*\\vmlogs\\*",
     "class": "Emulator",
     "category": "Logs",
     "program": "Nox",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.BigNox\\*",
+    "path": "{drive}Users\\*\\.BigNox\\*",
     "class": "Emulator",
     "category": "Logs",
     "program": "Nox",
@@ -4115,7 +4115,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\NVIDIA",
+    "path": "{drive}Users\\*\\AppData\\Local\\NVIDIA",
     "class": "Driver",
     "category": "Cache",
     "program": "NVIDIA",
@@ -4161,7 +4161,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\NVIDIA Corporation\\GfnRuntimeSdk\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Local\\NVIDIA Corporation\\GfnRuntimeSdk\\*.log",
     "class": "Driver",
     "category": "Logs",
     "program": "NVIDIA",
@@ -4215,21 +4215,21 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\obs-studio\\logs\\*txt",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\obs-studio\\logs\\*txt",
     "class": "Video",
     "category": "Logs",
     "program": "OBS Studio",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\OneDrive\\cache\\qmlcache\\*.qmlc",
+    "path": "{drive}Users\\*\\AppData\\Local\\OneDrive\\cache\\qmlcache\\*.qmlc",
     "class": "System",
     "category": "Cache",
     "program": "OneDrive",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Microsoft\\OneDrive\\setup",
+    "path": "{drive}Users\\*\\AppData\\Local\\Microsoft\\OneDrive\\setup",
     "class": "System",
     "category": "Cache",
     "program": "OneDrive",
@@ -4260,7 +4260,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\OONI Probe",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\OONI Probe",
     "class": "Security",
     "category": "Logs",
     "program": "OONI Probe",
@@ -4269,7 +4269,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Open Video Downloader",
+    "path": "{drive}Users\\*\\AppData\\Local\\Open Video Downloader",
     "class": "Video",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -4279,7 +4279,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.local\\share\\opencode",
+    "path": "{drive}Users\\*\\.local\\share\\opencode",
     "class": "AI",
     "category": "Logs",
     "program": "OpenCode",
@@ -4288,7 +4288,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.local\\share\\opencode",
+    "path": "{drive}Users\\*\\.local\\share\\opencode",
     "class": "AI",
     "category": "LastActivity",
     "program": "OpenCode",
@@ -4297,7 +4297,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ai.opencode.desktop",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ai.opencode.desktop",
     "class": "AI",
     "category": "Logs",
     "program": "OpenCode Desktop",
@@ -4306,7 +4306,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ai.opencode.desktop",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ai.opencode.desktop",
     "class": "AI",
     "category": "Cache",
     "program": "OpenCode Desktop",
@@ -4315,7 +4315,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Stable\\Default",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Opera Software\\Opera Stable\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -4328,7 +4328,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Stable\\Default\\Network",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Opera Software\\Opera Stable\\Default\\Network",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -4339,7 +4339,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Stable\\Default",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Opera Software\\Opera Stable\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Passwords",
@@ -4350,7 +4350,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Air Stable\\Default",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Opera Software\\Opera Air Stable\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -4363,7 +4363,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Air Stable\\Default\\Network",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Opera Software\\Opera Air Stable\\Default\\Network",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -4374,7 +4374,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Air Stable\\Default",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Opera Software\\Opera Air Stable\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Passwords",
@@ -4385,7 +4385,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera GX Stable\\Network",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Opera Software\\Opera GX Stable\\Network",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -4396,7 +4396,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera GX Stable",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Opera Software\\Opera GX Stable",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Passwords",
@@ -4407,7 +4407,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera GX Stable",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Opera Software\\Opera GX Stable",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -4421,7 +4421,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Neon Stable\\Default",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Opera Software\\Opera Neon Stable\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -4434,7 +4434,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Neon Stable\\Default\\Network",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Opera Software\\Opera Neon Stable\\Default\\Network",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -4445,7 +4445,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Opera Software\\Opera Neon Stable\\Default",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Opera Software\\Opera Neon Stable\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Passwords",
@@ -4456,7 +4456,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\osu",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\osu",
     "class": "Game",
     "category": "Logs",
     "program": "Osu",
@@ -4465,7 +4465,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\osu",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\osu",
     "class": "Game",
     "category": "Cache",
     "program": "Osu",
@@ -4474,7 +4474,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\osu",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\osu",
     "class": "Game",
     "category": "Images",
     "program": "Osu",
@@ -4515,7 +4515,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\pipx",
+    "path": "{drive}Users\\*\\pipx",
     "category": "Logs",
     "program": "pipx",
     "class": "Packet Manager",
@@ -4524,14 +4524,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\PlanetVPN\\cache\\qmlcache\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\PlanetVPN\\cache\\qmlcache\\*",
     "class": "VPN",
     "category": "Cache",
     "program": "PlanetVPN",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC",
     "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "PolyMC",
@@ -4541,7 +4541,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\game-cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC\\game-cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "PolyMC",
@@ -4549,7 +4549,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC\\cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "PolyMC",
@@ -4557,7 +4557,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\*\\minecraft",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC\\instances\\*\\minecraft",
     "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "PolyMC",
@@ -4571,7 +4571,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\*\\.minecraft",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC\\instances\\*\\.minecraft",
     "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "PolyMC",
@@ -4585,7 +4585,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\*\\minecraft\\crash-reports\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC\\instances\\*\\minecraft\\crash-reports\\*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "PolyMC",
@@ -4593,7 +4593,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\*\\.minecraft\\crash-reports\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC\\instances\\*\\.minecraft\\crash-reports\\*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "PolyMC",
@@ -4601,7 +4601,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\*\\minecraft\\saves/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC\\instances\\*\\minecraft\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -4610,7 +4610,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\*\\.minecraft\\saves/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC\\instances\\*\\.minecraft\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -4619,7 +4619,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\*\\minecraft\\screenshots/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC\\instances\\*\\minecraft\\screenshots/*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "PolyMC",
@@ -4627,7 +4627,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\*\\.minecraft\\screenshots/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC\\instances\\*\\.minecraft\\screenshots/*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "PolyMC",
@@ -4635,7 +4635,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\*\\minecraft",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC\\instances\\*\\minecraft",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "PolyMC",
@@ -4644,7 +4644,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\instances\\*\\.minecraft",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC\\instances\\*\\.minecraft",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "PolyMC",
@@ -4653,7 +4653,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -4663,7 +4663,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "PolyMC",
@@ -4672,14 +4672,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PolyMC\\*log*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PolyMC\\*log*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "PolyMC",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PostmanAgent\\logs\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PostmanAgent\\logs\\*.log",
     "class": "Developing",
     "category": "Logs",
     "program": "Postman",
@@ -4706,7 +4706,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher",
     "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "PrismLauncher",
@@ -4716,7 +4716,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\game-cache/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher\\game-cache/*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "PrismLauncher",
@@ -4724,7 +4724,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\cache/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher\\cache/*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "PrismLauncher",
@@ -4732,7 +4732,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher\\instances\\**\\minecraft",
     "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "PrismLauncher",
@@ -4746,7 +4746,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\*\\.minecraft",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher\\instances\\*\\.minecraft",
     "class": "Minecraft Launcher",
     "category": "Cheats",
     "program": "PrismLauncher",
@@ -4760,7 +4760,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\*\\minecraft\\crash-reports/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher\\instances\\*\\minecraft\\crash-reports/*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "PrismLauncher",
@@ -4768,7 +4768,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\*\\.minecraft\\crash-reports/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher\\instances\\*\\.minecraft\\crash-reports/*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "PrismLauncher",
@@ -4776,7 +4776,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\*\\minecraft\\saves/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher\\instances\\*\\minecraft\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -4785,7 +4785,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\*\\.minecraft\\saves/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher\\instances\\*\\.minecraft\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -4794,7 +4794,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\*\\minecraft\\screenshots/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher\\instances\\*\\minecraft\\screenshots/*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "PrismLauncher",
@@ -4802,7 +4802,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\*\\.minecraft\\screenshots/*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher\\instances\\*\\.minecraft\\screenshots/*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "PrismLauncher",
@@ -4810,7 +4810,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\*\\minecraft",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher\\instances\\*\\minecraft",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "PrismLauncher",
@@ -4819,7 +4819,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\instances\\*\\.minecraft",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher\\instances\\*\\.minecraft",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "PrismLauncher",
@@ -4828,7 +4828,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -4838,7 +4838,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "PrismLauncher",
@@ -4847,7 +4847,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\PrismLauncher\\*log*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\PrismLauncher\\*log*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "PrismLauncher",
@@ -4924,7 +4924,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Python\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\Python\\*",
     "class": "Developing",
     "category": "Documentation",
     "program": "Python",
@@ -4933,7 +4933,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Python\\*\\share",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\Python\\*\\share",
     "class": "Developing",
     "category": "Documentation",
     "program": "Python",
@@ -4965,7 +4965,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\tox",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\tox",
     "class": "Messanger",
     "category": "Logs",
     "program": "qTox",
@@ -4974,7 +4974,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\QtPass",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\QtPass",
     "class": "Password Manager",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -4984,7 +4984,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\QtPass",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\QtPass",
     "class": "Password Manager",
     "category": "Documentation",
     "program": "QtPass",
@@ -5026,28 +5026,28 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Rave\\Cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Rave\\Cache\\*",
     "class": "Video",
     "category": "Cache",
     "program": "Rave",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Rave\\Code Cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Rave\\Code Cache\\*",
     "class": "Video",
     "category": "Cache",
     "program": "Rave",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Rave\\logs\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Rave\\logs\\*.log",
     "class": "Video",
     "category": "Logs",
     "program": "Rave",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Recaf",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Recaf",
     "class": "Developing",
     "category": "Logs",
     "program": "Recaf",
@@ -5056,14 +5056,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Recaf\\log*.txt",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Recaf\\log*.txt",
     "class": "Developing",
     "category": "Logs",
     "program": "Recaf",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Recaf\\launcher",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Recaf\\launcher",
     "class": "Developing",
     "category": "Logs",
     "program": "Recaf",
@@ -5072,7 +5072,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Roblox",
+    "path": "{drive}Users\\*\\AppData\\Local\\Roblox",
     "class": "Game",
     "category": "Logs",
     "program": "Roblox",
@@ -5081,7 +5081,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Rockstar Games\\Launcher",
+    "path": "{drive}Users\\*\\AppData\\Local\\Rockstar Games\\Launcher",
     "class": "Game",
     "category": "Crashes",
     "program": "Rockstar Games",
@@ -5100,7 +5100,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}",
+    "path": "{drive}Users\\*",
     "class": "Cheat",
     "category": "Cheats",
     "program": "RusherHack",
@@ -5109,7 +5109,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Appdata\\Local",
+    "path": "{drive}Users\\*\\Appdata\\Local",
     "class": "Cheat",
     "category": "Cheats",
     "program": "RusherHack",
@@ -5126,7 +5126,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.rustup\\toolchains\\*\\share\\doc\\rust",
+    "path": "{drive}Users\\*\\.rustup\\toolchains\\*\\share\\doc\\rust",
     "class": "Developing",
     "category": "Documentation",
     "program": "Rust Language",
@@ -5154,7 +5154,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\RustRover*",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\RustRover*",
     "class": "Developing",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -5164,7 +5164,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.Salwyrr\\launcher",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.Salwyrr\\launcher",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "Change logs",
@@ -5174,7 +5174,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.Salwyrr\\launcher",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.Salwyrr\\launcher",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "News",
@@ -5195,14 +5195,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\TVGS\\Schedule I\\*.log",
+    "path": "{drive}Users\\*\\AppData\\LocalLow\\TVGS\\Schedule I\\*.log",
     "category": "Logs",
     "program": "Schedule I",
     "class": "Game",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\TVGS\\Schedule I\\Saves",
+    "path": "{drive}Users\\*\\AppData\\LocalLow\\TVGS\\Schedule I\\Saves",
     "category": "Game",
     "sub_category": "Saves",
     "program": "Schedule I",
@@ -5210,7 +5210,7 @@
     "remove_directories": true
   },
   {
-    "path": "{drive}Users\\{username}\\scoop",
+    "path": "{drive}Users\\*\\scoop",
     "class": "Packet Manager",
     "category": "Cache",
     "program": "Scoop",
@@ -5219,7 +5219,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\scoop\\apps\\*\\*",
+    "path": "{drive}Users\\*\\scoop\\apps\\*\\*",
     "class": "Packet Manager",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -5229,7 +5229,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\scoop\\apps\\*\\*",
+    "path": "{drive}Users\\*\\scoop\\apps\\*\\*",
     "class": "Packet Manager",
     "category": "Documentation",
     "program": "Scoop",
@@ -5239,7 +5239,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\TEAMHORAY\\Sephiria",
+    "path": "{drive}Users\\*\\AppData\\LocalLow\\TEAMHORAY\\Sephiria",
     "class": "Game",
     "category": "Logs",
     "program": "Sephiria",
@@ -5249,28 +5249,28 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\ShareX\\Backup\\*",
+    "path": "{drive}Users\\*\\Documents\\ShareX\\Backup\\*",
     "class": "Image",
     "category": "Backups",
     "program": "ShareX",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\ShareX\\Screenshots\\*\\*.jpg",
+    "path": "{drive}Users\\*\\Documents\\ShareX\\Screenshots\\*\\*.jpg",
     "class": "Image",
     "category": "Images",
     "program": "ShareX",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\ShareX\\Screenshots\\*\\*.png",
+    "path": "{drive}Users\\*\\Documents\\ShareX\\Screenshots\\*\\*.png",
     "class": "Image",
     "category": "Images",
     "program": "ShareX",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\ShareX",
+    "path": "{drive}Users\\*\\Documents\\ShareX",
     "class": "Image",
     "category": "Logs",
     "program": "ShareX",
@@ -5279,7 +5279,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Signal\\update-cache\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Signal\\update-cache\\*",
     "class": "Messanger",
     "category": "Cache",
     "program": "Signal",
@@ -5287,7 +5287,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Signal",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Signal",
     "class": "Messanger",
     "category": "Logs",
     "program": "Signal",
@@ -5308,7 +5308,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Spotify",
+    "path": "{drive}Users\\*\\AppData\\Local\\Spotify",
     "class": "Audio",
     "category": "Cache",
     "program": "Spotify",
@@ -5317,7 +5317,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Spotify",
+    "path": "{drive}Users\\*\\AppData\\Local\\Spotify",
     "class": "Audio",
     "category": "Logs",
     "program": "Spotify",
@@ -5454,7 +5454,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Tabby",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\Tabby",
     "class": "Terminal Emulator",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -5465,7 +5465,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher",
+    "path": "{drive}Users\\*\\.tecknixsoftware\\tecknixlauncher",
     "class": "Minecraft Launcher",
     "category": "Accounts",
     "program": "Tecknix Client",
@@ -5475,7 +5475,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher\\game-cache\\*",
+    "path": "{drive}Users\\*\\.tecknixsoftware\\tecknixlauncher\\game-cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Tecknix Client",
@@ -5483,7 +5483,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher\\cache\\*",
+    "path": "{drive}Users\\*\\.tecknixsoftware\\tecknixlauncher\\cache\\*",
     "class": "Minecraft Launcher",
     "category": "Cache",
     "program": "Tecknix Client",
@@ -5491,7 +5491,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher\\crash-reports/*",
+    "path": "{drive}Users\\*\\.tecknixsoftware\\tecknixlauncher\\crash-reports/*",
     "class": "Minecraft Launcher",
     "category": "Crashes",
     "program": "Tecknix Client",
@@ -5499,7 +5499,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher\\saves/*",
+    "path": "{drive}Users\\*\\.tecknixsoftware\\tecknixlauncher\\saves/*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -5508,7 +5508,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher\\screenshots/*",
+    "path": "{drive}Users\\*\\.tecknixsoftware\\tecknixlauncher\\screenshots/*",
     "class": "Minecraft Launcher",
     "category": "Images",
     "program": "Tecknix Client",
@@ -5516,7 +5516,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher",
+    "path": "{drive}Users\\*\\.tecknixsoftware\\tecknixlauncher",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Tecknix Client",
@@ -5525,7 +5525,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher",
+    "path": "{drive}Users\\*\\.tecknixsoftware\\tecknixlauncher",
     "class": "Minecraft Launcher",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -5535,7 +5535,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher",
+    "path": "{drive}Users\\*\\.tecknixsoftware\\tecknixlauncher",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Tecknix Client",
@@ -5544,14 +5544,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.tecknixsoftware\\tecknixlauncher\\*log*",
+    "path": "{drive}Users\\*\\.tecknixsoftware\\tecknixlauncher\\*log*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "Tecknix Client",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Telegram Desktop\\tdata",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Telegram Desktop\\tdata",
     "class": "Messanger",
     "category": "Accounts",
     "program": "Telegram",
@@ -5560,22 +5560,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Telegram Desktop\\tdata\\emoji\\*cache_*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Telegram Desktop\\tdata\\emoji\\*cache_*",
     "class": "Messanger",
     "category": "Cache",
     "program": "Telegram",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Telegram Desktop\\tdata\\user_data\\cache\\*\\*",
-    "class": "Messanger",
-    "category": "Cache",
-    "program": "Telegram",
-    "remove_directories": true,
-    "remove_files": true
-  },
-  {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Telegram Desktop\\tdata\\user_data\\media_cache\\*\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Telegram Desktop\\tdata\\user_data\\cache\\*\\*",
     "class": "Messanger",
     "category": "Cache",
     "program": "Telegram",
@@ -5583,21 +5575,29 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Telegram Desktop\\*.txt",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Telegram Desktop\\tdata\\user_data\\media_cache\\*\\*",
+    "class": "Messanger",
+    "category": "Cache",
+    "program": "Telegram",
+    "remove_directories": true,
+    "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Telegram Desktop\\*.txt",
     "class": "Messanger",
     "category": "Logs",
     "program": "Telegram",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Telegram Desktop\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Telegram Desktop\\*.log",
     "class": "Messanger",
     "category": "Logs",
     "program": "Telegram",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\My Games\\Terraria",
+    "path": "{drive}Users\\*\\Documents\\My Games\\Terraria",
     "class": "Game",
     "category": "Game",
     "sub_category": "Saves",
@@ -5611,7 +5611,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Documents\\My Games\\Terraria",
+    "path": "{drive}Users\\*\\Documents\\My Games\\Terraria",
     "class": "Game",
     "category": "Game",
     "sub_category": "Settings",
@@ -5622,7 +5622,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\VOVSOFT\\Text Edit Plus",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\VOVSOFT\\Text Edit Plus",
     "class": "Text",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -5632,7 +5632,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\VOVSOFT\\Text Edit Plus",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\VOVSOFT\\Text Edit Plus",
     "class": "Text",
     "category": "Documentation",
     "program": "Text Edit Plus",
@@ -5641,7 +5641,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\TgWsProxy",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\TgWsProxy",
     "class": "Security",
     "category": "Logs",
     "program": "TG WS Proxy",
@@ -5650,7 +5650,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\The Powder Toy\\Saves",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\The Powder Toy\\Saves",
     "class": "Game",
     "category": "Game",
     "sub_category": "Saves",
@@ -5658,7 +5658,7 @@
     "remove_all_in_dir": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\Application",
+    "path": "{drive}Users\\*\\AppData\\Local\\Thorium\\Application",
     "class": "Browser",
     "category": "Logs",
     "program": "Thorium",
@@ -5667,7 +5667,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\Application\\**\\WidevineCdm",
+    "path": "{drive}Users\\*\\AppData\\Local\\Thorium\\Application\\**\\WidevineCdm",
     "class": "Browser",
     "category": "Documentation",
     "program": "Thorium",
@@ -5676,7 +5676,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default\\Network",
+    "path": "{drive}Users\\*\\AppData\\Local\\Thorium\\User Data\\Default\\Network",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -5687,7 +5687,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default",
+    "path": "{drive}Users\\*\\AppData\\Local\\Thorium\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Passwords",
@@ -5700,7 +5700,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Thorium\\User Data\\Default",
+    "path": "{drive}Users\\*\\AppData\\Local\\Thorium\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -5714,7 +5714,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\thunderbird\\Profiles\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\thunderbird\\Profiles\\*",
     "class": "Messanger",
     "category": "Crashes",
     "program": "Thunderbird",
@@ -5723,7 +5723,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Pictures\\Tonfotos Telegram Connector\\*",
+    "path": "{drive}Users\\*\\Pictures\\Tonfotos Telegram Connector\\*",
     "class": "Image",
     "category": "Images",
     "program": "Tonfotos Telegram Connector",
@@ -5758,14 +5758,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\JAM Software\\TreeSize Free\\HELP_*",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\JAM Software\\TreeSize Free\\HELP_*",
     "class": "Disk Analyzer",
     "category": "Documentation",
     "program": "TreeSize",
     "remove_directories": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\JAM Software\\TreeSize Free",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\JAM Software\\TreeSize Free",
     "class": "Disk Analyzer",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -5778,14 +5778,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.Tribler\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.Tribler\\*.log",
     "class": "Torrent",
     "category": "Logs",
     "program": "Tribler",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\LocalLow\\Hakita\\ULTRAKILL",
+    "path": "{drive}Users\\*\\AppData\\LocalLow\\Hakita\\ULTRAKILL",
     "category": "Logs",
     "program": "Ultrakill",
     "class": "Game",
@@ -5828,7 +5828,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\UrbanVPN",
+    "path": "{drive}Users\\*\\UrbanVPN",
     "class": "VPN",
     "category": "Logs",
     "program": "UrbanVPN",
@@ -5837,7 +5837,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\.vapeclient",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\.vapeclient",
     "class": "Cheat",
     "category": "Cheats",
     "program": "Vape Client",
@@ -5868,7 +5868,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\vesktop",
+    "path": "{drive}Users\\*\\AppData\\Local\\vesktop",
     "class": "Messanger",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -5879,7 +5879,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\VirtualBox VMs\\*\\Logs\\*.log",
+    "path": "{drive}Users\\*\\VirtualBox VMs\\*\\Logs\\*.log",
     "class": "Security",
     "category": "Logs",
     "program": "VirtualBox",
@@ -5932,7 +5932,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Vivaldi\\User Data\\Default\\Network",
+    "path": "{drive}Users\\*\\AppData\\Local\\Vivaldi\\User Data\\Default\\Network",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -5943,7 +5943,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Vivaldi\\User Data\\Default",
+    "path": "{drive}Users\\*\\AppData\\Local\\Vivaldi\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Passwords",
@@ -5956,14 +5956,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\Pictures\\Vivaldi Captures\\*",
+    "path": "{drive}Users\\*\\Pictures\\Vivaldi Captures\\*",
     "class": "Browser",
     "category": "Images",
     "program": "Vivaldi",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Vivaldi\\User Data\\Default",
+    "path": "{drive}Users\\*\\AppData\\Local\\Vivaldi\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -5977,7 +5977,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\GameCenter\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Local\\GameCenter\\*.log",
     "class": "Game",
     "category": "Logs",
     "program": "VK GameCenter",
@@ -6018,7 +6018,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\VoidTrain\\Saved\\SaveGames\\SteamCloud\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\VoidTrain\\Saved\\SaveGames\\SteamCloud\\*",
     "category": "Game",
     "sub_category": "Saves",
     "program": "Void Train",
@@ -6026,7 +6026,7 @@
     "remove_directories": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\VoidTrain\\Saved\\Config\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\VoidTrain\\Saved\\Config\\*",
     "category": "Game",
     "sub_category": "Settings",
     "program": "Void Train",
@@ -6034,14 +6034,14 @@
     "remove_directories": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\VoidTrain\\Saved\\Logs\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\VoidTrain\\Saved\\Logs\\*",
     "category": "Logs",
     "program": "Void Train",
     "class": "Game",
     "remove_directories": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Code\\Network",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Code\\Network",
     "class": "Text",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -6052,7 +6052,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Code",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Code",
     "class": "Text",
     "category": "Logs",
     "program": "VS Code",
@@ -6061,7 +6061,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.vscode\\extensions\\*",
+    "path": "{drive}Users\\*\\.vscode\\extensions\\*",
     "class": "Text",
     "category": "Documentation",
     "program": "VS Code",
@@ -6074,7 +6074,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.vscode\\extensions\\*",
+    "path": "{drive}Users\\*\\.vscode\\extensions\\*",
     "class": "Text",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -6096,14 +6096,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\WalletWasabi\\Client\\*.txt",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\WalletWasabi\\Client\\*.txt",
     "class": "Crypto Wallet",
     "category": "Logs",
     "program": "Wasabi Wallet",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\app.waveflow\\waveflow\\profiles\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\app.waveflow\\waveflow\\profiles\\*",
     "class": "Audio",
     "category": "Cache",
     "program": "WaveFlow",
@@ -6112,7 +6112,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\app.waveflow\\waveflow",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\app.waveflow\\waveflow",
     "class": "Audio",
     "category": "Cache",
     "program": "WaveFlow",
@@ -6307,7 +6307,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local",
+    "path": "{drive}Users\\*\\AppData\\Local",
     "class": "System",
     "category": "Cache",
     "program": "Windows",
@@ -6339,7 +6339,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\CrashDumps\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\CrashDumps\\*",
     "class": "System",
     "category": "Crashes",
     "program": "Windows",
@@ -6347,7 +6347,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\Downloads\\*",
+    "path": "{drive}Users\\*\\Downloads\\*",
     "class": "System",
     "category": "Downloads",
     "program": "Windows",
@@ -6355,7 +6355,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\ConnectedDevicesPlatform\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\ConnectedDevicesPlatform\\*",
     "class": "System",
     "category": "LastActivity",
     "program": "Windows",
@@ -6483,7 +6483,7 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Temp\\*",
+    "path": "{drive}Users\\*\\AppData\\Local\\Temp\\*",
     "class": "System",
     "category": "Cache",
     "program": "Windows",
@@ -6509,7 +6509,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Microsoft\\MMC",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Microsoft\\MMC",
     "class": "System",
     "category": "LastActivity",
     "program": "Windows",
@@ -6518,7 +6518,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Microsoft\\MMC",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Microsoft\\MMC",
     "class": "System",
     "category": "Logs",
     "program": "Windows",
@@ -6527,7 +6527,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}",
+    "path": "{drive}Users\\*",
     "class": "System",
     "category": "LastActivity",
     "program": "Windows",
@@ -6565,7 +6565,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\Microsoft\\Windows\\PowerShell\\PSReadLine",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Microsoft\\Windows\\PowerShell\\PSReadLine",
     "class": "System",
     "category": "LastActivity",
     "program": "Windows PowerShell",
@@ -6574,14 +6574,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Windscribe\\Windscribe2\\*.txt",
+    "path": "{drive}Users\\*\\AppData\\Local\\Windscribe\\Windscribe2\\*.txt",
     "class": "VPN",
     "category": "Logs",
     "program": "Windscribe",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
+    "path": "{drive}Users\\*\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
     "class": "Packet Manager",
     "category": "Documentation",
     "program": "WinGet",
@@ -6590,7 +6590,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
+    "path": "{drive}Users\\*\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
     "class": "Packet Manager",
     "category": "Documentation",
     "sub_category": "Change logs",
@@ -6601,7 +6601,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
+    "path": "{drive}Users\\*\\AppData\\Local\\Windows\\WinGet\\Packages\\**\\**",
     "class": "Packet Manager",
     "category": "Documentation",
     "sub_category": "Licenses",
@@ -6627,7 +6627,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\winutil",
+    "path": "{drive}Users\\*\\AppData\\Local\\winutil",
     "class": "Optimization",
     "category": "Logs",
     "program": "Winutil",
@@ -6665,7 +6665,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.minecraftx\\instances\\*",
+    "path": "{drive}Users\\*\\.minecraftx\\instances\\*",
     "class": "Minecraft Launcher",
     "category": "Logs",
     "program": "X Minecraft Launcher",
@@ -6674,7 +6674,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.minecraftx\\instances\\*",
+    "path": "{drive}Users\\*\\.minecraftx\\instances\\*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -6684,7 +6684,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.minecraftx",
+    "path": "{drive}Users\\*\\.minecraftx",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Saves",
@@ -6694,7 +6694,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.minecraftx\\instances\\*",
+    "path": "{drive}Users\\*\\.minecraftx\\instances\\*",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Settings",
@@ -6704,7 +6704,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.minecraftx",
+    "path": "{drive}Users\\*\\.minecraftx",
     "class": "Minecraft Launcher",
     "category": "Game",
     "sub_category": "Settings",
@@ -6714,14 +6714,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Xamarin\\Logs\\*\\*.log",
+    "path": "{drive}Users\\*\\AppData\\Local\\Xamarin\\Logs\\*\\*.log",
     "class": "Developing",
     "category": "Logs",
     "program": "Xamarin",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Yandex\\YandexBrowser\\User Data\\Default",
+    "path": "{drive}Users\\*\\AppData\\Local\\Yandex\\YandexBrowser\\User Data\\Default",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -6734,7 +6734,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Yandex\\YandexBrowser\\User Data\\Default\\Network",
+    "path": "{drive}Users\\*\\AppData\\Local\\Yandex\\YandexBrowser\\User Data\\Default\\Network",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -6745,7 +6745,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Yandex\\YandexBrowser\\User Data\\Default\\Network",
+    "path": "{drive}Users\\*\\AppData\\Local\\Yandex\\YandexBrowser\\User Data\\Default\\Network",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Passwords",
@@ -6756,7 +6756,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Packages\\*.Yandex.Music_*",
+    "path": "{drive}Users\\*\\AppData\\Local\\Packages\\*.Yandex.Music_*",
     "category": "Cache",
     "program": "Yandex Music",
     "class": "Audio",
@@ -6766,7 +6766,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\YandexMusic",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\YandexMusic",
     "category": "Logs",
     "program": "Yandex Music",
     "class": "Audio",
@@ -6775,7 +6775,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\YandexMusic",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\YandexMusic",
     "category": "Cache",
     "program": "Yandex Music",
     "class": "Audio",
@@ -6788,14 +6788,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.config\\yasb\\yasb*log*",
+    "path": "{drive}Users\\*\\.config\\yasb\\yasb*log*",
     "class": "Status Bar",
     "category": "Logs",
     "program": "YASB",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\.config\\yasb\\yasb*log*",
+    "path": "{drive}Users\\*\\.config\\yasb\\yasb*log*",
     "class": "Status Bar",
     "category": "Logs",
     "program": "YASB",
@@ -6812,7 +6812,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\ZUI",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\ZUI",
     "class": "Security",
     "category": "Logs",
     "program": "Zapret Universal Interface",
@@ -6821,7 +6821,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.glzr\\zebar",
+    "path": "{drive}Users\\*\\.glzr\\zebar",
     "category": "Logs",
     "program": "Zebar",
     "files_to_remove": [
@@ -6829,7 +6829,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\.glzr\\zebar",
+    "path": "{drive}Users\\*\\.glzr\\zebar",
     "category": "Logs",
     "program": "Zebar",
     "files_to_remove": [
@@ -6837,7 +6837,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Zed",
+    "path": "{drive}Users\\*\\AppData\\Local\\Zed",
     "class": "Text",
     "category": "Logs",
     "program": "Zed",
@@ -6846,7 +6846,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Programs\\Zed\\tools",
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\Zed\\tools",
     "class": "Text",
     "category": "Logs",
     "program": "Zed",
@@ -6855,14 +6855,14 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Local\\Zed\\zed-crash-handler*",
+    "path": "{drive}Users\\*\\AppData\\Local\\Zed\\zed-crash-handler*",
     "class": "Text",
     "category": "Crashes",
     "program": "Zed",
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\zen\\Profiles\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\zen\\Profiles\\*",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Cookies",
@@ -6874,7 +6874,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\zen\\Profiles\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\zen\\Profiles\\*",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "History",
@@ -6887,7 +6887,7 @@
     ]
   },
   {
-    "path": "{drive}Users\\{username}\\AppData\\Roaming\\zen\\Profiles\\*",
+    "path": "{drive}Users\\*\\AppData\\Roaming\\zen\\Profiles\\*",
     "class": "Browser",
     "category": "Browser",
     "sub_category": "Passwords",
