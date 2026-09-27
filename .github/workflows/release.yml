@@ -270,16 +270,10 @@ jobs:
 
             ## ✨ What's New
 
-            ### 🪟 Windows Enhancements
-            - **ExifCleaner** Added documentation clearing
-            - **Text Edit Plus** Added documentation clearing
-            - **QtPass** Added documentation clearing
-            - **HomeBank** Added documentation clearing
-
-            ### 🐧 Linux Improvements
-            - **Zed** Added logs clearing
-            - **OpenCode** Added last activity clearing
-            - **Omarchy** added last activity, images clearing
+            ### 🐧 Linux Enhancements
+            - **Vivaldi** Added browser, cache clearing
+            - **Google Chrome** Added browser, cache clearing
+            - **Cliamp** Added logs, last activity clearing
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
