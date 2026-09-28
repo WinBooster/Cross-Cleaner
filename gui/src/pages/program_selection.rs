@@ -33,10 +33,10 @@ impl MyApp {
         let window_height =
             (base_height + scroll_height).min(crate::max_window_height(ctx) - TITLE_BAR_HEIGHT);
 
-        self.set_window_size(
-            ctx,
-            egui::Vec2::new(500.0, window_height + TITLE_BAR_HEIGHT),
-        );
+        //self.set_window_size(
+        //    ctx,
+        //    egui::Vec2::new(500.0, window_height + TITLE_BAR_HEIGHT),
+        //);
 
         ui.vertical_centered(|ui| {
             ui.heading("Select Programs to Clean");

@@ -7,7 +7,7 @@ use crate::title_bar::TITLE_BAR_HEIGHT;
 
 impl MyApp {
     pub(crate) fn render_settings(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
-        self.set_window_size(ctx, egui::Vec2::new(500.0, 110.0 + TITLE_BAR_HEIGHT));
+        //self.set_window_size(ctx, egui::Vec2::new(500.0, 110.0 + TITLE_BAR_HEIGHT));
 
         let mut cfg = crate::config::get();
         let mut changed = false;

@@ -364,7 +364,7 @@ pub fn register_all() {
     #[cfg(target_os = "linux")]
     let _ = custom_glob_cleaner! {
         id: "Optimize pictures",
-        program: "System",
+        program: "Linux",
         category: "Images",
         sub_category: "Compress",
         os: ["linux"],
@@ -378,7 +378,7 @@ pub fn register_all() {
     #[cfg(target_os = "linux")]
     let _ = custom_glob_cleaner! {
         id: "Optimize pictures",
-        program: "System",
+        program: "Omarchy",
         category: "Images",
         sub_category: "Compress",
         os: ["linux"],

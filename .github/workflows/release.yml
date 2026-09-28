@@ -274,6 +274,7 @@ jobs:
             - **Vivaldi** Added browser, cache clearing
             - **Google Chrome** Added browser, cache clearing
             - **Cliamp** Added logs, last activity clearing
+            - **Brave Browser** Added browser, cache, clearing
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
