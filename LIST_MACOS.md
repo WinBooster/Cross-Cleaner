@@ -1,9 +1,9 @@
-# MacOS Clearing Programs Catalog v2.0.3.9
+# MacOS Clearing Programs Catalog v2.0.4.0
 **Total categories in database:** 4
 
 **Total programs in database:** 1
 
-**Total pathes in database:** 8
+**Total pathes in database:** 6
 
 ## System
 

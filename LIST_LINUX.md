@@ -1,15 +1,15 @@
-# Linux Clearing Programs Catalog v2.0.3.9
-**Total categories in database:** 12
+# Linux Clearing Programs Catalog v2.0.4.0
+**Total categories in database:** 13
 
-**Total programs in database:** 67
+**Total programs in database:** 73
 
-**Total pathes in database:** 153
+**Total pathes in database:** 163
 
 ## AI
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [OpenCode](https://opencode.ai/download) | LastActivity, Logs |
+| 1 | [OpenCode](https://opencode.ai/download) | LastActivity, LastActivnity, Logs |
 
 
 ## Audio
@@ -18,16 +18,21 @@
 | --- | --- | --- |
 | 1 | [Alsa](https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture) | Documentation |
 | 2 | [Cassettle](https://gitlab.gnome.org/Rirusha/Cassette) | Cache, Logs |
-| 3 | [Spotify](https://open.spotify.com/download) | Logs |
-| 4 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
+| 3 | [Cliamp](https://github.com/bjarneo/cliamp) | LastActivity, Logs |
+| 4 | [Spotify](https://open.spotify.com/download) | Logs |
+| 5 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
 
 
 ## Browser
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [LibreWolf](https://librewolf.net/installation) | Browser, Cache |
-| 2 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser, Cache |
+| 1 | [Brave Browser](https://brave.com/download) | Browser, Cache |
+| 2 | [Google Chrome](https://www.google.com/intl/en/chrome) | Browser, Cache |
+| 3 | [LibreWolf](https://librewolf.net/installation) | Browser, Cache |
+| 4 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser, Cache |
+| 5 | [Thorium](https://thorium.rocks) | Browser |
+| 6 | [Vivaldi](https://vivaldi.com/download) | Browser, Cache |
 
 
 ## Cheat
@@ -43,6 +48,13 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [Exodus Crypto Wallet](https://www.exodus.com/download) | Accounts |
+
+
+## Desktop Display Manager
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | SDDM | Logs |
 
 
 ## Developing
@@ -76,10 +88,10 @@
 | 3 | [Lutris](https://lutris.net/downloads) | Logs |
 | 4 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
 | 5 | [Oxygen Not Included (Wine)](https://store.steampowered.com/app/457140/Oxygen_Not_Included) | Logs |
-| 6 | [RimWorld (Wine)](https://store.steampowered.com/app/294100/RimWorld) | Documentation, Game saves, Logs |
+| 6 | [RimWorld (Wine)](https://store.steampowered.com/app/294100/RimWorld) | Documentation, Game, Logs |
 | 7 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
 | 8 | [Steam Proton](https://github.com/ValveSoftware/Proton) | Documentation |
-| 9 | [Terraria](https://terraria.org) | Crashes, Game saves, Logs |
+| 9 | [Terraria](https://terraria.org) | Crashes, Game, Logs |
 | 10 | [The Powder Toy](https://powdertoy.co.uk) | Documentation |
 | 11 | [Windows (Wine)](https://www.microsoft.com/download/windows) | Cache |
 | 12 | [Winetricks](https://github.com/Winetricks/winetricks) | Logs |
@@ -97,17 +109,17 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [Cristalix](https://cristalix.gg) | Crashes, Game saves, Images, Logs |
-| 2 | [CubixWorld](https://cubixworld.net/start) | Crashes, Game saves, Images, Logs |
+| 1 | [Cristalix](https://cristalix.gg) | Crashes, Game, Images, Logs |
+| 2 | [CubixWorld](https://cubixworld.net/start) | Crashes, Game, Images, Logs |
 | 3 | [LoliLand (Wine)](https://loliland.ru/ru/start) | Accounts, Documentation, Logs |
-| 4 | [Lunar Client](https://www.lunarclient.com/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 5 | [Minecraft](https://www.minecraft.net/ru-ru/about-minecraft) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, LastActivity, Logs |
+| 4 | [Lunar Client](https://www.lunarclient.com/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
+| 5 | [Minecraft](https://www.minecraft.net/ru-ru/about-minecraft) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, LastActivity, Logs |
 | 6 | [Modrinth](https://modrinth.com/app) | Cache |
-| 7 | [MultiMC](https://multimc.org/#Download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 8 | [PolyMC](https://polymc.org/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
-| 9 | [PrismLauncher](https://prismlauncher.org/download/windows) | Accounts, Cache, Cheats, Crashes, Documentation, Game saves, Images, Logs |
+| 7 | [MultiMC](https://multimc.org/#Download) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
+| 8 | [PolyMC](https://polymc.org/download) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
+| 9 | [PrismLauncher](https://prismlauncher.org/download/windows) | Accounts, Cache, Cheats, Crashes, Documentation, Game, Images, Logs |
 | 10 | [SimpleMinecraft](https://simpleminecraft.ru/start.html) | Cache, Logs |
-| 11 | [X Minecraft Launcher](https://xmcl.app) | Game saves, Logs |
+| 11 | [X Minecraft Launcher](https://xmcl.app) | Game, Logs |
 
 
 ## Packet Manager
@@ -137,9 +149,8 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [CachyOS](https://cachyos.org) | Logs |
-| 2 | [Linux](https://www.kernel.org) | Cache, Trash |
+| 2 | [Linux](https://www.kernel.org) | Cache, Downloads, Trash |
 | 3 | Omarchy | Images, LastActivity |
-| 4 | System | Downloads |
 
 
 ## Text
@@ -158,6 +169,13 @@
 | 10 | [Zed](https://zed.dev) | Logs |
 
 
+## Tiling Manager
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Hyperland | Crashes |
+
+
 ## Uncategorized
 
 | № | Program | Categories |
@@ -173,5 +191,5 @@
 
 | № | Program | Category | OS |
 | --- | --- | --- | --- |
-| 1 | System | Images | linux |
-| 2 | System | Images | linux |
+| 1 | Linux | Images | linux |
+| 2 | Omarchy | Images | linux |

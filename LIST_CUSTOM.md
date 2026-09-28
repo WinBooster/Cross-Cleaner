@@ -1,4 +1,4 @@
-# Custom Cleanings Catalog v2.0.3.9
+# Custom Cleanings Catalog v2.0.4.0
 
 **Total custom cleanings:** 8
 
@@ -10,5 +10,5 @@
 | 4 | ShareX | Images | windows |
 | 5 | System | Images | android |
 | 6 | System | Images | android |
-| 7 | System | Images | linux |
-| 8 | System | Images | linux |
+| 7 | Linux | Images | linux |
+| 8 | Omarchy | Images | linux |
