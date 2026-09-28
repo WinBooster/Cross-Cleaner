@@ -1730,6 +1730,32 @@
     ]
   },
   {
+    "path": "/home/*/.config/thorium/Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "History",
+    "program": "Thorium",
+    "files_to_remove": [
+      "Favicons",
+      "Favicons-journal",
+      "History",
+      "History-journal"
+    ]
+  },
+  {
+    "path": "/home/*/.config/thorium/Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Passwords",
+    "program": "Thorium",
+    "files_to_remove": [
+      "Login Data",
+      "Login Data For Account",
+      "Login Data For Account-journal",
+      "Login Data-journal"
+    ]
+  },
+  {
     "path": "/home/*/.cache/thunderbird/**/cache2/*.log",
     "class": "Text",
     "category": "Logs",
@@ -1915,32 +1941,6 @@
     "program": "Zed",
     "directories_to_remove": [
       "logs"
-    ]
-  },
-  {
-    "path": "/home/*/.config/thorium/Default",
-    "class": "Browser",
-    "category": "Browser",
-    "sub_category": "History",
-    "program": "Thorium",
-    "files_to_remove": [
-      "Favicons",
-      "Favicons-journal",
-      "History",
-      "History-journal"
-    ]
-  },
-  {
-    "path": "/home/*/.config/thorium/Default",
-    "class": "Browser",
-    "category": "Browser",
-    "sub_category": "Passwords",
-    "program": "Thorium",
-    "files_to_remove": [
-      "Login Data",
-      "Login Data For Account",
-      "Login Data For Account-journal",
-      "Login Data-journal"
     ]
   }
 ]
