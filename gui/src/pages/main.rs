@@ -33,10 +33,10 @@ impl MyApp {
 
         // On Android window is fullscreen, don't enforce fixed size
         #[cfg(not(target_os = "android"))]
-        self.set_window_size(
-            ctx,
-            egui::Vec2::new(560.0, window_height + TITLE_BAR_HEIGHT),
-        );
+        //self.set_window_size(
+        //    ctx,
+        //    egui::Vec2::new(560.0, window_height + TITLE_BAR_HEIGHT),
+        //);
         #[cfg(target_os = "android")]
         {
             let _ = (window_height, TITLE_BAR_HEIGHT);

@@ -8,7 +8,7 @@ use crate::title_bar::TITLE_BAR_HEIGHT;
 
 impl MyApp {
     pub(crate) fn render_clearing(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
-        self.set_window_size(ctx, egui::Vec2::new(560.0, 100.0 + TITLE_BAR_HEIGHT));
+        //self.set_window_size(ctx, egui::Vec2::new(560.0, 100.0 + TITLE_BAR_HEIGHT));
         // Panel gives 8px, text adds 12px from the screen edges
         ui.vertical(|ui| {
             ui.add_space(4.0);
