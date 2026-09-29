@@ -28,7 +28,10 @@ pub(crate) fn split_list_and_button(ui: &egui::Ui) -> (egui::Rect, egui::Rect) {
     // Reserve the bottom inset so the button is not flush with the screen edge.
     let available = egui::Rect::from_min_max(
         available.min,
-        egui::pos2(available.max.x, (available.max.y - BOTTOM_INSET).max(available.min.y)),
+        egui::pos2(
+            available.max.x,
+            (available.max.y - BOTTOM_INSET).max(available.min.y),
+        ),
     );
     let spacing = ui.spacing().item_spacing.y;
     let button_height = BUTTON_HEIGHT.min(available.height());
