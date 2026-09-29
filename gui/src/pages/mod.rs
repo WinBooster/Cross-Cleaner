@@ -11,14 +11,30 @@ use eframe::egui;
 /// Height of the main action button (Next / Start Cleaning).
 pub(crate) const BUTTON_HEIGHT: f32 = 25.0;
 
+/// Empty space kept below the action button. On Android the window goes
+/// fullscreen under the system navigation bar, so the button is lifted by
+/// this inset instead of being hidden behind / flush against the bar.
+#[cfg(target_os = "android")]
+pub(crate) const BOTTOM_INSET: f32 = 40.0;
+#[cfg(not(target_os = "android"))]
+pub(crate) const BOTTOM_INSET: f32 = 0.0;
+
 /// Splits the remaining page area into a list rect that gets the scrollable
-/// content and a button rect pinned to the very bottom of the window, so the
-/// action button stays visible on small screens while the list scrolls above.
+/// content and a button rect pinned to the bottom of the window (minus
+/// [`BOTTOM_INSET`]), so the action button stays visible on small screens
+/// while the list scrolls above.
 pub(crate) fn split_list_and_button(ui: &egui::Ui) -> (egui::Rect, egui::Rect) {
     let available = ui.available_rect_before_wrap();
+    // Reserve the bottom inset so the button is not flush with the screen edge.
+    let available = egui::Rect::from_min_max(
+        available.min,
+        egui::pos2(available.max.x, (available.max.y - BOTTOM_INSET).max(available.min.y)),
+    );
     let spacing = ui.spacing().item_spacing.y;
     let button_height = BUTTON_HEIGHT.min(available.height());
-    let list_height = (available.height() - button_height - spacing).max(20.0);
+    let list_height = (available.height() - button_height - spacing)
+        .max(20.0)
+        .min(available.height().max(20.0));
     let list_rect =
         egui::Rect::from_min_size(available.min, egui::vec2(available.width(), list_height));
     let button_rect = egui::Rect::from_min_max(
