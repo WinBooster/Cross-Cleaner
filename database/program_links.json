@@ -1,4 +1,12 @@
 {
+  "Copilot": "https://copilot.microsoft.com",
+  "Cherry Studio": "https://github.com/cherryhq/cherry-studio",
+  "Kilo Code": "https://kilo.ai",
+  "OpenCode": "https://opencode.ai/download",
+  "OpenCode Desktop": "https://opencode.ai/download",
+  "Microsoft Lobe": "https://github.com/orgs/lobe",
+  "LM Studio": "https://lmstudio.ai/download",
+
   "EasyAntiCheat": "https://www.easy.ac/en-US",
   "FACEIT AC": "https://www.faceit.com/en/anti-cheat",
   "GameGuard": "https://gameguard.ac",
@@ -82,9 +90,12 @@
   "CPU-Z": "https://www.cpuid.com",
   "CrystalDiskInfo": "https://crystalmark.info",
 
+  "JOPDF": "https://www.jopdf.com",
+
   "1Password": "https://1password.com/",
   "KeePass 2": "https://keepass.info/download.html",
   "KeePassXC": "https://keepassxc.org/download",
+  "QtPass": "https://qtpass.org",
 
   "Flow Launcher": "https://www.flowlauncher.com",
 
@@ -108,6 +119,8 @@
   "Bit Monero": "https://www.getmonero.org/downloads",
   "Exodus Crypto Wallet": "https://www.exodus.com/download",
   "Wasabi Wallet": "https://wasabiwallet.io",
+
+  "SDDM": "https://github.com/sddm/sddm",
 
   "DBeaver": "https://dbeaver.io",
 
@@ -191,13 +204,9 @@
   "ImageGlass": "https://imageglass.org",
   "InkSpace": "https://inkscape.org",
   "Magpie": "https://github.com/Blinue/Magpie",
-  "Microsoft Lobe": "https://github.com/orgs/lobe",
   "ShareX": "https://getsharex.com/downloads",
   "Tonfotos Telegram Connector": "https://tonfotos.com",
   "Paint.NET": "https://paint.net",
-  "Kilo Code": "https://kilo.ai",
-  "OpenCode": "https://opencode.ai/download",
-  "OpenCode Desktop": "https://opencode.ai/download",
   "Greenshot": "https://github.com/greenshot/greenshot",
   "FastStone Image Viewer": "https://www.faststone.org",
 
@@ -225,9 +234,10 @@
   "DNSCrypt": "https://www.dnscrypt.org",
   "ExifCleaner": "https://github.com/szTheory/exifcleaner",
 
+  "Tabby": "https://tabby.sh",
+
   "Cursor": "https://www.cursor.com/downloads",
   "JetBrains": "https://www.jetbrains.com/?var=1",
-  "LM Studio": "https://lmstudio.ai/download",
   "LazyVim": "https://www.lazyvim.org/installation",
   "LibreOffice": "https://www.libreoffice.org/download/download-libreoffice",
   "NeoVim": "https://github.com/neovim/neovim/blob/master/INSTALL.md",
@@ -240,6 +250,7 @@
   "Visual Studio": "https://visualstudio.microsoft.com",
   "Text Edit Plus": "https://vovsoft.com/software/text-edit-plus",
 
+  "Hyperland": "https://github.com/hyprwm/hyprland",
   "GlazeWM": "https://visualstudio.microsoft.com",
 
   "Tribler": "https://www.tribler.org/download.html",
@@ -278,16 +289,18 @@
 
   "YASB": "https://github.com/amnweb/yasb",
 
+  "CachyOS": "https://cachyos.org",
+  "Omarchy": "https://omarchy.us",
+  "Linux": "https://www.kernel.org",
+  "Windows": "https://www.microsoft.com/download/windows",
+  "Windows Defender": "https://www.microsoft.com/download/windows",
+  "Windows PowerShell": "https://www.microsoft.com/download/windows",
+
   "MTT File Manager": "https://github.com/MTTamurex/MTT-File-Manager-RUST",
   "Total Commander": "https://www.ghisler.com",
 
-  "ImgBurn": "https://www.imgburn.com/index.php?act=download",
-  "CachyOS": "https://cachyos.org",
-  "Linux": "https://www.kernel.org",
-  "OneDrive": "https://www.microsoft.com/microsoft-365/onedrive/online-cloud-storage",
-  "Windows": "https://www.microsoft.com/download/windows",
-  "Windows Defender": "https://www.microsoft.com/download/windows",
   "OnionShare": "https://onionshare.org",
-  "Copilot": "https://copilot.microsoft.com",
-  "Cherry Studio": "https://github.com/cherryhq/cherry-studio"
+
+  "ImgBurn": "https://www.imgburn.com/index.php?act=download",
+  "OneDrive": "https://www.microsoft.com/microsoft-365/onedrive/online-cloud-storage"
 }

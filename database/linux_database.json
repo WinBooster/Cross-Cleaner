@@ -544,7 +544,7 @@
   },
   {
     "path": "/home/*/.config/GitHub Desktop/Cache/*",
-    "class": "Developing",
+    "class": "Git",
     "category": "Cache",
     "program": "GitHub Desktop",
     "remove_directories": true,
@@ -552,14 +552,14 @@
   },
   {
     "path": "/home/*/.config/GitHub Desktop/logs/*",
-    "class": "Developing",
+    "class": "Git",
     "category": "Logs",
     "program": "GitHub Desktop",
     "remove_files": true
   },
   {
     "path": "/usr/share/doc/",
-    "class": "Developing",
+    "class": "Git",
     "category": "Documentation",
     "program": "GitHub Desktop",
     "directories_to_remove": [
@@ -781,7 +781,8 @@
   {
     "path": "/usr/share/licenses/*",
     "category": "Documentation",
-    "program": "Licenses",
+    "sub_category": "Licenses",
+    "program": "Linux",
     "remove_directories": true,
     "remove_files": true
   },
@@ -942,6 +943,7 @@
     "path": "/home/*/.lunarclient/licenses/*",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Lunar Client",
     "remove_directories": true,
     "remove_files": true
@@ -1054,6 +1056,7 @@
     "path": "/home/*/.minecraft/licenses/*",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category":"Licenses",
     "program": "Minecraft",
     "remove_directories": true,
     "remove_files": true
@@ -1191,6 +1194,7 @@
     "path": "/home/*/.local/share/MultiMC/licenses/*",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "MultiMC",
     "remove_directories": true,
     "remove_files": true
@@ -1267,7 +1271,7 @@
   {
     "path": "/home/*/.local/share/opencode/tool-output/",
     "class": "AI",
-    "category": "LastActivnity",
+    "category": "LastActivity",
     "program": "OpenCode",
     "files_to_remove": [
       "prompt-history.json"
@@ -1406,6 +1410,7 @@
     "path": "/home/*/.local/share/PolyMC/licenses/*",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "PolyMC",
     "remove_directories": true,
     "remove_files": true
@@ -1502,6 +1507,7 @@
     "path": "/home/*/.local/share/PrismLauncher/licenses/*",
     "class": "Minecraft Launcher",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "PrismLauncher",
     "remove_directories": true,
     "remove_files": true
@@ -1560,10 +1566,19 @@
     "path": "/home/*/.wine/drive_c/RimWorld",
     "class": "Game",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "RimWorld (Wine)",
     "files_to_remove": [
       "EULA.txt",
-      "Licenses.txt",
+      "Licenses.txt"
+    ]
+  },
+  {
+    "path": "/home/*/.wine/drive_c/RimWorld",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "RimWorld (Wine)",
+    "files_to_remove": [
       "Readme.txt",
       "ModUpdating.txt"
     ]
@@ -1659,6 +1674,7 @@
     "path": "/home/*/.local/share/Steam/steamapps/common/Proton Hotfix",
     "class": "Game",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Steam Proton",
     "files_to_remove": [
       "LICENSE",
@@ -1823,18 +1839,27 @@
     "path": "/home/*/.vscode-oss/extensions/**/",
     "class": "Text",
     "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "VS Code",
+    "files_to_remove": [
+      "LICENSE.txt",
+      "LICENSE-APACHE",
+      "LICENSE-MIT"
+    ]
+  },
+  {
+    "path": "/home/*/.vscode-oss/extensions/**/",
+    "class": "Text",
+    "category": "Documentation",
     "program": "VS Code",
     "files_to_remove": [
       "CHANGELOG.md",
       "changelog.md",
-      "LICENSE.txt",
       "README.md",
       "readme.md",
       "SECURITY.md",
       "SUPPORT.md",
       "contributing.md",
-      "LICENSE-APACHE",
-      "LICENSE-MIT",
       "walkthrough-setup-tips.md"
     ],
     "directories_to_remove": [
@@ -1923,15 +1948,6 @@
     "program": "Yay",
     "directories_to_remove": [
       "yay"
-    ]
-  },
-  {
-    "path": "/home/*/zapret-configs",
-    "class": "Security",
-    "category": "Cache",
-    "program": "Zapret",
-    "directories_to_remove": [
-      ".git"
     ]
   },
   {

@@ -1616,6 +1616,7 @@
     "path": "{drive}Users\\*\\AppData\\Roaming\\Everything",
     "class": "Utility",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "Everything",
     "files_to_remove": [
       "Run History.csv"
@@ -1756,6 +1757,7 @@
     "path": "{drive}Users\\*\\AppData\\Roaming\\FlowLauncher\\Settings",
     "class": "Program Launcher",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "Flow Launcher",
     "files_to_remove": [
       "History.json",
@@ -1883,7 +1885,7 @@
   },
   {
     "path": "{drive}Program Files\\Git",
-    "class": "Developing",
+    "class": "Git",
     "category": "Documentation",
     "sub_category": "Licenses",
     "program": "Git",
@@ -1893,7 +1895,7 @@
   },
   {
     "path": "{drive}Program Files\\Git",
-    "class": "Developing",
+    "class": "Git",
     "category": "Documentation",
     "program": "Git",
     "files_to_remove": [
@@ -1902,21 +1904,21 @@
   },
   {
     "path": "{drive}Users\\*\\AppData\\Roaming\\GitHub Desktop\\*.log",
-    "class": "Developing",
+    "class": "Git",
     "category": "Logs",
     "program": "GitHub Desktop",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\*\\AppData\\Roaming\\GitHub Desktop\\logs\\*.log",
-    "class": "Developing",
+    "class": "Git",
     "category": "Logs",
     "program": "GitHub Desktop",
     "remove_files": true
   },
   {
     "path": "{drive}Users\\*\\AppData\\Local\\GitHubDesktop\\**\\*.log",
-    "class": "Developing",
+    "class": "Git",
     "category": "Logs",
     "program": "GitHub Desktop",
     "remove_files": true
@@ -3138,6 +3140,7 @@
     "path": "{drive}Users\\*\\.lmstudio",
     "class": "AI",
     "category": "LastActivity",
+    "sub_category": "Сonversations",
     "program": "LM Studio",
     "directories_to_remove": [
       "conversations"
@@ -3941,6 +3944,7 @@
     "path": "{drive}Users\\*\\.namida",
     "class": "Audio",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "Namida",
     "directories_to_remove": [
       "History"
@@ -4291,6 +4295,7 @@
     "path": "{drive}Users\\*\\.local\\share\\opencode",
     "class": "AI",
     "category": "LastActivity",
+    "sub_category": "Conversations",
     "program": "OpenCode",
     "directories_to_remove": [
       "storage"
@@ -6358,6 +6363,7 @@
     "path": "{drive}Users\\*\\AppData\\Local\\ConnectedDevicesPlatform\\*",
     "class": "System",
     "category": "LastActivity",
+    "sub_category": "Connected Devices",
     "program": "Windows",
     "remove_directories": true,
     "remove_files": true
@@ -6374,6 +6380,7 @@
     "path": "{drive}Windows\\Prefetch\\*",
     "class": "System",
     "category": "LastActivity",
+    "sub_category": "Recent Started Apps",
     "program": "Windows",
     "remove_files": true
   },
@@ -6512,6 +6519,7 @@
     "path": "{drive}Users\\*\\AppData\\Roaming\\Microsoft\\MMC",
     "class": "System",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "Windows",
     "files_to_remove": [
       "eventvwr"
@@ -6530,6 +6538,7 @@
     "path": "{drive}Users\\*",
     "class": "System",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "Windows",
     "directories_to_remove": [
       "Searches"
@@ -6568,6 +6577,7 @@
     "path": "{drive}Users\\*\\AppData\\Roaming\\Microsoft\\Windows\\PowerShell\\PSReadLine",
     "class": "System",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "Windows PowerShell",
     "files_to_remove": [
       "ConsoleHost_history.txt"
@@ -6904,6 +6914,25 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\rgitui\\rgitui",
+    "class": "Git",
+    "category": "Cache",
+    "program": "rgtui",
+    "files_to_remove": [
+      "avatar_cache.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\rgitui",
+    "class": "Git",
+    "category": "LastActivity",
+    "sub_category": "History",
+    "program": "rgtui",
+    "directories_to_remove": [
+      "history"
     ]
   }
 ]

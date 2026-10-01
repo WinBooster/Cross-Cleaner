@@ -33,7 +33,7 @@ impl GlobCleanStats {
 /// Inside the body you describe what to do with the entry (`path`).
 /// Return `Ok(GlobCleanStats)` to count the action or `Err(_)` to skip the entry.
 ///
-/// Generated wrapper expands `{username}` (done by the registry), runs
+/// Generated wrapper expands `*` (done by the registry), runs
 /// `$crate::glob::glob` on `path` and aggregates results.
 ///
 /// Note: glob patterns must use forward slashes (`/`).
@@ -281,9 +281,9 @@ pub fn register_all() {
         id: "VSCode clearing recent projects",
         program: "Visual Studio",
         category: "LastActivity",
-        sub_category: "",
+        sub_category: "Recent Documents",
         os: ["windows"],
-        glob: "{drive}/Users/{username}/AppData/Local/Microsoft/VisualStudio/*/ApplicationPrivateSettings.xml",
+        glob: "{drive}/Users/*/AppData/Local/Microsoft/VisualStudio/*/ApplicationPrivateSettings.xml",
         |path| {
             remove_code_containers_offline(path)
         }
@@ -295,9 +295,9 @@ pub fn register_all() {
         id: "dnSpy clearing recent files",
         program: "dnSpy",
         category: "LastActivity",
-        sub_category: "",
+        sub_category: "Recent Documents",
         os: ["windows"],
-        glob: "{drive}/Users/{username}/AppData/Roaming/dnSpy/dnSpy.xml",
+        glob: "{drive}/Users/*/AppData/Roaming/dnSpy/dnSpy.xml",
         |path| {
             remove_dnspy_file_lists(path)
         }
@@ -312,7 +312,7 @@ pub fn register_all() {
         sub_category: "Compress",
         os: ["windows"],
         sequential: true,
-        glob: "{drive}\\Users\\{username}\\Pictures\\**\\*",
+        glob: "{drive}\\Users\\*\\Pictures\\**\\*",
         |path| {
             crate::image_optimizer::optimize_single(path)
         }
@@ -327,7 +327,7 @@ pub fn register_all() {
         sub_category: "Compress",
         os: ["windows"],
         sequential: true,
-        glob: "{drive}\\Users\\{username}\\Documents\\ShareX\\Screenshots\\*\\*",
+        glob: "{drive}\\Users\\*\\Documents\\ShareX\\Screenshots\\*\\*",
         |path| {
             crate::image_optimizer::optimize_single(path)
         }
@@ -369,7 +369,7 @@ pub fn register_all() {
         sub_category: "Compress",
         os: ["linux"],
         sequential: true,
-        glob: "/home/{username}/Pictures/**/*",
+        glob: "/home/*/Pictures/**/*",
         |path| {
             crate::image_optimizer::optimize_single(path)
         }
@@ -383,7 +383,7 @@ pub fn register_all() {
         sub_category: "Compress",
         os: ["linux"],
         sequential: true,
-        glob: "/home/{username}/.local/state/omarchy/clipboard-images/*",
+        glob: "/home/*/.local/state/omarchy/clipboard-images/*",
         |path| {
             crate::image_optimizer::optimize_single(path)
         }

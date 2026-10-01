@@ -2,6 +2,7 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Vector 35\\Binary Ninja\\ui\\recentFileState",
     "category": "LastActivity",
+    "sub_category": "Recent Documents",
     "program": "Binary Ninja",
     "class": "Developing",
     "values_to_remove": [
@@ -11,6 +12,7 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Hex-Rays\\IDA\\History",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "IDA Pro",
     "class": "Developing",
     "remove_all_in_registry": true,
@@ -19,6 +21,7 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Hex-Rays\\IDA\\History64",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "IDA Pro",
     "class": "Developing",
     "remove_all_in_registry": true,
@@ -27,6 +30,7 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TypedPaths",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
@@ -34,6 +38,7 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FeatureUsage\\ShowJumpView",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
@@ -41,6 +46,7 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Compatibility Assistant\\Store",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
@@ -48,6 +54,7 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
@@ -55,6 +62,7 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "Windows",
     "class": "System",
     "remove_all_in_tree": true,
@@ -63,6 +71,7 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true,
@@ -71,6 +80,7 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ComDlg32",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "Windows",
     "class": "System",
     "remove_all_in_tree": true
@@ -78,6 +88,7 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FeatureUsage\\AppSwitched",
     "category": "LastActivity",
+    "sub_category": "History",
     "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
@@ -85,6 +96,7 @@
   {
     "path": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RecentDocs",
     "category": "LastActivity",
+    "sub_category": "Recent Documents",
     "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true
@@ -92,6 +104,7 @@
   {
     "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Enum\\USBSTOR",
     "category": "LastActivity",
+    "sub_category": "Connected Devices",
     "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true,
@@ -100,6 +113,7 @@
   {
     "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Enum\\USB",
     "category": "LastActivity",
+    "sub_category": "Connected Devices",
     "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true,
@@ -108,6 +122,7 @@
   {
     "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Portable Devices\\Devices",
     "category": "LastActivity",
+    "sub_category": "Connected Devices",
     "program": "Windows",
     "class": "System",
     "remove_all_in_registry": true,
