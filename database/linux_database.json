@@ -1056,7 +1056,7 @@
     "path": "/home/*/.minecraft/licenses/*",
     "class": "Minecraft Launcher",
     "category": "Documentation",
-    "sub_category":"Licenses",
+    "sub_category": "Licenses",
     "program": "Minecraft",
     "remove_directories": true,
     "remove_files": true
