@@ -5077,6 +5077,25 @@
     ]
   },
   {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\rgitui\\rgitui",
+    "class": "Git",
+    "category": "Cache",
+    "program": "rgtui",
+    "files_to_remove": [
+      "avatar_cache.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\rgitui",
+    "class": "Git",
+    "category": "LastActivity",
+    "sub_category": "History",
+    "program": "rgtui",
+    "directories_to_remove": [
+      "history"
+    ]
+  },
+  {
     "path": "{drive}Users\\*\\AppData\\Local\\Roblox",
     "class": "Game",
     "category": "Logs",
@@ -6914,25 +6933,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\rgitui\\rgitui",
-    "class": "Git",
-    "category": "Cache",
-    "program": "rgtui",
-    "files_to_remove": [
-      "avatar_cache.txt"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Local\\rgitui",
-    "class": "Git",
-    "category": "LastActivity",
-    "sub_category": "History",
-    "program": "rgtui",
-    "directories_to_remove": [
-      "history"
     ]
   }
 ]
