@@ -1,15 +1,15 @@
-# Linux Clearing Programs Catalog v2.0.4.0.1
-**Total categories in database:** 13
+# Linux Clearing Programs Catalog v2.0.4.0.3
+**Total categories in database:** 12
 
-**Total programs in database:** 73
+**Total programs in database:** 71
 
-**Total pathes in database:** 163
+**Total pathes in database:** 162
 
 ## AI
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [OpenCode](https://opencode.ai/download) | LastActivity, LastActivnity, Logs |
+| 1 | [OpenCode](https://opencode.ai/download) | LastActivity, Logs |
 
 
 ## Audio
@@ -54,7 +54,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | SDDM | Logs |
+| 1 | [SDDM](https://github.com/sddm/sddm) | Logs |
 
 
 ## Developing
@@ -64,12 +64,11 @@
 | 1 | Auto make | Logs |
 | 2 | [GTK](https://www.gtk.org) | Documentation |
 | 3 | [Ghidra](https://github.com/NationalSecurityAgency/ghidra) | Logs |
-| 4 | [GitHub Desktop](https://desktop.github.com/download) | Cache, Documentation, Logs |
-| 5 | [Go Language](https://go.dev/doc/install) | Cache |
-| 6 | [Gradle](https://gradle.org) | Cache |
-| 7 | [Jdk](https://www.oracle.com/java/technologies/downloads) | Documentation |
-| 8 | [Python](https://www.python.org/downloads) | Documentation |
-| 9 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
+| 4 | [Go Language](https://go.dev/doc/install) | Cache |
+| 5 | [Gradle](https://gradle.org) | Cache |
+| 6 | [Jdk](https://www.oracle.com/java/technologies/downloads) | Documentation |
+| 7 | [Python](https://www.python.org/downloads) | Documentation |
+| 8 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
 
 
 ## Driver
@@ -95,6 +94,13 @@
 | 10 | [The Powder Toy](https://powdertoy.co.uk) | Documentation |
 | 11 | [Windows (Wine)](https://www.microsoft.com/download/windows) | Cache |
 | 12 | [Winetricks](https://github.com/Winetricks/winetricks) | Logs |
+
+
+## Git
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | [GitHub Desktop](https://desktop.github.com/download) | Cache, Documentation, Logs |
 
 
 ## Messanger
@@ -137,20 +143,12 @@
 | 1 | [KeePassXC](https://keepassxc.org/download) | Documentation |
 
 
-## Security
-
-| № | Program | Categories |
-| --- | --- | --- |
-| 1 | [Zapret](https://github.com/bol-van/zapret) | Cache |
-
-
 ## System
 
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [CachyOS](https://cachyos.org) | Logs |
-| 2 | [Linux](https://www.kernel.org) | Cache, Downloads, Trash |
-| 3 | Omarchy | Images, LastActivity |
+| 2 | [Omarchy](https://omarchy.us) | Images, LastActivity |
 
 
 ## Text
@@ -173,7 +171,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Hyperland | Crashes |
+| 1 | [Hyperland](https://github.com/hyprwm/hyprland) | Crashes |
 
 
 ## Uncategorized
@@ -183,7 +181,7 @@
 | 1 | Documentation | Documentation |
 | 2 | EFI tools | Logs |
 | 3 | Info | Documentation |
-| 4 | Licenses | Documentation |
+| 4 | [Linux](https://www.kernel.org) | Cache, Documentation, Downloads, Trash |
 
 ---
 
