@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.4.0.1
+# Windows Clearing Programs Catalog v2.0.4.0.3
 **Total categories in database:** 12
 
-**Total programs in database:** 261
+**Total programs in database:** 262
 
-**Total pathes in database:** 562
+**Total pathes in database:** 564
 
 ## AI
 
@@ -126,27 +126,25 @@
 | 6 | [Enigma Virtual Box](https://enigmaprotector.com/en/downloads.html) | Documentation |
 | 7 | [FreeCAD](https://www.freecad.org) | Documentation, Logs |
 | 8 | [Ghidra](https://github.com/NationalSecurityAgency/ghidra) | Logs |
-| 9 | [Git](https://git-scm.com/downloads) | Documentation |
-| 10 | [GitHub Desktop](https://desktop.github.com/download) | Logs |
-| 11 | [Go Language](https://go.dev/doc/install) | Documentation |
-| 12 | [Gradle](https://gradle.org) | Cache |
-| 13 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
-| 14 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
-| 15 | [Insomnia](https://insomnia.rest) | Cache, Logs |
-| 16 | [Java](https://www.java.com/download) | Documentation |
-| 17 | [Kache](https://github.com/kunobi-ninja/kache) | Logs |
-| 18 | [MCCreator](https://mcreator.net/download) | Logs |
-| 19 | [Maven](https://maven.apache.org/download.cgi) | Documentation |
-| 20 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
-| 21 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
-| 22 | [Postman](https://www.postman.com/downloads) | Logs |
-| 23 | [Python](https://www.python.org/downloads) | Documentation |
-| 24 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
-| 25 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
-| 26 | [RustRover](https://www.jetbrains.com/rust) | Documentation |
-| 27 | [Unity Hub](https://unity.com/download) | Documentation |
-| 28 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk) | Documentation |
-| 29 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
+| 9 | [Go Language](https://go.dev/doc/install) | Documentation |
+| 10 | [Gradle](https://gradle.org) | Cache |
+| 11 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
+| 12 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
+| 13 | [Insomnia](https://insomnia.rest) | Cache, Logs |
+| 14 | [Java](https://www.java.com/download) | Documentation |
+| 15 | [Kache](https://github.com/kunobi-ninja/kache) | Logs |
+| 16 | [MCCreator](https://mcreator.net/download) | Logs |
+| 17 | [Maven](https://maven.apache.org/download.cgi) | Documentation |
+| 18 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
+| 19 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
+| 20 | [Postman](https://www.postman.com/downloads) | Logs |
+| 21 | [Python](https://www.python.org/downloads) | Documentation |
+| 22 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
+| 23 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
+| 24 | [RustRover](https://www.jetbrains.com/rust) | Documentation |
+| 25 | [Unity Hub](https://unity.com/download) | Documentation |
+| 26 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk) | Documentation |
+| 27 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
 
 
 ## Disk Analyzer
@@ -232,6 +230,15 @@
 | 25 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game |
 | 26 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
 | 27 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game, Logs |
+
+
+## Git
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | [Git](https://git-scm.com/downloads) | Documentation |
+| 2 | [GitHub Desktop](https://desktop.github.com/download) | Logs |
+| 3 | rgtui | Cache, LastActivity |
 
 
 ## ISO
@@ -320,7 +327,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | JOPDF | Documentation |
+| 1 | [JOPDF](https://www.jopdf.com) | Documentation |
 
 
 ## Packet Manager
@@ -340,7 +347,7 @@
 | 1 | [1Password](https://1password.com/) | Logs |
 | 2 | [KeePass 2](https://keepass.info/download.html) | Logs |
 | 3 | [KeePassXC](https://keepassxc.org/download) | Documentation |
-| 4 | QtPass | Documentation |
+| 4 | [QtPass](https://qtpass.org) | Documentation |
 
 
 ## Program Launcher
@@ -415,14 +422,14 @@
 | 2 | [OneDrive](https://www.microsoft.com/microsoft-365/onedrive/online-cloud-storage) | Cache |
 | 3 | [Windows](https://www.microsoft.com/download/windows) | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
 | 4 | [Windows Defender](https://www.microsoft.com/download/windows) | Documentation |
-| 5 | Windows PowerShell | LastActivity |
+| 5 | [Windows PowerShell](https://www.microsoft.com/download/windows) | LastActivity |
 
 
 ## Terminal Emulator
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Tabby | Documentation |
+| 1 | [Tabby](https://tabby.sh) | Documentation |
 
 
 ## Text
