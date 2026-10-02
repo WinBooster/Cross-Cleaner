@@ -10,9 +10,11 @@ pub mod pages;
 pub mod sounds;
 pub mod taskbar;
 pub mod title_bar;
+pub mod updater;
 
 pub use app::{MyApp, Page};
 pub use title_bar::TITLE_BAR_HEIGHT;
+pub use updater::UpdaterCommand;
 
 /// Number of category checkboxes per row.
 pub const CATEGORY_COLUMNS: usize = 2;

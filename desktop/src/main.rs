@@ -25,6 +25,7 @@ use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop};
 use winit::window::WindowId;
 
 mod display;
+mod updater;
 
 /// Minimum interval between repaints caused purely by pointer movement or by
 /// scroll-wheel input.
@@ -583,6 +584,14 @@ async fn run(backend: BackendChoice) -> eframe::Result {
         std::thread::spawn(move || {
             let _ = tx.send(check_new_version());
         });
+        // Self-update worker: downloads the new release and replaces the
+        // running executable with it (see `updater`). Registering it is what
+        // turns the update notification into an actual in-app update; without
+        // it the GUI only offers the release page.
+        let (updater_tx, updater_rx) = std::sync::mpsc::channel();
+        let updater_state = a.updater_state.clone();
+        a.updater_tx = Some(updater_tx);
+        std::thread::spawn(move || updater::run(updater_rx, updater_state));
         a
     };
 

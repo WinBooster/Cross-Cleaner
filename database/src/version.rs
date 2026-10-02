@@ -1,4 +1,6 @@
 use serde_json::Value;
+use std::io::{Read, Write};
+use std::path::PathBuf;
 use std::time::Duration;
 
 /// Base URL of the GitHub releases page.
@@ -10,6 +12,9 @@ const LATEST_RELEASE_API_URL: &str =
 const RELEASES_LIST_API_URL: &str =
     "https://api.github.com/repos/WinBooster/Cross-Cleaner/releases?per_page=30";
 
+/// Chunk size used while streaming a release binary to disk.
+const DOWNLOAD_CHUNK: usize = 64 * 1024;
+
 /// Information about a newer release found on GitHub.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NewRelease {
@@ -17,6 +22,18 @@ pub struct NewRelease {
     pub version: String,
     /// URL of the release page.
     pub url: String,
+    /// Direct download URL of the release binary matching this platform,
+    /// `None` when the release ships no such asset (e.g. a source-only tag).
+    pub asset_url: Option<String>,
+    /// Size of that binary in bytes, `None` when unknown.
+    pub asset_size: Option<u64>,
+}
+
+impl NewRelease {
+    /// True when the release ships a binary this build can install on its own.
+    pub fn has_asset(&self) -> bool {
+        self.asset_url.is_some()
+    }
 }
 
 /// One grouped entry of a changelog, e.g. group `Windows Enhancements`
@@ -59,6 +76,46 @@ pub fn is_newer(remote: &str, current: &str) -> bool {
     false
 }
 
+/// Name of the portable release binary for the platform this build runs on.
+///
+/// The release workflow publishes one binary per platform (see
+/// `.github/workflows/release.yml`). The Inno Setup installer
+/// (`Cross_Cleaner_Setup.exe`) is deliberately not used for the in-app
+/// update: it needs administrator rights and cannot report its progress.
+pub fn asset_name() -> &'static str {
+    if cfg!(target_os = "windows") {
+        "Windows-Cross_Cleaner_GUI.exe"
+    } else if cfg!(target_os = "linux") {
+        "Linux-Cross_Cleaner_GUI"
+    } else if cfg!(target_os = "macos") {
+        "MacOS-Arm64-Cross_Cleaner_GUI"
+    } else if cfg!(target_os = "android") {
+        "Cross_Cleaner_Android.apk"
+    } else {
+        ""
+    }
+}
+
+/// Picks the asset called `wanted` out of the GitHub `assets` array and
+/// returns its direct download URL together with its size in bytes.
+/// `size` is `0` when the release does not report one.
+fn parse_asset(assets: Option<&Value>, wanted: &str) -> Option<(String, u64)> {
+    if wanted.is_empty() {
+        return None;
+    }
+    for asset in assets?.as_array()? {
+        if asset.get("name").and_then(Value::as_str) != Some(wanted) {
+            continue;
+        }
+        let Some(url) = asset.get("browser_download_url").and_then(Value::as_str) else {
+            continue;
+        };
+        let size = asset.get("size").and_then(Value::as_u64).unwrap_or(0);
+        return Some((url.to_string(), size));
+    }
+    None
+}
+
 /// Checks GitHub for the latest release and returns it when its tag
 /// (e.g. `v2.0.2.8.1`) is newer than the current version.
 pub fn check_new_version() -> Result<Option<NewRelease>, String> {
@@ -97,7 +154,105 @@ pub fn check_new_version() -> Result<Option<NewRelease>, String> {
         .unwrap_or(RELEASES_URL)
         .to_string();
 
-    Ok(Some(NewRelease { version: tag, url }))
+    let asset = parse_asset(json.get("assets"), asset_name());
+    let (asset_url, asset_size) = match asset {
+        Some((url, size)) => (Some(url), (size > 0).then_some(size)),
+        None => (None, None),
+    };
+
+    Ok(Some(NewRelease {
+        version: tag,
+        url,
+        asset_url,
+        asset_size,
+    }))
+}
+
+/// Temporary file a release binary is streamed into.
+///
+/// Named after the running version and the process id, so a crashed run leaves
+/// at most one stale file behind and the next run overwrites it instead of
+/// filling the temp directory with half-downloaded binaries.
+fn update_download_path() -> PathBuf {
+    let extension = if cfg!(windows) { ".exe" } else { "" };
+    let version = crate::get_version().replace('.', "_");
+    std::env::temp_dir().join(format!(
+        "Cross_Cleaner_update_{version}_{}{extension}",
+        std::process::id()
+    ))
+}
+
+/// Streams the release binary at `url` into the temp directory, reporting
+/// `(downloaded, total)` through `progress` after every chunk.
+///
+/// `expected_size` is the size GitHub reported for the asset and is verified
+/// before the file is handed out, so a truncated download is never installed.
+/// The caller owns the returned file and should delete it once it is installed.
+pub fn download_asset(
+    url: &str,
+    expected_size: Option<u64>,
+    mut progress: impl FnMut(u64, Option<u64>),
+) -> Result<PathBuf, String> {
+    // Only ever talk to GitHub over HTTPS; the URL comes from the API above,
+    // but a redirect or a tampered cache must not be able to change that.
+    if !url.starts_with("https://") {
+        return Err(format!("Refusing to download a non-HTTPS URL: {url}"));
+    }
+
+    let agent: ureq::Agent = ureq::Agent::config_builder()
+        .timeout_global(Some(Duration::from_secs(600)))
+        .build()
+        .into();
+    let response = agent
+        .get(url)
+        .header(
+            "User-Agent",
+            concat!("Cross-Cleaner/", env!("CARGO_PKG_VERSION")),
+        )
+        .call()
+        .map_err(|e| format!("Failed to start the update download: {}", e))?;
+
+    let header_len = response
+        .headers()
+        .get("content-length")
+        .and_then(|value| value.to_str().ok())
+        .and_then(|value| value.parse::<u64>().ok());
+    let total = expected_size.filter(|size| *size > 0).or(header_len);
+
+    let path = update_download_path();
+    let mut file = std::fs::File::create(&path)
+        .map_err(|e| format!("Failed to create {}: {}", path.display(), e))?;
+    let mut reader = response.into_body().into_reader();
+    let mut buffer = vec![0u8; DOWNLOAD_CHUNK];
+    let mut downloaded = 0u64;
+
+    progress(downloaded, total);
+    loop {
+        let read = reader
+            .read(&mut buffer)
+            .map_err(|e| format!("Update download failed: {}", e))?;
+        if read == 0 {
+            break;
+        }
+        downloaded += read as u64;
+        file.write_all(&buffer[..read])
+            .map_err(|e| format!("Failed to write the update to disk: {}", e))?;
+        progress(downloaded, total);
+    }
+    file.flush()
+        .map_err(|e| format!("Failed to write the update to disk: {}", e))?;
+    drop(file);
+
+    if let Some(expected) = expected_size.filter(|size| *size > 0)
+        && downloaded != expected
+    {
+        let _ = std::fs::remove_file(&path);
+        return Err(format!(
+            "Incomplete update download: {downloaded} of {expected} bytes"
+        ));
+    }
+
+    Ok(path)
 }
 
 /// Removes bold/code markdown markup from a text fragment.
@@ -304,6 +459,93 @@ Special thanks to our amazing contributors who made this release possible:\n\
             changelog.contributors,
             vec!["@Nekiplay - Core improvements and feature implementations"]
         );
+    }
+
+    #[test]
+    fn test_asset_name_matches_published_release() {
+        let name = asset_name();
+        // Every released asset name is listed in .github/workflows/release.yml.
+        assert!(
+            [
+                "Windows-Cross_Cleaner_GUI.exe",
+                "Linux-Cross_Cleaner_GUI",
+                "MacOS-Arm64-Cross_Cleaner_GUI",
+                "Cross_Cleaner_Android.apk",
+            ]
+            .contains(&name),
+            "unexpected asset name: {name}"
+        );
+        assert_eq!(name.ends_with(".exe"), cfg!(windows));
+    }
+
+    #[test]
+    fn test_parse_asset_picks_matching_name() {
+        let assets = serde_json::json!([
+            { "name": "Linux-Cross_Cleaner_GUI", "size": 12, "browser_download_url": "https://example.com/linux" },
+            { "name": "Windows-Cross_Cleaner_GUI.exe", "size": 34, "browser_download_url": "https://example.com/windows" },
+        ]);
+        assert_eq!(
+            parse_asset(Some(&assets), "Windows-Cross_Cleaner_GUI.exe"),
+            Some(("https://example.com/windows".to_string(), 34))
+        );
+    }
+
+    #[test]
+    fn test_parse_asset_without_match() {
+        let assets = serde_json::json!([
+            { "name": "Linux-Cross_Cleaner_GUI", "size": 12, "browser_download_url": "https://example.com/linux" },
+        ]);
+        // No binary for this platform -> the caller falls back to the release page.
+        assert_eq!(
+            parse_asset(Some(&assets), "Windows-Cross_Cleaner_GUI.exe"),
+            None
+        );
+        // Malformed payloads are handled the same way instead of panicking.
+        assert_eq!(parse_asset(None, "Windows-Cross_Cleaner_GUI.exe"), None);
+        assert_eq!(
+            parse_asset(
+                Some(&serde_json::json!("not an array")),
+                "Windows-Cross_Cleaner_GUI.exe"
+            ),
+            None
+        );
+        // An unknown platform has no asset name to look for.
+        assert_eq!(parse_asset(Some(&assets), ""), None);
+    }
+
+    #[test]
+    fn test_parse_asset_ignores_missing_url() {
+        let assets = serde_json::json!([
+            { "name": "Windows-Cross_Cleaner_GUI.exe", "size": 34 },
+        ]);
+        assert_eq!(
+            parse_asset(Some(&assets), "Windows-Cross_Cleaner_GUI.exe"),
+            None
+        );
+    }
+
+    #[test]
+    fn test_update_download_path_is_unique_per_run() {
+        let path = update_download_path();
+        assert_eq!(path.parent(), Some(std::env::temp_dir().as_path()));
+        let name = path
+            .file_name()
+            .and_then(|n| n.to_str())
+            .expect("file name is valid UTF-8");
+        assert!(name.starts_with("Cross_Cleaner_update_"), "{name}");
+        // One file per running version, never one per chunk.
+        assert_eq!(path, update_download_path());
+        assert_eq!(name.contains('.'), cfg!(windows), "{name}");
+    }
+
+    #[test]
+    fn test_download_asset_rejects_non_https() {
+        let calls = std::cell::Cell::new(0);
+        let result = download_asset("http://example.com/update", None, |_, _| {
+            calls.set(calls.get() + 1);
+        });
+        assert!(result.is_err(), "plain HTTP must be refused");
+        assert_eq!(calls.get(), 0, "nothing may be downloaded");
     }
 
     #[test]

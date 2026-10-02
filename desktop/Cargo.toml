@@ -18,6 +18,9 @@ rodio = "0.22"
 serde = { version = "1", features = ["derive", "rc"] }
 serde_json = "1"
 winit = { version = "0.30.13", default-features = false, features = ["rwh_06"] }
+# Replaces the running executable with the freshly downloaded release, so the
+# app can update itself without an installer.
+self-replace = "1.5.0"
 
 [target.'cfg(windows)'.dependencies]
 eframe = { version = "0.36", default-features = false, features = [
@@ -27,6 +30,12 @@ eframe = { version = "0.36", default-features = false, features = [
 ] }
 winreg = "0.56.0"
 raw-window-handle = "0.6"
+# ShellExecuteW for the UAC prompt on restart (see `src/updater.rs`).
+windows = { version = "0.62.2", features = [
+	"Win32_Foundation",
+	"Win32_UI_Shell",
+	"Win32_UI_WindowsAndMessaging",
+] }
 
 [target.'cfg(target_os = "linux")'.dependencies]
 eframe = { version = "0.36", default-features = false, features = [

@@ -1,13 +1,17 @@
 //! Application state and the main UI (categories, program selection,
 //! progress, results, changelog viewport).
 
-use crate::notifications::{NotificationAction, NotificationManager, UpdateNotification};
+use crate::notifications::{
+    NotificationAction, NotificationManager, UPDATE_PROGRESS_ID, UpdateNotification,
+    UpdateProgressNotification,
+};
 use database::cleaner_database::CleanerDatabase;
 use database::get_version;
 #[cfg(windows)]
 use database::registry_database::RegistryDatabase;
 use database::structures::{Cleared, CustomCleaner};
 
+use crate::updater::{self, UpdateStage, UpdateState, UpdaterCommand};
 use database::version::{Changelog, NewRelease, fetch_changelogs};
 use eframe::egui;
 use std::cell::RefCell;
@@ -76,6 +80,15 @@ pub struct MyApp {
     pub settings_texture: Option<egui::TextureHandle>,
 
     pub update_receiver: Option<std::sync::mpsc::Receiver<Result<Option<NewRelease>, String>>>,
+    /// Progress of the automatic update, filled by the platform updater worker.
+    pub updater_state: UpdateState,
+    /// Channel to the platform updater worker (`desktop`). `None` when no
+    /// worker was registered — Android, or a build without self-replace —
+    /// which disables the in-app update and falls back to the release page.
+    pub updater_tx: Option<std::sync::mpsc::Sender<UpdaterCommand>>,
+    /// Release offered by the last update check, kept so a failed download
+    /// can be retried and the release page can be opened from the failure.
+    pub update_release: Option<NewRelease>,
     /// Number of database paths per (category, sub_category).
     pub sub_counts: HashMap<(Arc<str>, Arc<str>), usize>,
     /// Precomputed checkbox labels like `"Cache (12)"`, parallel to `categories`.
@@ -268,6 +281,9 @@ impl MyApp {
             settings_texture: None,
 
             update_receiver: None,
+            updater_state: updater::new_state(),
+            updater_tx: None,
+            update_release: None,
             sub_counts,
             category_labels,
             window_title,
@@ -407,6 +423,9 @@ impl MyApp {
             settings_texture: None,
 
             update_receiver: None,
+            updater_state: updater::new_state(),
+            updater_tx: None,
+            update_release: None,
             sub_counts,
             category_labels,
             window_title,
@@ -489,6 +508,120 @@ impl MyApp {
     /// Opens the changelog window (fetch starts in `show_changelog_window`).
     fn open_changelog(&mut self) {
         self.show_changelog = true;
+    }
+
+    /// True when a platform updater worker is registered *and* the release
+    /// ships a binary this build can install on its own. Otherwise the app
+    /// can only point the user at the release page.
+    fn can_install(&self, release: &NewRelease) -> bool {
+        self.updater_tx.is_some() && release.has_asset()
+    }
+
+    /// Starts the automatic update: hands `release` to the updater worker and
+    /// shows the progress notification. Falls back to the "new version
+    /// available" banner when the update cannot be installed in-app.
+    fn start_update(&mut self, release: NewRelease) {
+        if !self.can_install(&release) {
+            self.notifications.push(UpdateNotification::new(release));
+            return;
+        }
+
+        let version = release.version.clone();
+        let total = release.asset_size;
+        // Stored as well so the notification can retry the install and link to
+        // the release page if the update fails.
+        self.update_release = Some(release.clone());
+        self.notifications.close(egui::Id::new(UPDATE_PROGRESS_ID));
+        self.notifications
+            .push(UpdateProgressNotification::new(self.updater_state.clone()));
+        // Show the download starting immediately, so the notification is never
+        // blank while the worker picks the command up.
+        self.publish_stage(UpdateStage::Downloading {
+            version,
+            done: 0,
+            total,
+        });
+        self.send_to_updater(UpdaterCommand::Install(release));
+    }
+
+    /// Publishes `stage` to the updater state shared with the worker thread.
+    fn publish_stage(&self, stage: UpdateStage) {
+        updater::publish(&self.updater_state, stage);
+    }
+
+    /// Sends `command` to the updater worker, reporting the failure in the
+    /// notification instead of silently dropping the update.
+    fn send_to_updater(&self, command: UpdaterCommand) {
+        let Some(tx) = &self.updater_tx else {
+            return;
+        };
+        let version = self
+            .update_release
+            .as_ref()
+            .map(|r| r.version.clone())
+            .unwrap_or_default();
+        if let Err(e) = tx.send(command) {
+            self.publish_stage(UpdateStage::Failed {
+                version,
+                error: format!("The updater stopped responding: {e}"),
+            });
+        }
+    }
+
+    /// Asks the worker to start a fresh copy of the app and quit this one, so
+    /// the freshly installed version is the one that keeps running. The
+    /// replacement is already on disk at this point (see `self_replace`), so
+    /// the new process picks it up.
+    ///
+    /// The notification deliberately stays up: the worker either exits the
+    /// process or publishes [`UpdateStage::RestartFailed`] into it, which
+    /// turns into a "Try again" prompt the user can act on.
+    fn request_restart(&mut self) {
+        // Never restart in the middle of a download or install: the worker
+        // owns the executable then, and quitting would leave a partial update.
+        let stage = self.update_stage();
+        if stage.is_running() {
+            return;
+        }
+        let Some(tx) = &self.updater_tx else {
+            return;
+        };
+        if let Err(e) = tx.send(UpdaterCommand::Restart) {
+            // The update is installed, so this is a restart problem, not a
+            // failed download: `RetryUpdate` must not offer to install again.
+            self.publish_stage(UpdateStage::RestartFailed {
+                version: stage.version().unwrap_or("?").to_string(),
+                error: format!(
+                    "The updater stopped responding: {e} Close and reopen Cross Cleaner \
+                     to use the new version."
+                ),
+            });
+        }
+    }
+
+    /// Retries a failed update from the start of the download.
+    fn retry_update(&mut self) {
+        let Some(release) = self.update_release.clone() else {
+            return;
+        };
+        self.publish_stage(UpdateStage::Downloading {
+            version: release.version.clone(),
+            done: 0,
+            total: release.asset_size,
+        });
+        self.send_to_updater(UpdaterCommand::Install(release));
+    }
+
+    /// Opens the release page of the pending update in the system browser.
+    fn open_release_page(&mut self) {
+        if let Some(release) = &self.update_release {
+            crate::title_bar::open_in_browser(&release.url);
+        }
+    }
+
+    /// Current stage of the automatic update.
+    fn update_stage(&self) -> UpdateStage {
+        updater::current(&self.updater_state)
     }
 
     /// Draws the changelog viewport ("What's New") as a separate native window.
@@ -716,7 +849,7 @@ impl eframe::App for MyApp {
                 Ok(check) => {
                     self.update_receiver = None;
                     if let Ok(Some(release)) = check {
-                        self.notifications.push(UpdateNotification::new(release));
+                        self.start_update(release);
                         ctx.request_repaint();
                     }
                 }
@@ -752,6 +885,9 @@ impl eframe::App for MyApp {
             match action {
                 NotificationAction::Close => self.notifications.close(id),
                 NotificationAction::ShowChangelog => self.open_changelog(),
+                NotificationAction::RestartApp => self.request_restart(),
+                NotificationAction::RetryUpdate => self.retry_update(),
+                NotificationAction::OpenReleasePage => self.open_release_page(),
                 NotificationAction::None => {}
             }
         }
