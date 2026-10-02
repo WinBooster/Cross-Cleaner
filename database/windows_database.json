@@ -5080,7 +5080,7 @@
     "path": "{drive}Users\\*\\AppData\\Roaming\\rgitui\\rgitui",
     "class": "Git",
     "category": "Cache",
-    "program": "rgtui",
+    "program": "rgitui",
     "files_to_remove": [
       "avatar_cache.txt"
     ]
@@ -5090,7 +5090,7 @@
     "class": "Git",
     "category": "LastActivity",
     "sub_category": "History",
-    "program": "rgtui",
+    "program": "rgitui",
     "directories_to_remove": [
       "history"
     ]
@@ -5150,13 +5150,12 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Users\\*\\.rustup\\toolchains\\*\\share\\doc\\rust",
+    "path": "{drive}Users\\*\\.rustup\\toolchains\\*\\share\\doc\\rust\\html\\*",
     "class": "Developing",
     "category": "Documentation",
     "program": "Rust Language",
-    "directories_to_remove": [
-      "html"
-    ]
+    "remove_files": true,
+    "remove_directories": true
   },
   {
     "path": "{drive}Program Files\\RustDesk\\usbmmidd_v2",

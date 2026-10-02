@@ -135,8 +135,6 @@
   "DotNet": "https://dotnet.microsoft.com/en-us/download",
   "Enigma Virtual Box": "https://enigmaprotector.com/en/downloads.html",
   "FreeCAD": "https://www.freecad.org",
-  "Git": "https://git-scm.com/downloads",
-  "GitHub Desktop": "https://desktop.github.com/download",
   "Go Language": "https://go.dev/doc/install",
   "IDA Pro": "https://hex-rays.com/ida-pro",
   "Inno Setup 6": "https://jrsoftware.org/isdl.php#stable",
@@ -200,6 +198,10 @@
   "Genshin Impact": "https://genshin.hoyoverse.com",
   "Ultrakill": "https://store.steampowered.com/app/1229490/ULTRAKILL",
   "ArcheAge": "https://archeage.ru",
+
+  "Git": "https://git-scm.com/downloads",
+  "GitHub Desktop": "https://desktop.github.com/download",
+  "rgitui": "https://github.com/noahbclarkson/rgitui",
 
   "ImageGlass": "https://imageglass.org",
   "InkSpace": "https://inkscape.org",
