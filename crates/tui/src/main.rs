@@ -15,6 +15,7 @@ use std::time::Duration;
 use appcore::app::AppState;
 use clap::{ArgAction, Parser};
 use crossterm::event::{self, Event, KeyEventKind};
+use crossterm::cursor;
 use crossterm::execute;
 use crossterm::terminal::{
     EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode,
@@ -109,10 +110,23 @@ fn main() -> io::Result<()> {
     // Registers the worker that can replace this executable with the release
     // binary; without it the dialog only offers the release page.
     app.start_self_update();
+    // Before the terminal is taken: from here on nothing may write to stderr.
+    tui::app::install_diagnostic_sink();
     runtime.block_on(run(app))
 }
 
-/// Owns the terminal setup, so a panic or an early error still restores it.
+/// Owns the terminal setup, so an early error restores it.
+///
+/// Restoring is deliberately a free function rather than something only `Drop`
+/// does, because two paths bypass destructors entirely:
+///
+/// * a panic — with `panic = "abort"` there is no unwinding at all;
+/// * `std::process::exit` — which the self-update worker calls to hand the
+///   executable back to `self_replace` and start the new version.
+///
+/// In both cases the user's shell would otherwise be left in raw mode on the
+/// alternate screen, which looks like a broken terminal and needs `reset` to
+/// fix. Both paths call [`restore_terminal`] first.
 struct TerminalGuard {
     terminal: Terminal<CrosstermBackend<Stdout>>,
 }
@@ -129,16 +143,35 @@ impl TerminalGuard {
 
 impl Drop for TerminalGuard {
     fn drop(&mut self) {
-        // Best effort: the process is about to exit, so failures here only
-        // affect the appearance of the shell prompt afterwards.
-        let _ = disable_raw_mode();
-        let _ = execute!(self.terminal.backend_mut(), LeaveAlternateScreen);
-        let _ = self.terminal.show_cursor();
+        restore_terminal();
     }
+}
+
+/// Puts the terminal back the way it was found. Idempotent.
+fn restore_terminal() {
+    // Best effort: the process is usually about to exit, so a failure here only
+    // affects how the shell prompt looks afterwards.
+    let _ = disable_raw_mode();
+    let _ = execute!(io::stdout(), LeaveAlternateScreen, cursor::Show);
+}
+
+/// Installs a panic hook that restores the terminal before the message is
+/// printed, so an abort mid-cleaning cannot strand the user.
+fn install_panic_hook() {
+    let previous = std::panic::take_hook();
+    std::panic::set_hook(Box::new(move |info| {
+        restore_terminal();
+        previous(info);
+    }));
 }
 
 async fn run(mut app: TuiApp) -> io::Result<()> {
     let mut guard = TerminalGuard::enter()?;
+    // After `enter`, so the hook is only needed while we own the screen.
+    install_panic_hook();
+    // The self-update worker exits the process directly; it must not skip the
+    // restore.
+    selfupdate::set_before_exit(restore_terminal);
     let result = event_loop(&mut guard.terminal, &mut app);
     drop(guard);
     result

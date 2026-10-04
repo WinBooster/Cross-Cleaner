@@ -51,7 +51,7 @@ impl Display {
     /// Writes the recovered variables into the environment.
     pub fn apply(&self) {
         for (key, value) in &self.env {
-            eprintln!("Display: setting {key}={value}");
+            database::diag::info(format!("Display: setting {key}={value}"));
             // SAFETY: `main` calls this before the tokio runtime is built, so
             // this is the only thread of the process and none can read the
             // environment while it is being modified.
@@ -60,7 +60,7 @@ impl Display {
         if !self.env.is_empty()
             && let Some(backend) = self.backend
         {
-            eprintln!("Display: forcing the {backend} backend");
+            database::diag::info(format!("Display: forcing the {backend} backend"));
         }
     }
 }

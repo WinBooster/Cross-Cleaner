@@ -10,10 +10,26 @@
 // terminal app on a machine without a matching asset) working.
 
 use std::sync::mpsc::Receiver;
+use std::sync::OnceLock;
 use std::time::Duration;
 
 use appcore::updater::{UpdateStage, UpdateState, UpdaterCommand};
 use database::version::{NewRelease, download_asset};
+
+/// Called before [`std::process::exit`] in [`restart`].
+static BEFORE_EXIT: OnceLock<fn()> = OnceLock::new();
+
+/// Registers cleanup to run just before the process exits to start the new
+/// version.
+///
+/// [`restart`] has to call `exit` rather than return: it runs on the worker
+/// thread while the frontend's event loop is still drawing, and returning would
+/// put an old frame on top of the new process. `exit` skips destructors, so the
+/// terminal frontend registers its restore here — otherwise the user's shell
+/// would be left in raw mode on the alternate screen after every update.
+pub fn set_before_exit(hook: fn()) {
+    let _ = BEFORE_EXIT.set(hook);
+}
 
 /// Serves update commands until the frontend closes the channel.
 ///
@@ -25,7 +41,7 @@ pub fn run(commands: Receiver<UpdaterCommand>, state: UpdateState) {
         match command {
             UpdaterCommand::Install(release) => {
                 if let Err(error) = install(&release, &state) {
-                    eprintln!("[updater] {error}");
+                    database::diag::warn(format!("[updater] {error}"));
                     appcore::updater::publish(
                         &state,
                         UpdateStage::Failed {
@@ -91,7 +107,7 @@ fn install(release: &NewRelease, state: &UpdateState) -> Result<(), String> {
 /// write access to its own folder, which `C:\Program Files` does not grant to
 /// a normal user.
 fn describe_install_error(release: &NewRelease, version: &str, error: std::io::Error) -> String {
-    eprintln!("[updater] Failed to install v{version}: {error}");
+    database::diag::warn(format!("[updater] failed to install v{version}: {error}"));
     if error.kind() == std::io::ErrorKind::PermissionDenied {
         return format!(
             "Access denied while writing the update. Cross Cleaner is installed in a \
@@ -114,7 +130,7 @@ fn restart(state: &UpdateState) {
         .unwrap_or("?")
         .to_string();
     if let Err(error) = relaunch() {
-        eprintln!("[updater] {error}");
+        database::diag::warn(format!("[updater] {error}"));
         appcore::updater::publish(
             state,
             UpdateStage::RestartFailed {
@@ -130,7 +146,11 @@ fn restart(state: &UpdateState) {
     // terminal (or window) goes away right after.
     std::thread::sleep(Duration::from_millis(300));
     // `exit` rather than returning: the frontend's event loop is still running
-    // and would otherwise draw another frame over the new process.
+    // and would otherwise draw another frame over the new process. It also skips
+    // destructors, so the frontend's cleanup runs first.
+    if let Some(hook) = BEFORE_EXIT.get() {
+        hook();
+    }
     std::process::exit(0);
 }
 
@@ -150,7 +170,7 @@ fn relaunch() -> Result<(), String> {
             // instead of failing outright.
             #[cfg(windows)]
             if error.raw_os_error() == Some(ERROR_ELEVATION_REQUIRED) {
-                eprintln!("[updater] Restart needs elevation, asking Windows to elevate");
+                database::diag::info("[updater] restart needs elevation, asking Windows to elevate");
                 return shell_execute_elevated(&exe, &args);
             }
             Err(format!("Failed to restart Cross Cleaner: {error}"))

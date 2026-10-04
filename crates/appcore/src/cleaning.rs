@@ -265,7 +265,7 @@ fn notify_result(bytes_cleared: u64, removed_files: u64, removed_directories: u6
 
     temp_file.close().unwrap();
     if let Err(e) = notification_result {
-        eprintln!("Failed to show notification: {:?}", e);
+        database::diag::warn(format!("failed to show notification: {e:?}"));
     }
 }
 

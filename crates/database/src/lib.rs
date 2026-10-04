@@ -2,6 +2,7 @@ use crate::structures::CleanerData;
 
 pub mod cleaner_database;
 pub mod custom_cleaners;
+pub mod diag;
 pub mod registry_database;
 mod registry_utils;
 mod streaming;

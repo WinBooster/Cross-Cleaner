@@ -6,6 +6,7 @@
 //! egui popup becomes a centered overlay, the search field becomes an input
 //! mode, and the title bar becomes a header line plus a footer of key hints.
 
+use std::collections::VecDeque;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
@@ -32,6 +33,51 @@ const SETTINGS: [&str; 4] = ["Popup sound", "Click sound", "Check sound", "Done 
 
 /// Lines a page-up / page-down moves in the changelog overlay.
 const CHANGELOG_PAGE: usize = 10;
+
+/// Diagnostics captured while this process owns the terminal.
+///
+/// Cleaning runs on worker threads and reports failures through
+/// [`database::diag`]. Those must never reach stderr: the alternate screen would
+/// be torn in the middle of the run, and with `panic = "abort"` there is no
+/// redraw afterwards. They are collected here and surfaced as a toast instead.
+static DIAGNOSTICS: std::sync::Mutex<VecDeque<(String, Instant)>> =
+    std::sync::Mutex::new(VecDeque::new());
+
+/// How many diagnostics to keep. Bounded because nothing drains this buffer
+/// except [`TuiApp::tick`], and a long run must not grow it without limit.
+const DIAGNOSTIC_HISTORY: usize = 32;
+
+/// Routes library diagnostics into [`DIAGNOSTICS`].
+///
+/// Without this every `warn` from a cleaner would be written straight to the
+/// terminal this app is drawing into.
+pub fn install_diagnostic_sink() {
+    database::diag::set_sink(Some(std::sync::Arc::new(push_diagnostic)));
+}
+
+/// Removes the sink again, restoring the stderr default.
+pub fn remove_diagnostic_sink() {
+    database::diag::set_sink(None);
+}
+
+/// Takes the diagnostics collected since the last call.
+fn take_diagnostics() -> Vec<String> {
+    DIAGNOSTICS
+        .lock()
+        .map(|mut queue| queue.drain(..).map(|(line, _)| line).collect())
+        .unwrap_or_default()
+}
+
+/// A diagnostic arrived for the buffer, in arrival order.
+fn push_diagnostic(line: &str) {
+    let Ok(mut queue) = DIAGNOSTICS.lock() else {
+        return;
+    };
+    if queue.len() >= DIAGNOSTIC_HISTORY {
+        queue.pop_front();
+    }
+    queue.push_back((line.to_string(), Instant::now()));
+}
 
 /// Where the program search field gets its keystrokes.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -223,6 +269,20 @@ impl TuiApp {
             .is_some_and(|t| Instant::now() >= t.until)
         {
             self.toast = None;
+        }
+
+        // Surface whatever the cleaners reported. Only the newest is shown and
+        // the rest are counted, so a run that fails on every entry cannot bury
+        // the interface under a wall of toasts.
+        let diagnostics = take_diagnostics();
+        if let Some(last) = diagnostics.last() {
+            let more = diagnostics.len().saturating_sub(1);
+            let message = if more == 0 {
+                last.clone()
+            } else {
+                format!("{last} (+{more} more)")
+            };
+            self.toast = Some(Toast::new(message, Style::default().fg(Theme::WARN)));
         }
     }
 
@@ -1988,6 +2048,77 @@ mod tests {
             KeyModifiers::CONTROL,
         )));
         assert!(app.should_quit, "Ctrl+C must not be remapped");
+    }
+
+    // --- diagnostics ----------------------------------------------------
+
+    /// Installs the capture sink for one test and removes it again on drop.
+    ///
+    /// The sink and the queue behind it are process-global, so this also keeps a
+    /// panicking test from leaking the sink into the rest of the suite — which is
+    /// why the diagnostics behaviour is covered by a single test rather than
+    /// several that would race for the same global.
+    struct DiagnosticsGuard;
+
+    impl DiagnosticsGuard {
+        fn install() -> Self {
+            install_diagnostic_sink();
+            Self
+        }
+    }
+
+    impl Drop for DiagnosticsGuard {
+        fn drop(&mut self) {
+            remove_diagnostic_sink();
+            let _ = take_diagnostics();
+        }
+    }
+
+    #[test]
+    fn diagnostics_are_captured_and_surfaced_as_a_toast() {
+        let _guard = DiagnosticsGuard::install();
+        let mut app = sample_app();
+
+        // The regression: a cleaner reporting a failure used to `eprintln!`
+        // straight onto the alternate screen, tearing the frame apart in the
+        // middle of a run.
+        database::diag::warn("cleaner: remove_file C:\\cache\\a.tmp: access denied");
+        assert!(
+            !draw(&mut app, 100, 30).contains("access denied"),
+            "a diagnostic must never be part of a frame",
+        );
+
+        // The next tick turns it into a toast instead.
+        app.tick();
+        let screen = draw(&mut app, 100, 30);
+        assert!(screen.contains("access denied"), "{screen}");
+
+        // Drained, so an expired toast does not bring it back.
+        app.toast = None;
+        app.tick();
+        assert!(!draw(&mut app, 100, 30).contains("access denied"));
+
+        // A run that fails on every entry must not bury the interface either. The
+        // queue is capped, so only `DIAGNOSTIC_HISTORY` messages survive and the
+        // toast counts the rest it dropped.
+        for i in 0..40 {
+            database::diag::warn(format!("cleaner: failure {i}"));
+        }
+        app.tick();
+        let screen = draw(&mut app, 100, 30);
+        assert!(screen.contains("failure 39"), "{screen}");
+        assert!(
+            screen.contains(&format!("(+{} more)", DIAGNOSTIC_HISTORY - 1)),
+            "{screen}",
+        );
+
+        // `info` is surfaced too — image optimization reports on every file.
+        app.toast = None;
+        database::diag::info("[image_optimize] WRITTEN saved=4096");
+        app.tick();
+        let screen = draw(&mut app, 100, 30);
+        assert!(screen.contains("[info]"), "{screen}");
+        assert!(screen.contains("saved=4096"), "{screen}");
     }
 
     // --- update dialog ---------------------------------------------------

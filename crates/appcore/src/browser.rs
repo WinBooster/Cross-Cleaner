@@ -13,7 +13,7 @@ fn is_safe(url: &str) -> bool {
 #[cfg(windows)]
 pub fn open_in_browser(url: &str) {
     if !is_safe(url) {
-        eprintln!("Refusing to open non-HTTPS URL: {url}");
+        database::diag::warn(format!("refusing to open non-HTTPS URL: {url}"));
         return;
     }
     // `ShellExecuteW` is reached through `cmd /c start` so this crate stays
@@ -33,7 +33,7 @@ pub fn open_in_browser(url: &str) {
 ))]
 pub fn open_in_browser(url: &str) {
     if !is_safe(url) {
-        eprintln!("Refusing to open non-HTTPS URL: {url}");
+        database::diag::warn(format!("refusing to open non-HTTPS URL: {url}"));
         return;
     }
     let _ = std::process::Command::new("xdg-open").arg(url).spawn();
@@ -42,7 +42,7 @@ pub fn open_in_browser(url: &str) {
 #[cfg(target_os = "macos")]
 pub fn open_in_browser(url: &str) {
     if !is_safe(url) {
-        eprintln!("Refusing to open non-HTTPS URL: {url}");
+        database::diag::warn(format!("refusing to open non-HTTPS URL: {url}"));
         return;
     }
     let _ = std::process::Command::new("open").arg(url).spawn();

@@ -25,12 +25,11 @@ pub fn optimize_single(path: &Path) -> Result<crate::custom_cleaners::GlobCleanS
         .unwrap_or("")
         .to_lowercase();
 
-    eprintln!(
-        "[image_optimize] path={} ext={:?} is_image={}",
+    database::diag::info(format!(
+        "[image_optimize] path={} ext={ext:?} is_image={}",
         path.display(),
-        ext,
         is_image_extension(&ext)
-    );
+    ));
 
     if !is_image_extension(&ext) {
         return Ok(crate::custom_cleaners::GlobCleanStats::default());
@@ -46,7 +45,7 @@ pub fn optimize_single(path: &Path) -> Result<crate::custom_cleaners::GlobCleanS
     if original_size > MAX_IMAGE_BYTES {
         return Ok(crate::custom_cleaners::GlobCleanStats::default());
     }
-    eprintln!("[image_optimize] original_size={}", original_size);
+    database::diag::info(format!("[image_optimize] original_size={original_size}"));
 
     if ext == "gif" {
         let decoder =
@@ -64,7 +63,7 @@ pub fn optimize_single(path: &Path) -> Result<crate::custom_cleaners::GlobCleanS
     }
 
     let img = image::open(path).map_err(|e| {
-        eprintln!("[image_optimize] open failed: {}", e);
+        database::diag::warn(format!("[image_optimize] open failed: {e}"));
         io::Error::new(io::ErrorKind::InvalidData, e)
     })?;
     // Bound peak: reject huge decoded pixel buffers (e.g. 5000x5000 RGBA ~100MB).
@@ -89,11 +88,10 @@ pub fn optimize_single(path: &Path) -> Result<crate::custom_cleaners::GlobCleanS
     drop(img);
     let new_size = compressed.len() as u64;
 
-    eprintln!(
-        "[image_optimize] new_size={} saved={}",
-        new_size,
+    database::diag::info(format!(
+        "[image_optimize] new_size={new_size} saved={}",
         original_size.saturating_sub(new_size)
-    );
+    ));
 
     if new_size >= original_size {
         return Ok(crate::custom_cleaners::GlobCleanStats::default());
@@ -108,7 +106,7 @@ pub fn optimize_single(path: &Path) -> Result<crate::custom_cleaners::GlobCleanS
     replacement.persist(path).map_err(|e| e.error)?;
 
     let saved = original_size - new_size;
-    eprintln!("[image_optimize] WRITTEN saved={}", saved);
+    database::diag::info(format!("[image_optimize] WRITTEN saved={saved}"));
     Ok(crate::custom_cleaners::GlobCleanStats::file(saved))
 }
 

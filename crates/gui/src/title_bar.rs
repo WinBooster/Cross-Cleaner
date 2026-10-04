@@ -276,7 +276,7 @@ pub(crate) fn open_in_browser(url: &str) {
     use windows::core::{PCWSTR, w};
 
     if !url.starts_with("https://") {
-        eprintln!("Refusing to open non-HTTPS URL: {url}");
+        database::diag::warn(format!("refusing to open non-HTTPS URL: {url}"));
         return;
     }
     let wide_url: Vec<u16> = url.encode_utf16().chain(std::iter::once(0)).collect();
@@ -291,7 +291,7 @@ pub(crate) fn open_in_browser(url: &str) {
         )
     };
     if result.0 as isize <= 32 {
-        eprintln!("Failed to open URL in browser: {url}");
+        database::diag::warn(format!("failed to open URL in browser: {url}"));
     }
 }
 
@@ -303,7 +303,7 @@ pub(crate) fn open_in_browser(url: &str) {
 #[cfg(target_os = "android")]
 pub(crate) fn open_in_browser(url: &str) {
     if !url.starts_with("https://") {
-        eprintln!("Refusing to open non-HTTPS URL: {url}");
+        database::diag::warn(format!("refusing to open non-HTTPS URL: {url}"));
         return;
     }
     use jni::JavaVM;
@@ -375,7 +375,7 @@ pub(crate) fn open_in_browser(url: &str) {
     });
 
     if let Err(e) = result {
-        eprintln!("[browser] Failed to open URL {url}: {e:?}");
+        database::diag::warn(format!("[browser] failed to open URL {url}: {e:?}"));
         let _ = vm.attach_current_thread(|env| {
             env.exception_clear();
             Ok::<(), jni::errors::Error>(())

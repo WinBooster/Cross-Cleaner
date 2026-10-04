@@ -1,3 +1,4 @@
+use database::diag;
 use database::structures::{CleanerData, CleanerFlags, CleanerResult};
 use futures::stream::{self, StreamExt};
 use glob::glob;
@@ -206,7 +207,10 @@ fn clean_path_sync(path: &Path, data: &CleanerData) -> PathStats {
         match open_dir_without_links(path) {
             Ok(dir) => Some(dir),
             Err(e) => {
-                eprintln!("cleaner: open_dir {}: {}", path.display(), e);
+                diag::warn(format!(
+                    "cleaner: open_dir {}: {e}",
+                    path.display()
+                ));
                 None
             }
         }
@@ -214,33 +218,33 @@ fn clean_path_sync(path: &Path, data: &CleanerData) -> PathStats {
 
     for fname in &data.files_to_remove {
         let Some(relative) = safe_relative_path(fname) else {
-            eprintln!(
-                "cleaner: skipping unsafe file name {:?} in {}",
-                fname, data.path
-            );
+            diag::warn(format!(
+                "cleaner: skipping unsafe file name {fname:?} in {}",
+                data.path
+            ));
             continue;
         };
         let Some(dir) = &named_dir else { break };
         let fpath = path.join(&relative);
         match remove_file_in_dir(dir, &relative) {
             Ok(b) => stats.add(1, 0, b),
-            Err(e) => eprintln!("cleaner: remove_file {}: {}", fpath.display(), e),
+            Err(e) => diag::warn(format!("cleaner: remove_file {}: {e}", fpath.display())),
         }
     }
 
     for dname in &data.directories_to_remove {
         let Some(relative) = safe_relative_path(dname) else {
-            eprintln!(
-                "cleaner: skipping unsafe dir name {:?} in {}",
-                dname, data.path
-            );
+            diag::warn(format!(
+                "cleaner: skipping unsafe dir name {dname:?} in {}",
+                data.path
+            ));
             continue;
         };
         let Some(dir) = &named_dir else { break };
         let dpath = path.join(&relative);
         match remove_dir_in_dir(dir, &relative) {
             Ok((f, fo, b)) => stats.add(f, fo, b),
-            Err(e) => eprintln!("cleaner: remove_dir {}: {}", dpath.display(), e),
+            Err(e) => diag::warn(format!("cleaner: remove_dir {}: {e}", dpath.display())),
         }
     }
 
