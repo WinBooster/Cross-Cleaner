@@ -9,8 +9,8 @@
 // `self-replace` dependency — which is what keeps the Android build (and the
 // terminal app on a machine without a matching asset) working.
 
-use std::sync::mpsc::Receiver;
 use std::sync::OnceLock;
+use std::sync::mpsc::Receiver;
 use std::time::Duration;
 
 use appcore::updater::{UpdateStage, UpdateState, UpdaterCommand};
@@ -170,7 +170,9 @@ fn relaunch() -> Result<(), String> {
             // instead of failing outright.
             #[cfg(windows)]
             if error.raw_os_error() == Some(ERROR_ELEVATION_REQUIRED) {
-                database::diag::info("[updater] restart needs elevation, asking Windows to elevate");
+                database::diag::info(
+                    "[updater] restart needs elevation, asking Windows to elevate",
+                );
                 return shell_execute_elevated(&exe, &args);
             }
             Err(format!("Failed to restart Cross Cleaner: {error}"))

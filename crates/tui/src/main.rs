@@ -14,8 +14,8 @@ use std::time::Duration;
 
 use appcore::app::AppState;
 use clap::{ArgAction, Parser};
-use crossterm::event::{self, Event, KeyEventKind};
 use crossterm::cursor;
+use crossterm::event::{self, Event, KeyEventKind};
 use crossterm::execute;
 use crossterm::terminal::{
     EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode,

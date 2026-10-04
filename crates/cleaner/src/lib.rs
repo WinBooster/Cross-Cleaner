@@ -207,10 +207,7 @@ fn clean_path_sync(path: &Path, data: &CleanerData) -> PathStats {
         match open_dir_without_links(path) {
             Ok(dir) => Some(dir),
             Err(e) => {
-                diag::warn(format!(
-                    "cleaner: open_dir {}: {e}",
-                    path.display()
-                ));
+                diag::warn(format!("cleaner: open_dir {}: {e}", path.display()));
                 None
             }
         }
