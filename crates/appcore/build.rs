@@ -44,8 +44,7 @@ fn compress(asset: &str) {
     let out_path = Path::new(&out_dir).join(format!("{asset}.gz"));
     fs::write(&out_path, &compressed).expect("Failed to write compressed sound");
 
-    println!(
-        "cargo:rerun-if-changed={source}");
+    println!("cargo:rerun-if-changed={source}");
     println!(
         "  {asset}: {} bytes -> {} bytes ({:.1}% reduction)",
         bytes.len(),

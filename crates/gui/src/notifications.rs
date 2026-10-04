@@ -65,7 +65,9 @@ fn notification_alpha(sticky: bool, elapsed: f32) -> f32 {
         return fade_in;
     }
     let remaining = NOTIFICATION_LIFETIME.as_secs_f32() - elapsed;
-    fade_in.min(remaining / NOTIFICATION_FADE_SECS).clamp(0.0, 1.0)
+    fade_in
+        .min(remaining / NOTIFICATION_FADE_SECS)
+        .clamp(0.0, 1.0)
 }
 
 /// Holds and renders all active notifications.
@@ -429,10 +431,7 @@ mod tests {
             },
         ];
         for stage in stages {
-            assert!(
-                at(stage).sticky(),
-                "{stage:?} must not expire on its own",
-            );
+            assert!(at(stage).sticky(), "{stage:?} must not expire on its own",);
         }
         assert!(UpdateProgressNotification::new_release_page(release()).sticky());
     }

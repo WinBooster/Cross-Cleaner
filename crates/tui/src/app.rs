@@ -1239,7 +1239,11 @@ impl TuiApp {
 /// next to a download already in motion.
 fn update_progress_line(stage: &updater::UpdateStage) -> String {
     match stage {
-        updater::UpdateStage::Downloading { version, done, total } => format!(
+        updater::UpdateStage::Downloading {
+            version,
+            done,
+            total,
+        } => format!(
             "updating to v{version} — {}",
             updater::format_progress(*done, *total)
         ),
@@ -2792,8 +2796,10 @@ mod tests {
     fn a_failed_check_is_reported_instead_of_being_dropped() {
         let mut app = sample_app();
         let (tx, check) = std::sync::mpsc::channel();
-        tx.send(Err("Failed to request latest release: status 403".to_string()))
-            .expect("receiver alive");
+        tx.send(Err(
+            "Failed to request latest release: status 403".to_string()
+        ))
+        .expect("receiver alive");
         app.update_receiver = Some(check);
         app.tick();
         let screen = draw(&mut app, 100, 30);
