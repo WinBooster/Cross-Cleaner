@@ -38,7 +38,9 @@ LicenseFile=LICENSE
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=innosetup\compiler
 OutputBaseFilename=Cross_Cleaner_Setup
-SetupIconFile=assets\icon.ico
+; The icon lives with the crate that owns it (see crates/winicon), which both
+; binaries are stamped from, so the installer shows the same one.
+SetupIconFile=crates\winicon\assets\icon.ico
 SolidCompression=yes
 WizardStyle=modern dynamic
 

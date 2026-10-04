@@ -143,7 +143,6 @@ mod tests {
     }
 
     /// The version packing is platform-independent logic worth pinning down:
-    /// the field layout is what Windows reads back in Explorer.
     ///
     /// Windows keeps the four components as two 16-bit pairs, most significant
     /// first, so `3.2.1.4` is major `3`, minor `2`, build `1`, revision `4` —
