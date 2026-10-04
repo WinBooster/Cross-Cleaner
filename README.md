@@ -1,15 +1,19 @@
 <div align="center">
 <h1>🌟 Cross Cleaner 🌟</h1>
-
-[![Rustlang](https://img.shields.io/static/v1?label=Made%20with&message=Rust&logo=rust&labelColor=e82833&color=b11522)](https://www.rust-lang.org)
-[![Github License](https://img.shields.io/github/license/WinBooster/Cross-Cleaner?logo=mdBook)](https://github.com/WinBooster/Cross-Cleaner/blob/main/LICENSE)
-[![Build Status](https://github.com/WinBooster/Cross-Cleaner/actions/workflows/dev_build.yml/badge.svg)](https://github.com/WinBooster/Cross-Cleaner/actions)
-[![Download](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/total)](https://github.com/WinBooster/Cross-Cleaner/releases)
-[![GitHub Issues](https://img.shields.io/github/issues/WinBooster/Cross-Cleaner)](https://github.com/WinBooster/Cross-Cleaner/issues)
-[![GitHub Stars](https://img.shields.io/github/stars/WinBooster/Cross-Cleaner?style=social)](https://github.com/WinBooster/Cross-Cleaner/stargazers)
-
-### A powerful system cleanup tool written in Rust
-
+<br>
+An addon-style <a href="https://github.com/WinBooster/Cross-Cleaner">system cleanup tool</a> that removes temporary files, cache and other system junk from your computer.
+<br>
+<a href="https://www.rust-lang.org"><img src="https://img.shields.io/static/v1?label=Made%20with&message=Rust&logo=rust&labelColor=e82833&color=b11522" alt="Made with Rust"></a>
+<a href="https://github.com/WinBooster/Cross-Cleaner/blob/main/LICENSE"><img src="https://img.shields.io/github/license/WinBooster/Cross-Cleaner?logo=mdBook" alt="Github License"></a>
+<br>
+<a href="https://github.com/WinBooster/Cross-Cleaner/actions"><img src="https://github.com/WinBooster/Cross-Cleaner/actions/workflows/dev_build.yml/badge.svg" alt="Build Status"></a>
+<a href="https://github.com/WinBooster/Cross-Cleaner/releases"><img src="https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/total" alt="Downloads"/></a>
+<a href="https://github.com/WinBooster/Cross-Cleaner/issues"><img src="https://img.shields.io/github/issues/WinBooster/Cross-Cleaner" alt="GitHub Issues"/></a>
+<a href="https://github.com/WinBooster/Cross-Cleaner/stargazers"><img src="https://badgen.net/github/stars/WinBooster/Cross-Cleaner" alt="GitHub Stars"/></a>
+<br>
+<a href="https://discord.gg/wmJdUBaztX"><img src="https://img.shields.io/badge/support/help/issues-discord-brightgreen" alt="Discord"/></a>
+<br>
+<p>Join our Discord server for support, updates and community discussions 🤫</p>
 </div>
 
 ## 📌 About the Project

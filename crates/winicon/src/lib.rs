@@ -142,7 +142,41 @@ mod tests {
         );
     }
 
+    /// The Inno Setup script names the icon too, and Inno resolves it relative to
+    /// the repository root. When the icon moved into this crate that line was left
+    /// pointing at the old location, and the release job failed at the last step
+    /// with "The system cannot find the path specified" — after the binaries were
+    /// already built and uploaded nowhere.
+    #[test]
+    fn the_installer_script_points_at_the_icon() {
+        let script = std::fs::read_to_string(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../build_setup.iss"
+        ))
+        .expect("build_setup.iss is readable");
+
+        let icon_line = script
+            .lines()
+            .find(|line| line.trim_start().starts_with("SetupIconFile="))
+            .expect("the installer script sets SetupIconFile");
+        let relative = icon_line
+            .trim()
+            .trim_start_matches("SetupIconFile=")
+            .replace('\\', "/");
+
+        // Relative to the repository root, which is where `iscc` runs from.
+        let root = concat!(env!("CARGO_MANIFEST_DIR"), "/../..");
+        let resolved = format!("{root}/{relative}");
+        let bytes = std::fs::read(&resolved)
+            .unwrap_or_else(|e| panic!("{resolved} is unreadable: {e}"));
+        assert_eq!(
+            bytes, ICON,
+            "the installer must ship the same icon the binaries are stamped with",
+        );
+    }
+
     /// The version packing is platform-independent logic worth pinning down:
+    /// the field layout is what Windows reads back in Explorer.
     ///
     /// Windows keeps the four components as two 16-bit pairs, most significant
     /// first, so `3.2.1.4` is major `3`, minor `2`, build `1`, revision `4` —
