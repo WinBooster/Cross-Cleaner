@@ -1745,7 +1745,9 @@ mod tests {
 
     /// Character column at which `needle` starts in `haystack`.
     fn column_of(haystack: &str, needle: &str) -> Option<usize> {
-        haystack.find(needle).map(|at| haystack[..at].chars().count())
+        haystack
+            .find(needle)
+            .map(|at| haystack[..at].chars().count())
     }
 
     /// The column header: it sits inside the table's top border, so the border line
@@ -1792,7 +1794,9 @@ mod tests {
 
         let data: Vec<&str> = lines
             .iter()
-            .filter(|line| column_of(line, "Chrome").is_some() || column_of(line, "Visual").is_some())
+            .filter(|line| {
+                column_of(line, "Chrome").is_some() || column_of(line, "Visual").is_some()
+            })
             .copied()
             .collect();
         assert_eq!(data.len(), 2, "expected two rows:\n{screen}");
@@ -1806,10 +1810,7 @@ mod tests {
         );
         let border = header.trim_start_matches('╭').trim_end_matches('╮');
         // Only the labels and the single space after each may interrupt the rule.
-        let interruptions = border
-            .chars()
-            .filter(|c| *c != '─' && *c != ' ')
-            .count();
+        let interruptions = border.chars().filter(|c| *c != '─' && *c != ' ').count();
         assert!(
             interruptions > 0,
             "the labels must be inside the border:\n{screen}",

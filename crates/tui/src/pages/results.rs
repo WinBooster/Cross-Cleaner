@@ -92,9 +92,7 @@ pub fn render(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
 fn frame_block(header: Line<'static>, programs: usize) -> Block<'static> {
     Block::bordered()
         .title_top(header)
-        .title_bottom(
-            Line::from(format!(" {programs} cleaned · esc back ")).right_aligned(),
-        )
+        .title_bottom(Line::from(format!(" {programs} cleaned · esc back ")).right_aligned())
         .border_type(BorderType::Rounded)
         .border_style(Theme::border(true))
         .style(Style::default().bg(Theme::BG))
@@ -119,7 +117,9 @@ fn header_line() -> Line<'static> {
     // the block fills in after the title ends.
     spans.push(Span::styled(
         " Categories ",
-        Style::default().fg(Theme::TEXT_DIM).add_modifier(ratatui::style::Modifier::BOLD),
+        Style::default()
+            .fg(Theme::TEXT_DIM)
+            .add_modifier(ratatui::style::Modifier::BOLD),
     ));
     Line::from(spans)
 }
