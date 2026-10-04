@@ -17,10 +17,26 @@
 //!
 //! On non-Windows targets [`apply`] is a no-op, so callers need no `cfg`.
 
+/// The application icon, owned by this crate so both frontends stamp the same
+/// one without either of them carrying the file.
+///
+/// The raw bytes are here for the runtimes that draw the icon as a window icon
+/// (eframe on desktop, the activity on Android).
+pub const ICON: &[u8] = include_bytes!("../assets/icon.ico");
+
+/// The same file as a path, for `winres`, which takes a filename rather than
+/// bytes.
+///
+/// `CARGO_MANIFEST_DIR` expands here — while *this* crate is compiled — so the
+/// value is this crate's own directory no matter which build script ends up
+/// calling [`apply`]. That is what lets callers stop passing a relative path
+/// around: `desktop/build.rs` and `tui/build.rs` live two directories away and
+/// would each have to count the `..` segments on their own.
+pub const ICON_PATH: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/assets/icon.ico");
+
 /// What to stamp into a Windows executable.
-pub struct Options<'a> {
-    /// Path to the `.ico`, relative to the calling crate's manifest directory.
-    pub icon: &'a str,
+#[derive(Debug, Clone, Copy)]
+pub struct Options {
     /// Marks release builds as needing administrator rights.
     pub require_admin: bool,
     /// Switches the binary to the GUI subsystem. Only for window apps.
@@ -73,9 +89,9 @@ const ELEVATE_MANIFEST: &str = r#"
 /// the artifact the release workflow expects, and shipping one silently is worse
 /// than not shipping it at all.
 #[cfg(windows)]
-pub fn apply(options: Options<'_>) {
+pub fn apply(options: Options) {
     let mut res = winres::WindowsResource::new();
-    res.set_icon(options.icon);
+    res.set_icon(ICON_PATH);
 
     if options.require_admin && is_release() {
         res.set_manifest(ELEVATE_MANIFEST);
@@ -96,12 +112,43 @@ pub fn apply(options: Options<'_>) {
 
 /// Non-Windows no-op, so callers do not need their own `cfg`.
 #[cfg(not(windows))]
-pub fn apply(_options: Options<'_>) {}
+pub fn apply(_options: Options) {}
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
+    /// The icon is embedded at compile time, so a missing or empty file would
+    /// produce a binary with no icon and nothing else would notice.
+    #[test]
+    fn the_icon_is_embedded() {
+        assert!(!ICON.is_empty(), "icon.ico must be embedded");
+        // ICO magic: reserved = 0, type = 1 (icon), then the image count.
+        assert_eq!(&ICON[..4], &[0x00, 0x00, 0x01, 0x00], "not an ICO file");
+    }
+
+    /// `winres` only ever sees a filename, so a path that does not resolve would
+    /// fail deep inside the resource compiler with a much less obvious message.
+    #[test]
+    fn the_icon_path_points_at_the_embedded_icon() {
+        assert!(
+            ICON_PATH.ends_with("assets/icon.ico"),
+            "unexpected icon path: {ICON_PATH}",
+        );
+        let on_disk = std::fs::read(ICON_PATH).expect("icon.ico must exist on disk");
+        assert_eq!(
+            on_disk, ICON,
+            "the path and the embedded bytes must be the same file",
+        );
+    }
+
     /// The version packing is platform-independent logic worth pinning down:
     /// the field layout is what Windows reads back in Explorer.
+    ///
+    /// Windows keeps the four components as two 16-bit pairs, most significant
+    /// first, so `3.2.1.4` is major `3`, minor `2`, build `1`, revision `4` —
+    /// not `3.2.0.4`. Getting the shift wrong produces a file that still looks
+    /// versioned and is only wrong when read back.
     #[test]
     fn version_number_packs_four_components() {
         fn pack(version: &str) -> u64 {
@@ -112,12 +159,28 @@ mod tests {
             let get = |index: usize| parts.get(index).copied().unwrap_or(0);
             (get(0) << 48) | (get(1) << 32) | (get(2) << 16) | get(3)
         }
-        assert_eq!(pack("2.0.2"), 2 << 48);
-        assert_eq!(pack("2.0.2.8"), (2 << 48) | (8 << 16));
-        assert_eq!(pack("2.0.2.8.1"), (2 << 48) | (8 << 16) | 1);
+        const MAJOR: u64 = 1 << 48;
+        const MINOR: u64 = 1 << 32;
+        const BUILD: u64 = 1 << 16;
+        const REVISION: u64 = 1;
+
+        assert_eq!(
+            pack("3.2.1.4"),
+            3 * MAJOR | 2 * MINOR | BUILD | 4 * REVISION,
+            "all four components",
+        );
+        // A missing component is zero, so a three-part version is the same
+        // version with no revision.
+        assert_eq!(pack("3.2.1"), 3 * MAJOR | 2 * MINOR | BUILD);
+        assert_eq!(pack("3.2"), 3 * MAJOR | 2 * MINOR);
+        // Anything past the fourth is dropped, not shifted into the wrong field.
+        assert_eq!(
+            pack("3.2.1.4.9"),
+            3 * MAJOR | 2 * MINOR | BUILD | 4 * REVISION,
+        );
         // Unparsable components must not panic: the workflow passes whatever the
         // user typed into the release dispatch.
-        assert_eq!(pack("1.x.0"), 1 << 48);
+        assert_eq!(pack("1.x.0"), MAJOR);
         assert_eq!(pack(""), 0);
     }
 }

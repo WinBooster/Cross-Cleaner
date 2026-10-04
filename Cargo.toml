@@ -9,12 +9,11 @@ members = [
     "crates/gui",
     "crates/selfupdate",
     "crates/tui",
+    # Pulled in as a build dependency by both binaries, so it is compiled anyway.
+    # Listed explicitly because it owns the icon and the tests that guard it —
+    # as an excluded path dependency those tests would never run.
+    "crates/winicon",
 ]
-
-# `winicon` is only ever pulled in as a build dependency of the two Windows
-# binaries; keeping it out of the member list stops `cargo build --workspace`
-# from producing a library nobody links against.
-exclude = ["crates/winicon"]
 
 # wgpu-hal 30.0.1 requires windows 0.62, but the crates.io gpu-allocator 0.28.0
 # release resolves to windows 0.61 (pulled in by notify-rust -> tauri-winrt-notification).

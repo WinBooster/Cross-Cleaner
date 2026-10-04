@@ -16,3 +16,14 @@ notify-rust = "4"
 tempfile = "3.27"
 serde = { version = "1", features = ["derive", "rc"] }
 serde_json = "1"
+# Un-gzips the embedded sounds. Regular dependency, not just a build one: the
+# compressed bytes are stored in the binary and decompressed per playback.
+flate2 = "1.1"
+
+# Audio output. Android has no rodio support here and gets silent no-ops.
+[target.'cfg(not(target_os = "android"))'.dependencies]
+rodio = "0.22"
+
+# Gzips the sounds in `assets/` into `OUT_DIR` (see `build.rs`).
+[build-dependencies]
+flate2 = "1.1"

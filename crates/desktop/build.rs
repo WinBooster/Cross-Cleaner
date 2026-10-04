@@ -5,8 +5,6 @@
 
 fn main() {
     winicon::apply(winicon::Options {
-        // The crate lives in `crates/`, so the repo-root assets are two levels up.
-        icon: "..\\..\\assets\\icon.ico",
         // Cleaning writes to system-wide locations, so a release build must be
         // elevated — same as the terminal frontend.
         require_admin: true,

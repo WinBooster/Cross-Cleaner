@@ -74,11 +74,12 @@ To update the version in all Cargo.toml files:
 - crates/gui/Cargo.toml
 - crates/selfupdate/Cargo.toml
 - crates/tui/Cargo.toml
+- crates/winicon/Cargo.toml
 ```
 
-Every crate lives under `crates/`; `crates/winicon` is excluded from the
-workspace members because it is only ever pulled in as a build dependency of
-the two Windows binaries.
+Every crate lives under `crates/` and is a workspace member, `crates/winicon`
+included: it is a build dependency of the two Windows binaries anyway, and
+listing it is what lets the tests guarding the icon actually run.
 
 Or use a script:
 
@@ -173,7 +174,8 @@ Solution: Install Visual Studio Build Tools or Windows SDK
 
 **Problem**: Icon not found
 ```
-Solution: Ensure assets/icon.ico exists in the project root
+Solution: Ensure crates/winicon/assets/icon.ico exists — `winicon` owns the
+icon, so neither build.rs passes a path to it any more
 ```
 
 ### Build Fails with "Out of Memory"
@@ -248,7 +250,8 @@ upx --best target/release/Cross_Cleaner_*.exe
 - `crates/winicon`: Shared Windows resources (icon, version block, elevation manifest)
 - `crates/desktop/build.rs`: Window build script (delegates to `winicon`)
 - `crates/tui/build.rs`: Terminal build script (delegates to `winicon`)
-- `crates/gui/build.rs`: GUI build script (compresses sounds and icons)
+- `crates/appcore/build.rs`: UI sounds (gzips `assets/*.mp3` into `OUT_DIR`)
+- `crates/gui/build.rs`: GUI build script (compresses the window icons)
 - `crates/database/build.rs`: Database optimization (minify + gzip)
 
 ## 💡 Tips

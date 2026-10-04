@@ -11,6 +11,7 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use appcore::app::{AppState, Page};
+use appcore::sounds;
 use appcore::updater::{self, UpdateState, UpdaterCommand};
 use appcore::{Toggle, config};
 use crossterm::event::{Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
@@ -165,6 +166,20 @@ pub struct TuiApp {
     update_receiver: Option<std::sync::mpsc::Receiver<Result<Option<NewRelease>, String>>>,
     /// True while the update dialog is on screen.
     pub update_open: bool,
+    /// Set once the version check found a release this build can install and the
+    /// download was started without waiting for a key press, the way the window
+    /// frontend does it.
+    auto_update: bool,
+    /// Set once the dialog has been raised for a finished automatic update, so a
+    /// user who answered it does not get it back on the next tick.
+    update_announced: bool,
+    /// Footer line for the automatic update while the worker runs.
+    ///
+    /// Its own field rather than a toast: a toast is transient and gets
+    /// overwritten by the next one — a cleaner warning or "Cleaning finished." —
+    /// which would make the download flicker in and out. A toast still wins the
+    /// line, because it reports something that happened to the user's data.
+    update_progress: Option<String>,
     /// Progress of the self-update, written by the `selfupdate` worker thread.
     pub updater_state: UpdateState,
     /// Channel to the self-update worker. `None` when no worker was started,
@@ -199,6 +214,9 @@ impl TuiApp {
             update_release: None,
             update_receiver: None,
             update_open: false,
+            auto_update: false,
+            update_announced: false,
+            update_progress: None,
             updater_state: updater::new_state(),
             updater_tx: None,
             should_quit: false,
@@ -234,6 +252,69 @@ impl TuiApp {
         });
     }
 
+    /// Handles a release the background check found.
+    ///
+    /// A release this build can install is downloaded straight away, exactly as
+    /// the window frontend does it: waiting for a key press made the terminal app
+    /// look like it had no updater at all, when it only had one behind a
+    /// shortcut. Anything else — no worker, or no binary for this platform —
+    /// still points at the release page, which is all it can honestly offer.
+    fn accept_release(&mut self, release: NewRelease) {
+        let version = release.version.clone();
+        self.update_release = Some(release.clone());
+        if !self.can_install(&release) {
+            database::diag::info(format!(
+                "[updater] v{version} found, but this build cannot install it (worker={}, asset={})",
+                self.updater_tx.is_some(),
+                release.has_asset(),
+            ));
+            self.toast = Some(Toast::new(
+                format!("New version v{version} available — press O for the release page"),
+                Style::default().fg(Theme::GOOD),
+            ));
+            return;
+        }
+        database::diag::info(format!("[updater] v{version} found, downloading it now"));
+        self.start_update();
+    }
+
+    /// True when this build can replace its own executable with `release`.
+    fn can_install(&self, release: &NewRelease) -> bool {
+        self.updater_tx.is_some() && release.has_asset()
+    }
+
+    /// Watches the worker while an automatic update is in flight.
+    ///
+    /// Two things have to happen without a key press: the footer keeps reporting
+    /// the download, and the dialog appears as soon as the worker needs an
+    /// answer. It waits for that moment rather than opening on the first byte —
+    /// a modal that swallows the keyboard for the length of a download would
+    /// lock the app out of its own cleaning run.
+    fn poll_update(&mut self) {
+        if !self.auto_update {
+            return;
+        }
+        let stage = updater::current(&self.updater_state);
+        if stage.is_running() {
+            // Also covers a retry started from the dialog: the footer has to
+            // follow it, not just the first attempt.
+            self.update_progress = Some(update_progress_line(&stage));
+            return;
+        }
+        self.update_progress = None;
+        if self.update_announced {
+            return;
+        }
+        // Done either way: installed, or failed with something to retry. Raised
+        // once, so dismissing it is final.
+        self.update_announced = true;
+        let was_open = self.update_open;
+        self.update_open = true;
+        if !was_open {
+            sfx("pop", sounds::pop);
+        }
+    }
+
     // --- frame loop ------------------------------------------------------
 
     /// Advances time-based state and drains the channels the cleaning job and
@@ -243,25 +324,46 @@ impl TuiApp {
         if self.state.poll_result() {
             self.result_cursor = 0;
             self.toast = Some(Toast::info("Cleaning finished."));
+            // The end of a run, so the window frontend's done clip belongs here
+            // too — otherwise a long clean gives no sign it ever finished.
+            sfx("done", sounds::done);
         }
 
         if let Some(receiver) = &self.update_receiver {
             match receiver.try_recv() {
                 Ok(Ok(Some(release))) => {
                     self.update_receiver = None;
-                    self.toast = Some(Toast::new(
-                        format!(
-                            "New version v{} available — press O for the release page",
-                            release.version
-                        ),
-                        Style::default().fg(Theme::GOOD),
-                    ));
-                    self.update_release = Some(release);
+                    self.accept_release(release);
                 }
-                // No newer version, or the check failed: stop polling.
-                Ok(Ok(None)) | Ok(Err(_)) | Err(_) => self.update_receiver = None,
+                // Nothing newer: the ordinary case, nothing worth a toast.
+                Ok(Ok(None)) => self.update_receiver = None,
+                // A failed check used to be dropped on the floor, which made
+                // "the updater did nothing" indistinguishable from "there was
+                // nothing to do" — the one thing a user reporting a silent
+                // updater needs to be able to tell apart. GitHub also answers an
+                // unauthenticated client with 403 once the hourly rate limit is
+                // spent, so this is not a rare path.
+                Ok(Err(error)) => {
+                    self.update_receiver = None;
+                    self.toast = Some(Toast::warn(format!("Update check failed: {error}")));
+                }
+                // Nothing to read *yet*, which is the normal state for the first
+                // second or so: the request is still in flight. Keep polling.
+                //
+                // This must not be lumped in with `Disconnected`. The tick is 100 ms
+                // and the request takes about a second and a half, so treating
+                // "not ready" as "not coming" dropped the receiver before the answer
+                // could ever arrive — which is why the terminal app looked like it
+                // had no updater at all.
+                Err(std::sync::mpsc::TryRecvError::Empty) => {}
+                // The checking thread is gone and sent nothing: it panicked.
+                Err(std::sync::mpsc::TryRecvError::Disconnected) => {
+                    self.update_receiver = None;
+                    self.toast = Some(Toast::warn("Update check did not finish."));
+                }
             }
         }
+        self.poll_update();
 
         if self
             .toast
@@ -361,7 +463,9 @@ impl TuiApp {
             }
             KeyCode::Char('?') | KeyCode::F(1) => self.open_changelog(),
             KeyCode::Char('o') | KeyCode::Char('O') => self.open_release_page(),
-            KeyCode::Char('d') | KeyCode::Char('D') => self.start_update(),
+            // Starting a second download on top of a running one would interleave
+            // two writes to the same executable.
+            KeyCode::Char('d') | KeyCode::Char('D') if !stage.is_running() => self.start_update(),
             KeyCode::Char('r') | KeyCode::Char('R') => self.confirm_or_retry(),
             _ => {}
         }
@@ -395,6 +499,10 @@ impl TuiApp {
         }
         let version = release.version.clone();
         let total = release.asset_size;
+        // From here on this app is the one driving the update, so `tick` keeps
+        // the footer on it and raises the dialog when it needs an answer. Set
+        // before the send, because a full channel already ends the attempt.
+        self.auto_update = true;
         // Publish the opening stage right away so the dialog never shows an idle
         // bar while the worker picks the command up.
         updater::publish(
@@ -490,6 +598,12 @@ impl TuiApp {
             // shifted key.
             KeyCode::Char('U') if self.update_release.is_some() => {
                 self.update_open = !self.update_open;
+                // Only on the way in: the dialog closing is a dismissal, and the
+                // window frontend does not click on a dismissed notification
+                // either.
+                if self.update_open {
+                    sfx("pop", sounds::pop);
+                }
                 true
             }
             _ => false,
@@ -519,7 +633,9 @@ impl TuiApp {
                     return;
                 }
                 let cursor = self.category_cursor;
-                self.toast = Some(Toast::info(match self.state.toggle_category(cursor) {
+                let toggle = self.state.toggle_category(cursor);
+                play_toggle(toggle);
+                self.toast = Some(Toast::info(match toggle {
                     Toggle::On => "Category selected.",
                     Toggle::Off => "Category cleared.",
                 }));
@@ -529,6 +645,7 @@ impl TuiApp {
             KeyCode::Enter | KeyCode::Right | KeyCode::Char('l') => self.open_category_popup(),
             // The settings gear in the window title bar.
             KeyCode::Char('s') | KeyCode::Char('S') => {
+                sfx("click", sounds::click);
                 self.state.current_page = Page::Settings;
             }
             KeyCode::Char('n') | KeyCode::Char('N') => self.advance_to_programs(),
@@ -574,6 +691,9 @@ impl TuiApp {
             items: self.category_sub_items(self.category_cursor),
         };
         self.popup = Some(popup);
+        // Opened, not merely refused: a category without subcategories answers
+        // with a toast, and that must stay silent.
+        sfx("pop", sounds::pop);
     }
 
     /// `(label, selected)` for every subcategory of the category at `index`,
@@ -606,6 +726,7 @@ impl TuiApp {
         if self.state.build_program_list() {
             self.state.current_page = Page::ProgramSelection;
             self.program_cursor = 0;
+            sfx("click", sounds::click);
         } else {
             self.toast = Some(Toast::warn("Select at least one category first."));
         }
@@ -631,7 +752,9 @@ impl TuiApp {
                 else {
                     return;
                 };
-                self.toast = Some(Toast::info(match self.state.toggle_program(index) {
+                let toggle = self.state.toggle_program(index);
+                play_toggle(toggle);
+                self.toast = Some(Toast::info(match toggle {
                     Toggle::On => "Program selected.",
                     Toggle::Off => "Program excluded.",
                 }));
@@ -679,9 +802,11 @@ impl TuiApp {
             list: ListState::default().with_selected(Some(0)),
             items,
         });
+        sfx("pop", sounds::pop);
     }
 
     fn start_cleaning(&mut self) {
+        sfx("click", sounds::click);
         self.state.start_cleaning();
         self.sync_cursors();
     }
@@ -811,7 +936,7 @@ impl TuiApp {
             return;
         };
         let selected = popup.list.selected().unwrap_or(0);
-        match popup.kind {
+        let toggle = match popup.kind {
             PopupKind::Category(index) => {
                 // Real subcategories first, then "Uncategorized".
                 let subs = self.state.categories[index].subs.len();
@@ -820,13 +945,14 @@ impl TuiApp {
                 } else {
                     Arc::from("")
                 };
-                self.state.toggle_category_sub(index, &sub);
+                self.state.toggle_category_sub(index, &sub)
             }
             PopupKind::Program(index) => {
                 let category = Arc::clone(&self.state.program_categories[index][selected]);
-                self.state.toggle_program_category(index, &category);
+                self.state.toggle_program_category(index, &category)
             }
-        }
+        };
+        play_toggle(toggle);
         // Refresh right away so the new state is visible without waiting for
         // the next frame, and so a reader of `popup` never sees stale entries.
         self.refresh_popup();
@@ -884,6 +1010,7 @@ impl TuiApp {
         // release, not wherever the user stopped reading last time.
         self.changelog_scroll = 0;
         self.changelog_open = true;
+        sfx("pop", sounds::pop);
     }
 
     fn on_key_changelog(&mut self, key: KeyEvent) {
@@ -1004,6 +1131,19 @@ impl TuiApp {
             frame.render_widget(Paragraph::new(line), area);
             return;
         }
+        // A toast outranks the download: it reports something that happened to
+        // the user's data, while the download is ambient and still visible a
+        // moment later.
+        if let Some(progress) = &self.update_progress {
+            frame.render_widget(
+                Paragraph::new(Line::from(vec![
+                    Span::styled(format!(" {progress} "), Style::default().fg(Theme::ACCENT)),
+                    Span::styled("· U for details", Theme::dim()),
+                ])),
+                area,
+            );
+            return;
+        }
         frame.render_widget(
             Paragraph::new(Line::from(self.footer_hints())).style(Theme::dim()),
             area,
@@ -1092,8 +1232,70 @@ impl TuiApp {
     }
 }
 
+/// Footer text for an update the worker is still performing.
+///
+/// Separate from the dialog's own wording: the dialog is modal and spells out
+/// the keys, while this line is a status readout that has to fit on one row
+/// next to a download already in motion.
+fn update_progress_line(stage: &updater::UpdateStage) -> String {
+    match stage {
+        updater::UpdateStage::Downloading { version, done, total } => format!(
+            "updating to v{version} — {}",
+            updater::format_progress(*done, *total)
+        ),
+        updater::UpdateStage::Installing { version } => format!("installing v{version}"),
+        // Unreachable through `poll_update`, which only calls this while the
+        // stage is running. Kept exhaustive so a new stage cannot be forgotten.
+        _ => updater::stage_heading(stage),
+    }
+}
+
 /// Project repository, opened by the `G` binding.
 const GITHUB_URL: &str = "https://github.com/WinBooster/Cross-Cleaner";
+
+/// Plays the sound for a selection that was just toggled.
+///
+/// Check and uncheck are separate clips in the window frontend, and a keyboard
+/// has no checkbox to fall back on — this is the only cue that tells the two
+/// apart, so the mapping is kept in one place instead of at every call site.
+fn play_toggle(toggle: Toggle) {
+    match toggle {
+        Toggle::On => sfx("check", sounds::check),
+        Toggle::Off => sfx("uncheck", sounds::uncheck),
+    }
+}
+
+/// Plays one clip and names it, which is what lets the tests assert the sound
+/// map.
+///
+/// Playing needs an audio device, so a test cannot hear anything; it can only
+/// check that an action *reached* a clip. Without a name at the call site the
+/// map is invisible to the suite — which is how this app came to ship without a
+/// single sound while the window one had five.
+fn sfx(clip: &'static str, play: impl FnOnce()) {
+    #[cfg(test)]
+    PLAYED.with(|played| played.borrow_mut().push(clip));
+    #[cfg(not(test))]
+    let _ = clip;
+    play();
+}
+
+// Clips played on this thread, newest last.
+//
+// Thread-local rather than global: the harness runs tests in parallel and most
+// of them press keys, so a shared buffer would make the assertion depend on
+// which tests happened to overlap.
+#[cfg(test)]
+thread_local! {
+    static PLAYED: std::cell::RefCell<Vec<&'static str>> =
+        const { std::cell::RefCell::new(Vec::new()) };
+}
+
+/// Empties and returns the clips played on this thread so far.
+#[cfg(test)]
+fn take_played() -> Vec<&'static str> {
+    PLAYED.with(|played| played.take())
+}
 
 /// Moves a plain index cursor by `delta`, wrapping around `len` entries.
 fn move_index(cursor: &mut usize, delta: isize, len: usize) {
@@ -1674,6 +1876,101 @@ mod tests {
         assert!(!app.state.has_selection());
     }
 
+    /// Every action the window frontend gives a sound must reach the same clip
+    /// here.
+    ///
+    /// The terminal app shipped silent while `gui` played five clips, so the map
+    /// is pinned rather than left to whoever reads the code: a binding that
+    /// quietly stops making noise is a defect the user has to notice, not one a
+    /// test stumbles over.
+    #[test]
+    fn actions_play_the_same_clips_as_the_window_frontend() {
+        // This one runs a real cleaning job, so it reports through the same
+        // process-global diagnostics queue the test below owns. Take turns, and
+        // capture the output so it never reaches stderr either.
+        let _serial = sequential();
+        let _guard = DiagnosticsGuard::install();
+        let mut app = sample_app();
+        take_played();
+
+        // Category checkbox: selecting and clearing are two different clips.
+        press(&mut app, KeyCode::Char(' '));
+        press(&mut app, KeyCode::Char(' '));
+        assert_eq!(take_played(), ["check", "uncheck"], "category checkbox");
+
+        // Both categories, so Firefox really spans two of them — that is what
+        // makes the per-program popup reachable at all. The grid is two columns
+        // wide, so Tab is what reaches the second category; Down would stay on
+        // the only row.
+        press(&mut app, KeyCode::Char(' '));
+        press(&mut app, KeyCode::Tab);
+        press(&mut app, KeyCode::Char(' '));
+        // `n` is the window frontend's Next button.
+        press(&mut app, KeyCode::Char('n'));
+        assert_eq!(app.state.current_page, Page::ProgramSelection);
+        assert_eq!(
+            take_played(),
+            ["check", "check", "click"],
+            "both categories, then Next",
+        );
+
+        // Program checkbox. The list arrives pre-selected, so this clears and
+        // re-selects rather than the other way round.
+        press(&mut app, KeyCode::Enter);
+        press(&mut app, KeyCode::Enter);
+        assert_eq!(take_played(), ["uncheck", "check"], "program checkbox");
+
+        // `→` is the per-program category menu; the sample Chrome entry is in a
+        // single category, so the refusal must stay silent.
+        press(&mut app, KeyCode::Right);
+        assert!(app.popup.is_none(), "Chrome has one category");
+        assert_eq!(take_played(), Vec::<&str>::new(), "refused popup");
+
+        // Firefox is in two, so this one opens.
+        press(&mut app, KeyCode::Down);
+        press(&mut app, KeyCode::Right);
+        assert!(app.popup.is_some());
+        assert_eq!(take_played(), ["pop"], "program category menu");
+
+        // The popup starts with every category enabled, so the first space
+        // excludes one rather than adding it.
+        press(&mut app, KeyCode::Char(' '));
+        press(&mut app, KeyCode::Char(' '));
+        assert_eq!(take_played(), ["uncheck", "check"], "popup entry");
+        // Esc is navigation, not a button: dismissing the overlay is silent.
+        press(&mut app, KeyCode::Esc);
+        assert!(app.popup.is_none());
+        assert_eq!(take_played(), Vec::<&str>::new(), "escape");
+
+        // `S` starts the run. It spawns onto a tokio runtime, and the sample
+        // entries have nothing to remove, so no real file is touched.
+        let runtime = tokio::runtime::Builder::new_multi_thread()
+            .worker_threads(2)
+            .enable_all()
+            .build()
+            .expect("runtime");
+        runtime.block_on(async {
+            press(&mut app, KeyCode::Char('S'));
+        });
+        assert_eq!(take_played(), ["click"], "Start");
+
+        // The job runs on the runtime's own threads, so the result arrives on
+        // whichever one is free: `tick` until it lands.
+        for _ in 0..500 {
+            app.tick();
+            if app.state.current_page == Page::Results {
+                break;
+            }
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        assert_eq!(
+            app.state.current_page,
+            Page::Results,
+            "the run never finished",
+        );
+        assert_eq!(take_played(), ["done"], "the finishing clip");
+    }
+
     #[test]
     fn search_narrows_the_program_list() {
         let mut app = sample_app();
@@ -2155,6 +2452,22 @@ mod tests {
 
     // --- diagnostics ----------------------------------------------------
 
+    /// Serialises the tests that drive a real cleaning run.
+    ///
+    /// The harness runs tests in parallel, and a cleaning run reports through the
+    /// process-global diagnostic queue that the test below asserts on. Two runs at
+    /// once would put one test's messages into the other's assertions, so they
+    /// take turns.
+    static SEQUENTIAL: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
+    /// Holds [`SEQUENTIAL`] for the duration of a test.
+    ///
+    /// A poisoned lock only means some earlier test panicked; the queue is drained
+    /// on the way out either way, so there is nothing here worth failing over.
+    fn sequential() -> std::sync::MutexGuard<'static, ()> {
+        SEQUENTIAL.lock().unwrap_or_else(|e| e.into_inner())
+    }
+
     /// Installs the capture sink for one test and removes it again on drop.
     ///
     /// The sink and the queue behind it are process-global, so this also keeps a
@@ -2179,6 +2492,7 @@ mod tests {
 
     #[test]
     fn diagnostics_are_captured_and_surfaced_as_a_toast() {
+        let _serial = sequential();
         let _guard = DiagnosticsGuard::install();
         let mut app = sample_app();
 
@@ -2248,6 +2562,22 @@ mod tests {
         (app, rx)
     }
 
+    /// A version check that has already found `found`, so the first `tick` picks
+    /// it up. The check sender is dropped on return, which is exactly what the
+    /// real background thread does after reporting.
+    ///
+    /// The updater receiver comes back too: an automatic download has to land
+    /// somewhere, and it has to be a live one or the send fails instead.
+    fn app_with_check(
+        found: Option<NewRelease>,
+    ) -> (TuiApp, std::sync::mpsc::Receiver<UpdaterCommand>) {
+        let (mut app, rx) = app_with_update();
+        let (tx, check) = std::sync::mpsc::channel();
+        tx.send(Ok(found)).expect("the receiver is alive");
+        app.update_receiver = Some(check);
+        (app, rx)
+    }
+
     #[test]
     fn no_update_dialog_without_a_pending_release() {
         let mut app = sample_app();
@@ -2297,6 +2627,227 @@ mod tests {
         assert!(screen.contains("release page"), "{screen}");
     }
 
+    /// A release this build can install must download itself, the way the window
+    /// frontend does — waiting for a key press is what made the terminal app look
+    /// like it had no updater at all.
+    #[test]
+    fn a_found_release_starts_downloading_without_a_keypress() {
+        let (mut app, rx) = app_with_check(Some(release()));
+        app.tick();
+
+        match rx.try_recv().expect("the worker was asked to install") {
+            UpdaterCommand::Install(release) => assert_eq!(release.version, "9.9.9"),
+            UpdaterCommand::Restart => panic!("expected an install, got a restart"),
+        }
+        assert!(
+            matches!(
+                updater::current(&app.updater_state),
+                UpdateStage::Downloading { .. }
+            ),
+            "the opening stage is published synchronously",
+        );
+        // The footer reports it, but the dialog stays shut: a modal that ate the
+        // keyboard for the length of a download would lock the user out of the
+        // app they were cleaning with.
+        assert!(!app.update_open, "not modal while it downloads");
+        let screen = draw(&mut app, 100, 30);
+        assert!(screen.contains("updating to v9.9.9"), "{screen}");
+    }
+
+    /// The dialog waits for the one moment the user actually has to decide, then
+    /// stays down once answered.
+    #[test]
+    fn the_dialog_opens_when_the_worker_needs_an_answer_and_not_before() {
+        let (mut app, _rx) = app_with_check(Some(release()));
+        app.tick();
+        assert!(!app.update_open, "the first byte needs no decision");
+
+        updater::publish(
+            &app.updater_state,
+            UpdateStage::Installed {
+                version: "9.9.9".to_string(),
+            },
+        );
+        app.tick();
+        assert!(app.update_open, "restarting is the user's call");
+        assert!(
+            app.update_progress.is_none(),
+            "the footer hands its line over to the dialog",
+        );
+        let screen = draw(&mut app, 100, 30);
+        assert!(screen.contains("Restart to use it"), "{screen}");
+
+        press(&mut app, KeyCode::Esc);
+        assert!(!app.update_open);
+        app.tick();
+        assert!(
+            !app.update_open,
+            "an update the user answered must not come back",
+        );
+    }
+
+    /// A failed automatic download is reported the same way: not as a toast that
+    /// fades, but as the dialog offering a retry.
+    #[test]
+    fn a_failed_automatic_download_asks_for_a_decision_too() {
+        let (mut app, _rx) = app_with_check(Some(release()));
+        app.tick();
+        updater::publish(
+            &app.updater_state,
+            UpdateStage::Failed {
+                version: "9.9.9".to_string(),
+                error: "connection reset".to_string(),
+            },
+        );
+        app.tick();
+        assert!(app.update_open);
+        let screen = draw(&mut app, 100, 30);
+        assert!(screen.contains("connection reset"), "{screen}");
+        assert!(screen.contains("retry"), "{screen}");
+    }
+
+    /// Nothing to install means nothing to start: the release page is all this
+    /// build can honestly offer, and it has to say so.
+    /// A retry started from the dialog is still this app's own update, so the
+    /// footer follows the second attempt instead of freezing on the first.
+    #[test]
+    fn a_retry_keeps_reporting_progress_in_the_footer() {
+        let (mut app, _rx) = app_with_check(Some(release()));
+        app.tick();
+        updater::publish(
+            &app.updater_state,
+            UpdateStage::Failed {
+                version: "9.9.9".to_string(),
+                error: "connection reset".to_string(),
+            },
+        );
+        app.tick();
+        assert!(app.update_open);
+
+        press(&mut app, KeyCode::Char('r'));
+        assert!(
+            updater::current(&app.updater_state).is_running(),
+            "`r` on a failure starts a fresh download",
+        );
+        app.tick();
+        assert!(
+            app.update_progress
+                .as_deref()
+                .is_some_and(|line| line.contains("updating to")),
+            "the footer follows the retry: {:?}",
+            app.update_progress,
+        );
+
+        updater::publish(
+            &app.updater_state,
+            UpdateStage::Installed {
+                version: "9.9.9".to_string(),
+            },
+        );
+        app.tick();
+        assert!(app.update_progress.is_none(), "the download is over");
+        let screen = draw(&mut app, 100, 30);
+        assert!(screen.contains("Restart to use it"), "{screen}");
+    }
+
+    /// The regression behind "the updater never did anything": the tick is far
+    /// faster than the request, so the first ticks find an empty channel. Treating
+    /// "not answered yet" as "will never answer" threw the receiver away ~100 ms in,
+    /// long before the ~1.5 s response could arrive — and the release was then never
+    /// seen at all.
+    #[test]
+    fn a_check_that_is_still_in_flight_keeps_being_polled() {
+        let mut app = sample_app();
+        // A live sender that has not reported yet, which is exactly what the first
+        // ticks see.
+        let (tx, check) = std::sync::mpsc::channel();
+        app.update_receiver = Some(check);
+
+        for _ in 0..5 {
+            app.tick();
+        }
+        assert!(
+            app.update_receiver.is_some(),
+            "an unanswered check must still be polled",
+        );
+        assert!(app.toast.is_none(), "still in flight is not a failure");
+
+        // And when it does answer, the answer is still picked up.
+        tx.send(Ok(Some(release()))).expect("receiver alive");
+        app.tick();
+        assert!(app.update_receiver.is_none(), "polling stops once answered");
+        // `sample_app` has no self-update worker, so this build takes the
+        // release-page path — the point is that the release was seen at all.
+        assert_eq!(
+            app.update_release.as_ref().map(|r| r.version.as_str()),
+            Some("9.9.9"),
+            "the answer that arrived late must still be acted on",
+        );
+    }
+
+    /// A check that failed must say so. GitHub rate-limits unauthenticated
+    /// clients, and a silently dropped error is indistinguishable from "you are
+    /// already on the newest version".
+    #[test]
+    fn a_failed_check_is_reported_instead_of_being_dropped() {
+        let mut app = sample_app();
+        let (tx, check) = std::sync::mpsc::channel();
+        tx.send(Err("Failed to request latest release: status 403".to_string()))
+            .expect("receiver alive");
+        app.update_receiver = Some(check);
+        app.tick();
+        let screen = draw(&mut app, 100, 30);
+        assert!(screen.contains("Update check failed"), "{screen}");
+        assert!(screen.contains("403"), "the reason must survive: {screen}");
+        assert!(!app.auto_update, "nothing was started");
+
+        // Polling stops, so the toast is not refreshed every tick.
+        app.tick();
+        assert!(app.update_receiver.is_none(), "not polled again");
+    }
+
+    #[test]
+    fn a_check_that_found_nothing_stays_quiet() {
+        let mut app = sample_app();
+        let (tx, check) = std::sync::mpsc::channel();
+        tx.send(Ok(None)).expect("receiver alive");
+        app.update_receiver = Some(check);
+        app.tick();
+        assert!(app.toast.is_none(), "already up to date is not news");
+        assert!(app.update_receiver.is_none(), "not polled again");
+    }
+
+    #[test]
+    fn a_release_this_build_cannot_install_only_points_at_the_page() {
+        let (mut app, rx) = app_with_check(Some(NewRelease {
+            asset_url: None,
+            ..release()
+        }));
+        app.tick();
+        assert!(
+            rx.try_recv().is_err(),
+            "a release with no binary must not be handed to the worker",
+        );
+        assert!(!app.auto_update, "nothing was started");
+        assert!(!app.update_open);
+        assert!(app.update_progress.is_none());
+        let screen = draw(&mut app, 100, 30);
+        assert!(screen.contains("press O for the release page"), "{screen}");
+    }
+
+    #[test]
+    fn a_build_without_a_worker_only_points_at_the_page() {
+        let mut app = sample_app();
+        let (tx, check) = std::sync::mpsc::channel();
+        tx.send(Ok(Some(release()))).expect("receiver alive");
+        app.update_receiver = Some(check);
+        app.tick();
+        assert!(!app.auto_update, "no worker, so no download");
+        assert!(!app.update_open);
+        let screen = draw(&mut app, 100, 30);
+        assert!(screen.contains("press O for the release page"), "{screen}");
+    }
+
     #[test]
     fn d_starts_the_download_and_the_bar_shows_progress() {
         let (mut app, _rx) = app_with_update();
@@ -2331,17 +2882,27 @@ mod tests {
 
     #[test]
     fn a_running_download_cannot_be_dismissed() {
-        let (mut app, _rx) = app_with_update();
+        let (mut app, rx) = app_with_update();
         app.update_open = true;
         press(&mut app, KeyCode::Char('d'));
+        assert!(
+            rx.try_recv().is_ok(),
+            "the first download is the only one the worker may get",
+        );
         press(&mut app, KeyCode::Esc);
         assert!(
             app.update_open,
             "closing mid-download would strand the user on the old binary",
         );
-        // ...and `r` must not relaunch on top of it either.
+        // ...`r` must not relaunch on top of it either, and `d` must not start a
+        // second download writing to the same executable.
         press(&mut app, KeyCode::Char('r'));
         assert!(updater::current(&app.updater_state).is_running());
+        press(&mut app, KeyCode::Char('d'));
+        assert!(
+            rx.try_recv().is_err(),
+            "only the first install may reach the worker",
+        );
     }
 
     #[test]

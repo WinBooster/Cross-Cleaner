@@ -53,6 +53,21 @@ struct TimedNotification {
     inner: Box<dyn Notification>,
 }
 
+/// Opacity of a notification that has been up for `elapsed` seconds.
+///
+/// Split out because the difference between the two branches is the whole point:
+/// a sticky notification has no deadline, and giving it one empties it while
+/// leaving its border behind — `set_opacity` only reaches the content, the frame
+/// is painted around it.
+fn notification_alpha(sticky: bool, elapsed: f32) -> f32 {
+    let fade_in = (elapsed / NOTIFICATION_FADE_SECS).clamp(0.0, 1.0);
+    if sticky {
+        return fade_in;
+    }
+    let remaining = NOTIFICATION_LIFETIME.as_secs_f32() - elapsed;
+    fade_in.min(remaining / NOTIFICATION_FADE_SECS).clamp(0.0, 1.0)
+}
+
 /// Holds and renders all active notifications.
 #[derive(Default)]
 pub struct NotificationManager {
@@ -118,10 +133,7 @@ impl NotificationManager {
                         ui.add_space(6.0);
                     }
                     let elapsed = n.shown_at.elapsed().as_secs_f32();
-                    let remaining = NOTIFICATION_LIFETIME.as_secs_f32() - elapsed;
-                    let alpha = (elapsed / NOTIFICATION_FADE_SECS)
-                        .min(remaining / NOTIFICATION_FADE_SECS)
-                        .clamp(0.0, 1.0);
+                    let alpha = notification_alpha(n.inner.sticky(), elapsed);
                     let inner = egui::Frame::new()
                         .corner_radius(4.0)
                         .inner_margin(egui::Margin::symmetric(10, 8))
@@ -167,6 +179,9 @@ pub const UPDATE_PROGRESS_ID: &str = "update_progress_notification";
 /// * **Release page** — created with [`Self::new_release_page`] when this build
 ///   cannot replace its own executable (Android, or a release without a
 ///   matching binary). It degrades to a plain "new version available" line.
+///
+/// It never expires on its own (see [`Notification::sticky`]): it carries the
+/// only way forward out of an unfinished update. `Later` closes it.
 ///
 /// Every action row ends with a **Change log** button, so what the user is
 /// being offered to install is always one click away. There is no separate
@@ -219,8 +234,16 @@ impl UpdateProgressNotification {
                     action = NotificationAction::OpenReleasePage;
                 }
                 Self::changelog_button(ui, &mut action);
+                // This shape no longer expires on its own, so it needs a way out
+                // — otherwise a build that cannot self-update would keep the box
+                // on screen for the rest of the session with nothing to do about
+                // it.
+                if ui.button("Later").clicked() {
+                    crate::sounds::click();
+                    action = NotificationAction::Close;
+                }
             });
-            // This shape is informational, so it does not pin itself on screen.
+            // This shape is informational: nothing is downloading behind it.
             ui.small("This build cannot update itself — download it manually.");
         });
         action
@@ -233,16 +256,15 @@ impl Notification for UpdateProgressNotification {
     }
 
     fn sticky(&self) -> bool {
-        // The reduced shape is a plain banner and always expires on its own.
-        if self.fallback_release.is_some() {
-            return false;
-        }
-        let stage = updater::current(&self.state);
-        // While the worker owns the update the notification must stay up, and
-        // once the new version is on disk it must stay until the user answers
-        // the restart prompt. `Later` dismisses it. A failed update is just
-        // informational, so it auto-hides.
-        stage.is_running() || stage.is_installed()
+        // Always. This notification *is* the update, and it holds the only route
+        // forward: restart into the new version, retry a failed download, or open
+        // the release page when this build cannot install anything itself.
+        //
+        // Expiring it on a timer strands the user on the old binary — and if it
+        // expires while the update never finished, the Retry and Release page
+        // buttons go with it, so a transient network error becomes a dead end
+        // with no explanation on screen. `Later` closes it deliberately.
+        true
     }
 
     fn ui(&mut self, ui: &mut egui::Ui) -> NotificationAction {
@@ -250,17 +272,22 @@ impl Notification for UpdateProgressNotification {
             return self.ui_release_page(ui, release);
         }
         let stage = updater::current(&self.state);
-        // Nothing to report before a release was found.
-        if matches!(stage, UpdateStage::Idle) {
-            return NotificationAction::Close;
-        }
         let mut action = NotificationAction::None;
 
         ui.vertical(|ui| {
             ui.strong(updater::stage_heading(&stage));
 
             match &stage {
-                UpdateStage::Idle => {}
+                // The window between pushing the notification and publishing the
+                // first real stage. It has to render something: returning early
+                // here left the frame with no content at all, which draws as a
+                // bare outline.
+                UpdateStage::Idle => {
+                    ui.horizontal(|ui| {
+                        ui.spinner();
+                        ui.label("Checking for updates…");
+                    });
+                }
                 UpdateStage::Downloading {
                     version,
                     done,
@@ -373,11 +400,13 @@ mod tests {
     }
 
     #[test]
-    fn running_and_pending_restart_stages_stay_on_screen() {
-        // Closing a running download would leave the user on the old binary
-        // with no way back, and closing a pending restart would lose the
-        // "installed, please restart" prompt — both must survive on their own.
-        let running = [
+    fn it_never_expires_on_its_own() {
+        // Every stage, in both shapes. This notification holds the only way out
+        // of an unfinished update — restart, retry, or the release page — so a
+        // timer that removes it strands the user on the old binary with the
+        // explanation gone too.
+        let stages = [
+            UpdateStage::Idle,
             UpdateStage::Downloading {
                 version: "2.1.0".to_string(),
                 done: 10,
@@ -386,11 +415,6 @@ mod tests {
             UpdateStage::Installing {
                 version: "2.1.0".to_string(),
             },
-        ];
-        for stage in running {
-            assert!(at(stage).sticky());
-        }
-        let pending = [
             UpdateStage::Installed {
                 version: "2.1.0".to_string(),
             },
@@ -398,32 +422,44 @@ mod tests {
                 version: "2.1.0".to_string(),
                 error: "elevation required".to_string(),
             },
+            // The stage that used to auto-hide, taking `Retry` with it.
+            UpdateStage::Failed {
+                version: "2.1.0".to_string(),
+                error: "connection reset".to_string(),
+            },
         ];
-        for stage in pending {
-            assert!(at(stage).sticky());
+        for stage in stages {
+            assert!(
+                at(stage).sticky(),
+                "{stage:?} must not expire on its own",
+            );
         }
+        assert!(UpdateProgressNotification::new_release_page(release()).sticky());
     }
 
+    /// The frame's fill and stroke are painted around `set_opacity`, so a sticky
+    /// notification faded out by the auto-hide timer left an empty box: the border
+    /// at full strength and no content at all. Alpha is therefore a function of
+    /// `sticky` and elapsed time alone, with no deadline in it.
     #[test]
-    fn a_failed_update_expires_on_its_own() {
-        // There is no close button any more, so a failure must not pin itself:
-        // the user has to be able to get rid of it by not acting on it.
-        let notification = at(UpdateStage::Failed {
-            version: "2.1.0".to_string(),
-            error: "connection reset".to_string(),
-        });
-        assert!(!notification.sticky());
+    fn a_sticky_notification_fades_in_and_then_holds_its_opacity() {
+        assert_eq!(notification_alpha(true, 0.0), 0.0, "starts invisible");
+        assert_eq!(notification_alpha(true, 0.15), 0.5, "fades in");
+        assert_eq!(notification_alpha(true, 0.3), 1.0, "fully visible");
+        // Long past the auto-hide lifetime: still fully visible.
+        assert_eq!(notification_alpha(true, 600.0), 1.0, "holds");
     }
 
+    /// The non-sticky path still fades out, and is gone by the time the manager
+    /// drops it.
     #[test]
-    fn an_idle_progress_notification_expires_on_its_own() {
-        // Before a release is published there is nothing to report, and `ui`
-        // closes the notification anyway.
-        assert!(!at(UpdateStage::Idle).sticky());
-    }
-
-    #[test]
-    fn the_release_page_fallback_always_expires() {
-        assert!(!UpdateProgressNotification::new_release_page(release()).sticky());
+    fn a_timed_notification_still_fades_out() {
+        assert_eq!(notification_alpha(false, 0.15), 0.5);
+        assert_eq!(notification_alpha(false, 1.0), 1.0);
+        assert_eq!(
+            notification_alpha(false, NOTIFICATION_LIFETIME.as_secs_f32() - 0.1),
+            0.0,
+            "gone by the deadline",
+        );
     }
 }

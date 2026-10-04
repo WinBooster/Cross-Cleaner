@@ -17,7 +17,17 @@ pub fn get_version() -> &'static str {
     option_env!("APP_VERSION").unwrap_or("2.0.2.2")
 }
 
-pub const ICON_BYTES: &[u8; 38078] = include_bytes!("../../../assets/icon.ico");
+/// The application icon, used for the window icon and re-stamped onto the
+/// executable during a self-update.
+///
+/// The file itself lives in `crates/winicon/assets/`, next to the crate that
+/// stamps it into the binaries. It is reached from here rather than through a
+/// dependency because `winicon` is a build-script-only crate that stays outside
+/// the workspace, and `database` sits below every frontend in the graph. The
+/// path therefore crosses a crate boundary; if the file moves, this fails to
+/// compile with a clear "file not found" rather than silently shipping a binary
+/// with no icon.
+pub const ICON_BYTES: &[u8] = include_bytes!("../../winicon/assets/icon.ico");
 
 /// Android-specific database file (used via CleanerDatabase::default_source on target_os = "android").
 ///

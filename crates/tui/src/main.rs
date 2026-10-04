@@ -110,6 +110,9 @@ fn main() -> io::Result<()> {
     // Registers the worker that can replace this executable with the release
     // binary; without it the dialog only offers the release page.
     app.start_self_update();
+    // Opens the audio device once. A machine without one (a container, CI) just
+    // stays silent — `init` swallows the failure, same as in `desktop`.
+    appcore::sounds::init();
     // Before the terminal is taken: from here on nothing may write to stderr.
     tui::app::install_diagnostic_sink();
     runtime.block_on(run(app))

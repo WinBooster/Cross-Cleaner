@@ -7,8 +7,6 @@
 
 fn main() {
     winicon::apply(winicon::Options {
-        // The crate lives in `crates/`, so the repo-root assets are two levels up.
-        icon: "..\\..\\assets\\icon.ico",
         // Same reasoning as `desktop`: the cleaner writes to system-wide
         // locations, so an unelevated run would silently under-clean.
         require_admin: true,

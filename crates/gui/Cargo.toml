@@ -23,7 +23,9 @@ database = { path = "../database" }
 cleaner = { path = "../cleaner" }
 
 [target.'cfg(not(target_os = "android"))'.dependencies]
-rodio = "0.22"
+# `rodio` used to be declared here so `gui::sounds` could play the UI clips.
+# It now lives in `appcore`, which owns the shared player; nothing in `gui`
+# touches rodio directly.
 
 [build-dependencies]
 flate2 = "1.1"
