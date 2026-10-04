@@ -28,8 +28,11 @@ An addon-style <a href="https://github.com/WinBooster/Cross-Cleaner">system clea
 - 🎯 **User-Friendly**: Clean, minimalist interface for easy operation
 - 📄 **Custom-DataBase**: Ability to use custom cleanup database
 
-### Demo
-<img width="470" height="157" alt="image" src="https://github.com/user-attachments/assets/0cee6303-7ada-49f2-bd33-8159a583ebf9" />
+### Demo Desktop Edition
+<img width="570" height="557" alt="image" src="https://github.com/user-attachments/assets/69cc39e7-3824-4448-884f-cef4428ff731" />
+
+### Demo TUI Edition
+<img width="979" height="512" alt="image" src="https://github.com/user-attachments/assets/220db588-a366-4ba1-8101-04ea294a407a" />
 
 ## 📥 Installation
 
