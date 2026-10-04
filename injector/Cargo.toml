@@ -1,0 +1,71 @@
+[package]
+name = "injector"
+version = "2.0.4"
+edition = "2024"
+description = "Injectable Cross Cleaner: loads the cleaner window into any program and opens it on a hotkey"
+
+[lib]
+name = "cross_cleaner_injector"
+path = "src/lib.rs"
+# cdylib -> cross_cleaner_injector.dll / libcross_cleaner_injector.so
+# rlib   -> lets other code link the same startup logic (`injector::start`)
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "cross-clean-injector"
+path = "src/bin/injector_cli.rs"
+
+[dependencies]
+gui = { path = "../gui" }
+database = { path = "../database" }
+cleaner = { path = "../cleaner" }
+egui = "0.36"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync"] }
+futures = "0.3"
+# winit is used directly for the event loop: the window runs on its own thread,
+# so the loop has to be created with `any_thread`.
+winit = { version = "0.30.13", default-features = false, features = ["rwh_06"] }
+clap = { version = "4.6", features = ["derive"] }
+
+# Windows: both a glow (OpenGL) and a wgpu (DirectX 12 / Vulkan) renderer, so
+# the API can be chosen at runtime.
+[target.'cfg(windows)'.dependencies]
+eframe = { version = "0.36", default-features = false, features = [
+    "glow",
+    "wgpu",
+    "default_fonts",
+] }
+raw-window-handle = "0.6"
+windows = { version = "0.62.2", features = [
+    "Win32_Foundation",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Threading",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+# Linux: OpenGL through X11/Wayland plus wgpu for Vulkan.
+[target.'cfg(target_os = "linux")'.dependencies]
+eframe = { version = "0.36", default-features = false, features = [
+    "glow",
+    "wgpu",
+    "default_fonts",
+    "x11",
+    "wayland",
+] }
+raw-window-handle = "0.6"
+winit = { version = "0.30.13", default-features = false, features = [
+    "rwh_06",
+    "x11",
+    "wayland",
+] }
+libc = "0.2"
+
+[target.'cfg(windows)'.build-dependencies]
+winres = "0.1.12"
+
+[package.metadata.winres]
+FileDescription = "Cross Cleaner Injector"
+OriginalFilename = "Cross Cleaner Injector.dll"
+LegalCopyright = "Copyright Monolith Development © 2026"
+ProductName = "Cross Cleaner"
