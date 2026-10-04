@@ -1,4 +1,4 @@
-# Windows Clearing Programs Catalog v2.0.4.0.3
+# Windows Clearing Programs Catalog v2.0.4.1.1
 **Total categories in database:** 12
 
 **Total programs in database:** 262
@@ -238,7 +238,7 @@
 | --- | --- | --- |
 | 1 | [Git](https://git-scm.com/downloads) | Documentation |
 | 2 | [GitHub Desktop](https://desktop.github.com/download) | Logs |
-| 3 | rgtui | Cache, LastActivity |
+| 3 | [rgitui](https://github.com/noahbclarkson/rgitui) | Cache, LastActivity |
 
 
 ## ISO
