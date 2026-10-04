@@ -22,13 +22,20 @@ exclude = ["crates/winicon"]
 [patch.crates-io]
 gpu-allocator = { git = "https://github.com/Traverse-Research/gpu-allocator" }
 
+# Every published binary is a portable file a user downloads and runs in place,
+# so size wins over speed: `opt-level = "z"` gives up a little throughput for a
+# noticeably smaller executable, and nothing this app does is bound tightly
+# enough for that to show. Everything that would otherwise pad the file is off:
+# no debug info, no symbols, no unwinder, no incremental state, no rpath.
 [profile.release]
 lto = true
 codegen-units = 1
-opt-level = 3
+opt-level = "z"
 strip = true
 panic = "abort"
 debug = false
+incremental = false
+rpath = false
 
 [profile.dev]
 debug = "line-tables-only"

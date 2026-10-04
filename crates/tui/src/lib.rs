@@ -5,6 +5,7 @@
 //! cleaning job. Only the presentation and the key bindings live here.
 
 pub mod app;
+pub mod keymap;
 pub mod pages;
 pub mod theme;
 
