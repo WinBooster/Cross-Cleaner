@@ -1743,6 +1743,108 @@ mod tests {
         assert!(screen.contains("Cache, Logs"), "{screen}");
     }
 
+    /// Character column at which `needle` starts in `haystack`.
+    fn column_of(haystack: &str, needle: &str) -> Option<usize> {
+        haystack.find(needle).map(|at| haystack[..at].chars().count())
+    }
+
+    /// The column header: it sits inside the table's top border, so the border line
+    /// itself carries the labels.
+    fn header_line<'a>(screen: &'a str, lines: &[&'a str]) -> &'a str {
+        lines
+            .iter()
+            .find(|line| line.starts_with('╭') && line.contains("Program"))
+            .copied()
+            .unwrap_or_else(|| panic!("no header row:\n{screen}"))
+    }
+
+    #[test]
+    fn the_results_header_lines_up_with_its_columns() {
+        // Values chosen so each column has a recognisable, differently sized
+        // entry: if the header and the rows used different widths, the two
+        // would not line up.
+        let mut app = sample_app();
+        app.state.cleared_data = Some((
+            4096,
+            7,
+            2,
+            vec![
+                database::structures::Cleared {
+                    program: "Chrome".to_string(),
+                    removed_bytes: 4096,
+                    removed_files: 7,
+                    removed_directories: 2,
+                    affected_categories: vec!["Cache".to_string()],
+                },
+                database::structures::Cleared {
+                    program: "Visual Studio Code".to_string(),
+                    removed_bytes: 3_221_225_472,
+                    removed_files: 1234,
+                    removed_directories: 567,
+                    affected_categories: vec!["Cache".to_string(), "Logs".to_string()],
+                },
+            ],
+        ));
+        app.state.current_page = Page::Results;
+        let screen = draw(&mut app, 110, 24);
+        let lines: Vec<&str> = screen.lines().collect();
+        let header = header_line(&screen, &lines);
+
+        let data: Vec<&str> = lines
+            .iter()
+            .filter(|line| column_of(line, "Chrome").is_some() || column_of(line, "Visual").is_some())
+            .copied()
+            .collect();
+        assert_eq!(data.len(), 2, "expected two rows:\n{screen}");
+
+        // The labels sit inside the top border, and the rule must survive
+        // *between* them: a block title is drawn over the border, so any blank
+        // inside it erases the line and leaves the labels floating.
+        assert!(
+            header.starts_with('╭') && header.trim_end().ends_with('╮'),
+            "the top border must be drawn around the labels:\n{screen}",
+        );
+        let border = header.trim_start_matches('╭').trim_end_matches('╮');
+        // Only the labels and the single space after each may interrupt the rule.
+        let interruptions = border
+            .chars()
+            .filter(|c| *c != '─' && *c != ' ')
+            .count();
+        assert!(
+            interruptions > 0,
+            "the labels must be inside the border:\n{screen}",
+        );
+        // Between "Dirs" and "Categories" there is a rule, not a blank gap.
+        let dirs = header.find("Dirs").expect("Dirs label");
+        let categories = header.find("Categories").expect("Categories label");
+        let between = &header[dirs + "Dirs".len()..categories];
+        assert!(
+            between.contains('─'),
+            "the rule must show between the labels, found {between:?}:\n{screen}",
+        );
+
+        // Every column is left-aligned, so the header and the value must start
+        // at the very same column.
+        for ((label, short), (_, long)) in [
+            (("Program", "Chrome"), ("Program", "Visual Studio Code")),
+            (("Size", "4.0 KB"), ("Size", "3.0 GB")),
+            (("Files", "7"), ("Files", "1234")),
+            (("Dirs", "2"), ("Dirs", "567")),
+            (("Categories", "Cache"), ("Categories", "Cache, Logs")),
+        ] {
+            let header_at = column_of(header, label)
+                .unwrap_or_else(|| panic!("header has no {label}:\n{screen}"));
+            for (row, needle) in data.iter().zip([short, long]) {
+                let row_at = column_of(row, needle)
+                    .unwrap_or_else(|| panic!("row has no {needle}:\n{screen}"));
+                assert_eq!(
+                    header_at, row_at,
+                    "{label}: header starts at {header_at}, {needle} at {row_at}\n{screen}",
+                );
+            }
+        }
+    }
+
     #[test]
     fn results_page_without_data_falls_back_gracefully() {
         let mut app = sample_app();
