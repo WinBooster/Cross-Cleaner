@@ -51,7 +51,10 @@ eframe = { version = "0.36", default-features = false, features = [
     "default_fonts",
 ] }
 
-[target.'cfg(windows)'.build-dependencies]
+# Icon, version block and the administrator requirement, shared with `tui`.
+# Unconditional: `winicon` compiles to a no-op off Windows, which keeps
+# `build.rs` free of `cfg`.
+[build-dependencies]
 winicon = { path = "../winicon" }
 
 [package.metadata.winres]

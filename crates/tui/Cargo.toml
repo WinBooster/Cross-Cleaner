@@ -26,7 +26,10 @@ tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync"] }
 clap = { version = "4.6", features = ["derive"] }
 
 # Icon, version block and the administrator requirement, shared with `desktop`.
-[target.'cfg(windows)'.build-dependencies]
+# Unconditional: `winicon` compiles to a no-op off Windows, which keeps
+# `build.rs` free of `cfg`. Marking it Windows-only broke the Linux build, since
+# the build script still references the crate.
+[build-dependencies]
 winicon = { path = "../winicon" }
 
 [package.metadata.winres]
