@@ -97,68 +97,104 @@ impl MyApp {
                 .clicked()
             {
                 sounds::click();
-                if self.has_selection() {
-                    let selected_map = self.selected_map();
-                    let mut programs: Vec<(Arc<str>, Vec<Arc<str>>)> = Vec::new();
-                    let mut add = |program: Arc<str>, category: Arc<str>| {
-                        if let Some(entry) = programs
-                            .iter_mut()
-                            .find(|(p, _)| p.as_ref() == program.as_ref())
-                        {
-                            if !entry.1.iter().any(|c| c.as_ref() == category.as_ref()) {
-                                entry.1.push(category);
-                            }
-                        } else {
-                            programs.push((program, vec![category]));
-                        }
-                    };
-                    let _ = self.database.for_each_index(|data| {
-                        let eff = effective_sub("", &data.sub_category);
-                        if let Some(subs) = selected_map.get(data.category.as_ref())
-                            && subs.contains(&eff)
-                        {
-                            add(Arc::clone(&data.program), Arc::clone(&data.category));
-                        }
-                    });
-                    for data in self.custom_database.iter() {
-                        let eff = effective_sub("", &data.sub_category);
-                        if let Some(subs) = selected_map.get(data.category.as_ref())
-                            && subs.contains(&eff)
-                        {
-                            add(Arc::clone(&data.program), Arc::clone(&data.category));
-                        }
-                    }
-                    #[cfg(windows)]
-                    {
-                        let _ = self.regisry_database.for_each_index(|data| {
-                            let eff = effective_sub("", &data.sub_category);
-                            if let Some(subs) = selected_map.get(data.category.as_ref())
-                                && subs.contains(&eff)
-                            {
-                                add(Arc::clone(&data.program), Arc::clone(&data.category));
-                            }
-                        });
-                    }
-                    programs.sort_by(|a, b| a.0.cmp(&b.0));
-                    for (_, cats) in programs.iter_mut() {
-                        cats.sort();
-                    }
-
-                    self.program_checkboxes.clear();
-                    self.program_categories.clear();
-                    self.program_disabled.clear();
-                    for (program, cats) in programs {
-                        self.program_checkboxes
-                            .push((Rc::new(RefCell::new(true)), program));
-                        self.program_categories.push(cats);
-                        self.program_disabled.push(HashSet::new());
-                    }
-
-                    self.rebuild_filtered_programs();
+                if self.build_program_list() {
                     self.current_page = Page::ProgramSelection;
                 }
             }
         });
+    }
+
+    /// Turns the current category selection into the program list shown by the
+    /// program-selection page. Returns `false` when nothing is selected.
+    pub(crate) fn build_program_list(&mut self) -> bool {
+        if !self.has_selection() {
+            return false;
+        }
+        let selected_map = self.selected_map();
+        let mut programs: Vec<(Arc<str>, Vec<Arc<str>>)> = Vec::new();
+        let mut add = |program: Arc<str>, category: Arc<str>| {
+            if let Some(entry) = programs
+                .iter_mut()
+                .find(|(p, _)| p.as_ref() == program.as_ref())
+            {
+                if !entry.1.iter().any(|c| c.as_ref() == category.as_ref()) {
+                    entry.1.push(category);
+                }
+            } else {
+                programs.push((program, vec![category]));
+            }
+        };
+        let _ = self.database.for_each_index(|data| {
+            let eff = effective_sub("", &data.sub_category);
+            if let Some(subs) = selected_map.get(data.category.as_ref())
+                && subs.contains(&eff)
+            {
+                add(Arc::clone(&data.program), Arc::clone(&data.category));
+            }
+        });
+        for data in self.custom_database.iter() {
+            let eff = effective_sub("", &data.sub_category);
+            if let Some(subs) = selected_map.get(data.category.as_ref())
+                && subs.contains(&eff)
+            {
+                add(Arc::clone(&data.program), Arc::clone(&data.category));
+            }
+        }
+        #[cfg(windows)]
+        {
+            let _ = self.regisry_database.for_each_index(|data| {
+                let eff = effective_sub("", &data.sub_category);
+                if let Some(subs) = selected_map.get(data.category.as_ref())
+                    && subs.contains(&eff)
+                {
+                    add(Arc::clone(&data.program), Arc::clone(&data.category));
+                }
+            });
+        }
+        programs.sort_by(|a, b| a.0.cmp(&b.0));
+        for (_, cats) in programs.iter_mut() {
+            cats.sort();
+        }
+
+        self.program_checkboxes.clear();
+        self.program_categories.clear();
+        self.program_disabled.clear();
+        for (program, cats) in programs {
+            self.program_checkboxes
+                .push((Rc::new(RefCell::new(true)), program));
+            self.program_categories.push(cats);
+            self.program_disabled.push(HashSet::new());
+        }
+
+        self.rebuild_filtered_programs();
+        true
+    }
+
+    /// Starts a cleaning run over *every* category without going through the page
+    /// flow, which is what the loaded build needs when its hotkey should clean in
+    /// one step.
+    ///
+    /// Returns `false` when a run is already in progress or the database has no
+    /// programs to clean, so the caller can tell a no-op from a started run.
+    pub fn quick_clean_all(&mut self) -> bool {
+        if self.current_page == Page::Clearing {
+            return false;
+        }
+        // Same result as ticking every category box on the main page.
+        for cat in &mut self.categories {
+            cat.selected = cat.subs.iter().cloned().collect();
+            if cat.has_empty || cat.subs.is_empty() {
+                cat.selected.insert(Arc::from(""));
+            }
+        }
+        if !self.build_program_list() {
+            for cat in &mut self.categories {
+                cat.selected.clear();
+            }
+            return false;
+        }
+        self.start_cleaning();
+        true
     }
 
     /// Tristate checkbox of a single category; selects or clears all of its

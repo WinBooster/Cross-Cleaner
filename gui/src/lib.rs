@@ -4,6 +4,7 @@ pub mod app;
 pub mod categories;
 pub mod cleaning;
 pub mod config;
+pub mod display;
 pub mod icons;
 pub mod notifications;
 pub mod pages;

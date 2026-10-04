@@ -211,7 +211,7 @@ impl MyApp {
             });
     }
 
-    fn start_cleaning(&mut self) {
+    pub(crate) fn start_cleaning(&mut self) {
         let selected_map = self.selected_map();
 
         self.excluded_programs.clear();

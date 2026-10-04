@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["android","desktop","gui","database","cleaner"]
+members = ["android","desktop","gui","database","cleaner","injector"]
 
 # wgpu-hal 30.0.1 requires windows 0.62, but the crates.io gpu-allocator 0.28.0
 # release resolves to windows 0.61 (pulled in by notify-rust -> tauri-winrt-notification).
@@ -25,3 +25,13 @@ inherits = "release"
 [profile.release-with-debug]
 inherits = "release"
 debug = true
+
+# Profile for the injectable library (injector/).
+#
+# It runs *inside* another program, so a panic must not take that program down:
+# panic = "unwind" plus the catch_unwind at every thread entry point turns a
+# bug in the cleaner into a dead window instead of a dead program.
+# Build it with: cargo build -p injector --profile injected
+[profile.injected]
+inherits = "release"
+panic = "unwind"

@@ -24,8 +24,9 @@ use winit::event::{DeviceEvent, DeviceId, MouseScrollDelta, StartCause, TouchPha
 use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop};
 use winit::window::WindowId;
 
-mod display;
 mod updater;
+#[cfg(target_os = "linux")]
+use gui::display;
 
 /// Minimum interval between repaints caused purely by pointer movement or by
 /// scroll-wheel input.
