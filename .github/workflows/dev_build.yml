@@ -119,18 +119,22 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libasound2-dev
       - name: Build linux
-        run: cargo +nightly build --release -p desktop
+        run: |
+          cargo +nightly build --release -p desktop
+          cargo +nightly build --release -p tui
       - name: List files for debugging
         run: ls -la target/release/
       - name: Move linux binaries
         run: |
           mv target/release/desktop Cross_Cleaner_GUI_Linux
+          mv target/release/tui Cross_Cleaner_TUI_Linux
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
         with:
           name: linux-binaries
           path: |
             Cross_Cleaner_GUI_Linux
+            Cross_Cleaner_TUI_Linux
 
   build_windows:
     runs-on: windows-latest
@@ -140,18 +144,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build windows
-        run: cargo +nightly build --release -p desktop
+        run: |
+          cargo +nightly build --release -p desktop
+          cargo +nightly build --release -p tui
       - name: List files for debugging
         run: dir target\release\
       - name: Move windows binaries
         run: |
           move target\release\desktop.exe Cross_Cleaner_GUI_Windows.exe
+          move target\release\tui.exe Cross_Cleaner_TUI_Windows.exe
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows-binaries
           path: |
             Cross_Cleaner_GUI_Windows.exe
+            Cross_Cleaner_TUI_Windows.exe
   build_macos:
     runs-on: macos-latest
     needs: [sort_json]
@@ -160,18 +168,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build macos
-        run: cargo +nightly build --release -p desktop
+        run: |
+          cargo +nightly build --release -p desktop
+          cargo +nightly build --release -p tui
       - name: List files for debugging
         run: ls -la target/release/
       - name: Move macos binaries
         run: |
           mv target/release/desktop Cross_Cleaner_GUI_MacOS
+          mv target/release/tui Cross_Cleaner_TUI_MacOS
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: macos-binaries
           path: |
             Cross_Cleaner_GUI_MacOS
+            Cross_Cleaner_TUI_MacOS
   build_android:
     runs-on: ubuntu-latest
     needs: [sort_json]
