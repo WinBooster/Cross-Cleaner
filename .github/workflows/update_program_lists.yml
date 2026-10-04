@@ -449,7 +449,7 @@ jobs:
           import os, re
 
           version = os.environ.get('APP_VERSION', '')
-          src = open('cleaner/src/custom_cleaners.rs', encoding='utf-8').read()
+          src = open('crates/cleaner/src/custom_cleaners.rs', encoding='utf-8').read()
           # Parse only non-test part of the file
           src = src.split('#[cfg(test)]')[0]
 

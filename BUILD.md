@@ -67,11 +67,18 @@ To update the version in all Cargo.toml files:
 
 ```bash
 # Manually edit these files:
-- cli/Cargo.toml
-- gui/Cargo.toml
-- database/Cargo.toml
-- cleaner/Cargo.toml
+- crates/appcore/Cargo.toml
+- crates/cleaner/Cargo.toml
+- crates/database/Cargo.toml
+- crates/desktop/Cargo.toml
+- crates/gui/Cargo.toml
+- crates/selfupdate/Cargo.toml
+- crates/tui/Cargo.toml
 ```
+
+Every crate lives under `crates/`; `crates/winicon` is excluded from the
+workspace members because it is only ever pulled in as a build dependency of
+the two Windows binaries.
 
 Or use a script:
 
@@ -238,9 +245,11 @@ upx --best target/release/Cross_Cleaner_*.exe
 ## 🔧 Build Configuration Files
 
 - `Cargo.toml` (root): Workspace configuration + release profile
-- `cli/build.rs`: CLI build script (Windows resources)
-- `gui/build.rs`: GUI build script (Windows resources + manifest)
-- `database/build.rs`: Database optimization (minify + gzip)
+- `crates/winicon`: Shared Windows resources (icon, version block, elevation manifest)
+- `crates/desktop/build.rs`: Window build script (delegates to `winicon`)
+- `crates/tui/build.rs`: Terminal build script (delegates to `winicon`)
+- `crates/gui/build.rs`: GUI build script (compresses sounds and icons)
+- `crates/database/build.rs`: Database optimization (minify + gzip)
 
 ## 💡 Tips
 
