@@ -54,7 +54,7 @@ jobs:
         run: |
           sudo apt-get -y install jq
 
-          JSON_FILES=("database/linux_database.json" "database/windows_database.json" "database/registry_database.json" "database/macos_database.json" "database/android_database.json")
+          JSON_FILES=("crates/database/linux_database.json" "crates/database/windows_database.json" "crates/database/registry_database.json" "crates/database/macos_database.json" "crates/database/android_database.json")
           for JSON_FILE in "${JSON_FILES[@]}"; do
             echo "Processing $JSON_FILE..."
 
@@ -91,11 +91,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Move databases
         run: |
-          mv database/linux_database.json linux_database.json
-          mv database/windows_database.json windows_database.json
-          mv database/registry_database.json registry_database.json
-          mv database/macos_database.json macos_database.json
-          mv database/android_database.json android_database.json
+          mv crates/database/linux_database.json linux_database.json
+          mv crates/database/windows_database.json windows_database.json
+          mv crates/database/registry_database.json registry_database.json
+          mv crates/database/macos_database.json macos_database.json
+          mv crates/database/android_database.json android_database.json
       - name: Upload databases to artifacts
         uses: actions/upload-artifact@v4
         with:

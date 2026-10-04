@@ -1,0 +1,61 @@
+[package]
+name = "desktop"
+version = "2.0.1"
+edition = "2024"
+
+[dependencies]
+gui = { path = "../gui" }
+database = { path = "../database" }
+cleaner = { path = "../cleaner" }
+egui = "0.36"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync"] }
+futures = "0.3"
+notify-rust = "4"
+image = { version = "0.25.10", default-features = false, features = ["png", "ico"] }
+tempfile = "3.27"
+clap = { version = "4.6", features = ["derive"] }
+rodio = "0.22"
+serde = { version = "1", features = ["derive", "rc"] }
+serde_json = "1"
+winit = { version = "0.30.13", default-features = false, features = ["rwh_06"] }
+# Owns the executable replacement: the GUI only renders the shared update state.
+selfupdate = { path = "../selfupdate" }
+
+[target.'cfg(windows)'.dependencies]
+eframe = { version = "0.36", default-features = false, features = [
+    "wgpu",
+    "glow",
+    "default_fonts",
+] }
+winreg = "0.56.0"
+raw-window-handle = "0.6"
+# ShellExecuteW for the UAC prompt on restart (see `src/updater.rs`).
+windows = { version = "0.62.2", features = [
+	"Win32_Foundation",
+	"Win32_UI_Shell",
+	"Win32_UI_WindowsAndMessaging",
+] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+eframe = { version = "0.36", default-features = false, features = [
+    "glow",
+    "default_fonts",
+    "x11",
+    "wayland",
+] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+eframe = { version = "0.36", default-features = false, features = [
+    "wgpu",
+    "glow",
+    "default_fonts",
+] }
+
+[target.'cfg(windows)'.build-dependencies]
+winicon = { path = "../winicon" }
+
+[package.metadata.winres]
+FileDescription = "Cross Cleaner"
+OriginalFilename = "Cross Cleaner.exe"
+LegalCopyright = "Copyright Monolith Development © 2026"
+ProductName = "Cross Cleaner"

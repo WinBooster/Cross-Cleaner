@@ -33,7 +33,7 @@ jobs:
         run: |
           sudo apt-get -y install jq
 
-          JSON_FILES=("database/linux_database.json" "database/windows_database.json" "database/registry_database.json" "database/macos_database.json" "database/android_database.json")
+          JSON_FILES=("crates/database/linux_database.json" "crates/database/windows_database.json" "crates/database/registry_database.json" "crates/database/macos_database.json" "crates/database/android_database.json")
           for JSON_FILE in "${JSON_FILES[@]}"; do
             echo "Processing $JSON_FILE..."
 
@@ -75,26 +75,26 @@ jobs:
       - name: Process Windows data
         run: |
           # Load program links into a variable
-          if [ -f "database/program_links.json" ]; then
-            program_links=$(jq -r '.' database/program_links.json)
+          if [ -f "crates/database/program_links.json" ]; then
+            program_links=$(jq -r '.' crates/database/program_links.json)
           else
             program_links="{}"
           fi
 
           # Header
           echo "# Windows Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_WINDOWS.md
-          total_categories=$(jq -r 'map(.category) | unique | length' database/windows_database.json)
-          total_programs=$(jq -r 'map(.program) | unique | length' database/windows_database.json)
-          total_pathes=$(jq -r 'map(.path) | unique | length' database/windows_database.json)
+          total_categories=$(jq -r 'map(.category) | unique | length' crates/database/windows_database.json)
+          total_programs=$(jq -r 'map(.program) | unique | length' crates/database/windows_database.json)
+          total_pathes=$(jq -r 'map(.path) | unique | length' crates/database/windows_database.json)
           echo -e "**Total categories in database:** $total_categories\n" >> LIST_WINDOWS.md
           echo -e "**Total programs in database:** $total_programs\n" >> LIST_WINDOWS.md
           echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_WINDOWS.md
 
-          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/windows_database.json | while IFS= read -r class; do
+          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' crates/database/windows_database.json | while IFS= read -r class; do
             echo -e "## $class\n" >> LIST_WINDOWS.md
 
             # Get programs for this class
-            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/windows_database.json)
+            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' crates/database/windows_database.json)
 
             if [ -n "$programs" ]; then
               echo "| № | Program | Categories |" >> LIST_WINDOWS.md
@@ -122,9 +122,9 @@ jobs:
           done
 
           # Handle null class separately if needed
-          if jq -e '.[] | select(.class == null)' database/windows_database.json >/dev/null; then
+          if jq -e '.[] | select(.class == null)' crates/database/windows_database.json >/dev/null; then
             echo -e "## Uncategorized\n" >> LIST_WINDOWS.md
-            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/windows_database.json)
+            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' crates/database/windows_database.json)
 
             if [ -n "$programs" ]; then
               echo "| № | Program | Categories |" >> LIST_WINDOWS.md
@@ -152,26 +152,26 @@ jobs:
       - name: Process Windows Registry data
         run: |
           # Load program links into a variable
-          if [ -f "database/program_links.json" ]; then
-            program_links=$(jq -r '.' database/program_links.json)
+          if [ -f "crates/database/program_links.json" ]; then
+            program_links=$(jq -r '.' crates/database/program_links.json)
           else
             program_links="{}"
           fi
 
           # Header
           echo "# Windows Registry Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_REGISTRY.md
-          total_categories=$(jq -r 'map(.category) | unique | length' database/registry_database.json)
-          total_programs=$(jq -r 'map(.program) | unique | length' database/registry_database.json)
-          total_pathes=$(jq -r 'map(.path) | unique | length' database/registry_database.json)
+          total_categories=$(jq -r 'map(.category) | unique | length' crates/database/registry_database.json)
+          total_programs=$(jq -r 'map(.program) | unique | length' crates/database/registry_database.json)
+          total_pathes=$(jq -r 'map(.path) | unique | length' crates/database/registry_database.json)
           echo -e "**Total categories in database:** $total_categories\n" >> LIST_REGISTRY.md
           echo -e "**Total programs in database:** $total_programs\n" >> LIST_REGISTRY.md
           echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_REGISTRY.md
 
-          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/registry_database.json | while IFS= read -r class; do
+          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' crates/database/registry_database.json | while IFS= read -r class; do
             echo -e "## $class\n" >> LIST_REGISTRY.md
 
             # Get programs for this class
-            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/registry_database.json)
+            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' crates/database/registry_database.json)
 
             if [ -n "$programs" ]; then
               echo "| № | Program | Categories |" >> LIST_REGISTRY.md
@@ -199,9 +199,9 @@ jobs:
           done
 
           # Handle null class separately if needed
-          if jq -e '.[] | select(.class == null)' database/registry_database.json >/dev/null; then
+          if jq -e '.[] | select(.class == null)' crates/database/registry_database.json >/dev/null; then
             echo -e "## Uncategorized\n" >> LIST_REGISTRY.md
-            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/registry_database.json)
+            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' crates/database/registry_database.json)
 
             if [ -n "$programs" ]; then
               echo "| № | Program | Categories |" >> LIST_REGISTRY.md
@@ -230,26 +230,26 @@ jobs:
         run: |
 
           # Load program links into a variable
-          if [ -f "database/program_links.json" ]; then
-            program_links=$(jq -r '.' database/program_links.json)
+          if [ -f "crates/database/program_links.json" ]; then
+            program_links=$(jq -r '.' crates/database/program_links.json)
           else
             program_links="{}"
           fi
 
           # Header
           echo "# Linux Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_LINUX.md
-          total_categories=$(jq -r 'map(.category) | unique | length' database/linux_database.json)
-          total_programs=$(jq -r 'map(.program) | unique | length' database/linux_database.json)
-          total_pathes=$(jq -r 'map(.path) | unique | length' database/linux_database.json)
+          total_categories=$(jq -r 'map(.category) | unique | length' crates/database/linux_database.json)
+          total_programs=$(jq -r 'map(.program) | unique | length' crates/database/linux_database.json)
+          total_pathes=$(jq -r 'map(.path) | unique | length' crates/database/linux_database.json)
           echo -e "**Total categories in database:** $total_categories\n" >> LIST_LINUX.md
           echo -e "**Total programs in database:** $total_programs\n" >> LIST_LINUX.md
           echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_LINUX.md
 
-          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/linux_database.json | while IFS= read -r class; do
+          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' crates/database/linux_database.json | while IFS= read -r class; do
             echo -e "## $class\n" >> LIST_LINUX.md
 
             # Get programs for this class
-            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/linux_database.json)
+            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' crates/database/linux_database.json)
 
             if [ -n "$programs" ]; then
               echo "| № | Program | Categories |" >> LIST_LINUX.md
@@ -277,9 +277,9 @@ jobs:
           done
 
           # Handle null class separately if needed
-          if jq -e '.[] | select(.class == null)' database/linux_database.json >/dev/null; then
+          if jq -e '.[] | select(.class == null)' crates/database/linux_database.json >/dev/null; then
             echo -e "## Uncategorized\n" >> LIST_LINUX.md
-            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/linux_database.json)
+            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' crates/database/linux_database.json)
 
             if [ -n "$programs" ]; then
               echo "| № | Program | Categories |" >> LIST_LINUX.md
@@ -307,26 +307,26 @@ jobs:
       - name: Process MacOS data
         run: |
           # Load program links into a variable
-          if [ -f "database/program_links.json" ]; then
-            program_links=$(jq -r '.' database/program_links.json)
+          if [ -f "crates/database/program_links.json" ]; then
+            program_links=$(jq -r '.' crates/database/program_links.json)
           else
             program_links="{}"
           fi
 
           # Header
           echo "# MacOS Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_MACOS.md
-          total_categories=$(jq -r 'map(.category) | unique | length' database/macos_database.json)
-          total_programs=$(jq -r 'map(.program) | unique | length' database/macos_database.json)
-          total_pathes=$(jq -r 'map(.path) | unique | length' database/macos_database.json)
+          total_categories=$(jq -r 'map(.category) | unique | length' crates/database/macos_database.json)
+          total_programs=$(jq -r 'map(.program) | unique | length' crates/database/macos_database.json)
+          total_pathes=$(jq -r 'map(.path) | unique | length' crates/database/macos_database.json)
           echo -e "**Total categories in database:** $total_categories\n" >> LIST_MACOS.md
           echo -e "**Total programs in database:** $total_programs\n" >> LIST_MACOS.md
           echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_MACOS.md
 
-          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/macos_database.json | while IFS= read -r class; do
+          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' crates/database/macos_database.json | while IFS= read -r class; do
             echo -e "## $class\n" >> LIST_MACOS.md
 
             # Get programs for this class
-            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/macos_database.json)
+            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' crates/database/macos_database.json)
 
             if [ -n "$programs" ]; then
               echo "| № | Program | Categories |" >> LIST_MACOS.md
@@ -354,9 +354,9 @@ jobs:
           done
 
           # Handle null class separately if needed
-          if jq -e '.[] | select(.class == null)' database/macos_database.json >/dev/null; then
+          if jq -e '.[] | select(.class == null)' crates/database/macos_database.json >/dev/null; then
             echo -e "## Uncategorized\n" >> LIST_MACOS.md
-            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/macos_database.json)
+            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' crates/database/macos_database.json)
 
             if [ -n "$programs" ]; then
               echo "| № | Program | Categories |" >> LIST_MACOS.md
@@ -383,21 +383,21 @@ jobs:
 
       - name: Process Android data
         run: |
-          if [ -f "database/program_links.json" ]; then
-            program_links=$(jq -r '.' database/program_links.json)
+          if [ -f "crates/database/program_links.json" ]; then
+            program_links=$(jq -r '.' crates/database/program_links.json)
           else
             program_links="{}"
           fi
           echo "# Android Clearing Programs Catalog v${{ env.APP_VERSION }}" > LIST_ANDROID.md
-          total_categories=$(jq -r 'map(.category) | unique | length' database/android_database.json)
-          total_programs=$(jq -r 'map(.program) | unique | length' database/android_database.json)
-          total_pathes=$(jq -r 'map(.path) | unique | length' database/android_database.json)
+          total_categories=$(jq -r 'map(.category) | unique | length' crates/database/android_database.json)
+          total_programs=$(jq -r 'map(.program) | unique | length' crates/database/android_database.json)
+          total_pathes=$(jq -r 'map(.path) | unique | length' crates/database/android_database.json)
           echo -e "**Total categories in database:** $total_categories\n" >> LIST_ANDROID.md
           echo -e "**Total programs in database:** $total_programs\n" >> LIST_ANDROID.md
           echo -e "**Total pathes in database:** $total_pathes\n" >> LIST_ANDROID.md
-          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' database/android_database.json | while IFS= read -r class; do
+          jq -r 'map(.class) | unique | map(select(. != null)) | .[]' crates/database/android_database.json | while IFS= read -r class; do
             echo -e "## $class\n" >> LIST_ANDROID.md
-            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' database/android_database.json)
+            programs=$(jq -c --arg class "$class" 'group_by(.program)[] | select(.[0].program != null and .[0].class == $class)' crates/database/android_database.json)
             if [ -n "$programs" ]; then
               echo "| № | Program | Categories |" >> LIST_ANDROID.md
               echo "| --- | --- | --- |" >> LIST_ANDROID.md
@@ -419,9 +419,9 @@ jobs:
             fi
             echo -e "\n" >> LIST_ANDROID.md
           done
-          if jq -e '.[] | select(.class == null)' database/android_database.json >/dev/null; then
+          if jq -e '.[] | select(.class == null)' crates/database/android_database.json >/dev/null; then
             echo -e "## Uncategorized\n" >> LIST_ANDROID.md
-            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' database/android_database.json)
+            programs=$(jq -c 'group_by(.program)[] | select(.[0].program != null and .[0].class == null)' crates/database/android_database.json)
             if [ -n "$programs" ]; then
               echo "| № | Program | Categories |" >> LIST_ANDROID.md
               echo "| --- | --- | --- |" >> LIST_ANDROID.md

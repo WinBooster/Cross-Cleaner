@@ -1,0 +1,24 @@
+[package]
+name = "selfupdate"
+version = "2.0.1"
+edition = "2024"
+description = "Self-update worker shared by the Cross Cleaner frontends"
+
+[lib]
+name = "selfupdate"
+path = "src/lib.rs"
+
+[dependencies]
+appcore = { path = "../appcore" }
+database = { path = "../database" }
+# Replaces the running executable with the freshly downloaded release binary,
+# so the app can update itself without an installer.
+self-replace = "1.5.0"
+
+[target.'cfg(windows)'.dependencies]
+# ShellExecuteW for the UAC prompt when a release build relaunches itself.
+windows = { version = "0.62.2", features = [
+	"Win32_Foundation",
+	"Win32_UI_Shell",
+	"Win32_UI_WindowsAndMessaging",
+] }

@@ -1,0 +1,38 @@
+[package]
+name = "tui"
+version = "2.0.1"
+edition = "2024"
+description = "Terminal UI for Cross Cleaner"
+
+[lib]
+name = "tui"
+path = "src/lib.rs"
+
+# INFO: no `[[bin]]` section on purpose. The binary keeps the package name
+# (`tui`), and the release workflow renames it to `Windows-Cross_Cleaner_TUI.exe`
+# and friends when publishing. Hardcoding a release name here would make every
+# local build produce a file that looks like a release artifact.
+
+[dependencies]
+appcore = { path = "../appcore" }
+# Downloads the release binary and replaces the running executable, so the
+# terminal app can update itself from the published `*_TUI` asset.
+selfupdate = { path = "../selfupdate" }
+database = { path = "../database" }
+cleaner = { path = "../cleaner" }
+ratatui = "0.30.2"
+crossterm = "0.29"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync"] }
+clap = { version = "4.6", features = ["derive"] }
+
+# Icon, version block and the administrator requirement, shared with `desktop`.
+[target.'cfg(windows)'.build-dependencies]
+winicon = { path = "../winicon" }
+
+[package.metadata.winres]
+FileDescription = "Cross Cleaner (terminal)"
+# Matches the name cargo produces, so the release artifact and the version
+# block agree even after the workflow renames the file for publishing.
+OriginalFilename = "tui.exe"
+LegalCopyright = "Copyright Monolith Development © 2026"
+ProductName = "Cross Cleaner"
