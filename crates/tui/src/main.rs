@@ -20,9 +20,9 @@ use crossterm::terminal::{
     EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode,
 };
 use database::cleaner_database::CleanerDatabase;
-use database::structures::CustomCleaner;
 #[cfg(windows)]
 use database::registry_database::RegistryDatabase;
+use database::structures::CustomCleaner;
 use ratatui::Terminal;
 use ratatui::backend::CrosstermBackend;
 use tui::TuiApp;
@@ -159,7 +159,9 @@ fn event_loop(
                 // Key repeats are already filtered by crossterm on Windows;
                 // filtering the kind keeps a kitty-protocol release from
                 // firing a binding twice.
-                Event::Key(key) if key.kind != KeyEventKind::Release => app.on_event(Event::Key(key)),
+                Event::Key(key) if key.kind != KeyEventKind::Release => {
+                    app.on_event(Event::Key(key))
+                }
                 other => app.on_event(other),
             }
             if app.should_quit {

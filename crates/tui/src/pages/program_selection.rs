@@ -2,11 +2,11 @@
 //! category overlay, and the pinned ` Start Cleaning ` button — the terminal
 //! counterpart of `gui::pages::program_selection`.
 
+use ratatui::Frame;
 use ratatui::layout::{Constraint, Layout, Rect};
 use ratatui::style::Style;
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{List, ListItem, ListState, Paragraph};
-use ratatui::Frame;
 
 use crate::app::{InputMode, TuiApp};
 use crate::pages::button;
@@ -35,7 +35,10 @@ pub fn render(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
 
     match empty_hint(app) {
         Some(hint) => {
-            frame.render_widget(Paragraph::new(Line::from(Span::styled(hint, Theme::dim()))).block(block), list_area);
+            frame.render_widget(
+                Paragraph::new(Line::from(Span::styled(hint, Theme::dim()))).block(block),
+                list_area,
+            );
         }
         None => {
             let list = List::new(program_items(app))

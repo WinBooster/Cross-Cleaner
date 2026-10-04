@@ -176,11 +176,8 @@ impl CategoryIndex {
 
         let mut categories = Vec::with_capacity(names.len());
         for name in names {
-            let mut list: Vec<Arc<str>> = subs
-                .remove(&name)
-                .unwrap_or_default()
-                .into_iter()
-                .collect();
+            let mut list: Vec<Arc<str>> =
+                subs.remove(&name).unwrap_or_default().into_iter().collect();
             list.sort();
             categories.push(CategoryState {
                 has_empty: has_empty.remove(&name).unwrap_or(false),
@@ -411,11 +408,7 @@ impl AppState {
         }
         let was_enabled = *checkbox.borrow();
         *checkbox.borrow_mut() = !was_enabled;
-        if was_enabled {
-            Toggle::Off
-        } else {
-            Toggle::On
-        }
+        if was_enabled { Toggle::Off } else { Toggle::On }
     }
 
     /// Enables or disables one category of the program at `index`, which is how
@@ -436,7 +429,10 @@ impl AppState {
     /// True when the program is fully selected (nothing excluded).
     pub fn is_program_checked(&self, index: usize) -> bool {
         self.program_master(index)
-            && self.program_disabled.get(index).is_some_and(HashSet::is_empty)
+            && self
+                .program_disabled
+                .get(index)
+                .is_some_and(HashSet::is_empty)
     }
 
     /// True when the program is ticked but some of its categories are excluded.
@@ -761,10 +757,7 @@ mod tests {
             entry("Artifacts", "App4", ""),
         ]);
         let names: Vec<&str> = app.categories.iter().map(|c| c.name.as_ref()).collect();
-        assert_eq!(
-            names,
-            vec!["Cache", "Logs", "Documentation", "Artifacts"]
-        );
+        assert_eq!(names, vec!["Cache", "Logs", "Documentation", "Artifacts"]);
     }
 
     #[test]

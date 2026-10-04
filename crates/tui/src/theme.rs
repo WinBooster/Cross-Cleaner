@@ -41,9 +41,7 @@ impl Theme {
 
     /// A heading (`Select Programs to Clean`, `Cleaning Results`, ...).
     pub fn heading() -> Style {
-        Style::default()
-            .fg(Self::TEXT)
-            .add_modifier(Modifier::BOLD)
+        Style::default().fg(Self::TEXT).add_modifier(Modifier::BOLD)
     }
 
     /// A column header row.
@@ -55,7 +53,11 @@ impl Theme {
 
     /// A block border; `focused` switches it to the accent color.
     pub fn border(focused: bool) -> Style {
-        Style::default().fg(if focused { Self::BORDER_FOCUSED } else { Self::BORDER })
+        Style::default().fg(if focused {
+            Self::BORDER_FOCUSED
+        } else {
+            Self::BORDER
+        })
     }
 
     /// A titled block around a page area.
@@ -78,9 +80,7 @@ impl Theme {
 
     /// Glyphs used by the popup and the progress spinner.
     pub const BULLET: &'static str = "•";
-    pub const SPINNER: [&'static str; 8] = [
-        "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧",
-    ];
+    pub const SPINNER: [&'static str; 8] = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧"];
 
     /// A horizontal meter drawn from eighth blocks, used for the cleaning progress
     /// bar and the volume bars.
@@ -106,14 +106,21 @@ impl Theme {
         }
         let used = full + usize::from(partial);
         if used < width {
-            spans.push(Span::styled(" ".repeat(width - used), Style::default().fg(track)));
+            spans.push(Span::styled(
+                " ".repeat(width - used),
+                Style::default().fg(track),
+            ));
         }
         spans
     }
 
     /// A meter colored by meaning: silence is red, a real level is green.
     pub fn volume_meter(fraction: f32, width: usize) -> Vec<Span<'static>> {
-        let level = if fraction <= 0.001 { Self::BAD } else { Self::GOOD };
+        let level = if fraction <= 0.001 {
+            Self::BAD
+        } else {
+            Self::GOOD
+        };
         Self::meter(fraction, width, level, Self::BORDER)
     }
 }

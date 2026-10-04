@@ -707,7 +707,10 @@ mod tests {
             state.progress_message.is_empty(),
             "Progress message should be empty"
         );
-        assert!(state.search_query.is_empty(), "Search query should be empty");
+        assert!(
+            state.search_query.is_empty(),
+            "Search query should be empty"
+        );
         // No run in flight, so no result channel is waiting for a result.
         assert!(state.result_receiver.is_none());
         // The window-only plumbing starts empty too.

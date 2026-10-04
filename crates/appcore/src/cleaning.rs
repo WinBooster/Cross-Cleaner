@@ -229,7 +229,11 @@ pub async fn work(
     let removed_files_val = removed_files;
     let removed_directories_val = removed_directories;
 
-    notify_result(bytes_cleared_val, removed_files_val, removed_directories_val);
+    notify_result(
+        bytes_cleared_val,
+        removed_files_val,
+        removed_directories_val,
+    );
 
     (
         bytes_cleared_val,
@@ -290,10 +294,7 @@ mod tests {
 
     #[test]
     fn parses_progress_messages() {
-        assert_eq!(
-            parse_progress("PROGRESS:3:10:2048"),
-            Some((3, 10, 2048u64))
-        );
+        assert_eq!(parse_progress("PROGRESS:3:10:2048"), Some((3, 10, 2048u64)));
         assert_eq!(parse_progress("PROGRESS:0:0:0"), Some((0, 0, 0)));
     }
 

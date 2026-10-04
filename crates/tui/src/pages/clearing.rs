@@ -3,11 +3,11 @@
 //! `gui::pages::clearing`.
 
 use database::utils::get_file_size_string;
+use ratatui::Frame;
 use ratatui::layout::{Alignment, Constraint, Layout, Rect};
 use ratatui::style::Style;
 use ratatui::text::{Line, Span};
 use ratatui::widgets::Paragraph;
-use ratatui::Frame;
 
 use crate::app::TuiApp;
 use crate::pages::meter;
@@ -27,8 +27,7 @@ pub fn render(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
     let inner = block.inner(area);
     // The footer is its own row, so the meter above it keeps its full width
     // instead of having to share it with the counters.
-    let [body, footer] = Layout::vertical([Constraint::Min(1), Constraint::Length(1)])
-        .areas(inner);
+    let [body, footer] = Layout::vertical([Constraint::Min(1), Constraint::Length(1)]).areas(inner);
 
     let mut lines: Vec<Line<'static>> = Vec::new();
     if !program.is_empty() {

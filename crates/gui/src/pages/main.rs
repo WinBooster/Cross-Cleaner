@@ -165,8 +165,7 @@ impl MyApp {
                         // Snapshot the entries: the closure needs `&mut self`
                         // to apply the toggle, so it cannot hold a borrow of
                         // the category it is iterating.
-                        let category_name =
-                            self.state.categories[idx].name.clone();
+                        let category_name = self.state.categories[idx].name.clone();
                         let subs = self.state.categories[idx].subs.clone();
                         let has_empty = self.state.categories[idx].has_empty;
 

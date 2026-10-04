@@ -535,9 +535,10 @@ Special thanks to our amazing contributors who made this release possible:\n\
     fn test_every_released_asset_name_is_published_by_the_workflow() {
         // Guards the pairing between this file and .github/workflows/release.yml:
         // a rename on one side without the other silently breaks in-app updates.
-        let workflow = std::fs::read_to_string(
-            concat!(env!("CARGO_MANIFEST_DIR"), "/../../.github/workflows/release.yml"),
-        )
+        let workflow = std::fs::read_to_string(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../.github/workflows/release.yml"
+        ))
         .expect("release workflow is readable");
 
         let mut names = Vec::new();

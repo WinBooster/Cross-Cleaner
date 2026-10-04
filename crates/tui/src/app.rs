@@ -14,11 +14,11 @@ use appcore::updater::{self, UpdateState, UpdaterCommand};
 use appcore::{Toggle, config};
 use crossterm::event::{Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use database::version::{Changelog, Frontend, NewRelease};
+use ratatui::Frame;
 use ratatui::layout::{Constraint, Layout, Rect};
 use ratatui::style::Style;
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Clear, ListState, Padding, Paragraph, Wrap};
-use ratatui::Frame;
 
 use crate::keymap;
 use crate::pages;
@@ -28,12 +28,7 @@ use crate::theme::Theme;
 const TOAST_LIFETIME: Duration = Duration::from_secs(6);
 
 /// The four volumes, in the order the window frontend lists them.
-const SETTINGS: [&str; 4] = [
-    "Popup sound",
-    "Click sound",
-    "Check sound",
-    "Done sound",
-];
+const SETTINGS: [&str; 4] = ["Popup sound", "Click sound", "Check sound", "Done sound"];
 
 /// Lines a page-up / page-down moves in the changelog overlay.
 const CHANGELOG_PAGE: usize = 10;
@@ -222,7 +217,11 @@ impl TuiApp {
             }
         }
 
-        if self.toast.as_ref().is_some_and(|t| Instant::now() >= t.until) {
+        if self
+            .toast
+            .as_ref()
+            .is_some_and(|t| Instant::now() >= t.until)
+        {
             self.toast = None;
         }
     }
@@ -346,9 +345,12 @@ impl TuiApp {
                 total,
             },
         );
-        if let Err(e) = self.updater_tx.as_ref().expect("checked above").send(
-            UpdaterCommand::Install(release),
-        ) {
+        if let Err(e) = self
+            .updater_tx
+            .as_ref()
+            .expect("checked above")
+            .send(UpdaterCommand::Install(release))
+        {
             updater::publish(
                 &self.updater_state,
                 updater::UpdateStage::Failed {
@@ -464,9 +466,7 @@ impl TuiApp {
             }
             // Enter and `→` / `l` open the subcategory overlay — the terminal
             // stand-in for the window frontend's per-category menu button.
-            KeyCode::Enter | KeyCode::Right | KeyCode::Char('l') => {
-                self.open_category_popup()
-            }
+            KeyCode::Enter | KeyCode::Right | KeyCode::Char('l') => self.open_category_popup(),
             // The settings gear in the window title bar.
             KeyCode::Char('s') | KeyCode::Char('S') => {
                 self.state.current_page = Page::Settings;
@@ -492,7 +492,11 @@ impl TuiApp {
 
     /// Moves the focused category by one cell along the row.
     fn move_category_column(&mut self, delta: isize) {
-        move_index(&mut self.category_cursor, delta, self.state.categories.len());
+        move_index(
+            &mut self.category_cursor,
+            delta,
+            self.state.categories.len(),
+        );
     }
 
     fn open_category_popup(&mut self) {
@@ -559,7 +563,11 @@ impl TuiApp {
             KeyCode::Home => self.program_cursor = 0,
             KeyCode::End => self.program_cursor = len.saturating_sub(1),
             KeyCode::Enter | KeyCode::Char(' ') => {
-                let Some(index) = self.state.filtered_programs.get(self.program_cursor).copied()
+                let Some(index) = self
+                    .state
+                    .filtered_programs
+                    .get(self.program_cursor)
+                    .copied()
                 else {
                     return;
                 };
@@ -584,7 +592,12 @@ impl TuiApp {
     }
 
     fn open_program_popup(&mut self) {
-        let Some(index) = self.state.filtered_programs.get(self.program_cursor).copied() else {
+        let Some(index) = self
+            .state
+            .filtered_programs
+            .get(self.program_cursor)
+            .copied()
+        else {
             return;
         };
         let Some(categories) = self.state.program_categories.get(index) else {
@@ -630,7 +643,10 @@ impl TuiApp {
 
     /// Number of rows in the results table.
     pub fn result_count(&self) -> usize {
-        self.state.cleared_data.as_ref().map_or(0, |data| data.3.len())
+        self.state
+            .cleared_data
+            .as_ref()
+            .map_or(0, |data| data.3.len())
     }
 
     // --- settings page ----------------------------------------------------
@@ -859,7 +875,9 @@ impl TuiApp {
         self.program_cursor = self
             .program_cursor
             .min(self.state.filtered_programs.len().saturating_sub(1));
-        self.result_cursor = self.result_cursor.min(self.result_count().saturating_sub(1));
+        self.result_cursor = self
+            .result_cursor
+            .min(self.result_count().saturating_sub(1));
     }
 
     // --- rendering --------------------------------------------------------
@@ -921,10 +939,7 @@ impl TuiApp {
             let remaining = toast.until.saturating_duration_since(Instant::now());
             let line = Line::from(vec![
                 Span::styled(format!(" {} ", toast.message), toast.style),
-                Span::styled(
-                    format!("· {}s", remaining.as_secs() + 1),
-                    Theme::dim(),
-                ),
+                Span::styled(format!("· {}s", remaining.as_secs() + 1), Theme::dim()),
             ]);
             frame.render_widget(Paragraph::new(line), area);
             return;
@@ -946,9 +961,7 @@ impl TuiApp {
                 "n next",
                 "s settings",
             ],
-            Page::ProgramSelection => {
-                &["↑↓ move", "space select", "→ cats", "/ search", "S start"]
-            }
+            Page::ProgramSelection => &["↑↓ move", "space select", "→ cats", "/ search", "S start"],
             Page::Clearing => &["cleaning, please wait"],
             Page::Results => &["↑↓ scroll", "esc back"],
             Page::Settings => &["↑↓ pick", "←→ volume", "r reset", "esc back"],
@@ -1001,7 +1014,11 @@ impl TuiApp {
             " {}/{} · {}esc close ",
             self.changelog_scroll + 1,
             lines.len().max(1),
-            if max_scroll > 0 { "↑↓ scroll · " } else { "" },
+            if max_scroll > 0 {
+                "↑↓ scroll · "
+            } else {
+                ""
+            },
         );
         let block = block.title_bottom(Line::from(position).right_aligned());
 
@@ -1054,9 +1071,8 @@ fn render_popup(frame: &mut Frame, area: Rect, popup: &Popup) {
         })
         .collect();
 
-    let block = Theme::block(&popup.title, true).title_bottom(
-        Line::from(" ↑↓ move · space toggle · esc close ").right_aligned(),
-    );
+    let block = Theme::block(&popup.title, true)
+        .title_bottom(Line::from(" ↑↓ move · space toggle · esc close ").right_aligned());
     let list = ratatui::widgets::List::new(items)
         .block(block)
         .highlight_style(Theme::selected());
@@ -1091,8 +1107,7 @@ fn changelog_lines(changelog: Option<&Changelog>) -> Vec<Line<'static>> {
     if !changelog.contributors.is_empty() {
         lines.push(Line::default());
         lines.push(Line::styled("Contributors", Theme::heading()));
-        lines
-            .extend(changelog.contributors.iter().map(|c| bullet(c)));
+        lines.extend(changelog.contributors.iter().map(|c| bullet(c)));
     }
     lines
 }
@@ -1114,12 +1129,12 @@ mod tests {
     use super::*;
     use appcore::updater::UpdateStage;
     use database::cleaner_database::CleanerDatabase;
-    use database::version::ChangelogGroup;
-    use database::structures::{CleanerData, CleanerFlags};
-    use ratatui::Terminal;
-    use ratatui::backend::TestBackend;
     #[cfg(windows)]
     use database::registry_database::RegistryDatabase;
+    use database::structures::{CleanerData, CleanerFlags};
+    use database::version::ChangelogGroup;
+    use ratatui::Terminal;
+    use ratatui::backend::TestBackend;
 
     fn entry(category: &str, program: &str, sub: &str) -> CleanerData {
         CleanerData {
@@ -1147,11 +1162,7 @@ mod tests {
         let state = {
             #[cfg(windows)]
             {
-                AppState::from_database(
-                    database,
-                    RegistryDatabase::from_vec(Vec::new()),
-                    custom,
-                )
+                AppState::from_database(database, RegistryDatabase::from_vec(Vec::new()), custom)
             }
             #[cfg(not(windows))]
             {
@@ -1334,11 +1345,7 @@ mod tests {
         let state = {
             #[cfg(windows)]
             {
-                AppState::from_database(
-                    database,
-                    RegistryDatabase::from_vec(Vec::new()),
-                    custom,
-                )
+                AppState::from_database(database, RegistryDatabase::from_vec(Vec::new()), custom)
             }
             #[cfg(not(windows))]
             {
@@ -1421,11 +1428,7 @@ mod tests {
         let state = {
             #[cfg(windows)]
             {
-                AppState::from_database(
-                    database,
-                    RegistryDatabase::from_vec(Vec::new()),
-                    custom,
-                )
+                AppState::from_database(database, RegistryDatabase::from_vec(Vec::new()), custom)
             }
             #[cfg(not(windows))]
             {
@@ -1571,11 +1574,7 @@ mod tests {
         let state = {
             #[cfg(windows)]
             {
-                AppState::from_database(
-                    database,
-                    RegistryDatabase::from_vec(Vec::new()),
-                    custom,
-                )
+                AppState::from_database(database, RegistryDatabase::from_vec(Vec::new()), custom)
             }
             #[cfg(not(windows))]
             {
@@ -1758,7 +1757,10 @@ mod tests {
         press(&mut app, KeyCode::Char(' '));
         let screen = draw(&mut app, 100, 30);
         assert!(screen.contains("Category selected"), "{screen}");
-        assert!(!screen.contains("changelog"), "hints are replaced: {screen}");
+        assert!(
+            !screen.contains("changelog"),
+            "hints are replaced: {screen}"
+        );
     }
 
     /// A changelog long enough to overflow any overlay.
@@ -2000,11 +2002,11 @@ mod tests {
     }
 
     /// A pending update plus a *live* updater channel.
-///
-/// The receiver is returned so the caller can keep it alive: a dropped receiver
-/// would make every `send` fail, which is a different code path than the real
-/// one and would hide bugs in the dialog.
-fn app_with_update() -> (TuiApp, std::sync::mpsc::Receiver<UpdaterCommand>) {
+    ///
+    /// The receiver is returned so the caller can keep it alive: a dropped receiver
+    /// would make every `send` fail, which is a different code path than the real
+    /// one and would hide bugs in the dialog.
+    fn app_with_update() -> (TuiApp, std::sync::mpsc::Receiver<UpdaterCommand>) {
         let mut app = sample_app();
         let (tx, rx) = std::sync::mpsc::channel();
         app.updater_tx = Some(tx);

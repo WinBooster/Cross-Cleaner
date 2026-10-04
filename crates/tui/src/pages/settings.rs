@@ -2,11 +2,11 @@
 //! terminal counterpart of `gui::pages::settings`.
 
 use appcore::config;
+use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::Modifier;
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{List, ListItem, ListState};
-use ratatui::Frame;
 
 use crate::app::TuiApp;
 use crate::theme::Theme;
@@ -23,12 +23,7 @@ pub fn render(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
         cfg.check_volume,
         cfg.done_volume,
     ];
-    let labels = [
-        "Popup sound",
-        "Click sound",
-        "Check sound",
-        "Done sound",
-    ];
+    let labels = ["Popup sound", "Click sound", "Check sound", "Done sound"];
 
     let items: Vec<ListItem<'static>> = labels
         .iter()

@@ -2,11 +2,11 @@
 //! terminal counterpart of `gui::pages::results`.
 
 use database::utils::get_file_size_string;
+use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::Style;
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{List, ListItem, ListState, Paragraph};
-use ratatui::Frame;
 
 use crate::app::TuiApp;
 use crate::theme::Theme;
@@ -64,11 +64,12 @@ pub fn render(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
         Span::styled("Categories", Theme::column_header()),
     ]);
 
-    let list = List::new(items).block(
-        Theme::block(&format!(" {} programs ", cleared.len()), true)
-            .title_top(header.left_aligned()),
-    )
-    .highlight_style(Theme::selected());
+    let list = List::new(items)
+        .block(
+            Theme::block(&format!(" {} programs ", cleared.len()), true)
+                .title_top(header.left_aligned()),
+        )
+        .highlight_style(Theme::selected());
 
     let mut state = ListState::default().with_selected(Some(app.result_cursor));
     frame.render_stateful_widget(list, table, &mut state);

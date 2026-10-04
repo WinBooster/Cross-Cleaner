@@ -13,11 +13,11 @@
 //! row and `Tab` changes column, while the highlight always sits on the exact
 //! cell that `Space` would toggle.
 
+use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::Style;
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{List, ListItem};
-use ratatui::Frame;
 
 use appcore::{CATEGORY_COLUMNS, CategoryState};
 
@@ -153,11 +153,7 @@ fn hint_len(category: &CategoryState) -> usize {
 ///
 /// Mirroring the arrow matters: in the right column the count sits *outside* the
 /// label, so a `→` there would point back at the text instead of away from it.
-fn sub_hint(
-    category: &CategoryState,
-    side: Side,
-    style: Style,
-) -> Span<'static> {
+fn sub_hint(category: &CategoryState, side: Side, style: Style) -> Span<'static> {
     if category.subs.is_empty() {
         return Span::raw("");
     }
@@ -204,8 +200,7 @@ enum Side {
 fn cell_spans(app: &TuiApp, index: usize, width: usize, side: Side) -> Vec<Span<'static>> {
     let category = &app.state.categories[index];
     let focused = index == app.category_cursor;
-    let (check, check_style) =
-        Theme::checkbox(category.is_checked(), category.is_indeterminate());
+    let (check, check_style) = Theme::checkbox(category.is_checked(), category.is_indeterminate());
 
     // Everything except the label has a known width, so the label gets whatever
     // is left over and is truncated when it does not fit.

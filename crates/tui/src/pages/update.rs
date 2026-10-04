@@ -5,11 +5,11 @@
 
 use appcore::updater::{self, UpdateStage};
 use database::version::NewRelease;
+use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::Style;
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Clear, Paragraph, Wrap};
-use ratatui::Frame;
 
 use crate::app::{TuiApp, centered};
 use crate::theme::Theme;
@@ -82,7 +82,11 @@ pub fn render(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
 fn offer_body(release: &NewRelease) -> Vec<Line<'static>> {
     let mut lines = vec![
         Line::from(Span::styled(
-            format!("v{} is available. You have v{}.", release.version, database::get_version()),
+            format!(
+                "v{} is available. You have v{}.",
+                release.version,
+                database::get_version()
+            ),
             Theme::text(),
         )),
         Line::default(),
@@ -108,11 +112,7 @@ fn offer_body(release: &NewRelease) -> Vec<Line<'static>> {
 }
 
 /// The worker owns the update: show what it is doing and what to press next.
-fn stage_body(
-    stage: &UpdateStage,
-    time: f64,
-    spinner: &'static str,
-) -> Vec<Line<'static>> {
+fn stage_body(stage: &UpdateStage, time: f64, spinner: &'static str) -> Vec<Line<'static>> {
     match stage {
         UpdateStage::Idle => Vec::new(),
         UpdateStage::Downloading {
