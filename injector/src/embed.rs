@@ -75,7 +75,8 @@ mod platform {
     use std::sync::atomic::{AtomicIsize, Ordering};
     use std::sync::{Mutex, OnceLock};
 
-    use super::{log, TITLE_BAR, TITLE_BAR_BUTTONS};
+    use super::{TITLE_BAR, TITLE_BAR_BUTTONS};
+    use crate::log;
     use windows::Win32::Foundation::{HWND, LPARAM, RECT};
     use windows::Win32::UI::WindowsAndMessaging::{
         EnumWindows, GetAncestor, GetClientRect, GetForegroundWindow, GetWindowLongPtrW,
