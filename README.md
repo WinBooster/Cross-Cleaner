@@ -20,7 +20,7 @@
 
 - 🚀 **Multi-threaded**: Leverages rayon for parallel processing on multi-core systems
 - 🔒 **Secure**: Carefully preserves critical system files
-- 💻 **Cross-Platform**: Full support for [Windows](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_WINDOWS.md), [MacOS](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_MACOS.md) and [Linux](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_LINUX.md)
+- 💻 **Cross-Platform**: Full support for [Windows](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_WINDOWS.md), [MacOS](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_MACOS.md), [Linux](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_LINUX.md) and [Android](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_ANDROID.md)
 - 🎯 **User-Friendly**: Clean, minimalist interface for easy operation
 - 📄 **Custom-DataBase**: Ability to use custom cleanup database
 
