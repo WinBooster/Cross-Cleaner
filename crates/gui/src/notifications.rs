@@ -431,7 +431,12 @@ mod tests {
             },
         ];
         for stage in stages {
-            assert!(at(stage).sticky(), "{stage:?} must not expire on its own",);
+            // `at` consumes the stage to publish it, so the message below gets
+            // its own copy rather than reading a moved-from value.
+            assert!(
+                at(stage.clone()).sticky(),
+                "{stage:?} must not expire on its own",
+            );
         }
         assert!(UpdateProgressNotification::new_release_page(release()).sticky());
     }
@@ -455,10 +460,28 @@ mod tests {
     fn a_timed_notification_still_fades_out() {
         assert_eq!(notification_alpha(false, 0.15), 0.5);
         assert_eq!(notification_alpha(false, 1.0), 1.0);
+
+        // The fade-out occupies the last `NOTIFICATION_FADE_SECS` of the
+        // lifetime, so the notification is still partly visible just before the
+        // deadline — it reaches zero exactly at it, which is the moment the
+        // manager drops it (`shown_at.elapsed() < NOTIFICATION_LIFETIME`).
+        let deadline = NOTIFICATION_LIFETIME.as_secs_f32();
+        // Approximate: `deadline - 0.15` is not exactly representable in f32, and
+        // the division by the fade length carries the error into the result.
+        assert!((notification_alpha(false, deadline - 0.15) - 0.5).abs() < 1e-5);
+        assert!(
+            notification_alpha(false, deadline - 0.1) < 0.5,
+            "still fading out shortly before the deadline",
+        );
         assert_eq!(
-            notification_alpha(false, NOTIFICATION_LIFETIME.as_secs_f32() - 0.1),
+            notification_alpha(false, deadline),
             0.0,
-            "gone by the deadline",
+            "gone by the deadline"
+        );
+        assert_eq!(
+            notification_alpha(false, deadline + 1.0),
+            0.0,
+            "stays gone afterwards",
         );
     }
 }
