@@ -167,8 +167,8 @@ mod tests {
         // Relative to the repository root, which is where `iscc` runs from.
         let root = concat!(env!("CARGO_MANIFEST_DIR"), "/../..");
         let resolved = format!("{root}/{relative}");
-        let bytes = std::fs::read(&resolved)
-            .unwrap_or_else(|e| panic!("{resolved} is unreadable: {e}"));
+        let bytes =
+            std::fs::read(&resolved).unwrap_or_else(|e| panic!("{resolved} is unreadable: {e}"));
         assert_eq!(
             bytes, ICON,
             "the installer must ship the same icon the binaries are stamped with",
