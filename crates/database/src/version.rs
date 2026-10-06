@@ -76,6 +76,15 @@ pub fn is_newer(remote: &str, current: &str) -> bool {
     false
 }
 
+/// True when this build runs on arm64 (aarch64).
+///
+/// Windows and Linux publish an x86_64 and an arm64 binary, so the asset name
+/// has to carry the architecture: an arm64 build asking for the x86_64 asset
+/// would replace itself with a binary the CPU cannot execute.
+fn is_arm64() -> bool {
+    matches!(std::env::consts::ARCH, "aarch64" | "arm64")
+}
+
 /// Which of the release binaries a build installs for itself.
 ///
 /// The release publishes one binary per platform *and* per frontend (see
@@ -99,11 +108,16 @@ impl Frontend {
     /// report its progress.
     pub fn asset_name(self) -> &'static str {
         match (self, std::env::consts::OS) {
+            (Frontend::Gui, "windows") if is_arm64() => "Windows-Arm64-Cross_Cleaner_GUI.exe",
             (Frontend::Gui, "windows") => "Windows-Cross_Cleaner_GUI.exe",
+            (Frontend::Gui, "linux") if is_arm64() => "Linux-Arm64-Cross_Cleaner_GUI",
             (Frontend::Gui, "linux") => "Linux-Cross_Cleaner_GUI",
+            // macOS only ever ships arm64 builds, so the name never varies.
             (Frontend::Gui, "macos") => "MacOS-Arm64-Cross_Cleaner_GUI",
             (Frontend::Gui, "android") => "Cross_Cleaner_Android.apk",
+            (Frontend::Tui, "windows") if is_arm64() => "Windows-Arm64-Cross_Cleaner_TUI.exe",
             (Frontend::Tui, "windows") => "Windows-Cross_Cleaner_TUI.exe",
+            (Frontend::Tui, "linux") if is_arm64() => "Linux-Arm64-Cross_Cleaner_TUI",
             (Frontend::Tui, "linux") => "Linux-Cross_Cleaner_TUI",
             (Frontend::Tui, "macos") => "MacOS-Arm64-Cross_Cleaner_TUI",
             // The terminal app is not built for Android, and an APK cannot be
@@ -111,6 +125,31 @@ impl Frontend {
             (Frontend::Tui, _) => "",
             // An OS this project does not ship for.
             (Frontend::Gui, _) => "",
+        }
+    }
+
+    /// Name of the release binary for a given OS and CPU, regardless of the
+    /// ones this build actually runs on.
+    ///
+    /// [`Frontend::asset_name`] is the entry point the updater uses; this
+    /// variant exists so the tests can enumerate every published name instead
+    /// of only the one the test happens to run on.
+    #[cfg(test)]
+    pub fn asset_name_for(self, os: &str, arm64: bool) -> &'static str {
+        match (self, os, arm64) {
+            (Frontend::Gui, "windows", true) => "Windows-Arm64-Cross_Cleaner_GUI.exe",
+            (Frontend::Gui, "windows", false) => "Windows-Cross_Cleaner_GUI.exe",
+            (Frontend::Gui, "linux", true) => "Linux-Arm64-Cross_Cleaner_GUI",
+            (Frontend::Gui, "linux", false) => "Linux-Cross_Cleaner_GUI",
+            (Frontend::Gui, "macos", _) => "MacOS-Arm64-Cross_Cleaner_GUI",
+            (Frontend::Gui, "android", _) => "Cross_Cleaner_Android.apk",
+            (Frontend::Tui, "windows", true) => "Windows-Arm64-Cross_Cleaner_TUI.exe",
+            (Frontend::Tui, "windows", false) => "Windows-Cross_Cleaner_TUI.exe",
+            (Frontend::Tui, "linux", true) => "Linux-Arm64-Cross_Cleaner_TUI",
+            (Frontend::Tui, "linux", false) => "Linux-Cross_Cleaner_TUI",
+            (Frontend::Tui, "macos", _) => "MacOS-Arm64-Cross_Cleaner_TUI",
+            (Frontend::Tui, "android", _) => "",
+            (Frontend::Gui, _, _) | (Frontend::Tui, _, _) => "",
         }
     }
 }
@@ -503,7 +542,9 @@ Special thanks to our amazing contributors who made this release possible:\n\
         assert!(
             [
                 "Windows-Cross_Cleaner_GUI.exe",
+                "Windows-Arm64-Cross_Cleaner_GUI.exe",
                 "Linux-Cross_Cleaner_GUI",
+                "Linux-Arm64-Cross_Cleaner_GUI",
                 "MacOS-Arm64-Cross_Cleaner_GUI",
                 "Cross_Cleaner_Android.apk",
             ]
@@ -511,6 +552,12 @@ Special thanks to our amazing contributors who made this release possible:\n\
             "unexpected asset name: {name}"
         );
         assert_eq!(name.ends_with(".exe"), cfg!(windows));
+        // Only arm64 builds carry the arch marker, and macOS always does
+        // because it only ships arm64 binaries.
+        assert_eq!(
+            name.contains("Arm64"),
+            cfg!(any(target_arch = "aarch64", target_os = "macos"))
+        );
     }
 
     #[test]
@@ -522,7 +569,9 @@ Special thanks to our amazing contributors who made this release possible:\n\
         assert!(
             [
                 "Windows-Cross_Cleaner_TUI.exe",
+                "Windows-Arm64-Cross_Cleaner_TUI.exe",
                 "Linux-Cross_Cleaner_TUI",
+                "Linux-Arm64-Cross_Cleaner_TUI",
                 "MacOS-Arm64-Cross_Cleaner_TUI",
             ]
             .contains(&name),
@@ -541,26 +590,48 @@ Special thanks to our amazing contributors who made this release possible:\n\
         ))
         .expect("release workflow is readable");
 
-        let mut names = Vec::new();
-        for os in ["windows", "linux", "macos", "android"] {
-            names.push((Frontend::Gui, os));
-            names.push((Frontend::Tui, os));
+        for frontend in [Frontend::Gui, Frontend::Tui] {
+            for os in ["windows", "linux", "macos", "android"] {
+                for arm64 in [false, true] {
+                    let name = frontend.asset_name_for(os, arm64);
+                    // Android has no terminal build, so it resolves to nothing.
+                    if name.is_empty() {
+                        continue;
+                    }
+                    assert!(
+                        workflow.contains(name),
+                        "{name} is not published by the release workflow",
+                    );
+                }
+            }
         }
-        for (frontend, os) in names {
-            // The asset name is a `match` on `std::env::consts::OS`, which cannot
-            // be faked here, so only assert for the platform under test.
-            if os != std::env::consts::OS {
-                continue;
-            }
-            let name = frontend.asset_name();
-            // Android has no terminal build, so it must resolve to nothing.
-            if name.is_empty() {
-                continue;
-            }
-            assert!(
-                workflow.contains(name),
-                "{name} is not published by the release workflow",
+    }
+
+    #[test]
+    fn test_asset_name_for_matches_the_running_build() {
+        // `asset_name_for` exists so the tests can enumerate every platform, but
+        // it has to stay in step with what the updater actually resolves to.
+        for frontend in [Frontend::Gui, Frontend::Tui] {
+            assert_eq!(
+                frontend.asset_name_for(std::env::consts::OS, is_arm64()),
+                frontend.asset_name(),
+                "{frontend:?} name differs for the platform under test"
             );
+        }
+    }
+
+    #[test]
+    fn test_x86_and_arm64_asset_names_are_distinct() {
+        // The two binaries differ only by the arch marker, so a build must never
+        // ask for the one it cannot run: that would install an unrunnable exe.
+        for os in ["windows", "linux"] {
+            for frontend in [Frontend::Gui, Frontend::Tui] {
+                let x86 = frontend.asset_name_for(os, false);
+                let arm = frontend.asset_name_for(os, true);
+                assert_ne!(x86, arm, "{frontend:?} on {os} names both builds alike");
+                assert!(arm.contains("Arm64"), "{arm} is missing the arch marker");
+                assert!(!x86.contains("Arm64"), "{x86} should not be marked arm64");
+            }
         }
     }
 

@@ -133,6 +133,35 @@ jobs:
           path: |
             Linux-Cross_Cleaner_GUI
             Linux-Cross_Cleaner_TUI
+  build_linux_arm64:
+    # Native arm64 runner, so the build is the same job as `build_linux` on a
+    # different CPU rather than a cross-compile. The asset names carry `-Arm64`
+    # because `database::version` resolves the update asset per architecture.
+    runs-on: ubuntu-24.04-arm
+    needs: [sort_json]
+    permissions: write-all
+    name: Build Linux Arm64
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ALSA dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev
+      - name: Build linux arm64
+        run: |
+          cargo +nightly build --release -p desktop
+          cargo +nightly build --release -p tui
+      - name: Move linux arm64 binaries
+        run: |
+          mv target/release/desktop Linux-Arm64-Cross_Cleaner_GUI
+          mv target/release/tui Linux-Arm64-Cross_Cleaner_TUI
+      - name: Upload Linux Arm64 artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-binaries-arm64
+          path: |
+            Linux-Arm64-Cross_Cleaner_GUI
+            Linux-Arm64-Cross_Cleaner_TUI
   build_windows:
     runs-on: windows-latest
     needs: [sort_json]
@@ -156,6 +185,10 @@ jobs:
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.9
         with:
           path: build_setup.iss
+          # Default x64 branch of build_setup.iss. The architecture is a script
+          # parameter so the arm64 job can reuse this file; see the arm64 job.
+          options: |
+            /DMyArch=x64
       - name: Upload Windows setup artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -170,6 +203,50 @@ jobs:
           path: |
             Windows-Cross_Cleaner_GUI.exe
             Windows-Cross_Cleaner_TUI.exe
+  build_windows_arm64:
+    # Native arm64 runner, so no cross-linker is involved. The installer is named
+    # `..._Arm64.exe`, which keeps it out of the winget match on the x64 name.
+    runs-on: windows-11-arm
+    needs: [sort_json]
+    permissions: write-all
+    name: Build Windows Arm64
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build windows arm64
+        run: |
+          cargo +nightly build --release -p desktop
+          cargo +nightly build --release -p tui
+      - name: Move windows arm64 binaries
+        run: |
+          copy target\release\desktop.exe Windows-Arm64-Cross_Cleaner_GUI.exe
+          copy target\release\tui.exe Windows-Arm64-Cross_Cleaner_TUI.exe
+      - name: Update installer version
+        shell: pwsh
+        run: |
+          (Get-Content build_setup.iss) -replace '#define MyAppVersion ".*"', '#define MyAppVersion "${{ env.APP_VERSION }}"' | Set-Content build_setup.iss
+      - name: Build installer (Inno Setup, arm64)
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.9
+        with:
+          path: build_setup.iss
+          # Selects the arm64 branch of build_setup.iss: ArchitecturesAllowed=arm64
+          # and the `_Arm64` output name.
+          options: |
+            /DMyArch=arm64
+      - name: Upload Windows Arm64 setup artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-setup-arm64
+          if-no-files-found: error
+          path: |
+            innosetup\compiler\Cross_Cleaner_Setup_Arm64.exe
+      - name: Upload Windows Arm64 artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-binaries-arm64
+          if-no-files-found: error
+          path: |
+            Windows-Arm64-Cross_Cleaner_GUI.exe
+            Windows-Arm64-Cross_Cleaner_TUI.exe
   build_macos_arm64:
     runs-on: macos-latest
     needs: [sort_json]
@@ -239,7 +316,15 @@ jobs:
           path: |
             Cross_Cleaner_Android.apk
   create_release:
-    needs: [build_linux, build_windows, build_macos_arm64, build_android]
+    needs:
+      [
+        build_linux,
+        build_linux_arm64,
+        build_windows,
+        build_windows_arm64,
+        build_macos_arm64,
+        build_android,
+      ]
     runs-on: ubuntu-latest
     name: Create Release
     permissions:
@@ -252,11 +337,26 @@ jobs:
         with:
           name: linux-binaries
           path: linux-binaries
+      - name: Download Linux Arm64 artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-binaries-arm64
+          path: linux-binaries-arm64
       - name: Download Windows artifacts
         uses: actions/download-artifact@v4
         with:
           name: windows-binaries
           path: windows-binaries
+      - name: Download Windows Arm64 artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-binaries-arm64
+          path: windows-binaries-arm64
+      - name: Download Windows Arm64 setup artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-setup-arm64
+          path: windows-setup-arm64
       - name: Download MacOS artifacts
         uses: actions/download-artifact@v4
         with:
@@ -284,6 +384,7 @@ jobs:
 
             ### 🛠 Technical Updates
             - Auto updates
+            - Native arm64 builds for Linux and Windows, including an arm64 installer
 
             ## 👏 Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
@@ -294,11 +395,16 @@ jobs:
           files: |
             linux-binaries/Linux-Cross_Cleaner_GUI
             linux-binaries/Linux-Cross_Cleaner_TUI
+            linux-binaries-arm64/Linux-Arm64-Cross_Cleaner_GUI
+            linux-binaries-arm64/Linux-Arm64-Cross_Cleaner_TUI
             macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_GUI
             macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_TUI
             windows-binaries/Windows-Cross_Cleaner_GUI.exe
             windows-binaries/Windows-Cross_Cleaner_TUI.exe
+            windows-binaries-arm64/Windows-Arm64-Cross_Cleaner_GUI.exe
+            windows-binaries-arm64/Windows-Arm64-Cross_Cleaner_TUI.exe
             windows-setup/Cross_Cleaner_Setup.exe
+            windows-setup-arm64/Cross_Cleaner_Setup_Arm64.exe
             android-apk/Cross_Cleaner_Android.apk
 
   generate-lists:

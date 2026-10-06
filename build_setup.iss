@@ -10,9 +10,34 @@
 #define DoubleAmp(Value) StringChange(Value, "&", "&&")
 #define EscapeConstArgument(Value) StringChange(StringChange(StringChange(Value, "%", "%25"), ",", "%2c"), "}", "%7d")
 
+; Architecture the binaries in target\release were built for. The release
+; workflow compiles this script twice, once per runner, so pass the architecture
+; on the command line: iscc /DMyArch=arm64 build_setup.iss
+; Default is x64, which is what a local build produces on a normal machine.
+#ifndef MyArch
+  #define MyArch "x64"
+#endif
+
+; The output name carries the architecture so both installers can live in the
+; same release, and so winget (which matches ^Cross_Cleaner_Setup\.exe$) keeps
+; pointing at the x64 build only.
+#if MyArch == "arm64"
+  #define MyOutputBaseFilename "Cross_Cleaner_Setup_Arm64"
+  ; "arm64" refuses the installer on anything but a native arm64 CPU, so the
+  ; x64 setup is the only one installable through emulation.
+  #define MyArchitecturesAllowed "arm64"
+#else
+  #define MyOutputBaseFilename "Cross_Cleaner_Setup"
+  ; "x64compatible" includes x64 and Windows 11 on Arm, which runs x64 binaries.
+  #define MyArchitecturesAllowed "x64compatible"
+#endif
+
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
+; One AppId for both architectures on purpose: the arm64 setup is an in-place
+; replacement for the same app, so Windows treats it as an upgrade of an existing
+; install instead of leaving two copies of the app behind.
 AppId={{63C69122-AC80-4866-B328-5C3188A01F76}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
@@ -23,12 +48,15 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 UninstallDisplayIcon={app}\{#MyAppExeName}
-; "ArchitecturesAllowed=x64compatible" specifies that Setup cannot run on anything but x64 and Windows 11 on Arm.
-ArchitecturesAllowed=x64compatible
-; "ArchitecturesInstallIn64BitMode=x64compatible" requests that the install be done in "64-bit mode" on x64 or Windows 11 on Arm.
-; This means it should use the native 64-bit Program Files directory and the 64-bit view of the registry.
-ArchitecturesInstallIn64BitMode=x64compatible
-; Uncomment the following line to use a 64-bit installer.
+; Compiled from the {#MyArch} build of desktop.exe, so only that CPU can run it.
+ArchitecturesAllowed={#MyArchitecturesAllowed}
+; "ArchitecturesInstallIn64BitMode" requests that the install be done in "64-bit mode"
+; on those systems, meaning the native Program Files directory and 64-bit registry view.
+ArchitecturesInstallIn64BitMode={#MyArchitecturesAllowed}
+; SetupArchitecture is an Inno Setup 7 directive and the runner image ships 6.x,
+; where it stays commented out. It does not matter for the architecture split:
+; the default 32-bit setup stub runs on x64 and arm64 Windows alike, and the
+; restriction is carried by ArchitecturesAllowed above.
 ;SetupArchitecture=x64
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
@@ -37,7 +65,7 @@ LicenseFile=LICENSE
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=innosetup\compiler
-OutputBaseFilename=Cross_Cleaner_Setup
+OutputBaseFilename={#MyOutputBaseFilename}
 ; The icon lives with the crate that owns it (see crates/winicon), which both
 ; binaries are stamped from, so the installer shows the same one.
 SetupIconFile=crates\winicon\assets\icon.ico

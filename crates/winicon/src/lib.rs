@@ -175,6 +175,50 @@ mod tests {
         );
     }
 
+    /// The script is compiled twice per release, once for x64 and once for arm64
+    /// (see `.github/workflows/release.yml`), so the architecture has to be a
+    /// parameter rather than a constant baked into the file.
+    ///
+    /// Both output names have to stay in step with the workflow: the arm64
+    /// installer is picked up by name, and `Cross_Cleaner_Setup.exe` is the one
+    /// winget publishes, so a rename on either side breaks a release quietly.
+    #[test]
+    fn the_installer_script_builds_both_architectures() {
+        let script = std::fs::read_to_string(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../build_setup.iss"
+        ))
+        .expect("build_setup.iss is readable");
+
+        assert!(
+            script.contains("/DMyArch=arm64"),
+            "the script takes its architecture from the command line"
+        );
+        assert!(
+            script.contains("#ifndef MyArch"),
+            "a local build has no /DMyArch and must fall back to a default"
+        );
+        // Both names have to be present, because which one a build produces is
+        // decided by /DMyArch rather than by the file.
+        assert!(script.contains("Cross_Cleaner_Setup_Arm64"));
+        assert!(script.contains("OutputBaseFilename={#MyOutputBaseFilename}"));
+
+        let workflow = std::fs::read_to_string(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../.github/workflows/release.yml"
+        ))
+        .expect("release workflow is readable");
+        for name in [
+            "Cross_Cleaner_Setup.exe",
+            "Cross_Cleaner_Setup_Arm64.exe",
+        ] {
+            assert!(
+                workflow.contains(name),
+                "{name} is not published by the release workflow",
+            );
+        }
+    }
+
     /// The version packing is platform-independent logic worth pinning down:
     /// the field layout is what Windows reads back in Explorer.
     ///
