@@ -1,4 +1,4 @@
-# Windows Clearing Programs Catalog v2.0.4.1.1
+# Windows Clearing Programs Catalog v2.0.4.1.4
 **Total categories in database:** 12
 
 **Total programs in database:** 262
@@ -418,7 +418,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Internet Explorer | Logs |
+| 1 | [Internet Explorer](https://www.microsoft.com/ru-ru/download/internet-explorer) | Logs |
 | 2 | [OneDrive](https://www.microsoft.com/microsoft-365/onedrive/online-cloud-storage) | Cache |
 | 3 | [Windows](https://www.microsoft.com/download/windows) | Cache, Crashes, Documentation, Downloads, LastActivity, Logs |
 | 4 | [Windows Defender](https://www.microsoft.com/download/windows) | Documentation |
