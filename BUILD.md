@@ -35,6 +35,32 @@ cargo build --bin Cross_Cleaner_CLI --release
 cargo build --bin Cross_Cleaner_GUI --release
 ```
 
+### Disabling Self-Update (`self-update`)
+
+The window (`desktop`) and terminal (`tui`) binaries can update themselves: they
+download the published release and replace their own executable with it. That
+worker is behind the `self-update` feature, which is **on by default**:
+
+```bash
+# Default: builds with self-update
+cargo build --release -p desktop
+cargo build --release -p tui
+
+# Without self-update
+cargo build --release -p desktop --no-default-features
+cargo build --release -p tui --no-default-features
+```
+
+A build made with `--no-default-features` never compiles `crates/selfupdate`
+(so `self-replace` drops out of the binary) and never touches its own
+executable. Everything else stays: the update check still runs, a new release is
+still announced, and the notification still links the release page for the user
+to download by hand.
+
+The flag is a Cargo feature, not a `cfg` you set by hand — that way the CI
+release builds keep their current behaviour without passing anything, and
+`cargo build --no-default-features` is the whole switch.
+
 ## 📦 Version Management
 
 ### Setting Custom Version

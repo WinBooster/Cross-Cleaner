@@ -4,6 +4,15 @@ version = "2.0.4"
 edition = "2024"
 description = "Terminal UI for Cross Cleaner"
 
+[features]
+default = ["self-update"]
+# Compiles the self-update worker: the version check notices a new release, the
+# app downloads it and replaces its own executable with it. Turn it off with
+# `--no-default-features` for a build that must never rewrite itself. The check
+# itself is not part of the flag, so such a build still reports a new release
+# and links the release page — the user downloads it instead of the app doing it.
+self-update = ["dep:selfupdate"]
+
 [lib]
 name = "tui"
 path = "src/lib.rs"
@@ -17,7 +26,8 @@ path = "src/lib.rs"
 appcore = { path = "../appcore" }
 # Downloads the release binary and replaces the running executable, so the
 # terminal app can update itself from the published `*_TUI` asset.
-selfupdate = { path = "../selfupdate" }
+# Optional, so a build without the `self-update` feature never compiles it.
+selfupdate = { path = "../selfupdate", optional = true }
 database = { path = "../database" }
 cleaner = { path = "../cleaner" }
 ratatui = "0.30.2"

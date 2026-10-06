@@ -173,7 +173,9 @@ async fn run(mut app: TuiApp) -> io::Result<()> {
     // After `enter`, so the hook is only needed while we own the screen.
     install_panic_hook();
     // The self-update worker exits the process directly; it must not skip the
-    // restore.
+    // restore. Without the `self-update` feature there is no worker, so nothing
+    // can bypass `TerminalGuard`.
+    #[cfg(feature = "self-update")]
     selfupdate::set_before_exit(restore_terminal);
     let result = event_loop(&mut guard.terminal, &mut app);
     drop(guard);

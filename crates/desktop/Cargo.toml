@@ -3,6 +3,15 @@ name = "desktop"
 version = "2.0.4"
 edition = "2024"
 
+[features]
+default = ["self-update"]
+# Compiles the self-update worker: the version check notices a new release, the
+# app downloads it and replaces its own executable with it. Turn it off with
+# `--no-default-features` for a build that must never rewrite itself. The check
+# itself is not part of the flag, so such a build still reports a new release
+# and links the release page — the user downloads it instead of the app doing it.
+self-update = ["dep:selfupdate"]
+
 [dependencies]
 gui = { path = "../gui" }
 database = { path = "../database" }
@@ -20,7 +29,8 @@ serde = { version = "1", features = ["derive", "rc"] }
 serde_json = "1"
 winit = { version = "0.30.13", default-features = false, features = ["rwh_06"] }
 # Owns the executable replacement: the GUI only renders the shared update state.
-selfupdate = { path = "../selfupdate" }
+# Optional, so a build without the `self-update` feature never compiles it.
+selfupdate = { path = "../selfupdate", optional = true }
 
 [target.'cfg(windows)'.dependencies]
 eframe = { version = "0.36", default-features = false, features = [

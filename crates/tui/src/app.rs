@@ -230,14 +230,16 @@ impl TuiApp {
     ///
     /// The worker is what lets the terminal app replace its own executable, and
     /// it lives in the `selfupdate` crate so the window frontend shares it.
+    /// Nothing to start without the `self-update` feature: `updater_tx` stays
+    /// empty, which is what sends the update to the release page.
     pub fn start_self_update(&mut self) {
-        if self.updater_tx.is_some() {
-            return;
+        #[cfg(feature = "self-update")]
+        if self.updater_tx.is_none() {
+            let (tx, rx) = std::sync::mpsc::channel();
+            let state = self.updater_state.clone();
+            self.updater_tx = Some(tx);
+            std::thread::spawn(move || selfupdate::run(rx, state));
         }
-        let (tx, rx) = std::sync::mpsc::channel();
-        let state = self.updater_state.clone();
-        self.updater_tx = Some(tx);
-        std::thread::spawn(move || selfupdate::run(rx, state));
     }
 
     /// Asks GitHub for the latest release.

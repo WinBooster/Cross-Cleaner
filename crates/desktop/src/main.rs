@@ -588,10 +588,18 @@ async fn run(backend: BackendChoice) -> eframe::Result {
         // running executable with it (see the `selfupdate` crate). Registering
         // it is what turns the update notification into an actual in-app update;
         // without it the GUI only offers the release page.
-        let (updater_tx, updater_rx) = std::sync::mpsc::channel();
-        let updater_state = a.updater_state.clone();
-        a.updater_tx = Some(updater_tx);
-        std::thread::spawn(move || selfupdate::run(updater_rx, updater_state));
+        //
+        // The `self-update` feature is the switch for that registration. A
+        // build without it compiles no worker and leaves `updater_tx` empty,
+        // which is the same situation as never registering one — the release
+        // page takes over, and nothing can rewrite the executable on disk.
+        #[cfg(feature = "self-update")]
+        {
+            let (updater_tx, updater_rx) = std::sync::mpsc::channel();
+            let updater_state = a.updater_state.clone();
+            a.updater_tx = Some(updater_tx);
+            std::thread::spawn(move || selfupdate::run(updater_rx, updater_state));
+        }
         a
     };
 
