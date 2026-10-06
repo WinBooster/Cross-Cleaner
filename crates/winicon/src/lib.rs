@@ -208,10 +208,7 @@ mod tests {
             "/../../.github/workflows/release.yml"
         ))
         .expect("release workflow is readable");
-        for name in [
-            "Cross_Cleaner_Setup.exe",
-            "Cross_Cleaner_Setup_Arm64.exe",
-        ] {
+        for name in ["Cross_Cleaner_Setup.exe", "Cross_Cleaner_Setup_Arm64.exe"] {
             assert!(
                 workflow.contains(name),
                 "{name} is not published by the release workflow",
