@@ -28,11 +28,11 @@ cargo build --release
 ### Build Specific Components
 
 ```bash
-# Build CLI only
-cargo build --bin Cross_Cleaner_CLI --release
+# Build TUI only
+cargo build -p tui --release
 
 # Build GUI only
-cargo build --bin Cross_Cleaner_GUI --release
+cargo build -p desktop --release
 ```
 
 ### Disabling Self-Update (`self-update`)
@@ -148,8 +148,8 @@ Optimizations applied:
 - **Debug Info**: Disabled
 
 Expected results:
-- **CLI**: ~1.1 MB
-- **GUI**: ~4.2 MB
+- **TUI**: ~4.16 MB
+- **GUI**: ~11.6 MB
 
 ## 📊 Database Optimization
 
@@ -237,8 +237,8 @@ export APP_VERSION=$(git describe --tags --abbrev=0)
 cargo build --release
 
 # Binaries location:
-# - target/release/Cross_Cleaner_CLI
-# - target/release/Cross_Cleaner_GUI
+# - target/release/tui
+# - target/release/desktop
 ```
 
 ## 🧪 Testing
@@ -262,12 +262,12 @@ cargo test -- --nocapture
 APP_VERSION="1.9.6" cargo build --release
 
 # Windows: Binaries are in target/release/
-# - Cross_Cleaner_CLI.exe
-# - Cross_Cleaner_GUI.exe
+# - tui.exe
+# - desktop.exe
 
 # Optional: Strip and compress
-strip target/release/Cross_Cleaner_*.exe
-upx --best target/release/Cross_Cleaner_*.exe
+strip target/release/tui.exe
+upx --best target/release/tui.exe
 ```
 
 ## 🔧 Build Configuration Files
