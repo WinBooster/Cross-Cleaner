@@ -15,7 +15,9 @@ use appcore::sounds;
 use appcore::updater::{self, UpdateState, UpdaterCommand};
 use appcore::{Toggle, config};
 use crossterm::event::{Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
-use database::version::{Changelog, Frontend, NewRelease};
+#[cfg(feature = "self-update")]
+use database::version::Frontend;
+use database::version::{Changelog, NewRelease};
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Layout, Rect};
 use ratatui::style::Style;
@@ -197,6 +199,9 @@ pub struct TuiApp {
 impl TuiApp {
     /// Builds the app around a prepared [`AppState`].
     pub fn new(state: AppState) -> Self {
+        // Only the version check below writes to `app`, so without the
+        // `self-update` feature it is never mutated after construction.
+        #[allow(unused_mut)]
         let mut app = Self {
             state,
             category_cursor: 0,
@@ -222,16 +227,17 @@ impl TuiApp {
             should_quit: false,
             started: Instant::now(),
         };
+        #[cfg(feature = "self-update")]
         app.start_update_check();
         app
     }
 
-    /// Starts the self-update worker and kicks off the background version check.
+    /// Starts the self-update worker.
     ///
     /// The worker is what lets the terminal app replace its own executable, and
     /// it lives in the `selfupdate` crate so the window frontend shares it.
     /// Nothing to start without the `self-update` feature: `updater_tx` stays
-    /// empty, which is what sends the update to the release page.
+    /// empty, and without the version check there is no update to begin with.
     pub fn start_self_update(&mut self) {
         #[cfg(feature = "self-update")]
         if self.updater_tx.is_none() {
@@ -246,6 +252,11 @@ impl TuiApp {
     ///
     /// [`Frontend::Tui`] matters: the release ships one binary per frontend, and
     /// resolving the GUI asset would install the window app over the terminal one.
+    ///
+    /// Without the `self-update` feature the check is not made at all, which is
+    /// what keeps the update notification out of a distribution package: no
+    /// release is ever found, so there is nothing to announce or offer.
+    #[cfg(feature = "self-update")]
     fn start_update_check(&mut self) {
         let (tx, rx) = std::sync::mpsc::channel();
         self.update_receiver = Some(rx);

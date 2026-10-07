@@ -35,29 +35,39 @@ cargo build -p tui --release
 cargo build -p desktop --release
 ```
 
-### Disabling Self-Update (`self-update`)
+### Disabling Updates (`self-update`)
 
-The window (`desktop`) and terminal (`tui`) binaries can update themselves: they
-download the published release and replace their own executable with it. That
-worker is behind the `self-update` feature, which is **on by default**:
+The window (`desktop`) and terminal (`tui`) binaries check GitHub for a newer
+release, announce it with a notification, and replace their own executable with
+the download. All of that sits behind the `self-update` feature, which is **on
+by default**:
 
 ```bash
-# Default: builds with self-update
+# Default: builds with update notifications and self-update
 cargo build --release -p desktop
 cargo build --release -p tui
 
-# Without self-update
+# Without either — for distribution packages
 cargo build --release -p desktop --no-default-features
 cargo build --release -p tui --no-default-features
 ```
 
-A build made with `--no-default-features` never compiles `crates/selfupdate`
-(so `self-replace` drops out of the binary) and never touches its own
-executable. Everything else stays: the update check still runs, a new release is
-still announced, and the notification still links the release page for the user
-to download by hand.
+`--no-default-features` turns off the whole update path, not just the
+self-replacement:
 
-The flag is a Cargo feature, not a `cfg` you set by hand — that way the CI
+- `crates/selfupdate` is not compiled, so `self-replace` drops out of the binary
+- the GitHub version check never runs, so the app makes no network request
+- no update notification is raised and no release page is offered
+
+Everything else is untouched — cleaning, settings, the changelog and the program
+lists all behave the same.
+
+This is the switch a distribution package wants: the repository owns the
+version, so the app must not advertise a newer one or ask the user to replace a
+file the package manager owns. The trade-off is that packagers have to publish
+an update themselves; the app will never tell a user that a newer release exists.
+
+The flag is a Cargo feature rather than a `cfg` you set by hand, so the CI
 release builds keep their current behaviour without passing anything, and
 `cargo build --no-default-features` is the whole switch.
 

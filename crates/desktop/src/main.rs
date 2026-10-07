@@ -9,6 +9,7 @@ use database::get_version;
 #[cfg(windows)]
 use database::registry_database::RegistryDatabase;
 use database::structures::CustomCleaner;
+#[cfg(feature = "self-update")]
 use database::version::check_new_version;
 use eframe::UserEvent;
 use eframe::egui;
@@ -575,24 +576,35 @@ async fn run(backend: BackendChoice) -> eframe::Result {
 
     // Move app into the closure; update_receiver is filled in the background
     let app_for_closure = {
+        // Every mutation below sits behind the `self-update` feature, so without
+        // it the binding is never written to.
+        #[allow(unused_mut)]
         #[cfg(windows)]
         let mut a = MyApp::from_database(database, registry_database, custom_database);
+        #[allow(unused_mut)]
         #[cfg(not(windows))]
         let mut a = MyApp::from_database(database, custom_database);
-        let (tx, rx) = std::sync::mpsc::channel();
-        a.update_receiver = Some(rx);
-        std::thread::spawn(move || {
-            let _ = tx.send(check_new_version());
-        });
+        // Version check and the notification built from its answer. A build
+        // without the `self-update` feature skips both: the check never runs, so
+        // no release is ever found and no update notification is raised. That is
+        // the point of the flag for a distribution package — the repository owns
+        // the version, so the app must not advertise a newer one.
+        #[cfg(feature = "self-update")]
+        {
+            let (tx, rx) = std::sync::mpsc::channel();
+            a.update_receiver = Some(rx);
+            std::thread::spawn(move || {
+                let _ = tx.send(check_new_version());
+            });
+        }
         // Self-update worker: downloads the new release and replaces the
         // running executable with it (see the `selfupdate` crate). Registering
         // it is what turns the update notification into an actual in-app update;
         // without it the GUI only offers the release page.
         //
-        // The `self-update` feature is the switch for that registration. A
-        // build without it compiles no worker and leaves `updater_tx` empty,
-        // which is the same situation as never registering one — the release
-        // page takes over, and nothing can rewrite the executable on disk.
+        // The `self-update` feature is the switch for the whole update path, check
+        // and worker together. A build without it compiles no worker and leaves
+        // `updater_tx` empty, and nothing can rewrite the executable on disk.
         #[cfg(feature = "self-update")]
         {
             let (updater_tx, updater_rx) = std::sync::mpsc::channel();

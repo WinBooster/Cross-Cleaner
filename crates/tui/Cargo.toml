@@ -6,11 +6,11 @@ description = "Terminal UI for Cross Cleaner"
 
 [features]
 default = ["self-update"]
-# Compiles the self-update worker: the version check notices a new release, the
-# app downloads it and replaces its own executable with it. Turn it off with
-# `--no-default-features` for a build that must never rewrite itself. The check
-# itself is not part of the flag, so such a build still reports a new release
-# and links the release page — the user downloads it instead of the app doing it.
+# The whole update path: checking GitHub for a newer release, announcing it with
+# a notification, and replacing the running executable with the download. Turn it
+# off with `--no-default-features` for a distribution package — the repository
+# owns the version, so the app must neither advertise a newer release nor rewrite
+# a file the package manager installed.
 self-update = ["dep:selfupdate"]
 
 [lib]
