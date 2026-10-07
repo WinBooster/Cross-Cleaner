@@ -75,7 +75,7 @@ checksum = "e9d4ee0d472d1cd2e28c97dfa124b3d8d992e10eb0a035f33f5d12e3a177ba3b"
 
 [[package]]
 name = "android"
-version = "2.0.4"
+version = "2.0.1"
 dependencies = [
  "cleaner",
  "database",
@@ -187,7 +187,7 @@ checksum = "330a5ed07fa54e4702c9d6c4174f74427fc0ef6e214bbd677ae50a5099946470"
 
 [[package]]
 name = "appcore"
-version = "2.0.4"
+version = "2.0.1"
 dependencies = [
  "cleaner",
  "database",
@@ -741,7 +741,7 @@ checksum = "1c133bc6a41be0d194c306b5506d15e6feeea7b1d6604bd3f8310dfb2ca96486"
 
 [[package]]
 name = "cleaner"
-version = "2.0.4"
+version = "2.0.1"
 dependencies = [
  "cap-std",
  "database",
@@ -1115,7 +1115,7 @@ checksum = "0c87e182de0887fd5361989c677c4e8f5000cd9491d6d563161a8f3a5519fc7f"
 
 [[package]]
 name = "database"
-version = "2.0.4"
+version = "2.0.1"
 dependencies = [
  "bitflags 2.13.2",
  "disk-name",
@@ -1166,7 +1166,7 @@ dependencies = [
 
 [[package]]
 name = "desktop"
-version = "2.0.4"
+version = "2.0.1"
 dependencies = [
  "clap",
  "cleaner",
@@ -1963,7 +1963,7 @@ dependencies = [
 
 [[package]]
 name = "gui"
-version = "2.0.4"
+version = "2.0.1"
 dependencies = [
  "appcore",
  "cleaner",
@@ -4194,7 +4194,7 @@ checksum = "2ab42ca02749e120097e328d91d415325bdf43b1c72c4c8badf37375fe40a813"
 
 [[package]]
 name = "selfupdate"
-version = "2.0.4"
+version = "2.0.1"
 dependencies = [
  "appcore",
  "database",
@@ -4903,9 +4903,9 @@ dependencies = [
 
 [[package]]
 name = "tokio"
-version = "1.53.1"
+version = "1.53.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "202caea871b69668250d242070849eb495be178ed697a3e98aebce5bc81a0bed"
+checksum = "e95f91fcc7a621e8b030f6aa23c71fe9838ae2fb4d8118b75602a328f5144044"
 dependencies = [
  "pin-project-lite",
  "tokio-macros",
@@ -4995,7 +4995,7 @@ dependencies = [
 
 [[package]]
 name = "tui"
-version = "2.0.4"
+version = "2.0.1"
 dependencies = [
  "appcore",
  "clap",
@@ -6132,7 +6132,7 @@ checksum = "d6bbff5f0aada427a1e5a6da5f1f98158182f26556f345ac9e04d36d0ebed650"
 
 [[package]]
 name = "winicon"
-version = "2.0.4"
+version = "2.0.1"
 dependencies = [
  "winres",
 ]
