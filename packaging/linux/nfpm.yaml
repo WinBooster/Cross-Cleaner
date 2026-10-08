@@ -126,27 +126,20 @@ contents:
   - src: target/pkg/cross-cleaner.appdata.xml
     dst: /usr/share/metainfo/cross-cleaner.appdata.xml
 
-# Maintainer scripts. Top level `scripts`, not `deb.scripts`: as of nfpm 2.47
-# `deb.scripts` takes only `rules`/`templates`/`config` (the templated-script
-# feature) and the plain maintainer hooks moved to the packager-independent
-# `scripts` key, spelled out in full rather than as dpkg's postinst/postrm.
-# nfpm rejects `postinst` here with "field postinst not found in type
-# nfpm.DebScripts", which is what happens if they are put back under `deb:`.
+# Maintainer scripts. Two things to know about these keys:
+#
+# 1. Top level `scripts`, not `deb.scripts`. As of nfpm 2.47 `deb.scripts` takes
+#    only `rules`/`templates`/`config` (the templated-script feature) and the
+#    plain maintainer hooks moved here, spelled out in full rather than as dpkg's
+#    postinst/postrm. Putting postinst back under `deb:` fails with
+#    "field postinst not found in type nfpm.DebScripts".
+# 2. The values are PATHS, not inline script text. nfpm reads the file and copies
+#    it into the package as DEBIAN/postinst (or postrm) with mode 0755. Inlining
+#    the body fails with "file name too long", because nfpm then tries to open
+#    the whole body as a filename.
 scripts:
-  postinstall: |-
-    # Icon caches are per-user and dpkg cannot reach them, so nudge the session
-    # bus when one exists. Harmless over SSH and inside a container, and the
-    # guards mean a minimal system without the tool still installs cleanly.
-    if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] && command -v gtk-update-icon-cache >/dev/null 2>&1; then
-      gtk-update-icon-cache -qtf /usr/share/icons/hicolor || true
-      gtk-update-icon-cache -qtf /usr/share/pixmaps || true
-    fi
-  postremove: |-
-    # The icons are gone, so the cached copies have to go with them.
-    if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] && command -v gtk-update-icon-cache >/dev/null 2>&1; then
-      gtk-update-icon-cache -qtf /usr/share/icons/hicolor || true
-      gtk-update-icon-cache -qtf /usr/share/pixmaps || true
-    fi
+  postinstall: packaging/linux/scripts/postinstall.sh
+  postremove: packaging/linux/scripts/postremove.sh
 
 deb:
   # GNU extensions for the compression, so the archive is readable without

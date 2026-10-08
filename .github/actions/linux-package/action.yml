@@ -226,6 +226,17 @@ runs:
         # Echo the substituted fields, so a bad value shows up in the log before
         # the package step instead of as a parse error after it.
         grep -E '^(arch|version|release|mtime):' target/pkg/nfpm.yaml
+
+        # `scripts.*` holds paths, not script bodies. Checking they exist turns
+        # nfpm's "file name too long" -- which it reports when the body is
+        # inlined instead -- into a message that names the missing file.
+        for s in $(sed -n '/^scripts:/,/^[a-z]/{s/^[[:space:]]*[a-z]*:[[:space:]]*//p}' target/pkg/nfpm.yaml); do
+          if [ ! -f "$s" ]; then
+            echo "::error::maintainer script not found: $s"
+            exit 1
+          fi
+          echo "found maintainer script: $s"
+        done
         # No version in the filename, on purpose. GitHub serves
         # /releases/latest/download/<asset> only for assets whose name does not
         # change between releases, and that is what lets the website link straight
@@ -289,6 +300,17 @@ runs:
           exit 1
         fi
         echo "version ok: $got"
+
+        # The maintainer hooks live in the control archive, not the data one, so
+        # `dpkg-deb --contents` does not list them. Unpack the control member and
+        # confirm both landed under the names dpkg actually looks for -- the
+        # whole point of referencing them by path is that they get there.
+        ctrl="$(dpkg-deb --ctrl-tarfile "$deb" | tar -t)"
+        printf '%s\n' "$ctrl" | grep -qx 'postinst' || {
+          echo "::error::no postinst in the control archive:"; printf '%s\n' "$ctrl"; exit 1; }
+        printf '%s\n' "$ctrl" | grep -qx 'postrm' || {
+          echo "::error::no postrm in the control archive:"; printf '%s\n' "$ctrl"; exit 1; }
+        echo "maintainer scripts ok: postinst, postrm"
 
         # The architecture in the filename has to match what nfpm wrote into the
         # control file, or apt installs a foreign-architecture package.
