@@ -134,9 +134,11 @@ runs:
         echo "epoch=$(git log -1 --pretty=%ct)" >> "$GITHUB_OUTPUT"
 
     - name: Report runtime library requirements
-      # Informational, and the reason `depends` in nfpm.yaml is maintained by
-      # hand: when a new shared library starts being linked, it shows up here
-      # first instead of as a crash on a user's desktop.
+      # Informational. Note what this can and cannot show: winit dlopen()s the
+      # X11 and Wayland stack, so those libraries are absent from `ldd` even
+      # though the app cannot start without them. That is the whole reason
+      # `depends` in nfpm.yaml is a hand-maintained list, and the reason it is
+      # checked against apt below rather than derived from this output.
       shell: bash
       run: |
         echo "== cross-cleaner =="
@@ -216,6 +218,34 @@ runs:
           --config target/pkg/nfpm.yaml \
           --packager deb \
           --target "target/pkg/${PKG}_${VERSION}-${REVISION}_${DEB_ARCH}.deb"
+
+    - name: Verify declared dependencies resolve
+      # Every name in `depends` has to be installable on the suite these packages
+      # claim to support. nfpm does not resolve Depends: it writes the field
+      # verbatim, so a typo would ship a .deb that apt refuses to install, and it
+      # would only surface on a user's machine. `apt-get -s` fails on an unknown
+      # name, which turns that into a release failure instead.
+      #
+      # This is the only automated check on the dependency list, and it is
+      # deliberately a name check, not a completeness check. It cannot tell that
+      # a library is missing, only that the ones written down exist.
+      shell: bash
+      run: |
+        set -euo pipefail
+        # Read the rendered config rather than re-listing the names here, so what
+        # is checked is what actually goes into the package. Each entry stays one
+        # argv element because `libasound2t64 | libasound2` is a single dependency
+        # expression and word-splitting would turn it into two broken names.
+        mapfile -t deps < <(
+          sed -n '/^depends:/,/^[a-z]/{s/^[[:space:]]*-[[:space:]]*//p}' target/pkg/nfpm.yaml
+        )
+        if [ "${#deps[@]}" -eq 0 ]; then
+          echo "::error::no dependencies parsed from target/pkg/nfpm.yaml"
+          exit 1
+        fi
+        printf 'declared %d: %s\n' "${#deps[@]}" "${deps[*]}"
+        sudo apt-get update -qq
+        sudo apt-get install -s -y --no-install-recommends "${deps[@]}"
 
     - name: Verify .deb
       shell: bash

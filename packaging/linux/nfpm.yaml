@@ -36,25 +36,45 @@ depends:
   # Rust links these two; glibc 2.34+ folds libm/libpthread/libdl into libc6.
   - libc6
   - libgcc-s1
-  # Audio: gui::sounds needs an output device at startup, so this is a hard
-  # dependency rather than a recommendation.
-  # The t64 transition package exists on Ubuntu 24.04+, plain libasound2
-  # everywhere else, and dpkg resolves `a | b` to whichever is installable.
+
+  # Audio: appcore pulls in rodio, which opens an ALSA output device when the
+  # sounds are initialised, so this is a hard dependency rather than a
+  # recommendation. libasound2t64 is the Ubuntu 24.04+ name and plain libasound2
+  # is the Debian/older-Ubuntu one; dpkg resolves `a | b` to whichever is
+  # installable, which is why it is written as an alternative rather than picked.
   - libasound2t64 | libasound2
-  # eframe is built with the glow renderer plus the x11 and wayland backends,
-  # so the loader needs both stacks and the GL vendor dispatch underneath.
+
+  # GL and EGL, plus the vendor dispatch underneath them. eframe builds with the
+  # glow renderer, and glutin's Wayland backend probes EGL.
   - libgl1
   - libegl1
-  - libx11-6
-  - libxcb1
-  - libxkbcommon0
-  - libwayland-client0
-  - libwayland-cursor0
   - libdrm2
 
+  # X11. IMPORTANT: winit reaches every one of these through x11-dl, which
+  # dlopen()s them at runtime. None of them appear in `ldd` output and
+  # dpkg-shlibdeps cannot see them either, so they must be listed here by hand.
+  # They are still required: without them the window never opens.
+  - libx11-6
+  - libxcursor1
+  - libxrandr2
+  - libxi6
+  - libxinerama1
+  - libxext6
+  - libxrender1
+
+  # XKB common, for both the X11 and the Wayland path.
+  - libxkbcommon0
+  - libxkbcommon-x11-0
+
+  # Wayland. Also dlopen'd, through wayland-backend's dlopen feature, so the
+  # same caveat as the X11 set above applies.
+  - libwayland-client0
+  - libwayland-cursor0
+  - libwayland-egl1
+
 recommends:
-  # Theme colours come from fontconfig, and the app draws its own fonts, so a
-  # bare system without this still runs but looks wrong.
+  # Theme colours come from fontconfig. The app draws its own fonts, so a bare
+  # system without this still runs but looks wrong.
   - fontconfig
 
 contents:
@@ -99,11 +119,13 @@ deb:
   # GNU extensions for the compression, so the archive is readable without
   # dpkg-deb having to fall back.
   compression: xz
-  # dpkg-shlibdeps is skipped deliberately: it inspects the built binary at
-  # packaging time and produces a dependency on whatever *this* runner happens
-  # to have installed, which differs from a user's desktop. The `depends` list
-  # above is maintained by hand instead, and the workflow prints `ldd` output so
-  # a new shared-library requirement shows up in the log.
+  # dpkg-shlibdeps is skipped deliberately, and NOT because the build system
+  # differs from a user's desktop. It is skipped because it can only see the
+  # libraries the binary links, and winit dlopen()s the whole X11 and Wayland
+  # stack, which is most of the list above. Its output would look complete and
+  # still be missing everything needed to open a window. The list is therefore
+  # maintained by hand, and the workflow dry-run-installs it against apt on
+  # every release, so a typo fails the build rather than a user's install.
   scripts:
     postinst: |-
       # Icon caches are per-user and dpkg cannot reach them, so nudge the
