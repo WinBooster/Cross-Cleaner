@@ -249,22 +249,23 @@ runs:
           --target "target/pkg/${PKG}_${DEB_ARCH}.deb"
 
     - name: Verify declared dependencies resolve
-      # Every name in `depends` has to be installable on the suite these packages
-      # claim to support. nfpm does not resolve Depends: it writes the field
-      # verbatim, so a typo would ship a .deb that apt refuses to install, and it
-      # would only surface on a user's machine. `apt-get -s` fails on an unknown
-      # name, which turns that into a release failure instead.
+      # Every name in `depends` has to exist on the suite these packages target.
+      # nfpm does not resolve Depends: it copies the field verbatim, so a typo
+      # would ship a .deb that apt refuses to install, and only on a user's
+      # machine.
       #
-      # This is the only automated check on the dependency list, and it is
-      # deliberately a name check, not a completeness check. It cannot tell that
-      # a library is missing, only that the ones written down exist.
+      # The names are NOT handed to `apt-get install` directly. An `a | b`
+      # alternative is legal inside a control file's Depends field but is not
+      # valid apt command-line syntax -- apt treats the whole string as one
+      # package name and answers "Unable to locate package libasound2t64 |
+      # libasound2". So each alternative is resolved on its own here, and only
+      # the concrete names go to the dry run.
+      #
+      # This is a name check, not a completeness check: it cannot tell that a
+      # library is missing, only that the ones written down exist.
       shell: bash
       run: |
         set -euo pipefail
-        # Read the rendered config rather than re-listing the names here, so what
-        # is checked is what actually goes into the package. Each entry stays one
-        # argv element because `libasound2t64 | libasound2` is a single dependency
-        # expression and word-splitting would turn it into two broken names.
         mapfile -t deps < <(
           sed -n '/^depends:/,/^[a-z]/{s/^[[:space:]]*-[[:space:]]*//p}' target/pkg/nfpm.yaml
         )
@@ -272,9 +273,35 @@ runs:
           echo "::error::no dependencies parsed from target/pkg/nfpm.yaml"
           exit 1
         fi
-        printf 'declared %d: %s\n' "${#deps[@]}" "${deps[*]}"
         sudo apt-get update -qq
-        sudo apt-get install -s -y --no-install-recommends "${deps[@]}"
+
+        resolved=()
+        for dep in "${deps[@]}"; do
+          IFS='|' read -r -a alts <<< "$dep"
+          picked=""
+          for alt in "${alts[@]}"; do
+            # Trim, so a hand-edited `a | b` with stray spaces still resolves.
+            alt="${alt#"${alt%%[![:space:]]*}"}"
+            alt="${alt%"${alt##*[![:space:]]}"}"
+            [ -n "$alt" ] || continue
+            if apt-cache show "$alt" >/dev/null 2>&1; then
+              echo "  ok      $alt"
+              [ -n "$picked" ] || picked="$alt"
+            else
+              echo "  missing $alt"
+            fi
+          done
+          if [ -z "$picked" ]; then
+            echo "::error::no alternative of '$dep' exists on $(. /etc/os-release && echo "$PRETTY_NAME")"
+            exit 1
+          fi
+          resolved+=("$picked")
+        done
+
+        echo "install set: ${resolved[*]}"
+        # Dry run on the resolved names: catches version constraints and
+        # conflicts that a bare existence check would miss.
+        sudo apt-get install -s -y --no-install-recommends "${resolved[@]}"
 
     - name: Verify .deb
       shell: bash
