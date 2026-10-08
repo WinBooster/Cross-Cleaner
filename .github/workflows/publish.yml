@@ -1,0 +1,56 @@
+name: Publish Release
+
+# Release.yml creates the release as a DRAFT, so nothing is announced until a
+# human reviews the assets and the auto-generated notes and publishes it by hand.
+# This workflow is the manual follow-up: publish the draft, then run this to
+# push it out to the package managers and regenerate the program catalogs.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version number of the published release (e.g., 2.0.2.5)"
+        required: true
+        default: "2.0.2.5"
+      winget:
+        description: "Submit Cross_Cleaner_Setup.exe to winget"
+        type: boolean
+        required: false
+        default: true
+      lists:
+        description: "Regenerate and commit LIST_*.md program catalogs"
+        type: boolean
+        required: false
+        default: true
+
+env:
+  CARGO_TERM_COLOR: always
+  APP_VERSION: ${{ inputs.version }}
+
+jobs:
+  generate-lists:
+    name: Generating clearing programs list
+    if: inputs.lists
+    permissions:
+      contents: write
+    uses: ./.github/workflows/update_program_lists.yml
+    with:
+      version: ${{ inputs.version }}
+
+  winget_release:
+    name: Update package on winget
+    if: inputs.winget
+    runs-on: windows-latest
+    steps:
+      # winget-releaser reads the release over the API, so the draft has to be
+      # published before this job runs.
+      - name: Release to winget
+        uses: vedantmgoyal9/winget-releaser@v2
+        with:
+          identifier: WinBooster.Cross_Cleaner_GUI
+          version: ${{ env.APP_VERSION }}
+          release-tag: v${{ env.APP_VERSION }}
+          release-notes-url: https://github.com/${{ github.repository }}/releases/tag/v${{ env.APP_VERSION }}
+          installers-regex: '^Cross_Cleaner_Setup\.exe$'
+          max-versions-to-keep: 0
+          fork-user: Nekiplay
+          token: ${{ secrets.WINGET_TOKEN }}

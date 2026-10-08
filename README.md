@@ -58,3 +58,9 @@ cargo build --release
 ```
 
 4. The compiled binary will be located in `target/release`
+
+## 🤝 Contributing
+
+Pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for build
+checks, commit message conventions (they end up in the release notes) and the
+maintainer release process.

@@ -462,29 +462,12 @@ jobs:
         with:
           tag_name: v${{ env.APP_VERSION }}
           name: 🌟 Cross Cleaner ${{ env.APP_VERSION }} 🌟
-          body: |
-            ![Downloads](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}/total) ![Version](https://img.shields.io/badge/version-${{ env.APP_VERSION }}-blue) ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux%20|%20MacOS%20|%20Android-orange)
-
-            ## ✨ What's New
-
-            ### 🛠 Technical Updates
-            - Auto updates
-            - Native arm64 builds for Linux and Windows, including an arm64 installer
-
-            ### 📦 Linux packages
-            Install with your package manager, or grab the AppImage and run it in place:
-            ```bash
-            # Debian / Ubuntu
-            sudo apt install ./cross-cleaner_amd64.deb   # or ./cross-cleaner_arm64.deb
-            ```
-            Built for x86_64 and arm64. Both ship without the self-update feature on purpose, so apt owns the version. The filenames carry no version, so `releases/latest/download/` always resolves to the newest build.
-
-            ## 👏 Contributors Hall of Fame
-            Special thanks to our amazing contributors who made this release possible:
-            - **@Nekiplay** - Core improvements and feature implementations
-
-            ---
-            *Thank you for using Cross Cleaner! Your system, cleaner than ever.*
+          # No `body`: GitHub fills the release notes with the PRs and commits
+          # merged since the previous release.
+          generate_release_notes: true
+          # The release stays unpublished until it is reviewed and the draft is
+          # published by hand.
+          draft: true
           files: |
             linux-binaries/Linux-Cross_Cleaner_GUI
             linux-binaries/Linux-Cross_Cleaner_TUI
@@ -504,28 +487,7 @@ jobs:
             windows-setup-arm64/Cross_Cleaner_Setup_Arm64.exe
             android-apk/Cross_Cleaner_Android.apk
 
-  generate-lists:
-    name: Generating clearing programs list
-    needs: [create_release]
-    permissions:
-      contents: write
-    uses: ./.github/workflows/update_program_lists.yml
-    with:
-      version: ${{ github.event.inputs.version }}
-
-  winget_release:
-    name: Update package on winget
-    needs: [create_release]
-    runs-on: windows-latest
-    steps:
-      - name: Release to winget
-        uses: vedantmgoyal9/winget-releaser@v2
-        with:
-          identifier: WinBooster.Cross_Cleaner_GUI
-          version: ${{ env.APP_VERSION }}
-          release-tag: v${{ env.APP_VERSION }}
-          release-notes-url: https://github.com/${{ github.repository }}/releases/tag/v${{ env.APP_VERSION }}
-          installers-regex: '^Cross_Cleaner_Setup\.exe$'
-          max-versions-to-keep: 0
-          fork-user: Nekiplay
-          token: ${{ secrets.WINGET_TOKEN }}
+  # The release is created as a draft, so the publication jobs (winget submit
+  # and program catalogs) cannot run here: winget-releaser reads the release
+  # over the API and gets a 404 while the release is a draft. They live in
+  # publish.yml instead, which is run by hand after the draft is published.
