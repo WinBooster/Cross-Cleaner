@@ -74,6 +74,15 @@ depends:
   - libwayland-cursor0
   - libwayland-egl1
 
+# dpkg-shlibdeps is deliberately not used to generate the list above, and NOT
+# because the build system differs from a user's desktop. It is skipped because
+# it can only see the libraries the binary links, and winit dlopen()s the whole
+# X11 and Wayland stack, which is most of what is listed above. Its output would
+# look complete and still be missing everything needed to open a window. The
+# list is therefore maintained by hand, and the workflow dry-run-installs it
+# against apt on every release, so a typo fails the build rather than a user's
+# install.
+
 recommends:
   # Theme colours come from fontconfig. The app draws its own fonts, so a bare
   # system without this still runs but looks wrong.
@@ -117,27 +126,29 @@ contents:
   - src: target/pkg/cross-cleaner.appdata.xml
     dst: /usr/share/metainfo/cross-cleaner.appdata.xml
 
+# Maintainer scripts. Top level `scripts`, not `deb.scripts`: as of nfpm 2.47
+# `deb.scripts` takes only `rules`/`templates`/`config` (the templated-script
+# feature) and the plain maintainer hooks moved to the packager-independent
+# `scripts` key, spelled out in full rather than as dpkg's postinst/postrm.
+# nfpm rejects `postinst` here with "field postinst not found in type
+# nfpm.DebScripts", which is what happens if they are put back under `deb:`.
+scripts:
+  postinstall: |-
+    # Icon caches are per-user and dpkg cannot reach them, so nudge the session
+    # bus when one exists. Harmless over SSH and inside a container, and the
+    # guards mean a minimal system without the tool still installs cleanly.
+    if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] && command -v gtk-update-icon-cache >/dev/null 2>&1; then
+      gtk-update-icon-cache -qtf /usr/share/icons/hicolor || true
+      gtk-update-icon-cache -qtf /usr/share/pixmaps || true
+    fi
+  postremove: |-
+    # The icons are gone, so the cached copies have to go with them.
+    if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] && command -v gtk-update-icon-cache >/dev/null 2>&1; then
+      gtk-update-icon-cache -qtf /usr/share/icons/hicolor || true
+      gtk-update-icon-cache -qtf /usr/share/pixmaps || true
+    fi
+
 deb:
   # GNU extensions for the compression, so the archive is readable without
   # dpkg-deb having to fall back.
   compression: xz
-  # dpkg-shlibdeps is skipped deliberately, and NOT because the build system
-  # differs from a user's desktop. It is skipped because it can only see the
-  # libraries the binary links, and winit dlopen()s the whole X11 and Wayland
-  # stack, which is most of the list above. Its output would look complete and
-  # still be missing everything needed to open a window. The list is therefore
-  # maintained by hand, and the workflow dry-run-installs it against apt on
-  # every release, so a typo fails the build rather than a user's install.
-  scripts:
-    postinst: |-
-      # Icon caches are per-user and dpkg cannot reach them, so nudge the
-      # session bus when one exists. Harmless over SSH and in a container.
-      if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] && command -v gtk-update-icon-cache >/dev/null 2>&1; then
-        gtk-update-icon-cache -qtf /usr/share/icons/hicolor || true
-        gtk-update-icon-cache -qtf /usr/share/pixmaps || true
-      fi
-    postrm: |-
-      if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] && command -v gtk-update-icon-cache >/dev/null 2>&1; then
-        gtk-update-icon-cache -qtf /usr/share/icons/hicolor || true
-        gtk-update-icon-cache -qtf /usr/share/pixmaps || true
-      fi
