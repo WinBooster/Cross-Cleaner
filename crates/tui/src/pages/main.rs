@@ -41,7 +41,7 @@ const CHECK: usize = 3;
 
 /// Draws the category grid and the pinned button.
 pub fn render(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
-    let (list_area, button_area) = split_body(area, 3, 1);
+    let (list_area, button_area) = split_body(area, 1);
 
     let selected = app
         .state

@@ -17,12 +17,20 @@ use ratatui::widgets::Paragraph;
 
 use crate::theme::Theme;
 
-/// Splits `area` into a scrolling body and a pinned bottom button row.
-pub(crate) fn split_body(area: Rect, button_height: u16, gap: u16) -> (Rect, Rect) {
+/// Height of a pinned action button.
+///
+/// One row, because that is all a label is. A taller area only left the rows
+/// below it as bare background, which read as dead space hanging under the
+/// button rather than as part of it.
+pub(crate) const BUTTON_HEIGHT: u16 = 1;
+
+/// Splits `area` into a scrolling body, a blank separator and the pinned bottom
+/// button row.
+pub(crate) fn split_body(area: Rect, gap: u16) -> (Rect, Rect) {
     let [body, _, button] = Layout::vertical([
         Constraint::Min(3),
         Constraint::Length(gap),
-        Constraint::Length(button_height),
+        Constraint::Length(BUTTON_HEIGHT),
     ])
     .areas(area);
     (body, button)

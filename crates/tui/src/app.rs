@@ -1473,6 +1473,44 @@ mod tests {
         app.on_event(Event::Key(KeyEvent::new(code, KeyModifiers::NONE)));
     }
 
+    /// The pinned action button must be exactly as tall as its label.
+    ///
+    /// The button row used to be three rows high while the label is one line, so
+    /// two rows of bare background hung under `Next` and read as dead space — the
+    /// one thing a pinned primary action should not have below it.
+    #[test]
+    fn the_pinned_button_has_nothing_blank_below_it() {
+        for (page, label) in [
+            (Page::Main, "Next"),
+            (Page::ProgramSelection, "Start Cleaning"),
+        ] {
+            let mut app = sample_app();
+            // Selected through the state rather than with a key press: a press
+            // raises a toast, which takes two footer rows and lifts the button.
+            app.state.toggle_category(0);
+            assert!(
+                app.state.has_selection(),
+                "the list must have something to show"
+            );
+            app.state.current_page = page;
+
+            let screen = draw(&mut app, 80, 20);
+            assert!(app.toast.is_none(), "no toast: this is about the layout");
+            let lines: Vec<&str> = screen.lines().collect();
+            let button = lines
+                .iter()
+                .position(|line| line.contains(label))
+                .unwrap_or_else(|| panic!("no `{label}` on {page:?}:\n{screen}"));
+            // The footer is the last row of the frame, so the button belongs on
+            // the one right above it.
+            assert_eq!(
+                button + 1,
+                lines.len() - 1,
+                "`{label}` must touch the footer, not float above a blank strip:\n{screen}",
+            );
+        }
+    }
+
     #[test]
     fn main_page_lists_every_category() {
         let mut app = sample_app();

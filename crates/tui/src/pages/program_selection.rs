@@ -9,7 +9,7 @@ use ratatui::text::{Line, Span};
 use ratatui::widgets::{List, ListItem, ListState, Paragraph};
 
 use crate::app::{InputMode, TuiApp};
-use crate::pages::button;
+use crate::pages::{BUTTON_HEIGHT, button};
 use crate::theme::Theme;
 
 /// Draws the search field, the program list and the pinned button.
@@ -17,7 +17,7 @@ pub fn render(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
     let [search_area, list_area, button_area] = Layout::vertical([
         Constraint::Length(3),
         Constraint::Min(3),
-        Constraint::Length(3),
+        Constraint::Length(BUTTON_HEIGHT),
     ])
     .areas(area);
 
