@@ -10,7 +10,7 @@ on:
       version:
         description: "Version number of the published release (e.g., 2.0.2.5)"
         required: true
-        default: "2.0.2.5"
+        default: "2.0.4.1"
       winget:
         description: "Submit Cross_Cleaner_Setup.exe to winget"
         type: boolean
@@ -43,14 +43,33 @@ jobs:
     steps:
       # winget-releaser reads the release over the API, so the draft has to be
       # published before this job runs.
-      - name: Release to winget
+      - name: Release GUI to winget
         uses: vedantmgoyal9/winget-releaser@v2
         with:
           identifier: WinBooster.Cross_Cleaner_GUI
           version: ${{ env.APP_VERSION }}
           release-tag: v${{ env.APP_VERSION }}
           release-notes-url: https://github.com/${{ github.repository }}/releases/tag/v${{ env.APP_VERSION }}
-          installers-regex: '^Cross_Cleaner_Setup\.exe$'
+          # Both installers ship in the same release, and winget-releaser passes
+          # every matching asset to `komac update --urls`, so one manifest version
+          # gets an x64 and an arm64 installer instead of one installer for
+          # everyone. Komac reads the architecture off the file name
+          # (`_Arm64`), which is why the two names differ.
+          installers-regex: '^Cross_Cleaner_Setup(_Arm64)?\.exe$'
+          max-versions-to-keep: 0
+          fork-user: Nekiplay
+          token: ${{ secrets.WINGET_TOKEN }}
+      - name: Release TUI to winget
+        uses: vedantmgoyal9/winget-releaser@v2
+        with:
+          identifier: WinBooster.Cross_Cleaner_TUI
+          version: ${{ env.APP_VERSION }}
+          release-tag: v${{ env.APP_VERSION }}
+          release-notes-url: https://github.com/${{ github.repository }}/releases/tag/v${{ env.APP_VERSION }}
+          # Same as the GUI step: `Windows-Cross_Cleaner_TUI.exe` is the neutral
+          # (x64) build and `Windows-Arm64-Cross_Cleaner_TUI.exe` the native one,
+          # so the pattern matches both and Komac labels them per file name.
+          installers-regex: '^Windows(-Arm64)?-Cross_Cleaner_TUI\.exe$'
           max-versions-to-keep: 0
           fork-user: Nekiplay
           token: ${{ secrets.WINGET_TOKEN }}

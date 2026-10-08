@@ -179,9 +179,10 @@ mod tests {
     /// (see `.github/workflows/release.yml`), so the architecture has to be a
     /// parameter rather than a constant baked into the file.
     ///
-    /// Both output names have to stay in step with the workflow: the arm64
-    /// installer is picked up by name, and `Cross_Cleaner_Setup.exe` is the one
-    /// winget publishes, so a rename on either side breaks a release quietly.
+    /// Both output names have to stay in step with the workflow: winget matches
+    /// `^Cross_Cleaner_Setup(_Arm64)?\.exe$` and derives the manifest
+    /// architecture from the file name, so a rename on either side breaks a
+    /// release quietly.
     #[test]
     fn the_installer_script_builds_both_architectures() {
         let script = std::fs::read_to_string(concat!(

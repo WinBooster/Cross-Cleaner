@@ -19,8 +19,8 @@
 #endif
 
 ; The output name carries the architecture so both installers can live in the
-; same release, and so winget (which matches ^Cross_Cleaner_Setup\.exe$) keeps
-; pointing at the x64 build only.
+; same release, and so winget (which matches ^Cross_Cleaner_Setup(_Arm64)?\.exe$)
+; can label each installer in the manifest instead of guessing from one file.
 #if MyArch == "arm64"
   #define MyOutputBaseFilename "Cross_Cleaner_Setup_Arm64"
   ; "arm64" refuses the installer on anything but a native arm64 CPU, so the
