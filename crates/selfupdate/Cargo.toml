@@ -1,6 +1,6 @@
 [package]
 name = "selfupdate"
-version = "2.0.1"
+version = "2.0.4"
 edition = "2024"
 description = "Self-update worker shared by the Cross Cleaner frontends"
 
