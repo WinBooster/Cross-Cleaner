@@ -4,13 +4,13 @@ use std::path::PathBuf;
 use std::time::Duration;
 
 /// Base URL of the GitHub releases page.
-pub const RELEASES_URL: &str = "https://github.com/WinBooster/Cross-Cleaner/releases";
+pub const RELEASES_URL: &str = "https://github.com/Cross-Optimizations/Cross-Cleaner/releases";
 
 const LATEST_RELEASE_API_URL: &str =
-    "https://api.github.com/repos/WinBooster/Cross-Cleaner/releases/latest";
+    "https://api.github.com/repos/Cross-Optimizations/Cross-Cleaner/releases/latest";
 
 const RELEASES_LIST_API_URL: &str =
-    "https://api.github.com/repos/WinBooster/Cross-Cleaner/releases?per_page=30";
+    "https://api.github.com/repos/Cross-Optimizations/Cross-Cleaner/releases?per_page=30";
 
 /// Chunk size used while streaming a release binary to disk.
 const DOWNLOAD_CHUNK: usize = 64 * 1024;

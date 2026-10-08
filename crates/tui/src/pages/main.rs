@@ -21,8 +21,8 @@ use ratatui::widgets::{List, ListItem};
 
 use appcore::{CATEGORY_COLUMNS, CategoryState};
 
-use crate::app::TuiApp;
-use crate::pages::{button, split_body};
+use crate::app::{Click, TuiApp};
+use crate::pages::{button, count_digits, span_of, split_body};
 use crate::theme::Theme;
 
 /// Narrowest cell, so a very short category name does not make a ragged grid.
@@ -40,6 +40,10 @@ const MARKER: &str = "▸";
 const CHECK: usize = 3;
 
 /// Draws the category grid and the pinned button.
+///
+/// Both are also registered as click targets: a cell ticks its category — the
+/// same thing `Space` does at the cursor — and the ` Next ` button is the same
+/// button `n` presses.
 pub fn render(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
     let (list_area, button_area) = split_body(area, 1);
 
@@ -55,31 +59,60 @@ pub fn render(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
     );
 
     let block = Theme::block(&title, true);
-    let inner_width = block.inner(list_area).width as usize;
+    let (rows, hits) = category_rows(app, block.inner(list_area));
+
     // No `highlight_style`: the focus is drawn per cell, because ratatui can
     // only highlight a whole list row and the grid has two cells per row.
-    let list = List::new(category_rows(app, inner_width)).block(block);
-
+    let list = List::new(rows).block(block);
     frame.render_widget(list, list_area);
     frame.render_widget(button(" Next "), button_area);
+
+    for (rect, click) in hits {
+        app.hit(rect, click);
+    }
+    app.hit(button_area, Click::Next);
 }
 
-/// One list item per row, each holding up to [`CATEGORY_COLUMNS`] cells.
-fn category_rows(app: &TuiApp, inner_width: usize) -> Vec<ListItem<'static>> {
+/// One list item per row, each holding up to [`CATEGORY_COLUMNS`] cells, plus
+/// the click targets of every cell that is actually on screen.
+///
+/// The targets come out of the same pass that builds the spans, so a cell's
+/// rectangle and its glyphs cannot disagree about where the cell is — which is
+/// the whole difficulty of a mirrored grid laid out by hand.
+fn category_rows(app: &TuiApp, inner: Rect) -> (Vec<ListItem<'static>>, Vec<(Rect, Click)>) {
+    let inner_width = inner.width as usize;
     let cell = cell_width(app, inner_width);
     // Placing one cell at each edge needs room for both plus a visible gap;
     // otherwise the grid packs them left to right and wraps on narrow terminals.
     let spread = inner_width >= cell * 2 + GAP;
+    // The mirrored cell sits against the right edge when there is room, and next
+    // to the left one when there is not.
+    let right_column = if spread {
+        inner_width - cell
+    } else {
+        cell + GAP
+    } as u16;
 
-    app.state
+    let mut hits = Vec::new();
+    let rows = app
+        .state
         .categories
         .chunks(CATEGORY_COLUMNS)
         .enumerate()
         .map(|(row, chunk)| {
-            let base = row * CATEGORY_COLUMNS;
+            let row = row as u16;
+            let base = (row as usize) * CATEGORY_COLUMNS;
             // The left cell reads left to right; the right one is mirrored, so
             // its checkbox sits against the right window edge.
             let mut spans = cell_spans(app, base, cell, Side::Left);
+            hits.push((span_of(inner, row, 0, cell as u16), Click::Category(base)));
+            // The `→ N` marker opens the overlay instead of ticking, the way the
+            // per-category menu button does in the window frontend. Registered
+            // after the cell so it is found first.
+            hits.push((
+                marker_hit(inner, row, 0, cell, app, base),
+                Click::CategorySubs(base),
+            ));
 
             match chunk.len() {
                 0 => {}
@@ -91,18 +124,27 @@ fn category_rows(app: &TuiApp, inner_width: usize) -> Vec<ListItem<'static>> {
                     }
                 }
                 _ => {
-                    if spread {
-                        // Push the mirrored cell against the right edge.
-                        spans.push(Span::raw(" ".repeat(inner_width - cell * 2)));
-                    } else {
-                        spans.push(Span::raw(" ".repeat(GAP)));
-                    }
+                    let filler = if spread { inner_width - cell * 2 } else { GAP };
+                    spans.push(Span::raw(" ".repeat(filler)));
                     spans.extend(cell_spans(app, base + 1, cell, Side::Right));
+                    let right = right_column;
+                    hits.push((
+                        span_of(inner, row, right, cell as u16),
+                        Click::Category(base + 1),
+                    ));
+                    // The mirror reads right to left, so its `→ N` marker sits at
+                    // the far side of the cell instead of after the label.
+                    hits.push((
+                        marker_hit(inner, row, right, cell, app, base + 1),
+                        Click::CategorySubs(base + 1),
+                    ));
                 }
             }
             ListItem::new(Line::from(spans))
         })
-        .collect()
+        .collect();
+
+    (rows, hits)
 }
 
 /// Width every cell is padded to, so the columns line up on every row.
@@ -149,6 +191,33 @@ fn hint_len(category: &CategoryState) -> usize {
     4 + count_digits(category.selected.len())
 }
 
+/// The rectangle of the `→ N` marker in the cell of category `index`.
+///
+/// Measured from the side the marker is drawn against — the right end of the
+/// left cell, the left end of the mirrored one — so the target covers the glyph
+/// and the trailing padding, and never reaches the label. A marker is as narrow
+/// as its `→ N` text, and it sits at the far edge of the cell; aiming at anything
+/// else would cover the name and turn every click on the category into an
+/// overlay, or no overlay at all.
+fn marker_hit(
+    inner: Rect,
+    row: u16,
+    cell_column: u16,
+    cell: usize,
+    app: &TuiApp,
+    index: usize,
+) -> Rect {
+    let width = app.state.categories.get(index).map_or(0, hint_len) as u16;
+    // Mirrored cells draw the marker first, so the width is not subtracted.
+    let mirrored = cell_column > 0;
+    let column = if mirrored {
+        cell_column
+    } else {
+        cell_column + (cell as u16).saturating_sub(width)
+    };
+    span_of(inner, row, column, width)
+}
+
 /// The subcategory arrow and its count, pointing away from the label.
 ///
 /// Mirroring the arrow matters: in the right column the count sits *outside* the
@@ -165,11 +234,6 @@ fn sub_hint(category: &CategoryState, side: Side, style: Style) -> Span<'static>
         },
         style,
     )
-}
-
-/// Number of decimal digits in `value`.
-fn count_digits(value: usize) -> usize {
-    value.checked_ilog10().map_or(1, |d| d as usize + 1)
 }
 
 /// Which way a cell is laid out.

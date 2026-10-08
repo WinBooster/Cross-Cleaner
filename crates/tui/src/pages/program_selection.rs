@@ -8,11 +8,17 @@ use ratatui::style::Style;
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{List, ListItem, ListState, Paragraph};
 
-use crate::app::{InputMode, TuiApp};
-use crate::pages::{BUTTON_HEIGHT, button};
+use crate::app::{Click, InputMode, TuiApp};
+use crate::pages::{BUTTON_HEIGHT, button, count_digits, row_of, span_of};
 use crate::theme::Theme;
 
+/// Width of the checkbox glyph, `[x]`.
+const CHECK: u16 = 3;
+
 /// Draws the search field, the program list and the pinned button.
+///
+/// The three are clickable too: the search field takes the caret, a row ticks
+/// its program, the ` Start Cleaning ` button is the button `S` presses.
 pub fn render(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
     let [search_area, list_area, button_area] = Layout::vertical([
         Constraint::Length(3),
@@ -22,6 +28,7 @@ pub fn render(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
     .areas(area);
 
     render_search(app, frame, search_area);
+    app.hit(search_area, Click::Search);
 
     let shown = app.state.filtered_programs.len();
     let selected = app
@@ -41,15 +48,65 @@ pub fn render(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
             );
         }
         None => {
+            let inner = block.inner(list_area);
             let list = List::new(program_items(app))
                 .block(block)
                 .highlight_style(Theme::selected());
             let mut state = ListState::default().with_selected(Some(app.program_cursor));
             frame.render_stateful_widget(list, list_area, &mut state);
+            register_rows(app, inner, state.offset());
         }
     }
 
     frame.render_widget(button(" Start Cleaning "), button_area);
+    app.hit(button_area, Click::StartCleaning);
+}
+
+/// Registers the visible program rows as click targets.
+///
+/// `offset` is the row the list was scrolled to, which only ratatui knows after
+/// drawing: it scrolls to keep the cursor visible, so the index of the topmost
+/// row is a result of the render rather than an input to it. Rows below the box
+/// are never drawn and so are never registered — a click there falls through
+/// instead of ticking a program the user cannot see.
+fn register_rows(app: &mut TuiApp, inner: Rect, offset: usize) {
+    for row in 0..inner.height as usize {
+        let Some(&index) = app.state.filtered_programs.get(offset + row) else {
+            break;
+        };
+        app.hit(
+            row_of(inner, row as u16, inner.width),
+            Click::Program(offset + row),
+        );
+        // Only programs in several categories carry the marker, the same rule
+        // that decides whether the row draws one at all. Registered after the
+        // row, so it is found first: clicking the marker opens the overlay
+        // instead of ticking.
+        if let Some(marker) = marker_span(app, index, inner, row as u16) {
+            app.hit(marker, Click::ProgramCategories(offset + row));
+        }
+    }
+}
+
+/// The rectangle of the `→ N` marker on the row of program `index`, or `None`
+/// when the row has none.
+///
+/// Measured from the same prefix the row is drawn with — checkbox, a space, the
+/// name — so the target covers the glyph and not the label next to it.
+fn marker_span(app: &TuiApp, index: usize, inner: Rect, row: u16) -> Option<Rect> {
+    let categories = app.state.program_categories.get(index)?;
+    if categories.len() <= 1 {
+        return None;
+    }
+    let (_, name) = app.state.program_checkboxes.get(index)?;
+    // Two spaces, the arrow, one space, then the digits of the count.
+    let marker = 4 + count_digits(categories.len()) as u16;
+    Some(span_of(
+        inner,
+        row,
+        CHECK + 1 + name.chars().count() as u16,
+        marker,
+    ))
 }
 
 /// Explains why the list is empty, instead of drawing a blank box.

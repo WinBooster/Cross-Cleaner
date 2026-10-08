@@ -65,7 +65,9 @@ mod tests {
 
     #[test]
     fn only_https_is_accepted() {
-        assert!(is_safe("https://github.com/WinBooster/Cross-Cleaner"));
+        assert!(is_safe(
+            "https://github.com/Cross-Optimizations/Cross-Cleaner"
+        ));
         assert!(!is_safe("http://github.com/"));
         assert!(!is_safe("file:///C:/Windows/System32/cmd.exe"));
         assert!(!is_safe("javascript:alert(1)"));

@@ -52,3 +52,33 @@ pub(crate) fn button(label: &str) -> Paragraph<'static> {
 pub(crate) fn meter(fraction: f32, width: usize) -> Vec<Span<'static>> {
     Theme::meter(fraction, width, Theme::ACCENT, Theme::BORDER)
 }
+
+/// A rectangle covering `width` columns of the row `row` of `area`, starting
+/// `column` columns in.
+///
+/// The shared shape behind every click target: a whole row of a list, or the
+/// narrow `→ N` marker inside one. Clipped to `area`, because a target that
+/// escaped its box would answer clicks aimed at whatever is drawn underneath —
+/// on a cramped terminal, or on the mirrored column of the category grid.
+pub(crate) fn span_of(area: Rect, row: u16, column: u16, width: u16) -> Rect {
+    Rect {
+        x: area.x.saturating_add(column),
+        y: area.y.saturating_add(row),
+        width,
+        height: 1,
+    }
+    .intersection(area)
+}
+
+/// [`span_of`] for a target that spans the full inner width, from `area.x`.
+pub(crate) fn row_of(area: Rect, row: u16, width: u16) -> Rect {
+    span_of(area, row, 0, width)
+}
+
+/// Number of decimal digits in `value`, at least one.
+///
+/// Every `→ N` marker reserves this many columns for its count, so both the
+/// glyph and its click target have to agree on it.
+pub(crate) fn count_digits(value: usize) -> usize {
+    value.checked_ilog10().map_or(1, |d| d as usize + 1)
+}

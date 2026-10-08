@@ -11,7 +11,7 @@ use crate::sounds;
 pub const TITLE_BAR_HEIGHT: f32 = 32.0;
 
 /// Project repository, opened by the GitHub icon in the title bar.
-const GITHUB_URL: &str = "https://github.com/WinBooster/Cross-Cleaner";
+const GITHUB_URL: &str = "https://github.com/Cross-Optimizations/Cross-Cleaner";
 const DONATE_URL: &str = "https://nowpayments.io/donation/neki_play";
 
 // Width reserved for the close, minimize & GitHub buttons (drag area excludes

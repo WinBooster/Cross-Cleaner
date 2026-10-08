@@ -11,7 +11,8 @@ use ratatui::style::Style;
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Clear, Paragraph, Wrap};
 
-use crate::app::{TuiApp, centered};
+use crate::app::{Click, TuiApp, UpdateAction, centered};
+use crate::pages::row_of;
 use crate::theme::Theme;
 
 /// Width of the download bar, in columns.
@@ -70,12 +71,56 @@ pub fn render(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
     let rect = centered(area, 64, height.min(area.height));
     frame.render_widget(Clear, rect);
 
+    let block = Theme::block(&title, true);
+    // Taken before the block is handed to the paragraph, which consumes it: the
+    // choice lines are measured against the same inner area they are drawn into.
+    let inner = block.inner(rect);
     frame.render_widget(
-        Paragraph::new(body)
-            .block(Theme::block(&title, true))
+        Paragraph::new(body.clone())
+            .block(block)
             .wrap(Wrap { trim: false }),
         rect,
     );
+
+    register_actions(app, &body, area, inner);
+}
+
+/// Registers the dialog's choices as click targets.
+///
+/// Each `key   label` line becomes the target for the key it names, and the rest
+/// of the screen dismisses the dialog the way `Esc` does — which
+/// [`TuiApp::run_update`] refuses during a running download, exactly as it
+/// refuses the key. A click must not be a way around a guard the keyboard has.
+fn register_actions(app: &mut TuiApp, body: &[Line<'static>], area: Rect, inner: Rect) {
+    // The whole screen, so a click beside the dialog dismisses it the way `Esc`
+    // does. Registered first, so the lines inside it are found first.
+    app.hit(area, Click::CloseDialog);
+    for (row, line) in body.iter().enumerate() {
+        let Some(action) = action_of(line) else {
+            continue;
+        };
+        app.hit(
+            row_of(inner, row as u16, inner.width),
+            Click::Update(action),
+        );
+    }
+}
+
+/// The action a dialog line offers, if it is one of the clickable choices.
+///
+/// Read back off the rendered text rather than paired with the lines as they are
+/// built: the wording is the contract here — a line that stops reading as a
+/// choice stops being clickable, which is better than a target pointing at an
+/// action the row no longer shows.
+fn action_of(line: &Line<'_>) -> Option<UpdateAction> {
+    match line.to_string().split_whitespace().next()? {
+        "d" => Some(UpdateAction::Install),
+        "r" => Some(UpdateAction::Confirm),
+        "o" => Some(UpdateAction::ReleasePage),
+        "?" => Some(UpdateAction::Changelog),
+        "esc" => Some(UpdateAction::Later),
+        _ => None,
+    }
 }
 
 /// The release was found and can be installed: offer to do it.

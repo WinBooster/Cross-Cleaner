@@ -15,7 +15,7 @@ use std::time::Duration;
 use appcore::app::AppState;
 use clap::{ArgAction, Parser};
 use crossterm::cursor;
-use crossterm::event::{self, Event, KeyEventKind};
+use crossterm::event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyEventKind};
 use crossterm::execute;
 use crossterm::terminal::{
     EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode,
@@ -138,7 +138,11 @@ impl TerminalGuard {
     fn enter() -> io::Result<Self> {
         enable_raw_mode()?;
         let mut stdout = io::stdout();
-        execute!(stdout, EnterAlternateScreen)?;
+        // Mouse capture alongside the alternate screen: without it the terminal
+        // keeps interpreting clicks itself — selecting text, pasting — and the
+        // app never hears about them. It is undone in `restore_terminal`, which
+        // runs on the paths that skip this guard's `Drop` too.
+        execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
         let terminal = Terminal::new(CrosstermBackend::new(stdout))?;
         Ok(Self { terminal })
     }
@@ -153,9 +157,16 @@ impl Drop for TerminalGuard {
 /// Puts the terminal back the way it was found. Idempotent.
 fn restore_terminal() {
     // Best effort: the process is usually about to exit, so a failure here only
-    // affects how the shell prompt looks afterwards.
+    // affects how the shell prompt looks afterwards. Mouse capture first: left
+    // on, the terminal would keep sending mouse events to a shell that is no
+    // longer reading them, so its own selection stops working.
     let _ = disable_raw_mode();
-    let _ = execute!(io::stdout(), LeaveAlternateScreen, cursor::Show);
+    let _ = execute!(
+        io::stdout(),
+        DisableMouseCapture,
+        LeaveAlternateScreen,
+        cursor::Show
+    );
 }
 
 /// Installs a panic hook that restores the terminal before the message is

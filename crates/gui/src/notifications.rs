@@ -380,7 +380,8 @@ mod tests {
     fn release() -> NewRelease {
         NewRelease {
             version: "2.1.0".to_string(),
-            url: "https://github.com/WinBooster/Cross-Cleaner/releases/tag/v2.1.0".to_string(),
+            url: "https://github.com/Cross-Optimizations/Cross-Cleaner/releases/tag/v2.1.0"
+                .to_string(),
             asset_url: Some("https://example.invalid/app.exe".to_string()),
             asset_size: Some(1_024),
         }

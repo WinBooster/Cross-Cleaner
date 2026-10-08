@@ -2,9 +2,16 @@
 //!
 //! Mirrors [`gui::app::MyApp`] one-to-one: both wrap the same
 //! [`appcore::AppState`] and offer the same five pages. The differences follow
-//! from the medium — there is no hover, no texture and no native window, so an
-//! egui popup becomes a centered overlay, the search field becomes an input
-//! mode, and the title bar becomes a header line plus a footer of key hints.
+//! from the medium — there is no texture and no native window, so an egui popup
+//! becomes a centered overlay, the search field becomes an input mode, and the
+//! title bar becomes a header line plus a footer of key hints.
+//!
+//! The mouse is the one input the window frontend gets for free. It is emulated
+//! by hit testing: every widget that answers a click registers the rectangle it
+//! was drawn into ([`TuiApp::hit`]), and a click is dispatched to the same
+//! method its key press would have reached — see [`Click`]. Registering while
+//! drawing is what keeps the two in step; a rectangle computed a second time, by
+//! hand, would eventually point somewhere the glyph is not.
 
 use std::collections::VecDeque;
 use std::sync::Arc;
@@ -13,13 +20,15 @@ use std::time::{Duration, Instant};
 use appcore::app::{AppState, Page};
 use appcore::sounds;
 use appcore::updater::{self, UpdateState, UpdaterCommand};
-use appcore::{Toggle, config};
-use crossterm::event::{Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
+use appcore::{AppConfig, Toggle, config};
+use crossterm::event::{
+    Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers, MouseButton, MouseEvent, MouseEventKind,
+};
 #[cfg(feature = "self-update")]
 use database::version::Frontend;
 use database::version::{Changelog, NewRelease};
 use ratatui::Frame;
-use ratatui::layout::{Constraint, Layout, Rect};
+use ratatui::layout::{Constraint, Layout, Position, Rect};
 use ratatui::style::Style;
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Clear, ListState, Padding, Paragraph, Wrap};
@@ -36,6 +45,10 @@ const SETTINGS: [&str; 4] = ["Popup sound", "Click sound", "Check sound", "Done 
 
 /// Lines a page-up / page-down moves in the changelog overlay.
 const CHANGELOG_PAGE: usize = 10;
+
+/// Rows one wheel notch moves the focused row, the step a terminal wheel
+/// reports on every platform.
+const WHEEL_STEP: isize = 3;
 
 /// Diagnostics captured while this process owns the terminal.
 ///
@@ -110,6 +123,100 @@ pub struct Popup {
     pub items: Vec<(String, bool)>,
 }
 
+/// What a left click on a rectangle of the last frame does.
+///
+/// Every variant names the action, never the widget: [`TuiApp::run`] sends each
+/// one to the method the matching key press calls, so the mouse cannot do
+/// something the footer hints do not promise. An index is always a position in
+/// the list it was drawn from — the category grid, the filtered program list or
+/// the open overlay — which is also where the click target puts the cursor.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum Click {
+    /// Tick or untick this category, and move the cursor onto it.
+    Category(usize),
+    /// Open the subcategory overlay of this category.
+    CategorySubs(usize),
+    /// Tick or untick the program on this row of the filtered list.
+    Program(usize),
+    /// Open the category overlay of the program on this row.
+    ProgramCategories(usize),
+    /// Tick or untick this entry of the open overlay.
+    PopupItem(usize),
+    /// Move the settings cursor onto this volume.
+    Settings(usize),
+    /// Set a volume to the level under the pointer. `left` is the column its
+    /// bar starts at, so the click's own column can be turned into a level.
+    Volume { slot: usize, left: u16 },
+    /// Put the caret into the search field.
+    Search,
+    /// The pinned ` Next ` button on the category page.
+    Next,
+    /// The pinned ` Start Cleaning ` button on the program page.
+    StartCleaning,
+    /// One of the update dialog's rows.
+    Update(UpdateAction),
+    /// The backdrop of the checkable overlay: close it.
+    ClosePopup,
+    /// The backdrop of the changelog overlay: close it.
+    CloseChangelog,
+    /// The backdrop of the update dialog: put it off, the way `Esc` does.
+    CloseDialog,
+}
+
+/// The choices the update dialog offers.
+///
+/// Each one is a key *and* a row on screen, so both inputs reach
+/// [`TuiApp::run_update`].
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum UpdateAction {
+    /// `d`: download and install.
+    Install,
+    /// `r`: restart into the new version, or retry a failed download.
+    Confirm,
+    /// `o`: open the release page in a browser.
+    ReleasePage,
+    /// `?`: open the changelog.
+    Changelog,
+    /// `Esc`: leave the dialog for now.
+    Later,
+}
+
+/// The clickable rectangles of the current frame.
+///
+/// Pages append one per interactive widget while drawing, in paint order, and a
+/// lookup walks the list backwards, so the topmost registration wins: that is
+/// what makes a click land on an overlay drawn over the page rather than on the
+/// page underneath it.
+#[derive(Default)]
+struct HitAreas(Vec<(Rect, Click)>);
+
+impl HitAreas {
+    /// Forgets the rectangles of the last frame.
+    ///
+    /// Without this a widget that stopped being drawn — a page change, a
+    /// dismissed overlay — would keep answering clicks where it used to be.
+    fn clear(&mut self) {
+        self.0.clear();
+    }
+
+    fn push(&mut self, rect: Rect, click: Click) {
+        self.0.push((rect, click));
+    }
+
+    /// The action a click at `(column, row)` reaches, if any.
+    ///
+    /// An empty rectangle contains nothing, so a target that was clipped away
+    /// by a cramped terminal cannot swallow the click.
+    fn at(&self, column: u16, row: u16) -> Option<Click> {
+        let position = Position { x: column, y: row };
+        self.0
+            .iter()
+            .rev()
+            .find(|(rect, _)| rect.contains(position))
+            .map(|(_, click)| *click)
+    }
+}
+
 /// A transient status line shown in place of the key hints.
 pub struct Toast {
     pub message: String,
@@ -152,6 +259,10 @@ pub struct TuiApp {
     pub input: InputMode,
     pub popup: Option<Popup>,
     pub toast: Option<Toast>,
+
+    /// Rectangles drawn by the last frame that answer a click, rebuilt by every
+    /// [`TuiApp::render`].
+    hits: HitAreas,
 
     /// "What's New" overlay state.
     pub changelog_open: bool,
@@ -211,6 +322,7 @@ impl TuiApp {
             input: InputMode::Normal,
             popup: None,
             toast: None,
+            hits: HitAreas::default(),
             changelog_open: false,
             changelog_scroll: 0,
             changelog_max_scroll: 0,
@@ -413,10 +525,109 @@ impl TuiApp {
     pub fn on_event(&mut self, event: Event) {
         match event {
             Event::Key(key) if key.kind == KeyEventKind::Press => self.on_key(key),
+            Event::Mouse(mouse) => self.on_mouse(mouse),
             // The kitty protocol also reports key releases; the app is driven
             // by presses only, so a release must not double-fire a binding.
             _ => {}
         }
+    }
+
+    /// Routes a mouse event.
+    ///
+    /// The app owns the whole alternate screen, so a column and a row are the
+    /// buffer coordinates [`TuiApp::render`] drew into and the rectangles
+    /// registered last frame line up with it.
+    fn on_mouse(&mut self, mouse: MouseEvent) {
+        match mouse.kind {
+            // Only the press, so dragging the button across the screen cannot
+            // fire an action on every widget it passes over.
+            MouseEventKind::Down(MouseButton::Left) => {
+                if let Some(click) = self.hits.at(mouse.column, mouse.row) {
+                    self.run(click, mouse.column);
+                }
+            }
+            MouseEventKind::ScrollUp => self.scroll(-1),
+            MouseEventKind::ScrollDown => self.scroll(1),
+            // Motion, drags and the other buttons belong to terminal text
+            // selection; the app has nothing to say about them.
+            _ => {}
+        }
+    }
+
+    /// Performs the action a click resolved to.
+    ///
+    /// Every branch calls the method the matching key press calls, so the two
+    /// ways in cannot drift apart: same action, same sound, same toast. `column`
+    /// is the click's own column, which is what lets a click on a volume bar
+    /// set it to the level under the pointer instead of stepping it.
+    fn run(&mut self, click: Click, column: u16) {
+        match click {
+            Click::Category(index) => self.toggle_category(index),
+            Click::CategorySubs(index) => self.open_category_subs(index),
+            Click::Program(row) => self.toggle_program(row),
+            Click::ProgramCategories(row) => self.open_program_categories(row),
+            Click::PopupItem(row) => self.toggle_popup_entry(row),
+            Click::Settings(slot) => self.settings_cursor = slot,
+            Click::Volume { slot, left } => {
+                self.set_volume(slot, pages::settings::level_at(left, column));
+            }
+            Click::Search => self.input = InputMode::Editing,
+            Click::Next => self.advance_to_programs(),
+            Click::StartCleaning => self.start_cleaning(),
+            Click::Update(action) => self.run_update(action),
+            Click::ClosePopup => self.popup = None,
+            Click::CloseChangelog => self.changelog_open = false,
+            // Dismissing the dialog is `Esc`, and a running download refuses it
+            // — the rule lives in `run_update`, which is why the click goes
+            // through there too.
+            Click::CloseDialog => self.run_update(UpdateAction::Later),
+        }
+    }
+
+    /// Moves whatever is under the wheel by `notches`.
+    fn scroll(&mut self, notches: isize) {
+        if self.changelog_open {
+            // A release note is far longer than its overlay, so here the wheel
+            // has to scroll the content itself rather than move a cursor.
+            self.changelog_scroll = self
+                .changelog_scroll
+                .saturating_add_signed(notches * WHEEL_STEP);
+            return;
+        }
+        if let Some(len) = self.popup.as_ref().map(|popup| popup.items.len()) {
+            // The overlay is one long list of checkboxes, and the selection is
+            // what scrolls it.
+            self.move_popup(notches, len);
+            return;
+        }
+        let step = notches * WHEEL_STEP;
+        match self.state.current_page {
+            // The grid is two categories wide, so a notch is a row, not a cell.
+            Page::Main => self.move_category_row(notches),
+            Page::ProgramSelection => {
+                move_index(
+                    &mut self.program_cursor,
+                    step,
+                    self.state.filtered_programs.len(),
+                );
+            }
+            Page::Results => {
+                let len = self.result_count();
+                move_index(&mut self.result_cursor, step, len);
+            }
+            // Cleaning owns the page, and the settings list is four rows tall.
+            Page::Clearing | Page::Settings => {}
+        }
+    }
+
+    /// Records that `rect` answers a left click with `click`.
+    ///
+    /// Pages call this while drawing, which is the only moment the geometry is
+    /// known: the same values that put a widget on screen say where it is, so a
+    /// click target cannot drift away from the glyph it belongs to. Order is
+    /// paint order — see [`HitAreas`].
+    pub(crate) fn hit(&mut self, rect: Rect, click: Click) {
+        self.hits.push(rect, click);
     }
 
     /// Routes a key press to whichever overlay currently owns the keyboard.
@@ -461,26 +672,49 @@ impl TuiApp {
 
     /// Keys of the update dialog.
     ///
-    /// The dialog is the only place that can start an install or a relaunch, so
-    /// it owns the keyboard while it is up — except for the running stages,
-    /// where there is nothing safe to press.
+    /// Only the mapping lives here: every key names an [`UpdateAction`] and
+    /// hands it to [`TuiApp::run_update`], so a click on the same row cannot end
+    /// up doing something else.
     fn on_key_update(&mut self, key: KeyEvent) {
-        let stage = updater::current(&self.updater_state);
-        match key.code {
-            KeyCode::Esc => {
-                if stage.is_running() {
-                    return;
-                }
+        let action = match key.code {
+            KeyCode::Esc => Some(UpdateAction::Later),
+            KeyCode::Char('?') | KeyCode::F(1) => Some(UpdateAction::Changelog),
+            KeyCode::Char('o') | KeyCode::Char('O') => Some(UpdateAction::ReleasePage),
+            KeyCode::Char('d') | KeyCode::Char('D') => Some(UpdateAction::Install),
+            KeyCode::Char('r') | KeyCode::Char('R') => Some(UpdateAction::Confirm),
+            _ => None,
+        };
+        if let Some(action) = action {
+            self.run_update(action);
+        }
+    }
+
+    /// Carries out one of the dialog's choices, from a key or from a click.
+    ///
+    /// The dialog is the only place that can start an install or a relaunch, so
+    /// it owns both inputs while it is up — except for the running stages,
+    /// where there is nothing safe to press or click. Starting a second download
+    /// on top of a running one would interleave two writes to the same
+    /// executable, and closing mid-download would strand the user on the old
+    /// binary. The changelog and the release page stay open: neither touches the
+    /// worker.
+    fn run_update(&mut self, action: UpdateAction) {
+        let unsafe_while_running = matches!(
+            action,
+            UpdateAction::Install | UpdateAction::Confirm | UpdateAction::Later
+        );
+        if unsafe_while_running && updater::current(&self.updater_state).is_running() {
+            return;
+        }
+        match action {
+            UpdateAction::Install => self.start_update(),
+            UpdateAction::Confirm => self.confirm_or_retry(),
+            UpdateAction::ReleasePage => self.open_release_page(),
+            UpdateAction::Changelog => self.open_changelog(),
+            UpdateAction::Later => {
                 self.update_open = false;
                 self.toast = Some(Toast::info("Update postponed."));
             }
-            KeyCode::Char('?') | KeyCode::F(1) => self.open_changelog(),
-            KeyCode::Char('o') | KeyCode::Char('O') => self.open_release_page(),
-            // Starting a second download on top of a running one would interleave
-            // two writes to the same executable.
-            KeyCode::Char('d') | KeyCode::Char('D') if !stage.is_running() => self.start_update(),
-            KeyCode::Char('r') | KeyCode::Char('R') => self.confirm_or_retry(),
-            _ => {}
         }
     }
 
@@ -641,21 +875,13 @@ impl TuiApp {
             KeyCode::BackTab => self.move_category_column(-1),
             KeyCode::Home => self.category_cursor = 0,
             KeyCode::End => self.category_cursor = len.saturating_sub(1),
-            KeyCode::Char(' ') => {
-                if len == 0 {
-                    return;
-                }
-                let cursor = self.category_cursor;
-                let toggle = self.state.toggle_category(cursor);
-                play_toggle(toggle);
-                self.toast = Some(Toast::info(match toggle {
-                    Toggle::On => "Category selected.",
-                    Toggle::Off => "Category cleared.",
-                }));
-            }
+            KeyCode::Char(' ') => self.toggle_category(self.category_cursor),
             // Enter and `→` / `l` open the subcategory overlay — the terminal
-            // stand-in for the window frontend's per-category menu button.
-            KeyCode::Enter | KeyCode::Right | KeyCode::Char('l') => self.open_category_popup(),
+            // stand-in for the window frontend's per-category menu button, which
+            // is what the `→ N` marker opens for a mouse.
+            KeyCode::Enter | KeyCode::Right | KeyCode::Char('l') => {
+                self.open_category_subs(self.category_cursor)
+            }
             // The settings gear in the window title bar.
             KeyCode::Char('s') | KeyCode::Char('S') => {
                 sfx("click", sounds::click);
@@ -664,6 +890,24 @@ impl TuiApp {
             KeyCode::Char('n') | KeyCode::Char('N') => self.advance_to_programs(),
             _ => {}
         }
+    }
+
+    /// Ticks or unticks the category at `index` and moves the cursor onto it.
+    ///
+    /// Taking the index rather than reading the cursor is what lets a click
+    /// land on a cell that is not the focused one and still leave the keyboard
+    /// pointing at the category it just changed.
+    fn toggle_category(&mut self, index: usize) {
+        if index >= self.state.categories.len() {
+            return;
+        }
+        self.category_cursor = index;
+        let toggle = self.state.toggle_category(index);
+        play_toggle(toggle);
+        self.toast = Some(Toast::info(match toggle {
+            Toggle::On => "Category selected.",
+            Toggle::Off => "Category cleared.",
+        }));
     }
 
     /// Moves the focused category by whole rows, preserving the column.
@@ -689,19 +933,20 @@ impl TuiApp {
         );
     }
 
-    fn open_category_popup(&mut self) {
-        let Some(index) = self.state.categories.get(self.category_cursor) else {
+    /// Opens the subcategory overlay of the category at `index`.
+    fn open_category_subs(&mut self, index: usize) {
+        let Some(category) = self.state.categories.get(index) else {
             return;
         };
-        if index.subs.is_empty() {
+        if category.subs.is_empty() {
             self.toast = Some(Toast::warn("This category has no subcategories."));
             return;
         }
         let popup = Popup {
-            kind: PopupKind::Category(self.category_cursor),
-            title: format!(" {} subcategories ", index.name),
+            kind: PopupKind::Category(index),
+            title: format!(" {} subcategories ", category.name),
             list: ListState::default().with_selected(Some(0)),
-            items: self.category_sub_items(self.category_cursor),
+            items: self.category_sub_items(index),
         };
         self.popup = Some(popup);
         // Opened, not merely refused: a category without subcategories answers
@@ -756,23 +1001,12 @@ impl TuiApp {
             KeyCode::PageDown => move_index(&mut self.program_cursor, 10, len),
             KeyCode::Home => self.program_cursor = 0,
             KeyCode::End => self.program_cursor = len.saturating_sub(1),
-            KeyCode::Enter | KeyCode::Char(' ') => {
-                let Some(index) = self
-                    .state
-                    .filtered_programs
-                    .get(self.program_cursor)
-                    .copied()
-                else {
-                    return;
-                };
-                let toggle = self.state.toggle_program(index);
-                play_toggle(toggle);
-                self.toast = Some(Toast::info(match toggle {
-                    Toggle::On => "Program selected.",
-                    Toggle::Off => "Program excluded.",
-                }));
+            KeyCode::Enter | KeyCode::Char(' ') => self.toggle_program(self.program_cursor),
+            // `→` is the per-program category menu; the `→ N` marker on the row
+            // is what a mouse uses for the same thing.
+            KeyCode::Right | KeyCode::Char('l') => {
+                self.open_program_categories(self.program_cursor)
             }
-            KeyCode::Right | KeyCode::Char('l') => self.open_program_popup(),
             // `.` is accepted as well: the key labelled `/` on an English layout
             // produces `.` on a Russian one, and a layout table cannot tell the
             // two apart without shadowing the English `.`.
@@ -787,13 +1021,27 @@ impl TuiApp {
         }
     }
 
-    fn open_program_popup(&mut self) {
-        let Some(index) = self
-            .state
-            .filtered_programs
-            .get(self.program_cursor)
-            .copied()
-        else {
+    /// Ticks or unticks the program on `row` of the filtered list.
+    ///
+    /// The row is in filtered coordinates, which is also what the cursor counts
+    /// in, so a click can pass it straight through without looking the program
+    /// up again.
+    fn toggle_program(&mut self, row: usize) {
+        let Some(index) = self.state.filtered_programs.get(row).copied() else {
+            return;
+        };
+        self.program_cursor = row;
+        let toggle = self.state.toggle_program(index);
+        play_toggle(toggle);
+        self.toast = Some(Toast::info(match toggle {
+            Toggle::On => "Program selected.",
+            Toggle::Off => "Program excluded.",
+        }));
+    }
+
+    /// Opens the category overlay of the program on `row` of the filtered list.
+    fn open_program_categories(&mut self, row: usize) {
+        let Some(index) = self.state.filtered_programs.get(row).copied() else {
             return;
         };
         let Some(categories) = self.state.program_categories.get(index) else {
@@ -869,20 +1117,25 @@ impl TuiApp {
     /// is zero.
     fn adjust_volume(&mut self, delta: f32) {
         let slot = self.settings_cursor;
-        let mut cfg = config::get();
-        let target = match slot {
-            0 => &mut cfg.sound_volume,
-            1 => &mut cfg.click_volume,
-            2 => &mut cfg.check_volume,
-            _ => &mut cfg.done_volume,
-        };
-        *target = if delta == 0.0 {
+        let value = if delta == 0.0 {
             1.0
         } else {
-            (*target + delta).clamp(0.0, 1.0)
+            (volume_of(&config::get(), slot) + delta).clamp(0.0, 1.0)
         };
-        let value = *target;
+        self.set_volume(slot, value);
+    }
+
+    /// Sets one of the four volumes, moves the cursor onto it and reports the
+    /// new level.
+    ///
+    /// Both the arrow keys and a click on the bar end up here, so the two ways
+    /// of changing a level store it the same way and report it the same way.
+    fn set_volume(&mut self, slot: usize, value: f32) {
+        let mut cfg = config::get();
+        *volume_slot(&mut cfg, slot) = value.clamp(0.0, 1.0);
+        let value = volume_of(&cfg, slot);
         config::update(|c| *c = cfg);
+        self.settings_cursor = slot;
         self.toast = Some(Toast::info(format!(
             "{}: {:.0}%",
             SETTINGS[slot],
@@ -939,29 +1192,39 @@ impl TuiApp {
                     popup.list.select(Some(len.saturating_sub(1)));
                 }
             }
-            KeyCode::Char(' ') => self.toggle_popup_entry(),
+            KeyCode::Char(' ') => {
+                let selected = self
+                    .popup
+                    .as_ref()
+                    .and_then(|popup| popup.list.selected())
+                    .unwrap_or(0);
+                self.toggle_popup_entry(selected);
+            }
             _ => {}
         }
     }
 
-    fn toggle_popup_entry(&mut self) {
+    /// Ticks or unticks the entry at `row` of the open overlay.
+    ///
+    /// The row is what `Space` toggles at the highlighted position, so a click
+    /// on an entry and a click on the same entry's checkbox do the same thing.
+    fn toggle_popup_entry(&mut self, row: usize) {
         let Some(popup) = &self.popup else {
             return;
         };
-        let selected = popup.list.selected().unwrap_or(0);
         let toggle = match popup.kind {
             PopupKind::Category(index) => {
                 // Real subcategories first, then "Uncategorized".
                 let subs = self.state.categories[index].subs.len();
-                let sub = if selected < subs {
-                    Arc::clone(&self.state.categories[index].subs[selected])
+                let sub = if row < subs {
+                    Arc::clone(&self.state.categories[index].subs[row])
                 } else {
                     Arc::from("")
                 };
                 self.state.toggle_category_sub(index, &sub)
             }
             PopupKind::Program(index) => {
-                let category = Arc::clone(&self.state.program_categories[index][selected]);
+                let category = Arc::clone(&self.state.program_categories[index][row]);
                 self.state.toggle_program_category(index, &category)
             }
         };
@@ -1083,9 +1346,15 @@ impl TuiApp {
     // --- rendering --------------------------------------------------------
 
     /// Draws one frame.
+    ///
+    /// Also rebuilds the click targets: every page registers the rectangles it
+    /// just drew, in paint order, so what answers a click is exactly what is on
+    /// screen. The previous frame's targets go first — a widget that is no
+    /// longer drawn must stop answering clicks.
     pub fn render(&mut self, frame: &mut Frame) {
         self.refresh_popup();
         self.refresh_changelog();
+        self.hits.clear();
 
         let area = frame.area();
         frame.render_widget(
@@ -1112,8 +1381,12 @@ impl TuiApp {
         }
         self.render_footer(frame, footer);
 
-        if let Some(popup) = &self.popup {
-            render_popup(frame, area, popup);
+        // The overlay is drawn from `self.popup` while its targets go into
+        // `self.hits`, so the borrow is split rather than taken twice. It comes
+        // after the page, which is what puts it on top of the page's targets.
+        let Self { popup, hits, .. } = self;
+        if let Some(popup) = popup {
+            render_popup(popup, hits, frame, area);
         }
         pages::update::render(self, frame, area);
         if self.changelog_open {
@@ -1242,6 +1515,10 @@ impl TuiApp {
                 .scroll((self.changelog_scroll as u16, 0)),
             rect,
         );
+
+        // Nothing inside the notes is clickable — they are text — so the whole
+        // screen is the dismissal, exactly as `Esc` is.
+        self.hits.push(area, Click::CloseChangelog);
     }
 }
 
@@ -1268,7 +1545,30 @@ fn update_progress_line(stage: &updater::UpdateStage) -> String {
 }
 
 /// Project repository, opened by the `G` binding.
-const GITHUB_URL: &str = "https://github.com/WinBooster/Cross-Cleaner";
+const GITHUB_URL: &str = "https://github.com/Cross-Optimizations/Cross-Cleaner";
+
+/// The volume stored in slot `slot` of the shared config.
+///
+/// [`SETTINGS`] and the four fields are kept in step by this and
+/// [`volume_slot`]; the settings page reads the same order.
+fn volume_of(cfg: &AppConfig, slot: usize) -> f32 {
+    match slot {
+        0 => cfg.sound_volume,
+        1 => cfg.click_volume,
+        2 => cfg.check_volume,
+        _ => cfg.done_volume,
+    }
+}
+
+/// [`volume_of`] as a mutable reference, for writing a new level.
+fn volume_slot(cfg: &mut AppConfig, slot: usize) -> &mut f32 {
+    match slot {
+        0 => &mut cfg.sound_volume,
+        1 => &mut cfg.click_volume,
+        2 => &mut cfg.check_volume,
+        _ => &mut cfg.done_volume,
+    }
+}
 
 /// Plays the sound for a selection that was just toggled.
 ///
@@ -1331,10 +1631,19 @@ fn move_list(state: &mut ListState, delta: isize, len: usize) {
     state.select(Some((current + delta).rem_euclid(len as isize) as usize));
 }
 
-/// Draws the centered checkable overlay.
-fn render_popup(frame: &mut Frame, area: Rect, popup: &Popup) {
+/// Draws the centered checkable overlay, and registers what it answers.
+///
+/// An entry toggles its own checkbox; a click anywhere else closes the overlay,
+/// the way `Esc` does. The backdrop goes in before the entries so the entries
+/// are found first — a lookup takes the topmost target.
+fn render_popup(popup: &Popup, hits: &mut HitAreas, frame: &mut Frame, area: Rect) {
     let width = (area.width * 2 / 3).clamp(30, 64);
-    let height = (popup.items.len() as u16 + 4).clamp(6, area.height.saturating_sub(2));
+    // `clamp` panics when its bounds are inverted, which a terminal shorter than
+    // the minimum would do — the overlay then fills the screen rather than
+    // taking the frame down.
+    let height = (popup.items.len() as u16 + 4)
+        .max(6)
+        .min(area.height.saturating_sub(2).max(6));
     let rect = centered(area, width, height);
     frame.render_widget(Clear, rect);
 
@@ -1352,12 +1661,29 @@ fn render_popup(frame: &mut Frame, area: Rect, popup: &Popup) {
 
     let block = Theme::block(&popup.title, true)
         .title_bottom(Line::from(" ↑↓ move · space toggle · esc close ").right_aligned());
+    // Taken before the block is handed to the list, which consumes it.
+    let inner = block.inner(rect);
     let list = ratatui::widgets::List::new(items)
         .block(block)
         .highlight_style(Theme::selected());
 
-    let mut list_state = popup.list.clone();
+    let mut list_state = popup.list;
     frame.render_stateful_widget(list, rect, &mut list_state);
+
+    // The backdrop covers the whole screen, so a click outside the box closes the
+    // overlay instead of reaching the page underneath. Registered first, so the
+    // entries below win where they overlap.
+    hits.push(area, Click::ClosePopup);
+    // The list is scrolled to the selected entry, and `List` writes the offset it
+    // ended up with back into the state — so the rows on screen are only known
+    // after drawing, not before.
+    let offset = list_state.offset();
+    for row in 0..inner.height {
+        hits.push(
+            pages::row_of(inner, row, inner.width),
+            Click::PopupItem(offset + row as usize),
+        );
+    }
 }
 
 /// Flattens a changelog into display lines.
@@ -1471,6 +1797,54 @@ mod tests {
 
     fn press(app: &mut TuiApp, code: KeyCode) {
         app.on_event(Event::Key(KeyEvent::new(code, KeyModifiers::NONE)));
+    }
+
+    /// Left-clicks at a screen position.
+    fn click(app: &mut TuiApp, column: u16, row: u16) {
+        app.on_event(Event::Mouse(MouseEvent {
+            kind: MouseEventKind::Down(MouseButton::Left),
+            column,
+            row,
+            modifiers: KeyModifiers::NONE,
+        }));
+    }
+
+    /// Turns the wheel at a screen position, positive for a downward notch.
+    fn wheel(app: &mut TuiApp, notches: isize) {
+        let kind = if notches > 0 {
+            MouseEventKind::ScrollDown
+        } else {
+            MouseEventKind::ScrollUp
+        };
+        for _ in 0..notches.abs() {
+            app.on_event(Event::Mouse(MouseEvent {
+                kind,
+                column: 0,
+                row: 0,
+                modifiers: KeyModifiers::NONE,
+            }));
+        }
+    }
+
+    /// Draws a frame and clicks the first `needle` found on it.
+    ///
+    /// Goes through the rendered text rather than through the layout constants,
+    /// so the test fails if a target and the glyph it belongs to drift apart —
+    /// which is the failure mode hit testing has, and the reason the targets are
+    /// registered where the widgets are drawn.
+    fn click_on(app: &mut TuiApp, width: u16, height: u16, needle: &str) {
+        let screen = draw(app, width, height);
+        let (column, row) = position_of(&screen, needle);
+        click(app, column as u16, row as u16);
+    }
+
+    /// Screen position of the first `needle`, as `(column, row)`.
+    fn position_of(screen: &str, needle: &str) -> (usize, usize) {
+        screen
+            .lines()
+            .enumerate()
+            .find_map(|(row, line)| column_of(line, needle).map(|column| (column, row)))
+            .unwrap_or_else(|| panic!("no {needle:?} on screen:\n{screen}"))
     }
 
     /// The pinned action button must be exactly as tall as its label.
@@ -2233,6 +2607,483 @@ mod tests {
         appcore::config::update(|c| *c = appcore::AppConfig::default());
     }
 
+    // --- mouse -----------------------------------------------------------
+
+    /// The mouse must reach the same state the keyboard does, because the hints
+    /// in the footer promise one set of actions and there is only one app.
+    #[test]
+    fn clicking_a_category_cell_selects_exactly_that_category() {
+        let mut app = many_categories(6);
+        assert!(!app.state.has_selection());
+
+        // Second category: the grid is two columns wide, so this is the right
+        // one, and it is mirrored — the checkbox trails the label there.
+        click_on(&mut app, 100, 30, "Cat1");
+        assert!(
+            app.state.categories[1].is_checked(),
+            "the clicked cell is the one that changed",
+        );
+        for (index, category) in app.state.categories.iter().enumerate() {
+            assert_eq!(
+                category.is_unchecked(),
+                index != 1,
+                "only the clicked category changed",
+            );
+        }
+        // And the cursor followed the click, so the keyboard keeps acting on the
+        // category the mouse just touched.
+        assert_eq!(app.category_cursor, 1);
+    }
+
+    /// The `→ N` marker is a narrow target at the end of the cell. Everything
+    /// else in the cell — the label above all — must still tick, or the marker
+    /// target would swallow the whole cell and a click on a name would open an
+    /// overlay instead of selecting the category.
+    #[test]
+    fn clicking_a_label_ticks_even_though_the_cell_ends_in_a_marker() {
+        let mut app = many_categories(6);
+        for name in ["Cat0", "Cat2", "Cat4"] {
+            click_on(&mut app, 100, 30, name);
+            assert!(
+                app.popup.is_none(),
+                "{name}: clicking a label must not open the overlay",
+            );
+        }
+        // Three distinct categories, one per left-column row.
+        let ticked = app
+            .state
+            .categories
+            .iter()
+            .filter(|category| !category.is_unchecked())
+            .count();
+        assert_eq!(ticked, 3, "each click ticked its own left-column cell");
+    }
+
+    #[test]
+    fn clicking_the_mirrored_cell_does_not_hit_its_neighbour() {
+        // The regression: the right-hand cell is laid out backwards, so a target
+        // measured from the left edge lands on the wrong category — and the
+        // wrong one is the one the user can see they did not click.
+        let mut app = many_categories(6);
+        click_on(&mut app, 100, 30, "Cat3");
+        assert!(app.state.categories[3].is_checked(), "Cat3 was clicked");
+        assert!(
+            app.state.categories[2].is_unchecked(),
+            "Cat2 shares the row and must stay untouched",
+        );
+    }
+
+    #[test]
+    fn clicking_a_cell_toggles_it_back_off() {
+        let mut app = sample_app();
+        click_on(&mut app, 100, 30, "Cache");
+        assert!(app.state.has_selection());
+        click_on(&mut app, 100, 30, "Cache");
+        assert!(!app.state.has_selection());
+    }
+
+    /// The `→ N` marker is the mouse's route to the subcategories, the way
+    /// `Enter` is the keyboard's. Without it a mouse user could never open the
+    /// overlay at all.
+    #[test]
+    fn clicking_the_marker_opens_the_subcategories_instead_of_ticking() {
+        let mut app = sample_app();
+        let screen = draw(&mut app, 100, 30);
+        let (column, row) = position_of(&screen, "→");
+        click(&mut app, column as u16, row as u16);
+
+        let popup = app.popup.as_ref().expect("the marker opens the overlay");
+        assert_eq!(popup.items.len(), 2, "Browser and Code");
+        assert!(
+            app.state.categories[0].is_unchecked(),
+            "the click must not also tick the category",
+        );
+    }
+
+    /// A category with no subcategories draws no marker, so it must have no
+    /// marker target either — otherwise the target would sit on top of the cell
+    /// and quietly take its clicks away.
+    #[test]
+    fn a_category_without_subcategories_keeps_its_whole_cell_clickable() {
+        let mut app = uneven_grid_app();
+        // `Logs` has no subcategories, so its cell has no arrow: clicking the
+        // name has to tick it, not open an overlay.
+        let screen = draw(&mut app, 100, 30);
+        let (column, row) = position_of(&screen, "Logs");
+        click(&mut app, column as u16, row as u16);
+        assert!(
+            app.state.categories[1].is_checked(),
+            "the whole cell ticks, with no overlay target in the way",
+        );
+        assert!(app.popup.is_none(), "there is nothing to open");
+    }
+
+    #[test]
+    fn clicking_next_advances_to_the_program_page() {
+        let mut app = sample_app();
+        // Nothing selected yet: the click must be refused, with the same answer
+        // `n` gives.
+        click_on(&mut app, 100, 30, "Next");
+        assert_eq!(app.state.current_page, Page::Main, "nothing selected yet");
+
+        click_on(&mut app, 100, 30, "Cache");
+        click_on(&mut app, 100, 30, "Next");
+        assert_eq!(app.state.current_page, Page::ProgramSelection);
+    }
+
+    #[test]
+    fn clicking_a_program_row_toggles_it() {
+        let mut app = sample_app();
+        press(&mut app, KeyCode::Char(' '));
+        press(&mut app, KeyCode::Char('n'));
+        // The list arrives pre-selected, so this clears and re-selects it.
+        click_on(&mut app, 100, 30, "Chrome");
+        assert!(!app.state.is_program_checked(0), "Chrome was excluded");
+        assert_eq!(app.program_cursor, 0);
+        click_on(&mut app, 100, 30, "Chrome");
+        assert!(app.state.is_program_checked(0), "and back on");
+    }
+
+    /// A program in several categories carries the `→ N` marker, which opens its
+    /// category overlay rather than ticking it — the same split as the category
+    /// grid, and the only mouse route to per-category exclusions.
+    #[test]
+    fn clicking_a_program_marker_opens_its_categories() {
+        let mut app = sample_app();
+        // Both categories, so Firefox really spans two of them and gets a marker.
+        press(&mut app, KeyCode::Char(' '));
+        press(&mut app, KeyCode::Tab);
+        press(&mut app, KeyCode::Char(' '));
+        press(&mut app, KeyCode::Char('n'));
+
+        let screen = draw(&mut app, 100, 30);
+        let (_, row) = position_of(&screen, "Firefox");
+        // The marker follows the name on that row.
+        let line = screen.lines().nth(row).expect("the row is on screen");
+        let marker = column_of(line, "→").expect("Firefox is in two categories");
+        click(&mut app, marker as u16, row as u16);
+
+        let popup = app.popup.as_ref().expect("the marker opens the overlay");
+        assert_eq!(popup.items.len(), 2, "Cache and Logs");
+    }
+
+    /// The overlay is modal for the mouse exactly as it is for the keyboard: a
+    /// click beside it dismisses it instead of reaching the page underneath.
+    #[test]
+    fn clicking_outside_the_overlay_dismisses_it() {
+        let mut app = sample_app();
+        press(&mut app, KeyCode::Right);
+        assert!(app.popup.is_some());
+
+        click_on(&mut app, 100, 30, "Categories");
+        assert!(app.popup.is_none(), "a click outside dismisses");
+        assert!(!app.state.has_selection(), "and changes nothing else");
+    }
+
+    #[test]
+    fn clicking_an_overlay_entry_toggles_it() {
+        let mut app = sample_app();
+        press(&mut app, KeyCode::Right);
+        click_on(&mut app, 100, 30, "Browser");
+        assert!(
+            app.state.categories[0].selected.contains("Browser"),
+            "the clicked entry is the one that changed",
+        );
+        assert!(app.popup.is_some(), "the overlay stays open");
+
+        click_on(&mut app, 100, 30, "Code");
+        assert!(
+            app.state.categories[0].selected.contains("Code"),
+            "the second entry toggles on its own",
+        );
+    }
+
+    #[test]
+    fn clicking_the_search_field_puts_the_caret_in_it() {
+        let mut app = sample_app();
+        press(&mut app, KeyCode::Char(' '));
+        press(&mut app, KeyCode::Char('n'));
+        assert_eq!(app.input, InputMode::Normal);
+
+        click_on(&mut app, 100, 30, "Search:");
+        assert_eq!(
+            app.input,
+            InputMode::Editing,
+            "clicking the field types into it",
+        );
+        // ...and the keystrokes reach the query.
+        for c in "fox".chars() {
+            press(&mut app, KeyCode::Char(c));
+        }
+        assert_eq!(app.state.search_query_visible, "fox");
+    }
+
+    /// The volume bar is the terminal stand-in for the window frontend's slider:
+    /// a click sets the level under the pointer rather than stepping it.
+    #[test]
+    fn clicking_a_volume_bar_sets_the_level_under_the_pointer() {
+        let mut app = sample_app();
+        app.state.current_page = Page::Settings;
+        let screen = draw(&mut app, 100, 30);
+        let (column, row) = position_of(&screen, "Popup sound");
+        // The bar follows the label, one space along — `register_rows` measures
+        // the same columns.
+        let bar_left = column + "Popup sound ".len();
+        let bar_width = pages::settings::BAR_WIDTH;
+        click(&mut app, (bar_left + bar_width / 4) as u16, row as u16);
+        let level = appcore::config::get().sound_volume;
+        assert!(
+            (0.2..0.3).contains(&level),
+            "expected about a quarter, got {level}",
+        );
+
+        // The far left of the bar is silence, and the right end is full.
+        click(&mut app, bar_left as u16, row as u16);
+        assert_eq!(appcore::config::get().sound_volume, 0.0);
+        click(&mut app, (bar_left + bar_width - 1) as u16, row as u16);
+        assert_eq!(appcore::config::get().sound_volume, 1.0);
+
+        // Clicking the row outside the bar only moves the cursor.
+        click(&mut app, column as u16, row as u16);
+        assert_eq!(app.settings_cursor, 0);
+
+        // Put the shared config back so the test does not leak state.
+        appcore::config::update(|c| *c = AppConfig::default());
+    }
+
+    #[test]
+    fn clicking_a_volume_row_selects_it_for_the_arrow_keys() {
+        let mut app = sample_app();
+        app.state.current_page = Page::Settings;
+        let screen = draw(&mut app, 100, 30);
+        let (column, row) = position_of(&screen, "Done sound");
+        click(&mut app, column as u16, row as u16);
+        assert_eq!(app.settings_cursor, 3);
+
+        // ...so the arrow keys act on the row the mouse chose.
+        press(&mut app, KeyCode::Left);
+        assert!(
+            appcore::config::get().done_volume < 1.0,
+            "the click's row is the one that gets adjusted",
+        );
+        appcore::config::update(|c| *c = AppConfig::default());
+    }
+
+    /// A click is a press. Acting on the release as well would fire every action
+    /// twice, which for `Start Cleaning` would start two cleaning jobs.
+    #[test]
+    fn a_click_does_not_fire_twice_on_the_release() {
+        let mut app = sample_app();
+        app.state.toggle_category(0);
+        app.state.current_page = Page::ProgramSelection;
+        app.state.build_program_list();
+        draw(&mut app, 100, 30);
+        let screen = draw(&mut app, 100, 30);
+        let (column, row) = position_of(&screen, "Chrome");
+
+        app.on_event(Event::Mouse(MouseEvent {
+            kind: MouseEventKind::Up(MouseButton::Left),
+            column: column as u16,
+            row: row as u16,
+            modifiers: KeyModifiers::NONE,
+        }));
+        assert!(
+            app.state.is_program_checked(0),
+            "the release must not toggle it back",
+        );
+    }
+
+    /// Dragging across the screen must not tick everything it passes over.
+    #[test]
+    fn dragging_the_button_across_the_grid_ticks_one_category() {
+        let mut app = many_categories(6);
+        let screen = draw(&mut app, 100, 30);
+        let (column, row) = position_of(&screen, "Cat0");
+        click(&mut app, column as u16, row as u16);
+        let (column, _) = position_of(&screen, "Cat5");
+        app.on_event(Event::Mouse(MouseEvent {
+            kind: MouseEventKind::Drag(MouseButton::Left),
+            column: column as u16,
+            row: row as u16,
+            modifiers: KeyModifiers::NONE,
+        }));
+        let ticked = app
+            .state
+            .categories
+            .iter()
+            .filter(|category| !category.is_unchecked())
+            .count();
+        assert_eq!(ticked, 1, "only the press is an action");
+    }
+
+    /// A target from a page that is no longer on screen must not answer clicks.
+    #[test]
+    fn a_widget_stops_answering_once_the_page_is_gone() {
+        let mut app = sample_app();
+        app.state.toggle_category(0);
+        let screen = draw(&mut app, 100, 30);
+        let (column, row) = position_of(&screen, "Next");
+        assert_eq!(
+            app.hits.at(column as u16, row as u16),
+            Some(Click::Next),
+            "the button answers while it is on screen",
+        );
+
+        // Same position, but a page with nothing drawn there. The target is
+        // rebuilt on every frame, so the one from the previous frame is gone.
+        app.state.current_page = Page::Settings;
+        let _ = draw(&mut app, 100, 30);
+        assert_eq!(
+            app.hits.at(column as u16, row as u16),
+            None,
+            "last frame's target must not survive the page change",
+        );
+    }
+
+    /// Every page has to survive being drawn and clicked at its own corners,
+    /// including while an overlay is up.
+    #[test]
+    fn clicking_never_panics_on_any_page_or_terminal_size() {
+        let mut app = sample_app();
+        app.state.toggle_category(0);
+        for (width, height) in [(100, 30), (20, 6), (8, 3), (1, 1)] {
+            for page in [
+                Page::Main,
+                Page::ProgramSelection,
+                Page::Clearing,
+                Page::Results,
+                Page::Settings,
+            ] {
+                app.state.current_page = page;
+                draw(&mut app, width, height);
+                for column in 0..width {
+                    for row in 0..height {
+                        click(&mut app, column, row);
+                    }
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn the_wheel_scrolls_the_program_list_and_the_changelog() {
+        let mut app = sample_app();
+        press(&mut app, KeyCode::Char(' '));
+        press(&mut app, KeyCode::Char('n'));
+        assert_eq!(app.program_cursor, 0);
+        wheel(&mut app, 1);
+        assert!(
+            app.program_cursor > 0,
+            "the wheel moves the cursor on a list",
+        );
+
+        // On the changelog the wheel scrolls the content itself, which is the one
+        // place the content is longer than the window.
+        app.changelog = Some(long_changelog());
+        press(&mut app, KeyCode::Char('?'));
+        assert_eq!(app.changelog_scroll, 0);
+        wheel(&mut app, 2);
+        let scrolled = app.changelog_scroll;
+        assert!(scrolled > 0, "the wheel scrolls the changelog");
+        wheel(&mut app, -1);
+        assert!(app.changelog_scroll < scrolled, "and back up");
+
+        // And it is clamped by the render, not by the wheel.
+        wheel(&mut app, 1_000);
+        draw(&mut app, 60, 24);
+        assert!(app.changelog_scroll <= app.changelog_max_scroll);
+    }
+
+    /// The overlay stays modal for the wheel too: it moves the overlay's
+    /// selection instead of the page behind it.
+    #[test]
+    fn the_wheel_moves_the_overlay_selection_not_the_page() {
+        let mut app = sample_app();
+        press(&mut app, KeyCode::Right);
+        assert!(app.popup.is_some());
+        wheel(&mut app, 1);
+        assert_eq!(
+            app.popup.as_ref().and_then(|popup| popup.list.selected()),
+            Some(1),
+            "the overlay's selection moved",
+        );
+    }
+
+    /// Every dialog choice is clickable, and a click reaches the same action its
+    /// key does — including the guard that a running download refuses.
+    #[test]
+    fn the_update_dialog_answers_clicks_like_keys() {
+        let (mut app, rx) = app_with_update();
+        app.update_open = true;
+
+        let screen = draw(&mut app, 100, 30);
+        let (column, row) = position_of(&screen, "download and install");
+        click(&mut app, column as u16, row as u16);
+        assert!(
+            updater::current(&app.updater_state).is_running(),
+            "clicking `d` starts the download, as pressing it does",
+        );
+        assert!(
+            matches!(rx.try_recv(), Ok(UpdaterCommand::Install(_))),
+            "and hands the release to the worker",
+        );
+
+        // A click is a dismissal, so a running download has to refuse it exactly
+        // as it refuses `Esc` — otherwise the mouse is a way around the guard.
+        // The backdrop is the whole screen, so any column will do.
+        let screen = draw(&mut app, 100, 30);
+        let (column, row) = position_of(&screen, "downloading");
+        click(&mut app, column as u16, row as u16);
+        assert!(
+            app.update_open,
+            "a running download must not be dismissible by a click",
+        );
+    }
+
+    /// A click beside the dialog dismisses it, and `Esc` still does.
+    #[test]
+    fn clicking_beside_the_update_dialog_dismisses_it() {
+        let (mut app, _rx) = app_with_update();
+        app.update_open = true;
+        let screen = draw(&mut app, 100, 30);
+        let (column, row) = position_of(&screen, "Categories");
+        click(&mut app, column as u16, row as u16);
+        assert!(!app.update_open, "the backdrop dismisses the dialog");
+    }
+
+    /// The changelog is text, so a click anywhere on it closes it — there is
+    /// nothing in it to hit but the dismissal.
+    #[test]
+    fn clicking_the_changelog_closes_it() {
+        let mut app = sample_app();
+        app.changelog = Some(long_changelog());
+        press(&mut app, KeyCode::Char('?'));
+        let screen = draw(&mut app, 60, 24);
+        let (column, row) = position_of(&screen, "What's New");
+        click(&mut app, column as u16, row as u16);
+        assert!(!app.changelog_open);
+    }
+
+    /// A click must be routed while an overlay owns the screen, and must not
+    /// double-handle an overlay's key press.
+    #[test]
+    fn a_click_is_routed_through_the_overlay_that_is_open() {
+        let mut app = sample_app();
+        press(&mut app, KeyCode::Right);
+        assert!(app.popup.is_some());
+        // The popup is registered after the page, so its targets sit on top: a
+        // click on a page button must not fire while the overlay is up.
+        let screen = draw(&mut app, 100, 30);
+        let (column, row) = position_of(&screen, "Next");
+        click(&mut app, column as u16, row as u16);
+        assert_eq!(
+            app.state.current_page,
+            Page::Main,
+            "the page underneath must not act",
+        );
+        assert!(app.popup.is_none(), "the click dismissed the overlay");
+    }
+
     #[test]
     fn escape_goes_back_then_quits_from_the_main_page() {
         let mut app = sample_app();
@@ -2598,7 +3449,8 @@ mod tests {
     fn release() -> NewRelease {
         NewRelease {
             version: "9.9.9".to_string(),
-            url: "https://github.com/WinBooster/Cross-Cleaner/releases/tag/v9.9.9".to_string(),
+            url: "https://github.com/Cross-Optimizations/Cross-Cleaner/releases/tag/v9.9.9"
+                .to_string(),
             asset_url: Some("https://example.invalid/tui".to_string()),
             asset_size: Some(4096),
         }
