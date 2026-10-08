@@ -205,15 +205,27 @@ runs:
         EPOCH: ${{ steps.ver.outputs.epoch }}
       run: |
         set -euo pipefail
+        # nfpm parses `mtime` as an RFC3339 timestamp, not as a Unix epoch.
+        # Handing it the raw integer fails at package time with a confusing
+        # parse error that names a fragment of the number rather than the field,
+        # so the conversion happens here and is checked before nfpm runs.
+        mtime="$(date -u -d "@$EPOCH" +%Y-%m-%dT%H:%M:%SZ)"
+        if ! date -u -d "$mtime" +%Y-%m-%dT%H:%M:%SZ >/dev/null 2>&1; then
+          echo "::error::commit epoch '$EPOCH' did not convert to a valid RFC3339 time"
+          exit 1
+        fi
         sed -e "s/%%VERSION%%/${VERSION}/g" \
             -e "s/%%RELEASE%%/${REVISION}/g" \
             -e "s/%%DEB_ARCH%%/${DEB_ARCH}/g" \
-            -e "s/%%SOURCE_DATE_EPOCH%%/${EPOCH}/g" \
+            -e "s/%%MTIME%%/${mtime}/g" \
             packaging/linux/nfpm.yaml > target/pkg/nfpm.yaml
         if grep -q '%%' target/pkg/nfpm.yaml; then
           echo "::error::unsubstituted placeholder left in nfpm.yaml"
           exit 1
         fi
+        # Echo the substituted fields, so a bad value shows up in the log before
+        # the package step instead of as a parse error after it.
+        grep -E '^(arch|version|release|mtime):' target/pkg/nfpm.yaml
         # No version in the filename, on purpose. GitHub serves
         # /releases/latest/download/<asset> only for assets whose name does not
         # change between releases, and that is what lets the website link straight

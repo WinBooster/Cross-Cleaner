@@ -4,7 +4,7 @@
 #   %%VERSION%%           2.0.2.5 -> 2.0.2
 #   %%RELEASE%%           2.0.2.5 -> 5, giving the Debian version 2.0.2-5
 #   %%DEB_ARCH%%          amd64 or arm64
-#   %%SOURCE_DATE_EPOCH%% the commit timestamp, so the archive is reproducible
+#   %%MTIME%%             commit timestamp as RFC3339, so the archive is reproducible
 #
 # The file layout mirrors the AppImage built by the same action: both ship the
 # window app as `cross-cleaner` and the terminal app as `cross-cleaner-tui`.
@@ -20,9 +20,11 @@ maintainer: WinBooster
 vendor: WinBooster
 homepage: https://winbooster.github.io/
 license: GPL-3.0-or-later
-# Reproducible builds: the archive is normalised by nfpm, and SOURCE_DATE_EPOCH
-# is set by the workflow from the commit.
-mtime: "%%SOURCE_DATE_EPOCH%%"
+# Reproducible builds: nfpm stamps every archive entry with this, so two
+# builds of the same commit produce the same bytes. The value must be an
+# RFC3339 timestamp -- nfpm parses this field as a time, and passing a raw Unix
+# epoch integer fails with `Parsing time ... as 2006-01-02T15:04:05Z07:00`.
+mtime: "%%MTIME%%"
 
 description: |
   Cross Cleaner removes temporary files, cache and other system junk.
