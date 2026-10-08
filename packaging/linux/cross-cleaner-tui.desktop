@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Cross Cleaner (Terminal)
+GenericName=System Cleaner
+Comment=Remove temporary files, cache and system junk from a terminal
+Exec=cross-cleaner-tui
+Icon=cross-cleaner
+# A TUI needs a real terminal to draw into; without this the entry is a dead
+# icon when launched from a file manager.
+Terminal=true
+Categories=System;Utility;ConsoleOnly;
+StartupNotify=false

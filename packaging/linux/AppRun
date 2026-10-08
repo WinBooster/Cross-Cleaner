@@ -1,0 +1,16 @@
+#!/bin/sh
+# AppRun for the Cross Cleaner AppImage.
+#
+# AppImageLauncher and desktop environments launch the AppImage itself, which
+# lands here. Putting the AppDir's usr/bin on PATH first means the desktop
+# entry's `Exec=cross-cleaner` also resolves when the .desktop file is copied
+# into the user's applications directory and the launcher re-reads it.
+set -eu
+
+HERE="$(dirname "$(readlink -f "$0")")"
+export PATH="$HERE/usr/bin:$PATH"
+
+# Everything else lives in the AppDir, not the real root: the cleaner asks the
+# OS for well-known locations through $HOME and /tmp, and the desktop
+# integration is already resolved through PATH above.
+exec cross-cleaner "$@"

@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Application
+Name=Cross Cleaner
+GenericName=System Cleaner
+Comment=Remove temporary files, cache and system junk
+# Plain binary name, not a release asset name: this file is installed by dpkg
+# and mounted by AppImage, so Exec must stay stable across releases.
+Exec=cross-cleaner
+Icon=cross-cleaner
+Terminal=false
+Categories=System;Utility;Filesystem;
+# winit falls back to the executable name for X11 WM_CLASS when the app sets
+# no explicit app id, and the packaged binary is `cross-cleaner`. If a future
+# build sets one, this line has to follow it or the icon stops matching the
+# window under GNOME's shell.
+StartupWMClass=cross-cleaner
+StartupNotify=true

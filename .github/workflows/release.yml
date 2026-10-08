@@ -162,6 +162,79 @@ jobs:
           path: |
             Linux-Arm64-Cross_Cleaner_GUI
             Linux-Arm64-Cross_Cleaner_TUI
+  build_linux_packages:
+    # Distribution packages for Linux, published next to the portable binaries.
+    #
+    # Two deliberate differences from `build_linux`:
+    #
+    # 1. `self-update` is compiled OUT. Both crates document why in their
+    #    Cargo.toml: a package-manager install owns its version, so the app
+    #    must neither advertise a newer release nor replace the file dpkg or
+    #    AppImage put on disk. Building these packages with the default
+    #    features would ship something that fights its own package manager.
+    # 2. The binaries land as `cross-cleaner` and `cross-cleaner-tui`, not as
+    #    `Linux-Cross_Cleaner_GUI`, because a desktop entry's Exec line and a
+    #    symlink in /usr/bin need a name that does not change every release.
+    #
+    # Everything generated lands under target/pkg, which is gitignored. The
+    # sibling `formating_code` job runs `git add .` and pushes, so build output
+    # anywhere else would end up committed.
+    #
+    # The packaging itself is a composite action shared with the arm64 job, so
+    # the two cannot drift apart.
+    runs-on: ubuntu-24.04
+    needs: [sort_json]
+    permissions: write-all
+    name: Build Linux packages x64 (.deb, .AppImage)
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libasound2-dev
+
+      - name: Build binaries without self-update
+        run: cargo +nightly build --release -p desktop --no-default-features
+      - name: Build terminal binary without self-update
+        run: cargo +nightly build --release -p tui --no-default-features
+
+      - name: Package
+        uses: ./.github/actions/linux-package
+        with:
+          arch: x86_64
+          artifact-name: linux-packages
+          app-version: ${{ env.APP_VERSION }}
+
+  build_linux_packages_arm64:
+    # Native arm64 runner, so this is the same job as `build_linux_packages` on a
+    # different CPU rather than a cross-compile. There is no cross-compiled .deb:
+    # dpkg and AppImage both encode the target architecture in the artifact, so
+    # the payload has to be built for it.
+    runs-on: ubuntu-24.04-arm
+    needs: [sort_json]
+    permissions: write-all
+    name: Build Linux packages arm64 (.deb, .AppImage)
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libasound2-dev
+
+      - name: Build binaries without self-update
+        run: cargo +nightly build --release -p desktop --no-default-features
+      - name: Build terminal binary without self-update
+        run: cargo +nightly build --release -p tui --no-default-features
+
+      - name: Package
+        uses: ./.github/actions/linux-package
+        with:
+          arch: aarch64
+          artifact-name: linux-packages-arm64
+          app-version: ${{ env.APP_VERSION }}
+
   build_windows:
     runs-on: windows-latest
     needs: [sort_json]
@@ -320,6 +393,8 @@ jobs:
       [
         build_linux,
         build_linux_arm64,
+        build_linux_packages,
+        build_linux_packages_arm64,
         build_windows,
         build_windows_arm64,
         build_macos_arm64,
@@ -342,6 +417,16 @@ jobs:
         with:
           name: linux-binaries-arm64
           path: linux-binaries-arm64
+      - name: Download Linux packages (.deb, .AppImage)
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-packages
+          path: linux-packages
+      - name: Download Linux arm64 packages (.deb, .AppImage)
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-packages-arm64
+          path: linux-packages-arm64
       - name: Download Windows artifacts
         uses: actions/download-artifact@v4
         with:
@@ -376,17 +461,25 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.APP_VERSION }}
-          name: 🌟 Cross Cleaner ${{ env.APP_VERSION }} 🌟
+          name: рџЊџ Cross Cleaner ${{ env.APP_VERSION }} рџЊџ
           body: |
             ![Downloads](https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/v${{ env.APP_VERSION }}/total) ![Version](https://img.shields.io/badge/version-${{ env.APP_VERSION }}-blue) ![Platform](https://img.shields.io/badge/platform-Windows%20|%20Linux%20|%20MacOS%20|%20Android-orange)
 
-            ## ✨ What's New
+            ## вњЁ What's New
 
-            ### 🛠 Technical Updates
+            ### рџ›  Technical Updates
             - Auto updates
             - Native arm64 builds for Linux and Windows, including an arm64 installer
 
-            ## 👏 Contributors Hall of Fame
+            ### рџ“¦ Linux packages
+            Install with your package manager, or grab the AppImage and run it in place:
+            ```bash
+            # Debian / Ubuntu
+            sudo apt install ./cross-cleaner_*_amd64.deb
+            ```
+            Built for x86_64 and arm64; the arm64 package ends in `_arm64.deb`. Both ship without the self-update feature on purpose, so apt owns the version.
+
+            ## рџ‘Џ Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:
             - **@Nekiplay** - Core improvements and feature implementations
 
@@ -397,6 +490,10 @@ jobs:
             linux-binaries/Linux-Cross_Cleaner_TUI
             linux-binaries-arm64/Linux-Arm64-Cross_Cleaner_GUI
             linux-binaries-arm64/Linux-Arm64-Cross_Cleaner_TUI
+            linux-packages/*.deb
+            linux-packages/*.AppImage
+            linux-packages-arm64/*.deb
+            linux-packages-arm64/*.AppImage
             macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_GUI
             macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_TUI
             windows-binaries/Windows-Cross_Cleaner_GUI.exe

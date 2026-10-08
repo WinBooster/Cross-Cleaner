@@ -1,0 +1,338 @@
+name: Build Cross Cleaner Linux packages
+description: >-
+  Builds a .deb and an .AppImage from binaries that are already compiled, for
+  either x86_64 or aarch64. Kept as a composite action so the x64 and arm64
+  jobs cannot drift apart: every change to the nfpm pin, the icon set or the
+  verification steps has to be made once, in one file.
+
+inputs:
+  arch:
+    description: >-
+      Target architecture, using the Rust/Rustup spelling. x86_64 or aarch64.
+      Everything else is derived from this: the Debian architecture
+      (amd64/arm64), the nfpm release asset and the appimagetool asset all
+      differ from it, and each is wrong at least once if it is spelled out
+      separately at the call site.
+    required: true
+  artifact-name:
+    description: Name for the uploaded artifact holding the .deb and the AppImage.
+    required: true
+  app-version:
+    description: >-
+      The four-part application version from the workflow input, e.g. 2.0.2.5.
+      Passed in explicitly rather than read from the caller's `env:` block: a
+      workflow-level env var is not reliably exposed through the `env` context
+      inside a composite action, so relying on it works on some runner versions
+      and silently produces an empty string on others.
+    required: true
+  nfpm-version:
+    description: >-
+      nfpm release to package with. Pinned rather than tracking latest so a
+      release cannot silently change its packager; bump it here to upgrade.
+    required: false
+    default: '2.47.0'
+
+runs:
+  using: composite
+  steps:
+    # ── Architecture mapping ──────────────────────────────────────────────
+    # Declared once, checked immediately. Every downstream name depends on these
+    # three being right, and a typo here surfaces as a 404 much later.
+    - name: Resolve architecture names
+      id: arch
+      shell: bash
+      env:
+        ARCH_IN: ${{ inputs.arch }}
+      run: |
+        set -euo pipefail
+        case "$ARCH_IN" in
+          x86_64)
+            deb_arch=amd64     # Debian
+            nfpm_arch=x86_64   # nfpm release asset suffix
+            ;;
+          aarch64)
+            deb_arch=arm64
+            nfpm_arch=arm64
+            ;;
+          *)
+            echo "::error::unsupported arch '$ARCH_IN' (expected x86_64 or aarch64)"
+            exit 1
+            ;;
+        esac
+        echo "deb-arch=$deb_arch" >> "$GITHUB_OUTPUT"
+        echo "nfpm-arch=$nfpm_arch" >> "$GITHUB_OUTPUT"
+
+    - name: Install packaging dependencies
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends \
+          imagemagick \
+          desktop-file-utils \
+          file
+        # appstreamcli is only used for the informational metadata check below;
+        # appimagetool is invoked with --no-appstream so a metadata lint can
+        # never abort the release.
+        sudo apt-get install -y --no-install-recommends appstream || \
+          echo "::warning::appstream unavailable, skipping metadata validation"
+
+    - name: Fetch nfpm
+      shell: bash
+      env:
+        NFPM_VERSION: ${{ inputs.nfpm-version }}
+        NFPM_ARCH: ${{ steps.arch.outputs.nfpm-arch }}
+      run: |
+        set -euo pipefail
+        url="https://github.com/goreleaser/nfpm/releases/download/v${NFPM_VERSION}/nfpm_${NFPM_VERSION}_Linux_${NFPM_ARCH}.tar.gz"
+        curl -sSfL -o /tmp/nfpm.tar.gz "$url"
+        # checksums.txt ships alongside the release; verifying against it is the
+        # only thing standing between this job and a compromised download being
+        # packaged into a release artifact.
+        curl -sSfL -o /tmp/nfpm-checksums.txt \
+          "https://github.com/goreleaser/nfpm/releases/download/v${NFPM_VERSION}/checksums.txt"
+        expected="$(grep " nfpm_${NFPM_VERSION}_Linux_${NFPM_ARCH}.tar.gz$" /tmp/nfpm-checksums.txt | awk '{print $1}')"
+        actual="$(sha256sum /tmp/nfpm.tar.gz | awk '{print $1}')"
+        if [ -z "$expected" ] || [ "$expected" != "$actual" ]; then
+          echo "::error::nfpm checksum mismatch for ${NFPM_ARCH} (expected '$expected', got '$actual')"
+          exit 1
+        fi
+        # sudo because /usr/local/bin is root-owned on the runner image.
+        sudo tar -xzf /tmp/nfpm.tar.gz -C /usr/local/bin nfpm
+        nfpm --version
+
+    - name: Derive package versions
+      id: ver
+      shell: bash
+      env:
+        APP_VERSION: ${{ inputs.app-version }}
+      run: |
+        set -euo pipefail
+        # The app version has four parts (2.0.2.5). Debian splits that into an
+        # upstream version and a revision, so the fourth part becomes the
+        # revision: 2.0.2.5 -> 2.0.2-5. This keeps Debian's ordering right when a
+        # later release drops back to three parts, since 2.0.3 sorts above
+        # 2.0.2-5, whereas a flat 2.0.2.5 would not.
+        version="$(echo "$APP_VERSION" | cut -d. -f1-3)"
+        revision="$(echo "$APP_VERSION" | cut -d. -f4- | tr -d '[:space:]')"
+        revision="${revision:-1}"
+        # Written as `if ! grep ...; then` rather than `grep ... && fail`: under
+        # `set -e` an AND-OR list leaves the script with exit status 1 when grep
+        # succeeds, which would fail the step on the happy path.
+        if ! grep -Eq '^[0-9]+(\.[0-9A-Za-z]+)*$' <<<"$version"; then
+          echo "::error::bad upstream version '$version' from APP_VERSION=$APP_VERSION"
+          exit 1
+        fi
+        if ! grep -Eq '^[0-9A-Za-z.+~]+$' <<<"$revision"; then
+          echo "::error::bad revision '$revision' from APP_VERSION=$APP_VERSION"
+          exit 1
+        fi
+        echo "APP_VERSION=$APP_VERSION -> ${version}-${revision} (${{ inputs.arch }})"
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+        echo "revision=$revision" >> "$GITHUB_OUTPUT"
+        # nfpm normalises mtime from this, which makes the .deb reproducible
+        # across rebuilds of the same commit.
+        echo "epoch=$(git log -1 --pretty=%ct)" >> "$GITHUB_OUTPUT"
+
+    - name: Report runtime library requirements
+      # Informational, and the reason `depends` in nfpm.yaml is maintained by
+      # hand: when a new shared library starts being linked, it shows up here
+      # first instead of as a crash on a user's desktop.
+      shell: bash
+      run: |
+        echo "== cross-cleaner =="
+        ldd target/release/desktop | sort
+        echo "== cross-cleaner-tui =="
+        ldd target/release/tui | sort
+
+    - name: Generate hicolor icons
+      shell: bash
+      env:
+        PKG: cross-cleaner
+      run: |
+        set -euo pipefail
+        # crates/winicon/assets/icon.ico is a single 96px DIB frame, so 128 and
+        # 256 are upscaled rather than downscaled. Adding a >=512px master PNG to
+        # the repo is what makes those sizes sharp.
+        src="crates/winicon/assets/icon.ico"
+        for size in 48 96 128 256; do
+          out="target/pkg/icons/${size}x${size}/apps"
+          mkdir -p "$out"
+          convert -background none "$src" -filter Lanczos -resize "${size}x${size}" \
+            PNG32:"$out/${PKG}.png"
+        done
+        convert -background none "$src" -filter Lanczos -resize 256x256 \
+          PNG32:"target/pkg/${PKG}.png"
+        cp "target/pkg/icons/256x256/apps/${PKG}.png" "target/pkg/.DirIcon"
+        find target/pkg -name '*.png' -exec identify {} \;
+
+    - name: Validate and render AppStream metadata
+      shell: bash
+      env:
+        PKG: cross-cleaner
+        APP_VERSION: ${{ inputs.app-version }}
+        EPOCH: ${{ steps.ver.outputs.epoch }}
+      run: |
+        set -euo pipefail
+        sed -e "s/%%VERSION%%/${APP_VERSION}/g" \
+            -e "s/%%DATE%%/$(date -u -d "@$EPOCH" +%Y-%m-%d)/g" \
+            packaging/linux/cross-cleaner.appdata.xml > "target/pkg/${PKG}.appdata.xml"
+        if grep -q '%%' "target/pkg/${PKG}.appdata.xml"; then
+          echo "::error::unsubstituted placeholder left in appdata"
+          exit 1
+        fi
+        # appimagetool would run this itself, but on failure it aborts the whole
+        # release. Reporting it separately and non-fatally keeps a metadata lint
+        # from breaking the build while still surfacing it.
+        appstreamcli validate --pedantic "target/pkg/${PKG}.appdata.xml" || \
+          echo "::warning::appstreamcli reported issues (not fatal)"
+
+    - name: Validate desktop entries
+      shell: bash
+      run: |
+        set -euo pipefail
+        desktop-file-validate packaging/linux/cross-cleaner.desktop
+        desktop-file-validate packaging/linux/cross-cleaner-tui.desktop
+
+    - name: Build .deb
+      shell: bash
+      env:
+        PKG: cross-cleaner
+        DEB_ARCH: ${{ steps.arch.outputs.deb-arch }}
+        VERSION: ${{ steps.ver.outputs.version }}
+        REVISION: ${{ steps.ver.outputs.revision }}
+        EPOCH: ${{ steps.ver.outputs.epoch }}
+      run: |
+        set -euo pipefail
+        sed -e "s/%%VERSION%%/${VERSION}/g" \
+            -e "s/%%RELEASE%%/${REVISION}/g" \
+            -e "s/%%DEB_ARCH%%/${DEB_ARCH}/g" \
+            -e "s/%%SOURCE_DATE_EPOCH%%/${EPOCH}/g" \
+            packaging/linux/nfpm.yaml > target/pkg/nfpm.yaml
+        if grep -q '%%' target/pkg/nfpm.yaml; then
+          echo "::error::unsubstituted placeholder left in nfpm.yaml"
+          exit 1
+        fi
+        nfpm package \
+          --config target/pkg/nfpm.yaml \
+          --packager deb \
+          --target "target/pkg/${PKG}_${VERSION}-${REVISION}_${DEB_ARCH}.deb"
+
+    - name: Verify .deb
+      shell: bash
+      run: |
+        set -euo pipefail
+        deb=$(ls target/pkg/*.deb)
+        echo "== control =="
+        dpkg-deb --info "$deb" | sed -n '1,20p'
+        echo "== contents =="
+        dpkg-deb --contents "$deb"
+        # The architecture in the filename has to match what nfpm wrote into the
+        # control file, or apt installs a foreign-architecture package.
+        control_arch="$(dpkg-deb --field "$deb" Architecture)"
+        case "$control_arch" in
+          amd64|arm64) ;;
+          *) echo "::error::unexpected control Architecture '$control_arch'"; exit 1 ;;
+        esac
+        dpkg-deb --extract "$deb" target/pkg/extracted
+        test -x target/pkg/extracted/usr/bin/cross-cleaner
+        test -x target/pkg/extracted/usr/bin/cross-cleaner-tui
+        # The packaged ELF must match the runner's architecture, which is the
+        # real check that the arm64 job did not accidentally package x86_64.
+        file target/pkg/extracted/usr/bin/cross-cleaner | grep -qi "${{ inputs.arch }}"
+        # Canary: the self-update feature was compiled out, so the linked symbols
+        # of the `selfupdate` crate must not be in the binary. Its download URL is
+        # not hardcoded (it comes from the API response), so the crate name is the
+        # only marker available. Matching lines are printed so a false positive
+        # from some other crate is immediately diagnosable rather than looking
+        # like a broken package.
+        if strings target/pkg/extracted/usr/bin/cross-cleaner | grep -i 'selfupdate' | tee /tmp/canary.txt | grep -q .; then
+          echo "::error::self-update code linked into a --no-default-features build:"
+          cat /tmp/canary.txt
+          exit 1
+        fi
+
+    - name: Build .AppImage
+      shell: bash
+      env:
+        ARCH: ${{ inputs.arch }}
+        PKG: cross-cleaner
+        VERSION: ${{ steps.ver.outputs.version }}
+        REVISION: ${{ steps.ver.outputs.revision }}
+      run: |
+        set -euo pipefail
+        curl -sSfL -o /tmp/appimagetool.AppImage \
+          "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${ARCH}.AppImage"
+        chmod +x /tmp/appimagetool.AppImage
+
+        rm -rf target/pkg/AppDir
+        mkdir -p target/pkg/AppDir/usr/bin target/pkg/AppDir/usr/share/metainfo \
+                 target/pkg/AppDir/usr/share/icons
+        cp target/release/desktop target/pkg/AppDir/usr/bin/cross-cleaner
+        # The TUI ships too, so `AppRun cross-cleaner-tui` works after
+        # extracting, even though the AppImage icon launches the window app.
+        cp target/release/tui target/pkg/AppDir/usr/bin/cross-cleaner-tui
+        cp packaging/linux/AppRun target/pkg/AppDir/AppRun
+        chmod +x target/pkg/AppDir/AppRun
+        # The desktop file has to sit at the AppDir root, not in
+        # usr/share/applications, or appimagetool will not find it.
+        cp packaging/linux/cross-cleaner.desktop target/pkg/AppDir/cross-cleaner.desktop
+        cp "target/pkg/${PKG}.appdata.xml" "target/pkg/AppDir/usr/share/metainfo/${PKG}.appdata.xml"
+        # The destination is created explicitly: `cp -r src/. dst/` does not
+        # create dst itself, and fails under `set -e`.
+        cp -r target/pkg/icons/. target/pkg/AppDir/usr/share/icons/
+        # The icon must be at the AppDir root, named after the desktop file.
+        cp "target/pkg/${PKG}.png" "target/pkg/AppDir/${PKG}.png"
+        cp target/pkg/.DirIcon target/pkg/AppDir/.DirIcon
+
+        # The AppImage runtime mounts through FUSE, which hosted runners do not
+        # provide, so appimagetool is told to unpack itself instead. ARCH has to
+        # be set because it defaults to the runner, which is the same as the
+        # target here but is not guaranteed to be.
+        ARCH="$ARCH" APPIMAGE_EXTRACT_AND_RUN=1 /tmp/appimagetool.AppImage \
+          --no-appstream \
+          target/pkg/AppDir \
+          "target/pkg/${PKG}-${VERSION}-${REVISION}-${ARCH}.AppImage"
+
+    - name: Verify .AppImage
+      shell: bash
+      env:
+        PKG: cross-cleaner
+      run: |
+        set -euo pipefail
+        # Absolute first: the extraction below runs from a scratch directory,
+        # because --appimage-extract always writes squashfs-root into the
+        # current directory and would otherwise drop it in the repo root.
+        appimage="$(realpath "$(ls target/pkg/*.AppImage)")"
+        chmod +x "$appimage"
+        file "$appimage" | grep -qi "${{ inputs.arch }}" || {
+          echo "::error::AppImage is not for ${{ inputs.arch }}"; exit 1; }
+        rm -rf target/pkg/appimage-check
+        mkdir -p target/pkg/appimage-check
+        cd target/pkg/appimage-check
+        # Handled by the runtime before it tries to mount, so this works without
+        # FUSE; the `|| true` is only here to let the directory check below
+        # produce the real error message.
+        "$appimage" --appimage-extract >/dev/null 2>&1 || true
+        if [ ! -d squashfs-root ]; then
+          echo "::error::AppImage produced no squashfs-root"; exit 1
+        fi
+        ls -la squashfs-root | sed -n '1,20p'
+        test -x squashfs-root/AppRun
+        test -x squashfs-root/usr/bin/cross-cleaner
+        test -x squashfs-root/usr/bin/cross-cleaner-tui
+        test -f squashfs-root/cross-cleaner.desktop
+        test -f squashfs-root/.DirIcon
+        test -f squashfs-root/cross-cleaner.png
+        test -f "squashfs-root/usr/share/metainfo/${PKG}.appdata.xml"
+        # The AppRun contract: the desktop entry's bare `Exec=cross-cleaner` only
+        # resolves if AppRun puts usr/bin on PATH.
+        grep -q 'usr/bin' squashfs-root/AppRun
+
+    - name: Upload packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        if-no-files-found: error
+        path: |
+          target/pkg/*.deb
+          target/pkg/*.AppImage

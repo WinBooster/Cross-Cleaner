@@ -1,0 +1,119 @@
+# nfpm configuration for the Cross Cleaner .deb.
+#
+# Rendered by .github/actions/linux-package, which substitutes:
+#   %%VERSION%%           2.0.2.5 -> 2.0.2
+#   %%RELEASE%%           2.0.2.5 -> 5, giving the Debian version 2.0.2-5
+#   %%DEB_ARCH%%          amd64 or arm64
+#   %%SOURCE_DATE_EPOCH%% the commit timestamp, so the archive is reproducible
+#
+# The file layout mirrors the AppImage built by the same action: both ship the
+# window app as `cross-cleaner` and the terminal app as `cross-cleaner-tui`.
+
+name: cross-cleaner
+arch: "%%DEB_ARCH%%"
+platform: linux
+version: "%%VERSION%%"
+release: "%%RELEASE%%"
+section: utils
+priority: optional
+maintainer: WinBooster
+vendor: WinBooster
+homepage: https://winbooster.github.io/
+license: GPL-3.0-or-later
+# Reproducible builds: the archive is normalised by nfpm, and SOURCE_DATE_EPOCH
+# is set by the workflow from the commit.
+mtime: "%%SOURCE_DATE_EPOCH%%"
+
+description: |
+  Cross Cleaner removes temporary files, cache and other system junk.
+  .
+  It ships as a native window app and as a terminal app, and cleanses Windows,
+  macOS, Linux and Android, on x86_64 and arm64 alike. This package builds
+  without the self-update feature on purpose: dpkg owns the installed version,
+  so the app must not advertise a newer release or overwrite its own files.
+
+depends:
+  # Rust links these two; glibc 2.34+ folds libm/libpthread/libdl into libc6.
+  - libc6
+  - libgcc-s1
+  # Audio: gui::sounds needs an output device at startup, so this is a hard
+  # dependency rather than a recommendation.
+  # The t64 transition package exists on Ubuntu 24.04+, plain libasound2
+  # everywhere else, and dpkg resolves `a | b` to whichever is installable.
+  - libasound2t64 | libasound2
+  # eframe is built with the glow renderer plus the x11 and wayland backends,
+  # so the loader needs both stacks and the GL vendor dispatch underneath.
+  - libgl1
+  - libegl1
+  - libx11-6
+  - libxcb1
+  - libxkbcommon0
+  - libwayland-client0
+  - libwayland-cursor0
+  - libdrm2
+
+recommends:
+  # Theme colours come from fontconfig, and the app draws its own fonts, so a
+  # bare system without this still runs but looks wrong.
+  - fontconfig
+
+contents:
+  # Built with --no-default-features, so neither binary can rewrite itself.
+  - src: target/release/desktop
+    dst: /usr/bin/cross-cleaner
+    file_info:
+      mode: 0755
+
+  - src: target/release/tui
+    dst: /usr/bin/cross-cleaner-tui
+    file_info:
+      mode: 0755
+
+  - src: packaging/linux/cross-cleaner.desktop
+    dst: /usr/share/applications/cross-cleaner.desktop
+
+  - src: packaging/linux/cross-cleaner-tui.desktop
+    dst: /usr/share/applications/cross-cleaner-tui.desktop
+
+  # Generated from crates/winicon/assets/icon.ico by the workflow. The source is
+  # a single 96px frame, so 128 and 256 are upscaled; dropping a >=512px master
+  # PNG into the repo is what removes that softness.
+  - src: target/pkg/icons/48x48/apps/cross-cleaner.png
+    dst: /usr/share/icons/hicolor/48x48/apps/cross-cleaner.png
+
+  - src: target/pkg/icons/96x96/apps/cross-cleaner.png
+    dst: /usr/share/icons/hicolor/96x96/apps/cross-cleaner.png
+
+  - src: target/pkg/icons/128x128/apps/cross-cleaner.png
+    dst: /usr/share/icons/hicolor/128x128/apps/cross-cleaner.png
+
+  - src: target/pkg/icons/256x256/apps/cross-cleaner.png
+    dst: /usr/share/icons/hicolor/256x256/apps/cross-cleaner.png
+
+  # Read by both dpkg and appimagetool, so the .deb and the AppImage show the
+  # same entry in GNOME Software, KDE Discover and the browser.
+  - src: target/pkg/cross-cleaner.appdata.xml
+    dst: /usr/share/metainfo/cross-cleaner.appdata.xml
+
+deb:
+  # GNU extensions for the compression, so the archive is readable without
+  # dpkg-deb having to fall back.
+  compression: xz
+  # dpkg-shlibdeps is skipped deliberately: it inspects the built binary at
+  # packaging time and produces a dependency on whatever *this* runner happens
+  # to have installed, which differs from a user's desktop. The `depends` list
+  # above is maintained by hand instead, and the workflow prints `ldd` output so
+  # a new shared-library requirement shows up in the log.
+  scripts:
+    postinst: |-
+      # Icon caches are per-user and dpkg cannot reach them, so nudge the
+      # session bus when one exists. Harmless over SSH and in a container.
+      if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] && command -v gtk-update-icon-cache >/dev/null 2>&1; then
+        gtk-update-icon-cache -qtf /usr/share/icons/hicolor || true
+        gtk-update-icon-cache -qtf /usr/share/pixmaps || true
+      fi
+    postrm: |-
+      if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] && command -v gtk-update-icon-cache >/dev/null 2>&1; then
+        gtk-update-icon-cache -qtf /usr/share/icons/hicolor || true
+        gtk-update-icon-cache -qtf /usr/share/pixmaps || true
+      fi

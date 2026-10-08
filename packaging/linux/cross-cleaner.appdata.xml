@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  AppStream metadata, shared by the .deb and the AppImage: nfpm installs it into
+  /usr/share/metainfo and appimagetool picks it up from the same path, so the two
+  packages describe themselves identically.
+
+  %%VERSION%% and %%DATE%% are substituted by the release workflow. The version
+  is the four-part application version (2.0.2.5), which is what the app prints
+  about itself, not the Debian package version (2.0.2-5).
+-->
+<component type="desktop-application">
+  <id>cross-cleaner</id>
+  <name>Cross Cleaner</name>
+  <summary>Remove temporary files, cache and system junk</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <developer id="winbooster">
+    <name>WinBooster</name>
+  </developer>
+
+  <description>
+    <p>
+      Cross Cleaner removes temporary files, caches and leftover system junk. It
+      ships as a native window app and as a terminal app, and it builds for
+      Windows, macOS, Linux and Android, on x86_64 and arm64 alike.
+    </p>
+    <p>What it does:</p>
+    <ul>
+      <li>Cleans temporary files, cache and system junk</li>
+      <li>Window app and terminal app, sharing one cleanup database</li>
+      <li>Multi-threaded sweeps across every core</li>
+      <li>Critical system files are protected</li>
+      <li>Every cleanup catalog is published in the repository</li>
+      <li>Custom cleanup rules in plain JSON</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">cross-cleaner.desktop</launchable>
+
+  <url type="homepage">https://winbooster.github.io/</url>
+  <url type="bugtracker">https://github.com/WinBooster/Cross-Cleaner/issues</url>
+  <url type="vcs-browser">https://github.com/WinBooster/Cross-Cleaner</url>
+
+  <provides>
+    <binary>cross-cleaner</binary>
+    <binary>cross-cleaner-tui</binary>
+  </provides>
+
+  <categories>
+    <category>System</category>
+    <category>Utility</category>
+  </categories>
+
+  <keywords>
+    <keyword>cleaner</keyword>
+    <keyword>cleanup</keyword>
+    <keyword>junk</keyword>
+    <keyword>cache</keyword>
+    <keyword>temporary files</keyword>
+    <keyword>disk</keyword>
+    <keyword>privacy</keyword>
+  </keywords>
+
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+  </supports>
+
+  <requires>
+    <display_length compare="ge">768</display_length>
+  </requires>
+
+  <releases>
+    <release version="%%VERSION%%" date="%%DATE%%"/>
+  </releases>
+
+  <content_rating type="oars-1.1"/>
+</component>
