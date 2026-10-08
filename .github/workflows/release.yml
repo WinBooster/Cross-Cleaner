@@ -475,9 +475,9 @@ jobs:
             Install with your package manager, or grab the AppImage and run it in place:
             ```bash
             # Debian / Ubuntu
-            sudo apt install ./cross-cleaner_*_amd64.deb
+            sudo apt install ./cross-cleaner_amd64.deb   # or ./cross-cleaner_arm64.deb
             ```
-            Built for x86_64 and arm64; the arm64 package ends in `_arm64.deb`. Both ship without the self-update feature on purpose, so apt owns the version.
+            Built for x86_64 and arm64. Both ship without the self-update feature on purpose, so apt owns the version. The filenames carry no version, so `releases/latest/download/` always resolves to the newest build.
 
             ## рџ‘Џ Contributors Hall of Fame
             Special thanks to our amazing contributors who made this release possible:

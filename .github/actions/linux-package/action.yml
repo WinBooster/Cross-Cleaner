@@ -214,10 +214,16 @@ runs:
           echo "::error::unsubstituted placeholder left in nfpm.yaml"
           exit 1
         fi
+        # No version in the filename, on purpose. GitHub serves
+        # /releases/latest/download/<asset> only for assets whose name does not
+        # change between releases, and that is what lets the website link straight
+        # at the newest .deb instead of scraping the release page. The version
+        # still lives in the control file, and `Verify .deb` asserts it there.
+        # dpkg does not care what the file is called.
         nfpm package \
           --config target/pkg/nfpm.yaml \
           --packager deb \
-          --target "target/pkg/${PKG}_${VERSION}-${REVISION}_${DEB_ARCH}.deb"
+          --target "target/pkg/${PKG}_${DEB_ARCH}.deb"
 
     - name: Verify declared dependencies resolve
       # Every name in `depends` has to be installable on the suite these packages
@@ -249,6 +255,9 @@ runs:
 
     - name: Verify .deb
       shell: bash
+      env:
+        VERSION: ${{ steps.ver.outputs.version }}
+        REVISION: ${{ steps.ver.outputs.revision }}
       run: |
         set -euo pipefail
         deb=$(ls target/pkg/*.deb)
@@ -256,6 +265,19 @@ runs:
         dpkg-deb --info "$deb" | sed -n '1,20p'
         echo "== contents =="
         dpkg-deb --contents "$deb"
+
+        # The filename deliberately carries no version, so the control file is
+        # the only place the version exists. Nothing else checks it, which means
+        # a wrong value here would ship a package that apt cannot upgrade
+        # cleanly, so it is asserted rather than trusted.
+        want="${VERSION}-${REVISION}"
+        got="$(dpkg-deb --field "$deb" Version)"
+        if [ "$got" != "$want" ]; then
+          echo "::error::control Version is '$got', expected '$want'"
+          exit 1
+        fi
+        echo "version ok: $got"
+
         # The architecture in the filename has to match what nfpm wrote into the
         # control file, or apt installs a foreign-architecture package.
         control_arch="$(dpkg-deb --field "$deb" Architecture)"
@@ -263,6 +285,7 @@ runs:
           amd64|arm64) ;;
           *) echo "::error::unexpected control Architecture '$control_arch'"; exit 1 ;;
         esac
+        echo "architecture ok: $control_arch"
         dpkg-deb --extract "$deb" target/pkg/extracted
         test -x target/pkg/extracted/usr/bin/cross-cleaner
         test -x target/pkg/extracted/usr/bin/cross-cleaner-tui
@@ -286,8 +309,6 @@ runs:
       env:
         ARCH: ${{ inputs.arch }}
         PKG: cross-cleaner
-        VERSION: ${{ steps.ver.outputs.version }}
-        REVISION: ${{ steps.ver.outputs.revision }}
       run: |
         set -euo pipefail
         curl -sSfL -o /tmp/appimagetool.AppImage \
@@ -318,10 +339,15 @@ runs:
         # provide, so appimagetool is told to unpack itself instead. ARCH has to
         # be set because it defaults to the runner, which is the same as the
         # target here but is not guaranteed to be.
+        #
+        # No --version, and no version in the filename: see the note on the .deb
+        # above. appimagetool's --version only rewrites %%VERSION%% placeholders,
+        # and the version a user cares about is the one in the appdata, which
+        # already carries the four-part application version.
         ARCH="$ARCH" APPIMAGE_EXTRACT_AND_RUN=1 /tmp/appimagetool.AppImage \
           --no-appstream \
           target/pkg/AppDir \
-          "target/pkg/${PKG}-${VERSION}-${REVISION}-${ARCH}.AppImage"
+          "target/pkg/${PKG}-${ARCH}.AppImage"
 
     - name: Verify .AppImage
       shell: bash
