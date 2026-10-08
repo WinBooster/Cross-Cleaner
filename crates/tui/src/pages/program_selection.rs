@@ -1,6 +1,11 @@
 //! Program selection page: search field, program checkboxes with a per-program
 //! category overlay, and the pinned ` Start Cleaning ` button — the terminal
 //! counterpart of `gui::pages::program_selection`.
+//!
+//! Each row ends with a marker saying what the program belongs to: the category
+//! name when it is in exactly one, the number of them when it is in several.
+//! The window frontend draws the same split as text versus a menu button, so a
+//! program that is in one place reads the same in both apps.
 
 use ratatui::Frame;
 use ratatui::layout::{Constraint, Layout, Rect};
@@ -78,9 +83,9 @@ fn register_rows(app: &mut TuiApp, inner: Rect, offset: usize) {
             row_of(inner, row as u16, inner.width),
             Click::Program(offset + row),
         );
-        // Only programs in several categories carry the marker, the same rule
-        // that decides whether the row draws one at all. Registered after the
-        // row, so it is found first: clicking the marker opens the overlay
+        // Only the count is a control, and only when there is something to choose
+        // behind it — the same rule `category_marker` draws by. Registered after
+        // the row, so it is found first: clicking the count opens the overlay
         // instead of ticking.
         if let Some(marker) = marker_span(app, index, inner, row as u16) {
             app.hit(marker, Click::ProgramCategories(offset + row));
@@ -95,6 +100,9 @@ fn register_rows(app: &mut TuiApp, inner: Rect, offset: usize) {
 /// name — so the target covers the glyph and not the label next to it.
 fn marker_span(app: &TuiApp, index: usize, inner: Rect, row: u16) -> Option<Rect> {
     let categories = app.state.program_categories.get(index)?;
+    // The marker is only a control when the program is in several categories:
+    // with just one there is nothing to choose, and the row is already showing
+    // which category it is as text.
     if categories.len() <= 1 {
         return None;
     }
@@ -107,6 +115,43 @@ fn marker_span(app: &TuiApp, index: usize, inner: Rect, row: u16) -> Option<Rect
         CHECK + 1 + name.chars().count() as u16,
         marker,
     ))
+}
+
+/// The `→ …` marker of a program row.
+///
+/// What it says depends on how many categories the program has, and it is the
+/// same rule the window frontend applies to its menu button:
+///
+/// * one category — the category's *name*, so the row says where the program
+///   lives without the user having to open anything to find out;
+/// * several — how many, because the name of each would not fit and the count
+///   is what tells the user the menu behind it is worth opening.
+///
+/// The marker is drawn for every program, so the rows stay visually aligned
+/// whatever a program happens to be in.
+fn category_marker(app: &TuiApp, index: usize) -> Option<Span<'static>> {
+    let categories = app.state.program_categories.get(index)?;
+    match categories.len() {
+        0 => None,
+        1 => Some(Span::styled(format!("  → {}", categories[0]), Theme::dim())),
+        count => {
+            // A program with categories excluded is asking to be looked at, so
+            // the count is the part that gets the warning color.
+            let excluded = app
+                .state
+                .program_disabled
+                .get(index)
+                .map_or(0, |disabled| disabled.len());
+            Some(Span::styled(
+                format!("  → {count}"),
+                if excluded > 0 {
+                    Style::default().fg(Theme::WARN)
+                } else {
+                    Theme::dim()
+                },
+            ))
+        }
+    }
 }
 
 /// Explains why the list is empty, instead of drawing a blank box.
@@ -172,30 +217,7 @@ fn program_items(app: &TuiApp) -> Vec<ListItem<'static>> {
                 Span::styled(mark.to_string(), mark_style),
                 Span::styled(format!(" {name}"), Theme::text()),
             ];
-
-            // Only programs in several categories get the overlay marker, the
-            // same rule the window frontend uses to decide whether to draw its
-            // menu button.
-            let categories = app
-                .state
-                .program_categories
-                .get(index)
-                .map_or(0, |cats| cats.len());
-            if categories > 1 {
-                let excluded = app
-                    .state
-                    .program_disabled
-                    .get(index)
-                    .map_or(0, |disabled| disabled.len());
-                spans.push(Span::styled(
-                    format!("  → {categories}"),
-                    if excluded > 0 {
-                        Style::default().fg(Theme::WARN)
-                    } else {
-                        Theme::dim()
-                    },
-                ));
-            }
+            spans.extend(category_marker(app, index));
             ListItem::new(Line::from(spans))
         })
         .collect()

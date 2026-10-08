@@ -2168,6 +2168,39 @@ mod tests {
         );
     }
 
+    /// One category holding a single program, so the program list has a row whose
+    /// program is in exactly one category — the case the marker names instead of
+    /// counting. `sample_app` cannot do this: Chrome is in two subcategories and
+    /// Firefox spans two categories.
+    fn single_category_program() -> TuiApp {
+        let entries = vec![
+            entry("Cache", "Solo", "Browser"),
+            entry("Logs", "Chrome", "App"),
+            entry("Logs", "Chrome", "Core"),
+        ];
+        let database = CleanerDatabase::from_vec(entries);
+        let custom = Arc::from(Vec::new());
+        let state = {
+            #[cfg(windows)]
+            {
+                AppState::from_database(database, RegistryDatabase::from_vec(Vec::new()), custom)
+            }
+            #[cfg(not(windows))]
+            {
+                AppState::from_database(database, custom)
+            }
+        };
+        let mut app = TuiApp::new(state);
+        app.update_receiver = None;
+        app.state.toggle_category(0);
+        assert!(
+            app.state.build_program_list(),
+            "the program list must have been built",
+        );
+        app.state.current_page = Page::ProgramSelection;
+        app
+    }
+
     /// Two categories that both have subcategories, so both cells show an arrow.
     fn mirrored_grid_app() -> TuiApp {
         let entries = vec![
@@ -2939,6 +2972,103 @@ mod tests {
         assert!(app.state.has_selection());
         click_on(&mut app, 100, 30, "Cache");
         assert!(!app.state.has_selection());
+    }
+
+    /// A program in exactly one category says which one, after the arrow. The
+    /// count would be `→ 1`, which tells nobody anything.
+    #[test]
+    fn a_program_in_one_category_shows_the_category_name() {
+        let mut app = single_category_program();
+        assert_eq!(app.state.program_categories[0].len(), 1, "the premise");
+        let screen = draw(&mut app, 100, 30);
+        let line = screen
+            .lines()
+            .find(|line| line.contains("Solo"))
+            .unwrap_or_else(|| panic!("the program is not listed:\n{screen}"));
+        assert!(
+            line.contains("→ Cache"),
+            "the row must name the one category: {line:?}",
+        );
+        assert!(
+            !line.contains("→ 1"),
+            "a count of one says nothing: {line:?}",
+        );
+    }
+
+    /// A program in several categories keeps the count, because the names would
+    /// not fit on a row and the number is what makes the menu behind it worth
+    /// opening. This is the split the window frontend draws as text versus a
+    /// menu button.
+    #[test]
+    fn a_program_in_several_categories_shows_the_count() {
+        let mut app = sample_app();
+        // Both categories, so Firefox really spans two of them.
+        press(&mut app, KeyCode::Char(' '));
+        press(&mut app, KeyCode::Tab);
+        press(&mut app, KeyCode::Char(' '));
+        press(&mut app, KeyCode::Char('n'));
+
+        let screen = draw(&mut app, 100, 30);
+        let line = screen
+            .lines()
+            .find(|line| line.contains("Firefox"))
+            .unwrap_or_else(|| panic!("the program is not listed:\n{screen}"));
+        assert!(
+            line.contains("→ 2"),
+            "two categories count as two: {line:?}"
+        );
+        // And the single-category program on the same list still names itself.
+        let chrome = screen
+            .lines()
+            .find(|line| line.contains("Chrome"))
+            .unwrap_or_else(|| panic!("Chrome is not listed:\n{screen}"));
+        assert!(
+            chrome.contains("→ Cache"),
+            "Chrome is in one category, so it names it: {chrome:?}",
+        );
+    }
+
+    /// The single-category text is not a control, so it must not be clickable.
+    /// A target there would either open an overlay with nothing to choose or
+    /// take the click away from ticking the row.
+    #[test]
+    fn a_single_category_name_is_not_clickable() {
+        let mut app = single_category_program();
+        let screen = draw(&mut app, 100, 30);
+        let line = screen
+            .lines()
+            .find(|line| line.contains("→ Cache"))
+            .unwrap_or_else(|| panic!("no category name on screen:\n{screen}"));
+        let column = column_of(line, "→ Cache").expect("checked above");
+        let row = screen
+            .lines()
+            .position(|l| l == line)
+            .expect("the row exists");
+        assert_eq!(
+            app.hits.at(column as u16, row as u16),
+            Some(Click::Program(0)),
+            "the name belongs to the row, so it ticks the program",
+        );
+
+        click(&mut app, column as u16, row as u16);
+        assert!(app.popup.is_none(), "there is nothing to open");
+        assert!(
+            !app.state.is_program_checked(0),
+            "and the click must reach the row, not a menu",
+        );
+    }
+
+    /// Right-clicking a single-category program must not open a one-item menu
+    /// either: there is no choice to offer, so the right button stays inert,
+    /// exactly as it does on a category with no subcategories.
+    #[test]
+    fn right_clicking_a_single_category_program_opens_nothing() {
+        let mut app = single_category_program();
+        let screen = draw(&mut app, 100, 30);
+        let (column, row) = position_of(&screen, "Solo");
+        right_click(&mut app, column as u16, row as u16);
+        assert!(app.popup.is_none(), "one category offers nothing to choose",);
+        assert!(app.state.is_program_checked(0), "and nothing was changed");
     }
 
     /// The `→ N` marker is the mouse's route to the subcategories, the way
