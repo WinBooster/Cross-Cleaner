@@ -1,4 +1,4 @@
-# Custom Cleanings Catalog v2.0.4.1.5
+# Custom Cleanings Catalog v2.0.4.1.6
 
 **Total custom cleanings:** 8
 
