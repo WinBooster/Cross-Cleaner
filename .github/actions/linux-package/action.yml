@@ -332,12 +332,21 @@ runs:
         # `dpkg-deb --contents` does not list them. Unpack the control member and
         # confirm both landed under the names dpkg actually looks for -- the
         # whole point of referencing them by path is that they get there.
-        ctrl="$(dpkg-deb --ctrl-tarfile "$deb" | tar -t)"
-        printf '%s\n' "$ctrl" | grep -qx 'postinst' || {
-          echo "::error::no postinst in the control archive:"; printf '%s\n' "$ctrl"; exit 1; }
-        printf '%s\n' "$ctrl" | grep -qx 'postrm' || {
-          echo "::error::no postrm in the control archive:"; printf '%s\n' "$ctrl"; exit 1; }
-        echo "maintainer scripts ok: postinst, postrm"
+        #
+        # tar lists the members as `./postinst`, so the listing is normalised before
+        # the comparison. An exact match after normalisation is used rather than
+        # an anchored regex like `(^|/)postinst$`, which would also accept a
+        # nested `./usr/bin/postinst`.
+        ctrl="$(dpkg-deb --ctrl-tarfile "$deb" | tar -t | sed 's#^\./##')"
+        echo "control archive members:"
+        printf '%s\n' "$ctrl" | sed 's/^/  /'
+        for hook in postinst postrm; do
+          printf '%s\n' "$ctrl" | grep -qx "$hook" || {
+            echo "::error::$hook missing from the control archive"
+            exit 1
+          }
+          echo "maintainer script ok: $hook"
+        done
 
         # The architecture in the filename has to match what nfpm wrote into the
         # control file, or apt installs a foreign-architecture package.
