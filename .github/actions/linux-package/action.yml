@@ -49,10 +49,15 @@ runs:
           x86_64)
             deb_arch=amd64     # Debian
             nfpm_arch=x86_64   # nfpm release asset suffix
+            # file(1) spells this machine "x86-64" with a HYPHEN, which is not the
+            # Rust spelling. Matching `inputs.arch` against its output fails here
+            # while passing on aarch64, where both sides say "aarch64".
+            file_arch=x86-64
             ;;
           aarch64)
             deb_arch=arm64
             nfpm_arch=arm64
+            file_arch=aarch64
             ;;
           *)
             echo "::error::unsupported arch '$ARCH_IN' (expected x86_64 or aarch64)"
@@ -61,6 +66,7 @@ runs:
         esac
         echo "deb-arch=$deb_arch" >> "$GITHUB_OUTPUT"
         echo "nfpm-arch=$nfpm_arch" >> "$GITHUB_OUTPUT"
+        echo "file-arch=$file_arch" >> "$GITHUB_OUTPUT"
 
     - name: Install packaging dependencies
       shell: bash
@@ -308,6 +314,7 @@ runs:
       env:
         VERSION: ${{ steps.ver.outputs.version }}
         REVISION: ${{ steps.ver.outputs.revision }}
+        FILE_ARCH: ${{ steps.arch.outputs.file-arch }}
       run: |
         set -euo pipefail
         deb=$(ls target/pkg/*.deb)
@@ -359,9 +366,16 @@ runs:
         dpkg-deb --extract "$deb" target/pkg/extracted
         test -x target/pkg/extracted/usr/bin/cross-cleaner
         test -x target/pkg/extracted/usr/bin/cross-cleaner-tui
-        # The packaged ELF must match the runner's architecture, which is the
-        # real check that the arm64 job did not accidentally package x86_64.
-        file target/pkg/extracted/usr/bin/cross-cleaner | grep -qi "${{ inputs.arch }}"
+        # The packaged ELF must match the runner's architecture, which is the real
+        # check that the arm64 job did not accidentally package x86_64. The
+        # machine type is compared against file_arch, because file(1) writes
+        # "x86-64" for this arch and "aarch64" for the other.
+        desc="$(file target/pkg/extracted/usr/bin/cross-cleaner)"
+        echo "$desc"
+        if ! grep -qF "$FILE_ARCH" <<<"$desc"; then
+          echo "::error::packaged binary is not ${FILE_ARCH}"
+          exit 1
+        fi
         # Canary: the self-update feature was compiled out, so the linked symbols
         # of the `selfupdate` crate must not be in the binary. Its download URL is
         # not hardcoded (it comes from the API response), so the crate name is the
@@ -423,6 +437,7 @@ runs:
       shell: bash
       env:
         PKG: cross-cleaner
+        FILE_ARCH: ${{ steps.arch.outputs.file-arch }}
       run: |
         set -euo pipefail
         # Absolute first: the extraction below runs from a scratch directory,
@@ -430,8 +445,13 @@ runs:
         # current directory and would otherwise drop it in the repo root.
         appimage="$(realpath "$(ls target/pkg/*.AppImage)")"
         chmod +x "$appimage"
-        file "$appimage" | grep -qi "${{ inputs.arch }}" || {
-          echo "::error::AppImage is not for ${{ inputs.arch }}"; exit 1; }
+        # Same file(1) spelling caveat as the .deb check above.
+        adesc="$(file "$appimage")"
+        echo "$adesc"
+        if ! grep -qF "$FILE_ARCH" <<<"$adesc"; then
+          echo "::error::AppImage is not ${FILE_ARCH}"
+          exit 1
+        fi
         rm -rf target/pkg/appimage-check
         mkdir -p target/pkg/appimage-check
         cd target/pkg/appimage-check
