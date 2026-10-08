@@ -2579,7 +2579,7 @@
     "path": "{drive}Program Files (x86)\\Inno Setup 6\\Examples\\*.iss",
     "class": "Developing",
     "category": "Logs",
-    "sub_category":"Examples",
+    "sub_category": "Examples",
     "program": "Inno Setup 6",
     "remove_files": true
   },
@@ -2594,7 +2594,7 @@
     "path": "{drive}Program Files (x86)\\Inno Setup 7\\Examples\\*.iss",
     "class": "Developing",
     "category": "Logs",
-    "sub_category":"Examples",
+    "sub_category": "Examples",
     "program": "Inno Setup 7",
     "remove_files": true
   },
