@@ -130,6 +130,9 @@ pub struct Popup {
 /// something the footer hints do not promise. An index is always a position in
 /// the list it was drawn from — the category grid, the filtered program list or
 /// the open overlay — which is also where the click target puts the cursor.
+///
+/// A target is a *left*-click target. [`TuiApp::open_menu`] reinterprets it for
+/// the right button, which opens the menu behind it where there is one.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) enum Click {
     /// Tick or untick this category, and move the cursor onto it.
@@ -546,10 +549,41 @@ impl TuiApp {
                     self.run(click, mouse.column);
                 }
             }
+            MouseEventKind::Down(MouseButton::Right) => {
+                if let Some(click) = self.hits.at(mouse.column, mouse.row) {
+                    self.open_menu(click);
+                }
+            }
             MouseEventKind::ScrollUp => self.scroll(-1),
             MouseEventKind::ScrollDown => self.scroll(1),
             // Motion, drags and the other buttons belong to terminal text
             // selection; the app has nothing to say about them.
+            _ => {}
+        }
+    }
+
+    /// What the right button does with whatever the click resolved to.
+    ///
+    /// The right button is the terminal's context menu, and the one menu this
+    /// app has is a category's subcategory overlay — the very overlay its `→ N`
+    /// marker opens. So a right click on a checkbox opens the subcategories and
+    /// leaves the tick alone, which is what the right button means everywhere
+    /// else.
+    ///
+    /// Everything else is deliberately inert. A target with no menu behind it —
+    /// a pinned button, a volume bar, a dialog row — does nothing, because a
+    /// right click that silently started a cleaning run would be far worse than
+    /// one that does nothing at all.
+    fn open_menu(&mut self, click: Click) {
+        match click {
+            // A cell and its own marker open the same overlay, so where in the
+            // cell the right button landed makes no difference here.
+            Click::Category(index) | Click::CategorySubs(index) => self.open_category_subs(index),
+            Click::Program(row) | Click::ProgramCategories(row) => {
+                self.open_program_categories(row)
+            }
+            // An overlay entry is already inside the menu, and a dismissal has
+            // nothing behind it: there is no deeper menu to open.
             _ => {}
         }
     }
@@ -1439,15 +1473,24 @@ impl TuiApp {
     /// Context-sensitive key hints, the terminal stand-in for tooltips.
     fn footer_hints(&self) -> Vec<Span<'static>> {
         let page: &[&str] = match self.state.current_page {
+            // The right button opens the same overlay as `Enter`, so it shares
+            // the hint rather than adding a line the footer has no room for —
+            // a hint that gets clipped away teaches nothing.
             Page::Main => &[
                 "↑↓ row",
                 "tab column",
                 "space select",
-                "enter subs",
+                "enter/right subs",
                 "n next",
                 "s settings",
             ],
-            Page::ProgramSelection => &["↑↓ move", "space select", "→ cats", "/ search", "S start"],
+            Page::ProgramSelection => &[
+                "↑↓ move",
+                "space select",
+                "→/right cats",
+                "/ search",
+                "S start",
+            ],
             Page::Clearing => &["cleaning, please wait"],
             Page::Results => &["↑↓ scroll", "esc back"],
             Page::Settings => &["↑↓ pick", "←→ volume", "r reset", "esc back"],
@@ -1799,14 +1842,31 @@ mod tests {
         app.on_event(Event::Key(KeyEvent::new(code, KeyModifiers::NONE)));
     }
 
-    /// Left-clicks at a screen position.
-    fn click(app: &mut TuiApp, column: u16, row: u16) {
+    /// Clicks at a screen position with `button` held down.
+    fn click_with(app: &mut TuiApp, button: MouseButton, column: u16, row: u16) {
         app.on_event(Event::Mouse(MouseEvent {
-            kind: MouseEventKind::Down(MouseButton::Left),
+            kind: MouseEventKind::Down(button),
             column,
             row,
             modifiers: KeyModifiers::NONE,
         }));
+    }
+
+    /// Left-clicks at a screen position.
+    fn click(app: &mut TuiApp, column: u16, row: u16) {
+        click_with(app, MouseButton::Left, column, row);
+    }
+
+    /// Right-clicks at a screen position: the terminal's context menu.
+    fn right_click(app: &mut TuiApp, column: u16, row: u16) {
+        click_with(app, MouseButton::Right, column, row);
+    }
+
+    /// Right-clicks the first `needle` found on the current frame.
+    fn right_click_on(app: &mut TuiApp, width: u16, height: u16, needle: &str) {
+        let screen = draw(app, width, height);
+        let (column, row) = position_of(&screen, needle);
+        right_click(app, column as u16, row as u16);
     }
 
     /// Turns the wheel at a screen position, positive for a downward notch.
@@ -2592,6 +2652,7 @@ mod tests {
 
     #[test]
     fn settings_volume_steps_and_clamps() {
+        let _serial = config_lock();
         let mut app = sample_app();
         app.state.current_page = Page::Settings;
         for _ in 0..20 {
@@ -2604,7 +2665,36 @@ mod tests {
         press(&mut app, KeyCode::Char('r'));
         assert_eq!(appcore::config::get().sound_volume, 1.0, "resets to full");
         // Put the shared config back so the test does not leak state.
-        appcore::config::update(|c| *c = appcore::AppConfig::default());
+        appcore::config::update(|c| *c = AppConfig::default());
+    }
+
+    /// Serialises the tests that read or write the sound levels.
+    ///
+    /// The volumes live in one process-global config, and the harness runs tests
+    /// in parallel: without this a test that clamps `sound_volume` to zero would
+    /// silently break another's "full volume" assertion, and the failure would
+    /// land on whichever test happened to overlap rather than on the cause.
+    static CONFIG: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
+    /// Holds [`CONFIG`] and restores the default volumes on the way out.
+    ///
+    /// The restore is the point of returning a guard rather than a lock: the
+    /// next test in line must not inherit the level this one left behind, and a
+    /// panicking test has to restore it too.
+    fn config_lock() -> ConfigGuard {
+        // The field is never read: the lock exists for its `Drop`, and holding it
+        // is what keeps the tests apart.
+        let guard = CONFIG.lock().unwrap_or_else(|e| e.into_inner());
+        appcore::config::update(|c| *c = AppConfig::default());
+        ConfigGuard(guard)
+    }
+
+    struct ConfigGuard(#[expect(dead_code)] std::sync::MutexGuard<'static, ()>);
+
+    impl Drop for ConfigGuard {
+        fn drop(&mut self) {
+            appcore::config::update(|c| *c = AppConfig::default());
+        }
     }
 
     // --- mouse -----------------------------------------------------------
@@ -2657,6 +2747,175 @@ mod tests {
             .filter(|category| !category.is_unchecked())
             .count();
         assert_eq!(ticked, 3, "each click ticked its own left-column cell");
+    }
+
+    /// The right button is the terminal's context menu. On a checkbox its one
+    /// meaning is "show me the subcategories" — the same overlay `Enter` and the
+    /// `→ N` marker open — and it must leave the tick alone, or a right click
+    /// would select the category the user only asked to look inside.
+    #[test]
+    fn right_clicking_a_checkbox_opens_its_subcategories_without_ticking_it() {
+        let mut app = sample_app();
+        right_click_on(&mut app, 100, 30, "Cache");
+
+        let popup = app
+            .popup
+            .as_ref()
+            .expect("the right button opens the overlay");
+        assert_eq!(popup.items.len(), 2, "Browser and Code");
+        assert!(
+            app.state.categories[0].is_unchecked(),
+            "the right button must not also tick the category",
+        );
+    }
+
+    /// The mirror exists to be read from the other edge, so the right button has
+    /// to resolve to the category the mirrored cell shows — not its neighbour on
+    /// the same row.
+    #[test]
+    fn right_clicking_the_mirrored_cell_opens_that_category() {
+        let mut app = many_categories(6);
+        right_click_on(&mut app, 100, 30, "Cat3");
+        match app.popup.as_ref().map(|popup| popup.kind) {
+            Some(PopupKind::Category(index)) => assert_eq!(
+                index, 3,
+                "the overlay belongs to the category that was clicked",
+            ),
+            other => panic!("expected Cat3's overlay, got {other:?}"),
+        }
+    }
+
+    /// Anywhere in the cell opens the same menu, marker or not — the right button
+    /// is not restricted to the few columns the `→ N` glyph occupies.
+    #[test]
+    fn a_right_click_anywhere_in_the_cell_opens_the_same_menu() {
+        for needle in ["Cat0", "→"] {
+            let mut app = many_categories(6);
+            right_click_on(&mut app, 100, 30, needle);
+            assert!(
+                app.popup.is_some(),
+                "a right click on {needle:?} must open the overlay",
+            );
+            assert!(
+                app.state.categories[0].is_unchecked(),
+                "a right click on {needle:?} must not tick",
+            );
+        }
+    }
+
+    /// A category with no subcategories has no menu, so the right button has
+    /// nothing to open and must not fall back to ticking it — that is the left
+    /// button's job, and conflating the two would be the surprise the split
+    /// exists to avoid.
+    #[test]
+    fn right_clicking_a_category_without_subcategories_does_nothing() {
+        // In the uneven grid `Logs` is the category with no subcategories at
+        // all, so it has no overlay to open.
+        let mut app = uneven_grid_app();
+        right_click_on(&mut app, 100, 30, "Logs");
+        assert!(app.popup.is_none(), "there is no overlay to open",);
+        assert!(
+            app.state.categories[1].is_unchecked(),
+            "and the right button must not tick it either",
+        );
+    }
+
+    /// The program rows get the same split: right button opens the category
+    /// overlay, left button ticks.
+    #[test]
+    fn right_clicking_a_program_opens_its_categories_without_ticking_it() {
+        let mut app = sample_app();
+        // Both categories, so Firefox really spans two of them and has a menu.
+        press(&mut app, KeyCode::Char(' '));
+        press(&mut app, KeyCode::Tab);
+        press(&mut app, KeyCode::Char(' '));
+        press(&mut app, KeyCode::Char('n'));
+
+        right_click_on(&mut app, 100, 30, "Firefox");
+        match app.popup.as_ref().map(|popup| popup.kind) {
+            Some(PopupKind::Program(_)) => {}
+            other => panic!("expected the category overlay, got {other:?}"),
+        }
+        assert!(
+            app.state.is_program_checked(1),
+            "the right button must not exclude the program",
+        );
+    }
+
+    /// Everything with no menu behind it stays inert. This is the whole reason
+    /// the right button is routed through `open_menu` instead of `run`: a right
+    /// click that started a cleaning run, or set a volume, would be a genuinely
+    /// destructive surprise.
+    #[test]
+    fn a_right_click_on_anything_without_a_menu_does_nothing() {
+        // The pinned button: a cleaning run must not start from a right click.
+        let mut app = sample_app();
+        app.state.toggle_category(0);
+        app.state.current_page = Page::ProgramSelection;
+        app.state.build_program_list();
+        right_click_on(&mut app, 100, 30, "Start Cleaning");
+        assert_eq!(
+            app.state.current_page,
+            Page::ProgramSelection,
+            "a right click must not start the run",
+        );
+        assert!(app.popup.is_none());
+
+        // A volume bar: nothing may happen. Asserted through the toast rather
+        // than through the stored level, which is process-global — see
+        // `config_lock` for why these tests must not read it.
+        app.state.current_page = Page::Settings;
+        let screen = draw(&mut app, 100, 30);
+        let (column, row) = position_of(&screen, "Popup sound");
+        let bar_left = column + "Popup sound ".len();
+        right_click(&mut app, (bar_left + 2) as u16, row as u16);
+        assert!(
+            app.toast.is_none(),
+            "a right click must not report a new level, so it set none",
+        );
+
+        // The backdrop of the update dialog must not dismiss it either, which is
+        // what a stray right click near the dialog would otherwise do.
+        let (mut app, _rx) = app_with_update();
+        app.update_open = true;
+        let screen = draw(&mut app, 100, 30);
+        let (column, row) = position_of(&screen, "Categories");
+        right_click(&mut app, column as u16, row as u16);
+        assert!(app.update_open, "a right click is not a dismissal");
+    }
+
+    /// Both buttons stay live at once: right click opens, left click still ticks
+    /// the same cell afterwards.
+    #[test]
+    fn the_right_button_does_not_take_the_checkbox_away_from_the_left_one() {
+        let mut app = sample_app();
+        right_click_on(&mut app, 100, 30, "Cache");
+        assert!(app.popup.is_some());
+
+        // Closing the overlay, then ticking by left click as before.
+        press(&mut app, KeyCode::Esc);
+        assert!(app.popup.is_none());
+        click_on(&mut app, 100, 30, "Cache");
+        assert!(
+            app.state.categories[0].is_checked(),
+            "the left button must still tick",
+        );
+    }
+
+    /// An overlay entry is already inside the menu, so there is nothing deeper
+    /// for the right button to open — and it must not toggle the entry either,
+    /// which would make a right click a hidden second way to change the
+    /// selection.
+    #[test]
+    fn right_clicking_an_overlay_entry_does_not_toggle_it() {
+        let mut app = sample_app();
+        press(&mut app, KeyCode::Right);
+        right_click_on(&mut app, 100, 30, "Browser");
+        assert!(app.popup.is_some(), "the overlay stays open");
+        assert!(
+            !app.state.categories[0].selected.contains("Browser"),
+            "a right click must not tick the entry",
+        );
     }
 
     #[test]
@@ -2822,6 +3081,7 @@ mod tests {
     /// a click sets the level under the pointer rather than stepping it.
     #[test]
     fn clicking_a_volume_bar_sets_the_level_under_the_pointer() {
+        let _serial = config_lock();
         let mut app = sample_app();
         app.state.current_page = Page::Settings;
         let screen = draw(&mut app, 100, 30);
@@ -2846,13 +3106,11 @@ mod tests {
         // Clicking the row outside the bar only moves the cursor.
         click(&mut app, column as u16, row as u16);
         assert_eq!(app.settings_cursor, 0);
-
-        // Put the shared config back so the test does not leak state.
-        appcore::config::update(|c| *c = AppConfig::default());
     }
 
     #[test]
     fn clicking_a_volume_row_selects_it_for_the_arrow_keys() {
+        let _serial = config_lock();
         let mut app = sample_app();
         app.state.current_page = Page::Settings;
         let screen = draw(&mut app, 100, 30);
@@ -2866,7 +3124,6 @@ mod tests {
             appcore::config::get().done_volume < 1.0,
             "the click's row is the one that gets adjusted",
         );
-        appcore::config::update(|c| *c = AppConfig::default());
     }
 
     /// A click is a press. Acting on the release as well would fire every action
@@ -2940,8 +3197,8 @@ mod tests {
         );
     }
 
-    /// Every page has to survive being drawn and clicked at its own corners,
-    /// including while an overlay is up.
+    /// Every page has to survive being drawn and clicked at its own corners with
+    /// either button, including while an overlay is up.
     #[test]
     fn clicking_never_panics_on_any_page_or_terminal_size() {
         let mut app = sample_app();
@@ -2959,6 +3216,7 @@ mod tests {
                 for column in 0..width {
                     for row in 0..height {
                         click(&mut app, column, row);
+                        right_click(&mut app, column, row);
                     }
                 }
             }
@@ -3082,6 +3340,52 @@ mod tests {
             "the page underneath must not act",
         );
         assert!(app.popup.is_none(), "the click dismissed the overlay");
+    }
+
+    /// The right button has to be discoverable, and it may only be advertised
+    /// where it does something — a hint that lies on the results table is worse
+    /// than no hint at all.
+    /// The right button has to be discoverable, and a hint that names it may
+    /// only sit on a page where it does something — the results table and the
+    /// progress meter have no menu behind them, and a lie there is worse than
+    /// silence.
+    #[test]
+    fn the_right_button_is_hinted_only_where_it_opens_something() {
+        for (page, offered) in [
+            (Page::Main, true),
+            (Page::ProgramSelection, true),
+            (Page::Clearing, false),
+            (Page::Results, false),
+            (Page::Settings, false),
+        ] {
+            let mut app = sample_app();
+            app.state.toggle_category(0);
+            app.state.current_page = page;
+            // The hint line is one row and clips, so a phrase can be cut in half;
+            // collapsed, the page's own hints read the same either way.
+            let screen = draw(&mut app, 110, 30);
+            let footer = screen.split_whitespace().collect::<Vec<_>>().join(" ");
+            assert_eq!(
+                footer.contains("right"),
+                offered,
+                "{page:?} hints the right button wrongly:\n{footer}",
+            );
+        }
+    }
+
+    /// The hint must survive being clipped, which is the whole reason it lives
+    /// inside the page's own hints rather than in the global group at the far
+    /// right of a line that is already too long.
+    #[test]
+    fn the_right_button_hint_is_not_clipped_away() {
+        let mut app = sample_app();
+        // The main page has the longest hint list of all, so it is the tight one.
+        let screen = draw(&mut app, 110, 30);
+        assert!(
+            screen.contains("right"),
+            "the hint got clipped off the footer:\n{}",
+            screen.lines().last().unwrap_or_default(),
+        );
     }
 
     #[test]
