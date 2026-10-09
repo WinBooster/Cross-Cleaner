@@ -40,7 +40,9 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add .
-          git commit -m "Auto format code" || echo "No changes to commit"
+          # Conventional Commits: these messages end up in the release notes, so
+          # a plain "Auto format code" would land in the changelog unformatted.
+          git commit -m "chore: apply rustfmt" || echo "No changes to commit"
           git push || echo "No changes to push"
 
   sort_json:
@@ -78,7 +80,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add "${JSON_FILES[@]}"
-          git commit -m "Auto-sorted JSON files by program field" || echo "No changes to commit"
+          git commit -m "chore(database): sort programs by name" || echo "No changes to commit"
           git push || echo "No changes to push"
 
   upload_databases:
@@ -422,6 +424,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          # conventional-release resolves the previous release tag and validates
+          # the commit messages, which needs the full history and all tags.
+          fetch-depth: 0
+          # The Action pushes the tag itself using an explicit credential
+          # helper, so the token does not need to be left in .git/config where
+          # the other steps of this job could reach it.
+          persist-credentials: false
       - name: Download Linux artifacts
         uses: actions/download-artifact@v4
         with:
@@ -472,18 +482,27 @@ jobs:
         with:
           name: android-apk
           path: android-apk
+      # Creates the tag, pushes it, and creates the draft GitHub Release whose
+      # notes are the changelog generated from the Conventional Commits made
+      # since the previous release tag.
+      #
+      # The version is passed explicitly instead of being derived from the commit
+      # log because this project uses four-component versions (2.0.4.2.1), which
+      # are not valid semver.
+      #
+      # This must stay the last step of the job: the Action creates the release
+      # in its post step, and only runs it if every step succeeded.
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: Nekiplay/conventional-release@main
         with:
-          tag_name: v${{ env.APP_VERSION }}
-          name: 🌟 Cross Cleaner ${{ env.APP_VERSION }} 🌟
-          # No `body`: GitHub fills the release notes with the PRs and commits
-          # merged since the previous release.
-          generate_release_notes: true
+          manual-version: ${{ env.APP_VERSION }}
+          release-branch: main
+          github-release-enabled: true
           # The release stays unpublished until it is reviewed and the draft is
           # published by hand.
-          draft: true
-          files: |
+          github-release-draft: true
+          github-release-title: "🌟 Cross Cleaner ${{ env.APP_VERSION }} 🌟"
+          github-release-files: |
             linux-binaries/Linux-Cross_Cleaner_GUI
             linux-binaries/Linux-Cross_Cleaner_TUI
             linux-binaries/Linux-Cross_Cleaner_CLI

@@ -56,7 +56,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add "${JSON_FILES[@]}"
-          git commit -m "Auto-sorted JSON files by program field" || echo "No changes to commit"
+          git commit -m "chore(database): sort programs by name" || echo "No changes to commit"
           git push || echo "No changes to push"
 
   generate-lists:
@@ -549,5 +549,5 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add LIST_*.md
-          git commit -m "Auto-updated program catalogs" || echo "No changes to commit"
+          git commit -m "docs: update program catalogs" || echo "No changes to commit"
           git push || echo "No changes to push"
