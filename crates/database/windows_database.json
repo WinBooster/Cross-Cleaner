@@ -6755,6 +6755,16 @@
     ]
   },
   {
+    "path": "{drive}Program Files (x86)\\Wise\\Wise Disk Cleaner",
+    "class": "Disk Cleaner",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Wise Disk Cleaner",
+    "files_to_remove": [
+      "License.rtf"
+    ]
+  },
+  {
     "path": "{drive}Users\\*\\.minecraftx\\instances\\*",
     "class": "Minecraft Launcher",
     "category": "Logs",
@@ -6994,16 +7004,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Program Files (x86)\\Wise\\Wise Disk Cleaner",
-    "class": "Disk Cleaner",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "Wise Disk Cleaner",
-    "files_to_remove": [
-      "License.rtf"
     ]
   }
 ]
