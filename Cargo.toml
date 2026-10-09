@@ -4,6 +4,7 @@ members = [
     "crates/android",
     "crates/appcore",
     "crates/cleaner",
+    "crates/cli",
     "crates/database",
     "crates/desktop",
     "crates/gui",

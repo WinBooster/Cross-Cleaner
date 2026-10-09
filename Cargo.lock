@@ -755,6 +755,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "cli"
+version = "2.0.1"
+dependencies = [
+ "appcore",
+ "clap",
+ "cleaner",
+ "database",
+ "selfupdate",
+ "serde_json",
+ "tokio",
+ "winicon",
+]
+
+[[package]]
 name = "clipboard-win"
 version = "5.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4907,8 +4921,12 @@ version = "1.53.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e95f91fcc7a621e8b030f6aa23c71fe9838ae2fb4d8118b75602a328f5144044"
 dependencies = [
+ "libc",
+ "mio",
  "pin-project-lite",
+ "signal-hook-registry",
  "tokio-macros",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]

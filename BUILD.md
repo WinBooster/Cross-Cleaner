@@ -33,12 +33,15 @@ cargo build -p tui --release
 
 # Build GUI only
 cargo build -p desktop --release
+
+# Build CLI only
+cargo build -p cli --release
 ```
 
 ### Disabling Updates (`self-update`)
 
-The window (`desktop`) and terminal (`tui`) binaries check GitHub for a newer
-release, announce it with a notification, and replace their own executable with
+The window (`desktop`), terminal (`tui`) and command line (`cli`) binaries check
+GitHub for a newer release, announce it, and replace their own executable with
 the download. All of that sits behind the `self-update` feature, which is **on
 by default**:
 
@@ -46,10 +49,12 @@ by default**:
 # Default: builds with update notifications and self-update
 cargo build --release -p desktop
 cargo build --release -p tui
+cargo build --release -p cli
 
 # Without either — for distribution packages
 cargo build --release -p desktop --no-default-features
 cargo build --release -p tui --no-default-features
+cargo build --release -p cli --no-default-features
 ```
 
 `--no-default-features` turns off the whole update path, not just the
@@ -105,6 +110,7 @@ To update the version in all Cargo.toml files:
 # Manually edit these files:
 - crates/appcore/Cargo.toml
 - crates/cleaner/Cargo.toml
+- crates/cli/Cargo.toml
 - crates/database/Cargo.toml
 - crates/desktop/Cargo.toml
 - crates/gui/Cargo.toml
@@ -159,6 +165,7 @@ Optimizations applied:
 
 Expected results:
 - **TUI**: ~4.16 MB
+- **CLI**: ~4 MB
 - **GUI**: ~11.6 MB
 
 ## 📊 Database Optimization
@@ -249,6 +256,7 @@ cargo build --release
 # Binaries location:
 # - target/release/tui
 # - target/release/desktop
+# - target/release/cli
 ```
 
 ## 🧪 Testing
@@ -274,6 +282,7 @@ APP_VERSION="1.9.6" cargo build --release
 # Windows: Binaries are in target/release/
 # - tui.exe
 # - desktop.exe
+# - cli.exe
 
 # Optional: Strip and compress
 strip target/release/tui.exe
@@ -286,6 +295,7 @@ upx --best target/release/tui.exe
 - `crates/winicon`: Shared Windows resources (icon, version block, elevation manifest)
 - `crates/desktop/build.rs`: Window build script (delegates to `winicon`)
 - `crates/tui/build.rs`: Terminal build script (delegates to `winicon`)
+- `crates/cli/build.rs`: Command line build script (delegates to `winicon`)
 - `crates/appcore/build.rs`: UI sounds (gzips `assets/*.mp3` into `OUT_DIR`)
 - `crates/gui/build.rs`: GUI build script (compresses the window icons)
 - `crates/database/build.rs`: Database optimization (minify + gzip)

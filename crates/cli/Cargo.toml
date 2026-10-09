@@ -1,0 +1,54 @@
+[package]
+name = "cli"
+version = "2.0.1"
+edition = "2024"
+description = "Command line interface for Cross Cleaner"
+
+[features]
+default = ["self-update"]
+# Same switch as `desktop` and `tui`, for the same reason: a distribution
+# package owns the version, so a package-built CLI must not advertise a newer
+# release nor rewrite the file dpkg / winget / the installer put on disk. The
+# repository builds keep the feature on.
+#
+# Unlike the two frontends this crate has no window to draw an update dialog
+# into: the update path reports to the terminal (see `update::run`).
+self-update = ["dep:selfupdate"]
+
+[lib]
+name = "cli"
+path = "src/lib.rs"
+
+# INFO: no `[[bin]]` section on purpose. The binary keeps the package name
+# (`cli`), and the release workflow renames it to `Windows-Cross_Cleaner_CLI.exe`
+# and friends when publishing. Hardcoding a release name here would make every
+# local build produce a file that looks like a release artifact.
+
+[dependencies]
+appcore = { path = "../appcore" }
+database = { path = "../database" }
+cleaner = { path = "../cleaner" }
+# `signal` for the Ctrl-C handling of a run in flight, `time` for the progress
+# ticker. Both are the only reason this crate needs more than the runtime.
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "signal"] }
+clap = { version = "4.6", features = ["derive"] }
+# For `--json`: the result of a run and the three listings are each a single
+# object, which is what a script consuming this wants to parse.
+serde_json = "1"
+# Downloads the release binary and replaces the running executable, so the CLI
+# can update itself from the published `*_CLI` asset.
+selfupdate = { path = "../selfupdate", optional = true }
+
+# Icon and version block, shared with `desktop` and `tui`.
+# Unconditional: `winicon` compiles to a no-op off Windows, which keeps
+# `build.rs` free of `cfg`.
+[build-dependencies]
+winicon = { path = "../winicon" }
+
+[package.metadata.winres]
+FileDescription = "Cross Cleaner (command line)"
+# Matches the name cargo produces, so the release artifact and the version
+# block agree even after the workflow renames the file for publishing.
+OriginalFilename = "cli.exe"
+LegalCopyright = "Copyright Monolith Development © 2026"
+ProductName = "Cross Cleaner"

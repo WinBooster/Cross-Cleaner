@@ -34,6 +34,52 @@ An addon-style <a href="https://github.com/WinBooster/Cross-Cleaner">system clea
 ### Demo TUI Edition
 <img width="979" height="512" alt="image" src="https://github.com/user-attachments/assets/220db588-a366-4ba1-8101-04ea294a407a" />
 
+## 🖥️ Command Line Edition
+
+The same cleaner, driven from a terminal. It shares the database, the
+selection rules and the cleaning engine with the two apps above — the only
+thing that changes is how the selection is made.
+
+```bash
+# What can be cleaned?
+cli categories
+cli programs -c Cache
+
+# What would a selection touch, without touching it?
+cli plan -c Cache -c Logs --paths
+
+# Clean it.
+cli clean -c Cache -c Logs
+cli clean --all                      # everything, like the window app's "clean all"
+cli clean -c "Cache/Browser"         # one subcategory
+cli clean -p Chrome                  # one program, all of its categories
+cli clean -p "Chrome=Logs"           # one program, one of its categories
+cli clean -a -e Discord              # everything except one program
+
+# For a script.
+cli clean -a --json | jq .bytes
+```
+
+Selection is as detailed as in the terminal app — a category, a subcategory of
+one, a whole program, or a program narrowed to some of its categories. Names are
+matched case-insensitively, and a name that does not exist is an error with the
+closest real names next to it rather than a run that quietly cleans something
+else.
+
+| Command | What it does |
+|---|---|
+| `cli categories` | Categories with their subcategories and entry counts |
+| `cli programs [-c CAT]` | Programs of the selected categories, with a search filter |
+| `cli plan [selection]` | What a selection would clean, including every path with `--paths` |
+| `cli clean [selection]` | Clean it. `--dry-run` prints the plan instead |
+| `cli update` | Check for and install a newer release |
+
+Common flags: `-a/--all`, `-c/--category`, `-x/--exclude-category`,
+`-p/--program`, `-e/--exclude-program`, `-y/--yes`, `-v/--verbose`,
+`-q/--quiet`, `--json`, `--no-color`, `--dry-run`.
+
+Exit codes: `0` success, `1` a failure, `130` interrupted with Ctrl-C.
+
 ## 📥 Installation
 
 ### Option 1: Download Pre-built Binary

@@ -97,6 +97,8 @@ pub enum Frontend {
     Gui,
     /// The ratatui terminal app: `tui`.
     Tui,
+    /// The clap command line app: `cli`.
+    Cli,
 }
 
 impl Frontend {
@@ -123,8 +125,13 @@ impl Frontend {
             // The terminal app is not built for Android, and an APK cannot be
             // self-replaced anyway.
             (Frontend::Tui, _) => "",
+            (Frontend::Cli, "windows") if is_arm64() => "Windows-Arm64-Cross_Cleaner_CLI.exe",
+            (Frontend::Cli, "windows") => "Windows-Cross_Cleaner_CLI.exe",
+            (Frontend::Cli, "linux") if is_arm64() => "Linux-Arm64-Cross_Cleaner_CLI",
+            (Frontend::Cli, "linux") => "Linux-Cross_Cleaner_CLI",
+            (Frontend::Cli, "macos") => "MacOS-Arm64-Cross_Cleaner_CLI",
             // An OS this project does not ship for.
-            (Frontend::Gui, _) => "",
+            (Frontend::Gui, _) | (Frontend::Cli, _) => "",
         }
     }
 
@@ -149,7 +156,13 @@ impl Frontend {
             (Frontend::Tui, "linux", false) => "Linux-Cross_Cleaner_TUI",
             (Frontend::Tui, "macos", _) => "MacOS-Arm64-Cross_Cleaner_TUI",
             (Frontend::Tui, "android", _) => "",
-            (Frontend::Gui, _, _) | (Frontend::Tui, _, _) => "",
+            (Frontend::Cli, "windows", true) => "Windows-Arm64-Cross_Cleaner_CLI.exe",
+            (Frontend::Cli, "windows", false) => "Windows-Cross_Cleaner_CLI.exe",
+            (Frontend::Cli, "linux", true) => "Linux-Arm64-Cross_Cleaner_CLI",
+            (Frontend::Cli, "linux", false) => "Linux-Cross_Cleaner_CLI",
+            (Frontend::Cli, "macos", _) => "MacOS-Arm64-Cross_Cleaner_CLI",
+            (Frontend::Cli, "android", _) => "",
+            (Frontend::Gui, _, _) | (Frontend::Tui, _, _) | (Frontend::Cli, _, _) => "",
         }
     }
 }
@@ -580,6 +593,28 @@ Special thanks to our amazing contributors who made this release possible:\n\
         assert_eq!(name.ends_with(".exe"), cfg!(windows));
     }
 
+    /// The command line build must resolve its own asset, for the same reason
+    /// the terminal one does: installing the GUI binary here would replace the
+    /// CLI with a window that has nothing to do with it.
+    #[test]
+    fn test_command_line_asset_name_is_distinct_per_platform() {
+        let name = Frontend::Cli.asset_name();
+        assert!(!name.contains("GUI"), "unexpected asset name: {name}");
+        assert!(!name.contains("TUI"), "unexpected asset name: {name}");
+        assert!(
+            [
+                "Windows-Cross_Cleaner_CLI.exe",
+                "Windows-Arm64-Cross_Cleaner_CLI.exe",
+                "Linux-Cross_Cleaner_CLI",
+                "Linux-Arm64-Cross_Cleaner_CLI",
+                "MacOS-Arm64-Cross_Cleaner_CLI",
+            ]
+            .contains(&name),
+            "unexpected asset name: {name}"
+        );
+        assert_eq!(name.ends_with(".exe"), cfg!(windows));
+    }
+
     #[test]
     fn test_every_released_asset_name_is_published_by_the_workflow() {
         // Guards the pairing between this file and .github/workflows/release.yml:
@@ -590,11 +625,12 @@ Special thanks to our amazing contributors who made this release possible:\n\
         ))
         .expect("release workflow is readable");
 
-        for frontend in [Frontend::Gui, Frontend::Tui] {
+        for frontend in [Frontend::Gui, Frontend::Tui, Frontend::Cli] {
             for os in ["windows", "linux", "macos", "android"] {
                 for arm64 in [false, true] {
                     let name = frontend.asset_name_for(os, arm64);
-                    // Android has no terminal build, so it resolves to nothing.
+                    // Android has no terminal or CLI build, so it resolves to
+                    // nothing.
                     if name.is_empty() {
                         continue;
                     }
@@ -611,7 +647,7 @@ Special thanks to our amazing contributors who made this release possible:\n\
     fn test_asset_name_for_matches_the_running_build() {
         // `asset_name_for` exists so the tests can enumerate every platform, but
         // it has to stay in step with what the updater actually resolves to.
-        for frontend in [Frontend::Gui, Frontend::Tui] {
+        for frontend in [Frontend::Gui, Frontend::Tui, Frontend::Cli] {
             assert_eq!(
                 frontend.asset_name_for(std::env::consts::OS, is_arm64()),
                 frontend.asset_name(),
@@ -625,7 +661,7 @@ Special thanks to our amazing contributors who made this release possible:\n\
         // The two binaries differ only by the arch marker, so a build must never
         // ask for the one it cannot run: that would install an unrunnable exe.
         for os in ["windows", "linux"] {
-            for frontend in [Frontend::Gui, Frontend::Tui] {
+            for frontend in [Frontend::Gui, Frontend::Tui, Frontend::Cli] {
                 let x86 = frontend.asset_name_for(os, false);
                 let arm = frontend.asset_name_for(os, true);
                 assert_ne!(x86, arm, "{frontend:?} on {os} names both builds alike");

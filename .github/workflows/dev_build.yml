@@ -122,12 +122,14 @@ jobs:
         run: |
           cargo +nightly build --release -p desktop
           cargo +nightly build --release -p tui
+          cargo +nightly build --release -p cli
       - name: List files for debugging
         run: ls -la target/release/
       - name: Move linux binaries
         run: |
           mv target/release/desktop Cross_Cleaner_GUI_Linux
           mv target/release/tui Cross_Cleaner_TUI_Linux
+          mv target/release/cli Cross_Cleaner_CLI_Linux
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -135,6 +137,7 @@ jobs:
           path: |
             Cross_Cleaner_GUI_Linux
             Cross_Cleaner_TUI_Linux
+            Cross_Cleaner_CLI_Linux
 
   build_linux_arm64:
     # Native arm64 runner: the same job as build_linux, no cross-compilation.
@@ -152,12 +155,14 @@ jobs:
         run: |
           cargo +nightly build --release -p desktop
           cargo +nightly build --release -p tui
+          cargo +nightly build --release -p cli
       - name: List files for debugging
         run: ls -la target/release/
       - name: Move linux arm64 binaries
         run: |
           mv target/release/desktop Cross_Cleaner_GUI_Linux_Arm64
           mv target/release/tui Cross_Cleaner_TUI_Linux_Arm64
+          mv target/release/cli Cross_Cleaner_CLI_Linux_Arm64
       - name: Upload Linux Arm64 artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -165,6 +170,7 @@ jobs:
           path: |
             Cross_Cleaner_GUI_Linux_Arm64
             Cross_Cleaner_TUI_Linux_Arm64
+            Cross_Cleaner_CLI_Linux_Arm64
 
   build_windows:
     runs-on: windows-latest
@@ -177,12 +183,14 @@ jobs:
         run: |
           cargo +nightly build --release -p desktop
           cargo +nightly build --release -p tui
+          cargo +nightly build --release -p cli
       - name: List files for debugging
         run: dir target\release\
       - name: Move windows binaries
         run: |
           move target\release\desktop.exe Cross_Cleaner_GUI_Windows.exe
           move target\release\tui.exe Cross_Cleaner_TUI_Windows.exe
+          move target\release\cli.exe Cross_Cleaner_CLI_Windows.exe
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -190,6 +198,7 @@ jobs:
           path: |
             Cross_Cleaner_GUI_Windows.exe
             Cross_Cleaner_TUI_Windows.exe
+            Cross_Cleaner_CLI_Windows.exe
 
   build_windows_arm64:
     # Native arm64 runner: no cross-linker. No installer here, matching
@@ -204,12 +213,14 @@ jobs:
         run: |
           cargo +nightly build --release -p desktop
           cargo +nightly build --release -p tui
+          cargo +nightly build --release -p cli
       - name: List files for debugging
         run: dir target\release\
       - name: Move windows arm64 binaries
         run: |
           move target\release\desktop.exe Cross_Cleaner_GUI_Windows_Arm64.exe
           move target\release\tui.exe Cross_Cleaner_TUI_Windows_Arm64.exe
+          move target\release\cli.exe Cross_Cleaner_CLI_Windows_Arm64.exe
       - name: Upload Windows Arm64 artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -217,6 +228,7 @@ jobs:
           path: |
             Cross_Cleaner_GUI_Windows_Arm64.exe
             Cross_Cleaner_TUI_Windows_Arm64.exe
+            Cross_Cleaner_CLI_Windows_Arm64.exe
   build_macos:
     runs-on: macos-latest
     needs: [sort_json]
@@ -228,12 +240,14 @@ jobs:
         run: |
           cargo +nightly build --release -p desktop
           cargo +nightly build --release -p tui
+          cargo +nightly build --release -p cli
       - name: List files for debugging
         run: ls -la target/release/
       - name: Move macos binaries
         run: |
           mv target/release/desktop Cross_Cleaner_GUI_MacOS
           mv target/release/tui Cross_Cleaner_TUI_MacOS
+          mv target/release/cli Cross_Cleaner_CLI_MacOS
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -241,6 +255,7 @@ jobs:
           path: |
             Cross_Cleaner_GUI_MacOS
             Cross_Cleaner_TUI_MacOS
+            Cross_Cleaner_CLI_MacOS
   build_android:
     runs-on: ubuntu-latest
     needs: [sort_json]

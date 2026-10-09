@@ -570,16 +570,19 @@ impl AppState {
 
     // --- cleaning --------------------------------------------------------
 
-    /// Snapshots the current program selection and spawns the cleaning job.
-    /// Switches to the [`Page::Clearing`] page and clears the category
-    /// selection, so returning to the main page starts from a blank slate.
-    pub fn start_cleaning(&mut self) {
-        let selected_map = self.selected_map();
-
-        self.excluded_programs.clear();
+    /// The two exclusion sets the cleaning job is started with, derived from
+    /// the program page as it currently stands.
+    ///
+    /// Split out of [`Self::start_cleaning`] so a frontend that shows what a
+    /// run *would* touch (the command line frontend's `--dry-run`) describes
+    /// the selection exactly the way the job itself resolves it, instead of
+    /// growing its own second copy of the rule.
+    #[allow(clippy::type_complexity)]
+    pub fn exclusions(&self) -> (HashSet<Arc<str>>, HashSet<(Arc<str>, Arc<str>)>) {
+        let mut excluded_programs = HashSet::new();
         for (checkbox, program) in &self.program_checkboxes {
             if !*checkbox.borrow() {
-                self.excluded_programs.insert(Arc::clone(program));
+                excluded_programs.insert(Arc::clone(program));
             }
         }
 
@@ -594,6 +597,18 @@ impl AppState {
                 }
             }
         }
+
+        (excluded_programs, excluded_program_categories)
+    }
+
+    /// Snapshots the current program selection and spawns the cleaning job.
+    /// Switches to the [`Page::Clearing`] page and clears the category
+    /// selection, so returning to the main page starts from a blank slate.
+    pub fn start_cleaning(&mut self) {
+        let selected_map = self.selected_map();
+
+        let (excluded_programs, excluded_program_categories) = self.exclusions();
+        self.excluded_programs = excluded_programs.clone();
 
         let (progress_sender, progress_receiver) = mpsc::channel(32);
         self.progress_receiver = Some(progress_receiver);
