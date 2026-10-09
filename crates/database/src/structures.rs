@@ -656,4 +656,12 @@ pub struct CleanerResult {
     pub locked_bytes: u64,
     /// Named locked files, capped the same way [`Self::paths`] is.
     pub locked: Vec<ClearedPath>,
+    /// Files a scan found the ACL refuses to delete. Reported apart from
+    /// [`Self::locked_files`] because the remedy differs: elevation, not closing
+    /// the application that is holding them.
+    pub denied_files: u64,
+    /// Bytes those denied files hold.
+    pub denied_bytes: u64,
+    /// Named denied files, capped the same way [`Self::paths`] is.
+    pub denied: Vec<ClearedPath>,
 }

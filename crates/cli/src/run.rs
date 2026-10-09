@@ -331,7 +331,7 @@ fn render_scan(ui: &Ui, report: &cleaning::ScanReport, output: &OutputArgs) {
         ui.line("");
         ui.line(&ui.warn(&format!(
             "{} are in use and will not be removed:",
-            count(report.locked_files, "file")
+            count(report.locked_files, "item")
         )));
         ui.line(&format!(
             "  {} held back — close the programs using them and run again.",
@@ -339,6 +339,30 @@ fn render_scan(ui: &Ui, report: &cleaning::ScanReport, output: &OutputArgs) {
         ));
         if output.verbose {
             for detail in report.locked.iter().take(50) {
+                ui.line(&format!(
+                    "      {}  {}",
+                    detail.path,
+                    ui.dim(&database::utils::get_file_size_string(detail.removed_bytes))
+                ));
+            }
+        }
+    }
+
+    // Reported apart from `locked` because the advice is different: telling
+    // someone to close their applications when the problem is their ACL sends
+    // them after the wrong fix.
+    if report.denied_files > 0 {
+        ui.line("");
+        ui.line(&ui.warn(&format!(
+            "{} cannot be deleted without administrator rights:",
+            count(report.denied_files, "item")
+        )));
+        ui.line(&format!(
+            "  {} held back — run the same command from an elevated prompt.",
+            ui.bad(&database::utils::get_file_size_string(report.denied_bytes))
+        ));
+        if output.verbose {
+            for detail in report.denied.iter().take(50) {
                 ui.line(&format!(
                     "      {}  {}",
                     detail.path,
@@ -385,6 +409,9 @@ fn scan_json(report: &cleaning::ScanReport) -> String {
         // The same shape the `paths` of a program have, so a script can treat a
         // locked file exactly like a freeable one and filter on the same keys.
         "locked_paths": report.locked.iter().map(path_json).collect::<Vec<_>>(),
+        "denied_files": report.denied_files,
+        "denied_bytes": report.denied_bytes,
+        "denied_paths": report.denied.iter().map(path_json).collect::<Vec<_>>(),
         "unmeasured": report.unmeasured.iter().map(|entry| serde_json::json!({
             "id": entry.id,
             "reason": entry.reason,

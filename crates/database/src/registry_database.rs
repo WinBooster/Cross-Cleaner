@@ -5,6 +5,8 @@ use crate::registry_utils::{
     remove_value_in_registry, remove_values_matching_in_registry,
 };
 #[cfg(windows)]
+use crate::registry_utils::{KeyAccess, access_for, probe_key_access};
+#[cfg(windows)]
 use crate::streaming::for_each_array;
 #[cfg(windows)]
 use crate::structures::CleanerDataRegistry;
@@ -193,6 +195,23 @@ fn split_hive(path: &crate::structures::SharedPath) -> Option<(&'static str, Reg
 
 #[cfg(windows)]
 pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
+    clear_registry_with(data, false)
+}
+
+/// Reports what a real [`clear_registry`] would remove, deleting nothing.
+///
+/// The counting half of the removal was already separated from the writing half
+/// (each helper reads with `KEY_READ` before it deletes with `KEY_WRITE`), so
+/// measuring needs nothing new: the same enumeration runs and the write is left
+/// out. The access probe is what turns this from a size into an honest answer —
+/// a key the caller cannot delete is reported as blocked, not as free.
+#[cfg(windows)]
+pub fn measure_registry(data: &CleanerDataRegistry) -> CleanerResult {
+    clear_registry_with(data, true)
+}
+
+#[cfg(windows)]
+fn clear_registry_with(data: &CleanerDataRegistry, measure: bool) -> CleanerResult {
     // INFO: Creating output struct
     let mut result = CleanerResult {
         files: 0,
@@ -205,13 +224,13 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
         program: data.program.clone(),
         category: data.category.clone(),
         sub_category: data.sub_category.clone(),
-        // A registry key is never "locked" the way a file is, and a scan does
-        // not walk the registry ahead of the run, so there is nothing to count
-        // here. The bytes are zero either way, so the claim a scan makes about
-        // registry entries is unchanged: it reports the keys it would remove.
+        // Filled in below when measuring: a key the probe says is blocked.
         locked_files: 0,
         locked_bytes: 0,
         locked: Vec::new(),
+        denied_files: 0,
+        denied_bytes: 0,
+        denied: Vec::new(),
     };
 
     // INFO: Every item this entry removed, named. Collected rather than summed as
@@ -229,6 +248,38 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
         };
 
         for current_path in paths {
+            // Asked before anything is counted. A key this caller cannot delete
+            // frees nothing, so naming its contents as a saving would be a claim
+            // the run cannot honour — the same reason the filesystem walk
+            // probes before it totals.
+            if measure
+                && let Some(flags) = access_for(data)
+            {
+                let verdict = probe_key_access(&root, &current_path, flags);
+                if !verdict.is_yes() {
+                    let named = ClearedPath {
+                        path: crate::structures::SharedPath::new(&format!(
+                            "{}\\{}",
+                            hive, current_path
+                        )),
+                        removed_bytes: 0,
+                        removed_files: 0,
+                        removed_directories: 0,
+                    };
+                    match verdict {
+                        KeyAccess::Denied => {
+                            result.denied_files += 1;
+                            result.denied.push(named);
+                        }
+                        _ => {
+                            result.locked_files += 1;
+                            result.locked.push(named);
+                        }
+                    }
+                    continue;
+                }
+            }
+
             if data.remove_all_in_tree {
                 removals.extend(remove_all_in_tree_in_registry(&root, &current_path));
             }
@@ -285,7 +336,9 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
     // INFO: The total is the sum of what was listed, never a separate count: two
     // totals that can disagree is the bug this whole path was fixed to avoid.
     result.bytes = result.paths.iter().map(|entry| entry.removed_bytes).sum();
-    result.working = !result.paths.is_empty();
+    result.working = !result.paths.is_empty()
+        || !result.locked.is_empty()
+        || !result.denied.is_empty();
 
     result
 }

@@ -105,6 +105,9 @@ macro_rules! custom_glob_cleaner {
                     locked_files: 0,
                     locked_bytes: 0,
                     locked: Vec::new(),
+                    denied_files: 0,
+                    denied_bytes: 0,
+                    denied: Vec::new(),
                 };
 
                 // Stream glob without materializing full Vec<PathBuf> at once.

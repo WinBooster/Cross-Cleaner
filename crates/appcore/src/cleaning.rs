@@ -82,6 +82,12 @@ pub struct ScanReport {
     pub free: CleanResult,
     /// Files something is holding open, and the bytes they hold.
     pub locked_files: u64,
+    /// Items a scan found the ACL refuses to delete. Reported apart from
+    /// `locked_files` because the fix is different: elevation, not closing the
+    /// program that is holding them.
+    pub denied_files: u64,
+    pub denied_bytes: u64,
+    pub denied: Vec<ClearedPath>,
     pub locked_bytes: u64,
     /// Named locked files, largest first.
     pub locked: Arc<[ClearedPath]>,
@@ -183,6 +189,9 @@ pub async fn work_with(
     // share one return shape and the counting cannot be forgotten in one of them.
     let mut locked_files: u64 = 0;
     let mut locked_bytes: u64 = 0;
+    let mut denied_files: u64 = 0;
+    let mut denied_bytes: u64 = 0;
+    let mut denied: Vec<ClearedPath> = Vec::new();
     let mut locked: Vec<ClearedPath> = Vec::new();
     let mut unmeasured: Vec<Unmeasured> = Vec::new();
 
@@ -205,14 +214,20 @@ pub async fn work_with(
                 && !excluded_program_categories
                     .contains(&(Arc::clone(&data.program), Arc::clone(&data.category)))
             {
-                // INFO: a registry entry can only be counted by deleting it —
-                // there is no read-only form of `clear_registry`. A scan names
-                // it as unmeasured rather than reporting a zero it cannot back up.
+                // INFO: A registry entry is measured by the same enumeration a run
+                // performs, with the write left out, and each resolved key is
+                // probed for the access the entry needs. A key that cannot be
+                // deleted is reported as blocked rather than as a saving.
                 if scanning {
-                    unmeasured.push(Unmeasured {
-                        id: format!("{}/{}", data.program, data.category),
-                        reason: "registry entries can only be measured by clearing them",
-                    });
+                    let data = data.clone();
+                    let program = data.program.clone();
+                    let sender = progress_sender.clone();
+                    let sem = sem.clone();
+                    futures.push(Box::pin(async move {
+                        let _p = sem.acquire_owned().await.unwrap();
+                        let _ = sender.send(format!("{CLEANING_PREFIX}{program}")).await;
+                        database::registry_database::measure_registry(&data)
+                    }));
                     return;
                 }
                 let sender = progress_sender.clone();
@@ -312,6 +327,9 @@ pub async fn work_with(
         locked_bytes += result.locked_bytes;
         let taken = std::mem::take(&mut result.locked);
         locked.extend(taken);
+        denied_files += result.denied_files;
+        denied_bytes += result.denied_bytes;
+        denied.extend(std::mem::take(&mut result.denied));
         if fold(&mut cleared_programs, result) {
             bytes_cleared += bytes;
             removed_files += files;
@@ -387,6 +405,9 @@ pub async fn work_with(
         locked_files,
         locked_bytes,
         locked: locked.into(),
+        denied_files,
+        denied_bytes,
+        denied: denied.into(),
         unmeasured,
     }
 }
@@ -641,6 +662,9 @@ mod tests {
             locked_files: 0,
             locked_bytes: 0,
             locked: Vec::new(),
+            denied_files: 0,
+            denied_bytes: 0,
+            denied: Vec::new(),
             paths: paths
                 .iter()
                 .map(|(path, bytes)| ClearedPath {

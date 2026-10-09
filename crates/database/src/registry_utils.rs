@@ -1,8 +1,88 @@
 #[cfg(windows)]
 use winreg::{
     RegKey,
-    enums::{HKEY_CURRENT_USER, KEY_READ, KEY_WRITE},
+    enums::{HKEY_CURRENT_USER, KEY_READ, KEY_SET_VALUE, KEY_WRITE},
 };
+
+/// `DELETE` from `winnt.h`, spelled out because `winreg` does not re-export it.
+///
+/// Requesting it in `RegOpenKeyExW` is the whole probe: the call either grants
+/// the right (and the caller closes the handle again without deleting
+/// anything) or refuses, which is the answer the scan needs.
+#[cfg(windows)]
+pub const DELETE_ACCESS: u32 = 0x0001_0000;
+
+/// Whether a real run could delete from this key right now.
+#[cfg(windows)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum KeyAccess {
+    /// The key could be deleted.
+    Yes,
+    /// Another process has the key open, so deleting it would fail.
+    Locked,
+    /// The key's ACL refuses this user.
+    Denied,
+    /// The key is not there, or the probe could not tell.
+    Unknown,
+}
+
+#[cfg(windows)]
+impl KeyAccess {
+    /// True when a run would go through.
+    pub fn is_yes(self) -> bool {
+        self == KeyAccess::Yes
+    }
+}
+
+/// Asks whether `path` under `key` could be written to, without touching it.
+///
+/// The same two failures the filesystem probe distinguishes, reached the same
+/// way: the access is requested, and a refusal is read as `ERROR_SHARING_VIOLATION`
+/// or `ERROR_ACCESS_DENIED`. Those arrive as `io::Error`s out of `winreg`, which
+/// does not surface the raw code, so the numeric `raw_os_error` is matched.
+#[cfg(windows)]
+pub fn probe_key_access(key: &RegKey, path: &str, flags: u32) -> KeyAccess {
+    match key.open_subkey_with_flags(path, flags) {
+        // Dropped immediately: the probe opens, it does not keep.
+        Ok(handle) => {
+            drop(handle);
+            KeyAccess::Yes
+        }
+        Err(error) => match error.raw_os_error() {
+            // ERROR_SHARING_VIOLATION
+            Some(32) => KeyAccess::Locked,
+            // ERROR_ACCESS_DENIED
+            Some(5) => KeyAccess::Denied,
+            // ERROR_FILE_NOT_FOUND / ERROR_PATH_NOT_FOUND: nothing to delete.
+            Some(2) | Some(3) => KeyAccess::Unknown,
+            _ => KeyAccess::Unknown,
+        },
+    }
+}
+
+/// The access a registry entry needs to do what the database says it does.
+///
+/// Deleting the key itself implies everything inside it, so an entry that
+/// removes keys asks for the stronger right. An entry that only removes values
+/// needs just permission to set values on the key.
+#[cfg(windows)]
+pub fn access_for(data: &crate::structures::CleanerDataRegistry) -> Option<u32> {
+    let removes_keys = data.remove_all_in_tree
+        || data.remove_all_in_registry
+        || data.remove_trees == "true"
+        || !data.remove_trees.is_empty()
+        || !data.keys_to_remove.is_empty();
+    let removes_values = data.remove_values == "true"
+        || !data.remove_values.is_empty()
+        || !data.values_to_remove.is_empty();
+
+    match (removes_keys, removes_values) {
+        (true, _) => Some(DELETE_ACCESS),
+        (false, true) => Some(KEY_SET_VALUE),
+        // The entry names nothing to remove, so there is nothing to probe.
+        (false, false) => None,
+    }
+}
 
 #[cfg(not(windows))]
 pub fn get_steam_directory_from_registry() -> String {

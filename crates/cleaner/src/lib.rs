@@ -111,15 +111,17 @@ impl Mode {
 
 /// Removes (or measures) one named file inside an open directory handle.
 ///
-/// Returns the file's size together with whether it was actually reachable:
-/// in [`Mode::Measure`] a file something holds open reports `false`, which is
-/// the difference between bytes a run frees and bytes it does not.
+/// Returns the file's size together with whether it can actually be reached by
+/// a real run: in [`Mode::Measure`] the answer is the probe's verdict, which is
+/// the difference between bytes a run frees and bytes it does not. The reason
+/// travels with the size rather than being flattened to a bool, because "another
+/// program holds it" and "you lack the rights" call for different advice.
 fn remove_file_in_dir(
     dir: &cap_std::fs::Dir,
     name: &Path,
     path: &Path,
     mode: Mode,
-) -> io::Result<(u64, bool)> {
+) -> io::Result<(u64, deletable::Deletable)> {
     let meta = dir.symlink_metadata(name)?;
     if meta.is_symlink() {
         return Err(io::Error::new(
@@ -133,16 +135,16 @@ fn remove_file_in_dir(
     let len = meta.len();
     if mode.removes() {
         dir.remove_file(name)?;
-        return Ok((len, true));
+        return Ok((len, deletable::Deletable::Yes));
     }
     // INFO: probed after the stat and before the caller adds it to the totals.
     // A file can be readable and still undeletable — that is the whole point of
     // the probe, and a scan that reported it as free would promise bytes the
     // run is going to fail on.
-    Ok((len, deletable::is_deletable(path).is_yes()))
+    Ok((len, deletable::is_deletable(path)))
 }
 
-fn remove_file_sync(path: &Path, mode: Mode) -> io::Result<(u64, bool)> {
+fn remove_file_sync(path: &Path, mode: Mode) -> io::Result<(u64, deletable::Deletable)> {
     let name = path
         .file_name()
         .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "no file name in path"))?;
@@ -177,6 +179,13 @@ struct Removed {
     locked_count: u64,
     /// The bytes those files hold, counted in full even past the cap.
     locked_bytes: u64,
+    /// Files a scan found that the ACL refuses to delete. Kept apart from
+    /// `locked` because the fix is different — closing an application against a
+    /// permission problem wastes the user's time and sends them down the wrong
+    /// path entirely.
+    denied: Vec<ClearedPath>,
+    denied_count: u64,
+    denied_bytes: u64,
 }
 
 /// Deleted paths kept for one cleaner. Past this the numbers still count
@@ -223,18 +232,34 @@ impl Removed {
         self.locked_count += child.locked_count;
         self.locked_bytes += child.locked_bytes;
         self.locked.extend(child.locked);
+        self.denied_count += child.denied_count;
+        self.denied_bytes += child.denied_bytes;
+        self.denied.extend(child.denied);
     }
 
-    /// Folds in a file a scan found to be held open.
+    /// Folds in an item a scan found cannot be removed, routing it by reason.
     ///
     /// Separate from [`Self::merge`] on purpose: the counters must not move,
     /// because the bytes are not freeable. Counting them in `bytes` and then
     /// subtracting later is the same arithmetic with two chances to forget the
     /// subtraction.
-    fn merge_locked(&mut self, locked: Removed) {
-        self.locked_count += locked.files;
-        self.locked_bytes += locked.bytes;
-        self.locked.extend(locked.entries);
+    fn merge_blocked(&mut self, blocked: Removed, reason: deletable::Deletable) {
+        match reason {
+            deletable::Deletable::Denied => {
+                self.denied_count += blocked.files + blocked.folders;
+                self.denied_bytes += blocked.bytes;
+                self.denied.extend(blocked.entries);
+            }
+            // `Locked` and `Unknown` are folded together deliberately: an
+            // unanswered probe is not something the user can act on, and it is
+            // far closer to "something else holds it" than to "your rights are
+            // wrong", which would send them off to run elevated for nothing.
+            _ => {
+                self.locked_count += blocked.files + blocked.folders;
+                self.locked_bytes += blocked.bytes;
+                self.locked.extend(blocked.entries);
+            }
+        }
     }
 
     /// Adds entries, counting whatever does not fit instead of dropping it.
@@ -337,8 +362,19 @@ fn remove_dir_recursive(dir: &cap_std::fs::Dir, path: &Path, mode: Mode) -> io::
             removed.merge(child);
             if mode.removes() {
                 dir.remove_dir(&name)?; // sub is now empty
+                removed.merge(Removed::folder(&entry_path));
+            } else {
+                // The contents above are gone or counted, so what is left to
+                // ask about is whether this user may delete the directory
+                // itself. Counting it without asking promised a directory the
+                // run would leave behind.
+                let reason = deletable::is_deletable(&entry_path);
+                if reason.is_yes() {
+                    removed.merge(Removed::folder(&entry_path));
+                } else {
+                    removed.merge_blocked(Removed::folder(&entry_path), reason);
+                }
             }
-            removed.merge(Removed::folder(&entry_path));
         } else {
             let bytes = entry.metadata()?.len();
             if mode.removes() {
@@ -350,12 +386,14 @@ fn remove_dir_recursive(dir: &cap_std::fs::Dir, path: &Path, mode: Mode) -> io::
                 dir.remove_file(&name)?;
                 removed.merge(Removed::file(&entry_path, bytes));
             } else {
-                match deletable::is_deletable(&entry_path) {
-                    deletable::Deletable::Yes => removed.merge(Removed::file(&entry_path, bytes)),
+                let reason = deletable::is_deletable(&entry_path);
+                if reason.is_yes() {
+                    removed.merge(Removed::file(&entry_path, bytes));
+                } else {
                     // Counted as reachable minus nothing: the bytes are kept out
                     // of the run's totals below, and named here so the user can
                     // see what is holding them.
-                    _ => removed.merge_locked(Removed::file(&entry_path, bytes)),
+                    removed.merge_blocked(Removed::file(&entry_path, bytes), reason);
                 }
             }
         }
@@ -383,19 +421,43 @@ struct PathStats {
     locked: Vec<ClearedPath>,
     locked_count: u64,
     locked_bytes: u64,
+    /// Items a scan found the ACL refuses to delete. Kept apart from `locked`
+    /// because the remedy is different: elevation, not closing an application.
+    denied: Vec<ClearedPath>,
+    denied_count: u64,
+    denied_bytes: u64,
 }
 
 impl PathStats {
-    /// Folds in a file a scan found to be held open by another process.
+    /// Folds in an item a scan found cannot be removed, routed by reason.
     ///
     /// Separate from [`Self::add`] because the counters must not move: the bytes
     /// are visible and real, but the run will not free them, and a dry run that
     /// counted them would promise space the user does not get back.
-    fn merge_locked(&mut self, locked: Removed) {
-        self.locked_count += locked.files;
-        self.locked_bytes += locked.bytes;
-        self.locked.extend(locked.entries);
-        // A locked file still proves the path exists, so the entry counts as
+    fn merge_blocked(&mut self, blocked: Removed, reason: deletable::Deletable) {
+        let (count, bytes, list) = match reason {
+            deletable::Deletable::Denied => (
+                &mut self.denied_count,
+                &mut self.denied_bytes,
+                &mut self.denied,
+            ),
+            // `Locked` and `Unknown` share a bucket: an unanswered probe is not
+            // actionable, and it is much closer to "something else holds it"
+            // than to "your rights are wrong".
+            _ => (
+                &mut self.locked_count,
+                &mut self.locked_bytes,
+                &mut self.locked,
+            ),
+        };
+        *count += blocked.files + blocked.folders;
+        *bytes += blocked.bytes;
+        for entry in blocked.entries {
+            if list.len() < MAX_REMOVED_ENTRIES {
+                list.push(entry);
+            }
+        }
+        // A blocked item still proves the path exists, so the entry counts as
         // touched. Without this a directory holding nothing but locked files
         // would read as "nothing matched", which is the opposite of the truth.
         self.working = true;
@@ -417,6 +479,13 @@ impl PathStats {
         for entry in removed.locked {
             if self.locked.len() < MAX_REMOVED_ENTRIES {
                 self.locked.push(entry);
+            }
+        }
+        self.denied_count += removed.denied_count;
+        self.denied_bytes += removed.denied_bytes;
+        for entry in removed.denied {
+            if self.denied.len() < MAX_REMOVED_ENTRIES {
+                self.denied.push(entry);
             }
         }
         for entry in removed.entries {
@@ -470,12 +539,12 @@ fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData, mode: M
         let fpath = path.join(&relative);
         match remove_file_in_dir(dir, &relative, &fpath, mode) {
             // The file's own path, not its parent's: that is what was deleted.
-            Ok((b, reachable)) => {
+            Ok((b, reason)) => {
                 let removed = Removed::file(&fpath, b);
-                if reachable {
+                if reason.is_yes() {
                     stats.add(removed)
                 } else {
-                    stats.merge_locked(removed)
+                    stats.merge_blocked(removed, reason)
                 }
             }
             // A file the database lists but that is not on disk any more has
@@ -521,7 +590,7 @@ fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData, mode: M
     }
 
     if data.flags.contains(CleanerFlags::REMOVE_FILES)
-        && let Ok((b, reachable)) = remove_file_sync(path, mode)
+        && let Ok((b, reason)) = remove_file_sync(path, mode)
     {
         // The matched path itself, interned: listing it costs a pointer, not a
         // copy of the segments.
@@ -536,10 +605,10 @@ fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData, mode: M
             }],
             ..Removed::default()
         };
-        if reachable {
+        if reason.is_yes() {
             stats.add(removed)
         } else {
-            stats.merge_locked(removed)
+            stats.merge_blocked(removed, reason)
         }
     }
 
@@ -620,6 +689,9 @@ async fn walk_data(data: &CleanerData, mode: Mode) -> CleanerResult {
         locked_files: 0,
         locked_bytes: 0,
         locked: Vec::new(),
+        denied_files: 0,
+        denied_bytes: 0,
+        denied: Vec::new(),
     };
 
     // INFO: Reject parent-dir traversal in the DB-supplied glob pattern
@@ -669,6 +741,13 @@ async fn walk_data(data: &CleanerData, mode: Mode) -> CleanerResult {
             for path in stats.locked {
                 if out.locked.len() < MAX_REMOVED_ENTRIES {
                     out.locked.push(path);
+                }
+            }
+            out.denied_files += stats.denied_count;
+            out.denied_bytes += stats.denied_bytes;
+            for path in stats.denied {
+                if out.denied.len() < MAX_REMOVED_ENTRIES {
+                    out.denied.push(path);
                 }
             }
         }

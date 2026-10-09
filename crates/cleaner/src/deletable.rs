@@ -64,6 +64,14 @@ impl Deletable {
 }
 
 /// Asks whether `path` can be removed right now. Never removes anything.
+///
+/// A directory is probed too, and the probe answers a narrower question for one.
+/// Whether it is *empty* is the walk's problem, and on Windows a handle held on
+/// a directory does not block a `DELETE` open the way it blocks one on a file —
+/// see `a_directory_open_does_not_enforce_share_mode`. What the probe does catch
+/// is the ACL refusing the delete, which is the failure that actually kept a
+/// scanned directory from being removed. Counting such a directory as freeable
+/// promised bytes the run would not deliver.
 pub fn is_deletable(path: &Path) -> Deletable {
     let Ok(meta) = path.symlink_metadata() else {
         // It is gone already, or was never there. Reporting "removable" would
@@ -71,13 +79,12 @@ pub fn is_deletable(path: &Path) -> Deletable {
         // one answer that has to say it does not know.
         return Deletable::Unknown;
     };
-    if !meta.is_file() {
-        // A directory is removable when it is empty and its parent allows new
-        // entries; whether it *is* empty depends on the entries being removed
-        // first, so a per-file answer is the only honest one to give here.
-        return Deletable::Yes;
+    if meta.is_file() || meta.is_dir() {
+        return probe(path);
     }
-    probe(path)
+    // Sockets, devices and the like: nothing to ask about, and nothing the walk
+    // would remove as a plain entry either.
+    Deletable::Yes
 }
 
 #[cfg(windows)]
@@ -195,13 +202,63 @@ mod tests {
     }
 
     #[test]
-    fn a_directory_is_not_probed_as_a_file() {
+    fn a_directory_is_probed_like_a_file() {
         let dir = TempDir::new().unwrap();
         let sub = dir.path().join("sub");
         fs::create_dir(&sub).unwrap();
-        // A directory's removability depends on what is inside it, which the
-        // walk handles; the file probe must not guess either way.
+        // A plain directory is removable. Whether it is empty is the walk's
+        // question; the lock and the ACL are this probe's, and both apply.
         assert_eq!(is_deletable(&sub), Deletable::Yes);
+    }
+
+    /// Windows does not enforce share-mode on a directory open the way it does on
+    /// a file: holding a directory with `FILE_SHARE_MODE(0)` still lets a
+    /// `DELETE` open succeed, while the same handle on a file does not (see
+    /// `an_open_handle_without_share_delete_is_reported_as_locked` above).
+    ///
+    /// So for a directory this probe answers access and not locking, and the
+    /// `Locked` branch is unreachable there. Pinned because the asymmetry is
+    /// surprising and the obvious thing is to "fix" the probe by assuming the
+    /// file behaviour and shipping a claim it cannot back up.
+    #[cfg(windows)]
+    #[test]
+    fn a_directory_open_does_not_enforce_share_mode() {
+        use std::os::windows::ffi::OsStrExt;
+        use windows::Win32::Storage::FileSystem::{
+            CreateFileW, FILE_FLAG_BACKUP_SEMANTICS, FILE_SHARE_MODE, OPEN_EXISTING,
+        };
+        use windows::core::PCWSTR;
+
+        let dir = TempDir::new().unwrap();
+        let sub = dir.path().join("held");
+        fs::create_dir(&sub).unwrap();
+
+        let wide: Vec<u16> = sub
+            .as_os_str()
+            .encode_wide()
+            .chain(std::iter::once(0))
+            .collect();
+        // SAFETY: `wide` is NUL-terminated and outlives the call.
+        let held = unsafe {
+            CreateFileW(
+                PCWSTR(wide.as_ptr()),
+                0,
+                FILE_SHARE_MODE(0),
+                None,
+                OPEN_EXISTING,
+                FILE_FLAG_BACKUP_SEMANTICS,
+                None,
+            )
+        }
+        .expect("the directory opens");
+
+        // Documented behaviour, not an accident of the test: no `Locked`.
+        assert!(is_deletable(&sub).is_yes());
+
+        // SAFETY: the handle came back from `CreateFileW` and is closed once.
+        unsafe {
+            let _ = windows::Win32::Foundation::CloseHandle(held);
+        }
     }
 
     #[test]
