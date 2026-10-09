@@ -3098,7 +3098,7 @@
   },
   {
     "path": "{drive}Program Files\\LibreOffice",
-    "class": "Text",
+    "class": "Office",
     "category": "Documentation",
     "sub_category": "Licenses",
     "program": "LibreOffice",
@@ -3110,7 +3110,7 @@
   },
   {
     "path": "{drive}Program Files\\LibreOffice",
-    "class": "Text",
+    "class": "Office",
     "category": "Documentation",
     "program": "LibreOffice",
     "files_to_remove": [
@@ -3119,7 +3119,7 @@
   },
   {
     "path": "{drive}Program Files\\LibreOffice\\readmes\\*",
-    "class": "Text",
+    "class": "Office",
     "category": "Logs",
     "program": "LibreOffice",
     "remove_directories": true,
