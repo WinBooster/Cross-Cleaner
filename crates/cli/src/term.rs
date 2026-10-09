@@ -11,7 +11,7 @@
 //! codes) and off when `NO_COLOR` is set (https://no-color.org).
 
 use std::io::{IsTerminal, Write};
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicI32, Ordering};
 
 use database::structures::Cleared;
 use database::utils::get_file_size_string;
@@ -31,6 +31,7 @@ mod code {
 }
 
 /// Styling, resolved once from the flags and the environment.
+#[derive(Clone)]
 pub struct Ui {
     color: bool,
     quiet: bool,
@@ -48,6 +49,20 @@ pub struct Ui {
 /// all of them — and the line is shared state of the terminal, not of a styling
 /// object.
 static PROGRESS_ACTIVE: AtomicBool = AtomicBool::new(false);
+
+/// The whole-number percentage of the last drawn progress line.
+///
+/// A scan sends an update per file, so a 700-entry scan sends 700 of them while
+/// the percentage only takes 101 distinct values. Redrawing on every entry
+/// spends the terminal's time repainting a line that looks identical to the one
+/// already on screen, and the reader sees the bar frozen while the counter
+/// races. Skipping the redraw until the percentage actually moves cuts the
+/// repaints to about one in seven and leaves the counter stepping in step with
+/// the bar.
+///
+/// A static for the same reason as [`PROGRESS_ACTIVE`]: it belongs to the
+/// terminal, not to the styling object.
+static LAST_PERCENT: AtomicI32 = AtomicI32::new(-1);
 
 impl Ui {
     /// Builds the styling for this run.
@@ -161,6 +176,16 @@ impl Ui {
         if self.quiet || self.json || !std::io::stdout().is_terminal() {
             return;
         }
+        // Only redraw when the bar is actually going to look different. Updates
+        // without a fraction carry the name of what is being walked, which does
+        // change from one to the next, so those are never dropped.
+        if let Some(fraction) = fraction {
+            let percent = (fraction.clamp(0.0, 1.0) * 100.0).round() as i32;
+            if LAST_PERCENT.load(Ordering::Relaxed) == percent {
+                return;
+            }
+            LAST_PERCENT.store(percent, Ordering::Relaxed);
+        }
         let mut line = String::new();
         if let Some(fraction) = fraction {
             line.push_str(&self.bar(fraction));
@@ -198,8 +223,35 @@ impl Ui {
         }
     }
 
+    /// Routes library diagnostics to stderr in a way that does not tear the
+    /// progress line apart, and drops them entirely when the run asked for
+    /// silence.
+    ///
+    /// Without this the warnings go straight to stderr while the progress line
+    /// sits on stdout, and the two streams interleave mid-line: the reader gets
+    /// `Scanning  Windows[warn] cleaner: open_dir ...` and the next progress
+    /// update lands in the middle of a warning.
+    ///
+    /// The line is moved off first and the next progress update redraws it, so a
+    /// warning costs one repaint rather than corrupting the frame.
+    pub fn install_diagnostics(&self) {
+        let ui = self.clone();
+        database::diag::set_sink(Some(std::sync::Arc::new(move |line: &str| {
+            // `--quiet` is for scripts that only care about the exit code, and
+            // `--json` output has to stay machine-readable.
+            if ui.quiet || ui.json {
+                return;
+            }
+            ui.clear_progress();
+            eprintln!("{line}");
+        })));
+    }
+
     /// Moves off the progress line, once, before anything else is printed.
     pub fn clear_progress(&self) {
+        // A scan and the run that follows it both start from zero, so the
+        // throttle has to forget the last percentage it drew.
+        LAST_PERCENT.store(-1, Ordering::Relaxed);
         if PROGRESS_ACTIVE.swap(false, Ordering::Relaxed) && std::io::stdout().is_terminal() {
             print!("\r\x1b[2K");
             let _ = std::io::stdout().flush();

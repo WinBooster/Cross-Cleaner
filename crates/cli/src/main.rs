@@ -49,6 +49,9 @@ fn execute(cli: Cli) -> Result<ExitCode, String> {
     let globals = cli.globals.clone();
     let output = cli.command.output().clone();
     let ui = Ui::new(globals.no_color, output.quiet, output.json);
+    // Before any command runs a cleaner, so diagnostics from the libraries never
+    // land on top of the progress line.
+    ui.install_diagnostics();
 
     match cli.command {
         Command::Categories(args) => {

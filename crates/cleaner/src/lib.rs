@@ -76,6 +76,16 @@ fn open_dir_without_links(path: &Path) -> io::Result<cap_std::fs::Dir> {
     Ok(dir)
 }
 
+/// Whether `path` is a symlink or a junction, i.e. a reparse point that
+/// resolves somewhere other than where it sits.
+///
+/// Uses `symlink_metadata`, so the link itself is inspected and not whatever it
+/// points at — the same reason the walk opens directories through a handle
+/// rather than by path.
+fn is_linked(path: &Path) -> bool {
+    std::fs::symlink_metadata(path).is_ok_and(|meta| meta.is_symlink())
+}
+
 /// Whether a walk deletes what it finds or only measures it.
 ///
 /// Threaded through the whole removal path rather than checked once at the top,
@@ -436,7 +446,13 @@ fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData, mode: M
         match open_dir_without_links(path) {
             Ok(dir) => Some(dir),
             Err(e) => {
-                diag::warn(format!("cleaner: open_dir {}: {e}", path.display()));
+                // InvalidInput here is the link check refusing to walk out of
+                // the directory it was given — a permanent answer about this
+                // entry, not a runtime fault, so it is not worth reporting on
+                // every run. Anything else (permissions, I/O) still is.
+                if e.kind() != io::ErrorKind::InvalidInput {
+                    diag::warn(format!("cleaner: open_dir {}: {e}", path.display()));
+                }
                 None
             }
         }
@@ -462,6 +478,12 @@ fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData, mode: M
                     stats.merge_locked(removed)
                 }
             }
+            // A file the database lists but that is not on disk any more has
+            // nothing to clean: the goal is already met. Temp and cache folders
+            // churn constantly, so a stale entry is the normal case, not a
+            // fault — warning about it would bury the warnings that do matter
+            // (access denied, a file in use).
+            Err(e) if e.kind() == io::ErrorKind::NotFound => {}
             Err(e) => diag::warn(format!("cleaner: remove_file {}: {e}", fpath.display())),
         }
     }
@@ -481,6 +503,8 @@ fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData, mode: M
             // "3 files, 3 dirs" beside a single path tells the reader how much
             // went and nothing about what.
             Ok(removed) => stats.add(removed),
+            // Same as for a missing file above: an absent directory is already clean.
+            Err(e) if e.kind() == io::ErrorKind::NotFound => {}
             Err(e) => diag::warn(format!("cleaner: remove_dir {}: {e}", dpath.display())),
         }
     }
@@ -616,9 +640,19 @@ async fn walk_data(data: &CleanerData, mode: Mode) -> CleanerResult {
     // clone per path, and keep at most MAX_PATHS_IN_FLIGHT futures alive.
     let data = Arc::new(data.clone());
 
-    let mut path_stream = stream::iter(glob_iter.filter_map(Result::ok))
-        .map(|path| clean_one_path(path, Arc::clone(&data), mode))
-        .buffer_unordered(MAX_PATHS_IN_FLIGHT);
+    let mut path_stream = stream::iter(
+        glob_iter
+            .filter_map(Result::ok)
+            // A wildcard such as `{drive}Users\*` also matches the entries
+            // Windows keeps in that folder for compatibility: `All Users` and
+            // `Все пользователи` are junctions into `C:\ProgramData`. They are
+            // never a clean target — walking one would escape the directory it
+            // was matched in — and the walk below refuses them anyway, so drop
+            // them here instead of paying a warning on every run.
+            .filter(|path| !is_linked(path)),
+    )
+    .map(|path| clean_one_path(path, Arc::clone(&data), mode))
+    .buffer_unordered(MAX_PATHS_IN_FLIGHT);
 
     while let Some((_, stats)) = path_stream.next().await {
         if stats.working {

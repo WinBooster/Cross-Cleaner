@@ -6325,7 +6325,7 @@
     "class": "Utility",
     "category": "Cache",
     "program": "Windhawk",
-    "directories_to_remove": [
+    "files_to_remove": [
       "Cookies",
       "Cookies-journal"
     ]
