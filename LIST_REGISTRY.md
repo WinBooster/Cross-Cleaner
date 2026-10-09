@@ -1,4 +1,4 @@
-# Windows Registry Clearing Programs Catalog v2.0.4.1.6
+# Windows Registry Clearing Programs Catalog v2.0.4.2.2
 **Total categories in database:** 1
 
 **Total programs in database:** 3
