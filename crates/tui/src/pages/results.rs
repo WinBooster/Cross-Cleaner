@@ -22,7 +22,7 @@ use ratatui::style::Style;
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Cell, Clear, Paragraph, Row, Table, TableState, Wrap};
 
-use crate::app::{Click, TuiApp, centered};
+use crate::app::{Click, TuiApp};
 use crate::pages::row_of;
 use crate::theme::Theme;
 
@@ -33,13 +33,23 @@ const COUNTS: u16 = 7;
 /// Gap `Table::column_spacing` puts after every fixed column.
 const GAP: u16 = 1;
 
-/// Columns kept between the path overlay and the edge of the results page.
+/// Columns kept between the path overlay and the left and right edges of the
+/// results page, and rows kept between it and the top.
 ///
 /// The box is a child of the table, not of the screen: it sits inside the report
 /// it describes, so the summary above it, the header row and the footer stay
 /// where they were. The margin is what makes that visible — the table's own frame
 /// is drawn under it, so the report reads as the page the list belongs to.
 pub const DETAIL_MARGIN: u16 = 5;
+
+/// Rows left below the path overlay.
+///
+/// Smaller than [`DETAIL_MARGIN`] on purpose: the overlay carries its own
+/// ` n/m · ↑↓ scroll · esc close ` line in its bottom border, and with the same
+/// margin as the sides that border sat far enough above the foot of the table to
+/// look detached from it. Two rows leave the report visibly underneath it — which
+/// is the whole point of drawing this inside the report — without opening a gap.
+pub const DETAIL_MARGIN_BOTTOM: u16 = 2;
 
 fn widths() -> [Constraint; 5] {
     [
@@ -255,18 +265,25 @@ pub fn render_details(app: &mut TuiApp, frame: &mut Frame, area: Rect) {
     };
 
     let lines = line_count(entry);
-    // Inside the report, with the margin on every side. The height is grown to
-    // fit the content, but the *area* it is fitted into is already inset, so a
-    // long list never grows the box past the report it belongs to.
-    let height = (lines as u16 + 4)
-        .max(8)
-        .min(area.height.saturating_sub(DETAIL_MARGIN * 2).max(8));
+    // The report inset by its margins, and placed explicitly rather than through
+    // `centered`: the margins differ on the foot, and centring cannot express
+    // that — it would put the box back in the middle with equal gaps.
     let width = area
         .width
         .saturating_sub(DETAIL_MARGIN * 2)
         .max(20)
         .min(area.width);
-    let rect = centered(area, width, height);
+    let height = area
+        .height
+        .saturating_sub(DETAIL_MARGIN + DETAIL_MARGIN_BOTTOM)
+        .max(8)
+        .min(area.height);
+    let rect = Rect {
+        x: area.x + DETAIL_MARGIN,
+        y: area.y + DETAIL_MARGIN,
+        width,
+        height,
+    };
     frame.render_widget(Clear, rect);
 
     let block = Theme::block(

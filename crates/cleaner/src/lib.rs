@@ -100,7 +100,86 @@ fn remove_file_sync(path: &Path) -> io::Result<u64> {
     remove_file_in_dir(&dir, Path::new(name))
 }
 
-fn remove_dir_in_dir(parent_dir: &cap_std::fs::Dir, name: &Path) -> io::Result<(u64, u64, u64)> {
+/// What one removal took: the totals the run reports, plus one entry per item
+/// that actually went.
+///
+/// The two are kept apart because they answer different questions. "3 files, 3
+/// directories" says how much was deleted; only `entries` says *which*, and a
+/// report that showed the totals without the entries is what made a three-file
+/// deletion look like a single mysterious path.
+#[derive(Default)]
+struct Removed {
+    files: u64,
+    folders: u64,
+    bytes: u64,
+    /// One entry per removed item, in walk order. Capped by
+    /// [`MAX_REMOVED_ENTRIES`]: a cache directory can hold six figures of files,
+    /// and the results page shows a scrolling list.
+    entries: Vec<ClearedPath>,
+    /// Items that went but are not in `entries`, because the cap was reached.
+    omitted: usize,
+}
+
+/// Deleted paths kept for one cleaner. Past this the numbers still count
+/// everything, but the list stops growing — the appcore that assembles the
+/// results page caps it again per program and says how many it left out, so
+/// nothing is silently lost, only summarised twice.
+const MAX_REMOVED_ENTRIES: usize = 1000;
+
+impl Removed {
+    fn file(path: &Path, bytes: u64) -> Self {
+        Self {
+            files: 1,
+            bytes,
+            entries: vec![ClearedPath {
+                path: SharedPath::new(&path.to_string_lossy()),
+                removed_bytes: bytes,
+                removed_files: 1,
+                removed_directories: 0,
+            }],
+            ..Self::default()
+        }
+    }
+
+    fn folder(path: &Path) -> Self {
+        Self {
+            folders: 1,
+            entries: vec![ClearedPath {
+                path: SharedPath::new(&path.to_string_lossy()),
+                removed_bytes: 0,
+                removed_files: 0,
+                removed_directories: 1,
+            }],
+            ..Self::default()
+        }
+    }
+
+    /// Folds a child removal into this one, listing the child's own items.
+    fn merge(&mut self, child: Removed) {
+        self.files += child.files;
+        self.folders += child.folders;
+        self.bytes += child.bytes;
+        self.extend(child.entries);
+        self.omitted += child.omitted;
+    }
+
+    /// Adds entries, counting whatever does not fit instead of dropping it.
+    fn extend(&mut self, entries: Vec<ClearedPath>) {
+        for entry in entries {
+            if self.entries.len() < MAX_REMOVED_ENTRIES {
+                self.entries.push(entry);
+            } else {
+                self.omitted += 1;
+            }
+        }
+    }
+}
+
+fn remove_dir_in_dir(
+    parent_dir: &cap_std::fs::Dir,
+    name: &Path,
+    path: &Path,
+) -> io::Result<Removed> {
     let meta = parent_dir.symlink_metadata(name)?;
     if meta.is_symlink() {
         return Err(io::Error::new(
@@ -111,32 +190,37 @@ fn remove_dir_in_dir(parent_dir: &cap_std::fs::Dir, name: &Path) -> io::Result<(
     let dir = parent_dir.open_dir(name)?;
     // Keep the handle open only while walking; on Windows a directory cannot
     // be removed while any handle to it is open (cap-std omits FILE_SHARE_DELETE).
-    let (files, folders, bytes) = remove_dir_recursive(&dir)?;
+    let mut removed = remove_dir_recursive(&dir, path)?;
     drop(dir);
     parent_dir.remove_dir(name)?; // root is now empty; counts itself
-    Ok((files, folders + 1, bytes))
+    // The directory is listed too: it was removed, and it is the one item the
+    // caller named.
+    removed.merge(Removed::folder(path));
+    Ok(removed)
 }
 
-fn remove_dir_sync(root: PathBuf) -> io::Result<(u64, u64, u64)> {
+fn remove_dir_sync(root: PathBuf) -> io::Result<Removed> {
     let name = root.file_name().ok_or_else(|| {
         io::Error::new(io::ErrorKind::InvalidInput, "cannot remove filesystem root")
     })?;
     let parent = root.parent().unwrap_or_else(|| Path::new("."));
     let parent_dir = open_dir_without_links(parent)?;
-    remove_dir_in_dir(&parent_dir, Path::new(name))
+    remove_dir_in_dir(&parent_dir, Path::new(name), &root)
 }
 
 // INFO: Depth-first deletion relative to open handles. Entry types come from
 // the handle (lstat semantics, never follows links). Symlinks and Windows
 // junctions are removed as links; their targets are never touched.
-fn remove_dir_recursive(dir: &cap_std::fs::Dir) -> io::Result<(u64, u64, u64)> {
-    let mut files = 0u64;
-    let mut folders = 0u64;
-    let mut bytes = 0u64;
+//
+// INFO: `path` is the directory being walked, so every item removed below it can
+// be named by its full path rather than by a bare entry name.
+fn remove_dir_recursive(dir: &cap_std::fs::Dir, path: &Path) -> io::Result<Removed> {
+    let mut removed = Removed::default();
 
     for entry in dir.entries()? {
         let entry = entry?;
         let name = entry.file_name();
+        let entry_path = path.join(&name);
         let ft = entry.file_type()?;
         if ft.is_symlink() {
             // Never follow links. The removal syscall differs per platform:
@@ -150,33 +234,31 @@ fn remove_dir_recursive(dir: &cap_std::fs::Dir) -> io::Result<(u64, u64, u64)> {
                 // rejects them, RemoveDirectory removes the link itself.
                 // Regular file symlinks go through DeleteFile.
                 if dir.remove_file(&name).is_ok() {
-                    files += 1;
+                    removed.merge(Removed::file(&entry_path, 0));
                 } else {
                     dir.remove_dir(&name)?;
-                    folders += 1;
+                    removed.merge(Removed::folder(&entry_path));
                 }
             }
             #[cfg(not(windows))]
             {
                 dir.remove_file(&name)?;
-                files += 1;
+                removed.merge(Removed::file(&entry_path, 0));
             }
         } else if ft.is_dir() {
             let sub = dir.open_dir(&name)?;
-            let (f, fo, b) = remove_dir_recursive(&sub)?;
+            let child = remove_dir_recursive(&sub, &entry_path)?;
             drop(sub); // release handle before removing (Windows FILE_SHARE_DELETE)
-            files += f;
-            folders += fo;
-            bytes += b;
+            removed.merge(child);
             dir.remove_dir(&name)?; // sub is now empty
-            folders += 1;
+            removed.merge(Removed::folder(&entry_path));
         } else {
-            bytes += entry.metadata()?.len();
-            files += 1;
+            let bytes = entry.metadata()?.len();
             dir.remove_file(&name)?;
+            removed.merge(Removed::file(&entry_path, bytes));
         }
     }
-    Ok((files, folders, bytes))
+    Ok(removed)
 }
 
 #[derive(Default)]
@@ -185,57 +267,32 @@ struct PathStats {
     folders: u64,
     bytes: u64,
     working: bool,
-    /// Every removal, one entry each.
+    /// Every item removed for this matched path, named.
     ///
     /// The counters above are the run's totals; this is what the results page
     /// lists. Keeping them apart is the point: a database entry that names
     /// `files_to_remove: ["a.tmp"]` has deleted `…\a.tmp`, not the directory it
     /// was found in, and a report that says otherwise cannot be checked.
     removed: Vec<ClearedPath>,
+    /// Items removed but not listed, because [`MAX_REMOVED_ENTRIES`] was reached.
+    omitted: usize,
 }
 
 impl PathStats {
-    fn add(&mut self, files: u64, folders: u64, bytes: u64) {
-        self.files += files;
-        self.folders += folders;
-        self.bytes += bytes;
+    /// Folds one removal in: the totals, and every item it removed by name.
+    fn add(&mut self, removed: Removed) {
+        self.files += removed.files;
+        self.folders += removed.folders;
+        self.bytes += removed.bytes;
         self.working = true;
-    }
-
-    /// One named file, removed by `files_to_remove`.
-    fn add_file(&mut self, path: SharedPath, bytes: u64) {
-        self.add(1, 0, bytes);
-        self.removed.push(ClearedPath {
-            path,
-            removed_bytes: bytes,
-            removed_files: 1,
-            removed_directories: 0,
-        });
-    }
-
-    /// One named folder, removed by `directories_to_remove`. Its whole subtree
-    /// goes with it, so the entry carries that subtree's counts — listing every
-    /// file inside would be the size of the cache, not an answer.
-    fn add_dir(&mut self, path: SharedPath, files: u64, folders: u64, bytes: u64) {
-        self.add(files, folders, bytes);
-        self.removed.push(ClearedPath {
-            path,
-            removed_bytes: bytes,
-            removed_files: files,
-            removed_directories: folders,
-        });
-    }
-
-    /// The matched path itself, removed wholesale by a flag. The path is the
-    /// interned one it arrived as, so listing it costs a pointer.
-    fn add_whole(&mut self, path: &SharedPath, files: u64, folders: u64, bytes: u64) {
-        self.add(files, folders, bytes);
-        self.removed.push(ClearedPath {
-            path: path.clone(),
-            removed_bytes: bytes,
-            removed_files: files,
-            removed_directories: folders,
-        });
+        self.omitted += removed.omitted;
+        for entry in removed.entries {
+            if self.removed.len() < MAX_REMOVED_ENTRIES {
+                self.removed.push(entry);
+            } else {
+                self.omitted += 1;
+            }
+        }
     }
 }
 
@@ -274,7 +331,7 @@ fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData) -> Path
         let fpath = path.join(&relative);
         match remove_file_in_dir(dir, &relative) {
             // The file's own path, not its parent's: that is what was deleted.
-            Ok(b) => stats.add_file(SharedPath::new(&fpath.to_string_lossy()), b),
+            Ok(b) => stats.add(Removed::file(&fpath, b)),
             Err(e) => diag::warn(format!("cleaner: remove_file {}: {e}", fpath.display())),
         }
     }
@@ -289,8 +346,11 @@ fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData) -> Path
         };
         let Some(dir) = &named_dir else { break };
         let dpath = path.join(&relative);
-        match remove_dir_in_dir(dir, &relative) {
-            Ok((f, fo, b)) => stats.add_dir(SharedPath::new(&dpath.to_string_lossy()), f, fo, b),
+        match remove_dir_in_dir(dir, &relative, &dpath) {
+            // Every item inside it is listed by name, not folded into one line:
+            // "3 files, 3 dirs" beside a single path tells the reader how much
+            // went and nothing about what.
+            Ok(removed) => stats.add(removed),
             Err(e) => diag::warn(format!("cleaner: remove_dir {}: {e}", dpath.display())),
         }
     }
@@ -301,29 +361,41 @@ fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData) -> Path
 
     if data.flags.contains(CleanerFlags::REMOVE_ALL_IN_DIR) {
         // try fast; skip is_dir check for speed (A)
-        if let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf()) {
-            stats.add_whole(shared, f, fo, b);
+        if let Ok(removed) = remove_dir_sync(path.to_path_buf()) {
+            stats.add(removed);
         }
     }
 
     if data.flags.contains(CleanerFlags::REMOVE_FILES)
         && let Ok(b) = remove_file_sync(path)
     {
-        stats.add_whole(shared, 1, 0, b);
+        // The matched path itself, interned: listing it costs a pointer, not a
+        // copy of the segments.
+        stats.add(Removed {
+            files: 1,
+            bytes: b,
+            entries: vec![ClearedPath {
+                path: shared.clone(),
+                removed_bytes: b,
+                removed_files: 1,
+                removed_directories: 0,
+            }],
+            ..Removed::default()
+        });
     }
 
     if data.flags.contains(CleanerFlags::REMOVE_DIRECTORIES)
-        && let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf())
+        && let Ok(removed) = remove_dir_sync(path.to_path_buf())
     {
-        stats.add_whole(shared, f, fo, b);
+        stats.add(removed);
     }
 
     if data
         .flags
         .contains(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN)
-        && let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf())
+        && let Ok(removed) = remove_dir_sync(path.to_path_buf())
     {
-        stats.add_whole(shared, f, fo, b);
+        stats.add(removed);
     }
 
     stats
@@ -374,6 +446,7 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
         program: data.program.clone(),
         path: data.path.clone(),
         paths: Vec::new(),
+        paths_omitted: 0,
         category: data.category.clone(),
         sub_category: data.sub_category.clone(),
     };
@@ -406,11 +479,10 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
             out.files += stats.files;
             out.folders += stats.folders;
             out.bytes += stats.bytes;
-            // One entry per removal, taken from the work itself rather than
-            // re-derived here: a named `files_to_remove` file and a directory
-            // removed by a flag are different paths, and only the task knows
-            // which of them actually went.
+            // One entry per removed item, taken from the walk itself rather than
+            // re-derived here: only the task knows which of them actually went.
             out.paths.extend(stats.removed);
+            out.paths_omitted += stats.omitted;
         }
     }
 
@@ -647,8 +719,8 @@ mod tests {
         assert!(base.join("keep.txt").exists());
     }
 
-    /// Same for a named folder: the entry is the folder, carrying the counts of
-    /// everything that went with it, and the parent is untouched.
+    /// Same for a named folder: the folder and everything in it are listed by name,
+    /// and the parent it was found in is untouched and unlisted.
     #[tokio::test]
     async fn named_directories_are_listed_as_their_own_paths() {
         let temp_dir = TempDir::new().unwrap();
@@ -662,36 +734,133 @@ mod tests {
 
         let result = clear_data(&data).await;
         assert_eq!(result.files, 1);
-        assert_eq!(result.paths.len(), 1, "{:?}", result.paths);
-        let entry = &result.paths[0];
-        assert_eq!(entry.path.as_string(), cache.to_string_lossy());
-        assert_eq!(entry.removed_files, 1);
-        assert!(entry.removed_directories >= 1, "the folder counts itself");
-        assert_eq!(entry.removed_bytes, 7);
-        assert!(!cache.exists());
+        let mut listed: Vec<String> = result
+            .paths
+            .iter()
+            .map(|entry| entry.path.as_string())
+            .collect();
+        listed.sort();
+        let cache = cache.to_string_lossy().into_owned();
+        assert_eq!(
+            listed,
+            vec![cache.clone(), format!("{}\\{}", cache, "a.dat"),],
+            "the folder and the file inside it, each by name:\n{:?}",
+            result.paths,
+        );
+        // Each entry describes only what that item was: the directory is not
+        // credited with the file's size, or the list double-counts.
+        let file = result
+            .paths
+            .iter()
+            .find(|entry| entry.path.as_string().ends_with("a.dat"))
+            .expect("the file");
+        assert_eq!(file.removed_bytes, 7);
+        assert_eq!(file.removed_files, 1);
+        assert_eq!(file.removed_directories, 0);
+        let dir = result
+            .paths
+            .iter()
+            .find(|entry| entry.path.as_string() == cache)
+            .expect("the directory");
+        assert_eq!(dir.removed_bytes, 0, "a directory has no size of its own");
+        assert_eq!(dir.removed_directories, 1);
+        let listed_bytes: u64 = result.paths.iter().map(|entry| entry.removed_bytes).sum();
+        assert_eq!(listed_bytes, result.bytes);
+        assert!(!base.join("cache").exists());
         assert!(base.exists());
     }
 
-    /// A glob matched against a whole directory reports that directory: the
-    /// entries inside it are not tracked individually, because the walk would
-    /// cost more than the answer is worth.
+    /// A directory removed by a flag is walked, and everything in it is listed
+    /// by name. One line reading "3 files, 3 dirs" beside the directory says how
+    /// much went and nothing about *what* — which is the whole point of the list.
     #[tokio::test]
-    async fn a_directory_removed_by_flag_is_listed_as_itself() {
+    async fn a_removed_directory_lists_everything_inside_it() {
         let temp_dir = TempDir::new().unwrap();
         let target = temp_dir.path().join("target");
-        fs::create_dir(&target).unwrap();
+        let nested = target.join("nested");
+        fs::create_dir_all(&nested).unwrap();
         fs::write(target.join("one.txt"), b"a").unwrap();
-        fs::write(target.join("two.txt"), b"bb").unwrap();
+        fs::write(nested.join("two.txt"), b"bb").unwrap();
+        fs::write(nested.join("three.txt"), b"ccc").unwrap();
 
         let mut data = create_test_data(target.to_string_lossy().into_owned());
         data.flags.insert(CleanerFlags::REMOVE_ALL_IN_DIR);
 
         let result = clear_data(&data).await;
-        assert_eq!(result.paths.len(), 1, "{:?}", result.paths);
-        let entry = &result.paths[0];
-        assert_eq!(entry.path.as_string(), target.to_string_lossy());
-        assert_eq!(entry.removed_files, 2);
-        assert_eq!(entry.removed_bytes, 3);
+        assert_eq!(result.files, 3);
+        assert_eq!(result.folders, 2, "the directory and the one inside it");
+
+        let mut listed: Vec<String> = result
+            .paths
+            .iter()
+            .map(|entry| entry.path.as_string())
+            .collect();
+        listed.sort();
+        let target = target.to_string_lossy().into_owned();
+        // Sorted, and the directory itself is the shortest of its own subtree, so
+        // it sorts last among the `target\…` entries.
+        assert_eq!(
+            listed,
+            vec![
+                target.clone(),
+                format!("{}\\{}", target, "nested"),
+                format!("{}\\{}\\{}", target, "nested", "three.txt"),
+                format!("{}\\{}\\{}", target, "nested", "two.txt"),
+                format!("{}\\{}", target, "one.txt"),
+            ],
+            "every removed item is named, the directory included",
+        );
+        assert_eq!(result.paths_omitted, 0);
+
+        // Each file carries its own size, and the listed bytes still add up to
+        // the run's total: two totals that can disagree is the bug this whole
+        // path was fixed to avoid.
+        let bytes_of = |suffix: &str| {
+            result
+                .paths
+                .iter()
+                .find(|entry| entry.path.as_string().ends_with(suffix))
+                .unwrap_or_else(|| panic!("{suffix} not listed: {listed:?}"))
+                .removed_bytes
+        };
+        assert_eq!(bytes_of("one.txt"), 1);
+        assert_eq!(bytes_of("two.txt"), 2);
+        assert_eq!(bytes_of("three.txt"), 3);
+        let listed_bytes: u64 = result.paths.iter().map(|entry| entry.removed_bytes).sum();
+        assert_eq!(listed_bytes, result.bytes);
+        assert_eq!(result.bytes, 6);
+    }
+
+    /// Past the cap the walk keeps counting, and says how many items it did not
+    /// list. Dropping them silently is how a report comes to claim to be
+    /// complete when it is not.
+    #[tokio::test]
+    async fn a_huge_directory_is_capped_without_hiding_it() {
+        let temp_dir = TempDir::new().unwrap();
+        let target = temp_dir.path().join("target");
+        fs::create_dir(&target).unwrap();
+        for n in 0..(MAX_REMOVED_ENTRIES + 50) {
+            fs::write(target.join(format!("f{n:06}")), b"x").unwrap();
+        }
+
+        let mut data = create_test_data(target.to_string_lossy().into_owned());
+        data.flags.insert(CleanerFlags::REMOVE_ALL_IN_DIR);
+
+        let result = clear_data(&data).await;
+        assert_eq!(
+            result.paths.len(),
+            MAX_REMOVED_ENTRIES,
+            "the list stops at the cap",
+        );
+        // The directory itself is one of the removed items, so it is the one the
+        // cap costs: 50 files plus the directory is 51 slots against 1000.
+        assert_eq!(
+            result.paths_omitted, 51,
+            "and the items past the cap are counted, not dropped",
+        );
+        // The totals still describe everything.
+        assert_eq!(result.files, (MAX_REMOVED_ENTRIES + 50) as u64);
+        assert!(result.working);
     }
 
     /// Both named files and a wholesale flag in one entry: the report has to

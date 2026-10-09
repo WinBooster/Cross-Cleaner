@@ -201,6 +201,7 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
         working: false,
         path: data.path.clone(),
         paths: Vec::new(),
+        paths_omitted: 0,
         program: data.program.clone(),
         category: data.category.clone(),
         sub_category: data.sub_category.clone(),

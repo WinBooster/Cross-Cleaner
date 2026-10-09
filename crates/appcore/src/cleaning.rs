@@ -258,6 +258,9 @@ fn fold(cleared_programs: &mut Vec<Cleared>, result: CleanerResult) -> bool {
     if !cleared.affected_categories.contains(&category) {
         cleared.affected_categories.push(category);
     }
+    // Counted even before the cap: a run that deleted more than the cap holds has
+    // to say so, and the count is only true if it includes what was dropped here.
+    cleared.paths_omitted += result.paths_omitted;
     for detail in result.paths {
         keep_detail(cleared, detail);
     }
@@ -366,6 +369,7 @@ mod tests {
             bytes,
             working: true,
             path: "C:\\cache\\*".into(),
+            paths_omitted: 0,
             paths: paths
                 .iter()
                 .map(|(path, bytes)| ClearedPath {
@@ -438,6 +442,20 @@ mod tests {
         let mut cleared: Vec<Cleared> = Vec::new();
         assert!(!fold(&mut cleared, idle));
         assert!(cleared.is_empty());
+    }
+
+    /// A cleaner's own cap and this one both say what they left out, and the two
+    /// counts add up: a row that silently lost items in two places is a row whose
+    /// list cannot be trusted to be the whole story.
+    #[test]
+    fn omitted_items_from_the_cleaner_reach_the_row() {
+        let mut cleared: Vec<Cleared> = Vec::new();
+        let mut capped = result("Chrome", "Cache", 10, &[("C:\\cache\\a.tmp", 10)]);
+        capped.paths_omitted = 900;
+        fold(&mut cleared, capped);
+
+        assert_eq!(cleared[0].paths.len(), 1, "the one item it did list");
+        assert_eq!(cleared[0].paths_omitted, 900);
     }
 
     /// Past the cap the list keeps the largest paths rather than the first ones:

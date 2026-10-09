@@ -94,6 +94,7 @@ macro_rules! custom_glob_cleaner {
                     working: false,
                     path: data.path.clone(),
                     paths: Vec::new(),
+                    paths_omitted: 0,
                     program: data.program.clone(),
                     category: data.category.clone(),
                     sub_category: data.sub_category.clone(),

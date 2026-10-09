@@ -636,10 +636,12 @@ pub struct CleanerResult {
     /// [`ClearedPath::path`]: the database holds near-identical paths and this
     /// is one of them.
     pub path: SharedPath,
-    /// One entry per path this cleaner actually deleted, with that path's own
+    /// One entry per item this cleaner actually deleted, with that item's own
     /// share of the counters. Empty for a cleaner that cannot name what it
     /// removed (a registry key, an entry that matched nothing).
     pub paths: Vec<ClearedPath>,
+    /// Items deleted but not listed, because one cleaner's list hit its cap.
+    pub paths_omitted: usize,
     pub program: Arc<str>,
     pub category: Arc<str>,
     pub sub_category: Arc<str>,

@@ -3104,20 +3104,57 @@ mod tests {
             "and the summary:\n{with}"
         );
 
-        // The box is inset from the page. Read off the top border rather than a
-        // content row: only the border is guaranteed to be intact, since a long
-        // title is what wraps when the box gets narrow.
-        let top = with
-            .lines()
-            .find(|line| line.contains("Chrome —"))
-            .expect("the overlay's title row");
-        let border = top
-            .chars()
-            .position(|c| c == '╭')
-            .unwrap_or_else(|| panic!("no box on the title row:\n{with}"));
+        // The box is inset from the page by the same margin on every side. Read
+        // off the borders: they are the only rows guaranteed to be intact, since a
+        // long title is what wraps when the box gets narrow.
+        let margin = pages::results::DETAIL_MARGIN as usize;
+        let width = 100usize;
+        let rows: Vec<&str> = with.lines().collect();
+        // The report draws its own frame, so there are two boxes on screen. The
+        // overlay's corners are the ones inset from the edge; the report's sit
+        // on it, which is what tells the two apart.
+        // The report draws its own frame too, so two boxes are on screen. The overlay's
+        // corners are the ones inset from the edge; the report's sit on it, which
+        // is what tells the two apart.
+        let inset = |line: &str, open: char| {
+            line.chars()
+                .position(|c| c == open)
+                .filter(|column| *column >= margin && *column < width - margin)
+        };
+        let (top_row, left) = rows
+            .iter()
+            .enumerate()
+            .find_map(|(row, line)| Some((row, inset(line, '╭')?)))
+            .expect("the overlay's top-left corner");
+        let (bottom_row, right) = rows
+            .iter()
+            .enumerate()
+            .rev()
+            .find_map(|(row, line)| Some((row, inset(line, '╰')?)))
+            .map(|(row, _)| (row, inset(rows[row], '╯').expect("its right corner")))
+            .expect("the overlay's bottom-left corner");
         assert!(
-            border >= pages::results::DETAIL_MARGIN as usize,
-            "the box must keep a margin inside the page, starts at {border}:\n{with}",
+            bottom_row > top_row,
+            "the two corners must be the overlay's, not the report's:\n{with}",
+        );
+        assert_eq!(left, margin, "left margin:\n{with}");
+        assert_eq!(right, width - 1 - margin, "right margin:\n{with}",);
+        // The header row is the page's first row and the footer its last, so the
+        // report runs between them. The box clears the top by the full margin and
+        // the foot by the smaller one, so the report is still visible under it.
+        assert_eq!(
+            top_row,
+            1 + margin,
+            "top margin, inside the report:\n{with}",
+        );
+        assert_eq!(
+            bottom_row,
+            30 - 2 - pages::results::DETAIL_MARGIN_BOTTOM as usize,
+            "bottom margin, inside the report:\n{with}",
+        );
+        assert!(
+            pages::results::DETAIL_MARGIN_BOTTOM < pages::results::DETAIL_MARGIN,
+            "the foot margin is deliberately the smaller of the two",
         );
     }
 
