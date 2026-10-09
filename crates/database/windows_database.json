@@ -6961,7 +6961,7 @@
     "path": "{drive}Program Files\\TeamViewer",
     "class": "Screen Share",
     "category": "Documentation",
-    "sub_category": "Licences",
+    "sub_category": "Licenses",
     "program": "TeamViewer",
     "files_to_remove": [
       "CopyRights.txt"
@@ -6974,6 +6974,26 @@
     "program": "TeamViewer",
     "directories_to_remove": [
       "Logs"
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\BleachBit\\themes\\windows10",
+    "class": "Disk Cleaner",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "BleachBit",
+    "files_to_remove": [
+      "License.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\BleachBit\\themes\\windows10",
+    "class": "Disk Cleaner",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "BleachBit",
+    "files_to_remove": [
+      "License.txt"
     ]
   }
 ]
