@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.4.1.6
+# Windows Clearing Programs Catalog v2.0.4.2.2
 **Total categories in database:** 12
 
-**Total programs in database:** 262
+**Total programs in database:** 266
 
-**Total pathes in database:** 564
+**Total pathes in database:** 572
 
 ## AI
 
@@ -130,21 +130,22 @@
 | 10 | [Gradle](https://gradle.org) | Cache |
 | 11 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
 | 12 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
-| 13 | [Insomnia](https://insomnia.rest) | Cache, Logs |
-| 14 | [Java](https://www.java.com/download) | Documentation |
-| 15 | [Kache](https://github.com/kunobi-ninja/kache) | Logs |
-| 16 | [MCCreator](https://mcreator.net/download) | Logs |
-| 17 | [Maven](https://maven.apache.org/download.cgi) | Documentation |
-| 18 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
-| 19 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
-| 20 | [Postman](https://www.postman.com/downloads) | Logs |
-| 21 | [Python](https://www.python.org/downloads) | Documentation |
-| 22 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
-| 23 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
-| 24 | [RustRover](https://www.jetbrains.com/rust) | Documentation |
-| 25 | [Unity Hub](https://unity.com/download) | Documentation |
-| 26 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk) | Documentation |
-| 27 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
+| 13 | Inno Setup 7 | Logs |
+| 14 | [Insomnia](https://insomnia.rest) | Cache, Logs |
+| 15 | [Java](https://www.java.com/download) | Documentation |
+| 16 | [Kache](https://github.com/kunobi-ninja/kache) | Logs |
+| 17 | [MCCreator](https://mcreator.net/download) | Logs |
+| 18 | [Maven](https://maven.apache.org/download.cgi) | Documentation |
+| 19 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
+| 20 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
+| 21 | [Postman](https://www.postman.com/downloads) | Logs |
+| 22 | [Python](https://www.python.org/downloads) | Documentation |
+| 23 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
+| 24 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
+| 25 | [RustRover](https://www.jetbrains.com/rust) | Documentation |
+| 26 | [Unity Hub](https://unity.com/download) | Documentation |
+| 27 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk) | Documentation |
+| 28 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
 
 
 ## Disk Analyzer
@@ -152,6 +153,15 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [TreeSize](https://www.jam-software.com/treesize) | Documentation |
+
+
+## Disk Cleaner
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | BleachBit | Documentation |
+| 2 | Wise Disk Cleaner | Documentation |
+| 3 | [ССleaner](https://www.ccleaner.com) | Logs |
 
 
 ## Driver
@@ -311,6 +321,13 @@
 | 1 | [Blender](https://www.blender.org) | Documentation |
 
 
+## Office
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Documentation, Logs |
+
+
 ## Optimization
 
 | № | Program | Categories |
@@ -320,7 +337,6 @@
 | 3 | [Mem Reduct](https://github.com/henrypp/memreduct) | Documentation |
 | 4 | [WhySoSlow](https://www.resplendence.com/whysoslow) | Documentation |
 | 5 | [Winutil](https://github.com/ChrisTitusTech/winutil) | Logs |
-| 6 | [ССleaner](https://www.ccleaner.com) | Logs |
 
 
 ## PDF
@@ -369,6 +385,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [RustDesk](https://rustdesk.com) | Documentation |
+| 2 | TeamViewer | Documentation, Logs |
 
 
 ## Security
@@ -440,14 +457,13 @@
 | 2 | [DeepL](https://www.deepl.com) | Cache, Logs |
 | 3 | [JetBrains](https://www.jetbrains.com/?var=1) | Documentation, Logs |
 | 4 | [LazyVim](https://www.lazyvim.org/installation) | Documentation |
-| 5 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Documentation, Logs |
-| 6 | [NeoVim](https://github.com/neovim/neovim/blob/master/INSTALL.md) | Documentation, Logs |
-| 7 | [Notepad++](https://notepad-plus-plus.org/downloads) | Documentation |
-| 8 | [Sublime Text](https://www.sublimetext.com/download) | Logs |
-| 9 | [Text Edit Plus](https://vovsoft.com/software/text-edit-plus) | Documentation |
-| 10 | [VS Code](https://code.visualstudio.com/download) | Browser, Documentation, Logs |
-| 11 | [Visual Studio](https://visualstudio.microsoft.com) | Documentation |
-| 12 | [Zed](https://zed.dev) | Crashes, Logs |
+| 5 | [NeoVim](https://github.com/neovim/neovim/blob/master/INSTALL.md) | Documentation, Logs |
+| 6 | [Notepad++](https://notepad-plus-plus.org/downloads) | Documentation |
+| 7 | [Sublime Text](https://www.sublimetext.com/download) | Logs |
+| 8 | [Text Edit Plus](https://vovsoft.com/software/text-edit-plus) | Documentation |
+| 9 | [VS Code](https://code.visualstudio.com/download) | Browser, Documentation, Logs |
+| 10 | [Visual Studio](https://visualstudio.microsoft.com) | Documentation |
+| 11 | [Zed](https://zed.dev) | Crashes, Logs |
 
 
 ## Tiling Manager
