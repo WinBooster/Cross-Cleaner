@@ -1734,7 +1734,7 @@ fn update_progress_line(stage: &updater::UpdateStage) -> String {
 }
 
 /// Project repository, opened by the `G` binding.
-const GITHUB_URL: &str = "https://github.com/Cross-Optimizations/Cross-Cleaner";
+const GITHUB_URL: &str = "https://github.com/Cross-Cleaner/Cross-Cleaner";
 
 /// The volume stored in slot `slot` of the shared config.
 ///
