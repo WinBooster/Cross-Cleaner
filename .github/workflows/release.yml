@@ -509,7 +509,7 @@ jobs:
           # Every link points at this specific tag rather than at `latest` or
           # the releases index, so the badges never lead to another version.
           github-release-notes-prepend: |
-            [![Downloads](https://img.shields.io/github/downloads/${{ github.repository }}/v%s/total)](https://github.com/${{ github.repository }}/releases/tag/v%s)
+            [![Downloads](https://img.shields.io/github/downloads/${{ github.repository }}/releases/tag/v%s)
             [![Version](https://img.shields.io/badge/version-%s-blue)](https://github.com/${{ github.repository }}/releases/tag/v%s)
             [![License](https://img.shields.io/badge/license-GPLv3-blue)](https://github.com/${{ github.repository }}/blob/main/LICENSE)
           github-release-files: |
