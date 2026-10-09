@@ -508,10 +508,17 @@ jobs:
           #
           # Every link points at this specific tag rather than at `latest` or
           # the releases index, so the badges never lead to another version.
+          #
+          # The downloads badge counts every published release instead of this
+          # one: shields.io resolves a badge from published releases only, and
+          # this workflow creates the release as a draft — a per-tag downloads
+          # badge renders "repo or release not found" for the whole review, and
+          # only starts working once the draft is published. The link still
+          # points at this version.
           github-release-notes-prepend: |
-            [![Downloads](https://img.shields.io/github/downloads/${{ github.repository }}/v%s/total)](https://github.com/${{ github.repository }}/releases/tag/v%s)
-            [![Version](https://img.shields.io/badge/version-%s-blue)](https://github.com/${{ github.repository }}/releases/tag/v%s)
-            [![License](https://img.shields.io/badge/license-GPLv3-blue)](https://github.com/${{ github.repository }}/blob/main/LICENSE)
+            [![Downloads](https://img.shields.io/github/downloads/${{ github.repository }}/total?style=flat-square&label=downloads)](https://github.com/${{ github.repository }}/releases/tag/v%s)
+            [![Version](https://img.shields.io/badge/version-%s-blue?style=flat-square&label=version)](https://github.com/${{ github.repository }}/releases/tag/v%s)
+            [![License](https://img.shields.io/badge/license-GPLv3-blue?style=flat-square)](https://github.com/${{ github.repository }}/blob/main/LICENSE)
           github-release-files: |
             linux-binaries/Linux-Cross_Cleaner_GUI
             linux-binaries/Linux-Cross_Cleaner_TUI
