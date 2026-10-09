@@ -6956,5 +6956,24 @@
     "directories_to_remove": [
       "LOGS"
     ]
+  },
+  {
+    "path": "{drive}Program Files\\TeamViewer",
+    "class": "Screen Share",
+    "category": "Documentation",
+    "sub_category": "Licences",
+    "program": "TeamViewer",
+    "files_to_remove": [
+      "CopyRights.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\TeamViewer",
+    "class": "Screen Share",
+    "category": "Logs",
+    "program": "TeamViewer",
+    "directories_to_remove": [
+      "Logs"
+    ]
   }
 ]
