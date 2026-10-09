@@ -100,7 +100,13 @@ fn clean(ui: &Ui, globals: &Globals, args: CleanArgs) -> Result<ExitCode, String
         return Ok(ExitCode::SUCCESS);
     }
 
-    if args.dry_run {
+    // INFO: `--dry-run` is answered by the same walk a run performs with the
+    // deletions switched off, so it goes through `run::run` rather than a
+    // separate branch here: two paths would be two answers.
+    //
+    // `--paths` asks a different question — which patterns the selection
+    // covers — so that one still reads the database plan.
+    if args.dry_run && args.paths {
         report::dry_run(&state, ui, &args.output, true);
         return Ok(ExitCode::SUCCESS);
     }

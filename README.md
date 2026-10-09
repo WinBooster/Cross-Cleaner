@@ -56,6 +56,9 @@ cli clean -p Chrome                  # one program, all of its categories
 cli clean -p "Chrome=Logs"           # one program, one of its categories
 cli clean -a -e Discord              # everything except one program
 
+# See what it would actually free, without deleting anything.
+cli clean -c Cache --dry-run
+
 # For a script.
 cli clean -a --json | jq .bytes
 ```
@@ -66,12 +69,30 @@ matched case-insensitively, and a name that does not exist is an error with the
 closest real names next to it rather than a run that quietly cleans something
 else.
 
+`--dry-run` walks the same code the cleaner itself uses, so it measures rather
+than estimates. Files another program is holding open are counted separately
+instead of being promised as free, and cleaners that cannot be measured without
+running (custom cleaners, registry entries) are named as such:
+
+```text
+$ cli clean -c Browser --dry-run
+Would free 0 bytes in 0 files and 0 directories across 1 program
+
+  Vivaldi  0 B  0 files · 0 directories
+
+7 files are in use and will not be removed:
+  7.6 MB held back — close the programs using them and run again.
+```
+
+The walk costs about as much I/O as the run does, so a full `--all` scan is not
+instant. That is the price of an honest number.
+
 | Command | What it does |
 |---|---|
 | `cli categories` | Categories with their subcategories and entry counts |
 | `cli programs [-c CAT]` | Programs of the selected categories, with a search filter |
-| `cli plan [selection]` | What a selection would clean, including every path with `--paths` |
-| `cli clean [selection]` | Clean it. `--dry-run` prints the plan instead |
+| `cli plan [selection]` | Which database patterns a selection covers, with `--paths` |
+| `cli clean [selection]` | Clean it, or measure it with `--dry-run` |
 | `cli update` | Check for and install a newer release |
 
 Common flags: `-a/--all`, `-c/--category`, `-x/--exclude-category`,

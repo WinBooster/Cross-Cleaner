@@ -98,6 +98,13 @@ macro_rules! custom_glob_cleaner {
                     program: data.program.clone(),
                     category: data.category.clone(),
                     sub_category: data.sub_category.clone(),
+                    // A custom cleaner runs arbitrary code, so a scan cannot walk
+                    // it ahead of time: these stay zero and the CLI reports
+                    // custom cleaners as "measured by running them", never as
+                    // a number it cannot back up.
+                    locked_files: 0,
+                    locked_bytes: 0,
+                    locked: Vec::new(),
                 };
 
                 // Stream glob without materializing full Vec<PathBuf> at once.

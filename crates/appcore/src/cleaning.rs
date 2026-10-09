@@ -7,7 +7,7 @@
 //!   by the frontend as the "currently working on…" line.
 //! * `"PROGRESS:<done>:<total>:<bytes>"` — the counters for the progress bar.
 
-use cleaner::clear_data;
+use cleaner::{clear_data, scan_data};
 use database::cleaner_database::CleanerDatabase;
 #[cfg(windows)]
 use database::registry_database::{RegistryDatabase, clear_registry};
@@ -46,6 +46,68 @@ const MAX_PATH_DETAILS: usize = 1000;
 /// once per repaint would cost more than drawing the page does.
 pub type CleanResult = (u64, u64, u64, Arc<[Cleared]>);
 
+/// Whether a run deletes what it finds or only measures it.
+///
+/// A scan is the same walk with the deletions left out, which is the only way its
+/// numbers can be trusted: a dry run that re-derived the work would eventually
+/// disagree with the run it is describing.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum Mode {
+    /// Remove what is matched. What every frontend does on its Cleaning page.
+    #[default]
+    Clean,
+    /// Report what would be removed and leave it in place.
+    Scan,
+}
+
+impl Mode {
+    /// True when the run is allowed to delete.
+    pub fn removes(self) -> bool {
+        self == Mode::Clean
+    }
+}
+
+/// What a scan found, split into what a run can free and what it cannot.
+///
+/// The split is the point of a scan. One total would promise space the run is not
+/// going to deliver, because a file a running application holds open is present,
+/// measurable, and still undeletable.
+///
+/// No `Debug`: it carries the same [`Cleared`] rows a run reports, and those
+/// hold a detail entry per path. Debug-printing a scan would mean formatting a
+/// second copy of a report the caller is about to print properly.
+#[derive(Clone, Default)]
+pub struct ScanReport {
+    /// Bytes, files, directories and per-program rows a run could remove now.
+    pub free: CleanResult,
+    /// Files something is holding open, and the bytes they hold.
+    pub locked_files: u64,
+    pub locked_bytes: u64,
+    /// Named locked files, largest first.
+    pub locked: Arc<[ClearedPath]>,
+    /// Cleaners a scan cannot measure, and why.
+    ///
+    /// Custom cleaners run arbitrary code, and registry entries only exist to be
+    /// deleted; neither can be walked without doing the thing. A scan that
+    /// quietly counted them as zero would understate the work, so they are named
+    /// here instead.
+    pub unmeasured: Vec<Unmeasured>,
+}
+
+/// A cleaner a scan could not measure, with the reason it could not.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Unmeasured {
+    /// The cleaner's own name: a custom cleaner's id, or `Program/Category`.
+    pub id: String,
+    pub reason: &'static str,
+}
+
+/// Runs the cleaning job, or — with [`Mode::Scan`] — the same walk without the
+/// deletions.
+///
+/// The `mode` parameter exists so a dry run cannot drift from the run: every
+/// filter, every flag check and every entry ordering below is shared, and the
+/// only thing that changes is whether the walk is allowed to delete.
 pub async fn work(
     selected_map: HashMap<Arc<str>, HashSet<Arc<str>>>,
     progress_sender: mpsc::Sender<String>,
@@ -55,6 +117,60 @@ pub async fn work(
     excluded_programs: HashSet<Arc<str>>,
     excluded_program_categories: HashSet<(Arc<str>, Arc<str>)>,
 ) -> CleanResult {
+    work_with(
+        selected_map,
+        progress_sender,
+        database,
+        custom_database,
+        #[cfg(windows)]
+        registry_database,
+        excluded_programs,
+        excluded_program_categories,
+        Mode::Clean,
+    )
+    .await
+    .free
+}
+
+/// [`work`], with the mode and the scan's extra findings.
+///
+/// Returns [`ScanReport`] rather than a bare [`CleanResult`], because a scan has
+/// two answers — what is freeable and what is locked — and collapsing them into
+/// one number is the mistake this type exists to prevent.
+pub async fn scan(
+    selected_map: HashMap<Arc<str>, HashSet<Arc<str>>>,
+    progress_sender: mpsc::Sender<String>,
+    database: &CleanerDatabase,
+    custom_database: &[CustomCleaner],
+    #[cfg(windows)] registry_database: &RegistryDatabase,
+    excluded_programs: HashSet<Arc<str>>,
+    excluded_program_categories: HashSet<(Arc<str>, Arc<str>)>,
+) -> ScanReport {
+    work_with(
+        selected_map,
+        progress_sender,
+        database,
+        custom_database,
+        #[cfg(windows)]
+        registry_database,
+        excluded_programs,
+        excluded_program_categories,
+        Mode::Scan,
+    )
+    .await
+}
+
+#[allow(clippy::too_many_arguments)]
+pub async fn work_with(
+    selected_map: HashMap<Arc<str>, HashSet<Arc<str>>>,
+    progress_sender: mpsc::Sender<String>,
+    database: &CleanerDatabase,
+    custom_database: &[CustomCleaner],
+    #[cfg(windows)] registry_database: &RegistryDatabase,
+    excluded_programs: HashSet<Arc<str>>,
+    excluded_program_categories: HashSet<(Arc<str>, Arc<str>)>,
+    mode: Mode,
+) -> ScanReport {
     let mut current_task = 0;
 
     // ASYNC without threads: pure FuturesUnordered
@@ -62,6 +178,13 @@ pub async fn work(
     let mut removed_files: u64 = 0;
     let mut removed_directories: u64 = 0;
     let mut cleared_programs = Vec::<Cleared>::new();
+
+    // INFO: only ever non-empty in a scan; kept in the accumulator so both modes
+    // share one return shape and the counting cannot be forgotten in one of them.
+    let mut locked_files: u64 = 0;
+    let mut locked_bytes: u64 = 0;
+    let mut locked: Vec<ClearedPath> = Vec::new();
+    let mut unmeasured: Vec<Unmeasured> = Vec::new();
 
     // C: limit to 8 concurrent cleaners
     let sem = Arc::new(tokio::sync::Semaphore::new(8));
@@ -73,6 +196,7 @@ pub async fn work(
     // Streams directly into FuturesUnordered to avoid buffering all matches in RAM.
     #[cfg(windows)]
     {
+        let scanning = mode == Mode::Scan;
         let _ = registry_database.for_each(|data| {
             let eff = effective_sub(&data.class, &data.sub_category);
             if let Some(subs) = selected_map.get(data.category.as_ref())
@@ -81,6 +205,16 @@ pub async fn work(
                 && !excluded_program_categories
                     .contains(&(Arc::clone(&data.program), Arc::clone(&data.category)))
             {
+                // INFO: a registry entry can only be counted by deleting it —
+                // there is no read-only form of `clear_registry`. A scan names
+                // it as unmeasured rather than reporting a zero it cannot back up.
+                if scanning {
+                    unmeasured.push(Unmeasured {
+                        id: format!("{}/{}", data.program, data.category),
+                        reason: "registry entries can only be measured by clearing them",
+                    });
+                    return;
+                }
                 let sender = progress_sender.clone();
                 let name_msg = data.program.clone();
                 let sem = sem.clone();
@@ -105,6 +239,14 @@ pub async fn work(
         {
             if data.sequential {
                 sequential_cleaners.push(data.clone());
+            } else if mode == Mode::Scan {
+                // INFO: a custom cleaner is arbitrary code — image
+                // optimization, an external tool call. There is nothing to walk
+                // ahead of time, so a scan names it instead of guessing a size.
+                unmeasured.push(Unmeasured {
+                    id: data.id.clone(),
+                    reason: "custom cleaners can only be measured by running them",
+                });
             } else {
                 let data = data.clone();
                 let sender = progress_sender.clone();
@@ -135,10 +277,18 @@ pub async fn work(
             let sender = progress_sender.clone();
             let path_msg = data.program.clone();
             let sem = sem.clone();
+            // INFO: the same walk either way. `clear_data` and `scan_data` are
+            // one function behind two names, so the two modes cannot report
+            // different things about the same entry.
+            let scanning = mode == Mode::Scan;
             futures.push(Box::pin(async move {
                 let _p = sem.acquire_owned().await.unwrap();
                 let _ = sender.send(format!("{CLEANING_PREFIX}{path_msg}")).await;
-                clear_data(&data).await
+                if scanning {
+                    scan_data(&data).await
+                } else {
+                    clear_data(&data).await
+                }
             }));
         }
     });
@@ -148,12 +298,20 @@ pub async fn work(
         .send(format!("{PROGRESS_PREFIX}0:{total_tasks}:0"))
         .await;
 
-    while let Some(result) = futures.next().await {
+    while let Some(mut result) = futures.next().await {
         current_task += 1;
 
         // Read before the move: `fold` owns the result, and the run's own totals
         // are keyed on whether it had anything to count at all.
         let (bytes, files, folders) = (result.bytes, result.files, result.folders);
+        // INFO: a result whose only content is locked files counts as nothing
+        // removed — `fold` says so by returning false — but its locked totals
+        // still have to be collected, or the scan would report a directory full
+        // of locked files as empty. Read before the move: `fold` takes `result`.
+        locked_files += result.locked_files;
+        locked_bytes += result.locked_bytes;
+        let taken = std::mem::take(&mut result.locked);
+        locked.extend(taken);
         if fold(&mut cleared_programs, result) {
             bytes_cleared += bytes;
             removed_files += files;
@@ -170,6 +328,15 @@ pub async fn work(
 
     // Run sequential cleaners one at a time (image optimizers, etc.)
     for data in sequential_cleaners {
+        // INFO: the same reason as the concurrent custom cleaners above: they
+        // run code, so a scan cannot measure them without running them.
+        if mode == Mode::Scan {
+            unmeasured.push(Unmeasured {
+                id: data.id.clone(),
+                reason: "custom cleaners can only be measured by running them",
+            });
+            continue;
+        }
         current_task += 1;
         let _ = progress_sender
             .send(format!("{CLEANING_PREFIX}{}", data.id))
@@ -200,22 +367,28 @@ pub async fn work(
             .sort_by_key(|detail| Reverse(detail.removed_bytes));
     }
 
-    let bytes_cleared_val = bytes_cleared;
-    let removed_files_val = removed_files;
-    let removed_directories_val = removed_directories;
+    // A scan has nothing to celebrate, so it must not pop a notification
+    // claiming the disk was cleared when nothing was.
+    if mode.removes() {
+        notify_result(bytes_cleared, removed_files, removed_directories);
+    }
 
-    notify_result(
-        bytes_cleared_val,
-        removed_files_val,
-        removed_directories_val,
-    );
+    // Largest first for the same reason: a locked file is the one the user has
+    // to act on, and the biggest is the one worth acting on first.
+    locked.sort_by_key(|detail| Reverse(detail.removed_bytes));
 
-    (
-        bytes_cleared_val,
-        removed_files_val,
-        removed_directories_val,
-        cleared_programs.into(),
-    )
+    ScanReport {
+        free: (
+            bytes_cleared,
+            removed_files,
+            removed_directories,
+            cleared_programs.into(),
+        ),
+        locked_files,
+        locked_bytes,
+        locked: locked.into(),
+        unmeasured,
+    }
 }
 
 /// Folds one finished cleaner into the per-program table.
@@ -339,6 +512,101 @@ pub fn parse_progress(message: &str) -> Option<(usize, usize, u64)> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use database::cleaner_database::CleanerDatabase;
+    use database::structures::CleanerData;
+
+    /// A scan's job is to divide the tree into what a run frees and what it cannot.
+    /// A single total would be the failure mode, so the two are separate fields and
+    /// the free total must never absorb the locked one.
+    #[cfg(windows)]
+    #[tokio::test]
+    async fn a_scan_separates_freeable_bytes_from_locked_ones() {
+        use std::fs;
+        use std::os::windows::fs::OpenOptionsExt;
+
+        let dir = tempfile::tempdir().expect("a temp dir");
+        let free = dir.path().join("free.bin");
+        let held = dir.path().join("held.bin");
+        fs::write(&free, vec![0u8; 512]).unwrap();
+        fs::write(&held, vec![0u8; 4096]).unwrap();
+
+        let handle = fs::OpenOptions::new()
+            .read(true)
+            .share_mode(0)
+            .open(&held)
+            .expect("the file opens");
+
+        let database = CleanerDatabase::from_vec(vec![CleanerData {
+            path: format!("{}/*", dir.path().display()).into(),
+            category: Arc::from("Cache"),
+            program: Arc::from("Locked"),
+            class: Arc::from("Application"),
+            sub_category: Arc::from(""),
+            files_to_remove: vec![],
+            directories_to_remove: vec![],
+            flags: database::structures::CleanerFlags::REMOVE_FILES,
+        }]);
+
+        let (tx, _rx) = mpsc::channel(64);
+        let report = scan(
+            // The entry has no `sub_category`, so it is selected by the empty
+            // pseudo-subcategory, exactly as the category page ticks it.
+            HashMap::from([(Arc::from("Cache"), HashSet::from([Arc::from("")]))]),
+            tx,
+            &database,
+            &[],
+            &RegistryDatabase::from_vec(Vec::new()),
+            HashSet::new(),
+            HashSet::new(),
+        )
+        .await;
+
+        assert_eq!(report.free.0, 512, "only the removable file counts");
+        assert_eq!(report.locked_files, 1);
+        assert_eq!(report.locked_bytes, 4096);
+        assert_eq!(report.locked.len(), 1, "and it is named");
+        // Nothing was deleted: the whole point of asking.
+        assert!(free.exists());
+        assert!(held.exists());
+        drop(handle);
+    }
+
+    #[tokio::test]
+    async fn a_scan_names_the_cleaners_it_cannot_measure() {
+        use database::structures::CustomCleaner;
+
+        let database = CleanerDatabase::from_vec(Vec::new());
+        let custom = vec![CustomCleaner {
+            id: "Optimize pictures".to_string(),
+            program: Arc::from("Pictures"),
+            category: Arc::from("Images"),
+            sub_category: Arc::from("Pictures"),
+            path: "pictures".into(),
+            args: Vec::new(),
+            os: Vec::new(),
+            function: |_, _| Box::pin(async { panic!("a scan must not run a cleaner") }),
+            sequential: false,
+        }];
+
+        let (tx, _rx) = mpsc::channel(64);
+        #[cfg(windows)]
+        let registry = RegistryDatabase::from_vec(Vec::new());
+        let report = scan(
+            HashMap::from([(Arc::from("Images"), HashSet::from([Arc::from("Pictures")]))]),
+            tx,
+            &database,
+            &custom,
+            #[cfg(windows)]
+            &registry,
+            HashSet::new(),
+            HashSet::new(),
+        )
+        .await;
+
+        assert_eq!(report.unmeasured.len(), 1);
+        assert_eq!(report.unmeasured[0].id, "Optimize pictures");
+        assert!(!report.unmeasured[0].reason.is_empty());
+    }
 
     #[test]
     fn parses_progress_messages() {
@@ -370,6 +638,9 @@ mod tests {
             working: true,
             path: "C:\\cache\\*".into(),
             paths_omitted: 0,
+            locked_files: 0,
+            locked_bytes: 0,
+            locked: Vec::new(),
             paths: paths
                 .iter()
                 .map(|(path, bytes)| ClearedPath {

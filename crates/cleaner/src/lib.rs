@@ -8,6 +8,7 @@ use tokio::io;
 use tokio::sync::Semaphore;
 
 pub mod custom_cleaners;
+pub mod deletable;
 pub mod image_optimizer;
 
 // INFO: Re-export so macro_rules! ($crate::database::...) resolves in any consumer crate
@@ -75,7 +76,40 @@ fn open_dir_without_links(path: &Path) -> io::Result<cap_std::fs::Dir> {
     Ok(dir)
 }
 
-fn remove_file_in_dir(dir: &cap_std::fs::Dir, name: &Path) -> io::Result<u64> {
+/// Whether a walk deletes what it finds or only measures it.
+///
+/// Threaded through the whole removal path rather than checked once at the top,
+/// because a dry run that re-derives what a clean would do is only trustworthy
+/// if it is the *same* walk: the glob expansion, the flag checks, the
+/// `files_to_remove` / `directories_to_remove` lists and the order they run in
+/// are all things a second implementation would eventually get wrong, and a
+/// dry run that disagrees with the run is worse than no dry run at all.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum Mode {
+    /// Remove what is matched. The normal run.
+    Remove,
+    /// Measure what is matched and leave it in place.
+    Measure,
+}
+
+impl Mode {
+    /// True when the walk is allowed to delete.
+    fn removes(self) -> bool {
+        self == Mode::Remove
+    }
+}
+
+/// Removes (or measures) one named file inside an open directory handle.
+///
+/// Returns the file's size together with whether it was actually reachable:
+/// in [`Mode::Measure`] a file something holds open reports `false`, which is
+/// the difference between bytes a run frees and bytes it does not.
+fn remove_file_in_dir(
+    dir: &cap_std::fs::Dir,
+    name: &Path,
+    path: &Path,
+    mode: Mode,
+) -> io::Result<(u64, bool)> {
     let meta = dir.symlink_metadata(name)?;
     if meta.is_symlink() {
         return Err(io::Error::new(
@@ -87,17 +121,24 @@ fn remove_file_in_dir(dir: &cap_std::fs::Dir, name: &Path) -> io::Result<u64> {
         return Err(io::Error::new(io::ErrorKind::InvalidInput, "not a file"));
     }
     let len = meta.len();
-    dir.remove_file(name)?;
-    Ok(len)
+    if mode.removes() {
+        dir.remove_file(name)?;
+        return Ok((len, true));
+    }
+    // INFO: probed after the stat and before the caller adds it to the totals.
+    // A file can be readable and still undeletable — that is the whole point of
+    // the probe, and a scan that reported it as free would promise bytes the
+    // run is going to fail on.
+    Ok((len, deletable::is_deletable(path).is_yes()))
 }
 
-fn remove_file_sync(path: &Path) -> io::Result<u64> {
+fn remove_file_sync(path: &Path, mode: Mode) -> io::Result<(u64, bool)> {
     let name = path
         .file_name()
         .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "no file name in path"))?;
     let parent = path.parent().unwrap_or_else(|| Path::new("."));
     let dir = open_dir_without_links(parent)?;
-    remove_file_in_dir(&dir, Path::new(name))
+    remove_file_in_dir(&dir, Path::new(name), path, mode)
 }
 
 /// What one removal took: the totals the run reports, plus one entry per item
@@ -118,6 +159,14 @@ struct Removed {
     entries: Vec<ClearedPath>,
     /// Items that went but are not in `entries`, because the cap was reached.
     omitted: usize,
+    /// Files a scan found that something holds open, with their sizes. Empty in
+    /// every run that removes, and never folded into the counters above: these
+    /// are bytes the run will *not* free.
+    locked: Vec<ClearedPath>,
+    /// How many files `locked` accounts for, including the ones past the cap.
+    locked_count: u64,
+    /// The bytes those files hold, counted in full even past the cap.
+    locked_bytes: u64,
 }
 
 /// Deleted paths kept for one cleaner. Past this the numbers still count
@@ -161,6 +210,21 @@ impl Removed {
         self.bytes += child.bytes;
         self.extend(child.entries);
         self.omitted += child.omitted;
+        self.locked_count += child.locked_count;
+        self.locked_bytes += child.locked_bytes;
+        self.locked.extend(child.locked);
+    }
+
+    /// Folds in a file a scan found to be held open.
+    ///
+    /// Separate from [`Self::merge`] on purpose: the counters must not move,
+    /// because the bytes are not freeable. Counting them in `bytes` and then
+    /// subtracting later is the same arithmetic with two chances to forget the
+    /// subtraction.
+    fn merge_locked(&mut self, locked: Removed) {
+        self.locked_count += locked.files;
+        self.locked_bytes += locked.bytes;
+        self.locked.extend(locked.entries);
     }
 
     /// Adds entries, counting whatever does not fit instead of dropping it.
@@ -179,6 +243,7 @@ fn remove_dir_in_dir(
     parent_dir: &cap_std::fs::Dir,
     name: &Path,
     path: &Path,
+    mode: Mode,
 ) -> io::Result<Removed> {
     let meta = parent_dir.symlink_metadata(name)?;
     if meta.is_symlink() {
@@ -190,22 +255,24 @@ fn remove_dir_in_dir(
     let dir = parent_dir.open_dir(name)?;
     // Keep the handle open only while walking; on Windows a directory cannot
     // be removed while any handle to it is open (cap-std omits FILE_SHARE_DELETE).
-    let mut removed = remove_dir_recursive(&dir, path)?;
+    let mut removed = remove_dir_recursive(&dir, path, mode)?;
     drop(dir);
-    parent_dir.remove_dir(name)?; // root is now empty; counts itself
-    // The directory is listed too: it was removed, and it is the one item the
-    // caller named.
+    // The directory counts itself in either mode: it is the one item the caller
+    // named, and a measured run has to report the same shape as a real one.
+    if mode.removes() {
+        parent_dir.remove_dir(name)?; // root is now empty
+    }
     removed.merge(Removed::folder(path));
     Ok(removed)
 }
 
-fn remove_dir_sync(root: PathBuf) -> io::Result<Removed> {
+fn remove_dir_sync(root: PathBuf, mode: Mode) -> io::Result<Removed> {
     let name = root.file_name().ok_or_else(|| {
         io::Error::new(io::ErrorKind::InvalidInput, "cannot remove filesystem root")
     })?;
     let parent = root.parent().unwrap_or_else(|| Path::new("."));
     let parent_dir = open_dir_without_links(parent)?;
-    remove_dir_in_dir(&parent_dir, Path::new(name), &root)
+    remove_dir_in_dir(&parent_dir, Path::new(name), &root, mode)
 }
 
 // INFO: Depth-first deletion relative to open handles. Entry types come from
@@ -214,7 +281,7 @@ fn remove_dir_sync(root: PathBuf) -> io::Result<Removed> {
 //
 // INFO: `path` is the directory being walked, so every item removed below it can
 // be named by its full path rather than by a bare entry name.
-fn remove_dir_recursive(dir: &cap_std::fs::Dir, path: &Path) -> io::Result<Removed> {
+fn remove_dir_recursive(dir: &cap_std::fs::Dir, path: &Path, mode: Mode) -> io::Result<Removed> {
     let mut removed = Removed::default();
 
     for entry in dir.entries()? {
@@ -228,34 +295,59 @@ fn remove_dir_recursive(dir: &cap_std::fs::Dir, path: &Path) -> io::Result<Remov
             //   FILE_ATTRIBUTE_DIRECTORY but FileType::is_dir() is false for them,
             //   so they must go through RemoveDirectory (removes the link itself).
             // - Unix: unlink removes any symlink, including symlink-to-dir.
-            #[cfg(windows)]
-            {
-                // Junctions and dir symlinks are reparse points; DeleteFile
-                // rejects them, RemoveDirectory removes the link itself.
-                // Regular file symlinks go through DeleteFile.
-                if dir.remove_file(&name).is_ok() {
-                    removed.merge(Removed::file(&entry_path, 0));
-                } else {
-                    dir.remove_dir(&name)?;
-                    removed.merge(Removed::folder(&entry_path));
+            //
+            // In Measure mode the link is counted the same way and left alone:
+            // a symlink still frees the bytes of the link itself, and never the
+            // bytes of whatever it points at.
+            if mode.removes() {
+                #[cfg(windows)]
+                {
+                    // Junctions and dir symlinks are reparse points; DeleteFile
+                    // rejects them, RemoveDirectory removes the link itself.
+                    // Regular file symlinks go through DeleteFile.
+                    if dir.remove_file(&name).is_ok() {
+                        removed.merge(Removed::file(&entry_path, 0));
+                    } else {
+                        dir.remove_dir(&name)?;
+                        removed.merge(Removed::folder(&entry_path));
+                    }
                 }
-            }
-            #[cfg(not(windows))]
-            {
-                dir.remove_file(&name)?;
+                #[cfg(not(windows))]
+                {
+                    dir.remove_file(&name)?;
+                    removed.merge(Removed::file(&entry_path, 0));
+                }
+            } else {
                 removed.merge(Removed::file(&entry_path, 0));
             }
         } else if ft.is_dir() {
             let sub = dir.open_dir(&name)?;
-            let child = remove_dir_recursive(&sub, &entry_path)?;
+            let child = remove_dir_recursive(&sub, &entry_path, mode)?;
             drop(sub); // release handle before removing (Windows FILE_SHARE_DELETE)
             removed.merge(child);
-            dir.remove_dir(&name)?; // sub is now empty
+            if mode.removes() {
+                dir.remove_dir(&name)?; // sub is now empty
+            }
             removed.merge(Removed::folder(&entry_path));
         } else {
             let bytes = entry.metadata()?.len();
-            dir.remove_file(&name)?;
-            removed.merge(Removed::file(&entry_path, bytes));
+            if mode.removes() {
+                // A locked file fails here, and the whole walk of this
+                // directory stops with it: the entry that wanted the directory
+                // removed cannot remove a non-empty one. That is the real
+                // behaviour, so the scan has to predict it rather than report a
+                // size the run will not deliver.
+                dir.remove_file(&name)?;
+                removed.merge(Removed::file(&entry_path, bytes));
+            } else {
+                match deletable::is_deletable(&entry_path) {
+                    deletable::Deletable::Yes => removed.merge(Removed::file(&entry_path, bytes)),
+                    // Counted as reachable minus nothing: the bytes are kept out
+                    // of the run's totals below, and named here so the user can
+                    // see what is holding them.
+                    _ => removed.merge_locked(Removed::file(&entry_path, bytes)),
+                }
+            }
         }
     }
     Ok(removed)
@@ -276,9 +368,29 @@ struct PathStats {
     removed: Vec<ClearedPath>,
     /// Items removed but not listed, because [`MAX_REMOVED_ENTRIES`] was reached.
     omitted: usize,
+    /// Files a scan found held open by another process. Counted apart from
+    /// `files` / `bytes` so a scan never promises bytes the run cannot free.
+    locked: Vec<ClearedPath>,
+    locked_count: u64,
+    locked_bytes: u64,
 }
 
 impl PathStats {
+    /// Folds in a file a scan found to be held open by another process.
+    ///
+    /// Separate from [`Self::add`] because the counters must not move: the bytes
+    /// are visible and real, but the run will not free them, and a dry run that
+    /// counted them would promise space the user does not get back.
+    fn merge_locked(&mut self, locked: Removed) {
+        self.locked_count += locked.files;
+        self.locked_bytes += locked.bytes;
+        self.locked.extend(locked.entries);
+        // A locked file still proves the path exists, so the entry counts as
+        // touched. Without this a directory holding nothing but locked files
+        // would read as "nothing matched", which is the opposite of the truth.
+        self.working = true;
+    }
+
     /// Folds one removal in: the totals, and every item it removed by name.
     fn add(&mut self, removed: Removed) {
         self.files += removed.files;
@@ -286,6 +398,17 @@ impl PathStats {
         self.bytes += removed.bytes;
         self.working = true;
         self.omitted += removed.omitted;
+        // INFO: the locked files are counted even when the path counted nothing
+        // else. A scan that found only locked files still found something, and
+        // `working` is what stops the caller from reporting that as "nothing
+        // matched" — which would be the exact opposite of the truth.
+        self.locked_count += removed.locked_count;
+        self.locked_bytes += removed.locked_bytes;
+        for entry in removed.locked {
+            if self.locked.len() < MAX_REMOVED_ENTRIES {
+                self.locked.push(entry);
+            }
+        }
         for entry in removed.entries {
             if self.removed.len() < MAX_REMOVED_ENTRIES {
                 self.removed.push(entry);
@@ -298,7 +421,7 @@ impl PathStats {
 
 // INFO: All filesystem work for one matched path, executed inside a single
 // blocking task. Uses the same cap-std operations as before (no TOCTOU window).
-fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData) -> PathStats {
+fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData, mode: Mode) -> PathStats {
     let mut stats = PathStats::default();
 
     // Closed before the flags run, and that is not tidiness: cap-std opens
@@ -329,9 +452,16 @@ fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData) -> Path
         };
         let Some(dir) = &named_dir else { break };
         let fpath = path.join(&relative);
-        match remove_file_in_dir(dir, &relative) {
+        match remove_file_in_dir(dir, &relative, &fpath, mode) {
             // The file's own path, not its parent's: that is what was deleted.
-            Ok(b) => stats.add(Removed::file(&fpath, b)),
+            Ok((b, reachable)) => {
+                let removed = Removed::file(&fpath, b);
+                if reachable {
+                    stats.add(removed)
+                } else {
+                    stats.merge_locked(removed)
+                }
+            }
             Err(e) => diag::warn(format!("cleaner: remove_file {}: {e}", fpath.display())),
         }
     }
@@ -346,7 +476,7 @@ fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData) -> Path
         };
         let Some(dir) = &named_dir else { break };
         let dpath = path.join(&relative);
-        match remove_dir_in_dir(dir, &relative, &dpath) {
+        match remove_dir_in_dir(dir, &relative, &dpath, mode) {
             // Every item inside it is listed by name, not folded into one line:
             // "3 files, 3 dirs" beside a single path tells the reader how much
             // went and nothing about what.
@@ -361,17 +491,17 @@ fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData) -> Path
 
     if data.flags.contains(CleanerFlags::REMOVE_ALL_IN_DIR) {
         // try fast; skip is_dir check for speed (A)
-        if let Ok(removed) = remove_dir_sync(path.to_path_buf()) {
+        if let Ok(removed) = remove_dir_sync(path.to_path_buf(), mode) {
             stats.add(removed);
         }
     }
 
     if data.flags.contains(CleanerFlags::REMOVE_FILES)
-        && let Ok(b) = remove_file_sync(path)
+        && let Ok((b, reachable)) = remove_file_sync(path, mode)
     {
         // The matched path itself, interned: listing it costs a pointer, not a
         // copy of the segments.
-        stats.add(Removed {
+        let removed = Removed {
             files: 1,
             bytes: b,
             entries: vec![ClearedPath {
@@ -381,11 +511,16 @@ fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData) -> Path
                 removed_directories: 0,
             }],
             ..Removed::default()
-        });
+        };
+        if reachable {
+            stats.add(removed)
+        } else {
+            stats.merge_locked(removed)
+        }
     }
 
     if data.flags.contains(CleanerFlags::REMOVE_DIRECTORIES)
-        && let Ok(removed) = remove_dir_sync(path.to_path_buf())
+        && let Ok(removed) = remove_dir_sync(path.to_path_buf(), mode)
     {
         stats.add(removed);
     }
@@ -393,7 +528,7 @@ fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData) -> Path
     if data
         .flags
         .contains(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN)
-        && let Ok(removed) = remove_dir_sync(path.to_path_buf())
+        && let Ok(removed) = remove_dir_sync(path.to_path_buf(), mode)
     {
         stats.add(removed);
     }
@@ -412,7 +547,11 @@ const MAX_PATHS_IN_FLIGHT: usize = 64;
 /// Returns the path itself next to its counters: `clear_data` folds the counters
 /// into one result per database entry, but the results page has to say *which*
 /// path freed *how much*, and that is lost the moment they are summed.
-async fn clean_one_path(path: PathBuf, data: Arc<CleanerData>) -> (SharedPath, PathStats) {
+async fn clean_one_path(
+    path: PathBuf,
+    data: Arc<CleanerData>,
+    mode: Mode,
+) -> (SharedPath, PathStats) {
     // Interned before `path` moves into the blocking task: the segments are
     // shared with every other path under the same directories, so a run deletes
     // N paths without storing N copies of the prefix.
@@ -428,16 +567,21 @@ async fn clean_one_path(path: PathBuf, data: Arc<CleanerData>) -> (SharedPath, P
 
     // Every failure mode (join error, etc.) falls back to a non-working result,
     // matching the previous per-operation error handling.
-    let stats = tokio::task::spawn_blocking(move || clean_path_sync(&path, &for_task, &data))
+    let stats = tokio::task::spawn_blocking(move || clean_path_sync(&path, &for_task, &data, mode))
         .await
         .unwrap_or_default();
 
     (shared, stats)
 }
 
-// NOTE: The main function for data cleansing.
-// PERF: one blocking task per matched path, bounded globally by `BLOCKING`.
-pub async fn clear_data(data: &CleanerData) -> CleanerResult {
+/// Walk one database entry: expand its glob, then either remove or measure
+/// every matched path.
+///
+/// The two public entry points below are this one with a different [`Mode`].
+/// Keeping them together is the point — a dry run is only worth reading if it
+/// counts what the real run would actually delete, and the only way to guarantee
+/// that is to run the same walk.
+async fn walk_data(data: &CleanerData, mode: Mode) -> CleanerResult {
     let mut out = CleanerResult {
         files: 0,
         folders: 0,
@@ -449,6 +593,9 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
         paths_omitted: 0,
         category: data.category.clone(),
         sub_category: data.sub_category.clone(),
+        locked_files: 0,
+        locked_bytes: 0,
+        locked: Vec::new(),
     };
 
     // INFO: Reject parent-dir traversal in the DB-supplied glob pattern
@@ -470,7 +617,7 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
     let data = Arc::new(data.clone());
 
     let mut path_stream = stream::iter(glob_iter.filter_map(Result::ok))
-        .map(|path| clean_one_path(path, Arc::clone(&data)))
+        .map(|path| clean_one_path(path, Arc::clone(&data), mode))
         .buffer_unordered(MAX_PATHS_IN_FLIGHT);
 
     while let Some((_, stats)) = path_stream.next().await {
@@ -483,10 +630,44 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
             // re-derived here: only the task knows which of them actually went.
             out.paths.extend(stats.removed);
             out.paths_omitted += stats.omitted;
+            out.locked_files += stats.locked_count;
+            out.locked_bytes += stats.locked_bytes;
+            for path in stats.locked {
+                if out.locked.len() < MAX_REMOVED_ENTRIES {
+                    out.locked.push(path);
+                }
+            }
         }
     }
 
     out
+}
+
+// NOTE: The main function for data cleansing.
+// PERF: one blocking task per matched path, bounded globally by `BLOCKING`.
+pub async fn clear_data(data: &CleanerData) -> CleanerResult {
+    walk_data(data, Mode::Remove).await
+}
+
+/// Walk one entry and report what a real [`clear_data`] would remove, deleting
+/// nothing.
+///
+/// The glob is expanded, every matched path is walked, and the files, folders
+/// and bytes it *would* free are counted and named exactly as the real run
+/// counts them — so the answer to "how much is this worth" is measured rather
+/// than guessed from the pattern in the database.
+///
+/// Two things it deliberately does not do:
+///
+/// * **It is not free.** It walks every matched path and reads every file's
+///   size, so a full `--all` scan costs about as much I/O as the run does. That
+///   is the price of an honest number; a scan that only looked at the patterns
+///   would be fast and wrong.
+/// * **It is not a promise.** Files can be locked, moved or written to between
+///   the scan and the run, and a locked file is removed at the run and not at the
+///   scan. Treat the result as the size of the opportunity, not of the outcome.
+pub async fn scan_data(data: &CleanerData) -> CleanerResult {
+    walk_data(data, Mode::Measure).await
 }
 
 #[cfg(test)]
@@ -535,6 +716,106 @@ mod tests {
         assert_eq!(result.files, 1);
         assert!(result.bytes > 0);
         assert!(!file_path.exists());
+    }
+
+    /// A scan has to report what the run would free *and* leave everything
+    /// where it was. Both halves matter: the counts are the reason to use a
+    /// scan, and the untouched filesystem is the reason it is safe to.
+    #[tokio::test]
+    async fn a_scan_counts_the_files_without_removing_them() {
+        let temp_dir = TempDir::new().unwrap();
+        let file_path = temp_dir.path().join("test_file.txt");
+        fs::write(&file_path, b"test content").unwrap();
+
+        let mut data = create_test_data(file_path.to_str().unwrap().to_string());
+        data.flags.insert(CleanerFlags::REMOVE_FILES);
+
+        let scanned = scan_data(&data).await;
+
+        assert!(scanned.working, "a scan of a real file has to report it");
+        assert_eq!(scanned.files, 1);
+        assert_eq!(scanned.bytes, b"test content".len() as u64);
+        assert!(
+            file_path.exists(),
+            "a scan must not remove what it measured"
+        );
+    }
+
+    /// The scan and the run are the same walk, so they have to agree exactly.
+    /// If they ever diverge, the dry run is describing a different run.
+    #[tokio::test]
+    async fn a_scan_and_the_run_agree_on_the_numbers() {
+        let temp_dir = TempDir::new().unwrap();
+        let target = temp_dir.path().join("target");
+        fs::create_dir(&target).unwrap();
+        fs::write(target.join("a.txt"), b"aaaa").unwrap();
+        fs::write(target.join("b.txt"), b"bb").unwrap();
+        fs::create_dir(target.join("nested")).unwrap();
+        fs::write(target.join("nested").join("c.txt"), b"cccccc").unwrap();
+
+        let mut data = create_test_data(target.to_str().unwrap().to_string());
+        data.flags.insert(CleanerFlags::REMOVE_ALL_IN_DIR);
+
+        let scanned = scan_data(&data).await;
+
+        // The scan left the tree in place, which is what made the run below
+        // find exactly the same thing the scan measured.
+        assert!(target.exists(), "the scan must not remove what it measured");
+
+        let cleaned = clear_data(&data).await;
+
+        assert_eq!(scanned.files, cleaned.files);
+        assert_eq!(scanned.folders, cleaned.folders);
+        assert_eq!(scanned.bytes, cleaned.bytes);
+        assert!(!target.exists(), "and the run did remove it");
+    }
+
+    /// A scan must not promise the bytes of a file something is holding open, and
+    /// must say which ones they are. This is the case that separates an honest
+    /// dry run from a hopeful one: the file is there, the size is real, and the
+    /// run will still fail to remove it.
+    #[cfg(windows)]
+    #[tokio::test]
+    async fn a_scan_leaves_locked_files_out_of_the_freable_size() {
+        use std::os::windows::fs::OpenOptionsExt;
+
+        let temp_dir = TempDir::new().unwrap();
+        let free = temp_dir.path().join("free.bin");
+        let held = temp_dir.path().join("held.bin");
+        fs::write(&free, vec![0u8; 100]).unwrap();
+        fs::write(&held, vec![0u8; 200]).unwrap();
+
+        // No sharing at all: the delete the run would attempt is refused.
+        let handle = fs::OpenOptions::new()
+            .read(true)
+            .share_mode(0)
+            .open(&held)
+            .expect("the file opens");
+
+        let mut data = create_test_data(format!("{}/*", temp_dir.path().display()));
+        data.flags.insert(CleanerFlags::REMOVE_FILES);
+
+        let scanned = scan_data(&data).await;
+
+        // The free file is counted; the locked one is not.
+        assert_eq!(scanned.files, 1, "only the removable file is counted");
+        assert_eq!(scanned.bytes, 100);
+        assert_eq!(scanned.locked_files, 1);
+        assert_eq!(
+            scanned.locked_bytes, 200,
+            "and the unreachable bytes are named"
+        );
+        assert_eq!(scanned.locked.len(), 1);
+        assert!(
+            scanned.locked[0].path.to_string().contains("held.bin"),
+            "the locked path is reported by name, got {:?}",
+            scanned.locked[0].path
+        );
+
+        // Nothing was deleted, and the lock is still what a run would meet.
+        assert!(free.exists());
+        assert!(held.exists());
+        drop(handle);
     }
 
     #[tokio::test]

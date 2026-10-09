@@ -164,9 +164,20 @@ pub struct CleanArgs {
     #[command(flatten)]
     pub output: OutputArgs,
 
-    /// Print what would be cleaned and exit without deleting anything.
+    /// Walk the selection and report what a real run would free, without deleting
+    /// anything.
+    ///
+    /// The walk is the one the cleaner itself performs, so the size is measured
+    /// rather than estimated, and files another program is holding open are
+    /// reported separately instead of being promised as free.
     #[arg(long)]
     pub dry_run: bool,
+
+    /// With `--dry-run`, also list the database patterns the selection covers.
+    /// Answers "which paths would it look at", where `--dry-run` alone answers
+    /// "how much is actually there".
+    #[arg(long)]
+    pub paths: bool,
 
     /// Do not ask for confirmation before deleting.
     #[arg(short = 'y', long)]

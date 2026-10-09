@@ -153,9 +153,9 @@ pub fn dry_run(state: &AppState, ui: &Ui, output: &OutputArgs, paths: bool) {
     }
 
     ui.line(&ui.heading(&format!(
-        "{} and {} would be cleaned.",
-        count(programs.len(), "program"),
-        count(entries.len(), "path")
+        "{} and {} would be looked at.",
+        count(programs.len() as u64, "program"),
+        count(entries.len() as u64, "pattern")
     )));
     for (name, categories) in &programs {
         ui.line(&format!(

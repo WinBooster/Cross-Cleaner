@@ -226,9 +226,9 @@ impl Ui {
             self.heading(&format!(
                 "Removed {} in {} and {} across {}",
                 get_file_size_string(bytes),
-                count(files as usize, "file"),
-                count(dirs as usize, "directory"),
-                count(cleared.len(), "program"),
+                count(files, "file"),
+                count(dirs, "directory"),
+                count(cleared.len() as u64, "program"),
             ))
         );
 
@@ -309,7 +309,7 @@ impl Ui {
             self.bold(&format!(
                 "{} — {}",
                 entry.program,
-                count(entry.paths.len(), "path")
+                count(entry.paths.len() as u64, "path")
             ))
         );
         for detail in &entry.paths {
@@ -318,14 +318,14 @@ impl Ui {
                 counts.push(format!(
                     "{} {}",
                     detail.removed_files,
-                    plural(detail.removed_files as usize, "file", "files")
+                    plural(detail.removed_files == 1, "file", "files")
                 ));
             }
             if detail.removed_directories > 0 {
                 counts.push(format!(
                     "{} {}",
                     detail.removed_directories,
-                    plural(detail.removed_directories as usize, "dir", "dirs")
+                    plural(detail.removed_directories == 1, "dir", "dirs")
                 ));
             }
             println!(
@@ -340,8 +340,8 @@ impl Ui {
                 "  {}",
                 self.dim(&format!(
                     "{} more deleted {} are not listed.",
-                    count(entry.paths_omitted, "path"),
-                    plural(entry.paths_omitted, "path", "paths")
+                    count(entry.paths_omitted as u64, "path"),
+                    plural(entry.paths_omitted == 1, "path", "paths")
                 ))
             );
         }
@@ -385,13 +385,18 @@ fn terminal_width() -> usize {
 /// The plural *forms* on their own would leave a heading reading "programs and
 /// paths would be cleaned", which says nothing about how much is about to
 /// happen — the two numbers are the whole point of a dry run.
-pub fn count(amount: usize, noun: &'static str) -> String {
-    format!("{} {}", amount, plural(amount, noun, plural_of(noun)))
+///
+/// Takes `u64` rather than `usize` because the counters come straight off the
+/// cleaner: they are file counts, they are never an index, and truncating one to
+/// a pointer width to satisfy a signature would be a lossy conversion for
+/// nothing.
+pub fn count(amount: u64, noun: &'static str) -> String {
+    format!("{} {}", amount, plural(amount == 1, noun, plural_of(noun)))
 }
 
 /// `one file` / `two files`, from the count rather than by hand.
-pub fn plural(count: usize, one: &'static str, many: &'static str) -> &'static str {
-    if count == 1 { one } else { many }
+pub fn plural(is_one: bool, one: &'static str, many: &'static str) -> &'static str {
+    if is_one { one } else { many }
 }
 
 // Not every English plural is the noun plus an `s` — "directory" is
@@ -485,9 +490,8 @@ mod tests {
 
     #[test]
     fn plurals_come_from_the_count() {
-        assert_eq!(plural(1, "file", "files"), "file");
-        assert_eq!(plural(0, "file", "files"), "files");
-        assert_eq!(plural(2, "file", "files"), "files");
+        assert_eq!(plural(true, "file", "file"), "file");
+        assert_eq!(plural(false, "file", "files"), "files");
     }
 
     #[test]

@@ -645,4 +645,15 @@ pub struct CleanerResult {
     pub program: Arc<str>,
     pub category: Arc<str>,
     pub sub_category: Arc<str>,
+    /// Files found by a scan that something is holding open, so a real run
+    /// would fail to remove them. Always zero for a run that removes.
+    ///
+    /// This is what keeps a dry run honest: the size it reports is the size that
+    /// is *reachable*, and this is the part of the tree that is not. A scan that
+    /// left it out would promise bytes that a real run cannot deliver.
+    pub locked_files: u64,
+    /// Bytes those locked files hold — the size a scan is not promising.
+    pub locked_bytes: u64,
+    /// Named locked files, capped the same way [`Self::paths`] is.
+    pub locked: Vec<ClearedPath>,
 }

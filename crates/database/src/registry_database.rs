@@ -205,6 +205,13 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
         program: data.program.clone(),
         category: data.category.clone(),
         sub_category: data.sub_category.clone(),
+        // A registry key is never "locked" the way a file is, and a scan does
+        // not walk the registry ahead of the run, so there is nothing to count
+        // here. The bytes are zero either way, so the claim a scan makes about
+        // registry entries is unchanged: it reports the keys it would remove.
+        locked_files: 0,
+        locked_bytes: 0,
+        locked: Vec::new(),
     };
 
     // INFO: Every item this entry removed, named. Collected rather than summed as

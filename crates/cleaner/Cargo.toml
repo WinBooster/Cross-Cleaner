@@ -13,5 +13,15 @@ database = { path = "../database" }
 image = { version = "0.25.10", default-features = false, features = ["png", "ico", "jpeg", "webp", "bmp", "gif"] }
 tempfile = "3.27"
 
+# Only for the delete probe (see `is_deletable`): asking Windows whether a file
+# can be removed means opening it with DELETE access, which cap-std cannot
+# express. Off every other platform, where the probe reads permission bits.
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.62", features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Storage_FileSystem",
+] }
+
 [dev-dependencies]
 proptest = "1.11"

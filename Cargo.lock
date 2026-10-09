@@ -752,6 +752,7 @@ dependencies = [
  "rayon",
  "tempfile",
  "tokio",
+ "windows",
 ]
 
 [[package]]
