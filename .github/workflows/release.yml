@@ -502,6 +502,16 @@ jobs:
           # published by hand.
           github-release-draft: true
           github-release-title: "🌟 Cross Cleaner ${{ env.APP_VERSION }} 🌟"
+          # Markdown placed above the generated changelog. `%s` is replaced with
+          # the release version, so these badges stay correct without being
+          # edited for every release.
+          #
+          # Every link points at this specific tag rather than at `latest` or
+          # the releases index, so the badges never lead to another version.
+          github-release-notes-prepend: |
+            [![Downloads](https://img.shields.io/github/downloads/${{ github.repository }}/v%s/total)](https://github.com/${{ github.repository }}/releases/tag/v%s)
+            [![Version](https://img.shields.io/badge/version-%s-blue)](https://github.com/${{ github.repository }}/releases/tag/v%s)
+            [![License](https://img.shields.io/badge/license-GPLv3-blue)](https://github.com/${{ github.repository }}/blob/main/LICENSE)
           github-release-files: |
             linux-binaries/Linux-Cross_Cleaner_GUI
             linux-binaries/Linux-Cross_Cleaner_TUI
