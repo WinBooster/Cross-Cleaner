@@ -1,16 +1,17 @@
 #[cfg(windows)]
 use crate::registry_utils::{
-    expand_registry_path_pattern, remove_all_in_registry, remove_all_in_tree_in_registry,
-    remove_key_in_registry, remove_trees_matching_in_registry, remove_values_matching_in_registry,
+    RegistryRemoval, expand_registry_path_pattern, remove_all_in_registry,
+    remove_all_in_tree_in_registry, remove_key_in_registry, remove_trees_matching_in_registry,
+    remove_value_in_registry, remove_values_matching_in_registry,
 };
 #[cfg(windows)]
 use crate::streaming::for_each_array;
 #[cfg(windows)]
 use crate::structures::CleanerDataRegistry;
 #[cfg(windows)]
-use crate::structures::CleanerResult;
-#[cfg(windows)]
 use crate::structures::RegistryIndex;
+#[cfg(windows)]
+use crate::structures::{CleanerResult, ClearedPath};
 #[cfg(windows)]
 use flate2::read::GzDecoder;
 #[cfg(windows)]
@@ -150,55 +151,68 @@ pub fn get_database_from_file(
     Ok(entries.into())
 }
 
+/// The hives an entry may name, as the predef handle the helpers work from.
+#[cfg(windows)]
+const HIVES: [(&str, winreg::HKEY); 5] = [
+    ("HKEY_CURRENT_USER", HKEY_CURRENT_USER),
+    ("HKEY_CURRENT_CONFIG", HKEY_CURRENT_CONFIG),
+    ("HKEY_LOCAL_MACHINE", HKEY_LOCAL_MACHINE),
+    ("HKEY_CLASSES_ROOT", HKEY_CLASSES_ROOT),
+    ("HKEY_USERS", HKEY_USERS),
+];
+
+/// Splits an entry's path into its hive and the path relative to it.
+///
+/// `None` for anything that names no known root. Both halves are needed: the
+/// handle is what the removals are performed through, and the hive's name is
+/// what has to be printed in front of every removed key — a registry path
+/// without it is not something a reader can paste into regedit.
+#[cfg(windows)]
+fn split_hive(path: &crate::structures::SharedPath) -> Option<(&'static str, RegKey, String)> {
+    let full = path.as_string();
+    for (name, handle) in HIVES {
+        // Only the hive plus a separator counts: a key called
+        // `HKEY_CURRENT_USER_BACKUP` must not match `HKEY_CURRENT_USER`.
+        let Some(rest) = full.strip_prefix(name) else {
+            continue;
+        };
+        if !rest.starts_with('\\') {
+            continue;
+        }
+        let relative = rest.trim_start_matches('\\');
+        // A bare hive with nothing under it: there is no key to clean, and
+        // treating the empty remainder as "the root" would aim a removal at
+        // every value in the hive.
+        if relative.is_empty() {
+            return None;
+        }
+        return Some((name, RegKey::predef(handle), relative.to_string()));
+    }
+    None
+}
+
 #[cfg(windows)]
 pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
-    // INFO: Temporary clearing bytes result
-    let mut removed: u64 = 0;
-
     // INFO: Creating output struct
     let mut result = CleanerResult {
         files: 0,
         folders: 0,
         bytes: 0,
         working: false,
-        path: data.path.to_string(),
+        path: data.path.clone(),
+        paths: Vec::new(),
         program: data.program.clone(),
         category: data.category.clone(),
         sub_category: data.sub_category.clone(),
     };
 
-    // INFO: Parsing registry key
-    let root = if data.path.starts_with("HKEY_CURRENT_USER") {
-        Some(RegKey::predef(HKEY_CURRENT_USER))
-    } else if data.path.starts_with("HKEY_LOCAL_MACHINE") {
-        Some(RegKey::predef(HKEY_LOCAL_MACHINE))
-    } else if data.path.starts_with("HKEY_CLASSES_ROOT") {
-        Some(RegKey::predef(HKEY_CLASSES_ROOT))
-    } else if data.path.starts_with("HKEY_USERS") {
-        Some(RegKey::predef(HKEY_USERS))
-    } else if data.path.starts_with("HKEY_CURRENT_CONFIG") {
-        Some(RegKey::predef(HKEY_CURRENT_CONFIG))
-    } else {
-        None
-    };
-
-    // INFO: Removing registry key from path
-    let path = if data.path.starts_with("HKEY_CURRENT_USER\\") {
-        Some(data.path.as_string().replace("HKEY_CURRENT_USER\\", ""))
-    } else if data.path.starts_with("HKEY_LOCAL_MACHINE\\") {
-        Some(data.path.as_string().replace("HKEY_LOCAL_MACHINE\\", ""))
-    } else if data.path.starts_with("HKEY_CLASSES_ROOT\\") {
-        Some(data.path.as_string().replace("HKEY_CLASSES_ROOT\\", ""))
-    } else if data.path.starts_with("HKEY_USERS\\") {
-        Some(data.path.as_string().replace("HKEY_USERS\\", ""))
-    } else if data.path.starts_with("HKEY_CURRENT_CONFIG\\") {
-        Some(data.path.as_string().replace("HKEY_CURRENT_CONFIG\\", ""))
-    } else {
-        None
-    };
+    // INFO: Every item this entry removed, named. Collected rather than summed as
+    // it happens, because the results page has to show which key or value freed
+    // what — and a single total cannot answer that.
+    let mut removals: Vec<RegistryRemoval> = Vec::new();
 
     // INFO: Main logic
-    if let (Some(root), Some(path)) = (root, path) {
+    if let Some((hive, root, path)) = split_hive(&data.path) {
         // INFO: Expand glob pattern in main path ("*" and "?" per segment)
         let paths: Vec<String> = if path.contains('*') || path.contains('?') {
             expand_registry_path_pattern(&root, &path)
@@ -208,48 +222,62 @@ pub fn clear_registry(data: &CleanerDataRegistry) -> CleanerResult {
 
         for current_path in paths {
             if data.remove_all_in_tree {
-                removed += remove_all_in_tree_in_registry(&root, current_path.clone())
+                removals.extend(remove_all_in_tree_in_registry(&root, &current_path));
             }
             if data.remove_all_in_registry {
-                removed += remove_all_in_registry(&root, current_path.clone())
+                removals.extend(remove_all_in_registry(&root, &current_path));
             }
             // INFO: remove_values is the glob for value names matched at
             // the end of resolved paths, "true" removes all values
             if data.remove_values == "true" {
-                removed += remove_all_in_registry(&root, current_path.clone())
+                removals.extend(remove_all_in_registry(&root, &current_path));
             } else if !data.remove_values.is_empty() {
-                removed += remove_values_matching_in_registry(
+                removals.extend(remove_values_matching_in_registry(
                     &root,
-                    current_path.clone(),
-                    data.remove_values.clone(),
-                )
+                    &current_path,
+                    &data.remove_values,
+                ));
             }
             // INFO: remove_trees is the glob for subkey trees matched at
             // the end of resolved paths, "true" removes resolved keys
             if data.remove_trees == "true" {
-                removed += remove_key_in_registry(&root, current_path.clone())
+                removals.extend(remove_key_in_registry(&root, &current_path));
             } else if !data.remove_trees.is_empty() {
-                removed += remove_trees_matching_in_registry(
+                removals.extend(remove_trees_matching_in_registry(
                     &root,
-                    current_path.clone(),
-                    data.remove_trees.clone(),
-                )
+                    &current_path,
+                    &data.remove_trees,
+                ));
             }
             for value in data.values_to_remove.iter() {
-                use crate::registry_utils::remove_value_in_registry;
-
-                removed += remove_value_in_registry(&root, current_path.clone(), value.to_string());
+                removals.extend(remove_value_in_registry(&root, &current_path, value));
             }
             for value in data.keys_to_remove.iter() {
-                removed += remove_key_in_registry(&root, current_path.clone() + "\\" + value);
+                removals.extend(remove_key_in_registry(
+                    &root,
+                    &format!("{}\\{}", current_path, value),
+                ));
             }
         }
+
+        // INFO: One report entry per removed item, each with the hive in front of
+        // it. A registry cleaner removes values and subkeys rather than files, so
+        // the counts stay zero — what the page can honestly report is the key.
+        result.paths = removals
+            .into_iter()
+            .map(|removal| ClearedPath {
+                path: crate::structures::SharedPath::new(&format!("{}\\{}", hive, removal.path)),
+                removed_bytes: removal.bytes,
+                removed_files: 0,
+                removed_directories: 0,
+            })
+            .collect();
     }
 
-    if removed > 0 {
-        result.working = true;
-        result.bytes = removed;
-    }
+    // INFO: The total is the sum of what was listed, never a separate count: two
+    // totals that can disagree is the bug this whole path was fixed to avoid.
+    result.bytes = result.paths.iter().map(|entry| entry.removed_bytes).sum();
+    result.working = !result.paths.is_empty();
 
     result
 }

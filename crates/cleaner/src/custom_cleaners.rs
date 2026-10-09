@@ -92,7 +92,8 @@ macro_rules! custom_glob_cleaner {
                     folders: 0,
                     bytes: 0,
                     working: false,
-                    path: data.path.to_string(),
+                    path: data.path.clone(),
+                    paths: Vec::new(),
                     program: data.program.clone(),
                     category: data.category.clone(),
                     sub_category: data.sub_category.clone(),
@@ -113,6 +114,12 @@ macro_rules! custom_glob_cleaner {
                 let total_folders = AtomicU64::new(0);
                 let mut total: u64 = 0;
 
+                // Per-path detail, for the results overlay to list. The paths are
+                // interned segment by segment, so N entries below one directory
+                // share a single copy of it instead of storing N.
+                let removed: std::sync::Mutex<Vec<$crate::database::structures::ClearedPath>> =
+                    std::sync::Mutex::new(Vec::new());
+
                 // Bounded chunk to keep peak PathBuf allocation low.
                 let mut chunk: Vec<std::path::PathBuf> = Vec::with_capacity(1024);
                 let mut any = false;
@@ -126,12 +133,23 @@ macro_rules! custom_glob_cleaner {
                         let total_files_ref = &total_files;
                         let total_folders_ref = &total_folders;
                         let sender_ref = &sender;
+                        let removed_ref = &removed;
                         chunk.par_iter().for_each(|entry_path| {
                             if let Ok(stats) = __custom_glob_entry(entry_path, &data.args) {
                                 if stats.files > 0 || stats.folders > 0 || stats.bytes > 0 {
                                     total_files_ref.fetch_add(stats.files, Ordering::Relaxed);
                                     total_folders_ref.fetch_add(stats.folders, Ordering::Relaxed);
                                     total_bytes_ref.fetch_add(stats.bytes, Ordering::Relaxed);
+                                    if let Ok(mut removed) = removed_ref.lock() {
+                                        removed.push($crate::database::structures::ClearedPath {
+                                            path: $crate::database::structures::SharedPath::new(
+                                                &entry_path.to_string_lossy(),
+                                            ),
+                                            removed_bytes: stats.bytes,
+                                            removed_files: stats.files,
+                                            removed_directories: stats.folders,
+                                        });
+                                    }
                                 }
                             }
                             let cur = completed_ref.fetch_add(1, Ordering::Relaxed) + 1;
@@ -155,12 +173,23 @@ macro_rules! custom_glob_cleaner {
                 }
                 if !chunk.is_empty() {
                     total += chunk.len() as u64;
+                    let removed_ref = &removed;
                     chunk.par_iter().for_each(|entry_path| {
                         if let Ok(stats) = __custom_glob_entry(entry_path, &data.args) {
                             if stats.files > 0 || stats.folders > 0 || stats.bytes > 0 {
                                 total_files.fetch_add(stats.files, Ordering::Relaxed);
                                 total_folders.fetch_add(stats.folders, Ordering::Relaxed);
                                 total_bytes.fetch_add(stats.bytes, Ordering::Relaxed);
+                                if let Ok(mut removed) = removed_ref.lock() {
+                                    removed.push($crate::database::structures::ClearedPath {
+                                        path: $crate::database::structures::SharedPath::new(
+                                            &entry_path.to_string_lossy(),
+                                        ),
+                                        removed_bytes: stats.bytes,
+                                        removed_files: stats.files,
+                                        removed_directories: stats.folders,
+                                    });
+                                }
                             }
                         }
                         let _ = completed.fetch_add(1, Ordering::Relaxed);
@@ -182,6 +211,7 @@ macro_rules! custom_glob_cleaner {
                 result.folders = total_folders.load(Ordering::Relaxed);
                 result.bytes = total_bytes.load(Ordering::Relaxed);
                 result.working = result.files > 0 || result.folders > 0;
+                result.paths = removed.into_inner().unwrap_or_default();
 
                 result
             })

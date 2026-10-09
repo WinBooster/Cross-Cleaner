@@ -888,7 +888,7 @@ mod tests {
         app.current_page = Page::Clearing;
         assert!(app.go_back());
         assert_eq!(app.current_page, Page::Main);
-        app.cleared_data = Some((0, 0, 0, Vec::new()));
+        app.cleared_data = Some((0, 0, 0, Arc::from(Vec::new())));
         app.current_page = Page::Results;
         assert!(app.go_back());
         assert_eq!(app.current_page, Page::Main);
@@ -968,7 +968,7 @@ mod tests {
         let (tx, rx) = std::sync::mpsc::channel();
         app.result_receiver = Some(rx);
         assert!(!app.poll_result(), "nothing queued yet");
-        tx.send((10u64, 2u64, 1u64, Vec::new())).unwrap();
+        tx.send((10u64, 2u64, 1u64, Arc::from(Vec::new()))).unwrap();
         assert!(app.poll_result());
         assert_eq!(app.current_page, Page::Results);
         assert!(app.cleared_data.is_some());

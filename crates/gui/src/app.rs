@@ -27,6 +27,13 @@ pub struct MyApp {
     pub last_inner_size: Option<egui::Vec2>,
     /// Set once the results window has been resized for the current run.
     pub results_window_resized: bool,
+    /// Row of the results report whose deleted paths are on screen, `None` while
+    /// the report itself is.
+    ///
+    /// A row index rather than a copy of the paths: the paths live in the
+    /// finished run, which is behind an `Arc`, and a second copy here could
+    /// only ever disagree with it.
+    pub results_detail: Option<usize>,
     /// Windows taskbar progress (no-op on other platforms).
     pub taskbar: Option<taskbar::TaskbarProgress>,
 
@@ -88,6 +95,7 @@ impl MyApp {
             state,
             last_inner_size: None,
             results_window_resized: false,
+            results_detail: None,
             taskbar: None,
             menu_texture: None,
             icon_texture: None,
@@ -124,6 +132,19 @@ impl MyApp {
     /// Opens the changelog window (fetch starts in `show_changelog_window`).
     fn open_changelog(&mut self) {
         self.show_changelog = true;
+    }
+
+    /// Answers a back request from the title bar, the platform gesture or the
+    /// hardware key. Returns `true` when the app handled it in-app.
+    ///
+    /// The deleted-path list is one level below the report, so the first back
+    /// press returns to the report rather than dropping the whole results page
+    /// — the same order the terminal frontend's overlays use.
+    pub fn go_back(&mut self) -> bool {
+        if self.results_detail.take().is_some() {
+            return true;
+        }
+        self.state.go_back()
     }
 
     /// True when a platform updater worker is registered *and* the release
@@ -443,6 +464,9 @@ impl eframe::App for MyApp {
                 taskbar.remove();
             }
             self.results_window_resized = false;
+            // A new run replaces the report, so a path list pointing into the
+            // old one has nothing left to describe.
+            self.results_detail = None;
             crate::sounds::done();
             ctx.request_repaint();
         }
@@ -510,7 +534,7 @@ impl eframe::App for MyApp {
             self.settings_texture.as_ref(),
         );
         if back_clicked {
-            self.state.go_back();
+            self.go_back();
         }
         if settings_clicked {
             self.state.current_page = Page::Settings;
@@ -526,8 +550,12 @@ impl eframe::App for MyApp {
                 match self.state.current_page {
                     Page::Clearing => self.render_clearing(&ctx, ui),
                     Page::Results => {
-                        if !self.render_results(&ctx, ui) {
+                        // The deleted-path list is a level below the report,
+                        // so it is drawn first and the report stays behind it.
+                        if !self.render_results_details(ui)
                             // No result data yet: fall through to the main page.
+                            && !self.render_results(&ctx, ui)
+                        {
                             self.render_main(&ctx, ui);
                         }
                     }

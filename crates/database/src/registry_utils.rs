@@ -17,126 +17,185 @@ pub fn get_steam_directory_from_registry() -> String {
         .unwrap_or_default()
 }
 
+/// One registry item removed, named.
+///
+/// The database stores a pattern (`…\*\Histo*`), but what a cleaner deletes is a
+/// list of concrete keys and values. A report naming only the pattern cannot be
+/// checked against the registry afterwards, and it cannot say which of the keys
+/// the pattern matched freed what — which is the question the results page is
+/// there to answer.
 #[cfg(windows)]
-pub fn remove_all_in_tree_in_registry(key: &RegKey, path: String) -> u64 {
-    let mut keys = Vec::new();
-    let mut total_bytes = 0;
+pub struct RegistryRemoval {
+    /// Hive-relative path of the item that went. A value is addressed as its key
+    /// plus its name, which is how regedit addresses one too. The caller
+    /// prepends the hive: these helpers work from a predef `RegKey` and so never
+    /// know its name.
+    pub path: String,
+    pub bytes: u64,
+}
 
-    if let Ok(typed_path_read) = key.open_subkey_with_flags(&path, KEY_READ) {
-        for val in typed_path_read.enum_keys().flatten() {
-            if let Ok(subkey) = typed_path_read.open_subkey(&val)
-                && let Ok(info) = subkey.query_info()
-            {
-                total_bytes += info.max_value_name_len as u64 + info.max_value_len as u64;
-            }
-            keys.push(val);
+#[cfg(windows)]
+pub fn remove_all_in_tree_in_registry(key: &RegKey, path: &str) -> Vec<RegistryRemoval> {
+    let mut names = Vec::new();
+    let mut removed = Vec::new();
+
+    if let Ok(typed_path_read) = key.open_subkey_with_flags(path, KEY_READ) {
+        for name in typed_path_read.enum_keys().flatten() {
+            // The same accounting the running total used: the subkey's declared
+            // value sizes, which is all the registry reports before a removal.
+            let bytes = typed_path_read
+                .open_subkey(&name)
+                .and_then(|subkey| subkey.query_info())
+                .map_or(0, |info| {
+                    info.max_value_name_len as u64 + info.max_value_len as u64
+                });
+            removed.push(RegistryRemoval {
+                path: format!("{}\\{}", path, name),
+                bytes,
+            });
+            names.push(name);
         }
     }
 
     if let Ok(typed_path_write) = key.open_subkey_with_flags(path, KEY_WRITE) {
-        for key_name in keys {
-            let _ = typed_path_write.delete_subkey_all(&key_name);
+        for name in names {
+            let _ = typed_path_write.delete_subkey_all(&name);
         }
     }
 
-    total_bytes
+    removed
 }
 
 #[cfg(windows)]
-pub fn remove_all_in_registry(key: &RegKey, value: String) -> u64 {
-    let mut keys = Vec::new();
-    let mut total_bytes = 0;
+pub fn remove_all_in_registry(key: &RegKey, path: &str) -> Vec<RegistryRemoval> {
+    let mut names = Vec::new();
+    let mut removed = Vec::new();
 
-    if let Ok(typed_path_read) = key.open_subkey_with_flags(&value, KEY_READ) {
-        for val in typed_path_read.enum_values().flatten() {
-            total_bytes += (val.0.len() + val.1.to_string().len()) as u64;
-            keys.push(val.0);
+    if let Ok(typed_path_read) = key.open_subkey_with_flags(path, KEY_READ) {
+        for (name, value) in typed_path_read.enum_values().flatten() {
+            removed.push(RegistryRemoval {
+                path: format!("{}\\{}", path, name),
+                bytes: (name.len() + value.to_string().len()) as u64,
+            });
+            names.push(name);
         }
-    }
-
-    if let Ok(typed_path_write) = key.open_subkey_with_flags(value, KEY_WRITE) {
-        for key_name in keys {
-            let _ = typed_path_write.delete_value(&key_name);
-        }
-    }
-
-    total_bytes
-}
-
-#[cfg(windows)]
-pub fn remove_value_in_registry(key: &RegKey, path: String, value_name: String) -> u64 {
-    let mut total_bytes = 0;
-
-    if let Ok(typed_path_read) = key.open_subkey_with_flags(&path, KEY_READ)
-        && let Ok(reg_value) = typed_path_read.get_raw_value(&value_name)
-    {
-        total_bytes = (value_name.len() + reg_value.bytes.len()) as u64;
     }
 
     if let Ok(typed_path_write) = key.open_subkey_with_flags(path, KEY_WRITE) {
-        let _ = typed_path_write.delete_value(&value_name);
+        for name in names {
+            let _ = typed_path_write.delete_value(&name);
+        }
     }
 
-    total_bytes
+    removed
 }
 
+/// Removes one named value. `None` when it was not there.
+///
+/// Not reporting it is the point: `values_to_remove` names values that may never
+/// have been written, and listing one would claim a removal that did not happen.
 #[cfg(windows)]
-pub fn remove_key_in_registry(key: &RegKey, path: String) -> u64 {
-    let values_size = remove_all_in_registry(key, path.clone());
-    let tree_size = remove_all_in_tree_in_registry(key, path.clone());
+pub fn remove_value_in_registry(
+    key: &RegKey,
+    path: &str,
+    value_name: &str,
+) -> Option<RegistryRemoval> {
+    let existed = key
+        .open_subkey_with_flags(path, KEY_READ)
+        .ok()
+        .and_then(|read| read.get_raw_value(value_name).ok())
+        .map(|value| (value_name.len() + value.bytes.len()) as u64);
+
+    if let Ok(typed_path_write) = key.open_subkey_with_flags(path, KEY_WRITE) {
+        let _ = typed_path_write.delete_value(value_name);
+    }
+
+    existed.map(|bytes| RegistryRemoval {
+        path: format!("{}\\{}", path, value_name),
+        bytes,
+    })
+}
+
+/// Removes a key and everything under it. `None` when the key was not there.
+///
+/// Reported as the one key carrying its whole size rather than as its values and
+/// subkeys one by one: the database named the key, and a list whose lines add up
+/// to twice the size of the thing they belong to reads as a bug, not as detail.
+#[cfg(windows)]
+pub fn remove_key_in_registry(key: &RegKey, path: &str) -> Option<RegistryRemoval> {
+    key.open_subkey_with_flags(path, KEY_READ).ok()?;
+
+    let values = remove_all_in_registry(key, path);
+    let tree = remove_all_in_tree_in_registry(key, path);
+    let bytes: u64 = values.iter().chain(&tree).map(|item| item.bytes).sum();
 
     if let Ok(parent) = key.open_subkey_with_flags("", KEY_WRITE) {
-        let _ = parent.delete_subkey_all(&path);
+        let _ = parent.delete_subkey_all(path);
     }
 
-    values_size + tree_size
+    Some(RegistryRemoval {
+        path: path.to_string(),
+        bytes,
+    })
 }
 
 // INFO: Remove values inside `path` whose names match glob pattern
 // ("*" and "?" supported, case-insensitive)
 #[cfg(windows)]
-pub fn remove_values_matching_in_registry(key: &RegKey, path: String, pattern: String) -> u64 {
+pub fn remove_values_matching_in_registry(
+    key: &RegKey,
+    path: &str,
+    pattern: &str,
+) -> Vec<RegistryRemoval> {
     let mut matched = Vec::new();
-    let mut total_bytes = 0;
+    let mut removed = Vec::new();
 
-    if let Ok(typed_path_read) = key.open_subkey_with_flags(&path, KEY_READ) {
-        for val in typed_path_read.enum_values().flatten() {
-            if registry_name_match(&pattern, &val.0) {
-                total_bytes += (val.0.len() + val.1.to_string().len()) as u64;
-                matched.push(val.0);
-            }
-        }
-    }
-
-    if let Ok(typed_path_write) = key.open_subkey_with_flags(path, KEY_WRITE) {
-        for value_name in matched {
-            let _ = typed_path_write.delete_value(&value_name);
-        }
-    }
-
-    total_bytes
-}
-
-// INFO: Remove the whole subtree of every direct subkey of `path` whose name
-// matches glob pattern ("*" and "?" supported, case-insensitive)
-#[cfg(windows)]
-pub fn remove_trees_matching_in_registry(key: &RegKey, path: String, pattern: String) -> u64 {
-    let mut matched = Vec::new();
-
-    if let Ok(typed_path_read) = key.open_subkey_with_flags(&path, KEY_READ) {
-        for name in typed_path_read.enum_keys().flatten() {
-            if registry_name_match(&pattern, &name) {
+    if let Ok(typed_path_read) = key.open_subkey_with_flags(path, KEY_READ) {
+        for (name, value) in typed_path_read.enum_values().flatten() {
+            if registry_name_match(pattern, &name) {
+                removed.push(RegistryRemoval {
+                    path: format!("{}\\{}", path, name),
+                    bytes: (name.len() + value.to_string().len()) as u64,
+                });
                 matched.push(name);
             }
         }
     }
 
-    let mut total_bytes = 0;
-    for name in matched {
-        total_bytes += remove_key_in_registry(key, format!("{}\\{}", path, name));
+    if let Ok(typed_path_write) = key.open_subkey_with_flags(path, KEY_WRITE) {
+        for name in matched {
+            let _ = typed_path_write.delete_value(&name);
+        }
     }
 
-    total_bytes
+    removed
+}
+
+// INFO: Remove the whole subtree of every direct subkey of `path` whose name
+// matches glob pattern ("*" and "?" supported, case-insensitive)
+#[cfg(windows)]
+pub fn remove_trees_matching_in_registry(
+    key: &RegKey,
+    path: &str,
+    pattern: &str,
+) -> Vec<RegistryRemoval> {
+    let mut matched = Vec::new();
+
+    if let Ok(typed_path_read) = key.open_subkey_with_flags(path, KEY_READ) {
+        for name in typed_path_read.enum_keys().flatten() {
+            if registry_name_match(pattern, &name) {
+                matched.push(name);
+            }
+        }
+    }
+
+    matched
+        .into_iter()
+        // The matched subkey was just seen to exist, so `None` here would mean
+        // the tree changed underneath us; dropping it beats reporting a removal
+        // that cannot have happened.
+        .filter_map(|name| remove_key_in_registry(key, &format!("{}\\{}", path, name)))
+        .collect()
 }
 
 // INFO: Case-insensitive wildcard match for one registry key name segment.
@@ -370,24 +429,27 @@ mod tests {
         hkcu.delete_subkey_all(test_base).unwrap();
     }
 
+    /// A glob matches several concrete keys, and each removed value is its own
+    /// path. Reporting only the pattern — or only the first match — is what made
+    /// the results page unable to say where the bytes came from.
     #[cfg(windows)]
     #[test]
-    fn test_clear_registry_remove_values_true_removes_all() {
+    fn test_clear_registry_lists_every_key_and_value_it_removed() {
         use crate::registry_database::clear_registry;
         use crate::structures::CleanerDataRegistry;
-        use winreg::enums::{HKEY_CURRENT_USER, KEY_READ};
+        use winreg::enums::HKEY_CURRENT_USER;
 
         let hkcu = RegKey::predef(HKEY_CURRENT_USER);
-        let test_base = "Software\\CrossCleanerGlobValuesAllTest";
+        let test_base = "Software\\CrossCleanerPathsTest";
         let _ = hkcu.delete_subkey_all(test_base);
         let (base_key, _) = hkcu.create_subkey(test_base).unwrap();
-        let (h1, _) = base_key.create_subkey("History").unwrap();
+        let (h1, _) = base_key.create_subkey("App1\\History").unwrap();
         h1.set_value("recent", &"x").unwrap();
-        h1.set_value("other", &"y").unwrap();
+        let (h2, _) = base_key.create_subkey("App2\\History").unwrap();
+        h2.set_value("recent", &"yyyy").unwrap();
 
-        // INFO: remove_values = "true" removes all values
         let data = CleanerDataRegistry {
-            path: format!("HKEY_CURRENT_USER\\{}\\History", test_base).into(),
+            path: format!("HKEY_CURRENT_USER\\{}\\*\\History", test_base).into(),
             category: std::sync::Arc::from("Test"),
             program: std::sync::Arc::from("Test"),
             class: std::sync::Arc::from("Test"),
@@ -402,35 +464,48 @@ mod tests {
         let result = clear_registry(&data);
         assert!(result.working);
 
-        let h1 = hkcu
-            .open_subkey_with_flags(format!("{}\\History", test_base), KEY_READ)
-            .unwrap();
-        assert!(h1.get_value::<String, _>("recent").is_err());
-        assert!(h1.get_value::<String, _>("other").is_err());
+        let mut listed: Vec<String> = result
+            .paths
+            .iter()
+            .map(|entry| entry.path.as_string())
+            .collect();
+        listed.sort();
+        let base = format!("HKEY_CURRENT_USER\\{}", test_base);
+        assert_eq!(
+            listed,
+            vec![
+                format!("{}\\{}\\recent", base, "App1\\History"),
+                format!("{}\\{}\\recent", base, "App2\\History"),
+            ],
+            "one entry per removed value, each with the hive in front",
+        );
+        // The bytes still add up to the total the run reports.
+        let listed_bytes: u64 = result.paths.iter().map(|entry| entry.removed_bytes).sum();
+        assert_eq!(listed_bytes, result.bytes);
+        assert!(result.bytes > 0);
 
         hkcu.delete_subkey_all(test_base).unwrap();
     }
 
+    /// A key named by `keys_to_remove` is listed under its own path, not under
+    /// the pattern that reached it.
     #[cfg(windows)]
     #[test]
-    fn test_clear_registry_remove_trees_glob() {
+    fn test_clear_registry_lists_keys_to_remove_by_name() {
         use crate::registry_database::clear_registry;
         use crate::structures::CleanerDataRegistry;
         use winreg::enums::{HKEY_CURRENT_USER, KEY_READ};
 
         let hkcu = RegKey::predef(HKEY_CURRENT_USER);
-        let test_base = "Software\\CrossCleanerGlobTreeTest";
+        let test_base = "Software\\CrossCleanerKeysToRemoveTest";
         let _ = hkcu.delete_subkey_all(test_base);
         let (base_key, _) = hkcu.create_subkey(test_base).unwrap();
-        let (h1, _) = base_key.create_subkey("App1\\History\\Deep").unwrap();
-        h1.set_value("recent", &"x").unwrap();
-        let (h2, _) = base_key.create_subkey("App2\\History").unwrap();
-        h2.set_value("recent", &"y").unwrap();
-        base_key.create_subkey("App1\\KeepMe").unwrap();
+        let (inner, _) = base_key.create_subkey("Inner").unwrap();
+        inner.set_value("recent", &"value").unwrap();
+        base_key.create_subkey("Survivor").unwrap();
 
-        // INFO: remove_trees with glob "Hist*" - deletes matched subkey trees
         let data = CleanerDataRegistry {
-            path: format!("HKEY_CURRENT_USER\\{}\\*", test_base).into(),
+            path: format!("HKEY_CURRENT_USER\\{}", test_base).into(),
             category: std::sync::Arc::from("Test"),
             program: std::sync::Arc::from("Test"),
             class: std::sync::Arc::from("Test"),
@@ -438,26 +513,58 @@ mod tests {
             remove_all_in_tree: false,
             remove_all_in_registry: false,
             values_to_remove: vec![],
-            keys_to_remove: vec![],
+            keys_to_remove: vec![std::sync::Arc::from("Inner")],
             remove_values: String::new(),
-            remove_trees: String::from("Hist*"),
+            remove_trees: String::new(),
         };
         let result = clear_registry(&data);
-        assert!(result.working, "remove_trees should delete matched trees");
+        assert!(result.working);
+        assert_eq!(result.paths.len(), 1, "{:?}", result.paths);
+        assert_eq!(
+            result.paths[0].path.as_string(),
+            format!("HKEY_CURRENT_USER\\{}\\{}", test_base, "Inner"),
+        );
 
         let base = hkcu.open_subkey_with_flags(test_base, KEY_READ).unwrap();
-        assert!(
-            base.open_subkey("App1\\History").is_err(),
-            "App1\\History tree should be removed"
-        );
-        assert!(
-            base.open_subkey("App2\\History").is_err(),
-            "App2\\History tree should be removed"
-        );
-        assert!(
-            base.open_subkey("App1\\KeepMe").is_ok(),
-            "KeepMe should survive"
-        );
+        assert!(base.open_subkey("Inner").is_err(), "Inner should be gone");
+        assert!(base.open_subkey("Survivor").is_ok(), "Survivor stays");
+
+        hkcu.delete_subkey_all(test_base).unwrap();
+    }
+
+    /// `keys_to_remove` and `values_to_remove` name items that may never have
+    /// existed. A key that was not there must not be reported as removed, or the
+    /// page would list a removal that never happened.
+    #[cfg(windows)]
+    #[test]
+    fn test_clear_registry_reports_nothing_for_absent_items() {
+        use crate::registry_database::clear_registry;
+        use crate::structures::CleanerDataRegistry;
+        use winreg::enums::HKEY_CURRENT_USER;
+
+        let hkcu = RegKey::predef(HKEY_CURRENT_USER);
+        let test_base = "Software\\CrossCleanerAbsentTest";
+        let _ = hkcu.delete_subkey_all(test_base);
+        let (base_key, _) = hkcu.create_subkey(test_base).unwrap();
+        base_key.set_value("keep", &"keep").unwrap();
+
+        let data = CleanerDataRegistry {
+            path: format!("HKEY_CURRENT_USER\\{}", test_base).into(),
+            category: std::sync::Arc::from("Test"),
+            program: std::sync::Arc::from("Test"),
+            class: std::sync::Arc::from("Test"),
+            sub_category: std::sync::Arc::from(""),
+            remove_all_in_tree: false,
+            remove_all_in_registry: false,
+            values_to_remove: vec![std::sync::Arc::from("never-written")],
+            keys_to_remove: vec![std::sync::Arc::from("NeverExisted")],
+            remove_values: String::new(),
+            remove_trees: String::new(),
+        };
+        let result = clear_registry(&data);
+        assert!(!result.working, "nothing was removed");
+        assert_eq!(result.bytes, 0);
+        assert!(result.paths.is_empty(), "{:?}", result.paths);
 
         hkcu.delete_subkey_all(test_base).unwrap();
     }

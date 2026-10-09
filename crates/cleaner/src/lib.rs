@@ -1,5 +1,5 @@
 use database::diag;
-use database::structures::{CleanerData, CleanerFlags, CleanerResult};
+use database::structures::{CleanerData, CleanerFlags, CleanerResult, ClearedPath, SharedPath};
 use futures::stream::{self, StreamExt};
 use glob::glob;
 use std::path::{Component, Path, PathBuf};
@@ -185,6 +185,13 @@ struct PathStats {
     folders: u64,
     bytes: u64,
     working: bool,
+    /// Every removal, one entry each.
+    ///
+    /// The counters above are the run's totals; this is what the results page
+    /// lists. Keeping them apart is the point: a database entry that names
+    /// `files_to_remove: ["a.tmp"]` has deleted `…\a.tmp`, not the directory it
+    /// was found in, and a report that says otherwise cannot be checked.
+    removed: Vec<ClearedPath>,
 }
 
 impl PathStats {
@@ -194,13 +201,55 @@ impl PathStats {
         self.bytes += bytes;
         self.working = true;
     }
+
+    /// One named file, removed by `files_to_remove`.
+    fn add_file(&mut self, path: SharedPath, bytes: u64) {
+        self.add(1, 0, bytes);
+        self.removed.push(ClearedPath {
+            path,
+            removed_bytes: bytes,
+            removed_files: 1,
+            removed_directories: 0,
+        });
+    }
+
+    /// One named folder, removed by `directories_to_remove`. Its whole subtree
+    /// goes with it, so the entry carries that subtree's counts — listing every
+    /// file inside would be the size of the cache, not an answer.
+    fn add_dir(&mut self, path: SharedPath, files: u64, folders: u64, bytes: u64) {
+        self.add(files, folders, bytes);
+        self.removed.push(ClearedPath {
+            path,
+            removed_bytes: bytes,
+            removed_files: files,
+            removed_directories: folders,
+        });
+    }
+
+    /// The matched path itself, removed wholesale by a flag. The path is the
+    /// interned one it arrived as, so listing it costs a pointer.
+    fn add_whole(&mut self, path: &SharedPath, files: u64, folders: u64, bytes: u64) {
+        self.add(files, folders, bytes);
+        self.removed.push(ClearedPath {
+            path: path.clone(),
+            removed_bytes: bytes,
+            removed_files: files,
+            removed_directories: folders,
+        });
+    }
 }
 
 // INFO: All filesystem work for one matched path, executed inside a single
 // blocking task. Uses the same cap-std operations as before (no TOCTOU window).
-fn clean_path_sync(path: &Path, data: &CleanerData) -> PathStats {
+fn clean_path_sync(path: &Path, shared: &SharedPath, data: &CleanerData) -> PathStats {
     let mut stats = PathStats::default();
 
+    // Closed before the flags run, and that is not tidiness: cap-std opens
+    // directories without `FILE_SHARE_DELETE` on Windows, so a live handle on
+    // `path` makes every removal of `path` itself fail. An entry that both names
+    // files to drop and asks for the directory to go afterwards silently kept
+    // the directory — and reported nothing about it, because the removal that
+    // failed was the one nobody was watching.
     let named_dir = if data.files_to_remove.is_empty() && data.directories_to_remove.is_empty() {
         None
     } else {
@@ -224,7 +273,8 @@ fn clean_path_sync(path: &Path, data: &CleanerData) -> PathStats {
         let Some(dir) = &named_dir else { break };
         let fpath = path.join(&relative);
         match remove_file_in_dir(dir, &relative) {
-            Ok(b) => stats.add(1, 0, b),
+            // The file's own path, not its parent's: that is what was deleted.
+            Ok(b) => stats.add_file(SharedPath::new(&fpath.to_string_lossy()), b),
             Err(e) => diag::warn(format!("cleaner: remove_file {}: {e}", fpath.display())),
         }
     }
@@ -240,28 +290,32 @@ fn clean_path_sync(path: &Path, data: &CleanerData) -> PathStats {
         let Some(dir) = &named_dir else { break };
         let dpath = path.join(&relative);
         match remove_dir_in_dir(dir, &relative) {
-            Ok((f, fo, b)) => stats.add(f, fo, b),
+            Ok((f, fo, b)) => stats.add_dir(SharedPath::new(&dpath.to_string_lossy()), f, fo, b),
             Err(e) => diag::warn(format!("cleaner: remove_dir {}: {e}", dpath.display())),
         }
     }
 
+    // The handle has to be gone before anything removes `path` itself — see where
+    // `named_dir` is opened.
+    drop(named_dir);
+
     if data.flags.contains(CleanerFlags::REMOVE_ALL_IN_DIR) {
         // try fast; skip is_dir check for speed (A)
         if let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf()) {
-            stats.add(f, fo, b);
+            stats.add_whole(shared, f, fo, b);
         }
     }
 
     if data.flags.contains(CleanerFlags::REMOVE_FILES)
         && let Ok(b) = remove_file_sync(path)
     {
-        stats.add(1, 0, b);
+        stats.add_whole(shared, 1, 0, b);
     }
 
     if data.flags.contains(CleanerFlags::REMOVE_DIRECTORIES)
         && let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf())
     {
-        stats.add(f, fo, b);
+        stats.add_whole(shared, f, fo, b);
     }
 
     if data
@@ -269,7 +323,7 @@ fn clean_path_sync(path: &Path, data: &CleanerData) -> PathStats {
         .contains(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN)
         && let Ok((f, fo, b)) = remove_dir_sync(path.to_path_buf())
     {
-        stats.add(f, fo, b);
+        stats.add_whole(shared, f, fo, b);
     }
 
     stats
@@ -282,32 +336,31 @@ const MAX_PATHS_IN_FLIGHT: usize = 64;
 /// Clean one glob-matched path for a single database entry. `data` is shared
 /// across every path of the entry (Arc); all filesystem work for the path runs
 /// in a single blocking task, bounded by the global `BLOCKING` semaphore (B2).
-async fn clean_one_path(path: PathBuf, data: Arc<CleanerData>) -> CleanerResult {
-    let path_string = path.to_string_lossy().to_string();
-    let program = data.program.clone();
-    let category = data.category.clone();
-    let sub_category = data.sub_category.clone();
+///
+/// Returns the path itself next to its counters: `clear_data` folds the counters
+/// into one result per database entry, but the results page has to say *which*
+/// path freed *how much*, and that is lost the moment they are summed.
+async fn clean_one_path(path: PathBuf, data: Arc<CleanerData>) -> (SharedPath, PathStats) {
+    // Interned before `path` moves into the blocking task: the segments are
+    // shared with every other path under the same directories, so a run deletes
+    // N paths without storing N copies of the prefix.
+    let shared = SharedPath::new(&path.to_string_lossy());
 
     // B2: bound global blocking concurrency. The permit is held until the
     // blocking task finishes, so at most `BLOCKING` permits run at once.
     let _permit = BLOCKING.clone().acquire_owned().await.ok();
 
+    // Cloned because the same interned path is needed both inside the task and
+    // on the way out; the clone is a pointer, not another copy of the segments.
+    let for_task = shared.clone();
+
     // Every failure mode (join error, etc.) falls back to a non-working result,
     // matching the previous per-operation error handling.
-    let stats = tokio::task::spawn_blocking(move || clean_path_sync(&path, &data))
+    let stats = tokio::task::spawn_blocking(move || clean_path_sync(&path, &for_task, &data))
         .await
         .unwrap_or_default();
 
-    CleanerResult {
-        files: stats.files,
-        folders: stats.folders,
-        bytes: stats.bytes,
-        working: stats.working,
-        path: path_string,
-        program,
-        category,
-        sub_category,
-    }
+    (shared, stats)
 }
 
 // NOTE: The main function for data cleansing.
@@ -319,7 +372,8 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
         bytes: 0,
         working: false,
         program: data.program.clone(),
-        path: data.path.to_string(),
+        path: data.path.clone(),
+        paths: Vec::new(),
         category: data.category.clone(),
         sub_category: data.sub_category.clone(),
     };
@@ -346,12 +400,17 @@ pub async fn clear_data(data: &CleanerData) -> CleanerResult {
         .map(|path| clean_one_path(path, Arc::clone(&data)))
         .buffer_unordered(MAX_PATHS_IN_FLIGHT);
 
-    while let Some(partial) = path_stream.next().await {
-        if partial.working {
+    while let Some((_, stats)) = path_stream.next().await {
+        if stats.working {
             out.working = true;
-            out.files += partial.files;
-            out.folders += partial.folders;
-            out.bytes += partial.bytes;
+            out.files += stats.files;
+            out.folders += stats.folders;
+            out.bytes += stats.bytes;
+            // One entry per removal, taken from the work itself rather than
+            // re-derived here: a named `files_to_remove` file and a directory
+            // removed by a flag are different paths, and only the task knows
+            // which of them actually went.
+            out.paths.extend(stats.removed);
         }
     }
 
@@ -556,6 +615,120 @@ mod tests {
         assert_eq!(result.category.as_ref(), "TestCategory");
         assert_eq!(result.path, file_path.to_str().unwrap());
         assert!(result.working);
+    }
+
+    /// A file the database named is deleted by name, so it is listed by name.
+    /// Reporting its parent directory instead would credit the clean with
+    /// removing a directory that is still there, and hide the file that is not.
+    #[tokio::test]
+    async fn named_files_are_listed_as_their_own_paths() {
+        let temp_dir = TempDir::new().unwrap();
+        let base = temp_dir.path().join("base");
+        fs::create_dir(&base).unwrap();
+        fs::write(base.join("drop.tmp"), b"0123456789").unwrap();
+        fs::write(base.join("keep.txt"), b"keep").unwrap();
+
+        let mut data = create_test_data(base.to_string_lossy().into_owned());
+        data.files_to_remove = vec![std::sync::Arc::from("drop.tmp")];
+
+        let result = clear_data(&data).await;
+        assert_eq!(result.files, 1);
+        assert_eq!(result.bytes, 10);
+        assert_eq!(result.paths.len(), 1, "{:?}", result.paths);
+        let entry = &result.paths[0];
+        assert_eq!(
+            entry.path.as_string(),
+            base.join("drop.tmp").to_string_lossy()
+        );
+        assert_eq!(entry.removed_bytes, 10);
+        assert_eq!(entry.removed_files, 1);
+        // The directory it was found in is still on disk, so it is not listed.
+        assert!(base.exists());
+        assert!(base.join("keep.txt").exists());
+    }
+
+    /// Same for a named folder: the entry is the folder, carrying the counts of
+    /// everything that went with it, and the parent is untouched.
+    #[tokio::test]
+    async fn named_directories_are_listed_as_their_own_paths() {
+        let temp_dir = TempDir::new().unwrap();
+        let base = temp_dir.path().join("base");
+        let cache = base.join("cache");
+        fs::create_dir_all(&cache).unwrap();
+        fs::write(cache.join("a.dat"), b"content").unwrap();
+
+        let mut data = create_test_data(base.to_string_lossy().into_owned());
+        data.directories_to_remove = vec![std::sync::Arc::from("cache")];
+
+        let result = clear_data(&data).await;
+        assert_eq!(result.files, 1);
+        assert_eq!(result.paths.len(), 1, "{:?}", result.paths);
+        let entry = &result.paths[0];
+        assert_eq!(entry.path.as_string(), cache.to_string_lossy());
+        assert_eq!(entry.removed_files, 1);
+        assert!(entry.removed_directories >= 1, "the folder counts itself");
+        assert_eq!(entry.removed_bytes, 7);
+        assert!(!cache.exists());
+        assert!(base.exists());
+    }
+
+    /// A glob matched against a whole directory reports that directory: the
+    /// entries inside it are not tracked individually, because the walk would
+    /// cost more than the answer is worth.
+    #[tokio::test]
+    async fn a_directory_removed_by_flag_is_listed_as_itself() {
+        let temp_dir = TempDir::new().unwrap();
+        let target = temp_dir.path().join("target");
+        fs::create_dir(&target).unwrap();
+        fs::write(target.join("one.txt"), b"a").unwrap();
+        fs::write(target.join("two.txt"), b"bb").unwrap();
+
+        let mut data = create_test_data(target.to_string_lossy().into_owned());
+        data.flags.insert(CleanerFlags::REMOVE_ALL_IN_DIR);
+
+        let result = clear_data(&data).await;
+        assert_eq!(result.paths.len(), 1, "{:?}", result.paths);
+        let entry = &result.paths[0];
+        assert_eq!(entry.path.as_string(), target.to_string_lossy());
+        assert_eq!(entry.removed_files, 2);
+        assert_eq!(entry.removed_bytes, 3);
+    }
+
+    /// Both named files and a wholesale flag in one entry: the report has to
+    /// show the named file *and* the directory that went with it, not merge them
+    /// into one line that names neither.
+    #[tokio::test]
+    async fn a_named_file_and_the_directory_around_it_are_both_listed() {
+        let temp_dir = TempDir::new().unwrap();
+        let target = temp_dir.path().join("target");
+        fs::create_dir(&target).unwrap();
+        fs::write(target.join("drop.tmp"), b"1234").unwrap();
+
+        let mut data = create_test_data(target.to_string_lossy().into_owned());
+        data.files_to_remove = vec![std::sync::Arc::from("drop.tmp")];
+        data.flags
+            .insert(CleanerFlags::REMOVE_DIRECTORY_AFTER_CLEAN);
+
+        let result = clear_data(&data).await;
+        let listed: Vec<String> = result
+            .paths
+            .iter()
+            .map(|entry| entry.path.as_string())
+            .collect();
+        assert!(
+            listed.contains(&target.join("drop.tmp").to_string_lossy().into_owned()),
+            "{listed:?}",
+        );
+        assert!(
+            listed.contains(&target.to_string_lossy().into_owned()),
+            "{listed:?}"
+        );
+        // The counters still add up to what actually went: the file, then the
+        // now-empty directory around it.
+        assert_eq!(result.files, 1);
+        assert_eq!(result.folders, 1);
+        assert_eq!(result.bytes, 4);
+        assert!(!target.exists());
     }
 
     #[tokio::test]

@@ -206,6 +206,21 @@ where
     Ok(v.into_iter().map(|s| intern_arc(&s)).collect())
 }
 
+// INFO: One path a cleaner deleted, with the space it freed.
+//
+// INFO: `path` is a [`SharedPath`] rather than a `String`: one run can delete
+// tens of thousands of paths that all sit under the same `AppData\Local\...`
+// directories, and splitting on the separators interns those directories once.
+// Every entry then only stores the segment it is actually unique about.
+#[derive(PartialEq, Eq, Clone, Debug, Default)]
+pub struct ClearedPath {
+    /// The path exactly as it was resolved, byte-for-byte as the cleaner saw it.
+    pub path: SharedPath,
+    pub removed_bytes: u64,
+    pub removed_files: u64,
+    pub removed_directories: u64,
+}
+
 // INFO: Struct for GUI table (tabled removed - CLI table not used)
 #[derive(PartialEq, Clone)]
 pub struct Cleared {
@@ -214,6 +229,14 @@ pub struct Cleared {
     pub removed_files: u64,
     pub removed_directories: u64,
     pub affected_categories: Vec<String>,
+    /// Every path this program deleted, largest first — what the results page
+    /// shows for one row when the user asks where the space went.
+    pub paths: Vec<ClearedPath>,
+    /// Paths the cleaner deleted that did not fit into [`Self::paths`], because
+    /// the run hit the cap that keeps one program's list from growing without
+    /// bound. Reported next to the list rather than hidden, so a truncated row
+    /// never reads as a complete one.
+    pub paths_omitted: usize,
 }
 
 impl PartialEq<Option<Cleared>> for &Cleared {
@@ -609,7 +632,14 @@ pub struct CleanerResult {
     pub folders: u64,
     pub bytes: u64,
     pub working: bool,
-    pub path: String,
+    /// The entry's own pattern, stored segment-interned for the same reason as
+    /// [`ClearedPath::path`]: the database holds near-identical paths and this
+    /// is one of them.
+    pub path: SharedPath,
+    /// One entry per path this cleaner actually deleted, with that path's own
+    /// share of the counters. Empty for a cleaner that cannot name what it
+    /// removed (a registry key, an entry that matched nothing).
+    pub paths: Vec<ClearedPath>,
     pub program: Arc<str>,
     pub category: Arc<str>,
     pub sub_category: Arc<str>,

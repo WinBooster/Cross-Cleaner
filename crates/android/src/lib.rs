@@ -200,9 +200,10 @@ impl eframe::App for AndroidWrapper {
         let back_via_close = ctx.input(|i| i.viewport().close_requested());
         // Back gesture / hardware key
         if back_via_key || back_via_close {
-            // Navigation lives on the shared `AppState`, so both frontends answer a back
-            // request the same way.
-            if self.app.state.go_back() {
+            // Navigation lives on the app object, so the deleted-path list below
+            // the report is stepped out of before the report itself is dropped —
+            // the same order the window frontend's back arrow uses.
+            if self.app.go_back() {
                 // Cancel close if we handled it as in-app navigation (matches title_bar back)
                 ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);
                 // Consume the key so it doesn't bubble

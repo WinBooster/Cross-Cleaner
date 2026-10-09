@@ -97,6 +97,7 @@ fn expand_placeholders(cleaner: CustomCleaner) -> Vec<CustomCleaner> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::structures::SharedPath;
 
     fn test_cleaner(id: &str) -> CustomCleaner {
         CustomCleaner {
@@ -115,7 +116,8 @@ mod tests {
                         folders: 0,
                         bytes: 0,
                         working: false,
-                        path: String::new(),
+                        path: SharedPath::default(),
+                        paths: Vec::new(),
                         program: std::sync::Arc::from(""),
                         category: std::sync::Arc::from(""),
                         sub_category: std::sync::Arc::from(""),
@@ -162,7 +164,8 @@ mod tests {
                     folders: 0,
                     bytes: 0,
                     working: false,
-                    path: data.path.to_string(),
+                    path: data.path.clone(),
+                    paths: Vec::new(),
                     program: data.program.clone(),
                     category: data.category.clone(),
                     sub_category: data.sub_category.clone(),
