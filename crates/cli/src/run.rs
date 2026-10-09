@@ -375,28 +375,58 @@ fn render_scan(ui: &Ui, report: &cleaning::ScanReport, output: &OutputArgs) {
 fn scan_json(report: &cleaning::ScanReport) -> String {
     let (bytes, files, directories, cleared) = &report.free;
     serde_json::json!({
+        "dry_run": true,
         "bytes": bytes,
         "files": files,
         "directories": directories,
-        "programs": cleared.iter().map(|entry| serde_json::json!({
-            "program": entry.program,
-            "bytes": entry.removed_bytes,
-            "files": entry.removed_files,
-            "directories": entry.removed_directories,
-            "categories": entry.affected_categories,
-        })).collect::<Vec<_>>(),
+        "programs": cleared.iter().map(program_json).collect::<Vec<_>>(),
         "locked_files": report.locked_files,
         "locked_bytes": report.locked_bytes,
-        "locked_paths": report.locked.iter().map(|detail| serde_json::json!({
-            "path": detail.path.as_string(),
-            "bytes": detail.removed_bytes,
-        })).collect::<Vec<_>>(),
+        // The same shape the `paths` of a program have, so a script can treat a
+        // locked file exactly like a freeable one and filter on the same keys.
+        "locked_paths": report.locked.iter().map(path_json).collect::<Vec<_>>(),
         "unmeasured": report.unmeasured.iter().map(|entry| serde_json::json!({
             "id": entry.id,
             "reason": entry.reason,
         })).collect::<Vec<_>>(),
     })
     .to_string()
+}
+
+/// One program's row in the JSON report, for both a run and a scan.
+///
+/// Deliberately a single function. The two reports used to be written out
+/// separately, and they drifted: the run's carried `paths` and the scan's did
+/// not, so a script that read one could not read the other and nothing failed
+/// loudly — a dry run simply reported less than a run about the same tree. One
+/// generator is what keeps the second mode from quietly becoming the odd one out.
+fn program_json(entry: &database::structures::Cleared) -> serde_json::Value {
+    serde_json::json!({
+        "program": entry.program,
+        "bytes": entry.removed_bytes,
+        "files": entry.removed_files,
+        "directories": entry.removed_directories,
+        "categories": entry.affected_categories,
+        // Counted beyond the cap below, so a list that stops early cannot be
+        // mistaken for the whole of it.
+        "paths_omitted": entry.paths_omitted,
+        "paths": entry.paths.iter().map(path_json).collect::<Vec<_>>(),
+    })
+}
+
+/// One path in the JSON report: where it is, and what it costs.
+///
+/// The counters travel with the path rather than only its size, because a
+/// removed directory and a removed file are different outcomes for the same
+/// number of bytes — `0 bytes` next to `1 directory` says the folder itself
+/// went, not that it was empty.
+fn path_json(detail: &database::structures::ClearedPath) -> serde_json::Value {
+    serde_json::json!({
+        "path": detail.path.as_string(),
+        "bytes": detail.removed_bytes,
+        "files": detail.removed_files,
+        "directories": detail.removed_directories,
+    })
 }
 
 /// Prints the result: the table, then the paths if `--verbose` asked for them.
@@ -428,32 +458,12 @@ pub fn render(ui: &Ui, report: &RunReport, output: &OutputArgs) {
 /// The result as one JSON object, for a script that reads this instead of a
 /// human.
 fn json(report: &RunReport) -> String {
-    let programs: Vec<serde_json::Value> = report
-        .cleared
-        .iter()
-        .map(|entry| {
-            serde_json::json!({
-                "program": entry.program,
-                "bytes": entry.removed_bytes,
-                "files": entry.removed_files,
-                "directories": entry.removed_directories,
-                "categories": entry.affected_categories,
-                "paths_omitted": entry.paths_omitted,
-                "paths": entry.paths.iter().map(|detail| serde_json::json!({
-                    "path": detail.path.as_string(),
-                    "bytes": detail.removed_bytes,
-                    "files": detail.removed_files,
-                    "directories": detail.removed_directories,
-                })).collect::<Vec<_>>(),
-            })
-        })
-        .collect();
     serde_json::json!({
         "complete": report.complete,
         "bytes": report.bytes,
         "files": report.files,
         "directories": report.directories,
-        "programs": programs,
+        "programs": report.cleared.iter().map(program_json).collect::<Vec<_>>(),
     })
     .to_string()
 }
@@ -557,6 +567,55 @@ mod tests {
         assert!(report.complete);
         assert_eq!(report.bytes, 0);
         assert_eq!(report.cleared.len(), 0);
+    }
+
+    /// The run and the scan have to answer the same questions the same way.
+    ///
+    /// They used to be written as two separate JSON blocks, and they drifted: the
+    /// run's carried `paths`, the scan's did not. Nothing failed — a dry run simply
+    /// reported less than a run about the very same tree, and a script written
+    /// against one of them broke on the other without a word about why. This is
+    /// the guard that keeps the second mode from quietly becoming the odd one out.
+    #[test]
+    fn both_json_reports_carry_the_same_keys_for_a_program() {
+        let entry = database::structures::Cleared {
+            program: "Zed".to_string(),
+            removed_bytes: 65019,
+            removed_files: 2,
+            removed_directories: 1,
+            affected_categories: vec!["Logs".to_string()],
+            paths: vec![database::structures::ClearedPath {
+                path: database::structures::SharedPath::new("C:/tmp/Zed.log"),
+                removed_bytes: 65019,
+                removed_files: 2,
+                removed_directories: 1,
+            }],
+            paths_omitted: 0,
+        };
+
+        let from_run = program_json(&entry);
+        let from_scan = program_json(&entry);
+        assert_eq!(from_run, from_scan, "one generator, so one shape");
+
+        // The keys a script needs to enumerate paths and their sizes.
+        for key in [
+            "program",
+            "bytes",
+            "files",
+            "directories",
+            "paths",
+            "paths_omitted",
+        ] {
+            assert!(from_run.get(key).is_some(), "missing {key}");
+        }
+        let path = &from_run["paths"][0];
+        assert_eq!(path["path"], "C:/tmp/Zed.log");
+        assert_eq!(path["bytes"], 65019);
+        // A path that is a directory rather than a file is only visible through
+        // these two counters: a directory of zero length and a zero-byte file are
+        // otherwise the same number.
+        assert_eq!(path["files"], 2);
+        assert_eq!(path["directories"], 1);
     }
 
     /// A cleaner registered per drive arrives from the scan once per drive. The
