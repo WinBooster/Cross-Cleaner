@@ -614,6 +614,26 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Program Files (x86)\\BleachBit\\themes\\windows10",
+    "class": "Disk Cleaner",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "BleachBit",
+    "files_to_remove": [
+      "License.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\BleachBit\\themes\\windows10",
+    "class": "Disk Cleaner",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "BleachBit",
+    "files_to_remove": [
+      "License.txt"
+    ]
+  },
+  {
     "path": "{drive}Program Files\\Blender Foundation\\*",
     "class": "Modeling",
     "category": "Documentation",
@@ -5511,6 +5531,25 @@
     ]
   },
   {
+    "path": "{drive}Program Files\\TeamViewer",
+    "class": "Screen Share",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "TeamViewer",
+    "files_to_remove": [
+      "CopyRights.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\TeamViewer",
+    "class": "Screen Share",
+    "category": "Logs",
+    "program": "TeamViewer",
+    "directories_to_remove": [
+      "Logs"
+    ]
+  },
+  {
     "path": "{drive}Users\\*\\.tecknixsoftware\\tecknixlauncher",
     "class": "Minecraft Launcher",
     "category": "Accounts",
@@ -6955,45 +6994,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\TeamViewer",
-    "class": "Screen Share",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "TeamViewer",
-    "files_to_remove": [
-      "CopyRights.txt"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Local\\TeamViewer",
-    "class": "Screen Share",
-    "category": "Logs",
-    "program": "TeamViewer",
-    "directories_to_remove": [
-      "Logs"
-    ]
-  },
-  {
-    "path": "{drive}Program Files (x86)\\BleachBit\\themes\\windows10",
-    "class": "Disk Cleaner",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "BleachBit",
-    "files_to_remove": [
-      "License.txt"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Local\\BleachBit\\themes\\windows10",
-    "class": "Disk Cleaner",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "BleachBit",
-    "files_to_remove": [
-      "License.txt"
     ]
   }
 ]
