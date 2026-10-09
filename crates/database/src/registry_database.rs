@@ -1,11 +1,11 @@
 #[cfg(windows)]
+use crate::registry_utils::{KeyAccess, access_for, probe_key_access};
+#[cfg(windows)]
 use crate::registry_utils::{
     RegistryRemoval, expand_registry_path_pattern, remove_all_in_registry,
     remove_all_in_tree_in_registry, remove_key_in_registry, remove_trees_matching_in_registry,
     remove_value_in_registry, remove_values_matching_in_registry,
 };
-#[cfg(windows)]
-use crate::registry_utils::{KeyAccess, access_for, probe_key_access};
 #[cfg(windows)]
 use crate::streaming::for_each_array;
 #[cfg(windows)]
@@ -252,9 +252,7 @@ fn clear_registry_with(data: &CleanerDataRegistry, measure: bool) -> CleanerResu
             // frees nothing, so naming its contents as a saving would be a claim
             // the run cannot honour — the same reason the filesystem walk
             // probes before it totals.
-            if measure
-                && let Some(flags) = access_for(data)
-            {
+            if measure && let Some(flags) = access_for(data) {
                 let verdict = probe_key_access(&root, &current_path, flags);
                 if !verdict.is_yes() {
                     let named = ClearedPath {
@@ -336,9 +334,8 @@ fn clear_registry_with(data: &CleanerDataRegistry, measure: bool) -> CleanerResu
     // INFO: The total is the sum of what was listed, never a separate count: two
     // totals that can disagree is the bug this whole path was fixed to avoid.
     result.bytes = result.paths.iter().map(|entry| entry.removed_bytes).sum();
-    result.working = !result.paths.is_empty()
-        || !result.locked.is_empty()
-        || !result.denied.is_empty();
+    result.working =
+        !result.paths.is_empty() || !result.locked.is_empty() || !result.denied.is_empty();
 
     result
 }
