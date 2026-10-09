@@ -1,6 +1,6 @@
 [package]
 name = "winicon"
-version = "2.0.4"
+version = "2.0.1"
 edition = "2024"
 description = "Shared Windows resource (icon, version, manifest) setup for the Cross Cleaner binaries"
 
