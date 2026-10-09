@@ -6989,11 +6989,21 @@
   },
   {
     "path": "{drive}Program Files\\CCleaner",
-    "class": "Optimization",
+    "class": "Disk Cleaner",
     "category": "Logs",
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\Wise\\Wise Disk Cleaner",
+    "class": "Disk Cleaner",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Wise Disk Cleaner",
+    "files_to_remove": [
+      "License.rtf"
     ]
   }
 ]
