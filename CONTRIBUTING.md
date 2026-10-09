@@ -140,6 +140,11 @@ Bug Fixes. A dependency bump that is worth telling users about — because it
 unblocks a feature or fixes a CVE — deserves a line in the PR description
 instead.
 
+> Automated commits from `github-actions[bot]`, `dependabot` and similar
+> accounts are filtered out of the sections above entirely. They are still
+> listed in the **Commit history** table at the bottom of the release notes, so
+> the automated work stays auditable.
+
 ### `build` — how it is built
 
 ```
@@ -296,9 +301,13 @@ Versions have four components (`2.0.4.2.1`). The tag and the release use the
 full version; the `Cargo.toml` files use the first three, because Cargo requires
 semver.
 
-Commits that predate this convention (`Auto format code`, `Fix encoding`,
-`x64 fixes`, …) are listed under **Other Changes** rather than blocking the
-release. New commits are expected to follow the format above.
+Commits that predate this convention (`Fix encoding`, `x64 fixes`, …) are
+listed under **Other Changes** rather than blocking the release. New commits are
+expected to follow the format above.
+
+The release notes end with a collapsed **Commit history** table listing every
+commit in the release range with its author and a link to the diff, so a
+reviewer can check what actually landed before publishing the draft.
 
 `secrets.WINGET_TOKEN` must be available in the repository for step 3.
 
