@@ -1,6 +1,6 @@
 [package]
 name = "cli"
-version = "2.0.4"
+version = "2.0.1"
 edition = "2024"
 description = "Command line interface for Cross Cleaner"
 
