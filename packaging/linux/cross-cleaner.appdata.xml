@@ -14,8 +14,8 @@
   <summary>Remove temporary files, cache and system junk</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
-  <developer id="winbooster">
-    <name>WinBooster</name>
+  <developer id="cross-cleaner">
+    <name>Cross-Cleaner</name>
   </developer>
 
   <description>
@@ -37,9 +37,9 @@
 
   <launchable type="desktop-id">cross-cleaner.desktop</launchable>
 
-  <url type="homepage">https://winbooster.github.io/</url>
-  <url type="bugtracker">https://github.com/WinBooster/Cross-Cleaner/issues</url>
-  <url type="vcs-browser">https://github.com/WinBooster/Cross-Cleaner</url>
+  <url type="homepage">https://cross-cleaner.github.io/</url>
+  <url type="bugtracker">https://github.com/Cross-Cleaner/Cross-Cleaner/issues</url>
+  <url type="vcs-browser">https://github.com/Cross-Cleaner/Cross-Cleaner</url>
 
   <provides>
     <binary>cross-cleaner</binary>

@@ -9,7 +9,7 @@ For build, packaging and cross-compilation details see [BUILD.md](BUILD.md).
 ## 🚀 Before you start
 
 ```bash
-git clone https://github.com/WinBooster/Cross-Cleaner.git
+git clone https://github.com/Cross-Cleaner/Cross-Cleaner.git
 cd Cross-Cleaner
 cargo build          # debug build
 cargo test           # run the test suite

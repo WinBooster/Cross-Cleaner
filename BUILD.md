@@ -15,7 +15,7 @@ For Windows builds, you'll also need:
 
 ```bash
 # Clone the repository
-git clone https://github.com/WinBooster/Cross-Cleaner.git
+git clone https://github.com/Cross-Cleaner/Cross-Cleaner.git
 cd Cross-Cleaner
 
 # Build debug version

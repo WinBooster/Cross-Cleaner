@@ -16,9 +16,9 @@ version: "%%VERSION%%"
 release: "%%RELEASE%%"
 section: utils
 priority: optional
-maintainer: WinBooster
-vendor: WinBooster
-homepage: https://winbooster.github.io/
+maintainer: Cross-Cleaner
+vendor: Cross-Cleaner
+homepage: https://cross-cleaner.github.io/
 license: GPL-3.0-or-later
 # Reproducible builds: nfpm stamps every archive entry with this, so two
 # builds of the same commit produce the same bytes. The value must be an

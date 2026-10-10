@@ -1,15 +1,15 @@
 <div align="center">
 <h1>🌟 Cross Cleaner 🌟</h1>
 <br>
-An addon-style <a href="https://github.com/WinBooster/Cross-Cleaner">system cleanup tool</a> that removes temporary files, cache and other system junk from your computer.
+An addon-style <a href="https://github.com/Cross-Cleaner/Cross-Cleaner">system cleanup tool</a> that removes temporary files, cache and other system junk from your computer.
 <br>
 <a href="https://www.rust-lang.org"><img src="https://img.shields.io/static/v1?label=Made%20with&message=Rust&logo=rust&labelColor=e82833&color=b11522" alt="Made with Rust"></a>
-<a href="https://github.com/WinBooster/Cross-Cleaner/blob/main/LICENSE"><img src="https://img.shields.io/github/license/WinBooster/Cross-Cleaner?logo=mdBook" alt="Github License"></a>
+<a href="https://github.com/Cross-Cleaner/Cross-Cleaner/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Cross-Cleaner/Cross-Cleaner?logo=mdBook" alt="Github License"></a>
 <br>
-<a href="https://github.com/WinBooster/Cross-Cleaner/actions"><img src="https://github.com/WinBooster/Cross-Cleaner/actions/workflows/dev_build.yml/badge.svg" alt="Build Status"></a>
-<a href="https://github.com/WinBooster/Cross-Cleaner/releases"><img src="https://img.shields.io/github/downloads/WinBooster/Cross-Cleaner/total" alt="Downloads"/></a>
-<a href="https://github.com/WinBooster/Cross-Cleaner/issues"><img src="https://img.shields.io/github/issues/WinBooster/Cross-Cleaner" alt="GitHub Issues"/></a>
-<a href="https://github.com/WinBooster/Cross-Cleaner/stargazers"><img src="https://badgen.net/github/stars/WinBooster/Cross-Cleaner" alt="GitHub Stars"/></a>
+<a href="https://github.com/Cross-Cleaner/Cross-Cleaner/actions"><img src="https://github.com/Cross-Cleaner/Cross-Cleaner/actions/workflows/dev_build.yml/badge.svg" alt="Build Status"></a>
+<a href="https://github.com/Cross-Cleaner/Cross-Cleaner/releases"><img src="https://img.shields.io/github/downloads/Cross-Cleaner/Cross-Cleaner/total" alt="Downloads"/></a>
+<a href="https://github.com/Cross-Cleaner/Cross-Cleaner/issues"><img src="https://img.shields.io/github/issues/Cross-Cleaner/Cross-Cleaner" alt="GitHub Issues"/></a>
+<a href="https://github.com/Cross-Cleaner/Cross-Cleaner/stargazers"><img src="https://badgen.net/github/stars/Cross-Cleaner/Cross-Cleaner" alt="GitHub Stars"/></a>
 <br>
 <a href="https://discord.gg/wmJdUBaztX"><img src="https://img.shields.io/badge/support/help/issues-discord-brightgreen" alt="Discord"/></a>
 <br>
@@ -24,7 +24,7 @@ An addon-style <a href="https://github.com/WinBooster/Cross-Cleaner">system clea
 
 - 🚀 **Multi-threaded**: Leverages rayon for parallel processing on multi-core systems
 - 🔒 **Secure**: Carefully preserves critical system files
-- 💻 **Cross-Platform**: Full support for [Windows](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_WINDOWS.md), [MacOS](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_MACOS.md), [Linux](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_LINUX.md) and [Android](https://github.com/WinBooster/Cross-Cleaner/blob/main/LIST_ANDROID.md)
+- 💻 **Cross-Platform**: Full support for [Windows](https://github.com/Cross-Cleaner/Cross-Cleaner/blob/main/LIST_WINDOWS.md), [MacOS](https://github.com/Cross-Cleaner/Cross-Cleaner/blob/main/LIST_MACOS.md), [Linux](https://github.com/Cross-Cleaner/Cross-Cleaner/blob/main/LIST_LINUX.md) and [Android](https://github.com/Cross-Cleaner/Cross-Cleaner/blob/main/LIST_ANDROID.md)
 - 🎯 **User-Friendly**: Clean, minimalist interface for easy operation
 - 📄 **Custom-DataBase**: Ability to use custom cleanup database
 
@@ -104,7 +104,7 @@ Exit codes: `0` success, `1` a failure, `130` interrupted with Ctrl-C.
 ## 📥 Installation
 
 ### Option 1: Download Pre-built Binary
-Get the latest release from our [releases page](https://github.com/WinBooster/Cross-Cleaner/releases).
+Get the latest release from our [releases page](https://github.com/Cross-Cleaner/Cross-Cleaner/releases).
 
 ### Option 2: Build from Source
 
@@ -115,7 +115,7 @@ rustc --version
 
 2. Clone the repository:
 ```bash
-git clone https://github.com/WinBooster/Cross-Cleaner.git
+git clone https://github.com/Cross-Cleaner/Cross-Cleaner.git
 cd Cross-Cleaner
 ```
 
