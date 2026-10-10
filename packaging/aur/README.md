@@ -108,6 +108,27 @@ git push
 paru -S cross-cleaner
 ```
 
+## Требования для сборки
+
+**`base-devel` должен быть установлен.** `rust` и `cargo` входят в `base-devel`,
+и AUR-хелперы их **не ставят автоматически** — сборка просто падает с
+`cargo: command not found`. Это давнее соглашение AUR: пакеты предполагают
+наличие base-devel в среде сборки.
+
+```bash
+sudo pacman -S --needed base-devel
+```
+
+Остальные зависимости (`icoutils`, `desktop-file-utils`, `appstream`, `alsa-lib`,
+`mesa`, `wayland`) хелпер подтянет сам через `--syncdeps` — они указаны в
+`makedepends`, в отличие от `rust`.
+
+**Нужен доступ к crates.io.** Cargo во время сборки скачивает ~636 крейтов с
+`index.crates.io` / `static.crates.io` плюс git-зависимость `gpu-allocator` с
+GitHub. В сетях, где crates.io недоступен, сборка падает с
+`SSL connect error (Recv failure: Connection reset by peer)` — это не ошибка
+пакета. Обходится VPN либо зеркалом реестра в `~/.cargo/config.toml`.
+
 ## Проверка перед отправкой
 
 ```bash
