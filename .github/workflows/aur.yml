@@ -106,9 +106,31 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "$AUR_SSH_KEY" ]; then
-            echo "::error::secret AUR_SSH_PRIVATE_KEY is not set"
+            echo "::error::secret AUR_SSH_PRIVATE_KEY is empty in ${GITHUB_REPOSITORY}"
+            echo ""
+            echo "This step is running in: ${GITHUB_REPOSITORY}"
+            echo "The secret must exist in exactly that repository, under:"
+            echo "  Settings -> Secrets and variables -> Actions -> Repository secrets"
+            echo ""
+            echo "The usual causes:"
+            echo "  - it was added to a different repository (a fork, or the"
+            echo "    personal ${GITHUB_REPOSITORY%%/*}/<something> repo) rather than ${GITHUB_REPOSITORY}"
+            echo "  - it was added under 'Environment secrets' -- those are only"
+            echo "    visible to a job that declares an 'environment:', and this"
+            echo "    job declares none"
+            echo "  - the name differs: it must be exactly AUR_SSH_PRIVATE_KEY"
+            echo "  - it was saved but the value is empty or whitespace only"
             exit 1
           fi
+          # Bash substring rather than `printf ... | head -c`: under
+          # `set -o pipefail` a pipe into head is the same SIGPIPE trap that
+          # broke the tar step. No subprocess, no pipe.
+          if [ "${AUR_SSH_KEY:0:30}" != "-----BEGIN OPENSSH PRIVATE KEY" ]; then
+            echo "::error::AUR_SSH_PRIVATE_KEY does not start with an OpenSSH private key header"
+            echo "The value must be the whole file, including both BEGIN and END lines."
+            exit 1
+          fi
+          echo "Secret found, ${#AUR_SSH_KEY} bytes"
           install -m 700 -d ~/.ssh
           printf '%s\n' "$AUR_SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
