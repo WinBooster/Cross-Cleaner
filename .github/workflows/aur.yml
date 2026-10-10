@@ -61,7 +61,9 @@ jobs:
           if ! git rev-parse -q --verify "refs/tags/v${APP_VERSION}" >/dev/null; then
             echo "::error::tag v${APP_VERSION} does not exist in $GITHUB_REPOSITORY"
             echo "Known recent tags:"
-            git tag -l 'v*' --sort=-v:refname | head -10
+            # Same pipefail/EPIPE trap as the tar step below: let git finish.
+            git tag -l 'v*' --sort=-v:refname > tags.txt
+            sed -n '1,10p' tags.txt
             exit 1
           fi
           echo "Found tag v${APP_VERSION} at $(git rev-parse --short "v${APP_VERSION}")"
@@ -82,7 +84,13 @@ jobs:
           # change in how GitHub names tag archives would break the build in a
           # way that only shows up after a 40 minute compile. One tar -t here
           # catches it in a second.
-          top=$(tar tzf "cross-cleaner-v${APP_VERSION}.tar.gz" | head -1)
+          # The listing is drained in full before the first line is taken.
+          # `tar ... | head -1` would close the pipe early, tar would die on
+          # EPIPE ("tar: stdout: write error", exit 2), and `set -o pipefail`
+          # would turn that into a failed step -- which is exactly what happened
+          # the first time round.
+          listing=$(tar tzf "cross-cleaner-v${APP_VERSION}.tar.gz")
+          top=$(printf '%s\n' "$listing" | sed -n '1p')
           echo "Top level directory: ${top}"
           if [ "${top}" != "Cross-Cleaner-${APP_VERSION}/" ]; then
             echo "::error::expected top level 'Cross-Cleaner-${APP_VERSION}/', got '${top}'"
