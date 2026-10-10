@@ -2631,7 +2631,7 @@
   {
     "path": "{drive}Program Files (x86)\\Inno Setup 6\\Examples\\*.txt",
     "class": "Developing",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Inno Setup 6",
     "remove_files": true
   },
@@ -2646,7 +2646,7 @@
   {
     "path": "{drive}Program Files (x86)\\Inno Setup 7\\Examples\\*.txt",
     "class": "Developing",
-    "category": "Logs",
+    "category": "Documentation",
     "program": "Inno Setup 7",
     "remove_files": true
   },
