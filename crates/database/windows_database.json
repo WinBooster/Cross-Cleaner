@@ -1458,7 +1458,7 @@
     "path": "{drive}Users\\*\\AppData\\Local\\Programs\\*",
     "category": "Documentation",
     "sub_category": "Licenses",
-    "program": "Electron App's",
+    "program": "Electron",
     "files_to_remove": [
       "LICENSES.chromium.html",
       "LICENSE.electron.txt"
@@ -1467,7 +1467,7 @@
   {
     "path": "{drive}Users\\*\\AppData\\Roaming\\ow-electron\\*",
     "category": "Logs",
-    "program": "Electron App's",
+    "program": "Electron",
     "directories_to_remove": [
       "logs"
     ]
@@ -4389,6 +4389,28 @@
     "program": "OpenOffice",
     "files_to_remove": [
       "NOTICE"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\GenOffice",
+    "class": "Office",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "GenOffice",
+    "files_to_remove": [
+      "LICENSE.electron.txt",
+      "LICENSES.chromium.html"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\GenOffice",
+    "class": "Office",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "GenOffice",
+    "files_to_remove": [
+      "LICENSE.electron.txt",
+      "LICENSES.chromium.html"
     ]
   },
   {
