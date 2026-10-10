@@ -124,6 +124,62 @@
     ]
   },
   {
+    "path": "/home/*/.cache/BraveSoftware/Brave-Origin/Default",
+    "class": "Browser",
+    "category": "Cache",
+    "program": "Brave Origin",
+    "directories_to_remove": [
+      "Cache",
+      "Code Cache"
+    ]
+  },
+  {
+    "path": "/home/*/.cache/BraveSoftware/Brave-Origin/System Profile",
+    "class": "Browser",
+    "category": "Cache",
+    "program": "Brave Origin",
+    "directories_to_remove": [
+      "Code Cache"
+    ]
+  },
+  {
+    "path": "/home/*/.config/BraveSoftware/Brave-Origin/Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Cookies",
+    "program": "Brave Origin",
+    "files_to_remove": [
+      "Cookies",
+      "Cookies-journal"
+    ]
+  },
+  {
+    "path": "/home/*/.config/BraveSoftware/Brave-Origin/Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "History",
+    "program": "Brave Origin",
+    "files_to_remove": [
+      "Favicons",
+      "Favicons-journal",
+      "History",
+      "History-journal"
+    ]
+  },
+  {
+    "path": "/home/*/.config/BraveSoftware/Brave-Origin/Default",
+    "class": "Browser",
+    "category": "Browser",
+    "sub_category": "Passwords",
+    "program": "Brave Origin",
+    "files_to_remove": [
+      "Login Data",
+      "Favicons-journal",
+      "History",
+      "History-journal"
+    ]
+  },
+  {
     "path": "/home/*.config/cachyos/cachyos-hello",
     "class": "System",
     "category": "Logs",
@@ -2047,62 +2103,6 @@
     "program": "Zed",
     "directories_to_remove": [
       "logs"
-    ]
-  },
-  {
-    "path": "/home/*/.cache/BraveSoftware/Brave-Origin/Default",
-    "class": "Browser",
-    "category": "Cache",
-    "program": "Brave Origin",
-    "directories_to_remove": [
-      "Cache",
-      "Code Cache"
-    ]
-  },
-  {
-    "path": "/home/*/.cache/BraveSoftware/Brave-Origin/System Profile",
-    "class": "Browser",
-    "category": "Cache",
-    "program": "Brave Origin",
-    "directories_to_remove": [
-      "Code Cache"
-    ]
-  },
-  {
-    "path": "/home/*/.config/BraveSoftware/Brave-Origin/Default",
-    "class": "Browser",
-    "category": "Browser",
-    "sub_category": "Cookies",
-    "program": "Brave Origin",
-    "files_to_remove": [
-      "Cookies",
-      "Cookies-journal"
-    ]
-  },
-  {
-    "path": "/home/*/.config/BraveSoftware/Brave-Origin/Default",
-    "class": "Browser",
-    "category": "Browser",
-    "sub_category": "History",
-    "program": "Brave Origin",
-    "files_to_remove": [
-      "Favicons",
-      "Favicons-journal",
-      "History",
-      "History-journal"
-    ]
-  },
-  {
-    "path": "/home/*/.config/BraveSoftware/Brave-Origin/Default",
-    "class": "Browser",
-    "category": "Browser",
-    "sub_category": "Passwords",
-    "program": "Brave Origin",
-    "files_to_remove": [
-      "Login Data",
-      "Favicons-journal",
-      "History",
-      "History-journal"
     ]
   }
 ]
