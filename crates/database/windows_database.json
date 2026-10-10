@@ -624,6 +624,15 @@
     ]
   },
   {
+    "path": "{drive}Program Files (x86)\\BleachBit",
+    "class": "Disk Cleaner",
+    "category": "Documentation",
+    "program": "BleachBit",
+    "files_to_remove": [
+      "COPYING"
+    ]
+  },
+  {
     "path": "{drive}Users\\*\\AppData\\Local\\BleachBit\\themes\\windows10",
     "class": "Disk Cleaner",
     "category": "Documentation",
@@ -631,6 +640,15 @@
     "program": "BleachBit",
     "files_to_remove": [
       "License.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\BleachBit",
+    "class": "Disk Cleaner",
+    "category": "Documentation",
+    "program": "BleachBit",
+    "files_to_remove": [
+      "COPYING"
     ]
   },
   {
@@ -2620,7 +2638,7 @@
   {
     "path": "{drive}Program Files (x86)\\Inno Setup 6\\Examples\\*.iss",
     "class": "Developing",
-    "category": "Logs",
+    "category": "Documentation",
     "sub_category": "Examples",
     "program": "Inno Setup 6",
     "remove_files": true
@@ -2635,7 +2653,7 @@
   {
     "path": "{drive}Program Files (x86)\\Inno Setup 7\\Examples\\*.iss",
     "class": "Developing",
-    "category": "Logs",
+    "category": "Documentation",
     "sub_category": "Examples",
     "program": "Inno Setup 7",
     "remove_files": true
