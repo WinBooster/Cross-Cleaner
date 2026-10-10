@@ -586,7 +586,7 @@
   },
   {
     "path": "/home/*/.config/libreoffice/**/",
-    "class": "Text",
+    "class": "Office",
     "category": "Cache",
     "program": "LibreOffice",
     "directories_to_remove": [
