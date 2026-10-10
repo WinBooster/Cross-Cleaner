@@ -1,4 +1,9 @@
-# Maintainer: Cross-Cleaner <https://github.com/Cross-Cleaner/Cross-Cleaner>
+# Maintainer: Roman <roman at users.noreply.github.com>
+# Based on upstream packaging by the Cross-Cleaner authors.
+#
+# NOTE: the license in this repository (the packaging files) is 0BSD, per the
+# AUR submission guidelines. The packaged software itself is GPL-3.0-or-later,
+# which is what the license= field below refers to.
 
 # Built from source with the distribution package's own flags, mirroring the
 # reasoning in packaging/linux/nfpm.yaml: the package manager owns the installed
