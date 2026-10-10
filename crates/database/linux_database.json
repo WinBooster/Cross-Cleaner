@@ -174,9 +174,9 @@
     "program": "Brave Origin",
     "files_to_remove": [
       "Login Data",
-      "Favicons-journal",
-      "History",
-      "History-journal"
+      "Login Data For Account",
+      "Login Data For Account-journal",
+      "Login Data-journal"
     ]
   },
   {
