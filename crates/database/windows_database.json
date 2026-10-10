@@ -2113,7 +2113,7 @@
   {
     "path": "{drive}Users\\*\\.gradle",
     "category": "Cache",
-    "sub_category": "Development build"
+    "sub_category": "Development build",
     "program": "Gradle",
     "class": "Developing",
     "directories_to_remove": [
