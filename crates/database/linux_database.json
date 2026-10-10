@@ -1959,5 +1959,75 @@
     "directories_to_remove": [
       "logs"
     ]
+  },
+  {
+    "path": "/home/*/.codex",
+    "class": "AI",
+    "category": "Logs",
+    "program": "Codex",
+    "files_to_remove": [
+      "logs_2.sqlite",
+      "logs_2.sqlite-shm",
+      "logs_2.sqlite-wal"
+    ]
+  },
+  {
+    "path": "/home/*/.codex",
+    "class": "AI",
+    "category": "Cache",
+    "program": "Codex",
+    "directories_to_remove": [
+      "tmp"
+    ]
+  },
+  {
+    "path": "/var/cache/pacman/pkg/*",
+    "class": "Packet Manager",
+    "category": "Cache",
+    "program": "Pacman",
+    "remove_files": true
+  },
+  {
+    "path": "/var/log",
+    "class": "Packet Manager",
+    "category": "Logs",
+    "program": "Pacman",
+    "files_to_remove": [
+      "pacman.log"
+    ]
+  },
+  {
+    "path": "/var/log",
+    "class": "System",
+    "category": "Logs",
+    "program": "Linux",
+    "directories_to_remove": [
+      "archinstall"
+    ],
+    "files_to_remove": [
+      "omarchy-install.log",
+      "boot.log"
+    ]
+  },
+  {
+    "path": "/var/log",
+    "class": "Snapshots",
+    "category": "Logs",
+    "program": "Snapper",
+    "files_to_remove": [
+      "snapper.log"
+    ]
+  },
+  {
+    "path": "/var/log",
+    "class": "System",
+    "category": "Logs",
+    "program": "Systemd",
+    "directories_to_remove": [
+      "journal"
+    ],
+    "remove_files": [
+      "lastlog"
+    ]
   }
 ]
