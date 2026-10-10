@@ -3146,6 +3146,15 @@
     ]
   },
   {
+    "path": "{drive}Program Files (x86)\\OpenOffice 4\\program",
+    "class": "Office",
+    "category": "Documentation",
+    "program": "OpenOffice",
+    "files_to_remove": [
+      "NOTICE"
+    ]
+  },
+  {
     "path": "{drive}Users\\*\\AppData\\Roaming\\librewolf\\Profiles\\*",
     "class": "Browser",
     "category": "Browser",
