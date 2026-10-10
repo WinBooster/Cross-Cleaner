@@ -5,7 +5,6 @@
 
 use clap::{ArgAction, Parser};
 use database::cleaner_database::CleanerDatabase;
-use database::get_version;
 #[cfg(windows)]
 use database::registry_database::RegistryDatabase;
 use database::structures::CustomCleaner;
@@ -525,7 +524,7 @@ async fn run(backend: BackendChoice) -> eframe::Result {
         candidates
     };
 
-    let app_title = format!("Cross Cleaner GUI v{}", get_version());
+    let app_title = format!("Cross Cleaner GUI");
 
     // INFO: winit allows exactly one event loop per process, and it is
     // consumed by `run_app`, so a renderer that fails at runtime (glow

@@ -1577,7 +1577,6 @@ impl TuiApp {
     fn render_header(&self, frame: &mut Frame, area: Rect) {
         let line = Line::from(vec![
             Span::styled(" Cross Cleaner ", Theme::heading()),
-            Span::styled(format!("· {}", self.state.window_title), Theme::dim()),
             Span::raw("  "),
             Span::styled(
                 format!("[{}]", self.state.current_page.title()),

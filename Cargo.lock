@@ -75,7 +75,7 @@ checksum = "e9d4ee0d472d1cd2e28c97dfa124b3d8d992e10eb0a035f33f5d12e3a177ba3b"
 
 [[package]]
 name = "android"
-version = "2.0.1"
+version = "2.0.4"
 dependencies = [
  "cleaner",
  "database",
@@ -187,7 +187,7 @@ checksum = "330a5ed07fa54e4702c9d6c4174f74427fc0ef6e214bbd677ae50a5099946470"
 
 [[package]]
 name = "appcore"
-version = "2.0.1"
+version = "2.0.4"
 dependencies = [
  "cleaner",
  "database",
@@ -741,7 +741,7 @@ checksum = "1c133bc6a41be0d194c306b5506d15e6feeea7b1d6604bd3f8310dfb2ca96486"
 
 [[package]]
 name = "cleaner"
-version = "2.0.1"
+version = "2.0.4"
 dependencies = [
  "cap-std",
  "database",
@@ -757,7 +757,7 @@ dependencies = [
 
 [[package]]
 name = "cli"
-version = "2.0.1"
+version = "2.0.4"
 dependencies = [
  "appcore",
  "clap",
@@ -1130,7 +1130,7 @@ checksum = "0c87e182de0887fd5361989c677c4e8f5000cd9491d6d563161a8f3a5519fc7f"
 
 [[package]]
 name = "database"
-version = "2.0.1"
+version = "2.0.4"
 dependencies = [
  "bitflags 2.13.2",
  "disk-name",
@@ -1181,7 +1181,7 @@ dependencies = [
 
 [[package]]
 name = "desktop"
-version = "2.0.1"
+version = "2.0.4"
 dependencies = [
  "clap",
  "cleaner",
@@ -1978,7 +1978,7 @@ dependencies = [
 
 [[package]]
 name = "gui"
-version = "2.0.1"
+version = "2.0.4"
 dependencies = [
  "appcore",
  "cleaner",
@@ -4209,7 +4209,7 @@ checksum = "2ab42ca02749e120097e328d91d415325bdf43b1c72c4c8badf37375fe40a813"
 
 [[package]]
 name = "selfupdate"
-version = "2.0.1"
+version = "2.0.4"
 dependencies = [
  "appcore",
  "database",
@@ -5014,7 +5014,7 @@ dependencies = [
 
 [[package]]
 name = "tui"
-version = "2.0.1"
+version = "2.0.4"
 dependencies = [
  "appcore",
  "clap",
@@ -6151,7 +6151,7 @@ checksum = "d6bbff5f0aada427a1e5a6da5f1f98158182f26556f345ac9e04d36d0ebed650"
 
 [[package]]
 name = "winicon"
-version = "2.0.1"
+version = "2.0.4"
 dependencies = [
  "winres",
 ]
