@@ -28,6 +28,11 @@ jobs:
   update-aur:
     runs-on: ubuntu-latest
     name: Update cross-cleaner in AUR
+    # The AUR write key lives in this repository's `secrets` environment, next
+    # to WINGET_TOKEN and VT_API_KEY. Declaring it explicitly is what makes those
+    # visible to this job; the environment is not set as the repository default,
+    # so without this line `secrets.AUR_SSH_PRIVATE_KEY` resolves to empty.
+    environment: secrets
     env:
       APP_VERSION: ${{ github.event.inputs.version }}
       AUR_REPO: ssh://aur@aur.archlinux.org/cross-cleaner.git
@@ -109,15 +114,12 @@ jobs:
             echo "::error::secret AUR_SSH_PRIVATE_KEY is empty in ${GITHUB_REPOSITORY}"
             echo ""
             echo "This step is running in: ${GITHUB_REPOSITORY}"
-            echo "The secret must exist in exactly that repository, under:"
-            echo "  Settings -> Secrets and variables -> Actions -> Repository secrets"
-            echo ""
-            echo "The usual causes:"
-            echo "  - it was added to a different repository (a fork, or the"
-            echo "    personal ${GITHUB_REPOSITORY%%/*}/<something> repo) rather than ${GITHUB_REPOSITORY}"
-            echo "  - it was added under 'Environment secrets' -- those are only"
-            echo "    visible to a job that declares an 'environment:', and this"
-            echo "    job declares none"
+            echo "This job declares environment: secrets, so the value is read"
+            echo "from that environment's secrets. The usual causes now:"
+            echo "  - no secret named AUR_SSH_PRIVATE_KEY in the 'secrets'"
+            echo "    environment of ${GITHUB_REPOSITORY}"
+            echo "  - it was added as a Repository secret instead of an"
+            echo "    Environment secret, or the other way round"
             echo "  - the name differs: it must be exactly AUR_SSH_PRIVATE_KEY"
             echo "  - it was saved but the value is empty or whitespace only"
             exit 1
