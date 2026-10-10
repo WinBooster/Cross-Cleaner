@@ -1850,6 +1850,28 @@
     ]
   },
   {
+    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\GenOffice",
+    "class": "Office",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "GenOffice",
+    "files_to_remove": [
+      "LICENSE.electron.txt",
+      "LICENSES.chromium.html"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\GenOffice",
+    "class": "Office",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "GenOffice",
+    "files_to_remove": [
+      "LICENSE.electron.txt",
+      "LICENSES.chromium.html"
+    ]
+  },
+  {
     "path": "{drive}Users\\*\\AppData\\LocalLow\\miHoYo\\Genshin Impact",
     "category": "Documentation",
     "program": "Genshin Impact",
@@ -4389,28 +4411,6 @@
     "program": "OpenOffice",
     "files_to_remove": [
       "NOTICE"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Local\\Programs\\GenOffice",
-    "class": "Office",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "GenOffice",
-    "files_to_remove": [
-      "LICENSE.electron.txt",
-      "LICENSES.chromium.html"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\GenOffice",
-    "class": "Office",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "GenOffice",
-    "files_to_remove": [
-      "LICENSE.electron.txt",
-      "LICENSES.chromium.html"
     ]
   },
   {
