@@ -7125,5 +7125,23 @@
     "directories_to_remove": [
       "deps"
     ]
+  },
+  {
+    "path": "{drive}Quantower",
+    "class": "Finance",
+    "category": "Logs",
+    "program": "Quantower",
+    "directories_to_remove": [
+      "Logs"
+    ]
+  },
+  {
+    "path": "{drive}Quantower",
+    "class": "Finance",
+    "category": "Cache",
+    "program": "Quantower",
+    "directories_to_remove": [
+      "Temp"
+    ]
   }
 ]
