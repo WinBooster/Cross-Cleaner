@@ -3126,6 +3126,26 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Program Files\\ONLYOFFICE\\DesktopEditors",
+    "class": "Office",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "OnlyOffice",
+    "files_to_remove": [
+      "3DPARTYLICENSE.txt",
+      "LICENSE.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\ONLYOFFICE\\DesktopEditors",
+    "class": "Office",
+    "category": "Documentation",
+    "program": "OnlyOffice",
+    "files_to_remove": [
+      "index.html"
+    ]
+  },
+  {
     "path": "{drive}Users\\*\\AppData\\Roaming\\librewolf\\Profiles\\*",
     "class": "Browser",
     "category": "Browser",

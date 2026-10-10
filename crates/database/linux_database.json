@@ -309,8 +309,9 @@
   },
   {
     "path": "/usr/share/doc/",
+    "class": "System",
     "category": "Documentation",
-    "program": "Documentation",
+    "program": "Linux",
     "directories_to_remove": [
       "zstd",
       "zmq",
