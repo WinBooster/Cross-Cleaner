@@ -237,14 +237,20 @@ jobs:
               set -euo pipefail
               # makepkg ships in the pacman package on Arch.
               pacman -Sy --noconfirm --needed pacman >/dev/null
-              command -v makepkg >/dev/null || { echo "makepkg still missing" >&2; exit 1; }
-              makepkg --printsrcinfo -p PKGBUILD > .SRCINFO
+              # makepkg refuses to run as root, and it is right to: it drops
+              # privileges nowhere and builds into paths it will later chown.
+              # pacman needs root to install, makepkg must not have it, so the
+              # two run as different users in the same container.
+              useradd --create-home --shell /bin/bash builder
+              chown -R builder:builder /pkg
+              su builder -c "cd /pkg && makepkg --printsrcinfo -p PKGBUILD > .SRCINFO"
             '
           echo "--- .SRCINFO ---"
           cat aur-pkg/.SRCINFO
-          # The container runs as root, so .SRCINFO lands on the host owned by
-          # root and the runner user cannot read or commit it. Take it back
-          # before doing anything else with the tree.
+          # The container's `builder` is uid 1000, the runner is 1001, and a bind
+          # mount maps container uids straight through with no remapping. So
+          # .SRCINFO lands on the host owned by a different user, which the
+          # runner cannot commit. Take it back before doing anything else.
           sudo chown -R "$(id -u):$(id -g)" aur-pkg
           test -w aur-pkg/.SRCINFO || {
             echo "::error::.SRCINFO is not writable by the runner user"
