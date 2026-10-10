@@ -594,6 +594,25 @@
     ]
   },
   {
+    "path": "/home/*/.local/share/onlyoffice/desktopeditors",
+    "class": "Office",
+    "category": "LastActivity",
+    "program": "OnlyOffice",
+    "files_to_remove": [
+      "recents.xml"
+    ]
+  },
+  {
+    "path": "/home/*/.local/share/onlyoffice/desktopeditors/data",
+    "class": "Office",
+    "category": "Cache",
+    "program": "OnlyOffice",
+    "directories_to_remove": [
+      "cache",
+      "templates_cache"
+    ]
+  },
+  {
     "path": "/home/*/.cache/librewolf/**/thumbnails/*",
     "class": "Browser",
     "category": "Cache",
