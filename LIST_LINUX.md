@@ -1,15 +1,16 @@
-# Linux Clearing Programs Catalog v2.0.4.2.2
+# Linux Clearing Programs Catalog v2.0.4.3.1
 **Total categories in database:** 12
 
-**Total programs in database:** 71
+**Total programs in database:** 76
 
-**Total pathes in database:** 162
+**Total pathes in database:** 170
 
 ## AI
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [OpenCode](https://opencode.ai/download) | LastActivity, Logs |
+| 1 | Codex | Cache, Logs |
+| 2 | [OpenCode](https://opencode.ai/download) | LastActivity, Logs |
 
 
 ## Audio
@@ -28,11 +29,12 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [Brave Browser](https://brave.com/download) | Browser, Cache |
-| 2 | [Google Chrome](https://www.google.com/intl/en/chrome) | Browser, Cache |
-| 3 | [LibreWolf](https://librewolf.net/installation) | Browser, Cache |
-| 4 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser, Cache |
-| 5 | [Thorium](https://thorium.rocks) | Browser |
-| 6 | [Vivaldi](https://vivaldi.com/download) | Browser, Cache |
+| 2 | Brave Origin | Browser, Cache |
+| 3 | [Google Chrome](https://www.google.com/intl/en/chrome) | Browser, Cache |
+| 4 | [LibreWolf](https://librewolf.net/installation) | Browser, Cache |
+| 5 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser, Cache |
+| 6 | [Thorium](https://thorium.rocks) | Browser |
+| 7 | [Vivaldi](https://vivaldi.com/download) | Browser, Cache |
 
 
 ## Cheat
@@ -128,12 +130,21 @@
 | 11 | [X Minecraft Launcher](https://xmcl.app) | Game, Logs |
 
 
+## Office
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Cache |
+| 2 | [OnlyOffice](https://www.onlyoffice.com) | Cache, LastActivity |
+
+
 ## Packet Manager
 
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | Apt | Cache |
-| 2 | [Yay](https://github.com/Jguer/yay) | Cache |
+| 2 | Pacman | Cache, Logs |
+| 3 | [Yay](https://github.com/Jguer/yay) | Cache |
 
 
 ## Password Manager
@@ -143,12 +154,21 @@
 | 1 | [KeePassXC](https://keepassxc.org/download) | Documentation |
 
 
+## Snapshots
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Snapper | Logs |
+
+
 ## System
 
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [CachyOS](https://cachyos.org) | Logs |
-| 2 | [Omarchy](https://omarchy.us) | Images, LastActivity |
+| 2 | [Linux](https://www.kernel.org) | Cache, Documentation, Downloads, Logs, Trash |
+| 3 | [Omarchy](https://omarchy.us) | Images, LastActivity |
+| 4 | Systemd | Logs |
 
 
 ## Text
@@ -159,12 +179,11 @@
 | 2 | [Cursor](https://www.cursor.com/downloads) | Cache, Documentation, Logs |
 | 3 | [Gperf](https://github.com/jwinarske/gperf) | Documentation |
 | 4 | [JetBrains](https://www.jetbrains.com/?var=1) | Cache, Logs |
-| 5 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Cache |
-| 6 | [NeoVim](https://github.com/neovim/neovim/blob/master/INSTALL.md) | Logs |
-| 7 | [Pcre](https://www.pcre.org) | Documentation |
-| 8 | [Thunderbird](https://www.thunderbird.net) | Logs |
-| 9 | [VS Code](https://code.visualstudio.com/download) | Documentation, Logs |
-| 10 | [Zed](https://zed.dev) | Logs |
+| 5 | [NeoVim](https://github.com/neovim/neovim/blob/master/INSTALL.md) | Logs |
+| 6 | [Pcre](https://www.pcre.org) | Documentation |
+| 7 | [Thunderbird](https://www.thunderbird.net) | Logs |
+| 8 | [VS Code](https://code.visualstudio.com/download) | Documentation, Logs |
+| 9 | [Zed](https://zed.dev) | Logs |
 
 
 ## Tiling Manager
@@ -178,10 +197,8 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Documentation | Documentation |
-| 2 | EFI tools | Logs |
-| 3 | Info | Documentation |
-| 4 | [Linux](https://www.kernel.org) | Cache, Documentation, Downloads, Trash |
+| 1 | EFI tools | Logs |
+| 2 | Info | Documentation |
 
 ---
 

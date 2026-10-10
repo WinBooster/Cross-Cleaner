@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.4.2.2
+# Windows Clearing Programs Catalog v2.0.4.3.1
 **Total categories in database:** 12
 
-**Total programs in database:** 266
+**Total programs in database:** 272
 
-**Total pathes in database:** 572
+**Total pathes in database:** 583
 
 ## AI
 
@@ -120,32 +120,34 @@
 | --- | --- | --- |
 | 1 | [Anaconda](https://www.anaconda.com/download) | Documentation, Logs |
 | 2 | [BoxedAppPacker](https://www.boxedapp.com/boxedapppacker/download.html) | Documentation |
-| 3 | [CMake](https://cmake.org) | Documentation |
-| 4 | [Docker](https://www.docker.com/products/docker-desktop) | Logs |
-| 5 | [DotNet](https://dotnet.microsoft.com/en-us/download) | Logs |
-| 6 | [Enigma Virtual Box](https://enigmaprotector.com/en/downloads.html) | Documentation |
-| 7 | [FreeCAD](https://www.freecad.org) | Documentation, Logs |
-| 8 | [Ghidra](https://github.com/NationalSecurityAgency/ghidra) | Logs |
-| 9 | [Go Language](https://go.dev/doc/install) | Documentation |
-| 10 | [Gradle](https://gradle.org) | Cache |
-| 11 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
-| 12 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation, Logs |
-| 13 | Inno Setup 7 | Logs |
-| 14 | [Insomnia](https://insomnia.rest) | Cache, Logs |
-| 15 | [Java](https://www.java.com/download) | Documentation |
-| 16 | [Kache](https://github.com/kunobi-ninja/kache) | Logs |
-| 17 | [MCCreator](https://mcreator.net/download) | Logs |
-| 18 | [Maven](https://maven.apache.org/download.cgi) | Documentation |
-| 19 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
-| 20 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
-| 21 | [Postman](https://www.postman.com/downloads) | Logs |
-| 22 | [Python](https://www.python.org/downloads) | Documentation |
-| 23 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
-| 24 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
-| 25 | [RustRover](https://www.jetbrains.com/rust) | Documentation |
-| 26 | [Unity Hub](https://unity.com/download) | Documentation |
-| 27 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk) | Documentation |
-| 28 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
+| 3 | Bun | Cache |
+| 4 | [CMake](https://cmake.org) | Documentation |
+| 5 | Cargo | Cache |
+| 6 | [Docker](https://www.docker.com/products/docker-desktop) | Logs |
+| 7 | [DotNet](https://dotnet.microsoft.com/en-us/download) | Logs |
+| 8 | [Enigma Virtual Box](https://enigmaprotector.com/en/downloads.html) | Documentation |
+| 9 | [FreeCAD](https://www.freecad.org) | Documentation, Logs |
+| 10 | [Ghidra](https://github.com/NationalSecurityAgency/ghidra) | Logs |
+| 11 | [Go Language](https://go.dev/doc/install) | Documentation |
+| 12 | [Gradle](https://gradle.org) | Cache |
+| 13 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
+| 14 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation |
+| 15 | Inno Setup 7 | Documentation |
+| 16 | [Insomnia](https://insomnia.rest) | Cache, Logs |
+| 17 | [Java](https://www.java.com/download) | Documentation |
+| 18 | [Kache](https://github.com/kunobi-ninja/kache) | Logs |
+| 19 | [MCCreator](https://mcreator.net/download) | Logs |
+| 20 | [Maven](https://maven.apache.org/download.cgi) | Documentation |
+| 21 | [MinGW](https://www.mingw-w64.org/downloads) | Documentation |
+| 22 | [Node JS](https://nodejs.org/en/download) | Cache, Documentation, Logs |
+| 23 | [Postman](https://www.postman.com/downloads) | Logs |
+| 24 | [Python](https://www.python.org/downloads) | Documentation |
+| 25 | [Recaf](https://github.com/Col-E/Recaf) | Logs |
+| 26 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
+| 27 | [RustRover](https://www.jetbrains.com/rust) | Documentation |
+| 28 | [Unity Hub](https://unity.com/download) | Documentation |
+| 29 | [Windows Kits](https://developer.microsoft.com/windows/downloads/windows-sdk) | Documentation |
+| 30 | [Xamarin](https://dotnet.microsoft.com/apps/xamarin) | Logs |
 
 
 ## Disk Analyzer
@@ -159,8 +161,8 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | BleachBit | Documentation |
-| 2 | Wise Disk Cleaner | Documentation |
+| 1 | [BleachBit](https://www.bleachbit.org) | Documentation |
+| 2 | [Wise Disk Cleaner](https://www.wisecleaner.com/wise-disk-cleaner.html) | Documentation |
 | 3 | [ССleaner](https://www.ccleaner.com) | Logs |
 
 
@@ -207,6 +209,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | HomeBank | Documentation |
+| 2 | Quantower | Cache, Logs |
 
 
 ## Game
@@ -325,7 +328,10 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Documentation, Logs |
+| 1 | [GenOffice](https://genoffice.ai) | Documentation |
+| 2 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Documentation, Logs |
+| 3 | [OnlyOffice](https://www.onlyoffice.com) | Documentation |
+| 4 | OpenOffice | Documentation |
 
 
 ## Optimization
@@ -385,7 +391,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [RustDesk](https://rustdesk.com) | Documentation |
-| 2 | TeamViewer | Documentation, Logs |
+| 2 | [TeamViewer](https://www.teamviewer.com) | Documentation, Logs |
 
 
 ## Security
@@ -536,7 +542,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | Adobe | Documentation |
-| 2 | Electron App's | Documentation, Logs |
+| 2 | Electron | Documentation, Logs |
 | 3 | Mozilla Maintenance Service | Logs |
 | 4 | Zebar | Logs |
 
