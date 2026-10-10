@@ -29,7 +29,7 @@ An addon-style <a href="https://github.com/Cross-Cleaner/Cross-Cleaner">system c
 - 📄 **Custom-DataBase**: Ability to use custom cleanup database
 
 ### Demo Desktop Edition
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/44cbc90b-67e1-4ba5-9701-30e20cc1d7cf" />
+<img width="570" height="557" alt="image" src="https://github.com/user-attachments/assets/069cf3ab-9515-4daf-a6f2-99bc28de24ba" />
 
 ### Demo TUI Edition
 <img width="560" height="234" alt="image" src="https://github.com/user-attachments/assets/16000f98-a27d-444a-b88e-1060377e5cb9" />
