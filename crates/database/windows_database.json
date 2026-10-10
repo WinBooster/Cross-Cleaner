@@ -2113,6 +2113,7 @@
   {
     "path": "{drive}Users\\*\\.gradle",
     "category": "Cache",
+    "sub_category": "Development build"
     "program": "Gradle",
     "class": "Developing",
     "directories_to_remove": [
@@ -7073,6 +7074,56 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\.bun\\install",
+    "class": "Developing",
+    "category": "Cache",
+    "sub_category": "Development build",
+    "program": "Bun",
+    "directories_to_remove": [
+      "cache"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\.cargo\\registry",
+    "class": "Developing",
+    "category": "Cache",
+    "sub_category": "Development build",
+    "program": "Cargo",
+    "directories_to_remove": [
+      "cache"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\.cargo\\registry",
+    "class": "Developing",
+    "category": "Cache",
+    "sub_category": "Development build",
+    "program": "Cargo",
+    "directories_to_remove": [
+      "cache"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\Documents\\GitHub\\*\\target\\debug",
+    "class": "Developing",
+    "category": "Cache",
+    "sub_category": "Development build",
+    "program": "Cargo",
+    "directories_to_remove": [
+      "deps"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\Documents\\GitHub\\*\\target\\release",
+    "class": "Developing",
+    "category": "Cache",
+    "sub_category": "Development build",
+    "program": "Cargo",
+    "directories_to_remove": [
+      "deps"
     ]
   }
 ]
