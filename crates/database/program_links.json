@@ -79,12 +79,15 @@
 
   "Blender": "https://www.blender.org",
 
+  "GenOffice": "https://genoffice.ai",
+  "OnlyOffice": "https://www.onlyoffice.com",
+  "LibreOffice": "https://www.libreoffice.org/download/download-libreoffice",
+
   "CrystalCry": "https://crystalcry.org",
   "HiAlgo Boost": "https://www.hialgo.com",
   "Mem Reduct": "https://github.com/henrypp/memreduct",
   "WhySoSlow": "https://www.resplendence.com/whysoslow",
   "Winutil": "https://github.com/ChrisTitusTech/winutil",
-  "ССleaner": "https://www.ccleaner.com",
   "Unlocker": "http://www.emptyloop.com/unlocker",
   "Everything": "https://www.voidtools.com",
   "CPU-Z": "https://www.cpuid.com",
@@ -102,6 +105,7 @@
   "PuTTY": "https://putty.org",
 
   "RustDesk": "https://rustdesk.com",
+  "TeamViewer": "https://www.teamviewer.com",
 
   "Future Client": "https://futureclient.net",
   "Cheat Engine": "https://www.cheatengine.org/downloads.php",
@@ -156,6 +160,11 @@
   "Maven": "https://maven.apache.org/download.cgi",
 
   "TreeSize": "https://www.jam-software.com/treesize",
+
+  "BleachBit": "https://www.bleachbit.org",
+  "Wise Disk Cleaner": "https://www.wisecleaner.com/wise-disk-cleaner.html",
+  "ССleaner": "https://www.ccleaner.com",
+
 
   "IObit Driver Booster": "https://ru.iobit.com/driver-booster.php",
   "LGHUB": "https://www.logitechg.com/en-us/innovation/g-hub.html",
@@ -241,7 +250,6 @@
   "Cursor": "https://www.cursor.com/downloads",
   "JetBrains": "https://www.jetbrains.com/?var=1",
   "LazyVim": "https://www.lazyvim.org/installation",
-  "LibreOffice": "https://www.libreoffice.org/download/download-libreoffice",
   "NeoVim": "https://github.com/neovim/neovim/blob/master/INSTALL.md",
   "Notepad++": "https://notepad-plus-plus.org/downloads",
   "Sublime Text": "https://www.sublimetext.com/download",
