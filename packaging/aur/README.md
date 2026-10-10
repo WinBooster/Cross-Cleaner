@@ -13,31 +13,66 @@ git-репозиторий на AUR, в основной репозиторий 
 | `.gitignore` | Исключает артефакты `makepkg` |
 | `README.md` | Этот файл (для людей, а не для AUR) |
 
-## Важно: веб-формы отправки больше нет
+Итоговый `PKGBUILD` в AUR генерируется из этого каталога воркфлоу
+`.github/workflows/aur.yml` — см. ниже.
 
-Кнопка «Submit Package» на aur.archlinux.org **отсутствует** — AUR перешёл на
-отправку через git по SSH. Репозиторий пакета создаётся первым же `git push` на
-пустой репозиторий, отдельная регистрация не нужна.
+## Публикация: воркфлоу
 
-## Публикация
+Публикация автоматическая. Открываете **Actions → Update AUR package → Run
+workflow**, вводите версию (например `2.0.4.2.5`) и жмёте запуск.
 
-### 1. Аккаунт AUR
+![workflow](https://github.com/Cross-Cleaner/Cross-Cleaner/actions/workflows/aur.yml/badge.svg)
 
-Зарегистрируйтесь на https://aur.archlinux.org/passwd/ и войдите. Пакет
-`cross-cleaner` на момент написания свободен (проверено через
-`https://aur.archlinux.org/rpc/v5/info` — 0 результатов).
+Воркфлоу:
 
-### 2. SSH-ключ
+1. проверяет, что введённая строка — корректная версия для pacman;
+2. проверяет, что тег `v<версия>` существует в репозитории;
+3. скачивает архив тега и считает sha256;
+4. проверяет, что архив распаковывается в каталог, который ожидает `PKGBUILD`
+   (иначе об этом узнаёшь только через 40 минут компиляции);
+5. клонирует репозиторий AUR и копирует туда `PKGBUILD`, `LICENSE`, `.gitignore`;
+6. переписывает четыре строки между маркерами `AUR-VERSION` — версию и checksum;
+7. перегенерирует `.SRCINFO` и проверяет, что версия в нём обновилась;
+8. коммитит и пушит в `master`.
 
-Для записи нужен отдельный SSH-ключ — **не переиспользуйте ваш основной
-GitHub-ключ**, его можно будет отозвать отдельно:
+### Что нужно настроить один раз
+
+Секрет репозитория `AUR_SSH_PRIVATE_KEY` — приватная часть ключа, который
+зарегистрирован в аккаунте AUR (см. «Ручная публикация» ниже, шаг с
+`ssh-keygen`): **Settings → Secrets and variables → Actions → New repository
+secret**.
+
+Публичный ключ при этом уже должен быть в профиле AUR: **My Account → Add SSH
+Key**.
+
+### Галочка dry run
+
+У воркфлоу есть вход `dry_run`: он прогоняет все проверки, показывает diff и
+останавливается перед `git push`. Стоит начинать с него — он бесплатно ловит
+ошибку в версии до того, как что-то уедет в AUR.
+
+### Что НЕ делает воркфлоу
+
+Не трогает `pkgrel`. Он всегда 1, потому что версия привязана к одному тегу, а
+новая версия — это новый `pkgver`. Поднять `pkgrel` нужно руками в этом
+каталоге, если меняется сам пакет, а не приложение.
+
+## Ручная публикация
+
+Если воркфлоу недоступен — например, до настройки секрета — пакет можно
+залить руками. Кнопки «Submit Package» на aur.archlinux.org **нет**: AUR
+перешёл на git по SSH.
+
+### 1. Аккаунт и SSH-ключ
+
+Зарегистрируйтесь на https://aur.archlinux.org/passwd/. Создайте отдельный
+ключ — основной GitHub-ключ переиспользовать не стоит:
 
 ```bash
 ssh-keygen -f ~/.ssh/aur
 ```
 
-Публичный ключ (`~/.ssh/aur.pub`) вставьте в профиль на AUR: «My Account» →
-«Add SSH Key». И добавьте в `~/.ssh/config`:
+Публичный ключ (`~/.ssh/aur.pub`) вставьте в профиль AUR. В `~/.ssh/config`:
 
 ```
 Host aur.archlinux.org
@@ -45,73 +80,38 @@ Host aur.archlinux.org
   User aur
 ```
 
-Отпечатки сервера AUR (с главной страницы) для проверки:
-
-```
-Ed25519  SHA256:RFzBCUItH9LZS0cKB5UE6ceAYhBD5C8GeOBip8Z11+4
-ECDSA    SHA256:uTa/0PndEgPZTf76e1DFqXKJEXKsn7m9ivhLQtzGOCI
-RSA      SHA256:5s5cIyReIfNNVGRFdDbe3hdYiI5OelHGpw2rOUud3Q8
-```
-
-### 3. Клонировать пустой репозиторий
-
-AUR клонирует пустой репозиторий и сам создаёт pkgbase:
+### 2. Клонировать и запушить
 
 ```bash
-cd packaging/aur
-git -c init.defaultBranch=master clone ssh://aur@aur.archlinux.org/cross-cleaner.git /tmp/aur-cross-cleaner
+git clone ssh://aur@aur.archlinux.org/cross-cleaner.git /tmp/aur-cross-cleaner
 cd /tmp/aur-cross-cleaner
-cp /home/roman/Documents/GitHub/Cross-Cleaner/packaging/aur/{PKGBUILD,.SRCINFO,LICENSE,.gitignore} .
-```
+cp /home/roman/Documents/GitHub/Cross-Cleaner/packaging/aur/{PKGBUILD,LICENSE,.gitignore} .
 
-Предупреждение «You appear to have cloned an empty repository» — это ожидаемо,
-не ошибка.
-
-### 4. Пуш
-
-```bash
-makepkg --printsrcinfo -p PKGBUILD > .SRCINFO   # всегда перед коммитом
+# проставить версию и checksum в блок между маркерами, затем:
+makepkg --printsrcinfo -p PKGBUILD > .SRCINFO
 git add PKGBUILD .SRCINFO LICENSE .gitignore
-git commit -m "Initial AUR package"
+git commit -m "cross-cleaner <версия>"
 git push
 ```
-
-После пуша пакет появится на AUR в течение от нескольких минут до часа.
 
 **Требования AUR, которые ломают пуш:**
 
-- Пуш только в ветку `master`. Если ветка называется иначе — переименуйте:
-  `git branch -M master`.
-- `PKGBUILD` и `.SRCINFO` должны быть в коммите. Если забыли `.SRCINFO` —
+- Пуш только в ветку `master`. Если ветка называется иначе — `git branch -M master`.
+- **AUR отклоняет non-fast-forward.** Локальная история не должна расходиться с
+  удалённой: если расходилась, `--force` не поможет, серверный хук его отклонит.
+  Сначала `git pull --rebase origin master`, потом push.
+- `PKGBUILD` и `.SRCINFO` должны быть в одном коммите. Забыли `.SRCINFO` —
   `git commit --amend --add .SRCINFO`, а не новый коммит.
 - `LICENSE` обязателен: пакеты без лицензии не промотируются в официальные
   репозитории.
-- Имя пользователя и email коммитов берутся из глобального git-конфига, и после
-  пуша их сменить почти невозможно. Если для AUR нужны другие — задайте
-  локально до коммита:
-  `git config user.name "..." && git config user.email "..."`.
-
-### 5. Обновление пакета
-
-```bash
-cd /tmp/aur-cross-cleaner
-git pull
-# ...внести правки...
-makepkg --printsrcinfo -p PKGBUILD > .SRCINFO
-git commit -am "описание изменения"
-git push
-```
-
-После установки:
-
-```bash
-paru -S cross-cleaner
-```
+- Имя и email коммитов берутся из глобального git-конфига, и после пуша их
+  сменить почти невозможно. Для другого авторства задайте их локально до
+  коммита: `git config user.name "..." && git config user.email "..."`.
 
 ## Требования для сборки
 
-**`base-devel` должен быть установлен.** `rust` и `cargo` входят в `base-devel`,
-и AUR-хелперы их **не ставят автоматически** — сборка просто падает с
+**`base-devel` должен быть установлен.** `rust` и `cargo` входят в
+`base-devel`, и AUR-хелперы их **не ставят автоматически** — сборка падает с
 `cargo: command not found`. Это давнее соглашение AUR: пакеты предполагают
 наличие base-devel в среде сборки.
 
@@ -119,13 +119,13 @@ paru -S cross-cleaner
 sudo pacman -S --needed base-devel
 ```
 
-Остальные зависимости (`icoutils`, `desktop-file-utils`, `appstream`, `alsa-lib`,
-`mesa`, `wayland`) хелпер подтянет сам через `--syncdeps` — они указаны в
-`makedepends`, в отличие от `rust`.
+Остальные зависимости (`icoutils`, `desktop-file-utils`, `appstream`,
+`alsa-lib`, `mesa`, `wayland`) хелпер подтянет сам — они указаны в `makedepends`,
+в отличие от `rust`.
 
-**Нужен доступ к crates.io.** Cargo во время сборки скачивает ~636 крейтов с
-`index.crates.io` / `static.crates.io` плюс git-зависимость `gpu-allocator` с
-GitHub. В сетях, где crates.io недоступен, сборка падает с
+**Нужен доступ к crates.io.** Cargo скачивает ~640 крейтов с `index.crates.io` /
+`static.crates.io` плюс git-зависимость `gpu-allocator` с GitHub. В сетях, где
+crates.io недоступен, сборка падает с
 `SSL connect error (Recv failure: Connection reset by peer)` — это не ошибка
 пакета. Обходится VPN либо зеркалом реестра в `~/.cargo/config.toml`.
 
@@ -134,37 +134,64 @@ GitHub. В сетях, где crates.io недоступен, сборка па�
 ```bash
 bash -n PKGBUILD                      # синтаксис
 makepkg --printsrcinfo -p PKGBUILD   # метаданные
-makepkg -s --noconfirm               # полная сборка с установкой зависимостей
+makepkg -s --noconfirm               # полная сборка
 makepkg --packagelist                # какие файлы попадут в пакет
 ```
 
-Полная сборка долгая: ~636 крейтов в lock-файле плюс `lto = true`,
-`codegen-units = 1`, `opt-level = "z"` из workspace-профиля. Это настройка
-upstream, а не этого PKGBUILD.
+Полная сборка долгая: ~640 крейтов плюс `lto = true`, `codegen-units = 1`,
+`opt-level = "z"` из workspace-профиля. Это настройка upstream, а не этого
+PKGBUILD.
 
 ## Особенности пакета
 
-**Собирается из git, а не из tarball.** `source` указывает на репозиторий,
-версия вычисляется через `git describe`. Новый тег upstream подхватывается сам:
-orphanage увидит изменившуюся версию, руками править ничего не нужно.
+**Версия привязана к тегу, а не к ветке.** Источник — архив тега
+(`.../archive/refs/tags/v${pkgver}.tar.gz`), а не `git+`. VCS-источник всегда
+идёт за default-веткой, и каждый пользователь собрал бы то, что в `main`
+лежало на момент сборки, а не тот релиз, который опубликован. С архивом
+версия ниже называет ровно один коммит. Побочный эффект: имя
+`cross-cleaner` без суффикса `-git` теперь корректно по правилам AUR.
 
-По правилам AUR, VCS-пакет, не привязанный к конкретной версии, должен
-называться с суффиксом `-git`. Здесь `pkgname=cross-cleaner` без суффикса —
-это отступление от рекомендации: пакет отслеживает теги (`git describe`
-даёт версию релиза, а не `0.0.rN.gHASH`), то есть фактически привязан к
-конкретным версиям. Если хотите строго по правилам — переименуйте в
-`cross-cleaner-git`, но тогда и в `url`/`.desktop`/README ничего менять не
-нужно, только `pkgname` в PKGBUILD.
+**Функции `pkgver()` нет.** Раньше она считала версию через `git describe`, и
+это делало пакет непригодным: значение всегда расходилось с тем, что показано в
+веб-интерфейсе AUR.
+
+**`--locked` не используется.** `Cargo.lock` в релизных тегах устарел
+относительно манифестов в тех же тегах: в `v2.0.4.2.5` крейты объявляют
+`version = "2.0.4"`, а lock-файл помнит `2.0.1`, поэтому cargo требует
+перезаписи lock и `--locked` обрывает сборку до компиляции. То, ради чего
+`--locked` добавлялся, всё равно держится: lock уже фиксирует ревизию
+`gpu-allocator` из `Cargo.toml`'s `[patch.crates-io]`, и cargo не пересматривает
+записи, которые удовлетворяют манифестам. Релизные воркфлоу самого проекта
+`--locked` тоже не передают.
+
+**Снимаются флаги компилятора makepkg.** `build()` делает `unset CFLAGS
+CXXFLAGS CPPFLAGS FCFLAGS FFLAGS ARFLAGS LDFLAGS LTOFLAGS RUSTFLAGS`. Arch
+экспортирует `CFLAGS` в окружение сборки, их подхватывает крейт `cc` и
+передаёт компилятору, которым `ring`'s build.rs собирает крипто-ядро, после
+чего финальная линковка теряет `-l` для этого архива и падает на всех символах
+ring:
+
+```
+ld.lld: error: undefined symbol: ring_core_0_17_14__x25519_sc_mask
+```
+
+Сама ring при этом собрана верно: build-скрипт выдаёт и `rustc-link-lib`, и
+`rustc-link-search`, а в архиве лежат все 157 символов. Проверено отсечением на
+уменьшенном крейте (`ureq → rustls → ring`): без `CFLAGS` собирается, с ними —
+нет, а LTO, `RUSTFLAGS`, `LDFLAGS` и остальное окружение makepkg ни при чём.
+
+**`prepare()` идемпотентна.** Иконка извлекается во временный каталог, а не
+прямо в `$srcdir`: makepkg переиспользует существующий `$srcdir`, если изменился
+только PKGBUILD, и старая схема падала с `mv: ... are the same file`.
 
 **Три бинарника.** `cross-cleaner` (оконное приложение), `cross-cleaner-tui`
 (терминальное) и `cross-cleaner-cli` (для скриптов). `cargo` называет их по
 именам пакетов (`desktop`, `tui`, `cli`), в PKGBUILD они переименовываются,
 чтобы `Exec=` в desktop-файлах не зависел от конкретного релиза.
 
-**`--no-default-features` везде.** Путь самообновления (проверка GitHub на новый
-релиз и замена собственного исполняемого файла) выключен намеренно: версией
-установленного пакета управляет пакетный менеджер, и приложение не должно ему
-мешать. Так же поступает `.deb`-сборка — см. `packaging/linux/nfpm.yaml`.
+**`--no-default-features` везде.** Путь самообновления выключен намеренно:
+версией установленного пакета управляет пакетный менеджер. Так же поступает
+`.deb`-сборка — см. `packaging/linux/nfpm.yaml`.
 
 **Зависимости.** Список `depends` перенесён из `nfpm.yaml`, где он тоже
 поддерживается вручную: winit через `x11-dl` открывает весь X11-стек через
@@ -175,10 +202,6 @@ orphanage увидит изменившуюся версию, руками пр�
 `icotool` извлекает его как есть. В отличие от AppImage-сборки, здесь ничего не
 растягивается под 128 и 256 — установлен единственный настоящий размер. Чтобы
 добавить остальные, нужен мастер-PNG ≥512px в `crates/winicon/assets`.
-
-**Метаданные AppStream.** `packaging/linux/cross-cleaner.appdata.xml` содержит
-плейсхолдеры `%%VERSION%%` и `%%DATE%%`, которые в релизе подставляет workflow.
-Здесь то же самое делает `prepare()` — по вычисленному `pkgver` и дате коммита.
 
 **Две лицензии.** `LICENSE` в этом каталоге (0BSD) — лицензия на файлы пакета,
 требование Arch для допуска в официальные репозитории. Лицензия самой программы
@@ -200,3 +223,11 @@ vendor в `nfpm.yaml`, developer в appdata.
 - `crates/android/Cargo.toml:43` и `crates/android/src/lib.rs:49` —
   `com.winbooster.crosscleaner`. Это application ID: смена создаст новое
   приложение в Google Play, а не обновление существующего.
+
+## Известная проблема upstream
+
+В релизных тегах `Cargo.lock` не соответствует манифестам: версии крейтов в
+`Cargo.toml` подняты до `2.0.4`, а lock-файл остался на `2.0.1`. Пока это так,
+`cargo build --locked` не работает ни на одном теге. Лечится регенерацией
+lock-файла в релизном воркфлоу — например, добавлением
+`cargo update --workspace` в задачу `formating_code` перед коммитом.

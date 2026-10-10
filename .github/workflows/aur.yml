@@ -1,0 +1,218 @@
+name: Update AUR package
+
+# Publishes a tagged release to the AUR. The version is an input rather than
+# something read from the default branch: the PKGBUILD in the AUR is pinned to
+# exactly one git tag, so which release goes out is always an explicit choice.
+#
+# The PKGBUILD is not edited here by hand. packaging/aur/PKGBUILD in this
+# repository is the single source of truth, and this workflow copies it into the
+# AUR repository with only the four lines between the AUR-VERSION markers
+# rewritten -- the checksum of the tag archive and the version itself.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish, as a git tag without the leading v (e.g. 2.0.4.2.5)"
+        required: true
+        default: "2.0.4.2.5"
+      dry_run:
+        description: "Check everything and show the diff, but do not push to AUR"
+        type: boolean
+        required: false
+        default: false
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  update-aur:
+    runs-on: ubuntu-latest
+    name: Update cross-cleaner in AUR
+    env:
+      APP_VERSION: ${{ github.event.inputs.version }}
+      AUR_REPO: ssh://aur@aur.archlinux.org/cross-cleaner.git
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Only the PKGBUILD template is needed. Depth 1 with no history saves
+          # a large clone: the tag list is fetched separately below.
+          fetch-depth: 1
+
+      - name: Validate version input
+        run: |
+          set -euo pipefail
+          # AUR versions allow digits and dots separated by single hyphens.
+          # Anything else is rejected by pacman later, so catch it here where
+          # the message can say what was wrong.
+          if ! printf '%s' "$APP_VERSION" | grep -Eq '^[0-9]+(\.[0-9]+)*([a-zA-Z0-9._+]*-[0-9]+(\.[0-9]+)*)?$'; then
+            echo "::error::'$APP_VERSION' is not a valid package version"
+            exit 1
+          fi
+          if printf '%s' "$APP_VERSION" | grep -q '[^0-9a-zA-Z.+-]'; then
+            echo "::error::'$APP_VERSION' contains characters pacman rejects"
+            exit 1
+          fi
+          echo "Publishing version: $APP_VERSION"
+
+      - name: Check the tag exists
+        run: |
+          set -euo pipefail
+          git fetch --tags --force --quiet
+          if ! git rev-parse -q --verify "refs/tags/v${APP_VERSION}" >/dev/null; then
+            echo "::error::tag v${APP_VERSION} does not exist in $GITHUB_REPOSITORY"
+            echo "Known recent tags:"
+            git tag -l 'v*' --sort=-v:refname | head -10
+            exit 1
+          fi
+          echo "Found tag v${APP_VERSION} at $(git rev-parse --short "v${APP_VERSION}")"
+
+      - name: Download the tag archive and checksum it
+        run: |
+          set -euo pipefail
+          url="https://github.com/$GITHUB_REPOSITORY/archive/refs/tags/v${APP_VERSION}.tar.gz"
+          curl -sSL --retry 3 -o "cross-cleaner-v${APP_VERSION}.tar.gz" "$url"
+          sha=$(sha256sum "cross-cleaner-v${APP_VERSION}.tar.gz" | cut -d' ' -f1)
+          echo "SHA256=${sha}" >> "$GITHUB_ENV"
+          echo "Checksum of v${APP_VERSION}: ${sha}"
+
+      - name: Verify the archive extracts to the directory the PKGBUILD expects
+        run: |
+          set -euo pipefail
+          # packaging/aur/PKGBUILD derives its source directory from pkgver, so a
+          # change in how GitHub names tag archives would break the build in a
+          # way that only shows up after a 40 minute compile. One tar -t here
+          # catches it in a second.
+          top=$(tar tzf "cross-cleaner-v${APP_VERSION}.tar.gz" | head -1)
+          echo "Top level directory: ${top}"
+          if [ "${top}" != "Cross-Cleaner-${APP_VERSION}/" ]; then
+            echo "::error::expected top level 'Cross-Cleaner-${APP_VERSION}/', got '${top}'"
+            exit 1
+          fi
+
+      - name: Set up SSH for the AUR
+        # AUR accepts writes over SSH only, so this needs the private half of a
+        # key that is registered on the account (My Account -> Add SSH Key).
+        # Store it as the repository secret AUR_SSH_PRIVATE_KEY.
+        env:
+          AUR_SSH_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "$AUR_SSH_KEY" ]; then
+            echo "::error::secret AUR_SSH_PRIVATE_KEY is not set"
+            exit 1
+          fi
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$AUR_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          # ssh-keyscan on its own is trust-on-first-use, which on a CI runner
+          # is trust-nothing: an attacker able to poison DNS would get a silent
+          # MITM on the push that writes to the AUR account. So the scanned key
+          # is checked against the fingerprint published on the AUR front page
+          # ("The following SSH fingerprints are used for the AUR") and the
+          # connection is aborted on a mismatch.
+          expected="SHA256:RFzBCUItH9LZS0cKB5UE6ceAYhBD5C8GeOBip8Z11+4"
+          actual=$(ssh-keyscan -t ed25519 aur.archlinux.org 2>/dev/null \
+                   | ssh-keygen -lf - | awk '{print $2}')
+          echo "AUR host fingerprint: ${actual}"
+          if [ "$actual" != "$expected" ]; then
+            echo "::error::aur.archlinux.org fingerprint mismatch"
+            echo "  expected ${expected}"
+            echo "  got      ${actual}"
+            echo "If Arch rotated the key, update AUR_SSH_FINGERPRINT and re-check the new value."
+            exit 1
+          fi
+          echo "aur.archlinux.org ${actual}" > ~/.ssh/known_hosts
+          ssh -o BatchMode=yes -T aur@aur.archlinux.org exit || true
+          echo "SSH to AUR is available"
+
+      - name: Clone the AUR repository
+        run: |
+          set -euo pipefail
+          git clone "$AUR_REPO" aur-pkg
+          cd aur-pkg
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout master
+
+      - name: Copy the packaging files into the AUR repository
+        run: |
+          set -euo pipefail
+          cd aur-pkg
+          cp ../packaging/aur/PKGBUILD PKGBUILD
+          cp ../packaging/aur/LICENSE LICENSE
+          cp ../packaging/aur/.gitignore .gitignore
+
+      - name: Pin the PKGBUILD to the requested version
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, sys
+
+          begin = "# ---AUR-VERSION-BEGIN---"
+          end = "# ---AUR-VERSION-END---"
+          version = os.environ["APP_VERSION"]
+          sha = os.environ["SHA256"]
+          path = "aur-pkg/PKGBUILD"
+
+          lines = open(path).read().splitlines()
+          try:
+              first = lines.index(begin)
+              last = lines.index(end)
+          except ValueError:
+              sys.exit(f"::error::markers not found in {path}")
+          if last < first:
+              sys.exit("::error::markers are in the wrong order")
+
+          block = [
+              begin,
+              f"pkgver={version}",
+              # Always 1: the tag names one commit, so a new version is a new
+              # pkgver. pkgrel only moves for a packaging change to the same
+              # version, and that is a manual edit.
+              "pkgrel=1",
+              'source=("cross-cleaner-v${pkgver}.tar.gz::'
+              'https://github.com/Cross-Cleaner/Cross-Cleaner/archive/refs/tags/v${pkgver}.tar.gz")',
+              f"sha256sums=('{sha}')",
+              end,
+          ]
+          open(path, "w").write("\n".join(lines[:first] + block + lines[last + 1:]) + "\n")
+          print(f"PKGBUILD pinned to {version}")
+          PY
+
+      - name: Regenerate .SRCINFO
+        run: |
+          set -euo pipefail
+          cd aur-pkg
+          makepkg --printsrcinfo -p PKGBUILD > .SRCINFO
+          echo "--- .SRCINFO ---"
+          cat .SRCINFO
+          # The version in .SRCINFO is what the AUR page displays; if it did not
+          # move, the orphanage would not notice an update.
+          grep -q "pkgver = ${APP_VERSION}$" .SRCINFO \
+            || { echo "::error::.SRCINFO does not carry version ${APP_VERSION}"; exit 1; }
+
+      - name: Show the change
+        run: |
+          cd aur-pkg
+          git --no-pager diff --stat
+          git --no-pager diff -- PKGBUILD
+
+      - name: Push to AUR
+        if: ${{ !inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          cd aur-pkg
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "AUR already carries $APP_VERSION, nothing to push"
+            exit 0
+          fi
+          git add PKGBUILD .SRCINFO LICENSE .gitignore
+          git commit -m "cross-cleaner ${APP_VERSION}"
+          # AUR rejects non-fast-forward pushes, so this must build on master.
+          git push origin master
+
+      - name: Report the dry run
+        if: ${{ inputs.dry_run }}
+        run: |
+          echo "Dry run: AUR would be updated to ${APP_VERSION} (checksum ${SHA256:-computed above})."
