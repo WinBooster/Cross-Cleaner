@@ -3126,35 +3126,6 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Program Files\\ONLYOFFICE\\DesktopEditors",
-    "class": "Office",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "OnlyOffice",
-    "files_to_remove": [
-      "3DPARTYLICENSE.txt",
-      "LICENSE.txt"
-    ]
-  },
-  {
-    "path": "{drive}Program Files\\ONLYOFFICE\\DesktopEditors",
-    "class": "Office",
-    "category": "Documentation",
-    "program": "OnlyOffice",
-    "files_to_remove": [
-      "index.html"
-    ]
-  },
-  {
-    "path": "{drive}Program Files (x86)\\OpenOffice 4\\program",
-    "class": "Office",
-    "category": "Documentation",
-    "program": "OpenOffice",
-    "files_to_remove": [
-      "NOTICE"
-    ]
-  },
-  {
     "path": "{drive}Users\\*\\AppData\\Roaming\\librewolf\\Profiles\\*",
     "class": "Browser",
     "category": "Browser",
@@ -4336,6 +4307,26 @@
     ]
   },
   {
+    "path": "{drive}Program Files\\ONLYOFFICE\\DesktopEditors",
+    "class": "Office",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "OnlyOffice",
+    "files_to_remove": [
+      "3DPARTYLICENSE.txt",
+      "LICENSE.txt"
+    ]
+  },
+  {
+    "path": "{drive}Program Files\\ONLYOFFICE\\DesktopEditors",
+    "class": "Office",
+    "category": "Documentation",
+    "program": "OnlyOffice",
+    "files_to_remove": [
+      "index.html"
+    ]
+  },
+  {
     "path": "{drive}Users\\*\\AppData\\Roaming\\OONI Probe",
     "class": "Security",
     "category": "Logs",
@@ -4389,6 +4380,15 @@
     "program": "OpenCode Desktop",
     "directories_to_remove": [
       "Cache"
+    ]
+  },
+  {
+    "path": "{drive}Program Files (x86)\\OpenOffice 4\\program",
+    "class": "Office",
+    "category": "Documentation",
+    "program": "OpenOffice",
+    "files_to_remove": [
+      "NOTICE"
     ]
   },
   {
