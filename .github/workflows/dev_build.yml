@@ -20,7 +20,6 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  APP_VERSION: "2.0.1"
 
 jobs:
   formating_code:
@@ -29,9 +28,15 @@ jobs:
     name: Formating code
     steps:
       - uses: actions/checkout@v4
-      - name: Update Cargo.toml version
-        run: |
-          find . -name Cargo.toml -exec sed -i 's/^version = .*/version = "${{ env.APP_VERSION }}"/' {} +
+      # No version rewriting here on purpose. This job runs on every push and
+      # PR that touches a .rs or .toml file, and it used to hardcode
+      # APP_VERSION = "2.0.1" and write it into every Cargo.toml before
+      # committing. That fought release.yml, which writes the real release
+      # version, so the two ping-ponged the manifests between 2.0.1 and 2.0.4
+      # and every tag inherited whichever value it happened to be created on --
+      # v2.0.4.2.5 shipped 2.0.4, v2.0.4.2.4 shipped 2.0.1. It also left
+      # Cargo.lock disagreeing with the manifests, which is why `cargo build
+      # --locked` failed. release.yml is the single owner of the version.
       - name: Formating code
         run: cargo fmt
       - name: Commit changes
