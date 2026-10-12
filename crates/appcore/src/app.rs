@@ -316,7 +316,7 @@ impl AppState {
             #[cfg(windows)]
             registry_database,
 
-            window_title: format!("Cross Cleaner v{}", get_version()),
+            window_title: String::from("Cross Cleaner"),
         }
     }
 

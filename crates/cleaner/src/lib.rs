@@ -783,6 +783,38 @@ pub async fn scan_data(data: &CleanerData) -> CleanerResult {
     walk_data(data, Mode::Measure).await
 }
 
+/// Creates a directory symlink at `link` pointing at `target`, reporting whether
+/// the platform allowed it.
+///
+/// Windows only grants that privilege to Developer Mode or an elevated token, so
+/// a machine with neither cannot set up the tree a test needs. Reporting it —
+/// rather than unwrapping — lets those tests skip instead of failing for a
+/// reason that has nothing to do with the cleaner.
+#[cfg(test)]
+pub(crate) fn dir_symlink(target: &Path, link: &Path) -> bool {
+    #[cfg(unix)]
+    let created = std::os::unix::fs::symlink(target, link);
+    #[cfg(windows)]
+    let created = std::os::windows::fs::symlink_dir(target, link);
+    created.is_ok()
+}
+
+/// Whether a test that could not create its directory symlink has to stop.
+///
+/// The reason is printed rather than swallowed: a silently shortened test looks
+/// exactly like one that passed on its own merits, and these tests exist
+/// precisely to prove the cleaner refuses to walk through a link.
+#[cfg(test)]
+pub(crate) fn skip_without_symlink(created: bool) -> bool {
+    if !created {
+        eprintln!(
+            "skipped: this platform would not create a directory symlink \
+             (Windows needs Developer Mode or an elevated token)"
+        );
+    }
+    !created
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1402,11 +1434,6 @@ mod tests {
     #[cfg(any(windows, unix))]
     #[tokio::test]
     async fn test_clear_data_named_paths_do_not_follow_directory_links() {
-        #[cfg(unix)]
-        use std::os::unix::fs::symlink as symlink_dir;
-        #[cfg(windows)]
-        use std::os::windows::fs::symlink_dir;
-
         let temp_dir = TempDir::new().unwrap();
         let base = temp_dir.path().join("base");
         let outside = temp_dir.path().join("outside");
@@ -1414,7 +1441,9 @@ mod tests {
         fs::create_dir(&outside).unwrap();
         fs::write(outside.join("keep.txt"), b"keep").unwrap();
         fs::create_dir(outside.join("keep_dir")).unwrap();
-        symlink_dir(&outside, base.join("link")).unwrap();
+        if skip_without_symlink(dir_symlink(&outside, &base.join("link"))) {
+            return;
+        }
 
         let mut data = create_test_data(base.to_string_lossy().into_owned());
         data.files_to_remove = vec!["link/keep.txt".into()];
@@ -1429,11 +1458,6 @@ mod tests {
     #[cfg(any(windows, unix))]
     #[tokio::test]
     async fn test_clear_data_does_not_follow_linked_match_parent() {
-        #[cfg(unix)]
-        use std::os::unix::fs::symlink as symlink_dir;
-        #[cfg(windows)]
-        use std::os::windows::fs::symlink_dir;
-
         let temp_dir = TempDir::new().unwrap();
         let base = temp_dir.path().join("base");
         let outside = temp_dir.path().join("outside");
@@ -1441,7 +1465,9 @@ mod tests {
         fs::create_dir(&outside).unwrap();
         let keep = outside.join("keep.tmp");
         fs::write(&keep, b"keep").unwrap();
-        symlink_dir(&outside, base.join("link")).unwrap();
+        if skip_without_symlink(dir_symlink(&outside, &base.join("link"))) {
+            return;
+        }
 
         let mut data = create_test_data(format!("{}/link/*.tmp", base.display()));
         data.flags.insert(CleanerFlags::REMOVE_FILES);
@@ -1454,18 +1480,15 @@ mod tests {
     #[cfg(any(windows, unix))]
     #[tokio::test]
     async fn test_clear_data_named_paths_refuse_linked_root() {
-        #[cfg(unix)]
-        use std::os::unix::fs::symlink as symlink_dir;
-        #[cfg(windows)]
-        use std::os::windows::fs::symlink_dir;
-
         let temp_dir = TempDir::new().unwrap();
         let outside = temp_dir.path().join("outside");
         fs::create_dir(&outside).unwrap();
         let keep = outside.join("keep.txt");
         fs::write(&keep, b"keep").unwrap();
         let link = temp_dir.path().join("link");
-        symlink_dir(&outside, &link).unwrap();
+        if skip_without_symlink(dir_symlink(&outside, &link)) {
+            return;
+        }
 
         let mut data = create_test_data(link.to_string_lossy().into_owned());
         data.files_to_remove = vec!["keep.txt".into()];
@@ -1533,8 +1556,6 @@ mod tests {
     #[cfg(windows)]
     #[tokio::test]
     async fn test_clear_data_junction_inside_tree_not_followed() {
-        use std::os::windows::fs::symlink_dir;
-
         let temp_dir = TempDir::new().unwrap();
         let base = temp_dir.path().join("base");
         fs::create_dir(&base).unwrap();
@@ -1544,7 +1565,9 @@ mod tests {
         fs::write(target.join("valuable.txt"), b"keep").unwrap();
 
         let link = base.join("link");
-        symlink_dir(&target, &link).unwrap();
+        if skip_without_symlink(dir_symlink(&target, &link)) {
+            return;
+        }
 
         let mut data = create_test_data(base.to_str().unwrap().to_string());
         data.flags.insert(CleanerFlags::REMOVE_ALL_IN_DIR);
@@ -1586,15 +1609,15 @@ mod tests {
     #[cfg(windows)]
     #[tokio::test]
     async fn test_clear_data_refuses_junction_root() {
-        use std::os::windows::fs::symlink_dir;
-
         let temp_dir = TempDir::new().unwrap();
         let target = temp_dir.path().join("target");
         fs::create_dir(&target).unwrap();
         fs::write(target.join("valuable.txt"), b"keep").unwrap();
 
         let link = temp_dir.path().join("link");
-        symlink_dir(&target, &link).unwrap();
+        if skip_without_symlink(dir_symlink(&target, &link)) {
+            return;
+        }
 
         let mut data = create_test_data(link.to_str().unwrap().to_string());
         data.flags.insert(CleanerFlags::REMOVE_ALL_IN_DIR);

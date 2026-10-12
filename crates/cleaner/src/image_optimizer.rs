@@ -182,11 +182,7 @@ mod tests {
     #[cfg(any(windows, unix))]
     #[test]
     fn linked_image_parent_is_refused() {
-        #[cfg(unix)]
-        use std::os::unix::fs::symlink as symlink_dir;
-        #[cfg(windows)]
-        use std::os::windows::fs::symlink_dir;
-
+        use crate::{dir_symlink, skip_without_symlink};
         let temp_dir = tempfile::tempdir().unwrap();
         let outside = temp_dir.path().join("outside");
         std::fs::create_dir(&outside).unwrap();
@@ -194,7 +190,9 @@ mod tests {
         RgbaImage::new(2, 2).save(&image).unwrap();
         let original = std::fs::read(&image).unwrap();
         let link = temp_dir.path().join("link");
-        symlink_dir(&outside, &link).unwrap();
+        if skip_without_symlink(dir_symlink(&outside, &link)) {
+            return;
+        }
 
         assert!(optimize_single(&link.join("image.png")).is_err());
         assert_eq!(std::fs::read(&image).unwrap(), original);
