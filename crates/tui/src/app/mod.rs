@@ -50,8 +50,10 @@ use appcore::app::AppState;
 use appcore::sounds;
 use appcore::updater::{self, UpdateState, UpdaterCommand};
 use database::version::{Changelog, NewRelease};
+use ratatui::layout::Rect;
 use ratatui::style::Style;
 
+use crate::pages::results::ResultSort;
 use crate::theme::Theme;
 
 pub(crate) use click::{Click, HitAreas, UpdateAction};
@@ -71,6 +73,21 @@ pub struct TuiApp {
     pub program_cursor: usize,
     /// Cursor on the results table.
     pub result_cursor: usize,
+    /// Which column the results table is ordered by, and which way.
+    ///
+    /// On the app rather than in the run: the report is the cleaner's data and
+    /// the order is the reader's, so the two must not be able to overwrite one
+    /// another — see [`crate::pages::results::sorted_rows`].
+    pub result_sort: ResultSort,
+    /// The report's column labels, while the wheel over them has something to
+    /// undo.
+    ///
+    /// Its own field rather than a [`HitAreas`] entry: the labels answer clicks
+    /// through their own targets, registered later, so a lookup would find those
+    /// first and the wheel would scroll the table instead of clearing the sort.
+    /// `None` while there is no sort to clear, which is also what leaves the
+    /// wheel scrolling over the border as it always did.
+    pub result_header: Option<Rect>,
     /// Cursor on the settings page.
     pub settings_cursor: usize,
 
@@ -138,6 +155,8 @@ impl TuiApp {
             category_cursor: 0,
             program_cursor: 0,
             result_cursor: 0,
+            result_sort: ResultSort::default(),
+            result_header: None,
             settings_cursor: 0,
             input: InputMode::Normal,
             popup: None,
@@ -173,6 +192,12 @@ impl TuiApp {
         self.state.drain_progress();
         if self.state.poll_result() {
             self.result_cursor = 0;
+            // A new report arrives in the cleaner's own order, so the sort the
+            // reader chose on the last one does not carry over onto it: it was an
+            // answer to a question about those numbers.
+            self.result_sort = ResultSort::default();
+            // And nothing is left to undo over the labels either.
+            self.result_header = None;
             // A new run replaces the report, so an overlay pointing into the old
             // one has nothing left to describe.
             self.details = None;

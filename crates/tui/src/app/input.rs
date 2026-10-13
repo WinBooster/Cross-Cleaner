@@ -13,11 +13,12 @@ use appcore::sounds;
 use crossterm::event::{
     Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers, MouseButton, MouseEvent, MouseEventKind,
 };
-use ratatui::layout::Rect;
+use ratatui::layout::{Position, Rect};
 use ratatui::widgets::ListState;
 
 use crate::keymap;
 use crate::pages;
+use crate::pages::results::{ResultSort, SortColumn, sorted_rows};
 
 use super::TuiApp;
 use super::click::{Click, UpdateAction};
@@ -52,6 +53,7 @@ impl TuiApp {
     /// buffer coordinates [`TuiApp::render`] drew into and the rectangles
     /// registered last frame line up with it.
     fn on_mouse(&mut self, mouse: MouseEvent) {
+        let at = Position::new(mouse.column, mouse.row);
         match mouse.kind {
             // Only the press, so dragging the button across the screen cannot
             // fire an action on every widget it passes over.
@@ -65,8 +67,8 @@ impl TuiApp {
                     self.open_menu(click);
                 }
             }
-            MouseEventKind::ScrollUp => self.scroll(-1),
-            MouseEventKind::ScrollDown => self.scroll(1),
+            MouseEventKind::ScrollUp => self.scroll(-1, at),
+            MouseEventKind::ScrollDown => self.scroll(1, at),
             // Motion, drags and the other buttons belong to terminal text
             // selection; the app has nothing to say about them.
             _ => {}
@@ -120,6 +122,11 @@ impl TuiApp {
             Click::Next => self.advance_to_programs(),
             Click::StartCleaning => self.start_cleaning(),
             Click::ResultRow(row) => self.toggle_details(row),
+            // One label, three answers, and the button alone says which one: the
+            // chain is built by clicking, never by holding a modifier down —
+            // terminals do not all report one, and a control that works only on
+            // the ones that do is a control that is not there.
+            Click::SortColumn(column) => self.cycle_result_sort(column),
             // A line of the overlay is text, like a changelog line: the click is
             // swallowed rather than answered, which is also what keeps it from
             // dismissing the overlay the user is reading.
@@ -136,7 +143,12 @@ impl TuiApp {
     }
 
     /// Moves whatever is under the wheel by `notches`.
-    fn scroll(&mut self, notches: isize) {
+    ///
+    /// `at` is where the wheel is: the report's labels are a target for it, and
+    /// that is the one place the wheel clears the sort instead of scrolling —
+    /// the sort is what is drawn there, so it is what a wheel over it should
+    /// undo. Everywhere else the wheel keeps scrolling, as it always did.
+    fn scroll(&mut self, notches: isize, at: Position) {
         if self.changelog_open {
             // A release note is far longer than its overlay, so here the wheel
             // has to scroll the content itself rather than move a cursor.
@@ -155,6 +167,12 @@ impl TuiApp {
             // The overlay is one long list of checkboxes, and the selection is
             // what scrolls it.
             self.move_popup(notches, len);
+            return;
+        }
+        // After the overlays, never before: one of them owns the screen, and a
+        // scroll over it belongs to it rather than to the report underneath.
+        if self.over_result_header(at) {
+            self.reset_result_sort();
             return;
         }
         let step = notches * WHEEL_STEP;
@@ -527,6 +545,51 @@ impl TuiApp {
             .map_or(0, |data| data.3.len())
     }
 
+    /// The results rows in the order the table draws them: indices into the
+    /// run's own list.
+    ///
+    /// Every row the page counts goes through here — the drawn rows, the row
+    /// targets, [`Self::path_count`] and the overlay behind `Enter` — because a
+    /// sort is one decision, and re-deriving the order at each of those places
+    /// is how one of them ends up a row out and opens another program's paths.
+    pub fn result_order(&self) -> Vec<usize> {
+        self.state
+            .cleared_data
+            .as_ref()
+            .map_or(Vec::new(), |data| sorted_rows(&data.3, &self.result_sort))
+    }
+
+    /// Puts `column` into the sort, or walks it out of it again.
+    ///
+    /// Clicking a label cycles it through the three states a column of the sort
+    /// can be in — out of it, in it as it reads best, in it the other way round —
+    /// so a chain of two or three columns is built and taken apart with the same
+    /// button, in the same place, and a secondary column can be reversed without
+    /// costing the reader the chain around it.
+    fn cycle_result_sort(&mut self, column: SortColumn) {
+        self.result_sort = self.result_sort.cycled(column);
+        sfx("click", sounds::click);
+    }
+
+    /// Puts the report back in the order the run produced it.
+    ///
+    /// Only ever called with something to clear: the wheel's rectangle is not
+    /// recorded while the chain is empty, so this cannot swallow a scroll that
+    /// was meant for the table.
+    fn reset_result_sort(&mut self) {
+        self.result_sort = ResultSort::default();
+        sfx("click", sounds::click);
+    }
+
+    /// True while the pointer is over the report's column labels.
+    ///
+    /// Kept out of [`HitAreas`] on purpose: the labels' own targets cover the
+    /// same row and are registered later, so a lookup would find them first and
+    /// the wheel would scroll the table instead of clearing the sort.
+    fn over_result_header(&self, at: Position) -> bool {
+        self.result_header.is_some_and(|area| area.contains(at))
+    }
+
     /// Opens the deleted-path list of the results row at `row`, or closes it when
     /// that row is already open.
     ///
@@ -580,10 +643,15 @@ impl TuiApp {
 
     /// Deleted paths of one results row — the lines the overlay lists.
     pub fn path_count(&self, row: usize) -> usize {
+        // Through the drawn order, like every other row: `row` is a position in
+        // the table, not in the run's list.
+        let Some(&index) = self.result_order().get(row) else {
+            return 0;
+        };
         self.state
             .cleared_data
             .as_ref()
-            .and_then(|data| data.3.get(row))
+            .and_then(|data| data.3.get(index))
             .map_or(0, |cleared| cleared.paths.len())
     }
 

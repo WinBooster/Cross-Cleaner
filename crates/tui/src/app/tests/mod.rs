@@ -122,6 +122,11 @@ fn right_click_on(app: &mut TuiApp, width: u16, height: u16, needle: &str) {
 
 /// Turns the wheel at a screen position, positive for a downward notch.
 fn wheel(app: &mut TuiApp, notches: isize) {
+    wheel_at(app, 0, 0, notches)
+}
+
+/// [`wheel`] at a screen position, for the targets that are not the whole screen.
+fn wheel_at(app: &mut TuiApp, column: u16, row: u16, notches: isize) {
     let kind = if notches > 0 {
         MouseEventKind::ScrollDown
     } else {
@@ -130,8 +135,8 @@ fn wheel(app: &mut TuiApp, notches: isize) {
     for _ in 0..notches.abs() {
         app.on_event(Event::Mouse(MouseEvent {
             kind,
-            column: 0,
-            row: 0,
+            column,
+            row,
             modifiers: KeyModifiers::NONE,
         }));
     }
@@ -367,6 +372,100 @@ fn results_app() -> TuiApp {
     app
 }
 
+/// One results row with its numbers set by hand.
+///
+/// [`cleared`] derives the counts from the paths it is given, which is fine for
+/// a test about the path list and useless for one about sorting: there every
+/// column has to be able to disagree with the others.
+fn report_row(
+    program: &str,
+    bytes: u64,
+    files: u64,
+    dirs: u64,
+    categories: &[&str],
+    path: &str,
+) -> database::structures::Cleared {
+    use database::structures::{Cleared, ClearedPath};
+    Cleared {
+        program: program.to_string(),
+        removed_bytes: bytes,
+        removed_files: files,
+        removed_directories: dirs,
+        affected_categories: categories.iter().map(|name| (*name).to_string()).collect(),
+        paths: vec![ClearedPath {
+            path: (*path).into(),
+            removed_bytes: bytes,
+            removed_files: files,
+            removed_directories: 0,
+        }],
+        paths_omitted: 0,
+    }
+}
+
+/// A finished run in an order that is neither name nor size, with columns that
+/// disagree with one another — so a sort has something to change, and the column
+/// it changed cannot be guessed from another one.
+///
+/// * report order — ShareX, Visual Studio Code, Adobe
+/// * size — VS Code first, then the two 1 KB rows, largest first on a tie
+/// * files — ShareX has most, VS Code fewest: the reverse of the size order
+/// * dirs — VS Code has most, ShareX none at all
+/// * categories — `Backups, Cache` / `Cache` / `Logs` reads in a third order
+///   again, and none of the three orders is the same as either of the others.
+///
+/// Each row still carries one path of its own, so the overlay behind `Enter` can
+/// be checked against the order the table is drawn in.
+fn sortable_results_app() -> TuiApp {
+    let mut app = sample_app();
+    app.state.cleared_data = Some((
+        6144,
+        9,
+        3,
+        Arc::from(vec![
+            report_row("ShareX", 1024, 4, 0, &["Logs"], "C:/sharex/a"),
+            report_row("Visual Studio Code", 4096, 2, 2, &["Cache"], "C:/vscode/a"),
+            report_row("Adobe", 1024, 3, 1, &["Backups", "Cache"], "C:/adobe/a"),
+        ]),
+    ));
+    app.state.current_page = Page::Results;
+    app
+}
+
+/// A report long enough for the wheel to have somewhere to go, whose columns run
+/// opposite ways.
+///
+/// A notch moves the cursor three rows, so a three-row report sends it straight
+/// back to the first of them — and a test that the wheel moves it would then pass
+/// or fail for a reason that has nothing to do with the wheel. The counts run
+/// against the sizes for the other half of the reason: a fixture whose columns all
+/// rank the same way cannot tell one sort from another.
+fn scrolling_results_app() -> TuiApp {
+    let mut app = sample_app();
+    app.state.cleared_data = Some((
+        21_504,
+        21,
+        15,
+        Arc::from(
+            (0..6)
+                .map(|n| {
+                    let size = (6 - n) as u64;
+                    let count = (n + 1) as u64;
+                    report_row(
+                        &format!("App{n}"),
+                        size * 1024,
+                        count,
+                        size - 1,
+                        &["Cache"],
+                        &format!("C:/app{n}"),
+                    )
+                })
+                .collect::<Vec<_>>(),
+        ),
+    ));
+    app.state.current_page = Page::Results;
+    app
+}
+
 /// A changelog long enough to overflow any overlay.
 fn long_changelog() -> Changelog {
     Changelog {
@@ -437,6 +536,63 @@ fn header_line<'a>(screen: &'a str, lines: &[&'a str]) -> &'a str {
         .find(|line| line.starts_with('╭') && line.contains("Program"))
         .copied()
         .unwrap_or_else(|| panic!("no header row:\n{screen}"))
+}
+
+/// The top border of the report, which is where the column labels live.
+fn report_header(app: &mut TuiApp, width: u16, height: u16) -> (String, usize) {
+    let screen = draw(app, width, height);
+    let lines: Vec<&str> = screen.lines().collect();
+    let header = header_line(&screen, &lines);
+    let row = screen
+        .lines()
+        .position(|line| line == header)
+        .expect("the header is a line of the frame");
+    (header.to_string(), row)
+}
+
+/// The bottom border of the report, which carries the sort chain and the frame's
+/// own hints.
+fn frame_foot(screen: &str) -> &str {
+    screen
+        .lines()
+        .find(|line| line.starts_with('╰'))
+        .unwrap_or_else(|| panic!("the frame has no foot:\n{screen}"))
+}
+
+/// Clicks a column label in the report's top border.
+///
+/// Goes through the drawn label rather than through the layout constants, for
+/// the same reason [`click_on`] does: a target and the glyph it belongs to are
+/// drawn from the same geometry, and a test that hardcoded the geometry would
+/// pass even once they had drifted apart.
+fn click_header(app: &mut TuiApp, width: u16, height: u16, label: &str) {
+    let (header, row) = report_header(app, width, height);
+    let column = column_of(&header, label).unwrap_or_else(|| panic!("no {label:?} in {header:?}"));
+    click(app, column as u16, row as u16);
+}
+
+/// Screen position of the report's column labels: where the wheel clears the sort.
+fn header_at(app: &mut TuiApp, width: u16, height: u16) -> (u16, usize) {
+    let (header, row) = report_header(app, width, height);
+    let column = column_of(&header, "Program").expect("the header carries the labels");
+    (column as u16, row)
+}
+
+/// Asserts the drawn report lists `names` top to bottom, in that order.
+///
+/// An order is not a set of values, so it has to be read off the screen: the row
+/// each name was drawn on, compared in sequence. That is the whole claim the sort
+/// makes — which line comes first — and it is what a reader of the report sees.
+#[track_caller]
+fn assert_row_order(screen: &str, names: &[&str]) {
+    let rows: Vec<usize> = names
+        .iter()
+        .map(|name| position_of(screen, name).1)
+        .collect();
+    assert!(
+        rows.windows(2).all(|pair| pair[0] < pair[1]),
+        "expected {names:?} top to bottom, found them on rows {rows:?}:\n{screen}",
+    );
 }
 
 // --- locks that keep process-global state out of each other's way ---

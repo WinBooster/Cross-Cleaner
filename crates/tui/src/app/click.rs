@@ -8,6 +8,8 @@
 
 use ratatui::layout::{Position, Rect};
 
+use crate::pages::results::SortColumn;
+
 /// What a left click on a rectangle of the last frame does.
 ///
 /// Every variant names the action, never the widget: [`TuiApp::run`] sends each
@@ -43,6 +45,14 @@ pub(crate) enum Click {
     StartCleaning,
     /// A row of the results table: open the paths it deleted.
     ResultRow(usize),
+    /// A column label in the report's top border: walk its column into or out of
+    /// the sort.
+    ///
+    /// The labels are drawn inside the frame rather than above it, so this target
+    /// sits on the border — one row above the rows it re-orders. One target for
+    /// three answers, because the left button is the only one a terminal can be
+    /// relied upon to report: the wheel over the same border is the way back out.
+    SortColumn(SortColumn),
     /// A line of the open path overlay. It does nothing by itself, but it has to
     /// exist: without it the backdrop underneath would close the overlay on a
     /// click inside it.

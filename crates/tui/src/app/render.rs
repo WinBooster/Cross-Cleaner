@@ -31,6 +31,9 @@ impl TuiApp {
         self.refresh_popup();
         self.refresh_changelog();
         self.hits.clear();
+        // Likewise the wheel's own rectangle: a frame that does not draw the
+        // labels must not leave a border that still clears a sort.
+        self.result_header = None;
 
         let area = frame.area();
         frame.render_widget(
@@ -147,6 +150,10 @@ impl TuiApp {
                 "S start",
             ],
             Page::Clearing => &["cleaning, please wait"],
+            // Nothing about the sort here: it is not a key, and the frame's own
+            // bottom border says how it is reached — on the labels it is drawn
+            // on, rather than in a line the terminal clips before a reader has
+            // read it.
             Page::Results => &["↑↓ scroll", "enter paths", "esc back"],
             Page::Settings => &["↑↓ pick", "←→ volume", "r reset", "esc back"],
         };

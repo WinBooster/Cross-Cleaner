@@ -164,6 +164,99 @@ fn the_results_table_advertises_the_path_list() {
     assert!(screen.contains("enter paths"), "{screen}");
 }
 
+/// A row means one program, and a sort moves the rows around — so `Enter` has to
+/// keep following the row it was aimed at. Counting in the run's own list would
+/// open the paths of whichever program landed on that position, which is a
+/// different answer every time the table was re-ordered.
+#[test]
+fn enter_on_a_sorted_row_opens_that_rows_paths() {
+    let mut app = sortable_results_app();
+    // Biggest first, which is not the order the run reported.
+    click_header(&mut app, 100, 30, "Size");
+    press(&mut app, KeyCode::Enter);
+
+    let screen = draw(&mut app, 100, 30);
+    assert!(screen.contains("C:/vscode/a"), "{screen}");
+    assert!(!screen.contains("C:/sharex/a"), "{screen}");
+}
+
+/// The same for the row's own target: after a sort the click targets have to be
+/// counted in the order the rows are drawn in, not in the run's list.
+#[test]
+fn clicking_a_sorted_row_opens_that_rows_paths() {
+    let mut app = sortable_results_app();
+    // Most files first, so Adobe moves up to the second row from the bottom.
+    click_header(&mut app, 100, 30, "Files");
+    let screen = draw(&mut app, 100, 30);
+    assert_row_order(&screen, &["ShareX", "Adobe", "Visual Studio Code"]);
+
+    click_on(&mut app, 100, 30, "Adobe");
+    let screen = draw(&mut app, 100, 30);
+    assert!(screen.contains("C:/adobe/a"), "{screen}");
+    assert!(!screen.contains("C:/vscode/a"), "{screen}");
+}
+
+/// The cursor counts rows the same way the targets do, so moving down and
+/// pressing `Enter` lands on the row below the one that is highlighted.
+#[test]
+fn the_cursor_counts_rows_in_the_drawn_order() {
+    let mut app = sortable_results_app();
+    click_header(&mut app, 100, 30, "Dirs");
+    // Dirs descending: VS Code, Adobe, ShareX.
+    press(&mut app, KeyCode::Down);
+    press(&mut app, KeyCode::Enter);
+    let screen = draw(&mut app, 100, 30);
+    assert!(screen.contains("C:/adobe/a"), "{screen}");
+}
+
+/// A new run is a new report: it arrives in the cleaner's own order, and the
+/// order the reader chose for the last one is an answer about *those* numbers,
+/// not a setting to carry onto a table whose values are all different now.
+#[test]
+fn a_finished_run_reports_itself_in_its_own_order() {
+    // A real run, so the report really arrives through the channel the app polls.
+    let _serial = sequential();
+    let _guard = DiagnosticsGuard::install();
+    let mut app = sortable_results_app();
+    click_header(&mut app, 100, 30, "Size");
+    let (header, _) = report_header(&mut app, 100, 30);
+    assert!(
+        header.contains("Size ↓"),
+        "the sort is in force: {header:?}"
+    );
+
+    // The sample entries have nothing to remove, so no file is touched and the
+    // report that comes back is empty — the header is all there is to read.
+    app.state.current_page = Page::ProgramSelection;
+    app.state.cleared_data = None;
+    let runtime = tokio::runtime::Builder::new_multi_thread()
+        .worker_threads(2)
+        .enable_all()
+        .build()
+        .expect("runtime");
+    runtime.block_on(async {
+        app.state.start_cleaning();
+    });
+    for _ in 0..500 {
+        app.tick();
+        if app.state.current_page == Page::Results {
+            break;
+        }
+        std::thread::sleep(Duration::from_millis(10));
+    }
+    assert_eq!(
+        app.state.current_page,
+        Page::Results,
+        "the run never finished",
+    );
+
+    let (header, _) = report_header(&mut app, 100, 30);
+    assert!(
+        !header.contains('↓') && !header.contains('↑'),
+        "a new report is ordered by nobody: {header:?}",
+    );
+}
+
 /// A path is the one string on this page that cannot be shortened, so the
 /// overlay takes the width it can. It used to take three quarters of the
 /// screen and cap out at 110 columns: at 120 columns that left the box 90

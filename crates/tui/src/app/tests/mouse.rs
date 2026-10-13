@@ -375,6 +375,416 @@ fn a_category_without_subcategories_keeps_its_whole_cell_clickable() {
     assert!(app.popup.is_none(), "there is nothing to open");
 }
 
+/// The column labels are the sort control: the report has to be re-orderable
+/// without the keyboard, because the labels are the only thing on screen that
+/// says the table can be. Clicking `Program` is what puts it in name order —
+/// an order no run produces on its own.
+#[test]
+fn clicking_a_column_label_orders_the_report_by_that_column() {
+    let mut app = sortable_results_app();
+    click_header(&mut app, 100, 30, "Program");
+    let screen = draw(&mut app, 100, 30);
+    assert_row_order(&screen, &["Adobe", "ShareX", "Visual Studio Code"]);
+}
+
+/// The same label again turns the order around: one control, two answers, which
+/// is what a header in an ordinary table does and what a terminal has room for.
+///
+/// The two 1 KB rows fall back to their names, which read the same way round in
+/// both directions: `size ↓` is *the biggest, and among equals A–Z*.
+#[test]
+fn clicking_the_same_label_again_reverses_the_order() {
+    let mut app = sortable_results_app();
+    click_header(&mut app, 100, 30, "Size");
+    let largest_first = draw(&mut app, 100, 30);
+    assert_row_order(&largest_first, &["Visual Studio Code", "Adobe", "ShareX"]);
+
+    click_header(&mut app, 100, 30, "Size");
+    let smallest_first = draw(&mut app, 100, 30);
+    assert_row_order(&smallest_first, &["Adobe", "ShareX", "Visual Studio Code"]);
+}
+
+/// Every column is a control, not only the one a report is usually read by.
+/// `Files` is the sharpest check: the fixture's file counts run the opposite way
+/// to its sizes, so an order that came from anywhere else fails here.
+#[test]
+fn every_column_label_sorts_the_report() {
+    for (label, expected) in [
+        ("Files", &["ShareX", "Adobe", "Visual Studio Code"][..]),
+        ("Dirs", &["Visual Studio Code", "Adobe", "ShareX"][..]),
+        ("Categories", &["Adobe", "Visual Studio Code", "ShareX"][..]),
+    ] {
+        let mut app = sortable_results_app();
+        click_header(&mut app, 100, 30, label);
+        let screen = draw(&mut app, 100, 30);
+        assert_row_order(&screen, expected);
+    }
+}
+
+/// The order has to be readable without clicking anything, since the header is
+/// the only place it can be said: the column it was asked for carries the arrow,
+/// the direction with it, and no other column is marked.
+#[test]
+fn the_sorted_column_is_marked_with_its_direction() {
+    let mut app = sortable_results_app();
+    click_header(&mut app, 100, 30, "Size");
+    let (header, _) = report_header(&mut app, 100, 30);
+    assert!(header.contains("Size ↓"), "the biggest first: {header:?}");
+    assert_eq!(
+        header.matches(['↓', '↑']).count(),
+        1,
+        "only one column is marked: {header:?}",
+    );
+
+    click_header(&mut app, 100, 30, "Size");
+    let (header, _) = report_header(&mut app, 100, 30);
+    assert!(header.contains("Size ↑"), "the other way round: {header:?}");
+}
+
+/// A mark must not cost the labels their place: the arrow goes inside the cell,
+/// so a column still starts where its own values do — which is the whole reason
+/// the arrow is drawn inside the cell rather than after it.
+#[test]
+fn a_marked_label_stays_over_its_own_column() {
+    let mut app = sortable_results_app();
+    let (plain, _) = report_header(&mut app, 110, 24);
+    click_header(&mut app, 110, 24, "Dirs");
+    let (marked, _) = report_header(&mut app, 110, 24);
+
+    for label in ["Program", "Size", "Files", "Dirs", "Categories"] {
+        assert_eq!(
+            column_of(&plain, label),
+            column_of(&marked, label),
+            "{label} moved when another column was ordered: {marked:?}",
+        );
+    }
+    // And the column after the marked one still sits over its own values.
+    let screen = draw(&mut app, 110, 24);
+    let row = screen
+        .lines()
+        .find(|line| line.contains("Visual Studio Code"))
+        .expect("the row is on screen");
+    assert_eq!(
+        column_of(&marked, "Categories"),
+        column_of(row, "Cache"),
+        "the last label must stay over the last column: {marked:?} / {row:?}",
+    );
+}
+
+/// The report arrives in the order the cleaner produced it, and claims nothing
+/// about it: nothing is marked until a column is picked, and the first click on
+/// a column is not a reversal of a sort that was never made.
+#[test]
+fn the_report_starts_in_the_runs_own_order() {
+    let mut app = sortable_results_app();
+    let screen = draw(&mut app, 100, 30);
+    assert_row_order(&screen, &["ShareX", "Visual Studio Code", "Adobe"]);
+    let (header, _) = report_header(&mut app, 100, 30);
+    assert!(
+        !header.contains('↓') && !header.contains('↑'),
+        "no column is ordered yet: {header:?}",
+    );
+}
+
+/// A click on a row is still a click on a row. The header targets are drawn on
+/// the border, one line above the first row, so neither has swallowed the other.
+#[test]
+fn clicking_a_row_does_not_reorder_the_report() {
+    let mut app = sortable_results_app();
+    click_on(&mut app, 100, 30, "Adobe");
+    assert!(
+        app.details.is_some(),
+        "a row click opens the paths it deleted",
+    );
+    let (header, _) = report_header(&mut app, 100, 30);
+    assert!(
+        !header.contains('↓') && !header.contains('↑'),
+        "and orders nothing: {header:?}",
+    );
+}
+
+/// The sort is a click on a word inside the frame, which nothing else in this
+/// interface would teach — so the frame's own bottom border has to say it is
+/// there, and that the wheel over those words is the way back out of it.
+#[test]
+fn the_results_border_hints_the_sort_and_its_reset() {
+    let mut app = sortable_results_app();
+    let screen = draw(&mut app, 100, 30);
+    let foot = frame_foot(&screen);
+    assert!(
+        foot.contains("click to sort"),
+        "the border has to name the control:\n{foot}",
+    );
+    assert!(
+        foot.contains("wheel clears"),
+        "and the way back out of it:\n{foot}",
+    );
+    // Both live on the frame the labels are drawn in, so nothing about the mouse
+    // has to survive a footer the terminal clips.
+    assert!(
+        !screen.lines().last().unwrap_or_default().contains("sort"),
+        "the footer is for keys, and the sort is not one:\n{screen}",
+    );
+}
+
+/// A second column is a second click on a second label, with no modifier held
+/// down: a terminal that does not report one would otherwise not have the
+/// control at all, which on Windows is most of them.
+///
+/// The column clicked last is the one that decides, so the click has to *show*
+/// something: the fixture's file counts run the opposite way to its sizes, with
+/// no ties anywhere, so a second column that only ever broke ties would leave the
+/// list exactly as it was. A click that cannot be seen is a click nobody makes
+/// twice.
+#[test]
+fn a_second_column_takes_over_the_order() {
+    let mut app = scrolling_results_app();
+    click_header(&mut app, 100, 30, "Size");
+    let by_size_alone = draw(&mut app, 100, 30);
+    assert_row_order(
+        &by_size_alone,
+        &["App0", "App1", "App2", "App3", "App4", "App5"],
+    );
+
+    click_header(&mut app, 100, 30, "Files");
+    let by_files_then_size = draw(&mut app, 100, 30);
+    assert_row_order(
+        &by_files_then_size,
+        &["App5", "App4", "App3", "App2", "App1", "App0"],
+    );
+    // Both columns are still in the chain: the first one is not thrown away, it
+    // is what breaks the new column's ties.
+    let (header, _) = report_header(&mut app, 100, 30);
+    assert!(header.contains("Files ↓"), "the click decides: {header:?}");
+    assert!(
+        header.contains("Size ↓"),
+        "and size is under it: {header:?}"
+    );
+}
+
+/// Two columns both marked with arrows say nothing about which of them decides,
+/// so the frame's bottom border spells the chain out in the order it is applied.
+#[test]
+fn the_marked_columns_are_listed_in_the_order_they_are_applied() {
+    let mut app = sortable_results_app();
+    click_header(&mut app, 100, 30, "Size");
+    click_header(&mut app, 100, 30, "Files");
+    let screen = draw(&mut app, 100, 30);
+    let bottom = frame_foot(&screen);
+    assert!(
+        bottom.contains("files ↓ then size ↓"),
+        "the chain reads dominant first, which is what `then` means: {bottom:?}",
+    );
+}
+
+/// A click on a column already in the chain walks it through its three states —
+/// the way it reads best, the other way, gone — so a *secondary* key can be
+/// reversed or dropped without giving up the whole chain. A key nobody could
+/// reverse would be half a control.
+#[test]
+fn a_click_walks_a_column_through_its_states() {
+    let mut app = sortable_results_app();
+    // First click: it joins the chain, read the way `Files` reads.
+    click_header(&mut app, 100, 30, "Files");
+    assert_row_order(
+        &draw(&mut app, 100, 30),
+        &["ShareX", "Adobe", "Visual Studio Code"],
+    );
+
+    // Second: the other way round. The fixture's file counts are all different,
+    // so the whole list turns — which is what must not be mistaken for "nothing
+    // happened".
+    click_header(&mut app, 100, 30, "Files");
+    assert_row_order(
+        &draw(&mut app, 100, 30),
+        &["Visual Studio Code", "Adobe", "ShareX"],
+    );
+    let (header, _) = report_header(&mut app, 100, 30);
+    assert!(header.contains("Files ↑"), "{header:?}");
+
+    // Third: out of the chain, back to the order the run reported.
+    click_header(&mut app, 100, 30, "Files");
+    let screen = draw(&mut app, 100, 30);
+    assert_row_order(&screen, &["ShareX", "Visual Studio Code", "Adobe"]);
+    let (header, _) = report_header(&mut app, 100, 30);
+    assert!(
+        !header.contains('↑') && !header.contains('↓'),
+        "the chain is empty again, so nothing is marked: {header:?}",
+    );
+}
+
+/// A secondary key has to be reversible *where it stands*: reversing it must not
+/// cost the reader the chain around it.
+#[test]
+fn a_secondary_key_is_reversed_in_place() {
+    let mut app = sortable_results_app();
+    click_header(&mut app, 100, 30, "Size");
+    click_header(&mut app, 100, 30, "Files");
+    // Reverse the key that decides; the one under it is not touched, and the file
+    // counts now run the other way.
+    click_header(&mut app, 100, 30, "Files");
+    let screen = draw(&mut app, 100, 30);
+    assert_row_order(&screen, &["Visual Studio Code", "Adobe", "ShareX"]);
+    let (header, _) = report_header(&mut app, 100, 30);
+    assert!(
+        header.contains("Files ↑"),
+        "the deciding key was reversed: {header:?}",
+    );
+    assert!(
+        header.contains("Size ↓"),
+        "and the one under it stands: {header:?}",
+    );
+    assert!(
+        frame_foot(&screen).contains("files ↑ then size ↓"),
+        "and the border says the same: {:?}",
+        frame_foot(&screen),
+    );
+}
+
+/// A chain can grow past the frame that has to show it, and a right-aligned
+/// title is clipped from the *left* — so a chain that overflowed would lose its
+/// first key, which is the one that decides. The hints are the half that goes
+/// instead: they are in the footer line too.
+#[test]
+fn a_chain_too_long_for_the_frame_keeps_its_own_head() {
+    let mut app = sortable_results_app();
+    for label in ["Size", "Files", "Dirs", "Categories"] {
+        click_header(&mut app, 100, 30, label);
+    }
+    let screen = draw(&mut app, 100, 30);
+    assert!(
+        frame_foot(&screen).contains("3 cleaned · categories ↑ then dirs ↓"),
+        "the chain's head has to survive the frame:\n{}",
+        frame_foot(&screen),
+    );
+    let (header, _) = report_header(&mut app, 100, 30);
+    for label in ["Size ↓", "Files ↓", "Dirs ↓", "Categories ↑"] {
+        assert!(
+            header.contains(label),
+            "{label} is in the chain: {header:?}"
+        );
+    }
+}
+
+/// The wheel over the labels is the way back out of a chain of three, and it has
+/// to be all of it at once: walking three columns out one click at a time is the
+/// kind of chore a gesture exists to remove.
+#[test]
+fn the_wheel_over_the_labels_clears_the_sort() {
+    let mut app = sortable_results_app();
+    for label in ["Size", "Files", "Dirs"] {
+        click_header(&mut app, 100, 30, label);
+    }
+    let sorted = draw(&mut app, 100, 30);
+    assert!(
+        frame_foot(&sorted).contains("then"),
+        "the premise: a chain is in force:\n{}",
+        frame_foot(&sorted),
+    );
+
+    let (column, row) = header_at(&mut app, 100, 30);
+    wheel_at(&mut app, column, row as u16, 1);
+
+    let cleared = draw(&mut app, 100, 30);
+    assert_row_order(&cleared, &["ShareX", "Visual Studio Code", "Adobe"]);
+    let (header, _) = report_header(&mut app, 100, 30);
+    assert!(
+        !header.contains('↓') && !header.contains('↑'),
+        "the chain is gone: {header:?}",
+    );
+}
+
+/// The wheel belongs to the rows everywhere else: a report is a page, not a long
+/// list, and a scroll that threw the sort away would make the control useless.
+#[test]
+fn the_wheel_over_the_rows_still_scrolls() {
+    let mut app = scrolling_results_app();
+    click_header(&mut app, 100, 30, "Size");
+    let cursor = app.result_cursor;
+    let screen = draw(&mut app, 100, 30);
+    let (column, row) = position_of(&screen, "App3");
+
+    wheel_at(&mut app, column as u16, row as u16, 1);
+    assert_ne!(
+        app.result_cursor, cursor,
+        "the wheel moves the cursor over a row",
+    );
+    let (header, _) = report_header(&mut app, 100, 30);
+    assert!(
+        header.contains("Size ↓"),
+        "and left the sort alone: {header:?}"
+    );
+}
+
+/// With nothing to undo there is nothing to intercept: the border must not take
+/// the wheel away from the table just by being where the pointer happens to be.
+#[test]
+fn the_wheel_over_the_labels_scrolls_when_there_is_no_sort() {
+    let mut app = scrolling_results_app();
+    let cursor = app.result_cursor;
+    let (column, row) = header_at(&mut app, 100, 30);
+    wheel_at(&mut app, column, row as u16, 1);
+    assert_ne!(
+        app.result_cursor, cursor,
+        "an unsorted report has nothing to clear, so the wheel still scrolls",
+    );
+}
+
+/// The wheel is the report's own: while the path list is up it scrolls the list,
+/// header row included, because the overlay owns the screen.
+#[test]
+fn the_wheel_over_the_labels_scrolls_the_open_path_list() {
+    // One row, but a long list behind it: the list has to be able to move, or
+    // the wheel would have nothing to answer and the test would prove nothing.
+    let mut app = sample_app();
+    let paths: Vec<(String, u64)> = (0..40)
+        .map(|n| (format!("C:/cache/file{n}"), n as u64))
+        .collect();
+    let paths: Vec<(&str, u64)> = paths
+        .iter()
+        .map(|(path, bytes)| (path.as_str(), *bytes))
+        .collect();
+    app.state.cleared_data = Some((780, 40, 0, Arc::from(vec![cleared("Chrome", 780, &paths)])));
+    app.state.current_page = Page::Results;
+    click_header(&mut app, 100, 30, "Size");
+    press(&mut app, KeyCode::Enter);
+    let scroll = app.details.as_ref().map(|details| details.scroll);
+
+    let (column, row) = header_at(&mut app, 100, 30);
+    wheel_at(&mut app, column, row as u16, 1);
+    let after = app.details.as_ref().map(|details| details.scroll);
+    assert!(
+        after > scroll,
+        "the overlay took the wheel, not the report underneath: {scroll:?} then {after:?}",
+    );
+    let (header, _) = report_header(&mut app, 100, 30);
+    assert!(
+        header.contains("Size ↓"),
+        "and the sort is untouched: {header:?}",
+    );
+}
+/// The sort targets are measured off the frame's own geometry, so a terminal
+/// that cannot fit the columns is the case where they would run off the screen —
+/// and a target that escapes the box answers clicks meant for whatever is drawn
+/// there instead. Every cell of every size has to stay harmless.
+#[test]
+fn the_sorted_report_survives_a_tiny_terminal() {
+    let mut app = sortable_results_app();
+    // Ordered once, on a frame wide enough to draw the labels at all: below
+    // that the sort is simply not on screen, which is a different question from
+    // whether the targets that were registered are still inside the box.
+    click_header(&mut app, 100, 30, "Size");
+    for (width, height) in [(100, 30), (40, 10), (20, 6), (8, 3), (1, 1)] {
+        draw(&mut app, width, height);
+        for column in 0..width {
+            for row in 0..height {
+                click(&mut app, column, row);
+                right_click(&mut app, column, row);
+            }
+        }
+    }
+}
+
 #[test]
 fn clicking_next_advances_to_the_program_page() {
     let mut app = sample_app();
