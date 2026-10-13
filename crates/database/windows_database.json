@@ -7145,5 +7145,25 @@
     "directories_to_remove": [
       "LOGS"
     ]
+  },
+  {
+    "path": "{drive}Users\\*\\.herdr\\packages\\standalone\\current",
+    "class": "AI",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Herdr",
+    "directories_to_remove": [
+      "THIRD-PARTY-NOTICES"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\.herdr\\packages\\standalone\\releases\\*",
+    "class": "AI",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Herdr",
+    "directories_to_remove": [
+      "THIRD-PARTY-NOTICES"
+    ]
   }
 ]
