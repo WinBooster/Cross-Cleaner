@@ -2398,6 +2398,26 @@
     ]
   },
   {
+    "path": "{drive}Users\\*\\.herdr\\packages\\standalone\\current",
+    "class": "AI",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Herdr",
+    "directories_to_remove": [
+      "THIRD-PARTY-NOTICES"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\.herdr\\packages\\standalone\\releases\\*",
+    "class": "AI",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Herdr",
+    "directories_to_remove": [
+      "THIRD-PARTY-NOTICES"
+    ]
+  },
+  {
     "path": "{drive}Program Files (x86)\\HiAlgo\\Plugins\\BOOST",
     "class": "Optimization",
     "category": "Documentation",
@@ -7144,26 +7164,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\.herdr\\packages\\standalone\\current",
-    "class": "AI",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "Herdr",
-    "directories_to_remove": [
-      "THIRD-PARTY-NOTICES"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\.herdr\\packages\\standalone\\releases\\*",
-    "class": "AI",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "Herdr",
-    "directories_to_remove": [
-      "THIRD-PARTY-NOTICES"
     ]
   }
 ]
