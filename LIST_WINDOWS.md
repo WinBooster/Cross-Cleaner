@@ -58,7 +58,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Blockwork | Logs |
+| 1 | [Blockwork](https://blockworked.com) | Logs |
 
 
 ## Browser
@@ -121,9 +121,9 @@
 | --- | --- | --- |
 | 1 | [Anaconda](https://www.anaconda.com/download) | Documentation, Logs |
 | 2 | [BoxedAppPacker](https://www.boxedapp.com/boxedapppacker/download.html) | Documentation |
-| 3 | Bun | Cache |
+| 3 | [Bun](https://bun.com) | Cache |
 | 4 | [CMake](https://cmake.org) | Documentation |
-| 5 | Cargo | Cache |
+| 5 | [Cargo](https://github.com/rust-lang/cargo) | Cache |
 | 6 | [Docker](https://www.docker.com/products/docker-desktop) | Logs |
 | 7 | [DotNet](https://dotnet.microsoft.com/en-us/download) | Logs |
 | 8 | [Enigma Virtual Box](https://enigmaprotector.com/en/downloads.html) | Documentation |
@@ -133,7 +133,7 @@
 | 12 | [Gradle](https://gradle.org) | Cache |
 | 13 | [IDA Pro](https://hex-rays.com/ida-pro) | Cache |
 | 14 | [Inno Setup 6](https://jrsoftware.org/isdl.php#stable) | Documentation |
-| 15 | Inno Setup 7 | Documentation |
+| 15 | [Inno Setup 7](https://jrsoftware.org/isdl.php#stable) | Documentation |
 | 16 | [Insomnia](https://insomnia.rest) | Cache, Logs |
 | 17 | [Java](https://www.java.com/download) | Documentation |
 | 18 | [Kache](https://github.com/kunobi-ninja/kache) | Logs |
@@ -209,8 +209,8 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | HomeBank | Documentation |
-| 2 | Quantower | Cache, Logs |
+| 1 | [HomeBank](https://www.gethomebank.org) | Documentation |
+| 2 | [Quantower](https://www.quantower.com) | Cache, Logs |
 
 
 ## Game
