@@ -42,6 +42,8 @@
   "Cliamp": "https://github.com/bjarneo/cliamp",
   "WaveFlow": "https://github.com/InstaZDLL/WaveFlow",
 
+  "Blockwork": "https://blockworked.com",
+
   "Brave Browser": "https://brave.com/download",
   "Microsoft Edge": "https://www.microsoft.com/edge",
   "Google Chrome": "https://www.google.com/intl/en/chrome",
@@ -131,10 +133,12 @@
   "Jdk": "https://www.oracle.com/java/technologies/downloads",
   "Anaconda": "https://www.anaconda.com/download",
   "GTK": "https://www.gtk.org",
+  "Bun": "https://bun.com",
   "Ghidra": "https://github.com/NationalSecurityAgency/ghidra",
   "Gradle": "https://gradle.org",
   "BoxedAppPacker": "https://www.boxedapp.com/boxedapppacker/download.html",
   "CMake": "https://cmake.org",
+  "Cargo": "https://github.com/rust-lang/cargo",
   "Docker": "https://www.docker.com/products/docker-desktop",
   "DotNet": "https://dotnet.microsoft.com/en-us/download",
   "Enigma Virtual Box": "https://enigmaprotector.com/en/downloads.html",
@@ -142,6 +146,7 @@
   "Go Language": "https://go.dev/doc/install",
   "IDA Pro": "https://hex-rays.com/ida-pro",
   "Inno Setup 6": "https://jrsoftware.org/isdl.php#stable",
+  "Inno Setup 7": "https://jrsoftware.org/isdl.php#stable",
   "Java": "https://www.java.com/download",
   "MCCreator": "https://mcreator.net/download",
   "MinGW": "https://www.mingw-w64.org/downloads",
@@ -179,6 +184,14 @@
   "Memu": "https://www.memuplay.com/download.html",
   "Nox": "https://bignox.com/nox-app-player",
   "Ruffle": "https://github.com/ruffle-rs/ruffle",
+
+  "MTT File Manager": "https://github.com/MTTamurex/MTT-File-Manager-RUST",
+  "Total Commander": "https://www.ghisler.com",
+
+  "OnionShare": "https://onionshare.org",
+
+  "HomeBank": "https://www.gethomebank.org",
+  "Quantower": "https://www.quantower.com",
 
   "Lutris": "https://lutris.net/downloads",
   "Garry's mod": "https://store.steampowered.com/app/4000/Garrys_Mod",
@@ -306,11 +319,6 @@
   "Windows": "https://www.microsoft.com/download/windows",
   "Windows Defender": "https://www.microsoft.com/download/windows",
   "Windows PowerShell": "https://www.microsoft.com/download/windows",
-
-  "MTT File Manager": "https://github.com/MTTamurex/MTT-File-Manager-RUST",
-  "Total Commander": "https://www.ghisler.com",
-
-  "OnionShare": "https://onionshare.org",
 
   "ImgBurn": "https://www.imgburn.com/index.php?act=download",
   "OneDrive": "https://www.microsoft.com/microsoft-365/onedrive/online-cloud-storage"
