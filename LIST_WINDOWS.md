@@ -11,7 +11,7 @@
 | --- | --- | --- |
 | 1 | [Cherry Studio](https://github.com/cherryhq/cherry-studio) | Logs |
 | 2 | [Copilot](https://copilot.microsoft.com) | Logs |
-| 3 | Herdr | Documentation |
+| 3 | [Herdr](https://herdr.dev) | Documentation |
 | 4 | [Kilo Code](https://kilo.ai) | Logs |
 | 5 | [LM Studio](https://lmstudio.ai/download) | LastActivity, Logs |
 | 6 | [Microsoft Lobe](https://github.com/orgs/lobe) | Logs |
