@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.4.3.1
+# Windows Clearing Programs Catalog v2.0.4.3.2
 **Total categories in database:** 12
 
-**Total programs in database:** 272
+**Total programs in database:** 273
 
-**Total pathes in database:** 583
+**Total pathes in database:** 585
 
 ## AI
 
@@ -11,11 +11,12 @@
 | --- | --- | --- |
 | 1 | [Cherry Studio](https://github.com/cherryhq/cherry-studio) | Logs |
 | 2 | [Copilot](https://copilot.microsoft.com) | Logs |
-| 3 | [Kilo Code](https://kilo.ai) | Logs |
-| 4 | [LM Studio](https://lmstudio.ai/download) | LastActivity, Logs |
-| 5 | [Microsoft Lobe](https://github.com/orgs/lobe) | Logs |
-| 6 | [OpenCode](https://opencode.ai/download) | LastActivity, Logs |
-| 7 | [OpenCode Desktop](https://opencode.ai/download) | Cache, Logs |
+| 3 | Herdr | Documentation |
+| 4 | [Kilo Code](https://kilo.ai) | Logs |
+| 5 | [LM Studio](https://lmstudio.ai/download) | LastActivity, Logs |
+| 6 | [Microsoft Lobe](https://github.com/orgs/lobe) | Logs |
+| 7 | [OpenCode](https://opencode.ai/download) | LastActivity, Logs |
+| 8 | [OpenCode Desktop](https://opencode.ai/download) | Cache, Logs |
 
 
 ## AntiCheat
