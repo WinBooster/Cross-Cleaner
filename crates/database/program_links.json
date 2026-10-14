@@ -1,4 +1,5 @@
 {
+  "Codex": "https://github.com/openai/codex",
   "Copilot": "https://copilot.microsoft.com",
   "Cherry Studio": "https://github.com/cherryhq/cherry-studio",
   "Kilo Code": "https://kilo.ai",
@@ -46,6 +47,7 @@
   "Blockwork": "https://blockworked.com",
 
   "Brave Browser": "https://brave.com/download",
+  "Brave Origin": "https://brave.com/origin",
   "Microsoft Edge": "https://www.microsoft.com/edge",
   "Google Chrome": "https://www.google.com/intl/en/chrome",
   "LibreWolf": "https://librewolf.net/installation",
@@ -85,6 +87,7 @@
   "GenOffice": "https://genoffice.ai",
   "OnlyOffice": "https://www.onlyoffice.com",
   "LibreOffice": "https://www.libreoffice.org/download/download-libreoffice",
+  "OpenOffice": "https://www.openoffice.org",
 
   "CrystalCry": "https://crystalcry.org",
   "HiAlgo Boost": "https://www.hialgo.com",
@@ -102,6 +105,8 @@
   "KeePass 2": "https://keepass.info/download.html",
   "KeePassXC": "https://keepassxc.org/download",
   "QtPass": "https://qtpass.org",
+
+  "Snapper": "https://github.com/openSUSE/snapper",
 
   "Flow Launcher": "https://www.flowlauncher.com",
 
@@ -305,6 +310,8 @@
   "VLC": "https://www.videolan.org/vlc",
   "iTop Screen Recorder": "https://recorder.itopvpn.com",
 
+  "Apt": "https://manpages.ubuntu.com/manpages/xenial/man8/apt.8.html",
+  "Pacman": "https://pacman.archlinux.page",
   "Yay": "https://github.com/Jguer/yay",
   "Chocolatey": "https://chocolatey.org/install",
   "Scoop": "https://scoop.sh",
