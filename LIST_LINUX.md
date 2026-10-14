@@ -9,7 +9,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Codex | Cache, Logs |
+| 1 | [Codex](https://github.com/openai/codex) | Cache, Logs |
 | 2 | [OpenCode](https://opencode.ai/download) | LastActivity, Logs |
 
 
@@ -29,7 +29,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [Brave Browser](https://brave.com/download) | Browser, Cache |
-| 2 | Brave Origin | Browser, Cache |
+| 2 | [Brave Origin](https://brave.com/origin) | Browser, Cache |
 | 3 | [Google Chrome](https://www.google.com/intl/en/chrome) | Browser, Cache |
 | 4 | [LibreWolf](https://librewolf.net/installation) | Browser, Cache |
 | 5 | [Mozilla Firefox](https://www.mozilla.org/firefox/new) | Browser, Cache |
@@ -142,8 +142,8 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Apt | Cache |
-| 2 | Pacman | Cache, Logs |
+| 1 | [Apt](https://manpages.ubuntu.com/manpages/xenial/man8/apt.8.html) | Cache |
+| 2 | [Pacman](https://pacman.archlinux.page) | Cache, Logs |
 | 3 | [Yay](https://github.com/Jguer/yay) | Cache |
 
 
@@ -158,7 +158,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Snapper | Logs |
+| 1 | [Snapper](https://github.com/openSUSE/snapper) | Logs |
 
 
 ## System
