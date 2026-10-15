@@ -7165,5 +7165,25 @@
     "directories_to_remove": [
       "LOGS"
     ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\DDNet",
+    "class": "Game",
+    "category": "Downloads",
+    "program": "DDNet",
+    "directories_to_remove": [
+      "downloadedmaps",
+      "downloadedskins"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\DDNet",
+    "class": "Game",
+    "category": "Game",
+    "sub_category": "Saved records",
+    "program": "DDNet",
+    "directories_to_remove": [
+      "ghosts"
+    ]
   }
 ]
