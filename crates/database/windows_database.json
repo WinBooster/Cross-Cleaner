@@ -7185,5 +7185,14 @@
     "directories_to_remove": [
       "ghosts"
     ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Photocraft",
+    "class": "Image",
+    "category": "Logs",
+    "program": "PhotoCraft",
+    "directories_to_remove": [
+      "logs"
+    ]
   }
 ]
