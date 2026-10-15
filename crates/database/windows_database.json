@@ -321,6 +321,16 @@
     ]
   },
   {
+    "path": "{drive}Users\\*\\AppData\\Local\\ArtCraft Launcher",
+    "class": "Program Launcher",
+    "category": "Logs",
+    "program": "ArtCraft Launcher",
+    "directories_to_remove": [
+      "Logs",
+      "logs"
+    ]
+  },
+  {
     "path": "{drive}Program Files (x86)\\ASIO4ALL v2",
     "class": "Audio",
     "category": "Documentation",
@@ -1848,6 +1858,16 @@
     ]
   },
   {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\FilmCraft",
+    "class": "Video",
+    "category": "Logs",
+    "program": "FilmCraft",
+    "directories_to_remove": [
+      "Logs",
+      "logs"
+    ]
+  },
+  {
     "path": "{drive}Program Files\\Image-Line\\*",
     "class": "Audio",
     "category": "Documentation",
@@ -2358,6 +2378,16 @@
     "category": "Logs",
     "program": "GribLand",
     "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\GridCraft",
+    "class": "Data Base",
+    "category": "Logs",
+    "program": "GridCraft",
+    "directories_to_remove": [
+      "Logs",
+      "logs"
+    ]
   },
   {
     "path": "{drive}Users\\*\\Documents\\GTA San Andreas User Files\\SAMP",
@@ -6215,6 +6245,16 @@
     "remove_directory_after_clean": true
   },
   {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\VectorCraft",
+    "class": "Image",
+    "category": "Logs",
+    "program": "VectorCraft",
+    "directories_to_remove": [
+      "Logs",
+      "logs"
+    ]
+  },
+  {
     "path": "{drive}Program Files\\VeraCrypt",
     "class": "Security",
     "category": "Documentation",
@@ -7091,6 +7131,16 @@
     ]
   },
   {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\WordCraft",
+    "class": "Office",
+    "category": "Logs",
+    "program": "WordCraft",
+    "directories_to_remove": [
+      "Logs",
+      "logs"
+    ]
+  },
+  {
     "path": "{drive}Users\\*\\.minecraftx\\instances\\*",
     "class": "Minecraft Launcher",
     "category": "Logs",
@@ -7330,56 +7380,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\WordCraft",
-    "class": "Office",
-    "category": "Logs",
-    "program": "WordCraft",
-    "directories_to_remove": [
-      "Logs",
-      "logs"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Local\\ArtCraft Launcher",
-    "class": "Program Launcher",
-    "category": "Logs",
-    "program": "ArtCraft Launcher",
-    "directories_to_remove": [
-      "Logs",
-      "logs"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\FilmCraft",
-    "class": "Video",
-    "category": "Logs",
-    "program": "FilmCraft",
-    "directories_to_remove": [
-      "Logs",
-      "logs"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\GridCraft",
-    "class": "Data Base",
-    "category": "Logs",
-    "program": "GridCraft",
-    "directories_to_remove": [
-      "Logs",
-      "logs"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\VectorCraft",
-    "class": "Image",
-    "category": "Logs",
-    "program": "VectorCraft",
-    "directories_to_remove": [
-      "Logs",
-      "logs"
     ]
   }
 ]
