@@ -7300,5 +7300,14 @@
     "directories_to_remove": [
       "LOGS"
     ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\WordCraft",
+    "class": "Office",
+    "category": "Logs",
+    "program": "WordCraft",
+    "directories_to_remove": [
+      "logs"
+    ]
   }
 ]
