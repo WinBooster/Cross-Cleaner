@@ -311,6 +311,16 @@
     ]
   },
   {
+    "path": "{drive}Users\\*\\AppData\\Local\\ArtCraft Launcher",
+    "class": "Program Launcher",
+    "category": "Logs",
+    "program": "ArtCraft Launcher",
+    "directories_to_remove": [
+      "Logs",
+      "logs"
+    ]
+  },
+  {
     "path": "{drive}Program Files (x86)\\ASIO4ALL v2",
     "class": "Audio",
     "category": "Documentation",
@@ -1825,6 +1835,16 @@
     "program": "Fatality",
     "directories_to_remove": [
       "fatality"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\FilmCraft",
+    "class": "Video",
+    "category": "Logs",
+    "program": "FilmCraft",
+    "directories_to_remove": [
+      "Logs",
+      "logs"
     ]
   },
   {
@@ -7061,6 +7081,16 @@
     ]
   },
   {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\WordCraft",
+    "class": "Office",
+    "category": "Logs",
+    "program": "WordCraft",
+    "directories_to_remove": [
+      "Logs",
+      "logs"
+    ]
+  },
+  {
     "path": "{drive}Users\\*\\.minecraftx\\instances\\*",
     "class": "Minecraft Launcher",
     "category": "Logs",
@@ -7300,36 +7330,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\WordCraft",
-    "class": "Office",
-    "category": "Logs",
-    "program": "WordCraft",
-    "directories_to_remove": [
-      "Logs",
-      "logs"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Local\\ArtCraft Launcher",
-    "class": "Program Launcher",
-    "category": "Logs",
-    "program": "ArtCraft Launcher",
-    "directories_to_remove": [
-      "Logs",
-      "logs"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\FilmCraft",
-    "class": "Video",
-    "category": "Logs",
-    "program": "FilmCraft",
-    "directories_to_remove": [
-      "Logs",
-      "logs"
     ]
   }
 ]
