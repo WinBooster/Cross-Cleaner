@@ -7309,5 +7309,14 @@
     "directories_to_remove": [
       "logs"
     ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\ArtCraft Launcher",
+    "class": "Program Launcher",
+    "category": "Logs",
+    "program": "ArtCraft Launcher",
+    "directories_to_remove": [
+      "logs"
+    ]
   }
 ]
