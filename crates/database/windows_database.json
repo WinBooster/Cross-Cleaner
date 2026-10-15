@@ -7275,5 +7275,28 @@
       "docs",
       "doc"
     ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Minetest\\mods\\*",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "Luanti",
+    "files_to_remove": [
+      "README.md",
+      "MIGRATING.md",
+      "LICENSE.txt",
+      "LICENSE.md",
+      "LEGAL.md",
+      "GROUPS.md",
+      "DEV_TRANSLATION_WORKFLOW.md",
+      "CREDITS.md",
+      "CONTRIBUTING.md",
+      "API.md",
+      ".gitignore"
+    ],
+    "directories_to_remove": [
+      "docs",
+      "doc"
+    ]
   }
 ]
