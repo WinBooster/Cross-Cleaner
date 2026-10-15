@@ -7318,5 +7318,14 @@
     "directories_to_remove": [
       "logs"
     ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\FilmCraft",
+    "class": "Office",
+    "category": "Logs",
+    "program": "FilmCraft",
+    "directories_to_remove": [
+      "Logs"
+    ]
   }
 ]
