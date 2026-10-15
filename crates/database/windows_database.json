@@ -7225,5 +7225,55 @@
       "Widelands.url",
       "Widelands-Onlinehelp.url"
     ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\luanti\\*",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "Luanti",
+    "directories_to_remove": [
+      "doc"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Minetest",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Luanti",
+    "files_to_remove": [
+      "debug.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Minetest",
+    "class": "Game",
+    "category": "Cache",
+    "program": "Luanti",
+    "directories_to_remove": [
+      "cache"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Minetest\\games\\*",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "Luanti",
+    "files_to_remove": [
+      "README.md",
+      "MIGRATING.md",
+      "LICENSE.txt",
+      "LICENSE.md",
+      "LEGAL.md",
+      "GROUPS.md",
+      "DEV_TRANSLATION_WORKFLOW.md",
+      "CREDITS.md",
+      "CONTRIBUTING.md",
+      "API.md",
+      ".gitignore"
+    ],
+    "directories_to_remove": [
+      "docs",
+      "doc"
+    ]
   }
 ]
