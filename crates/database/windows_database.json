@@ -1349,6 +1349,26 @@
     ]
   },
   {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\DDNet",
+    "class": "Game",
+    "category": "Downloads",
+    "program": "DDNet",
+    "directories_to_remove": [
+      "downloadedmaps",
+      "downloadedskins"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\DDNet",
+    "class": "Game",
+    "category": "Game",
+    "sub_category": "Saved records",
+    "program": "DDNet",
+    "directories_to_remove": [
+      "ghosts"
+    ]
+  },
+  {
     "path": "{drive}Users\\*\\AppData\\Local\\DeepL_SE\\cache\\*",
     "class": "Text",
     "category": "Cache",
@@ -3402,6 +3422,81 @@
     "remove_files": true
   },
   {
+    "path": "{drive}Users\\*\\AppData\\Local\\luanti\\*",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "Luanti",
+    "directories_to_remove": [
+      "doc"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Minetest",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Luanti",
+    "files_to_remove": [
+      "debug.txt"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Minetest",
+    "class": "Game",
+    "category": "Cache",
+    "program": "Luanti",
+    "directories_to_remove": [
+      "cache"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Minetest\\games\\*",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "Luanti",
+    "files_to_remove": [
+      "README.md",
+      "MIGRATING.md",
+      "LICENSE.txt",
+      "LICENSE.md",
+      "LICENSE",
+      "LEGAL.md",
+      "GROUPS.md",
+      "DEV_TRANSLATION_WORKFLOW.md",
+      "CREDITS.md",
+      "CONTRIBUTING.md",
+      "API.md",
+      ".gitignore"
+    ],
+    "directories_to_remove": [
+      "docs",
+      "doc"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Minetest\\mods\\*",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "Luanti",
+    "files_to_remove": [
+      "README.md",
+      "MIGRATING.md",
+      "LICENSE.txt",
+      "LICENSE.md",
+      "LICENSE",
+      "LEGAL.md",
+      "GROUPS.md",
+      "DEV_TRANSLATION_WORKFLOW.md",
+      "CREDITS.md",
+      "CONTRIBUTING.md",
+      "API.md",
+      ".gitignore"
+    ],
+    "directories_to_remove": [
+      "docs",
+      "doc"
+    ]
+  },
+  {
     "path": "{drive}Users\\*\\.lunarclient",
     "class": "Minecraft Launcher",
     "category": "Accounts",
@@ -4703,6 +4798,15 @@
     "program": "Pandora",
     "remove_directories": true,
     "remove_files": true
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Photocraft",
+    "class": "Image",
+    "category": "Logs",
+    "program": "PhotoCraft",
+    "directories_to_remove": [
+      "logs"
+    ]
   },
   {
     "path": "{drive}Users\\*\\pipx",
@@ -6401,6 +6505,37 @@
     ]
   },
   {
+    "path": "{drive}Users\\*\\AppData\\Local\\Widelands",
+    "class": "Game",
+    "category": "Documentation",
+    "sub_category": "Change logs",
+    "program": "Widelands",
+    "files_to_remove": [
+      "ChangeLog"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\Widelands",
+    "class": "Game",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Widelands",
+    "files_to_remove": [
+      "COPYING"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\Widelands",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "Widelands",
+    "files_to_remove": [
+      "CREDITS",
+      "Widelands.url",
+      "Widelands-Onlinehelp.url"
+    ]
+  },
+  {
     "path": "{drive}Program Files\\Windhawk\\Compiler",
     "class": "Utility",
     "category": "Documentation",
@@ -7164,141 +7299,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\DDNet",
-    "class": "Game",
-    "category": "Downloads",
-    "program": "DDNet",
-    "directories_to_remove": [
-      "downloadedmaps",
-      "downloadedskins"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\DDNet",
-    "class": "Game",
-    "category": "Game",
-    "sub_category": "Saved records",
-    "program": "DDNet",
-    "directories_to_remove": [
-      "ghosts"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\Photocraft",
-    "class": "Image",
-    "category": "Logs",
-    "program": "PhotoCraft",
-    "directories_to_remove": [
-      "logs"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Local\\Widelands",
-    "class": "Game",
-    "category": "Documentation",
-    "sub_category": "Change logs",
-    "program": "Widelands",
-    "files_to_remove": [
-      "ChangeLog"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Local\\Widelands",
-    "class": "Game",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "Widelands",
-    "files_to_remove": [
-      "COPYING"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Local\\Widelands",
-    "class": "Game",
-    "category": "Documentation",
-    "program": "Widelands",
-    "files_to_remove": [
-      "CREDITS",
-      "Widelands.url",
-      "Widelands-Onlinehelp.url"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Local\\luanti\\*",
-    "class": "Game",
-    "category": "Documentation",
-    "program": "Luanti",
-    "directories_to_remove": [
-      "doc"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\Minetest",
-    "class": "Game",
-    "category": "Logs",
-    "program": "Luanti",
-    "files_to_remove": [
-      "debug.txt"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\Minetest",
-    "class": "Game",
-    "category": "Cache",
-    "program": "Luanti",
-    "directories_to_remove": [
-      "cache"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\Minetest\\games\\*",
-    "class": "Game",
-    "category": "Documentation",
-    "program": "Luanti",
-    "files_to_remove": [
-      "README.md",
-      "MIGRATING.md",
-      "LICENSE.txt",
-      "LICENSE.md",
-      "LICENSE",
-      "LEGAL.md",
-      "GROUPS.md",
-      "DEV_TRANSLATION_WORKFLOW.md",
-      "CREDITS.md",
-      "CONTRIBUTING.md",
-      "API.md",
-      ".gitignore"
-    ],
-    "directories_to_remove": [
-      "docs",
-      "doc"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\Minetest\\mods\\*",
-    "class": "Game",
-    "category": "Documentation",
-    "program": "Luanti",
-    "files_to_remove": [
-      "README.md",
-      "MIGRATING.md",
-      "LICENSE.txt",
-      "LICENSE.md",
-      "LICENSE",
-      "LEGAL.md",
-      "GROUPS.md",
-      "DEV_TRANSLATION_WORKFLOW.md",
-      "CREDITS.md",
-      "CONTRIBUTING.md",
-      "API.md",
-      ".gitignore"
-    ],
-    "directories_to_remove": [
-      "docs",
-      "doc"
     ]
   }
 ]
