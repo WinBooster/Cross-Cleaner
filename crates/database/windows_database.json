@@ -7194,5 +7194,36 @@
     "directories_to_remove": [
       "logs"
     ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\Widelands",
+    "class": "Game",
+    "category": "Documentation",
+    "sub_category": "Change logs",
+    "program": "Widelands",
+    "files_to_remove": [
+      "ChangeLog"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\Widelands",
+    "class": "Game",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Widelands",
+    "files_to_remove": [
+      "COPYING"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\Widelands",
+    "class": "Game",
+    "category": "Documentation",
+    "program": "Widelands",
+    "files_to_remove": [
+      "CREDITS",
+      "Widelands.url",
+      "Widelands-Onlinehelp.url"
+    ]
   }
 ]
