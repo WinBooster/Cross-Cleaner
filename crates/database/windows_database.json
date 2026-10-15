@@ -7381,5 +7381,15 @@
     "directories_to_remove": [
       "LOGS"
     ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\DeckCraft",
+    "class": "Office",
+    "category": "Logs",
+    "program": "DeckCraft",
+    "directories_to_remove": [
+      "Logs",
+      "logs"
+    ]
   }
 ]
