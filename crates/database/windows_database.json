@@ -4805,6 +4805,7 @@
     "category": "Logs",
     "program": "PhotoCraft",
     "directories_to_remove": [
+      "Logs",
       "logs"
     ]
   },
@@ -7307,6 +7308,7 @@
     "category": "Logs",
     "program": "WordCraft",
     "directories_to_remove": [
+      "Logs",
       "logs"
     ]
   },
@@ -7316,16 +7318,18 @@
     "category": "Logs",
     "program": "ArtCraft Launcher",
     "directories_to_remove": [
+      "Logs",
       "logs"
     ]
   },
   {
     "path": "{drive}Users\\*\\AppData\\Roaming\\FilmCraft",
-    "class": "Office",
+    "class": "Video",
     "category": "Logs",
     "program": "FilmCraft",
     "directories_to_remove": [
-      "Logs"
+      "Logs",
+      "logs"
     ]
   }
 ]
