@@ -7331,5 +7331,25 @@
       "Logs",
       "logs"
     ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\GridCraft",
+    "class": "Data Base",
+    "category": "Logs",
+    "program": "GridCraft",
+    "directories_to_remove": [
+      "Logs",
+      "logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\VectorCraft",
+    "class": "Image",
+    "category": "Logs",
+    "program": "VectorCraft",
+    "directories_to_remove": [
+      "Logs",
+      "logs"
+    ]
   }
 ]
