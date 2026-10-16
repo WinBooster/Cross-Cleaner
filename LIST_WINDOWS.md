@@ -113,7 +113,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [DBeaver](https://dbeaver.io) | Documentation |
-| 2 | GridCraft | Logs |
+| 2 | [GridCraft](https://github.com/storytold/gridcraft) | Logs |
 
 
 ## Developing
@@ -224,7 +224,7 @@
 | 4 | Borderlands 2 | Game, Logs |
 | 5 | Cossacks 3 | Game |
 | 6 | [Counter-Strike Global Offensive](https://store.steampowered.com/app/730/CounterStrike_2) | Game |
-| 7 | DDNet | Downloads, Game |
+| 7 | [DDNet](https://github.com/ddnet/ddnet) | Downloads, Game |
 | 8 | [Dota 2](https://www.dota2.com/home) | Game |
 | 9 | Dungeon Keeper 2 | Documentation, Logs |
 | 10 | [Electronic Arts Desktop](https://www.ea.com/ea-app) | Logs |
@@ -232,7 +232,7 @@
 | 12 | GTA San Andreas | Images, Logs |
 | 13 | [Genshin Impact](https://genshin.hoyoverse.com) | Crashes, Documentation, Logs |
 | 14 | [Lords Mobile](https://lordsmobile.igg.com/pc) | Logs |
-| 15 | Luanti | Cache, Documentation, Logs |
+| 15 | [Luanti](https://github.com/luanti-org/luanti) | Cache, Documentation, Logs |
 | 16 | [Melissia Games Launcher](https://melissia.games) | Documentation, Logs |
 | 17 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
 | 18 | [Roblox](https://www.roblox.com/download) | Logs |
@@ -247,7 +247,7 @@
 | 27 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game |
 | 28 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
 | 29 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game, Logs |
-| 30 | Widelands | Documentation |
+| 30 | [Widelands](https://github.com/widelands/widelands) | Documentation |
 
 
 ## Git
@@ -276,10 +276,10 @@
 | 4 | [InkSpace](https://inkscape.org) | Documentation, Logs |
 | 5 | [Magpie](https://github.com/Blinue/Magpie) | Cache, Logs |
 | 6 | [Paint.NET](https://paint.net) | Documentation |
-| 7 | PhotoCraft | Logs |
+| 7 | [PhotoCraft](https://github.com/storytold/photocraft) | Logs |
 | 8 | [ShareX](https://getsharex.com/downloads) | Backups, Images, Logs |
 | 9 | [Tonfotos Telegram Connector](https://tonfotos.com) | Images |
-| 10 | VectorCraft | Logs |
+| 10 | [VectorCraft](https://github.com/storytold/vectorcraft) | Logs |
 
 
 ## Messanger
@@ -335,12 +335,12 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | DeckCraft | Logs |
+| 1 | [DeckCraft](https://github.com/storytold/deckcraft) | Logs |
 | 2 | [GenOffice](https://genoffice.ai) | Documentation |
 | 3 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Documentation, Logs |
 | 4 | [OnlyOffice](https://www.onlyoffice.com) | Documentation |
 | 5 | [OpenOffice](https://www.openoffice.org) | Documentation |
-| 6 | WordCraft | Logs |
+| 6 | [WordCraft](https://github.com/storytold/wordcraft) | Logs |
 
 
 ## Optimization
@@ -358,7 +358,7 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | Foxit PDF Reader | Cache |
+| 1 | [Foxit PDF Reader](https://www.foxit.com/pdf-reader) | Cache |
 | 2 | [JOPDF](https://www.jopdf.com) | Documentation |
 
 
@@ -539,10 +539,10 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [AVCLabs Video Enhancer AI](https://www.avclabs.com/video-enhancer-ai.html) | Logs |
-| 2 | FilmCraft | Logs |
+| 2 | [FilmCraft](https://github.com/storytold/filmcraft) | Logs |
 | 3 | [HandBrake](https://handbrake.fr/downloads.php) | Documentation, Logs |
 | 4 | [OBS Studio](https://obsproject.com/download) | Logs |
-| 5 | Open Video Downloader | Documentation |
+| 5 | [Open Video Downloader](https://github.com/jely2002/youtube-dl-gui) | Documentation |
 | 6 | [Rave](https://rave.io) | Cache, Logs |
 | 7 | [Topaz Video AI](https://www.topazlabs.com/topaz-video-ai) | Logs |
 | 8 | [VLC](https://www.videolan.org/vlc) | Documentation, Logs |
