@@ -138,6 +138,43 @@ jobs:
             Linux-Cross_Cleaner_GUI
             Linux-Cross_Cleaner_TUI
             Linux-Cross_Cleaner_CLI
+  build_linux_no_updater:
+    # Same binaries as `build_linux`, built with `--no-default-features` so the
+    # `self-update` feature is compiled out rather than merely turned off at
+    # runtime: this build never checks GitHub for a newer release, never shows an
+    # update notification, and never replaces its own executable.
+    #
+    # The `-no-updater` suffix is only the published name; anyone who wants an
+    # install that cannot update itself picks this asset instead of the default
+    # one.
+    runs-on: ubuntu-latest
+    needs: [sort_json]
+    permissions: write-all
+    name: Build Linux (no updater)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ALSA dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev
+      - name: Build linux without self-update
+        run: |
+          cargo +nightly build --release -p desktop --no-default-features
+          cargo +nightly build --release -p tui --no-default-features
+          cargo +nightly build --release -p cli --no-default-features
+      - name: Move linux binaries
+        run: |
+          mv target/release/desktop Linux-Cross_Cleaner_GUI-no-updater
+          mv target/release/tui Linux-Cross_Cleaner_TUI-no-updater
+          mv target/release/cli Linux-Cross_Cleaner_CLI-no-updater
+      - name: Upload Linux no-updater artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-binaries-no-updater
+          path: |
+            Linux-Cross_Cleaner_GUI-no-updater
+            Linux-Cross_Cleaner_TUI-no-updater
+            Linux-Cross_Cleaner_CLI-no-updater
   build_linux_arm64:
     # Native arm64 runner, so the build is the same job as `build_linux` on a
     # different CPU rather than a cross-compile. The asset names carry `-Arm64`
@@ -170,6 +207,37 @@ jobs:
             Linux-Arm64-Cross_Cleaner_GUI
             Linux-Arm64-Cross_Cleaner_TUI
             Linux-Arm64-Cross_Cleaner_CLI
+  build_linux_arm64_no_updater:
+    # Native arm64 runner: same as `build_linux_no_updater` on a different CPU.
+    # See that job for why `self-update` is compiled out and the name is suffixed.
+    runs-on: ubuntu-24.04-arm
+    needs: [sort_json]
+    permissions: write-all
+    name: Build Linux Arm64 (no updater)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ALSA dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev
+      - name: Build linux arm64 without self-update
+        run: |
+          cargo +nightly build --release -p desktop --no-default-features
+          cargo +nightly build --release -p tui --no-default-features
+          cargo +nightly build --release -p cli --no-default-features
+      - name: Move linux arm64 binaries
+        run: |
+          mv target/release/desktop Linux-Arm64-Cross_Cleaner_GUI-no-updater
+          mv target/release/tui Linux-Arm64-Cross_Cleaner_TUI-no-updater
+          mv target/release/cli Linux-Arm64-Cross_Cleaner_CLI-no-updater
+      - name: Upload Linux Arm64 no-updater artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-binaries-arm64-no-updater
+          path: |
+            Linux-Arm64-Cross_Cleaner_GUI-no-updater
+            Linux-Arm64-Cross_Cleaner_TUI-no-updater
+            Linux-Arm64-Cross_Cleaner_CLI-no-updater
   build_linux_packages:
     # Distribution packages for Linux, published next to the portable binaries.
     #
@@ -287,6 +355,34 @@ jobs:
             Windows-Cross_Cleaner_GUI.exe
             Windows-Cross_Cleaner_TUI.exe
             Windows-Cross_Cleaner_CLI.exe
+  build_windows_no_updater:
+    # Portable Windows binaries with `self-update` compiled out, so `-no-updater`
+    # builds never look for a newer release nor overwrite themselves. No Inno
+    # Setup installer is built here: this job only ships the portable exes.
+    runs-on: windows-latest
+    needs: [sort_json]
+    permissions: write-all
+    name: Build Windows (no updater)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build windows without self-update
+        run: |
+          cargo +nightly build --release -p desktop --no-default-features
+          cargo +nightly build --release -p tui --no-default-features
+          cargo +nightly build --release -p cli --no-default-features
+      - name: Move windows binaries
+        run: |
+          copy target\release\desktop.exe Windows-Cross_Cleaner_GUI-no-updater.exe
+          copy target\release\tui.exe Windows-Cross_Cleaner_TUI-no-updater.exe
+          copy target\release\cli.exe Windows-Cross_Cleaner_CLI-no-updater.exe
+      - name: Upload Windows no-updater artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-binaries-no-updater
+          path: |
+            Windows-Cross_Cleaner_GUI-no-updater.exe
+            Windows-Cross_Cleaner_TUI-no-updater.exe
+            Windows-Cross_Cleaner_CLI-no-updater.exe
   build_windows_arm64:
     # Native arm64 runner, so no cross-linker is involved. The installer is named
     # `..._Arm64.exe`, which keeps it out of the winget match on the x64 name.
@@ -334,6 +430,34 @@ jobs:
             Windows-Arm64-Cross_Cleaner_GUI.exe
             Windows-Arm64-Cross_Cleaner_TUI.exe
             Windows-Arm64-Cross_Cleaner_CLI.exe
+  build_windows_arm64_no_updater:
+    # Native arm64 runner, portable exes only. Same `-no-updater` build as
+    # `build_windows_no_updater`, for the arm64 CPU.
+    runs-on: windows-11-arm
+    needs: [sort_json]
+    permissions: write-all
+    name: Build Windows Arm64 (no updater)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build windows arm64 without self-update
+        run: |
+          cargo +nightly build --release -p desktop --no-default-features
+          cargo +nightly build --release -p tui --no-default-features
+          cargo +nightly build --release -p cli --no-default-features
+      - name: Move windows arm64 binaries
+        run: |
+          copy target\release\desktop.exe Windows-Arm64-Cross_Cleaner_GUI-no-updater.exe
+          copy target\release\tui.exe Windows-Arm64-Cross_Cleaner_TUI-no-updater.exe
+          copy target\release\cli.exe Windows-Arm64-Cross_Cleaner_CLI-no-updater.exe
+      - name: Upload Windows Arm64 no-updater artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-binaries-arm64-no-updater
+          if-no-files-found: error
+          path: |
+            Windows-Arm64-Cross_Cleaner_GUI-no-updater.exe
+            Windows-Arm64-Cross_Cleaner_TUI-no-updater.exe
+            Windows-Arm64-Cross_Cleaner_CLI-no-updater.exe
   build_macos_arm64:
     runs-on: macos-latest
     needs: [sort_json]
@@ -359,6 +483,33 @@ jobs:
             MacOS-Arm64-Cross_Cleaner_GUI
             MacOS-Arm64-Cross_Cleaner_TUI
             MacOS-Arm64-Cross_Cleaner_CLI
+  build_macos_arm64_no_updater:
+    # macOS only ships arm64, so this is the only `-no-updater` macOS build. Same
+    # `self-update`-less build as the other `-no-updater` jobs.
+    runs-on: macos-latest
+    needs: [sort_json]
+    permissions: write-all
+    name: Build MacOS Arm64 (no updater)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build macos without self-update
+        run: |
+          cargo +nightly build --release -p desktop --no-default-features
+          cargo +nightly build --release -p tui --no-default-features
+          cargo +nightly build --release -p cli --no-default-features
+      - name: Move macos binaries
+        run: |
+          mv target/release/desktop MacOS-Arm64-Cross_Cleaner_GUI-no-updater
+          mv target/release/tui MacOS-Arm64-Cross_Cleaner_TUI-no-updater
+          mv target/release/cli MacOS-Arm64-Cross_Cleaner_CLI-no-updater
+      - name: Upload MacOS no-updater artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-binaries-arm64-no-updater
+          path: |
+            MacOS-Arm64-Cross_Cleaner_GUI-no-updater
+            MacOS-Arm64-Cross_Cleaner_TUI-no-updater
+            MacOS-Arm64-Cross_Cleaner_CLI-no-updater
   build_android:
     runs-on: ubuntu-latest
     needs: [sort_json]
@@ -409,12 +560,17 @@ jobs:
     needs:
       [
         build_linux,
+        build_linux_no_updater,
         build_linux_arm64,
+        build_linux_arm64_no_updater,
         build_linux_packages,
         build_linux_packages_arm64,
         build_windows,
+        build_windows_no_updater,
         build_windows_arm64,
+        build_windows_arm64_no_updater,
         build_macos_arm64,
+        build_macos_arm64_no_updater,
         build_android,
       ]
     runs-on: ubuntu-latest
@@ -437,11 +593,21 @@ jobs:
         with:
           name: linux-binaries
           path: linux-binaries
+      - name: Download Linux no-updater artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-binaries-no-updater
+          path: linux-binaries-no-updater
       - name: Download Linux Arm64 artifacts
         uses: actions/download-artifact@v4
         with:
           name: linux-binaries-arm64
           path: linux-binaries-arm64
+      - name: Download Linux Arm64 no-updater artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-binaries-arm64-no-updater
+          path: linux-binaries-arm64-no-updater
       - name: Download Linux packages (.deb, .AppImage)
         uses: actions/download-artifact@v4
         with:
@@ -457,11 +623,21 @@ jobs:
         with:
           name: windows-binaries
           path: windows-binaries
+      - name: Download Windows no-updater artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-binaries-no-updater
+          path: windows-binaries-no-updater
       - name: Download Windows Arm64 artifacts
         uses: actions/download-artifact@v4
         with:
           name: windows-binaries-arm64
           path: windows-binaries-arm64
+      - name: Download Windows Arm64 no-updater artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-binaries-arm64-no-updater
+          path: windows-binaries-arm64-no-updater
       - name: Download Windows Arm64 setup artifacts
         uses: actions/download-artifact@v4
         with:
@@ -472,6 +648,11 @@ jobs:
         with:
           name: macos-binaries-arm64
           path: macos-binaries-arm64
+      - name: Download MacOS no-updater artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-binaries-arm64-no-updater
+          path: macos-binaries-arm64-no-updater
       - name: Download Windows setup artifacts
         uses: actions/download-artifact@v4
         with:
@@ -519,9 +700,15 @@ jobs:
             linux-binaries/Linux-Cross_Cleaner_GUI
             linux-binaries/Linux-Cross_Cleaner_TUI
             linux-binaries/Linux-Cross_Cleaner_CLI
+            linux-binaries-no-updater/Linux-Cross_Cleaner_GUI-no-updater
+            linux-binaries-no-updater/Linux-Cross_Cleaner_TUI-no-updater
+            linux-binaries-no-updater/Linux-Cross_Cleaner_CLI-no-updater
             linux-binaries-arm64/Linux-Arm64-Cross_Cleaner_GUI
             linux-binaries-arm64/Linux-Arm64-Cross_Cleaner_TUI
             linux-binaries-arm64/Linux-Arm64-Cross_Cleaner_CLI
+            linux-binaries-arm64-no-updater/Linux-Arm64-Cross_Cleaner_GUI-no-updater
+            linux-binaries-arm64-no-updater/Linux-Arm64-Cross_Cleaner_TUI-no-updater
+            linux-binaries-arm64-no-updater/Linux-Arm64-Cross_Cleaner_CLI-no-updater
             linux-packages/*.deb
             linux-packages/*.AppImage
             linux-packages-arm64/*.deb
@@ -529,12 +716,21 @@ jobs:
             macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_GUI
             macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_TUI
             macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_CLI
+            macos-binaries-arm64-no-updater/MacOS-Arm64-Cross_Cleaner_GUI-no-updater
+            macos-binaries-arm64-no-updater/MacOS-Arm64-Cross_Cleaner_TUI-no-updater
+            macos-binaries-arm64-no-updater/MacOS-Arm64-Cross_Cleaner_CLI-no-updater
             windows-binaries/Windows-Cross_Cleaner_GUI.exe
             windows-binaries/Windows-Cross_Cleaner_TUI.exe
             windows-binaries/Windows-Cross_Cleaner_CLI.exe
+            windows-binaries-no-updater/Windows-Cross_Cleaner_GUI-no-updater.exe
+            windows-binaries-no-updater/Windows-Cross_Cleaner_TUI-no-updater.exe
+            windows-binaries-no-updater/Windows-Cross_Cleaner_CLI-no-updater.exe
             windows-binaries-arm64/Windows-Arm64-Cross_Cleaner_GUI.exe
             windows-binaries-arm64/Windows-Arm64-Cross_Cleaner_TUI.exe
             windows-binaries-arm64/Windows-Arm64-Cross_Cleaner_CLI.exe
+            windows-binaries-arm64-no-updater/Windows-Arm64-Cross_Cleaner_GUI-no-updater.exe
+            windows-binaries-arm64-no-updater/Windows-Arm64-Cross_Cleaner_TUI-no-updater.exe
+            windows-binaries-arm64-no-updater/Windows-Arm64-Cross_Cleaner_CLI-no-updater.exe
             windows-setup/Cross_Cleaner_Setup.exe
             windows-setup-arm64/Cross_Cleaner_Setup_Arm64.exe
             android-apk/Cross_Cleaner_Android.apk
