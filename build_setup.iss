@@ -28,9 +28,10 @@
 ; like `-no-updater` reads as an arithmetic expression to the preprocessor, while
 ; a valueless /D flag is unambiguous.
 ;
-; winget matches ^Cross_Cleaner_Setup(_Arm64)?\.exe$, so the suffixed name stays
-; out of the winget submission — the self-updating installer is the one people
-; should get from a package manager.
+; winget matches ^Cross_Cleaner_Setup(_Arm64)?-no-updater\.exe$ and ships only
+; this installer (see publish.yml): a package-manager install owns its version,
+; so the app must not replace the file winget put on disk. The self-updating
+; installer stays in the GitHub Release for people who install by hand.
 #ifdef MyNoUpdater
   #define MyNoUpdaterSuffix "-no-updater"
 #else

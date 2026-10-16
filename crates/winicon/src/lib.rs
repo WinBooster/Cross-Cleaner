@@ -180,7 +180,7 @@ mod tests {
     /// parameter rather than a constant baked into the file.
     ///
     /// Both output names have to stay in step with the workflow: winget matches
-    /// `^Cross_Cleaner_Setup(_Arm64)?\.exe$` and derives the manifest
+    /// `^Cross_Cleaner_Setup(_Arm64)?-no-updater\.exe$` and derives the manifest
     /// architecture from the file name, so a rename on either side breaks a
     /// release quietly.
     #[test]
