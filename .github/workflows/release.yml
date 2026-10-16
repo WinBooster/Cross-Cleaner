@@ -357,8 +357,9 @@ jobs:
             Windows-Cross_Cleaner_CLI.exe
   build_windows_no_updater:
     # Portable Windows binaries with `self-update` compiled out, so `-no-updater`
-    # builds never look for a newer release nor overwrite themselves. No Inno
-    # Setup installer is built here: this job only ships the portable exes.
+    # builds never look for a newer release nor overwrite themselves. The Inno
+    # Setup installer is built from the same `--no-default-features` desktop.exe
+    # and published as `Cross_Cleaner_Setup-no-updater.exe`.
     runs-on: windows-latest
     needs: [sort_json]
     permissions: write-all
@@ -375,6 +376,27 @@ jobs:
           copy target\release\desktop.exe Windows-Cross_Cleaner_GUI-no-updater.exe
           copy target\release\tui.exe Windows-Cross_Cleaner_TUI-no-updater.exe
           copy target\release\cli.exe Windows-Cross_Cleaner_CLI-no-updater.exe
+      - name: Update installer version
+        shell: pwsh
+        run: |
+          (Get-Content build_setup.iss) -replace '#define MyAppVersion ".*"', '#define MyAppVersion "${{ env.APP_VERSION }}"' | Set-Content build_setup.iss
+      - name: Build installer (Inno Setup, no updater)
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.9
+        with:
+          path: build_setup.iss
+          # `MyNoUpdater` makes the output `Cross_Cleaner_Setup-no-updater.exe`
+          # so it never collides with the self-updating installer. It packages
+          # `target\release\desktop.exe`, which this job built without the feature.
+          options: |
+            /DMyArch=x64
+            /DMyNoUpdater
+      - name: Upload Windows no-updater setup artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-setup-no-updater
+          if-no-files-found: error
+          path: |
+            innosetup\compiler\Cross_Cleaner_Setup-no-updater.exe
       - name: Upload Windows no-updater artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -431,8 +453,9 @@ jobs:
             Windows-Arm64-Cross_Cleaner_TUI.exe
             Windows-Arm64-Cross_Cleaner_CLI.exe
   build_windows_arm64_no_updater:
-    # Native arm64 runner, portable exes only. Same `-no-updater` build as
-    # `build_windows_no_updater`, for the arm64 CPU.
+    # Native arm64 runner, portable exes plus the `-no-updater` installer. Same
+    # `--no-default-features` build as `build_windows_no_updater`, for the arm64
+    # CPU.
     runs-on: windows-11-arm
     needs: [sort_json]
     permissions: write-all
@@ -449,6 +472,26 @@ jobs:
           copy target\release\desktop.exe Windows-Arm64-Cross_Cleaner_GUI-no-updater.exe
           copy target\release\tui.exe Windows-Arm64-Cross_Cleaner_TUI-no-updater.exe
           copy target\release\cli.exe Windows-Arm64-Cross_Cleaner_CLI-no-updater.exe
+      - name: Update installer version
+        shell: pwsh
+        run: |
+          (Get-Content build_setup.iss) -replace '#define MyAppVersion ".*"', '#define MyAppVersion "${{ env.APP_VERSION }}"' | Set-Content build_setup.iss
+      - name: Build installer (Inno Setup, arm64, no updater)
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.9
+        with:
+          path: build_setup.iss
+          # arm64 output name is `Cross_Cleaner_Setup_Arm64-no-updater.exe`: the
+          # arch marker comes from MyArch, the suffix from /DMyNoUpdater.
+          options: |
+            /DMyArch=arm64
+            /DMyNoUpdater
+      - name: Upload Windows Arm64 no-updater setup artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-setup-arm64-no-updater
+          if-no-files-found: error
+          path: |
+            innosetup\compiler\Cross_Cleaner_Setup_Arm64-no-updater.exe
       - name: Upload Windows Arm64 no-updater artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -643,6 +686,11 @@ jobs:
         with:
           name: windows-setup-arm64
           path: windows-setup-arm64
+      - name: Download Windows Arm64 no-updater setup artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-setup-arm64-no-updater
+          path: windows-setup-arm64-no-updater
       - name: Download MacOS artifacts
         uses: actions/download-artifact@v4
         with:
@@ -658,6 +706,11 @@ jobs:
         with:
           name: windows-setup
           path: windows-setup
+      - name: Download Windows no-updater setup artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-setup-no-updater
+          path: windows-setup-no-updater
       - name: Download Android APK
         uses: actions/download-artifact@v4
         with:
@@ -732,7 +785,9 @@ jobs:
             windows-binaries-arm64-no-updater/Windows-Arm64-Cross_Cleaner_TUI-no-updater.exe
             windows-binaries-arm64-no-updater/Windows-Arm64-Cross_Cleaner_CLI-no-updater.exe
             windows-setup/Cross_Cleaner_Setup.exe
+            windows-setup-no-updater/Cross_Cleaner_Setup-no-updater.exe
             windows-setup-arm64/Cross_Cleaner_Setup_Arm64.exe
+            windows-setup-arm64-no-updater/Cross_Cleaner_Setup_Arm64-no-updater.exe
             android-apk/Cross_Cleaner_Android.apk
 
   # The release is created as a draft, so the publication jobs (winget submit

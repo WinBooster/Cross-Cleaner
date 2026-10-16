@@ -18,16 +18,35 @@
   #define MyArch "x64"
 #endif
 
+; The `-no-updater` installer packages binaries built with `--no-default-features`,
+; where the whole self-update path is compiled out. It is the same app (same
+; AppId), only with the ability to update itself removed, so the release workflow
+; builds it by passing /DMyNoUpdater and the output name keeps the two installers
+; apart. A local build leaves the suffix empty.
+;
+; The suffix is chosen here rather than passed as a /D value on purpose: a value
+; like `-no-updater` reads as an arithmetic expression to the preprocessor, while
+; a valueless /D flag is unambiguous.
+;
+; winget matches ^Cross_Cleaner_Setup(_Arm64)?\.exe$, so the suffixed name stays
+; out of the winget submission — the self-updating installer is the one people
+; should get from a package manager.
+#ifdef MyNoUpdater
+  #define MyNoUpdaterSuffix "-no-updater"
+#else
+  #define MyNoUpdaterSuffix ""
+#endif
+
 ; The output name carries the architecture so both installers can live in the
 ; same release, and so winget (which matches ^Cross_Cleaner_Setup(_Arm64)?\.exe$)
 ; can label each installer in the manifest instead of guessing from one file.
 #if MyArch == "arm64"
-  #define MyOutputBaseFilename "Cross_Cleaner_Setup_Arm64"
+  #define MyOutputBaseFilename "Cross_Cleaner_Setup_Arm64" + MyNoUpdaterSuffix
   ; "arm64" refuses the installer on anything but a native arm64 CPU, so the
   ; x64 setup is the only one installable through emulation.
   #define MyArchitecturesAllowed "arm64"
 #else
-  #define MyOutputBaseFilename "Cross_Cleaner_Setup"
+  #define MyOutputBaseFilename "Cross_Cleaner_Setup" + MyNoUpdaterSuffix
   ; "x64compatible" includes x64 and Windows 11 on Arm, which runs x64 binaries.
   #define MyArchitecturesAllowed "x64compatible"
 #endif
