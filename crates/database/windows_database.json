@@ -1947,6 +1947,15 @@
     ]
   },
   {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Foxit Software\\Continuous\\Foxit PDF Reader",
+    "class": "PDF",
+    "category": "Cache",
+    "program": "Foxit PDF Reader",
+    "directories_to_remove": [
+      "cacheData"
+    ]
+  },
+  {
     "path": "{drive}Program Files\\FreeCAD 1.1",
     "class": "Developing",
     "category": "Documentation",
@@ -3202,15 +3211,6 @@
     "program": "JOPDF",
     "directories_to_remove": [
       "docs"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Roaming\\Foxit Software\\Continuous\\Foxit PDF Reader",
-    "class": "PDF",
-    "category": "Cache",
-    "program": "Foxit PDF Reader",
-    "directories_to_remove": [
-      "cacheData"
     ]
   },
   {
