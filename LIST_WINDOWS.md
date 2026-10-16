@@ -1,9 +1,9 @@
-# Windows Clearing Programs Catalog v2.0.4.3.2
+# Windows Clearing Programs Catalog v2.0.4.4
 **Total categories in database:** 12
 
-**Total programs in database:** 273
+**Total programs in database:** 284
 
-**Total pathes in database:** 585
+**Total pathes in database:** 599
 
 ## AI
 
@@ -113,6 +113,7 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [DBeaver](https://dbeaver.io) | Documentation |
+| 2 | GridCraft | Logs |
 
 
 ## Developing
@@ -223,27 +224,30 @@
 | 4 | Borderlands 2 | Game, Logs |
 | 5 | Cossacks 3 | Game |
 | 6 | [Counter-Strike Global Offensive](https://store.steampowered.com/app/730/CounterStrike_2) | Game |
-| 7 | [Dota 2](https://www.dota2.com/home) | Game |
-| 8 | Dungeon Keeper 2 | Documentation, Logs |
-| 9 | [Electronic Arts Desktop](https://www.ea.com/ea-app) | Logs |
-| 10 | [Epic Games Launcher](https://store.epicgames.com/en-US/download) | Logs |
-| 11 | GTA San Andreas | Images, Logs |
-| 12 | [Genshin Impact](https://genshin.hoyoverse.com) | Crashes, Documentation, Logs |
-| 13 | [Lords Mobile](https://lordsmobile.igg.com/pc) | Logs |
-| 14 | [Melissia Games Launcher](https://melissia.games) | Documentation, Logs |
-| 15 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
-| 16 | [Roblox](https://www.roblox.com/download) | Logs |
-| 17 | Rockstar Games | Crashes |
-| 18 | [Rust](https://store.steampowered.com/app/252490/Rust) | Game |
-| 19 | [Schedule I](https://store.steampowered.com/app/3164500/Schedule_I) | Game, Logs |
-| 20 | Sephiria | Logs |
-| 21 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
-| 22 | [Terraria](https://terraria.org) | Game |
-| 23 | [The Powder Toy](https://powdertoy.co.uk) | Game |
-| 24 | [Ultrakill](https://store.steampowered.com/app/1229490/ULTRAKILL) | Logs |
-| 25 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game |
-| 26 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
-| 27 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game, Logs |
+| 7 | DDNet | Downloads, Game |
+| 8 | [Dota 2](https://www.dota2.com/home) | Game |
+| 9 | Dungeon Keeper 2 | Documentation, Logs |
+| 10 | [Electronic Arts Desktop](https://www.ea.com/ea-app) | Logs |
+| 11 | [Epic Games Launcher](https://store.epicgames.com/en-US/download) | Logs |
+| 12 | GTA San Andreas | Images, Logs |
+| 13 | [Genshin Impact](https://genshin.hoyoverse.com) | Crashes, Documentation, Logs |
+| 14 | [Lords Mobile](https://lordsmobile.igg.com/pc) | Logs |
+| 15 | Luanti | Cache, Documentation, Logs |
+| 16 | [Melissia Games Launcher](https://melissia.games) | Documentation, Logs |
+| 17 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
+| 18 | [Roblox](https://www.roblox.com/download) | Logs |
+| 19 | Rockstar Games | Crashes |
+| 20 | [Rust](https://store.steampowered.com/app/252490/Rust) | Game |
+| 21 | [Schedule I](https://store.steampowered.com/app/3164500/Schedule_I) | Game, Logs |
+| 22 | Sephiria | Logs |
+| 23 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
+| 24 | [Terraria](https://terraria.org) | Game |
+| 25 | [The Powder Toy](https://powdertoy.co.uk) | Game |
+| 26 | [Ultrakill](https://store.steampowered.com/app/1229490/ULTRAKILL) | Logs |
+| 27 | [Unturned](https://store.steampowered.com/app/304930/Unturned) | Game |
+| 28 | [VK GameCenter](https://vkplay.ru/about/?from=gamecenter) | Logs |
+| 29 | [Void Train](https://store.steampowered.com/app/1159690/Voidtrain) | Game, Logs |
+| 30 | Widelands | Documentation |
 
 
 ## Git
@@ -272,8 +276,10 @@
 | 4 | [InkSpace](https://inkscape.org) | Documentation, Logs |
 | 5 | [Magpie](https://github.com/Blinue/Magpie) | Cache, Logs |
 | 6 | [Paint.NET](https://paint.net) | Documentation |
-| 7 | [ShareX](https://getsharex.com/downloads) | Backups, Images, Logs |
-| 8 | [Tonfotos Telegram Connector](https://tonfotos.com) | Images |
+| 7 | PhotoCraft | Logs |
+| 8 | [ShareX](https://getsharex.com/downloads) | Backups, Images, Logs |
+| 9 | [Tonfotos Telegram Connector](https://tonfotos.com) | Images |
+| 10 | VectorCraft | Logs |
 
 
 ## Messanger
@@ -329,10 +335,12 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [GenOffice](https://genoffice.ai) | Documentation |
-| 2 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Documentation, Logs |
-| 3 | [OnlyOffice](https://www.onlyoffice.com) | Documentation |
-| 4 | [OpenOffice](https://www.openoffice.org) | Documentation |
+| 1 | DeckCraft | Logs |
+| 2 | [GenOffice](https://genoffice.ai) | Documentation |
+| 3 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Documentation, Logs |
+| 4 | [OnlyOffice](https://www.onlyoffice.com) | Documentation |
+| 5 | [OpenOffice](https://www.openoffice.org) | Documentation |
+| 6 | WordCraft | Logs |
 
 
 ## Optimization
@@ -350,7 +358,8 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [JOPDF](https://www.jopdf.com) | Documentation |
+| 1 | Foxit PDF Reader | Cache |
+| 2 | [JOPDF](https://www.jopdf.com) | Documentation |
 
 
 ## Packet Manager
@@ -377,7 +386,8 @@
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [Flow Launcher](https://www.flowlauncher.com) | Cache, LastActivity, Logs |
+| 1 | ArtCraft Launcher | Logs |
+| 2 | [Flow Launcher](https://www.flowlauncher.com) | Cache, LastActivity, Logs |
 
 
 ## SSH
@@ -529,13 +539,14 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [AVCLabs Video Enhancer AI](https://www.avclabs.com/video-enhancer-ai.html) | Logs |
-| 2 | [HandBrake](https://handbrake.fr/downloads.php) | Documentation, Logs |
-| 3 | [OBS Studio](https://obsproject.com/download) | Logs |
-| 4 | Open Video Downloader | Documentation |
-| 5 | [Rave](https://rave.io) | Cache, Logs |
-| 6 | [Topaz Video AI](https://www.topazlabs.com/topaz-video-ai) | Logs |
-| 7 | [VLC](https://www.videolan.org/vlc) | Documentation, Logs |
-| 8 | [iTop Screen Recorder](https://recorder.itopvpn.com) | Logs |
+| 2 | FilmCraft | Logs |
+| 3 | [HandBrake](https://handbrake.fr/downloads.php) | Documentation, Logs |
+| 4 | [OBS Studio](https://obsproject.com/download) | Logs |
+| 5 | Open Video Downloader | Documentation |
+| 6 | [Rave](https://rave.io) | Cache, Logs |
+| 7 | [Topaz Video AI](https://www.topazlabs.com/topaz-video-ai) | Logs |
+| 8 | [VLC](https://www.videolan.org/vlc) | Documentation, Logs |
+| 9 | [iTop Screen Recorder](https://recorder.itopvpn.com) | Logs |
 
 
 ## Uncategorized
