@@ -94,8 +94,9 @@
     ]
   },
   {
-    "path": "{drive}Program Files\\Adobe\\*\\Legal\\*\\*.html",
+    "path": "{drive}Program Files\\Adobe\\**\\Legal\\*\\*.html",
     "category": "Documentation",
+    "sub_category": "Licenses",
     "program": "Adobe",
     "remove_files": true
   },
