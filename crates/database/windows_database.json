@@ -3204,6 +3204,15 @@
     ]
   },
   {
+    "path": "{drive}Users\\*\\AppData\\Roaming\\Foxit Software\\Continuous\\Foxit PDF Reader",
+    "class": "PDF",
+    "category": "Cache",
+    "program": "Foxit PDF Reader",
+    "directories_to_remove": [
+      "cacheData"
+    ]
+  },
+  {
     "path": "{drive}Users\\*\\AppData\\Local\\kache",
     "class": "Developing",
     "category": "Logs",
