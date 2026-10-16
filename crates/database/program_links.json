@@ -84,10 +84,12 @@
 
   "Blender": "https://www.blender.org",
 
+  "DeckCraft": "https://github.com/storytold/deckcraft",
   "GenOffice": "https://genoffice.ai",
   "OnlyOffice": "https://www.onlyoffice.com",
   "LibreOffice": "https://www.libreoffice.org/download/download-libreoffice",
   "OpenOffice": "https://www.openoffice.org",
+  "WordCraft": "https://github.com/storytold/wordcraft",
 
   "CrystalCry": "https://crystalcry.org",
   "HiAlgo Boost": "https://www.hialgo.com",
@@ -99,6 +101,7 @@
   "CPU-Z": "https://www.cpuid.com",
   "CrystalDiskInfo": "https://crystalmark.info",
 
+  "Foxit PDF Reader": "https://www.foxit.com/pdf-reader",
   "JOPDF": "https://www.jopdf.com",
 
   "1Password": "https://1password.com/",
@@ -135,6 +138,7 @@
   "SDDM": "https://github.com/sddm/sddm",
 
   "DBeaver": "https://dbeaver.io",
+  "GridCraft": "https://github.com/storytold/gridcraft",
 
   "Jdk": "https://www.oracle.com/java/technologies/downloads",
   "Anaconda": "https://www.anaconda.com/download",
@@ -204,10 +208,12 @@
   "Hearts of Iron IV": "https://store.steampowered.com/app/394360/Hearts_of_Iron_IV",
   "Arizona Games Launcher": "https://arizona-rp.com/#how-to-play",
   "Counter-Strike Global Offensive": "https://store.steampowered.com/app/730/CounterStrike_2",
+  "DDNet": "https://github.com/ddnet/ddnet",
   "Dota 2": "https://www.dota2.com/home",
   "Electronic Arts Desktop": "https://www.ea.com/ea-app",
   "Epic Games Launcher": "https://store.epicgames.com/en-US/download",
   "Lords Mobile": "https://lordsmobile.igg.com/pc",
+  "Luanti": "https://github.com/luanti-org/luanti",
   "Melissia Games Launcher": "https://melissia.games",
   "Osu": "https://osu.ppy.sh/home/download",
   "Roblox": "https://www.roblox.com/download",
@@ -226,6 +232,7 @@
   "Genshin Impact": "https://genshin.hoyoverse.com",
   "Ultrakill": "https://store.steampowered.com/app/1229490/ULTRAKILL",
   "ArcheAge": "https://archeage.ru",
+  "Widelands": "https://github.com/widelands/widelands",
 
   "Git": "https://git-scm.com/downloads",
   "GitHub Desktop": "https://desktop.github.com/download",
@@ -237,8 +244,10 @@
   "ShareX": "https://getsharex.com/downloads",
   "Tonfotos Telegram Connector": "https://tonfotos.com",
   "Paint.NET": "https://paint.net",
+  "PhotoCraft": "https://github.com/storytold/photocraft",
   "Greenshot": "https://github.com/greenshot/greenshot",
   "FastStone Image Viewer": "https://www.faststone.org",
+  "VectorCraft": "https://github.com/storytold/vectorcraft",
 
   "4uKey for Android": "https://www.tenorshare.ru/products/android-password-reset-tool.html",
   "Gpg4win": "https://www.gpg4win.org",
@@ -303,8 +312,10 @@
   "iTop VPN": "https://www.itopvpn.com",
 
   "AVCLabs Video Enhancer AI": "https://www.avclabs.com/video-enhancer-ai.html",
+  "FilmCraft": "https://github.com/storytold/filmcraft",
   "HandBrake": "https://handbrake.fr/downloads.php",
   "OBS Studio": "https://obsproject.com/download",
+  "Open Video Downloader": "https://github.com/jely2002/youtube-dl-gui",
   "Rave": "https://rave.io",
   "Topaz Video AI": "https://www.topazlabs.com/topaz-video-ai",
   "VLC": "https://www.videolan.org/vlc",
