@@ -2243,9 +2243,19 @@
   },
   {
     "path": "/home/*/.config/soundcraft",
-    "class": "PDF",
+    "class": "Audio",
     "category": "Logs",
     "program": "SoundCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
+  },
+  {
+    "path": "/home/*/.config/wordcraft",
+    "class": "Office",
+    "category": "Logs",
+    "program": "WordCraft",
     "directories_to_remove": [
       "logs",
       "Logs"
