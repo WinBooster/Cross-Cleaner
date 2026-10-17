@@ -2201,5 +2201,15 @@
       "logs",
       "Logs"
     ]
+  },
+  {
+    "path": "/home/*/.config/deckcraft",
+    "class": "Office",
+    "category": "Logs",
+    "program": "DeckCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
   }
 ]
