@@ -2279,5 +2279,15 @@
       "logs",
       "Logs"
     ]
+  },
+  {
+    "path": "/home/neki/.config/effectcraft",
+    "class": "Graphics",
+    "category": "Logs",
+    "program": "EffectCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
   }
 ]
