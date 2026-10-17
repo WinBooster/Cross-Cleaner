@@ -2220,5 +2220,15 @@
     "files_to_remove": [
       "debug.txt"
     ]
+  },
+  {
+    "path": "/home/*/.local/share/filmcraft",
+    "class": "Video",
+    "category": "Logs",
+    "program": "FilmCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
   }
 ]
