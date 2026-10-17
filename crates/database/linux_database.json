@@ -2123,5 +2123,53 @@
       "herdr-client.log",
       "herdr-server.log"
     ]
+  },
+  {
+    "path": "/opt/vesktop",
+    "class": "Messanger",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Vesktop",
+    "files_to_remove": [
+      "LICENSE.electron.txt",
+      "LICENSES.chromium.html"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Developing",
+    "category": "Documentation",
+    "program": "Cargo",
+    "directories_to_remove": [
+      "cargo"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Developing",
+    "category": "Documentation",
+    "program": "Clippy",
+    "directories_to_remove": [
+      "clippy"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Developing",
+    "category": "Documentation",
+    "program": "Lua",
+    "directories_to_remove": [
+      "lua54"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Developing",
+    "category": "Documentation",
+    "program": "Rust Language",
+    "directories_to_remove": [
+      "rustc",
+      "rustfmt"
+    ]
   }
 ]
