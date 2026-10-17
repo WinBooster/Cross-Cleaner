@@ -78,6 +78,28 @@
     ]
   },
   {
+    "path": "/usr/share/doc",
+    "class": "Modeling",
+    "category": "Documentation",
+    "program": "Blockbench",
+    "directories_to_remove": [
+      "blockbench"
+    ]
+  },
+  {
+    "path": "/home/*/.config/Blockbench",
+    "class": "Modeling",
+    "category": "Cache",
+    "program": "Blockbench",
+    "directories_to_remove": [
+      "Cache",
+      "Code Cache",
+      "DawnGraphiteCache",
+      "DawnWebGPUCache",
+      "GPUCache"
+    ]
+  },
+  {
     "path": "/home/*/.config/BraveSoftware/Brave-Browser",
     "class": "Browser",
     "category": "Cache",
@@ -765,6 +787,15 @@
     "program": "JetBrains",
     "remove_directories": true,
     "remove_files": true
+  },
+  {
+    "path": "/home/*/.local/share/jopdf/cache",
+    "class": "PDF",
+    "category": "Logs",
+    "program": "JOPDF",
+    "directories_to_remove": [
+      "log"
+    ]
   },
   {
     "path": "/usr/share/keepassxc/",
@@ -2400,37 +2431,6 @@
     "program": "Zed",
     "directories_to_remove": [
       "logs"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Modeling",
-    "category": "Documentation",
-    "program": "Blockbench",
-    "directories_to_remove": [
-      "blockbench"
-    ]
-  },
-  {
-    "path": "/home/*/.config/Blockbench",
-    "class": "Modeling",
-    "category": "Cache",
-    "program": "Blockbench",
-    "directories_to_remove": [
-      "Cache",
-      "Code Cache",
-      "DawnGraphiteCache",
-      "DawnWebGPUCache",
-      "GPUCache"
-    ]
-  },
-  {
-    "path": "/home/*/.local/share/jopdf/cache",
-    "class": "PDF",
-    "category": "Logs",
-    "program": "JOPDF",
-    "directories_to_remove": [
-      "log"
     ]
   }
 ]
