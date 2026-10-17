@@ -2379,5 +2379,15 @@
     "directories_to_remove": [
       "gridcraft"
     ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Git",
+    "category": "Documentation",
+    "program": "rgitui",
+    "directories_to_remove": [
+      "rgitui-bin",
+      "rgitui"
+    ]
   }
 ]
