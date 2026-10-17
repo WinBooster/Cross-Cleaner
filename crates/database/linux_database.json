@@ -189,6 +189,15 @@
     ]
   },
   {
+    "path": "/usr/share/doc",
+    "class": "Developing",
+    "category": "Documentation",
+    "program": "Cargo",
+    "directories_to_remove": [
+      "cargo"
+    ]
+  },
+  {
     "path": "/home/*/.cache/cassette/",
     "class": "Audio",
     "category": "Cache",
@@ -221,6 +230,15 @@
     "program": "Cliamp",
     "files_to_remove": [
       "history.toml"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Developing",
+    "category": "Documentation",
+    "program": "Clippy",
+    "directories_to_remove": [
+      "clippy"
     ]
   },
   {
@@ -575,6 +593,16 @@
     "program": "Hearts of Iron IV",
     "directories_to_remove": [
       "crashes"
+    ]
+  },
+  {
+    "path": "/home/*/.config/herdr",
+    "class": "AI",
+    "category": "Logs",
+    "program": "Herdr",
+    "files_to_remove": [
+      "herdr-client.log",
+      "herdr-server.log"
     ]
   },
   {
@@ -954,6 +982,15 @@
     "program": "LoliLand (Wine)",
     "files_to_remove": [
       "auth.json"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Developing",
+    "category": "Documentation",
+    "program": "Lua",
+    "directories_to_remove": [
+      "lua54"
     ]
   },
   {
@@ -1449,6 +1486,15 @@
     ]
   },
   {
+    "path": "/home/*/.cache/paru",
+    "class": "Packet Manager",
+    "category": "Cache",
+    "program": "Paru",
+    "directories_to_remove": [
+      "clone"
+    ]
+  },
+  {
     "path": "/usr/share/doc/",
     "class": "Text",
     "category": "Documentation",
@@ -1726,6 +1772,16 @@
     ]
   },
   {
+    "path": "/usr/share/doc",
+    "class": "Developing",
+    "category": "Documentation",
+    "program": "Rust Language",
+    "directories_to_remove": [
+      "rustc",
+      "rustfmt"
+    ]
+  },
+  {
     "path": "/home/*/.local/share/sddm",
     "class": "Desktop Display Manager",
     "category": "Logs",
@@ -1925,6 +1981,17 @@
     "remove_files": true
   },
   {
+    "path": "/opt/vesktop",
+    "class": "Messanger",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "Vesktop",
+    "files_to_remove": [
+      "LICENSE.electron.txt",
+      "LICENSES.chromium.html"
+    ]
+  },
+  {
     "path": "/home/*/.config/vivaldi/Default",
     "class": "Browser",
     "category": "Browser",
@@ -2103,73 +2170,6 @@
     "program": "Zed",
     "directories_to_remove": [
       "logs"
-    ]
-  },
-  {
-    "path": "/home/*/.cache/paru",
-    "class": "Packet Manager",
-    "category": "Cache",
-    "program": "Paru",
-    "directories_to_remove": [
-      "clone"
-    ]
-  },
-  {
-    "path": "/home/*/.config/herdr",
-    "class": "AI",
-    "category": "Logs",
-    "program": "Herdr",
-    "files_to_remove": [
-      "herdr-client.log",
-      "herdr-server.log"
-    ]
-  },
-  {
-    "path": "/opt/vesktop",
-    "class": "Messanger",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "Vesktop",
-    "files_to_remove": [
-      "LICENSE.electron.txt",
-      "LICENSES.chromium.html"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Developing",
-    "category": "Documentation",
-    "program": "Cargo",
-    "directories_to_remove": [
-      "cargo"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Developing",
-    "category": "Documentation",
-    "program": "Clippy",
-    "directories_to_remove": [
-      "clippy"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Developing",
-    "category": "Documentation",
-    "program": "Lua",
-    "directories_to_remove": [
-      "lua54"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Developing",
-    "category": "Documentation",
-    "program": "Rust Language",
-    "directories_to_remove": [
-      "rustc",
-      "rustfmt"
     ]
   }
 ]
