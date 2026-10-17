@@ -2423,5 +2423,14 @@
       "DawnWebGPUCache",
       "GPUCache"
     ]
+  },
+  {
+    "path": "/home/*/.local/share/jopdf/cache",
+    "class": "PDF",
+    "category": "Logs",
+    "program": "JOPDF",
+    "directories_to_remove": [
+      "log"
+    ]
   }
 ]
