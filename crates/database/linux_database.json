@@ -2289,5 +2289,95 @@
       "logs",
       "Logs"
     ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "PDF",
+    "category": "Documentation",
+    "program": "PdfCraft",
+    "directories_to_remove": [
+      "pdfcraft"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Image",
+    "category": "Documentation",
+    "program": "PhotoCraft",
+    "directories_to_remove": [
+      "photocraft"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Audio",
+    "category": "Documentation",
+    "program": "SoundCraft",
+    "directories_to_remove": [
+      "soundcraft"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Graphics",
+    "category": "Documentation",
+    "program": "VectorCraft",
+    "directories_to_remove": [
+      "vectorcraft"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Office",
+    "category": "Documentation",
+    "program": "WordCraft",
+    "directories_to_remove": [
+      "wordcraft"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Office",
+    "category": "Documentation",
+    "program": "DeckCraft",
+    "directories_to_remove": [
+      "deckcraft"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Graphics",
+    "category": "Documentation",
+    "program": "DesignCraft",
+    "directories_to_remove": [
+      "designcraft"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Graphics",
+    "category": "Documentation",
+    "program": "EffectCraft",
+    "directories_to_remove": [
+      "effectcraft"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Video",
+    "category": "Documentation",
+    "program": "FilmCraft",
+    "directories_to_remove": [
+      "filmcraft"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Office",
+    "category": "Documentation",
+    "program": "GridCraft",
+    "directories_to_remove": [
+      "gridcraft"
+    ]
   }
 ]
