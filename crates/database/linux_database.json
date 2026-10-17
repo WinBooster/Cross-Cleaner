@@ -2104,5 +2104,24 @@
     "directories_to_remove": [
       "logs"
     ]
+  },
+  {
+    "path": "/home/*/.cache/paru",
+    "class": "Packet Manager",
+    "category": "Cache",
+    "program": "Paru",
+    "directories_to_remove": [
+      "clone"
+    ]
+  },
+  {
+    "path": "/home/*/.config/herdr",
+    "class": "AI",
+    "category": "Logs",
+    "program": "Herdr",
+    "files_to_remove": [
+      "herdr-client.log",
+      "herdr-server.log"
+    ]
   }
 ]
