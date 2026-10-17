@@ -2401,7 +2401,7 @@
   },
   {
     "path": "{drive}Users\\*\\AppData\\Roaming\\GridCraft",
-    "class": "Data Base",
+    "class": "Office",
     "category": "Logs",
     "program": "GridCraft",
     "directories_to_remove": [

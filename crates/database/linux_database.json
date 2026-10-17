@@ -2191,5 +2191,15 @@
       "logs",
       "Logs"
     ]
+  },
+  {
+    "path": "/home/*/.config/vectorcraft",
+    "class": "Image",
+    "category": "Logs",
+    "program": "VectorCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
   }
 ]
