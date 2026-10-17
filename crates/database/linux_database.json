@@ -2230,5 +2230,15 @@
       "logs",
       "Logs"
     ]
+  },
+  {
+    "path": "/home/*/.local/share/pdfcraft",
+    "class": "PDF",
+    "category": "Logs",
+    "program": "PdfCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
   }
 ]
