@@ -6266,7 +6266,7 @@
   },
   {
     "path": "{drive}Users\\*\\AppData\\Roaming\\VectorCraft",
-    "class": "Image",
+    "class": "Graphics",
     "category": "Logs",
     "program": "VectorCraft",
     "directories_to_remove": [
