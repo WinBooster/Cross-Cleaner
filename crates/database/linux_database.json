@@ -2181,5 +2181,15 @@
       "logs",
       "Logs"
     ]
+  },
+  {
+    "path": "/home/*/.config/gridcraft",
+    "class": "Office",
+    "category": "Logs",
+    "program": "GridCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
   }
 ]
