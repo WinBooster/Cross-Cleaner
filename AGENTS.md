@@ -106,11 +106,25 @@ there can delete user data on real machines. Changes to them are made by
 humans, and the CI `sort_json` job owns their ordering (sorted by `program`,
 case-insensitive), so hand edits are doubly unwelcome.
 
-If a task seems to require a new cleaning entry:
+If a task seems to require a new cleaning entry in the JSON databases above:
 
 1. Ask the user / a maintainer to make (or approve) the data change.
 2. At most, prepare a concrete proposal (exact JSON snippets, sources) in a
    comment, issue or PR description — not as a direct edit to the files above.
+
+### What *is* allowed: `crates/cleaner/src/custom_cleaners.rs`
+
+Unlike the JSON databases, built-in custom cleanings live in code:
+`crates/cleaner/src/custom_cleaners.rs`. **AI agents may edit this file.**
+It is the supported place to add cleaning logic (via `custom_glob_cleaner!`
+and friends), subject to one hard constraint: keep the `id` / `program` /
+`category` / `path` field formatting intact — the CI parses that file with a
+regex to build the "Built-in custom cleanings" docs, and changing the field
+layout breaks the generated `LIST_CUSTOM.md`.
+
+Care is still required: these cleaners run deletes on real machines, so prefer
+precise globs, never widen a pattern "just in case", and describe the effect in
+the commit message (`feat(cleaner): ...`, `fix(cleaner): ...`).
 
 ## 🚫 Generated files — do not edit by hand
 
