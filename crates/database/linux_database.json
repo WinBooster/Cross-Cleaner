@@ -2401,5 +2401,27 @@
     "directories_to_remove": [
       "logs"
     ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Modeling",
+    "category": "Documentation",
+    "program": "Blockbench",
+    "directories_to_remove": [
+      "blockbench"
+    ]
+  },
+  {
+    "path": "/home/*/.config/Blockbench",
+    "class": "Modeling",
+    "category": "Cache",
+    "program": "Blockbench",
+    "directories_to_remove": [
+      "Cache",
+      "Code Cache",
+      "DawnGraphiteCache",
+      "DawnWebGPUCache",
+      "GPUCache"
+    ]
   }
 ]
