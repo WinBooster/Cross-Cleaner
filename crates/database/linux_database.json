@@ -2260,5 +2260,14 @@
       "logs",
       "Logs"
     ]
+  },
+  {
+    "path": "/home/*/.local/share/solidcraft",
+    "class": "Graphics",
+    "category": "Crashes",
+    "program": "SolidCraft",
+    "directories_to_remove": [
+      "crashes"
+    ]
   }
 ]
