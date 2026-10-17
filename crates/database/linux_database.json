@@ -382,6 +382,44 @@
     ]
   },
   {
+    "path": "/home/*/.config/deckcraft",
+    "class": "Office",
+    "category": "Logs",
+    "program": "DeckCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Office",
+    "category": "Documentation",
+    "program": "DeckCraft",
+    "directories_to_remove": [
+      "deckcraft"
+    ]
+  },
+  {
+    "path": "/home/neki/.config/designcraft",
+    "class": "Graphics",
+    "category": "Logs",
+    "program": "DesignCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Graphics",
+    "category": "Documentation",
+    "program": "DesignCraft",
+    "directories_to_remove": [
+      "designcraft"
+    ]
+  },
+  {
     "path": "/home/*/.config/discord/",
     "class": "Messanger",
     "category": "Cache",
@@ -402,6 +440,25 @@
     "remove_files": true
   },
   {
+    "path": "/home/neki/.config/effectcraft",
+    "class": "Graphics",
+    "category": "Logs",
+    "program": "EffectCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Graphics",
+    "category": "Documentation",
+    "program": "EffectCraft",
+    "directories_to_remove": [
+      "effectcraft"
+    ]
+  },
+  {
     "path": "/usr/share/efitools/",
     "category": "Logs",
     "program": "EFI tools",
@@ -417,6 +474,25 @@
     "program": "Exodus Crypto Wallet",
     "directories_to_remove": [
       "exodus.wallet"
+    ]
+  },
+  {
+    "path": "/home/*/.local/share/filmcraft",
+    "class": "Video",
+    "category": "Logs",
+    "program": "FilmCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Video",
+    "category": "Documentation",
+    "program": "FilmCraft",
+    "directories_to_remove": [
+      "filmcraft"
     ]
   },
   {
@@ -557,6 +633,25 @@
     "program": "Gradle",
     "directories_to_remove": [
       "caches"
+    ]
+  },
+  {
+    "path": "/home/*/.config/gridcraft",
+    "class": "Office",
+    "category": "Logs",
+    "program": "GridCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Office",
+    "category": "Documentation",
+    "program": "GridCraft",
+    "directories_to_remove": [
+      "gridcraft"
     ]
   },
   {
@@ -991,6 +1086,15 @@
     "program": "Lua",
     "directories_to_remove": [
       "lua54"
+    ]
+  },
+  {
+    "path": "/home/*/.minetest",
+    "class": "Game",
+    "category": "Logs",
+    "program": "Luanti",
+    "files_to_remove": [
+      "debug.txt"
     ]
   },
   {
@@ -1505,6 +1609,44 @@
     ]
   },
   {
+    "path": "/home/*/.local/share/pdfcraft",
+    "class": "PDF",
+    "category": "Logs",
+    "program": "PdfCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "PDF",
+    "category": "Documentation",
+    "program": "PdfCraft",
+    "directories_to_remove": [
+      "pdfcraft"
+    ]
+  },
+  {
+    "path": "/home/*/.config/photocraft",
+    "class": "Image",
+    "category": "Logs",
+    "program": "PhotoCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Image",
+    "category": "Documentation",
+    "program": "PhotoCraft",
+    "directories_to_remove": [
+      "photocraft"
+    ]
+  },
+  {
     "path": "/home/*/.local/share/PolyMC/",
     "class": "Minecraft Launcher",
     "category": "Accounts",
@@ -1716,6 +1858,16 @@
     ]
   },
   {
+    "path": "/usr/share/doc",
+    "class": "Git",
+    "category": "Documentation",
+    "program": "rgitui",
+    "directories_to_remove": [
+      "rgitui-bin",
+      "rgitui"
+    ]
+  },
+  {
     "path": "/home/*/.wine/drive_c/users/*/AppData/LocalLow/Ludeon Studios/RimWorld by Ludeon Studios",
     "class": "Game",
     "category": "Logs",
@@ -1828,6 +1980,34 @@
     "program": "Snapper",
     "files_to_remove": [
       "snapper.log"
+    ]
+  },
+  {
+    "path": "/home/*/.local/share/solidcraft",
+    "class": "Graphics",
+    "category": "Crashes",
+    "program": "SolidCraft",
+    "directories_to_remove": [
+      "crashes"
+    ]
+  },
+  {
+    "path": "/home/*/.config/soundcraft",
+    "class": "Audio",
+    "category": "Logs",
+    "program": "SoundCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Audio",
+    "category": "Documentation",
+    "program": "SoundCraft",
+    "directories_to_remove": [
+      "soundcraft"
     ]
   },
   {
@@ -1981,6 +2161,25 @@
     "remove_files": true
   },
   {
+    "path": "/home/*/.config/vectorcraft",
+    "class": "Image",
+    "category": "Logs",
+    "program": "VectorCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Graphics",
+    "category": "Documentation",
+    "program": "VectorCraft",
+    "directories_to_remove": [
+      "vectorcraft"
+    ]
+  },
+  {
     "path": "/opt/vesktop",
     "class": "Messanger",
     "category": "Documentation",
@@ -2107,6 +2306,25 @@
     ]
   },
   {
+    "path": "/home/*/.config/wordcraft",
+    "class": "Office",
+    "category": "Logs",
+    "program": "WordCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
+  },
+  {
+    "path": "/usr/share/doc",
+    "class": "Office",
+    "category": "Documentation",
+    "program": "WordCraft",
+    "directories_to_remove": [
+      "wordcraft"
+    ]
+  },
+  {
     "path": "/home/*/.config/xmcl",
     "class": "Minecraft Launcher",
     "category": "Logs",
@@ -2170,224 +2388,6 @@
     "program": "Zed",
     "directories_to_remove": [
       "logs"
-    ]
-  },
-  {
-    "path": "/home/*/.config/photocraft",
-    "class": "Image",
-    "category": "Logs",
-    "program": "PhotoCraft",
-    "directories_to_remove": [
-      "logs",
-      "Logs"
-    ]
-  },
-  {
-    "path": "/home/*/.config/gridcraft",
-    "class": "Office",
-    "category": "Logs",
-    "program": "GridCraft",
-    "directories_to_remove": [
-      "logs",
-      "Logs"
-    ]
-  },
-  {
-    "path": "/home/*/.config/vectorcraft",
-    "class": "Image",
-    "category": "Logs",
-    "program": "VectorCraft",
-    "directories_to_remove": [
-      "logs",
-      "Logs"
-    ]
-  },
-  {
-    "path": "/home/*/.config/deckcraft",
-    "class": "Office",
-    "category": "Logs",
-    "program": "DeckCraft",
-    "directories_to_remove": [
-      "logs",
-      "Logs"
-    ]
-  },
-  {
-    "path": "/home/*/.minetest",
-    "class": "Game",
-    "category": "Logs",
-    "program": "Luanti",
-    "files_to_remove": [
-      "debug.txt"
-    ]
-  },
-  {
-    "path": "/home/*/.local/share/filmcraft",
-    "class": "Video",
-    "category": "Logs",
-    "program": "FilmCraft",
-    "directories_to_remove": [
-      "logs",
-      "Logs"
-    ]
-  },
-  {
-    "path": "/home/*/.local/share/pdfcraft",
-    "class": "PDF",
-    "category": "Logs",
-    "program": "PdfCraft",
-    "directories_to_remove": [
-      "logs",
-      "Logs"
-    ]
-  },
-  {
-    "path": "/home/*/.config/soundcraft",
-    "class": "Audio",
-    "category": "Logs",
-    "program": "SoundCraft",
-    "directories_to_remove": [
-      "logs",
-      "Logs"
-    ]
-  },
-  {
-    "path": "/home/*/.config/wordcraft",
-    "class": "Office",
-    "category": "Logs",
-    "program": "WordCraft",
-    "directories_to_remove": [
-      "logs",
-      "Logs"
-    ]
-  },
-  {
-    "path": "/home/*/.local/share/solidcraft",
-    "class": "Graphics",
-    "category": "Crashes",
-    "program": "SolidCraft",
-    "directories_to_remove": [
-      "crashes"
-    ]
-  },
-  {
-    "path": "/home/neki/.config/designcraft",
-    "class": "Graphics",
-    "category": "Logs",
-    "program": "DesignCraft",
-    "directories_to_remove": [
-      "logs",
-      "Logs"
-    ]
-  },
-  {
-    "path": "/home/neki/.config/effectcraft",
-    "class": "Graphics",
-    "category": "Logs",
-    "program": "EffectCraft",
-    "directories_to_remove": [
-      "logs",
-      "Logs"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "PDF",
-    "category": "Documentation",
-    "program": "PdfCraft",
-    "directories_to_remove": [
-      "pdfcraft"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Image",
-    "category": "Documentation",
-    "program": "PhotoCraft",
-    "directories_to_remove": [
-      "photocraft"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Audio",
-    "category": "Documentation",
-    "program": "SoundCraft",
-    "directories_to_remove": [
-      "soundcraft"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Graphics",
-    "category": "Documentation",
-    "program": "VectorCraft",
-    "directories_to_remove": [
-      "vectorcraft"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Office",
-    "category": "Documentation",
-    "program": "WordCraft",
-    "directories_to_remove": [
-      "wordcraft"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Office",
-    "category": "Documentation",
-    "program": "DeckCraft",
-    "directories_to_remove": [
-      "deckcraft"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Graphics",
-    "category": "Documentation",
-    "program": "DesignCraft",
-    "directories_to_remove": [
-      "designcraft"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Graphics",
-    "category": "Documentation",
-    "program": "EffectCraft",
-    "directories_to_remove": [
-      "effectcraft"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Video",
-    "category": "Documentation",
-    "program": "FilmCraft",
-    "directories_to_remove": [
-      "filmcraft"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Office",
-    "category": "Documentation",
-    "program": "GridCraft",
-    "directories_to_remove": [
-      "gridcraft"
-    ]
-  },
-  {
-    "path": "/usr/share/doc",
-    "class": "Git",
-    "category": "Documentation",
-    "program": "rgitui",
-    "directories_to_remove": [
-      "rgitui-bin",
-      "rgitui"
     ]
   }
 ]
