@@ -2240,5 +2240,15 @@
       "logs",
       "Logs"
     ]
+  },
+  {
+    "path": "/home/*/.config/soundcraft",
+    "class": "PDF",
+    "category": "Logs",
+    "program": "SoundCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
   }
 ]
