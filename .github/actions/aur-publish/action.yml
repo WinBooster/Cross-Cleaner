@@ -15,6 +15,13 @@ inputs:
   version:
     description: Version being published, as the git tag without its leading `v`.
     required: true
+  pkgrel:
+    description: >-
+      pkgrel being published. Used only for the log lines and the commit
+      message: the check against .SRCINFO compares pkgver, because that is what
+      names the release.
+    required: false
+    default: "1"
   package:
     description: Package name, for the commit message and the messages in the log.
     required: true
@@ -144,21 +151,26 @@ runs:
       env:
         CHECKOUT_DIR: ${{ inputs.checkout-dir }}
         APP_VERSION: ${{ inputs.version }}
+        PKGREL: ${{ inputs.pkgrel }}
         PKGNAME: ${{ inputs.package }}
       run: |
         set -euo pipefail
         cd "$CHECKOUT_DIR"
+        # The full version, as the AUR shows it: two publications of the same
+        # pkgver are told apart by this number, so a commit message without it
+        # would leave the log ambiguous.
+        release="${APP_VERSION}-${PKGREL}"
         # Not `git diff --quiet`: on a package that does not exist yet every
         # file is untracked, a diff sees none of them, and the first
         # publication would decide it had nothing to do and never create the
         # package. `status --porcelain` sees untracked files too, and
         # makepkg's artifacts stay out of it through the .gitignore.
         if [ -z "$(git status --porcelain)" ]; then
-          echo "AUR already carries ${APP_VERSION}, nothing to push"
+          echo "AUR already carries ${release}, nothing to push"
           exit 0
         fi
         git add PKGBUILD .SRCINFO LICENSE .gitignore
-        git commit -m "${PKGNAME} ${APP_VERSION}"
+        git commit -m "${PKGNAME} ${release}"
         # AUR rejects non-fast-forward pushes, so this must build on master.
         git push origin master
 
@@ -168,5 +180,6 @@ runs:
       env:
         PKGNAME: ${{ inputs.package }}
         APP_VERSION: ${{ inputs.version }}
+        PKGREL: ${{ inputs.pkgrel }}
       run: |
-        echo "Dry run: ${PKGNAME} ${APP_VERSION} is ready, and nothing was pushed."
+        echo "Dry run: ${PKGNAME} ${APP_VERSION}-${PKGREL} is ready, and nothing was pushed."

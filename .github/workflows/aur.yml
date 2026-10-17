@@ -13,10 +13,17 @@ name: Update AUR packages
 # Neither PKGBUILD is edited here by hand. packaging/aur/PKGBUILD and
 # packaging/aur/bin/PKGBUILD in this repository are the single source of truth,
 # and each job copies its own into its AUR repository with only the block
-# between the AUR-VERSION markers rewritten -- the version and the checksums.
-# The input validation, the tag lookup, the checksummed tag archive and the SSH
-# setup are shared through .github/actions/aur-prepare, and the .SRCINFO
+# between the AUR-VERSION markers rewritten -- the version, the pkgrel and the
+# checksums. What is committed inside those markers is whatever the last edit
+# of the template left there and not what the AUR carries; publishing rewrites
+# it. The input validation, the tag lookup, the checksummed tag archive and the
+# SSH setup are shared through .github/actions/aur-prepare, and the .SRCINFO
 # regeneration and the push through .github/actions/aur-publish.
+#
+# pkgrel and target exist for the one case a release does not cover: a fix to a
+# PKGBUILD for a version that is already on the AUR. The fixed PKGBUILD is the
+# same pkgver with the next pkgrel, and only the package that changed needs to
+# be republished, so neither field can be fixed at 1/both.
 on:
   workflow_dispatch:
     inputs:
@@ -24,6 +31,19 @@ on:
         description: "Version to publish, as a git tag without the leading v (e.g. 2.0.4.2.5)"
         required: true
         default: "2.0.4.2.5"
+      pkgrel:
+        description: "pkgrel to publish: 1 for a new version, higher when republishing a packaging fix"
+        required: false
+        default: "1"
+      target:
+        description: "Which package to publish"
+        type: choice
+        options:
+          - both
+          - cross-cleaner
+          - cross-cleaner-bin
+        required: false
+        default: "both"
       dry_run:
         description: "Check everything and show the diff, but do not push to AUR"
         type: boolean
@@ -35,6 +55,10 @@ env:
 
 jobs:
   update-aur:
+    # `target` selects one job or both: a republish of a packaging fix touches
+    # exactly one package, and publishing the other one again would only raise
+    # a pkgrel nobody changed anything in.
+    if: ${{ inputs.target != 'cross-cleaner-bin' }}
     runs-on: ubuntu-latest
     name: Update cross-cleaner in AUR
     # The AUR write key lives in this repository's `secrets` environment, next
@@ -56,6 +80,7 @@ jobs:
         uses: ./.github/actions/aur-prepare
         with:
           version: ${{ github.event.inputs.version }}
+          pkgrel: ${{ inputs.pkgrel }}
           ssh-key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
           aur-repo: ssh://aur@aur.archlinux.org/cross-cleaner.git
           checkout-dir: aur-pkg
@@ -75,6 +100,7 @@ jobs:
           # steps of that same action, which makes the export work in some job
           # shapes and silently produce an empty string in others.
           SHA256: ${{ steps.prepare.outputs.sha256 }}
+          PKGREL: ${{ inputs.pkgrel }}
         run: |
           set -euo pipefail
           python3 - <<'PY'
@@ -83,6 +109,7 @@ jobs:
           begin = "# ---AUR-VERSION-BEGIN---"
           end = "# ---AUR-VERSION-END---"
           version = os.environ["APP_VERSION"]
+          pkgrel = os.environ["PKGREL"]
           sha = os.environ["SHA256"]
           path = "aur-pkg/PKGBUILD"
 
@@ -98,17 +125,18 @@ jobs:
           block = [
               begin,
               f"pkgver={version}",
-              # Always 1: the tag names one commit, so a new version is a new
-              # pkgver. pkgrel only moves for a packaging change to the same
-              # version, and that is a manual edit.
-              "pkgrel=1",
+              # Passed in rather than derived: a new version starts at pkgrel 1,
+              # but a fix to the PKGBUILD for a version the AUR already carries
+              # is published as the same pkgver with a higher pkgrel, and only
+              # the caller knows which of the two this run is.
+              f"pkgrel={pkgrel}",
               'source=("cross-cleaner-v${pkgver}.tar.gz::'
               'https://github.com/Cross-Cleaner/Cross-Cleaner/archive/refs/tags/v${pkgver}.tar.gz")',
               f"sha256sums=('{sha}')",
               end,
           ]
           open(path, "w").write("\n".join(lines[:first] + block + lines[last + 1:]) + "\n")
-          print(f"PKGBUILD pinned to {version}")
+          print(f"PKGBUILD pinned to {version}-{pkgrel}")
           PY
 
       - name: Regenerate .SRCINFO and push
@@ -116,6 +144,7 @@ jobs:
         with:
           checkout-dir: aur-pkg
           version: ${{ github.event.inputs.version }}
+          pkgrel: ${{ inputs.pkgrel }}
           package: cross-cleaner
           # One source, so one checksum: the tag archive. See the action for
           # what the numbers are compared against.
@@ -123,6 +152,7 @@ jobs:
           dry-run: ${{ inputs.dry_run }}
 
   update-aur-bin:
+    if: ${{ inputs.target != 'cross-cleaner' }}
     runs-on: ubuntu-latest
     name: Update cross-cleaner-bin in AUR
     environment: secrets
@@ -138,6 +168,7 @@ jobs:
         uses: ./.github/actions/aur-prepare
         with:
           version: ${{ github.event.inputs.version }}
+          pkgrel: ${{ inputs.pkgrel }}
           ssh-key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
           aur-repo: ssh://aur@aur.archlinux.org/cross-cleaner-bin.git
           checkout-dir: aur-bin
@@ -179,7 +210,11 @@ jobs:
             marker="${spec##*:}"
             for component in GUI TUI CLI; do
               asset="release-assets/${prefix}-Cross_Cleaner_${component}-no-updater"
-              desc=$(file -b "$asset")
+              # -L because the same check in the PKGBUILD reads a symlink:
+              # makepkg lays a source into $srcdir as a link to the download
+              # rather than copying it, and file(1) does not follow symlinks
+              # unless asked. The two checks have to mean the same thing.
+              desc=$(file -Lb "$asset")
               printf '%s: %s\n' "$asset" "$desc"
               if ! printf '%s' "$desc" | grep -qF "$marker"; then
                 echo "::error::${asset} is not a ${marker} binary"
@@ -210,6 +245,8 @@ jobs:
         # The checksums are computed from the files themselves, both here and
         # for the tag archive: they are the files that were just downloaded and
         # verified, so nothing can be hashed that was not also inspected.
+        env:
+          PKGREL: ${{ inputs.pkgrel }}
         run: |
           set -euo pipefail
           python3 - <<'PY'
@@ -218,6 +255,7 @@ jobs:
           begin = "# ---AUR-VERSION-BEGIN---"
           end = "# ---AUR-VERSION-END---"
           version = os.environ["APP_VERSION"]
+          pkgrel = os.environ["PKGREL"]
           path = "aur-bin/PKGBUILD"
           assets = "release-assets"
           repo = "https://github.com/Cross-Cleaner/Cross-Cleaner"
@@ -242,10 +280,11 @@ jobs:
           block = [
               begin,
               "pkgver=%s" % version,
-              # Always 1: the tag names one commit, so a new version is a new
-              # pkgver. pkgrel only moves for a packaging change to the same
-              # version, and that is a manual edit.
-              "pkgrel=1",
+              # Passed in rather than derived: a new version starts at pkgrel 1,
+              # but a fix to the PKGBUILD for a version the AUR already carries
+              # is published as the same pkgver with a higher pkgrel, and only
+              # the caller knows which of the two this run is.
+              "pkgrel=%s" % pkgrel,
           ]
 
           for arch, prefix in (("x86_64", "Linux"), ("aarch64", "Linux-Arm64")):
@@ -284,7 +323,7 @@ jobs:
           if last < first:
               sys.exit("::error::markers are in the wrong order")
           open(path, "w").write("\n".join(lines[:first] + block + lines[last + 1:]) + "\n")
-          print("PKGBUILD pinned to %s" % version)
+          print("PKGBUILD pinned to %s-%s" % (version, pkgrel))
           PY
 
       - name: Regenerate .SRCINFO and push
@@ -292,6 +331,7 @@ jobs:
         with:
           checkout-dir: aur-bin
           version: ${{ github.event.inputs.version }}
+          pkgrel: ${{ inputs.pkgrel }}
           package: cross-cleaner-bin
           # Four sources per architecture -- the tag archive and the three
           # uploads -- and the archive's checksum appears in both arrays

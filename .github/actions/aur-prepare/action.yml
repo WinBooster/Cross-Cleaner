@@ -13,6 +13,12 @@ inputs:
   version:
     description: Version to publish, as a git tag without the leading `v` (e.g. 2.0.4.2.5).
     required: true
+  pkgrel:
+    description: >-
+      pkgrel to write into the PKGBUILD. 1 for a new version; higher when the
+      same version is republished with a fixed PKGBUILD.
+    required: false
+    default: "1"
   ssh-key:
     description: >-
       Private half of the key registered on the AUR account. Passed in as an
@@ -41,10 +47,11 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Validate version input
+    - name: Validate the version and pkgrel inputs
       shell: bash
       env:
         APP_VERSION: ${{ inputs.version }}
+        PKGREL: ${{ inputs.pkgrel }}
       run: |
         set -euo pipefail
         # AUR versions allow digits and dots separated by single hyphens.
@@ -58,7 +65,15 @@ runs:
           echo "::error::'$APP_VERSION' contains characters pacman rejects"
           exit 1
         fi
-        echo "Publishing version: $APP_VERSION"
+        # pkgrel is an integer, with an optional decimal part for a quick
+        # follow-up (2, 1.1). It is written into the PKGBUILD verbatim, so a
+        # value pacman would reject has to be caught here rather than by
+        # makepkg in the last step of the job.
+        if ! printf '%s' "$PKGREL" | grep -Eq '^[0-9]+(\.[0-9]+)*$'; then
+          echo "::error::pkgrel '$PKGREL' is not a number like 1 or 1.1"
+          exit 1
+        fi
+        echo "Publishing version: ${APP_VERSION}-${PKGREL}"
 
     - name: Check the tag exists
       shell: bash
