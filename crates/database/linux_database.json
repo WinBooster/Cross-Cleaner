@@ -2269,5 +2269,15 @@
     "directories_to_remove": [
       "crashes"
     ]
+  },
+  {
+    "path": "/home/neki/.config/designcraft",
+    "class": "Graphics",
+    "category": "Logs",
+    "program": "DesignCraft",
+    "directories_to_remove": [
+      "logs",
+      "Logs"
+    ]
   }
 ]
