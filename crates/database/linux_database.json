@@ -198,6 +198,18 @@
     ]
   },
   {
+    "path": "/home/*/.cargo/registry",
+    "class": "Developing",
+    "category": "Cache",
+    "sub_category": "Development build",
+    "program": "Cargo",
+    "directories_to_remove": [
+      "cache",
+      "index",
+      "src"
+    ]
+  },
+  {
     "path": "/home/*/.cache/cassette/",
     "class": "Audio",
     "category": "Cache",
@@ -2388,18 +2400,6 @@
     "program": "Zed",
     "directories_to_remove": [
       "logs"
-    ]
-  },
-  {
-    "path": "/home/*/.cargo/registry",
-    "class": "Developing",
-    "category": "Cache",
-    "sub_category": "Development build",
-    "program": "Cargo",
-    "directories_to_remove": [
-      "cache",
-      "index",
-      "src"
     ]
   }
 ]
