@@ -1,13 +1,22 @@
-name: Update AUR package
+name: Update AUR packages
 
-# Publishes a tagged release to the AUR. The version is an input rather than
-# something read from the default branch: the PKGBUILD in the AUR is pinned to
-# exactly one git tag, so which release goes out is always an explicit choice.
+# Publishes a tagged release to the AUR as two packages, both pinned to the
+# same tag:
 #
-# The PKGBUILD is not edited here by hand. packaging/aur/PKGBUILD in this
-# repository is the single source of truth, and this workflow copies it into the
-# AUR repository with only the four lines between the AUR-VERSION markers
-# rewritten -- the checksum of the tag archive and the version itself.
+#   cross-cleaner      compiles the release on the machine that installs it
+#   cross-cleaner-bin  installs the `-no-updater` binaries the release uploaded
+#
+# The version is an input rather than something read from the default branch:
+# each PKGBUILD names exactly one git tag, so which release goes out is always
+# an explicit choice and never whatever main happened to contain.
+#
+# Neither PKGBUILD is edited here by hand. packaging/aur/PKGBUILD and
+# packaging/aur/bin/PKGBUILD in this repository are the single source of truth,
+# and each job copies its own into its AUR repository with only the block
+# between the AUR-VERSION markers rewritten -- the version and the checksums.
+# The input validation, the tag lookup, the checksummed tag archive and the SSH
+# setup are shared through .github/actions/aur-prepare, and the .SRCINFO
+# regeneration and the push through .github/actions/aur-publish.
 on:
   workflow_dispatch:
     inputs:
@@ -35,146 +44,21 @@ jobs:
     environment: secrets
     env:
       APP_VERSION: ${{ github.event.inputs.version }}
-      AUR_REPO: ssh://aur@aur.archlinux.org/cross-cleaner.git
     steps:
       - uses: actions/checkout@v4
         with:
           # Only the PKGBUILD template is needed. Depth 1 with no history saves
-          # a large clone: the tag list is fetched separately below.
+          # a large clone: the tag list is fetched separately by the action.
           fetch-depth: 1
 
-      - name: Validate version input
-        run: |
-          set -euo pipefail
-          # AUR versions allow digits and dots separated by single hyphens.
-          # Anything else is rejected by pacman later, so catch it here where
-          # the message can say what was wrong.
-          if ! printf '%s' "$APP_VERSION" | grep -Eq '^[0-9]+(\.[0-9]+)*([a-zA-Z0-9._+]*-[0-9]+(\.[0-9]+)*)?$'; then
-            echo "::error::'$APP_VERSION' is not a valid package version"
-            exit 1
-          fi
-          if printf '%s' "$APP_VERSION" | grep -q '[^0-9a-zA-Z.+-]'; then
-            echo "::error::'$APP_VERSION' contains characters pacman rejects"
-            exit 1
-          fi
-          echo "Publishing version: $APP_VERSION"
-
-      - name: Check the tag exists
-        run: |
-          set -euo pipefail
-          git fetch --tags --force --quiet
-          if ! git rev-parse -q --verify "refs/tags/v${APP_VERSION}" >/dev/null; then
-            echo "::error::tag v${APP_VERSION} does not exist in $GITHUB_REPOSITORY"
-            echo "Known recent tags:"
-            # Same pipefail/EPIPE trap as the tar step below: let git finish.
-            git tag -l 'v*' --sort=-v:refname > tags.txt
-            sed -n '1,10p' tags.txt
-            exit 1
-          fi
-          echo "Found tag v${APP_VERSION} at $(git rev-parse --short "v${APP_VERSION}")"
-
-      - name: Download the tag archive and checksum it
-        run: |
-          set -euo pipefail
-          url="https://github.com/$GITHUB_REPOSITORY/archive/refs/tags/v${APP_VERSION}.tar.gz"
-          curl -sSL --retry 3 -o "cross-cleaner-v${APP_VERSION}.tar.gz" "$url"
-          sha=$(sha256sum "cross-cleaner-v${APP_VERSION}.tar.gz" | cut -d' ' -f1)
-          echo "SHA256=${sha}" >> "$GITHUB_ENV"
-          echo "Checksum of v${APP_VERSION}: ${sha}"
-
-      - name: Verify the archive extracts to the directory the PKGBUILD expects
-        run: |
-          set -euo pipefail
-          # packaging/aur/PKGBUILD derives its source directory from pkgver, so a
-          # change in how GitHub names tag archives would break the build in a
-          # way that only shows up after a 40 minute compile. One tar -t here
-          # catches it in a second.
-          # The listing is drained in full before the first line is taken.
-          # `tar ... | head -1` would close the pipe early, tar would die on
-          # EPIPE ("tar: stdout: write error", exit 2), and `set -o pipefail`
-          # would turn that into a failed step -- which is exactly what happened
-          # the first time round.
-          listing=$(tar tzf "cross-cleaner-v${APP_VERSION}.tar.gz")
-          top=$(printf '%s\n' "$listing" | sed -n '1p')
-          echo "Top level directory: ${top}"
-          if [ "${top}" != "Cross-Cleaner-${APP_VERSION}/" ]; then
-            echo "::error::expected top level 'Cross-Cleaner-${APP_VERSION}/', got '${top}'"
-            exit 1
-          fi
-
-      - name: Set up SSH for the AUR
-        # AUR accepts writes over SSH only, so this needs the private half of a
-        # key that is registered on the account (My Account -> Add SSH Key).
-        # Store it as the repository secret AUR_SSH_PRIVATE_KEY.
-        env:
-          AUR_SSH_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
-        run: |
-          set -euo pipefail
-          if [ -z "$AUR_SSH_KEY" ]; then
-            echo "::error::secret AUR_SSH_PRIVATE_KEY is empty in ${GITHUB_REPOSITORY}"
-            echo ""
-            echo "This step is running in: ${GITHUB_REPOSITORY}"
-            echo "This job declares environment: secrets, so the value is read"
-            echo "from that environment's secrets. The usual causes now:"
-            echo "  - no secret named AUR_SSH_PRIVATE_KEY in the 'secrets'"
-            echo "    environment of ${GITHUB_REPOSITORY}"
-            echo "  - it was added as a Repository secret instead of an"
-            echo "    Environment secret, or the other way round"
-            echo "  - the name differs: it must be exactly AUR_SSH_PRIVATE_KEY"
-            echo "  - it was saved but the value is empty or whitespace only"
-            exit 1
-          fi
-          # Bash substring rather than `printf ... | head -c`: under
-          # `set -o pipefail` a pipe into head is the same SIGPIPE trap that
-          # broke the tar step. No subprocess, no pipe.
-          if [ "${AUR_SSH_KEY:0:30}" != "-----BEGIN OPENSSH PRIVATE KEY" ]; then
-            echo "::error::AUR_SSH_PRIVATE_KEY does not start with an OpenSSH private key header"
-            echo "The value must be the whole file, including both BEGIN and END lines."
-            exit 1
-          fi
-          echo "Secret found, ${#AUR_SSH_KEY} bytes"
-          install -m 700 -d ~/.ssh
-          printf '%s\n' "$AUR_SSH_KEY" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-
-          # ssh-keyscan on its own is trust-on-first-use, which on a CI runner
-          # is trust-nothing: an attacker able to poison DNS would get a silent
-          # MITM on the push that writes to the AUR account. So the scanned key
-          # is checked against the fingerprint published on the AUR front page
-          # ("The following SSH fingerprints are used for the AUR") and the
-          # connection is aborted on a mismatch.
-          expected="SHA256:RFzBCUItH9LZS0cKB5UE6ceAYhBD5C8GeOBip8Z11+4"
-          hostkey=$(ssh-keyscan -t ed25519 aur.archlinux.org 2>/dev/null)
-          if [ -z "$hostkey" ]; then
-            echo "::error::could not read the aur.archlinux.org host key"
-            exit 1
-          fi
-          actual=$(printf '%s\n' "$hostkey" | ssh-keygen -lf - | awk '{print $2}')
-          echo "AUR host fingerprint: ${actual}"
-          if [ "$actual" != "$expected" ]; then
-            echo "::error::aur.archlinux.org fingerprint mismatch"
-            echo "  expected ${expected}"
-            echo "  got      ${actual}"
-            echo "If Arch rotated the key, update AUR_SSH_FINGERPRINT and re-check the new value."
-            exit 1
-          fi
-          # known_hosts takes the public KEY line, not the fingerprint. Writing
-          # "aur.archlinux.org SHA256:..." there instead makes every later
-          # connection fail with "Host key verification failed." -- which is
-          # exactly what this did on the first run.
-          printf '%s\n' "$hostkey" > ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
-          ssh -o BatchMode=yes -T aur@aur.archlinux.org exit || true
-          echo "SSH to AUR is available"
-
-      - name: Clone the AUR repository
-        run: |
-          set -euo pipefail
-          git clone "$AUR_REPO" aur-pkg
-          cd aur-pkg
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout master
+      - name: Prepare the publication
+        id: prepare
+        uses: ./.github/actions/aur-prepare
+        with:
+          version: ${{ github.event.inputs.version }}
+          ssh-key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          aur-repo: ssh://aur@aur.archlinux.org/cross-cleaner.git
+          checkout-dir: aur-pkg
 
       - name: Copy the packaging files into the AUR repository
         run: |
@@ -185,6 +69,12 @@ jobs:
           cp ../packaging/aur/.gitignore .gitignore
 
       - name: Pin the PKGBUILD to the requested version
+        env:
+          # Passed in rather than exported by the action: an environment
+          # variable written inside a composite action is not visible to the
+          # steps of that same action, which makes the export work in some job
+          # shapes and silently produce an empty string in others.
+          SHA256: ${{ steps.prepare.outputs.sha256 }}
         run: |
           set -euo pipefail
           python3 - <<'PY'
@@ -221,73 +111,190 @@ jobs:
           print(f"PKGBUILD pinned to {version}")
           PY
 
-      - name: Regenerate .SRCINFO
-        # makepkg does not exist on the runner -- GitHub's ubuntu-latest image
-        # ships no pacman at all -- so this runs inside an Arch container. Using
-        # the real makepkg rather than reimplementing the format here is the
-        # point: .SRCINFO has to match what makepkg writes on a user's machine,
-        # and a hand-rolled writer would silently drift from it.
+      - name: Regenerate .SRCINFO and push
+        uses: ./.github/actions/aur-publish
+        with:
+          checkout-dir: aur-pkg
+          version: ${{ github.event.inputs.version }}
+          package: cross-cleaner
+          # One source, so one checksum: the tag archive. See the action for
+          # what the numbers are compared against.
+          checksums: sha256sums=1
+          dry-run: ${{ inputs.dry_run }}
+
+  update-aur-bin:
+    runs-on: ubuntu-latest
+    name: Update cross-cleaner-bin in AUR
+    environment: secrets
+    env:
+      APP_VERSION: ${{ github.event.inputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Prepare the publication
+        id: prepare
+        uses: ./.github/actions/aur-prepare
+        with:
+          version: ${{ github.event.inputs.version }}
+          ssh-key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          aur-repo: ssh://aur@aur.archlinux.org/cross-cleaner-bin.git
+          checkout-dir: aur-bin
+
+      - name: Download the release assets
+        # Both architectures, not just the one this runner is: the PKGBUILD has
+        # to carry a checksum for every architecture it declares in arch=,
+        # because the user builds on whichever machine they have and nothing
+        # runs later to fill in the other one.
         run: |
           set -euo pipefail
-          docker run --rm \
-            -v "$PWD/aur-pkg:/pkg" \
-            -w /pkg \
-            archlinux:latest \
-            bash -c '
-              set -euo pipefail
-              # makepkg ships in the pacman package on Arch.
-              pacman -Sy --noconfirm --needed pacman >/dev/null
-              # makepkg refuses to run as root, and it is right to: it drops
-              # privileges nowhere and builds into paths it will later chown.
-              # pacman needs root to install, makepkg must not have it, so the
-              # two run as different users in the same container.
-              useradd --create-home --shell /bin/bash builder
-              chown -R builder:builder /pkg
-              su builder -c "cd /pkg && makepkg --printsrcinfo -p PKGBUILD > .SRCINFO"
-            '
-          echo "--- .SRCINFO ---"
-          cat aur-pkg/.SRCINFO
-          # The container's `builder` is uid 1000, the runner is 1001, and a bind
-          # mount maps container uids straight through with no remapping. So
-          # .SRCINFO lands on the host owned by a different user, which the
-          # runner cannot commit. Take it back before doing anything else.
-          sudo chown -R "$(id -u):$(id -g)" aur-pkg
-          test -w aur-pkg/.SRCINFO || {
-            echo "::error::.SRCINFO is not writable by the runner user"
-            exit 1
-          }
-          # The version in .SRCINFO is what the AUR page displays; if it did not
-          # move, the orphanage would not notice an update.
-          grep -q "pkgver = ${APP_VERSION}$" aur-pkg/.SRCINFO \
-            || { echo "::error::.SRCINFO does not carry version ${APP_VERSION}"; exit 1; }
-          grep -q "sha256sums = " aur-pkg/.SRCINFO \
-            || { echo "::error::.SRCINFO carries no checksum"; exit 1; }
-          if grep -q "sha256sums = SKIP" aur-pkg/.SRCINFO; then
-            echo "::error::checksum was not substituted"
-            exit 1
-          fi
+          mkdir -p release-assets
+          for prefix in Linux Linux-Arm64; do
+            for component in GUI TUI CLI; do
+              asset="${prefix}-Cross_Cleaner_${component}-no-updater"
+              # --fail so a missing upload is an error rather than a saved
+              # error page: without it, an asset that failed to publish would
+              # be hashed and pushed as if it were a binary.
+              curl -sSfL --retry 3 -o "release-assets/${asset}" \
+                "https://github.com/${GITHUB_REPOSITORY}/releases/download/v${APP_VERSION}/${asset}"
+              printf '  %s %s\n' "${asset}" "$(sha256sum "release-assets/${asset}" | cut -d' ' -f1)"
+            done
+          done
 
-      - name: Show the change
-        run: |
-          cd aur-pkg
-          git --no-pager diff --stat
-          git --no-pager diff -- PKGBUILD
-
-      - name: Push to AUR
-        if: ${{ !inputs.dry_run }}
+      - name: Verify the assets are no-updater Linux builds
+        # The two properties this package exists for, asserted here rather than
+        # discovered by whoever installs it later:
+        #
+        # 1. the architecture, because a URL that lost its `Arm64` marker
+        #    resolves happily and installs a binary the machine cannot run;
+        # 2. the feature set, because a self-updating build would replace its
+        #    own file behind pacman's back. This is the same canary the release
+        #    pipeline applies to the .deb it builds from this same code, and
+        #    finding `selfupdate` in the binary is the failure.
         run: |
           set -euo pipefail
-          cd aur-pkg
-          if git diff --quiet && git diff --cached --quiet; then
-            echo "AUR already carries $APP_VERSION, nothing to push"
-            exit 0
-          fi
-          git add PKGBUILD .SRCINFO LICENSE .gitignore
-          git commit -m "cross-cleaner ${APP_VERSION}"
-          # AUR rejects non-fast-forward pushes, so this must build on master.
-          git push origin master
+          for spec in "Linux:x86-64" "Linux-Arm64:aarch64"; do
+            prefix="${spec%%:*}"
+            marker="${spec##*:}"
+            for component in GUI TUI CLI; do
+              asset="release-assets/${prefix}-Cross_Cleaner_${component}-no-updater"
+              desc=$(file -b "$asset")
+              printf '%s: %s\n' "$asset" "$desc"
+              if ! printf '%s' "$desc" | grep -qF "$marker"; then
+                echo "::error::${asset} is not a ${marker} binary"
+                exit 1
+              fi
+              # Matching lines are printed rather than merely counted, so a
+              # false positive names itself instead of looking like a broken
+              # release.
+              if strings "$asset" | grep -i 'selfupdate' > selfupdate-canary.txt; then
+                echo "::error::${asset} carries self-update code:"
+                cat selfupdate-canary.txt
+                exit 1
+              fi
+            done
+          done
 
-      - name: Report the dry run
-        if: ${{ inputs.dry_run }}
+      - name: Copy the packaging files into the AUR repository
         run: |
-          echo "Dry run: AUR would be updated to ${APP_VERSION} (checksum ${SHA256:-computed above})."
+          set -euo pipefail
+          cd aur-bin
+          cp ../packaging/aur/bin/PKGBUILD PKGBUILD
+          # Shared with cross-cleaner: the same 0BSD license on the packaging
+          # files, and the same list of makepkg's build artifacts to ignore.
+          cp ../packaging/aur/LICENSE LICENSE
+          cp ../packaging/aur/.gitignore .gitignore
+
+      - name: Pin the PKGBUILD to the requested version
+        # The checksums are computed from the files themselves, both here and
+        # for the tag archive: they are the files that were just downloaded and
+        # verified, so nothing can be hashed that was not also inspected.
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, os, sys
+
+          begin = "# ---AUR-VERSION-BEGIN---"
+          end = "# ---AUR-VERSION-END---"
+          version = os.environ["APP_VERSION"]
+          path = "aur-bin/PKGBUILD"
+          assets = "release-assets"
+          repo = "https://github.com/Cross-Cleaner/Cross-Cleaner"
+
+          def sha256(filename):
+              digest = hashlib.sha256()
+              with open(filename, "rb") as handle:
+                  for chunk in iter(lambda: handle.read(1 << 20), b""):
+                      digest.update(chunk)
+              return digest.hexdigest()
+
+          def upload(prefix, component):
+              # The `-no-updater` suffix is not decoration: it names the build
+              # whose self-update feature was compiled out, which is the whole
+              # reason this package exists next to the default asset.
+              return "%s-Cross_Cleaner_%s-no-updater" % (prefix, component)
+
+          archive = "cross-cleaner-v%s.tar.gz" % version
+          archive_sha = sha256(archive)
+          sums = []
+
+          block = [
+              begin,
+              "pkgver=%s" % version,
+              # Always 1: the tag names one commit, so a new version is a new
+              # pkgver. pkgrel only moves for a packaging change to the same
+              # version, and that is a manual edit.
+              "pkgrel=1",
+          ]
+
+          for arch, prefix in (("x86_64", "Linux"), ("aarch64", "Linux-Arm64")):
+              names = [upload(prefix, component) for component in ("GUI", "TUI", "CLI")]
+              block.append("source_%s=(" % arch)
+              # A literal ${pkgver} on purpose: it is a reference for pacman to
+              # expand, not a value to substitute now.
+              block.append('    "cross-cleaner-v${pkgver}.tar.gz::'
+                           '%s/archive/refs/tags/v${pkgver}.tar.gz"' % repo)
+              for name in names:
+                  block.append('    "%s/releases/download/v${pkgver}/%s"' % (repo, name))
+              block.append(")")
+              block.append("sha256sums_%s=(" % arch)
+              block.append("    '%s'" % archive_sha)
+              for name in names:
+                  digest = sha256(os.path.join(assets, name))
+                  sums.append(digest)
+                  block.append("    '%s'" % digest)
+              block.append(")")
+          block.append(end)
+
+          # Six uploads of three different programs: identical checksums would
+          # mean the downloads did not resolve to six different files -- a URL
+          # that answered with the same content twice, most likely. The
+          # PKGBUILD would carry perfectly plausible-looking checksums either
+          # way, so the mistake is caught here instead.
+          if len(set(sums)) != len(sums):
+              sys.exit("::error::two release assets have the same checksum")
+
+          lines = open(path).read().splitlines()
+          try:
+              first = lines.index(begin)
+              last = lines.index(end)
+          except ValueError:
+              sys.exit(f"::error::markers not found in {path}")
+          if last < first:
+              sys.exit("::error::markers are in the wrong order")
+          open(path, "w").write("\n".join(lines[:first] + block + lines[last + 1:]) + "\n")
+          print("PKGBUILD pinned to %s" % version)
+          PY
+
+      - name: Regenerate .SRCINFO and push
+        uses: ./.github/actions/aur-publish
+        with:
+          checkout-dir: aur-bin
+          version: ${{ github.event.inputs.version }}
+          package: cross-cleaner-bin
+          # Four sources per architecture -- the tag archive and the three
+          # uploads -- and the archive's checksum appears in both arrays
+          # because both architectures share that one file.
+          checksums: sha256sums_x86_64=4 sha256sums_aarch64=4
+          dry-run: ${{ inputs.dry_run }}

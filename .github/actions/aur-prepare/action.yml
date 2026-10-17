@@ -1,0 +1,213 @@
+name: Prepare an AUR publication
+description: >-
+  Everything the two AUR jobs do the same way: validate the version input, check
+  the tag exists, download and checksum the tag archive, verify the archive
+  unpacks into the directory the PKGBUILD expects, set up SSH to
+  aur.archlinux.org and clone the AUR repository to publish into. One file
+  instead of two copies, because both packages are published from the same
+  release: every check here has to mean exactly the same thing in both jobs, and
+  the pinned AUR host key in particular is a security constant that must not be
+  able to drift between them.
+
+inputs:
+  version:
+    description: Version to publish, as a git tag without the leading `v` (e.g. 2.0.4.2.5).
+    required: true
+  ssh-key:
+    description: >-
+      Private half of the key registered on the AUR account. Passed in as an
+      input because a composite action cannot read the caller's secrets itself.
+    required: true
+  aur-repo:
+    description: >-
+      SSH URL of the AUR repository to clone, e.g.
+      ssh://aur@aur.archlinux.org/cross-cleaner.git.
+    required: true
+  checkout-dir:
+    description: Directory the AUR repository is cloned into, relative to the workspace.
+    required: false
+    default: aur-pkg
+
+outputs:
+  sha256:
+    description: >-
+      SHA-256 of the tag archive, for the step that writes it into the
+      PKGBUILD's checksum array. Returned as an output rather than exported
+      through $GITHUB_ENV: an environment variable written by a composite
+      action is not visible to the steps inside that same action, which makes
+      the export work in one shape of job and silently fail in another.
+    value: ${{ steps.archive.outputs.sha256 }}
+
+runs:
+  using: composite
+  steps:
+    - name: Validate version input
+      shell: bash
+      env:
+        APP_VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+        # AUR versions allow digits and dots separated by single hyphens.
+        # Anything else is rejected by pacman later, so catch it here where
+        # the message can say what was wrong.
+        if ! printf '%s' "$APP_VERSION" | grep -Eq '^[0-9]+(\.[0-9]+)*([a-zA-Z0-9._+]*-[0-9]+(\.[0-9]+)*)?$'; then
+          echo "::error::'$APP_VERSION' is not a valid package version"
+          exit 1
+        fi
+        if printf '%s' "$APP_VERSION" | grep -q '[^0-9a-zA-Z.+-]'; then
+          echo "::error::'$APP_VERSION' contains characters pacman rejects"
+          exit 1
+        fi
+        echo "Publishing version: $APP_VERSION"
+
+    - name: Check the tag exists
+      shell: bash
+      env:
+        APP_VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+        git fetch --tags --force --quiet
+        if ! git rev-parse -q --verify "refs/tags/v${APP_VERSION}" >/dev/null; then
+          echo "::error::tag v${APP_VERSION} does not exist in $GITHUB_REPOSITORY"
+          echo "Known recent tags:"
+          # Same pipefail/EPIPE trap as the tar step below: let git finish.
+          git tag -l 'v*' --sort=-v:refname > tags.txt
+          sed -n '1,10p' tags.txt
+          exit 1
+        fi
+        echo "Found tag v${APP_VERSION} at $(git rev-parse --short "v${APP_VERSION}")"
+
+    - name: Download the tag archive and checksum it
+      id: archive
+      shell: bash
+      env:
+        APP_VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+        # Named as the PKGBUILD names its source, so the file hashed here is
+        # the file the PKGBUILD refers to under the same name.
+        url="https://github.com/$GITHUB_REPOSITORY/archive/refs/tags/v${APP_VERSION}.tar.gz"
+        curl -sSL --retry 3 -o "cross-cleaner-v${APP_VERSION}.tar.gz" "$url"
+        sha=$(sha256sum "cross-cleaner-v${APP_VERSION}.tar.gz" | cut -d' ' -f1)
+        echo "sha256=${sha}" >> "$GITHUB_OUTPUT"
+        echo "Checksum of v${APP_VERSION}: ${sha}"
+
+    - name: Verify the archive extracts to the directory the PKGBUILD expects
+      shell: bash
+      env:
+        APP_VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+        # Both PKGBUILDs derive their source directory from pkgver, so a change
+        # in how GitHub names tag archives would break the build in a way that
+        # only shows up after a 40 minute compile in one of them and after a
+        # confusing "no such directory" in the other. One tar -t here catches
+        # it in a second.
+        # The listing is drained in full before the first line is taken.
+        # `tar ... | head -1` would close the pipe early, tar would die on
+        # EPIPE ("tar: stdout: write error", exit 2), and `set -o pipefail`
+        # would turn that into a failed step -- which is exactly what happened
+        # the first time round.
+        listing=$(tar tzf "cross-cleaner-v${APP_VERSION}.tar.gz")
+        top=$(printf '%s\n' "$listing" | sed -n '1p')
+        echo "Top level directory: ${top}"
+        if [ "${top}" != "Cross-Cleaner-${APP_VERSION}/" ]; then
+          echo "::error::expected top level 'Cross-Cleaner-${APP_VERSION}/', got '${top}'"
+          exit 1
+        fi
+
+    - name: Set up SSH for the AUR
+      # AUR accepts writes over SSH only, so this needs the private half of a
+      # key that is registered on the account (My Account -> Add SSH Key).
+      # Stored as the repository secret AUR_SSH_PRIVATE_KEY and handed in here
+      # by the calling job.
+      shell: bash
+      env:
+        AUR_SSH_KEY: ${{ inputs.ssh-key }}
+      run: |
+        set -euo pipefail
+        if [ -z "$AUR_SSH_KEY" ]; then
+          echo "::error::secret AUR_SSH_PRIVATE_KEY is empty in ${GITHUB_REPOSITORY}"
+          echo ""
+          echo "This step is running in: ${GITHUB_REPOSITORY}"
+          echo "Both AUR jobs declare environment: secrets, so the value is read"
+          echo "from that environment's secrets. The usual causes now:"
+          echo "  - no secret named AUR_SSH_PRIVATE_KEY in the 'secrets'"
+          echo "    environment of ${GITHUB_REPOSITORY}"
+          echo "  - it was added as a Repository secret instead of an"
+          echo "    Environment secret, or the other way round"
+          echo "  - the name differs: it must be exactly AUR_SSH_PRIVATE_KEY"
+          echo "  - it was saved but the value is empty or whitespace only"
+          exit 1
+        fi
+        # Bash substring rather than `printf ... | head -c`: under
+        # `set -o pipefail` a pipe into head is the same SIGPIPE trap that
+        # broke the tar step. No subprocess, no pipe.
+        if [ "${AUR_SSH_KEY:0:30}" != "-----BEGIN OPENSSH PRIVATE KEY" ]; then
+          echo "::error::AUR_SSH_PRIVATE_KEY does not start with an OpenSSH private key header"
+          echo "The value must be the whole file, including both BEGIN and END lines."
+          exit 1
+        fi
+        echo "Secret found, ${#AUR_SSH_KEY} bytes"
+        install -m 700 -d ~/.ssh
+        printf '%s\n' "$AUR_SSH_KEY" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+
+        # ssh-keyscan on its own is trust-on-first-use, which on a CI runner
+        # is trust-nothing: an attacker able to poison DNS would get a silent
+        # MITM on the push that writes to the AUR account. So the scanned key
+        # is checked against the fingerprint published on the AUR front page
+        # ("The following SSH fingerprints are used for the AUR") and the
+        # connection is aborted on a mismatch.
+        expected="SHA256:RFzBCUItH9LZS0cKB5UE6ceAYhBD5C8GeOBip8Z11+4"
+        hostkey=$(ssh-keyscan -t ed25519 aur.archlinux.org 2>/dev/null)
+        if [ -z "$hostkey" ]; then
+          echo "::error::could not read the aur.archlinux.org host key"
+          exit 1
+        fi
+        actual=$(printf '%s\n' "$hostkey" | ssh-keygen -lf - | awk '{print $2}')
+        echo "AUR host fingerprint: ${actual}"
+        if [ "$actual" != "$expected" ]; then
+          echo "::error::aur.archlinux.org fingerprint mismatch"
+          echo "  expected ${expected}"
+          echo "  got      ${actual}"
+          echo "If Arch rotated the key, update the pin in this action and re-check the new value."
+          exit 1
+        fi
+        # known_hosts takes the public KEY line, not the fingerprint. Writing
+        # "aur.archlinux.org SHA256:..." there instead makes every later
+        # connection fail with "Host key verification failed." -- which is
+        # exactly what this did on the first run.
+        printf '%s\n' "$hostkey" > ~/.ssh/known_hosts
+        chmod 600 ~/.ssh/known_hosts
+        ssh -o BatchMode=yes -T aur@aur.archlinux.org exit || true
+        echo "SSH to AUR is available"
+
+    - name: Clone the AUR repository
+      shell: bash
+      env:
+        AUR_REPO: ${{ inputs.aur-repo }}
+        CHECKOUT_DIR: ${{ inputs.checkout-dir }}
+      run: |
+        set -euo pipefail
+        # A package that does not exist yet is cloned as an empty repository,
+        # and the first push creates it, so nothing has to be prepared on the
+        # AUR side beforehand.
+        git clone "$AUR_REPO" "$CHECKOUT_DIR"
+        cd "$CHECKOUT_DIR"
+        git config user.name  "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+        # AUR accepts pushes to master only, so the work has to happen on it.
+        # `git checkout master` is not enough on a package that does not exist
+        # yet: that clone is empty, master is not a branch there but only the
+        # unborn branch HEAD points at, and the checkout fails with
+        # "error: pathspec 'master' did not match any file(s) known to git" --
+        # which, under `set -e`, would abort the first publication of every new
+        # package. The other branch is not hypothetical: the first push to a
+        # repository that does not exist yet is what creates the package.
+        if git rev-parse --verify --quiet refs/heads/master >/dev/null; then
+          git checkout master
+        else
+          git checkout -b master
+        fi

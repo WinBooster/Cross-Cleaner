@@ -1,0 +1,172 @@
+name: Publish to the AUR
+description: >-
+  The last part of an AUR publication: regenerate .SRCINFO with the real
+  makepkg, show what changed, and push to master unless this is a dry run.
+  Shared between the two package jobs for the same reason as aur-prepare -- the
+  AUR server rejects what this produces when it is subtly wrong (a .SRCINFO
+  that did not move, a checksum left as SKIP, a non-fast-forward push), and
+  those rejections have to be impossible in both jobs rather than only in the
+  one that happened to be tried first.
+
+inputs:
+  checkout-dir:
+    description: Directory holding the AUR repository the calling job has filled in.
+    required: true
+  version:
+    description: Version being published, as the git tag without its leading `v`.
+    required: true
+  package:
+    description: Package name, for the commit message and the messages in the log.
+    required: true
+  checksums:
+    description: >-
+      Space-separated `key=count` pairs naming the .SRCINFO checksum keys this
+      package is expected to carry, and how many entries each must have. Which
+      keys exist depends on how the PKGBUILD declares its sources -- a package
+      that builds on every architecture from one archive uses `sha256sums`,
+      while one that downloads a different asset per architecture writes
+      `sha256sums_x86_64` and `sha256sums_aarch64` -- and this action cannot
+      tell the two apart without being told.
+    required: true
+  dry-run:
+    description: Check everything, show the diff, and stop before the push.
+    required: false
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Check the dry-run input
+      # The conditions below compare strings, because that is what a composite
+      # action receives. A value that is neither true nor false would leave both
+      # the push and the dry-run report skipped, and the job would go green
+      # having published nothing -- a rehearsal that silently does not rehearse.
+      shell: bash
+      env:
+        DRY_RUN: ${{ inputs.dry-run }}
+      run: |
+        set -euo pipefail
+        case "$DRY_RUN" in
+          true|false) echo "dry run: ${DRY_RUN}" ;;
+          *)
+            echo "::error::dry-run input is '${DRY_RUN}', expected true or false"
+            exit 1
+            ;;
+        esac
+
+    - name: Regenerate .SRCINFO
+      # makepkg does not exist on the runner -- GitHub's ubuntu-latest image
+      # ships no pacman at all -- so this runs inside an Arch container. Using
+      # the real makepkg rather than reimplementing the format here is the
+      # point: .SRCINFO has to match what makepkg writes on a user's machine,
+      # and a hand-rolled writer would silently drift from it.
+      shell: bash
+      env:
+        CHECKOUT_DIR: ${{ inputs.checkout-dir }}
+        APP_VERSION: ${{ inputs.version }}
+        CHECKSUM_KEYS: ${{ inputs.checksums }}
+      run: |
+        set -euo pipefail
+        docker run --rm \
+          -v "$PWD/$CHECKOUT_DIR:/pkg" \
+          -w /pkg \
+          archlinux:latest \
+          bash -c '
+            set -euo pipefail
+            # makepkg ships in the pacman package on Arch.
+            pacman -Sy --noconfirm --needed pacman >/dev/null
+            # makepkg refuses to run as root, and it is right to: it drops
+            # privileges nowhere and builds into paths it will later chown.
+            # pacman needs root to install, makepkg must not have it, so the
+            # two run as different users in the same container.
+            useradd --create-home --shell /bin/bash builder
+            chown -R builder:builder /pkg
+            su builder -c "cd /pkg && makepkg --printsrcinfo -p PKGBUILD > .SRCINFO"
+          '
+        echo "--- .SRCINFO ---"
+        cat "$CHECKOUT_DIR/.SRCINFO"
+        # The container's `builder` is uid 1000, the runner is 1001, and a bind
+        # mount maps container uids straight through with no remapping. So
+        # .SRCINFO lands on the host owned by a different user, which the
+        # runner cannot commit. Take it back before doing anything else.
+        sudo chown -R "$(id -u):$(id -g)" "$CHECKOUT_DIR"
+        test -w "$CHECKOUT_DIR/.SRCINFO" || {
+          echo "::error::.SRCINFO is not writable by the runner user"
+          exit 1
+        }
+        # The version in .SRCINFO is what the AUR page displays; if it did not
+        # move, the orphanage would not notice an update.
+        grep -q "pkgver = ${APP_VERSION}$" "$CHECKOUT_DIR/.SRCINFO" \
+          || { echo "::error::.SRCINFO does not carry version ${APP_VERSION}"; exit 1; }
+        # Every source needs its checksum, and the count matters: a source line
+        # that quietly disappeared would leave a package that installs fewer
+        # files than it claims to. The counts are compared rather than merely
+        # checked for non-emptiness for exactly that reason.
+        for spec in $CHECKSUM_KEYS; do
+          key="${spec%%=*}"
+          want="${spec##*=}"
+          # grep -c prints 0 and exits 1 when nothing matches, which is an
+          # answer here rather than a failure, hence the `|| :`.
+          count=$(grep -c "^[[:space:]]*${key} = " "$CHECKOUT_DIR/.SRCINFO" || :)
+          if [ "$count" != "$want" ]; then
+            echo "::error::.SRCINFO carries ${count} ${key} entries, expected ${want}"
+            exit 1
+          fi
+          echo "  ${key}: ${count}"
+        done
+        # A placeholder means the version block was written but not filled in:
+        # makepkg would build the package, and pacman would install it without
+        # ever having verified a download.
+        if grep -q "SKIP" "$CHECKOUT_DIR/.SRCINFO"; then
+          echo "::error::a checksum was not substituted"
+          exit 1
+        fi
+
+    - name: Show the change
+      shell: bash
+      env:
+        CHECKOUT_DIR: ${{ inputs.checkout-dir }}
+      run: |
+        cd "$CHECKOUT_DIR"
+        # `git diff` shows nothing on a repository that has never been pushed
+        # to, because nothing there is tracked yet, so the untracked files are
+        # listed as well. That is the state a package starts in.
+        git --no-pager status --short
+        git --no-pager diff --stat
+        git --no-pager diff -- PKGBUILD
+
+    - name: Push to AUR
+      # Deliberately `== 'false'` rather than `!= 'true'`: anything unexpected
+      # in this input has to mean "do not push", which is the direction that
+      # cannot publish a mistake.
+      if: ${{ inputs.dry-run == 'false' }}
+      shell: bash
+      env:
+        CHECKOUT_DIR: ${{ inputs.checkout-dir }}
+        APP_VERSION: ${{ inputs.version }}
+        PKGNAME: ${{ inputs.package }}
+      run: |
+        set -euo pipefail
+        cd "$CHECKOUT_DIR"
+        # Not `git diff --quiet`: on a package that does not exist yet every
+        # file is untracked, a diff sees none of them, and the first
+        # publication would decide it had nothing to do and never create the
+        # package. `status --porcelain` sees untracked files too, and
+        # makepkg's artifacts stay out of it through the .gitignore.
+        if [ -z "$(git status --porcelain)" ]; then
+          echo "AUR already carries ${APP_VERSION}, nothing to push"
+          exit 0
+        fi
+        git add PKGBUILD .SRCINFO LICENSE .gitignore
+        git commit -m "${PKGNAME} ${APP_VERSION}"
+        # AUR rejects non-fast-forward pushes, so this must build on master.
+        git push origin master
+
+    - name: Report the dry run
+      if: ${{ inputs.dry-run != 'false' }}
+      shell: bash
+      env:
+        PKGNAME: ${{ inputs.package }}
+        APP_VERSION: ${{ inputs.version }}
+      run: |
+        echo "Dry run: ${PKGNAME} ${APP_VERSION} is ready, and nothing was pushed."
