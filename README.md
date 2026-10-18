@@ -106,7 +106,26 @@ Exit codes: `0` success, `1` a failure, `130` interrupted with Ctrl-C.
 ### Option 1: Download Pre-built Binary
 Get the latest release from our [releases page](https://github.com/Cross-Cleaner/Cross-Cleaner/releases).
 
-### Option 2: Build from Source
+### Option 2: Arch Linux / AUR
+Install the pre-built package with your favorite AUR helper:
+```bash
+yay -S cross-cleaner-bin
+```
+
+### Option 3: Nix / NixOS
+The repository ships a flake that builds all three Linux front-ends (with the
+self-updater compiled out, since Nix owns the installed version):
+```bash
+nix run github:Cross-Cleaner/Cross-Cleaner              # window app
+nix run github:Cross-Cleaner/Cross-Cleaner#cross-cleaner-tui   # terminal app
+nix run github:Cross-Cleaner/Cross-Cleaner#cross-cleaner-cli   # headless CLI
+```
+Or install it into your profile:
+```bash
+nix profile install github:Cross-Cleaner/Cross-Cleaner
+```
+
+### Option 4: Build from Source
 
 1. Make sure you have [Rust](https://www.rust-lang.org/) installed (version 1.70 or higher):
 ```bash
