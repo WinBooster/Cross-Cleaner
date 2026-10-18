@@ -52,14 +52,21 @@ jobs:
           echo "APP_VERSION=$VERSION" >> "$GITHUB_ENV"
 
       - name: Bump the package version in flake.nix
+        env:
+          NEWVER: ${{ env.APP_VERSION }}
         run: |
           old=$(grep -oP '^\s*version = "\K[^"]+' flake.nix | tail -n 1)
-          if [ "$old" = "$APP_VERSION" ]; then
-            echo "flake.nix already carries version $APP_VERSION"
+          if [ "$old" = "$NEWVER" ]; then
+            echo "flake.nix already carries version $NEWVER"
           else
-            perl -pi -e 's|^(\s*version = ")[^"]+";|\1'"$APP_VERSION"'";|' flake.nix
-            echo "Bumped the flake.nix version: $old -> $APP_VERSION"
+            # The replacement interpolates the version from an env var rather
+            # than splatting it after a \1: writing "\12.0.4.5" makes perl
+            # read \12 as a (non-existent) group-twelve backreference and
+            # silently truncate the version at its first digit.
+            perl -pi -e 's|^(\s*version = ")[^"]+";|${1}$ENV{NEWVER}";|' flake.nix
+            echo "Bumped the flake.nix version: $old -> $NEWVER"
           fi
+          grep -E '^\s*version = ' flake.nix
 
       - name: Verify the nix build
         run: |
