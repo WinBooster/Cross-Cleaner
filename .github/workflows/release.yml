@@ -841,7 +841,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh workflow run update_flake.yml --ref main -f version="${{ env.APP_VERSION }}"
+          gh workflow run update_flake.yml -R "${{ github.repository }}" --ref main -f version="${{ env.APP_VERSION }}"
 
   # The release is created as a draft, so the publication jobs (winget submit
   # and program catalogs) cannot run here: winget-releaser reads the release
