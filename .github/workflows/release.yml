@@ -130,6 +130,20 @@ jobs:
           mv target/release/desktop Linux-Cross_Cleaner_GUI
           mv target/release/tui Linux-Cross_Cleaner_TUI
           mv target/release/cli Linux-Cross_Cleaner_CLI
+      - name: Bundle a portable tar.gz
+        # For systems with neither apt nor dnf: the same three binaries the
+        # release already publishes bare, plus the legal and the "what is
+        # this" file, in one download. The binaries keep their self-update
+        # feature on purpose -- unlike the .deb/.rpm/.AppImage, this archive
+        # is a portable download family, not a package-manager install, so
+        # nothing forbids the app from updating itself.
+        run: |
+          tar --owner=0 --group=0 -czf Linux-Cross_Cleaner.tar.gz \
+            Linux-Cross_Cleaner_GUI \
+            Linux-Cross_Cleaner_TUI \
+            Linux-Cross_Cleaner_CLI \
+            LICENSE \
+            README.md
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -138,6 +152,7 @@ jobs:
             Linux-Cross_Cleaner_GUI
             Linux-Cross_Cleaner_TUI
             Linux-Cross_Cleaner_CLI
+            Linux-Cross_Cleaner.tar.gz
   build_linux_no_updater:
     # Same binaries as `build_linux`, built with `--no-default-features` so the
     # `self-update` feature is compiled out rather than merely turned off at
@@ -199,6 +214,15 @@ jobs:
           mv target/release/desktop Linux-Arm64-Cross_Cleaner_GUI
           mv target/release/tui Linux-Arm64-Cross_Cleaner_TUI
           mv target/release/cli Linux-Arm64-Cross_Cleaner_CLI
+      - name: Bundle a portable tar.gz
+        # Same bundle as the x64 build_linux job above, for arm64 machines.
+        run: |
+          tar --owner=0 --group=0 -czf Linux-Arm64-Cross_Cleaner.tar.gz \
+            Linux-Arm64-Cross_Cleaner_GUI \
+            Linux-Arm64-Cross_Cleaner_TUI \
+            Linux-Arm64-Cross_Cleaner_CLI \
+            LICENSE \
+            README.md
       - name: Upload Linux Arm64 artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -207,6 +231,7 @@ jobs:
             Linux-Arm64-Cross_Cleaner_GUI
             Linux-Arm64-Cross_Cleaner_TUI
             Linux-Arm64-Cross_Cleaner_CLI
+            Linux-Arm64-Cross_Cleaner.tar.gz
   build_linux_arm64_no_updater:
     # Native arm64 runner: same as `build_linux_no_updater` on a different CPU.
     # See that job for why `self-update` is compiled out and the name is suffixed.
@@ -767,6 +792,8 @@ jobs:
             linux-binaries-arm64-no-updater/Linux-Arm64-Cross_Cleaner_GUI-no-updater
             linux-binaries-arm64-no-updater/Linux-Arm64-Cross_Cleaner_TUI-no-updater
             linux-binaries-arm64-no-updater/Linux-Arm64-Cross_Cleaner_CLI-no-updater
+            linux-binaries/Linux-Cross_Cleaner.tar.gz
+            linux-binaries-arm64/Linux-Arm64-Cross_Cleaner.tar.gz
             linux-packages/*.deb
             linux-packages/*.rpm
             linux-packages/*.AppImage
