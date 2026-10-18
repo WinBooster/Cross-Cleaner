@@ -518,29 +518,35 @@ runs:
         }
 
         echo "== contents =="
-        # Extraction runs from a scratch directory, the same hygiene rule as
-        # the AppImage check: rpm2cpio writes paths relative to the cwd.
+        # Extracted with bsdtar rather than cpio: libarchive reads the rpm
+        # payload directly and always writes RELATIVE paths into the scratch
+        # directory, applying file modes after the data is on disk. The GNU
+        # cpio default keeps entry names absolute (there is a separate
+        # --no-absolute-filenames opt-in for relative ones) and the runners
+        # made the /usr/bin entries fail with EACCES the two first runs, so
+        # the payload assertion now leans on a tool whose behaviour does not
+        # depend on which name flavour the packager picked.
+        sudo apt-get install -y -qq libarchive-tools >/dev/null
         rm -rf target/pkg/rpm-check
         mkdir -p target/pkg/rpm-check
-        cd target/pkg/rpm-check
-        rpm2cpio "$rpm_pkg" | cpio -idmu --quiet
-        test -x usr/bin/cross-cleaner
-        test -x usr/bin/cross-cleaner-tui
-        test -x usr/bin/cross-cleaner-cli
-        test -f usr/share/applications/cross-cleaner.desktop
-        test -f usr/share/applications/cross-cleaner-tui.desktop
-        test -f usr/share/metainfo/cross-cleaner.appdata.xml
+        bsdtar -xf "$rpm_pkg" -C target/pkg/rpm-check
+        test -x target/pkg/rpm-check/usr/bin/cross-cleaner
+        test -x target/pkg/rpm-check/usr/bin/cross-cleaner-tui
+        test -x target/pkg/rpm-check/usr/bin/cross-cleaner-cli
+        test -f target/pkg/rpm-check/usr/share/applications/cross-cleaner.desktop
+        test -f target/pkg/rpm-check/usr/share/applications/cross-cleaner-tui.desktop
+        test -f target/pkg/rpm-check/usr/share/metainfo/cross-cleaner.appdata.xml
         # The packaged ELF must match the runner's architecture, which is the
         # real check that the arm64 job did not accidentally package x86_64.
         # Same file(1) spelling caveat as the .deb check above.
-        desc="$(file usr/bin/cross-cleaner)"
+        desc="$(file target/pkg/rpm-check/usr/bin/cross-cleaner)"
         echo "$desc"
         if ! grep -qF "$FILE_ARCH" <<<"$desc"; then
           echo "::error::packaged binary is not ${FILE_ARCH}"
           exit 1
         fi
         # Same self-update canary as the .deb, against the rpm's window app.
-        if strings usr/bin/cross-cleaner | grep -i 'selfupdate' | tee /tmp/rpm-canary.txt | grep -q .; then
+        if strings target/pkg/rpm-check/usr/bin/cross-cleaner | grep -i 'selfupdate' | tee /tmp/rpm-canary.txt | grep -q .; then
           echo "::error::self-update code linked into the rpm's --no-default-features build:"
           cat /tmp/rpm-canary.txt
           exit 1
