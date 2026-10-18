@@ -108,8 +108,10 @@
 
                   # hicolor icon set from the bundled .ico, the same sizes the
                   # .deb installs. 256 is the master frame; the rest are the
-                  # downscales the icon cache prefers.
+                  # downscales the icon cache prefers. magick does not create
+                  # the target directories, seed them first.
                   for size in 48 96 128 256; do
+                    install -dm755 "$out/share/icons/hicolor/''${size}x''${size}/apps"
                     magick -background none crates/winicon/assets/icon.ico \
                       -filter Lanczos -resize ''${size}x''${size} \
                       PNG32:$out/share/icons/hicolor/''${size}x''${size}/apps/cross-cleaner.png
