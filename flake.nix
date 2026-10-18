@@ -31,7 +31,7 @@
           package = pkgs.callPackage
             # callPackage supplies every argument except the ones that only
             # this flake can provide.
-            ({ lib, rustPlatform, makeWrapper, imagemagick
+            ({ lib, rustPlatform, makeWrapper, imagemagick, pkg-config
              , alsa-lib, libdrm, libGL, mesa, libxkbcommon, wayland, fontconfig, xorg
              }:
 
@@ -83,7 +83,13 @@
                 # bring it back; `cargo test` runs the same three packages).
                 doCheck = false;
 
-                nativeBuildInputs = [ makeWrapper imagemagick ];
+                # `alsa-sys` links ALSA through pkg-config at compile time (the
+                # -sys crates insist on a pkg-config probe): without it the
+                # cpal build panics with "The pkg-config command could not be
+                # found". The other multimedia libs are dlopen()ed at runtime
+                # and come via LD_LIBRARY_PATH in postFixup instead.
+                nativeBuildInputs = [ makeWrapper imagemagick pkg-config ];
+                buildInputs = [ alsa-lib ];
 
                 postInstall = ''
                   # Cargo installs the bins under the crate names; the desktop
