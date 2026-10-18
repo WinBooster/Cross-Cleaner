@@ -1988,7 +1988,8 @@ dependencies = [
 [[package]]
 name = "gpu-allocator"
 version = "0.28.0"
-source = "git+https://github.com/Traverse-Research/gpu-allocator#5d8be6b0b68376d12c392a822fcee89ec22e995b"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "51255ea7cfaadb6c5f1528d43e92a82acb2b96c43365989a28b2d44ee38f8795"
 dependencies = [
  "ash",
  "hashbrown 0.16.1",

@@ -16,11 +16,11 @@ members = [
     "crates/winicon",
 ]
 
-# wgpu-hal 30.0.1 requires windows 0.62, but the crates.io gpu-allocator 0.28.0
-# release resolves to windows 0.61 (pulled in by notify-rust -> tauri-winrt-notification).
-# Main branch widens the windows requirement to ">=0.53, <=0.62".
-[patch.crates-io]
-gpu-allocator = { git = "https://github.com/Traverse-Research/gpu-allocator" }
+# gpu-allocator needs no patch anymore: the crates.io 0.28.0 release ships the
+# widened `windows` requirement ("0.53-0.62", upstream PR #288) that wgpu-hal
+# 30.0.1 wants, so resolution succeeds straight from the registry and the whole
+# graph settles on windows 0.62. If upstream ever regresses that range, a
+# [patch.crates-io] entry can come back here.
 
 # Every published binary is a portable file a user downloads and runs in place,
 # so size wins over speed: `opt-level = "z"` gives up a little throughput for a

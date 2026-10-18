@@ -52,19 +52,11 @@
                 # would fall back to a stale hardcoded string.
                 env.APP_VERSION = version;
 
-                cargoLock = {
-                  lockFile = ./Cargo.lock;
-                  # One patched git dependency: Cargo.toml pins the gpu-allocator
-                  # version wgpu-hal needs against crates.io drift (see the
-                  # comment next to [patch.crates-io]). Git sources fetched
-                  # through cargoLock need a pre-declared hash of the vendored
-                  # tree. The first build fails with the real digest — paste it
-                  # here and never touch it again until the patch rev changes:
-                  #   cargo-unpack error: ... got: sha256:XXXXXXXX...
-                  outputHashes = {
-                    "gpu-allocator-0.28.0" = lib.fakeHash;
-                  };
-                };
+                cargoLock.lockFile = ./Cargo.lock;
+                # Every dependency comes from crates.io (the gpu-allocator git
+                # patch went away once its crates.io release gained the
+                # widened windows requirement), so no outputHashes are needed
+                # here and the lock file alone pins the vendor tree.
 
                 # Same rule as the .deb / .rpm: a package-manager install owns
                 # its version, so distribution builds compile the updater out
