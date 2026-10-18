@@ -245,12 +245,13 @@ jobs:
     #
     # 1. `self-update` is compiled OUT. Both crates document why in their
     #    Cargo.toml: a package-manager install owns its version, so the app
-    #    must neither advertise a newer release nor replace the file dpkg or
-    #    AppImage put on disk. Building these packages with the default
+    #    must neither advertise a newer release nor replace the file dpkg,
+    #    rpm or AppImage put on disk. Building these packages with the default
     #    features would ship something that fights its own package manager.
-    # 2. The binaries land as `cross-cleaner` and `cross-cleaner-tui`, not as
-    #    `Linux-Cross_Cleaner_GUI`, because a desktop entry's Exec line and a
-    #    symlink in /usr/bin need a name that does not change every release.
+    # 2. The binaries land as `cross-cleaner`, `cross-cleaner-tui` and
+    #    `cross-cleaner-cli`, not as `Linux-Cross_Cleaner_GUI`, because a
+    #    desktop entry's Exec line and a /usr/bin entry need a name that does
+    #    not change every release.
     #
     # Everything generated lands under target/pkg, which is gitignored. The
     # sibling `formating_code` job runs `git add .` and pushes, so build output
@@ -261,7 +262,7 @@ jobs:
     runs-on: ubuntu-24.04
     needs: [sort_json]
     permissions: write-all
-    name: Build Linux packages x64 (.deb, .AppImage)
+    name: Build Linux packages x64 (.deb, .rpm, .AppImage)
     steps:
       - uses: actions/checkout@v4
 
@@ -274,6 +275,8 @@ jobs:
         run: cargo +nightly build --release -p desktop --no-default-features
       - name: Build terminal binary without self-update
         run: cargo +nightly build --release -p tui --no-default-features
+      - name: Build command-line binary without self-update
+        run: cargo +nightly build --release -p cli --no-default-features
 
       - name: Package
         uses: ./.github/actions/linux-package
@@ -284,13 +287,13 @@ jobs:
 
   build_linux_packages_arm64:
     # Native arm64 runner, so this is the same job as `build_linux_packages` on a
-    # different CPU rather than a cross-compile. There is no cross-compiled .deb:
-    # dpkg and AppImage both encode the target architecture in the artifact, so
-    # the payload has to be built for it.
+    # different CPU rather than a cross-compile. There is no cross-compiled .deb
+    # or .rpm: dpkg, rpm and AppImage all encode the target architecture in the
+    # artifact, so the payload has to be built for it.
     runs-on: ubuntu-24.04-arm
     needs: [sort_json]
     permissions: write-all
-    name: Build Linux packages arm64 (.deb, .AppImage)
+    name: Build Linux packages arm64 (.deb, .rpm, .AppImage)
     steps:
       - uses: actions/checkout@v4
 
@@ -303,6 +306,8 @@ jobs:
         run: cargo +nightly build --release -p desktop --no-default-features
       - name: Build terminal binary without self-update
         run: cargo +nightly build --release -p tui --no-default-features
+      - name: Build command-line binary without self-update
+        run: cargo +nightly build --release -p cli --no-default-features
 
       - name: Package
         uses: ./.github/actions/linux-package
@@ -651,12 +656,12 @@ jobs:
         with:
           name: linux-binaries-arm64-no-updater
           path: linux-binaries-arm64-no-updater
-      - name: Download Linux packages (.deb, .AppImage)
+      - name: Download Linux packages (.deb, .rpm, .AppImage)
         uses: actions/download-artifact@v4
         with:
           name: linux-packages
           path: linux-packages
-      - name: Download Linux arm64 packages (.deb, .AppImage)
+      - name: Download Linux arm64 packages (.deb, .rpm, .AppImage)
         uses: actions/download-artifact@v4
         with:
           name: linux-packages-arm64
@@ -763,8 +768,10 @@ jobs:
             linux-binaries-arm64-no-updater/Linux-Arm64-Cross_Cleaner_TUI-no-updater
             linux-binaries-arm64-no-updater/Linux-Arm64-Cross_Cleaner_CLI-no-updater
             linux-packages/*.deb
+            linux-packages/*.rpm
             linux-packages/*.AppImage
             linux-packages-arm64/*.deb
+            linux-packages-arm64/*.rpm
             linux-packages-arm64/*.AppImage
             macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_GUI
             macos-binaries-arm64/MacOS-Arm64-Cross_Cleaner_TUI

@@ -1,13 +1,20 @@
-# nfpm configuration for the Cross Cleaner .deb.
+# nfpm configuration for the Cross Cleaner .deb and .rpm.
 #
 # Rendered by .github/actions/linux-package, which substitutes:
 #   %%VERSION%%           2.0.2.5 -> 2.0.2
-#   %%RELEASE%%           2.0.2.5 -> 5, giving the Debian version 2.0.2-5
-#   %%DEB_ARCH%%          amd64 or arm64
-#   %%MTIME%%             commit timestamp as RFC3339, so the archive is reproducible
+#   %%RELEASE%%           2.0.2.5 -> 5, giving 2.0.2-5 on dpkg and rpm alike
+#   %%DEB_ARCH%%          amd64 or arm64 (dpkg nomenclature, top-level arch)
+#   %%RPM_ARCH%%          x86_64 or aarch64 (rpm nomenclature, rpm.arch override)
+#   %%MTIME%%             commit timestamp as RFC3339, so the archives are reproducible
+#
+# One render feeds both packages: dpkg reads the top-level fields and the
+# `deb:` section; rpm reads the same top-level fields, its own `rpm:` section
+# and `overrides.rpm`, whose `depends` replaces the deb-only spellings of the
+# same libraries.
 #
 # The file layout mirrors the AppImage built by the same action: both ship the
-# window app as `cross-cleaner` and the terminal app as `cross-cleaner-tui`.
+# window app as `cross-cleaner`, the terminal app as `cross-cleaner-tui` and
+# the command-line tool as `cross-cleaner-cli`.
 
 name: cross-cleaner
 arch: "%%DEB_ARCH%%"
@@ -21,18 +28,20 @@ vendor: Cross-Cleaner
 homepage: https://cross-cleaner.github.io/
 license: GPL-3.0-or-later
 # Reproducible builds: nfpm stamps every archive entry with this, so two
-# builds of the same commit produce the same bytes. The value must be an
-# RFC3339 timestamp -- nfpm parses this field as a time, and passing a raw Unix
-# epoch integer fails with `Parsing time ... as 2006-01-02T15:04:05Z07:00`.
+# builds of the same commit produce the same bytes, on the .deb and the .rpm
+# alike. The value must be an RFC3339 timestamp -- nfpm parses this field
+# as a time, and passing a raw Unix epoch integer fails with
+# `Parsing time ... as 2006-01-02T15:04:05Z07:00`.
 mtime: "%%MTIME%%"
 
 description: |
   Cross Cleaner removes temporary files, cache and other system junk.
   .
-  It ships as a native window app and as a terminal app, and cleanses Windows,
-  macOS, Linux and Android, on x86_64 and arm64 alike. This package builds
-  without the self-update feature on purpose: dpkg owns the installed version,
-  so the app must not advertise a newer release or overwrite its own files.
+  It ships as a native window app, a terminal app and a command-line tool, and
+  cleanses Windows, macOS, Linux and Android, on x86_64 and arm64 alike. This
+  package builds without the self-update feature on purpose: the package
+  manager owns the installed version, so the app must not advertise a newer
+  release or overwrite its own files.
 
 depends:
   # Rust links these two; glibc 2.34+ folds libm/libpthread/libdl into libc6.
@@ -83,13 +92,66 @@ depends:
 # against apt on every release, so a typo fails the build rather than a user's
 # install.
 
+overrides:
+  # The rpm `depends` override is the FULL requires list, not a delta on top
+  # of the deb list above: nfpm merges overrides with mergo's WithOverride,
+  # which REPLACES a non-empty slice rather than unioning it (asserted by
+  # nfpm's own TestOverrides). Writing only the names that differ here would
+  # still land a package requiring libc6 on Fedora.
+  #
+  # The names follow the Fedora / RHEL / Oracle Linux family, which is what
+  # this .rpm is built for. openSUSE and Arch-style forks spell many of the
+  # same libraries differently (mesa-libEGL vs Mesa-libEGL1, suffixed
+  # libwayland names), so the dependency honesty of this one metadata blob
+  # cannot be universal.
+  rpm:
+    depends:
+      # Rust links these two; glibc folds libm/libpthread/libdl into libc.
+      - glibc
+      - libgcc
+
+      # Audio: rodio opens an ALSA output device when the sounds are
+      # initialised, so this is a hard requirement like on the deb side.
+      - alsa-lib
+
+      # GL and EGL, plus the vendor dispatch underneath them. eframe builds
+      # with the glow renderer, and glutin's Wayland backend probes EGL.
+      - mesa-libGL
+      - mesa-libEGL
+      - libdrm
+
+      # X11. IMPORTANT: winit reaches every one of these through x11-dl, which
+      # dlopen()s them at runtime. None of them appear in `ldd` output and no
+      # rpmbuild-time scan sees them either, so they must be listed here by
+      # hand. They are still required: without them the window never opens.
+      - libX11
+      - libXcursor
+      - libXrandr
+      - libXi
+      - libXinerama
+      - libXext
+      - libXrender
+
+      # XKB common, for both the X11 and the Wayland path.
+      - libxkbcommon
+      - libxkbcommon-x11-0
+
+      # Wayland. Also dlopen'd, through wayland-backend's dlopen feature, so
+      # the same caveat as the X11 set above applies.
+      - libwayland-client
+      - libwayland-cursor
+      - libwayland-egl
+
+# The top-level `recommends` flows into the rpm as a weak dependency too;
+# fontconfig exists and is spelt the same on Fedora and EL.
+
 recommends:
   # Theme colours come from fontconfig. The app draws its own fonts, so a bare
   # system without this still runs but looks wrong.
   - fontconfig
 
 contents:
-  # Built with --no-default-features, so neither binary can rewrite itself.
+  # Built with --no-default-features, so no shipped binary can rewrite itself.
   - src: target/release/desktop
     dst: /usr/bin/cross-cleaner
     file_info:
@@ -97,6 +159,15 @@ contents:
 
   - src: target/release/tui
     dst: /usr/bin/cross-cleaner-tui
+    file_info:
+      mode: 0755
+
+  # The headless CLI front-end, invocable as `cross-cleaner-cli` from any
+  # shell and from scripting. Like the other two, it has no desktop entry on
+  # purpose: a command that only makes sense with arguments would just break
+  # the desktop's application grid.
+  - src: target/release/cli
+    dst: /usr/bin/cross-cleaner-cli
     file_info:
       mode: 0755
 
@@ -121,7 +192,7 @@ contents:
   - src: target/pkg/icons/256x256/apps/cross-cleaner.png
     dst: /usr/share/icons/hicolor/256x256/apps/cross-cleaner.png
 
-  # Read by both dpkg and appimagetool, so the .deb and the AppImage show the
+  # Read by dpkg, rpm and appimagetool, so all three show the
   # same entry in GNOME Software, KDE Discover and the browser.
   - src: target/pkg/cross-cleaner.appdata.xml
     dst: /usr/share/metainfo/cross-cleaner.appdata.xml
@@ -140,6 +211,13 @@ contents:
 scripts:
   postinstall: packaging/linux/scripts/postinstall.sh
   postremove: packaging/linux/scripts/postremove.sh
+
+rpm:
+  # rpm's own nomenclature, applied INSTEAD of the top-level `arch` above:
+  # nfpm would map the deb-style name (amd64 -> x86_64) on its own, but this
+  # build knows the exact rpm spelling anyway, so it is substituted directly
+  # rather than trusting the mapping table.
+  arch: "%%RPM_ARCH%%"
 
 deb:
   # GNU extensions for the compression, so the archive is readable without

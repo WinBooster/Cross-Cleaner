@@ -1,9 +1,9 @@
 name: Build Cross Cleaner Linux packages
 description: >-
-  Builds a .deb and an .AppImage from binaries that are already compiled, for
-  either x86_64 or aarch64. Kept as a composite action so the x64 and arm64
-  jobs cannot drift apart: every change to the nfpm pin, the icon set or the
-  verification steps has to be made once, in one file.
+  Builds a .deb, an .rpm and an .AppImage from binaries that are already
+  compiled, for either x86_64 or aarch64. Kept as a composite action so the x64
+  and arm64 jobs cannot drift apart: every change to the nfpm pin, the icon set
+  or the verification steps has to be made once, in one file.
 
 inputs:
   arch:
@@ -48,6 +48,7 @@ runs:
         case "$ARCH_IN" in
           x86_64)
             deb_arch=amd64     # Debian
+            rpm_arch=x86_64    # rpm/fedora nomenclature, same as the Rust one
             nfpm_arch=x86_64   # nfpm release asset suffix
             # file(1) spells this machine "x86-64" with a HYPHEN, which is not the
             # Rust spelling. Matching `inputs.arch` against its output fails here
@@ -56,6 +57,7 @@ runs:
             ;;
           aarch64)
             deb_arch=arm64
+            rpm_arch=aarch64
             nfpm_arch=arm64
             file_arch=aarch64
             ;;
@@ -65,6 +67,7 @@ runs:
             ;;
         esac
         echo "deb-arch=$deb_arch" >> "$GITHUB_OUTPUT"
+        echo "rpm-arch=$rpm_arch" >> "$GITHUB_OUTPUT"
         echo "nfpm-arch=$nfpm_arch" >> "$GITHUB_OUTPUT"
         echo "file-arch=$file_arch" >> "$GITHUB_OUTPUT"
 
@@ -75,7 +78,13 @@ runs:
         sudo apt-get install -y --no-install-recommends \
           imagemagick \
           desktop-file-utils \
-          file
+          file \
+          rpm \
+          cpio
+        # rpm(1) is used in the .rpm verification step below: reading the
+        # package header (name/version/arch/requires/scriptlets) and unpacking
+        # it via rpm2cpio. It is not needed to BUILD the rpm -- nfpm writes
+        # the package itself -- only to prove the result is sound.
         # appstreamcli is only used for the informational metadata check below;
         # appimagetool is invoked with --no-appstream so a metadata lint can
         # never abort the release.
@@ -151,6 +160,8 @@ runs:
         ldd target/release/desktop | sort
         echo "== cross-cleaner-tui =="
         ldd target/release/tui | sort
+        echo "== cross-cleaner-cli =="
+        ldd target/release/cli | sort
 
     - name: Generate hicolor icons
       shell: bash
@@ -206,6 +217,7 @@ runs:
       env:
         PKG: cross-cleaner
         DEB_ARCH: ${{ steps.arch.outputs.deb-arch }}
+        RPM_ARCH: ${{ steps.arch.outputs.rpm-arch }}
         VERSION: ${{ steps.ver.outputs.version }}
         REVISION: ${{ steps.ver.outputs.revision }}
         EPOCH: ${{ steps.ver.outputs.epoch }}
@@ -220,9 +232,14 @@ runs:
           echo "::error::commit epoch '$EPOCH' did not convert to a valid RFC3339 time"
           exit 1
         fi
+        # Both arch placeholders are substituted at once, because ONE render
+        # feeds both packages: the .deb reads the top-level `arch`, the .rpm
+        # reads `rpm.arch` from the same file, and unsubstituted `%%RPM_ARCH%%`
+        # would fail the placeholder check below instead of at package time.
         sed -e "s/%%VERSION%%/${VERSION}/g" \
             -e "s/%%RELEASE%%/${REVISION}/g" \
             -e "s/%%DEB_ARCH%%/${DEB_ARCH}/g" \
+            -e "s/%%RPM_ARCH%%/${RPM_ARCH}/g" \
             -e "s/%%MTIME%%/${mtime}/g" \
             packaging/linux/nfpm.yaml > target/pkg/nfpm.yaml
         if grep -q '%%' target/pkg/nfpm.yaml; then
@@ -366,6 +383,7 @@ runs:
         dpkg-deb --extract "$deb" target/pkg/extracted
         test -x target/pkg/extracted/usr/bin/cross-cleaner
         test -x target/pkg/extracted/usr/bin/cross-cleaner-tui
+        test -x target/pkg/extracted/usr/bin/cross-cleaner-cli
         # The packaged ELF must match the runner's architecture, which is the real
         # check that the arm64 job did not accidentally package x86_64. The
         # machine type is compared against file_arch, because file(1) writes
@@ -381,10 +399,150 @@ runs:
         # not hardcoded (it comes from the API response), so the crate name is the
         # only marker available. Matching lines are printed so a false positive
         # from some other crate is immediately diagnosable rather than looking
-        # like a broken package.
-        if strings target/pkg/extracted/usr/bin/cross-cleaner | grep -i 'selfupdate' | tee /tmp/canary.txt | grep -q .; then
-          echo "::error::self-update code linked into a --no-default-features build:"
-          cat /tmp/canary.txt
+        # like a broken package. The window app is not the only front-end that
+        # could forget the feature flag, so the CLI is checked alongside it; the
+        # TUI builds hit the same --no-default-features path in these jobs.
+        for bin in cross-cleaner cross-cleaner-cli; do
+          if strings "target/pkg/extracted/usr/bin/$bin" | grep -i 'selfupdate' | tee /tmp/canary.txt | grep -q .; then
+            echo "::error::self-update code linked into $bin of a --no-default-features build:"
+            cat /tmp/canary.txt
+            exit 1
+          fi
+        done
+
+    - name: Build .rpm
+      # The .deb and the .rpm are built from the SAME rendered nfpm.yaml (see
+      # Build .deb): the rpm packager reads the same contents, maintainer
+      # scripts and version fields, takes its architecture from `rpm.arch`,
+      # and takes its Requires from `overrides.rpm.depends`. Everything the
+      # placeholder check validated once is therefore in force twice.
+      shell: bash
+      env:
+        PKG: cross-cleaner
+        RPM_ARCH: ${{ steps.arch.outputs.rpm-arch }}
+      run: |
+        set -euo pipefail
+        # No version in the filename, mirroring the .deb's naming: GitHub
+        # serves /releases/latest/download/<asset> only for names that do not
+        # change between releases, and dnf does not care what the file is
+        # called either.
+        nfpm package \
+          --config target/pkg/nfpm.yaml \
+          --packager rpm \
+          --target "target/pkg/${PKG}_${RPM_ARCH}.rpm"
+
+    - name: Verify .rpm
+      # The rpm tooling here is a reader, not a builder: it parses the header
+      # and unpacks the payload to prove nfpm wrote a sound package, the same
+      # way dpkg-deb proves the .deb above.
+      shell: bash
+      env:
+        VERSION: ${{ steps.ver.outputs.version }}
+        REVISION: ${{ steps.ver.outputs.revision }}
+        RPM_ARCH: ${{ steps.arch.outputs.rpm-arch }}
+        FILE_ARCH: ${{ steps.arch.outputs.file-arch }}
+      run: |
+        set -euo pipefail
+        rpm_pkg="$(realpath "$(ls target/pkg/*.rpm)")"
+        echo "== header =="
+        rpm -qpi "$rpm_pkg"
+
+        # The filename deliberately carries no version, so the header is the
+        # only place the version exists. A wrong value would ship a package
+        # that dnf cannot upgrade cleanly, so it is asserted rather than
+        # trusted, exactly like the control file's Version for the .deb.
+        name="$(rpm -qp --qf '%{NAME}\n' "$rpm_pkg")"
+        version="$(rpm -qp --qf '%{VERSION}\n' "$rpm_pkg")"
+        release="$(rpm -qp --qf '%{RELEASE}\n' "$rpm_pkg")"
+        arch="$(rpm -qp --qf '%{ARCH}\n' "$rpm_pkg")"
+        if [ "$name" != "cross-cleaner" ]; then
+          echo "::error::header Name is '$name', expected 'cross-cleaner'"
+          exit 1
+        fi
+        if [ "$version" != "$VERSION" ]; then
+          echo "::error::header Version is '$version', expected '$VERSION'"
+          exit 1
+        fi
+        if [ "$release" != "$REVISION" ]; then
+          echo "::error::header Release is '$release', expected '$REVISION'"
+          exit 1
+        fi
+        if [ "$arch" != "$RPM_ARCH" ]; then
+          echo "::error::header Arch is '$arch', expected '$RPM_ARCH'"
+          exit 1
+        fi
+        echo "header ok: $name-$version-$release.$arch"
+
+        echo "== requires =="
+        rpm -qp --requires "$rpm_pkg" | sort
+
+        # The rpm dependency names cannot be resolvable on a Debian runner the
+        # way the .deb list is dry-run against apt, so the next best checks are
+        # both directions of the override merge: the Fedora/EL spellings made
+        # it into the header, and the Debian spellings did NOT. The latter is
+        # the sneaky one: a failed overrides merge is silent, and would ship a
+        # package requiring libc6 -- unresolvable on any rpm distro.
+        for dep in glibc alsa-lib libdrm mesa-libGL mesa-libEGL \
+                   libX11 libXcursor libXrandr libXi libXinerama \
+                   libXext libXrender libxkbcommon libxkbcommon-x11-0 \
+                   libwayland-client libwayland-cursor libwayland-egl; do
+          # ` |$)` and not just a prefix match: bare requires print as
+          # "alsa-lib" with no version, and -x11-0 must not stand in for
+          # a missing libxkbcommon.
+          rpm -qp --requires "$rpm_pkg" | grep -Eq "^${dep}( |$)" || {
+            echo "::error::rpm header is missing Requires: $dep"
+            exit 1
+          }
+        done
+        if rpm -qp --requires "$rpm_pkg" | grep -Eq '^(libc6|libgcc-s1|libasound2|libgl1|libegl1|libdrm2|libx11-6|libxcursor1|libxrandr2|libxi6|libxinerama1|libxext6|libxrender1|libxkbcommon0|libwayland-client0|libwayland-cursor0|libwayland-egl1)'; then
+          echo "::error::rpm header carries Debian-style dependency names"
+          exit 1
+        fi
+
+        echo "== scriptlets =="
+        scripts="$(rpm -qp --scripts "$rpm_pkg")"
+        echo "$scripts"
+        # The deb-side maintainer hooks are what rpm stores as %post/%postun
+        # scriptlets -- addScriptFiles in nfpm maps scripts.postinstall and
+        # scripts.postremove there. Asserting they landed keeps a config
+        # regression from shipping an rpm that leaves a stale icon cache.
+        for hook in postinstall postuninstall; do
+          grep -q "^${hook} scriptlet" <<<"$scripts" || {
+            echo "::error::$hook scriptlet missing from the rpm header"
+            exit 1
+          }
+        done
+        grep -q 'gtk-update-icon-cache' <<<"$scripts" || {
+          echo "::error::rpm scriptlets do not refresh the icon cache"
+          exit 1
+        }
+
+        echo "== contents =="
+        # Extraction runs from a scratch directory, the same hygiene rule as
+        # the AppImage check: rpm2cpio writes paths relative to the cwd.
+        rm -rf target/pkg/rpm-check
+        mkdir -p target/pkg/rpm-check
+        cd target/pkg/rpm-check
+        rpm2cpio "$rpm_pkg" | cpio -idmu --quiet
+        test -x usr/bin/cross-cleaner
+        test -x usr/bin/cross-cleaner-tui
+        test -x usr/bin/cross-cleaner-cli
+        test -f usr/share/applications/cross-cleaner.desktop
+        test -f usr/share/applications/cross-cleaner-tui.desktop
+        test -f usr/share/metainfo/cross-cleaner.appdata.xml
+        # The packaged ELF must match the runner's architecture, which is the
+        # real check that the arm64 job did not accidentally package x86_64.
+        # Same file(1) spelling caveat as the .deb check above.
+        desc="$(file usr/bin/cross-cleaner)"
+        echo "$desc"
+        if ! grep -qF "$FILE_ARCH" <<<"$desc"; then
+          echo "::error::packaged binary is not ${FILE_ARCH}"
+          exit 1
+        fi
+        # Same self-update canary as the .deb, against the rpm's window app.
+        if strings usr/bin/cross-cleaner | grep -i 'selfupdate' | tee /tmp/rpm-canary.txt | grep -q .; then
+          echo "::error::self-update code linked into the rpm's --no-default-features build:"
+          cat /tmp/rpm-canary.txt
           exit 1
         fi
 
@@ -403,9 +561,11 @@ runs:
         mkdir -p target/pkg/AppDir/usr/bin target/pkg/AppDir/usr/share/metainfo \
                  target/pkg/AppDir/usr/share/icons
         cp target/release/desktop target/pkg/AppDir/usr/bin/cross-cleaner
-        # The TUI ships too, so `AppRun cross-cleaner-tui` works after
-        # extracting, even though the AppImage icon launches the window app.
+        # The TUI and the CLI ship too, so `AppRun cross-cleaner-tui` and
+        # `AppRun cross-cleaner-cli` work after extracting, even though the
+        # AppImage icon launches the window app.
         cp target/release/tui target/pkg/AppDir/usr/bin/cross-cleaner-tui
+        cp target/release/cli target/pkg/AppDir/usr/bin/cross-cleaner-cli
         cp packaging/linux/AppRun target/pkg/AppDir/AppRun
         chmod +x target/pkg/AppDir/AppRun
         # The desktop file has to sit at the AppDir root, not in
@@ -466,6 +626,7 @@ runs:
         test -x squashfs-root/AppRun
         test -x squashfs-root/usr/bin/cross-cleaner
         test -x squashfs-root/usr/bin/cross-cleaner-tui
+        test -x squashfs-root/usr/bin/cross-cleaner-cli
         test -f squashfs-root/cross-cleaner.desktop
         test -f squashfs-root/.DirIcon
         test -f squashfs-root/cross-cleaner.png
@@ -481,4 +642,5 @@ runs:
         if-no-files-found: error
         path: |
           target/pkg/*.deb
+          target/pkg/*.rpm
           target/pkg/*.AppImage
