@@ -1,4 +1,4 @@
-# Windows Clearing Programs Catalog v2.0.4.4
+# Windows Clearing Programs Catalog v2.0.4.5
 **Total categories in database:** 12
 
 **Total programs in database:** 284
@@ -113,7 +113,6 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [DBeaver](https://dbeaver.io) | Documentation |
-| 2 | [GridCraft](https://github.com/storytold/gridcraft) | Logs |
 
 
 ## Developing
@@ -259,6 +258,13 @@
 | 3 | [rgitui](https://github.com/noahbclarkson/rgitui) | Cache, LastActivity |
 
 
+## Graphics
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | [VectorCraft](https://github.com/storytold/vectorcraft) | Logs |
+
+
 ## ISO
 
 | № | Program | Categories |
@@ -279,7 +285,6 @@
 | 7 | [PhotoCraft](https://github.com/storytold/photocraft) | Logs |
 | 8 | [ShareX](https://getsharex.com/downloads) | Backups, Images, Logs |
 | 9 | [Tonfotos Telegram Connector](https://tonfotos.com) | Images |
-| 10 | [VectorCraft](https://github.com/storytold/vectorcraft) | Logs |
 
 
 ## Messanger
@@ -337,10 +342,11 @@
 | --- | --- | --- |
 | 1 | [DeckCraft](https://github.com/storytold/deckcraft) | Logs |
 | 2 | [GenOffice](https://genoffice.ai) | Documentation |
-| 3 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Documentation, Logs |
-| 4 | [OnlyOffice](https://www.onlyoffice.com) | Documentation |
-| 5 | [OpenOffice](https://www.openoffice.org) | Documentation |
-| 6 | [WordCraft](https://github.com/storytold/wordcraft) | Logs |
+| 3 | [GridCraft](https://github.com/storytold/gridcraft) | Logs |
+| 4 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Documentation, Logs |
+| 5 | [OnlyOffice](https://www.onlyoffice.com) | Documentation |
+| 6 | [OpenOffice](https://www.openoffice.org) | Documentation |
+| 7 | [WordCraft](https://github.com/storytold/wordcraft) | Logs |
 
 
 ## Optimization

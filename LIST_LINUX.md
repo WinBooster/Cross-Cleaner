@@ -1,16 +1,17 @@
-# Linux Clearing Programs Catalog v2.0.4.4
+# Linux Clearing Programs Catalog v2.0.4.5
 **Total categories in database:** 12
 
-**Total programs in database:** 76
+**Total programs in database:** 97
 
-**Total pathes in database:** 170
+**Total pathes in database:** 189
 
 ## AI
 
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [Codex](https://github.com/openai/codex) | Cache, Logs |
-| 2 | [OpenCode](https://opencode.ai/download) | LastActivity, Logs |
+| 2 | [Herdr](https://herdr.dev) | Logs |
+| 3 | [OpenCode](https://opencode.ai/download) | LastActivity, Logs |
 
 
 ## Audio
@@ -20,8 +21,9 @@
 | 1 | [Alsa](https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture) | Documentation |
 | 2 | [Cassettle](https://gitlab.gnome.org/Rirusha/Cassette) | Cache, Logs |
 | 3 | [Cliamp](https://github.com/bjarneo/cliamp) | LastActivity, Logs |
-| 4 | [Spotify](https://open.spotify.com/download) | Logs |
-| 5 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
+| 4 | SoundCraft | Documentation, Logs |
+| 5 | [Spotify](https://open.spotify.com/download) | Logs |
+| 6 | [Yandex Music](https://music.yandex.ru/download) | Cache, Logs |
 
 
 ## Browser
@@ -64,13 +66,16 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | Auto make | Logs |
-| 2 | [GTK](https://www.gtk.org) | Documentation |
-| 3 | [Ghidra](https://github.com/NationalSecurityAgency/ghidra) | Logs |
-| 4 | [Go Language](https://go.dev/doc/install) | Cache |
-| 5 | [Gradle](https://gradle.org) | Cache |
-| 6 | [Jdk](https://www.oracle.com/java/technologies/downloads) | Documentation |
-| 7 | [Python](https://www.python.org/downloads) | Documentation |
-| 8 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
+| 2 | [Cargo](https://github.com/rust-lang/cargo) | Cache, Documentation |
+| 3 | Clippy | Documentation |
+| 4 | [GTK](https://www.gtk.org) | Documentation |
+| 5 | [Ghidra](https://github.com/NationalSecurityAgency/ghidra) | Logs |
+| 6 | [Go Language](https://go.dev/doc/install) | Cache |
+| 7 | [Gradle](https://gradle.org) | Cache |
+| 8 | [Jdk](https://www.oracle.com/java/technologies/downloads) | Documentation |
+| 9 | Lua | Documentation |
+| 10 | [Python](https://www.python.org/downloads) | Documentation |
+| 11 | [Rust Language](https://www.rust-lang.org/tools/install) | Documentation |
 
 
 ## Driver
@@ -86,16 +91,17 @@
 | --- | --- | --- |
 | 1 | [Garry's mod](https://store.steampowered.com/app/4000/Garrys_Mod) | Crashes, Logs |
 | 2 | [Hearts of Iron IV](https://store.steampowered.com/app/394360/Hearts_of_Iron_IV) | Cache, Crashes, Logs |
-| 3 | [Lutris](https://lutris.net/downloads) | Logs |
-| 4 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
-| 5 | [Oxygen Not Included (Wine)](https://store.steampowered.com/app/457140/Oxygen_Not_Included) | Logs |
-| 6 | [RimWorld (Wine)](https://store.steampowered.com/app/294100/RimWorld) | Documentation, Game, Logs |
-| 7 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
-| 8 | [Steam Proton](https://github.com/ValveSoftware/Proton) | Documentation |
-| 9 | [Terraria](https://terraria.org) | Crashes, Game, Logs |
-| 10 | [The Powder Toy](https://powdertoy.co.uk) | Documentation |
-| 11 | [Windows (Wine)](https://www.microsoft.com/download/windows) | Cache |
-| 12 | [Winetricks](https://github.com/Winetricks/winetricks) | Logs |
+| 3 | [Luanti](https://github.com/luanti-org/luanti) | Logs |
+| 4 | [Lutris](https://lutris.net/downloads) | Logs |
+| 5 | [Osu](https://osu.ppy.sh/home/download) | Cache, Images, Logs |
+| 6 | [Oxygen Not Included (Wine)](https://store.steampowered.com/app/457140/Oxygen_Not_Included) | Logs |
+| 7 | [RimWorld (Wine)](https://store.steampowered.com/app/294100/RimWorld) | Documentation, Game, Logs |
+| 8 | [Steam](https://store.steampowered.com/about) | Accounts, Documentation, Logs |
+| 9 | [Steam Proton](https://github.com/ValveSoftware/Proton) | Documentation |
+| 10 | [Terraria](https://terraria.org) | Crashes, Game, Logs |
+| 11 | [The Powder Toy](https://powdertoy.co.uk) | Documentation |
+| 12 | [Windows (Wine)](https://www.microsoft.com/download/windows) | Cache |
+| 13 | [Winetricks](https://github.com/Winetricks/winetricks) | Logs |
 
 
 ## Git
@@ -103,6 +109,24 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [GitHub Desktop](https://desktop.github.com/download) | Cache, Documentation, Logs |
+| 2 | [rgitui](https://github.com/noahbclarkson/rgitui) | Documentation |
+
+
+## Graphics
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | DesignCraft | Documentation, Logs |
+| 2 | EffectCraft | Documentation, Logs |
+| 3 | SolidCraft | Crashes |
+
+
+## Image
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | [PhotoCraft](https://github.com/storytold/photocraft) | Documentation, Logs |
+| 2 | [VectorCraft](https://github.com/storytold/vectorcraft) | Documentation, Logs |
 
 
 ## Messanger
@@ -111,6 +135,7 @@
 | --- | --- | --- |
 | 1 | [Discord](https://discord.com) | Cache, Logs |
 | 2 | [Telegram](https://desktop.telegram.org) | Accounts, Logs |
+| 3 | [Vesktop](https://vesktop.dev) | Documentation |
 
 
 ## Minecraft Launcher
@@ -130,12 +155,30 @@
 | 11 | [X Minecraft Launcher](https://xmcl.app) | Game, Logs |
 
 
+## Modeling
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | Blockbench | Cache, Documentation |
+
+
 ## Office
 
 | № | Program | Categories |
 | --- | --- | --- |
-| 1 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Cache |
-| 2 | [OnlyOffice](https://www.onlyoffice.com) | Cache, LastActivity |
+| 1 | [DeckCraft](https://github.com/storytold/deckcraft) | Documentation, Logs |
+| 2 | [GridCraft](https://github.com/storytold/gridcraft) | Documentation, Logs |
+| 3 | [LibreOffice](https://www.libreoffice.org/download/download-libreoffice) | Cache |
+| 4 | [OnlyOffice](https://www.onlyoffice.com) | Cache, LastActivity |
+| 5 | [WordCraft](https://github.com/storytold/wordcraft) | Documentation, Logs |
+
+
+## PDF
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | [JOPDF](https://www.jopdf.com) | Logs |
+| 2 | PdfCraft | Documentation, Logs |
 
 
 ## Packet Manager
@@ -144,7 +187,8 @@
 | --- | --- | --- |
 | 1 | [Apt](https://manpages.ubuntu.com/manpages/xenial/man8/apt.8.html) | Cache |
 | 2 | [Pacman](https://pacman.archlinux.page) | Cache, Logs |
-| 3 | [Yay](https://github.com/Jguer/yay) | Cache |
+| 3 | Paru | Cache |
+| 4 | [Yay](https://github.com/Jguer/yay) | Cache |
 
 
 ## Password Manager
@@ -191,6 +235,13 @@
 | № | Program | Categories |
 | --- | --- | --- |
 | 1 | [Hyperland](https://github.com/hyprwm/hyprland) | Crashes |
+
+
+## Video
+
+| № | Program | Categories |
+| --- | --- | --- |
+| 1 | [FilmCraft](https://github.com/storytold/filmcraft) | Documentation, Logs |
 
 
 ## Uncategorized
