@@ -49,6 +49,10 @@
               in
               rustPlatform.buildRustPackage {
                 pname = "cross-cleaner";
+                # stdenv composes the derivation name as "${pname}-${version}"
+                # from these two attributes only; the let-binding above is not
+                # seen by the attrset itself, so inherit it explicitly.
+                inherit version;
 
                 src = ./.;
 
