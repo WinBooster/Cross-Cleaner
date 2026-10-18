@@ -35,14 +35,20 @@
              , alsa-lib, libdrm, libGL, mesa, libxkbcommon, wayland, fontconfig, xorg
              }:
 
-              rustPlatform.buildRustPackage {
-                pname = "cross-cleaner";
+              let
                 # The full application version as on the release tag (v2.0.4.4).
                 # The fourth component — and the fifth one on a quick patch fix
                 # (2.0.4.4.1) — is chosen in the release workflow; Cargo.toml on
                 # the branch carries only the first three (2.0.4), so there is
                 # nothing to derive it from. Bump this by hand on every release.
+                #
+                # A `let`, not an attribute of buildRustPackage: `env` below
+                # reads this value, and plain (non-`rec`) attrset members do
+                # not see each other.
                 version = "2.0.4.4";
+              in
+              rustPlatform.buildRustPackage {
+                pname = "cross-cleaner";
 
                 src = ./.;
 

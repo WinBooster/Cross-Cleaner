@@ -55,18 +55,19 @@ jobs:
         env:
           NEWVER: ${{ env.APP_VERSION }}
         run: |
-          old=$(grep -oP '^\s*version = "\K[^"]+' flake.nix | tail -n 1)
+          old=$(grep -oP '^\s*(?:let\s+)?version = "\K[^"]+' flake.nix | tail -n 1)
           if [ "$old" = "$NEWVER" ]; then
             echo "flake.nix already carries version $NEWVER"
           else
             # The replacement interpolates the version from an env var rather
             # than splatting it after a \1: writing "\12.0.4.5" makes perl
             # read \12 as a (non-existent) group-twelve backreference and
-            # silently truncate the version at its first digit.
-            perl -pi -e 's|^(\s*version = ")[^"]+";|${1}$ENV{NEWVER}";|' flake.nix
+            # silently truncate the version at its first digit. The
+            # (?:let\s+)? part matches the `let version = ...;` binding too.
+            perl -pi -e 's|^(\s*(?:let\s+)?version = ")[^"]+";|${1}$ENV{NEWVER}";|' flake.nix
             echo "Bumped the flake.nix version: $old -> $NEWVER"
           fi
-          grep -E '^\s*version = ' flake.nix
+          grep -nE '^\s*(let\s+)?version = ' flake.nix
 
       - name: Verify the nix build
         run: |
