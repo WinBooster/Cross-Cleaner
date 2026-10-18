@@ -1,0 +1,88 @@
+name: Update flake
+
+# Keeps flake.nix in sync with every release: bumps the package version to
+# the released one, verifying it with a real nix build of the front-ends.
+# release.yml dispatches this workflow once its own jobs are done; it can
+# also be run by hand (without a version input it derives one from the
+# newest v* tag).
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version number (e.g., 2.0.4.4)"
+        required: false
+        default: ""
+  workflow_call:
+    inputs:
+      version:
+        description: "Version number (e.g., 2.0.4.4)"
+        required: false
+        type: string
+        default: ""
+
+env:
+  APP_VERSION: ${{ github.event.inputs.version || inputs.version }}
+
+jobs:
+  sync_flake:
+    runs-on: ubuntu-latest
+    name: Sync flake.nix with the release
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # The version input is optional, so without one it is derived from
+          # the newest v* tag, which needs the full history and all tags.
+          fetch-depth: 0
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+
+      - name: Figure out the version
+        run: |
+          VERSION="${{ env.APP_VERSION }}"
+          if [ -z "$VERSION" ]; then
+            VERSION=$(git describe --tags --abbrev=0 | sed 's/^v//')
+            echo "No version was given, using the newest tag instead: $VERSION"
+          fi
+          echo "APP_VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - name: Bump the package version in flake.nix
+        run: |
+          old=$(grep -oP '^\s*version = "\K[^"]+' flake.nix | tail -n 1)
+          if [ "$old" = "$APP_VERSION" ]; then
+            echo "flake.nix already carries version $APP_VERSION"
+          else
+            perl -pi -e 's|^(\s*version = ")[^"]+";|\1'"$APP_VERSION"'";|' flake.nix
+            echo "Bumped the flake.nix version: $old -> $APP_VERSION"
+          fi
+
+      - name: Verify the nix build
+        run: |
+          # A real build keeps the flake honest: if a release drops into
+          # flake.nix with a broken version line or a code change that needs a
+          # new dlopen'ed library in the LD_LIBRARY_PATH wrap, this catches it
+          # instead of letting nix users hit it on install day.
+          if nix build .#cross-cleaner --no-link > nix-build.log 2>&1; then
+            echo "nix build succeeded"
+          else
+            echo "The nix build failed:" >&2
+            tail -n 100 nix-build.log >&2
+            exit 1
+          fi
+
+      - name: Commit and push
+        run: |
+          if git diff --quiet flake.nix; then
+            echo "flake.nix is already in sync — nothing to commit"
+            exit 0
+          fi
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add flake.nix
+          git commit -m "build: sync the nix flake with release $APP_VERSION" || echo "No changes to commit"
+          git push || echo "No changes to push"

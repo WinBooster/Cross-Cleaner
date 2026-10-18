@@ -824,6 +824,25 @@ jobs:
             windows-setup-arm64-no-updater/Cross_Cleaner_Setup_Arm64-no-updater.exe
             android-apk/Cross_Cleaner_Android.apk
 
+  # Hand the fresh version to the flake updater: it bumps the version in
+  # flake.nix and verifies it with a real nix build of the front-ends. It
+  # runs as a separate workflow, so a failure there (network, sandbox, a
+  # broken build) never blocks or re-runs the release itself.
+  trigger_flake_update:
+    needs: [create_release]
+    runs-on: ubuntu-latest
+    name: Trigger flake update
+    permissions:
+      # Dispatching another workflow needs actions:write.
+      actions: write
+
+    steps:
+      - name: Dispatch the flake update
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run update_flake.yml --ref main -f version="${{ env.APP_VERSION }}"
+
   # The release is created as a draft, so the publication jobs (winget submit
   # and program catalogs) cannot run here: winget-releaser reads the release
   # over the API and gets a 404 while the release is a draft. They live in

@@ -134,6 +134,7 @@ These are produced by CI and every manual change will be overwritten:
 | --- | --- |
 | `LIST_WINDOWS.md`, `LIST_REGISTRY.md`, `LIST_LINUX.md`, `LIST_MACOS.md`, `LIST_ANDROID.md`, `LIST_CUSTOM.md` | `update_program_lists.yml` |
 | `version =` lines in `Cargo.toml` / `Cargo.lock` | release workflow |
+| `version =` line in `flake.nix` | `update_flake.yml` (dispatched by the release workflow) |
 | Order of `crates/database/*_database.json` | `sort_json` job |
 
 Edit the sources instead:
