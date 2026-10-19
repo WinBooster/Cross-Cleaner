@@ -6732,13 +6732,12 @@
     "remove_files": true
   },
   {
-    "path": "{drive}Windows",
+    "path": "{drive}Windows\\SystemTemp\\*",
     "class": "System",
     "category": "Cache",
     "program": "Windows",
-    "directories_to_remove": [
-      "SystemTemp"
-    ]
+    "remove_files": true,
+    "rmove_directories": true
   },
   {
     "path": "{drive}Windows\\System32\\DriverStorage",
