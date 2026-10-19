@@ -34,7 +34,7 @@ flate2 = "1.1"
 # Linux: glow + X11/Wayland.
 # macOS: Apple deprecated OpenGL, поэтому wgpu (Metal).
 [target.'cfg(windows)'.dependencies]
-eframe = { version = "0.36", default-features = false, features = [
+eframe = { version = "0.37", default-features = false, features = [
     "wgpu",
     "glow",
     "default_fonts",
@@ -49,7 +49,7 @@ windows = { version = "0.62.2", features = [
 ] }
 
 [target.'cfg(target_os = "linux")'.dependencies]
-eframe = { version = "0.36", default-features = false, features = [
+eframe = { version = "0.37", default-features = false, features = [
     "glow",
 	"wgpu",
     "default_fonts",
@@ -58,14 +58,14 @@ eframe = { version = "0.36", default-features = false, features = [
 ] }
 
 [target.'cfg(target_os = "macos")'.dependencies]
-eframe = { version = "0.36", default-features = false, features = [
+eframe = { version = "0.37", default-features = false, features = [
     "wgpu",
     "glow",
     "default_fonts",
 ] }
 
 [target.'cfg(target_os = "android")'.dependencies]
-eframe = { version = "0.36", default-features = false, features = [
+eframe = { version = "0.37", default-features = false, features = [
     "wgpu",
     "default_fonts",
     "android-native-activity",
