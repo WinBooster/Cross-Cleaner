@@ -6737,7 +6737,7 @@
     "category": "Cache",
     "program": "Windows",
     "remove_files": true,
-    "rmove_directories": true
+    "remove_directories": true
   },
   {
     "path": "{drive}Windows\\System32\\DriverStorage",
