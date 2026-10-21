@@ -7400,5 +7400,24 @@
     "directories_to_remove": [
       "LOGS"
     ]
+  },
+  {
+    "path": "{drive}Users\\*\\.pi\\agent",
+    "class": "AI",
+    "category": "LastActivity",
+    "sub_category": "Conversations",
+    "program": "Pi",
+    "directories_to_remove": [
+      "sessions"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\.pi\\agent",
+    "class": "AI",
+    "category": "Accounts",
+    "program": "Pi",
+    "files_to_remove": [
+      "auth.json"
+    ]
   }
 ]
