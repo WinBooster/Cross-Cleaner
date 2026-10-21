@@ -3266,6 +3266,25 @@
     ]
   },
   {
+    "path": "{drive}Users\\*\\AppData\\Local\\Microsoft\\WinGet\\Packages\\JesseDuffield.lazygit_Microsoft.Winget.Source_*",
+    "class": "Git",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "LazyGit",
+    "files_to_remove": [
+      "LICENSE"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\Microsoft\\WinGet\\Packages\\JesseDuffield.lazygit_Microsoft.Winget.Source_*",
+    "class": "Git",
+    "category": "Documentation",
+    "program": "LazyGit",
+    "files_to_remove": [
+      "README.md"
+    ]
+  },
+  {
     "path": "{drive}Users\\*\\Appdata\\Local\\nvim-data\\lazy\\*",
     "class": "Text",
     "category": "Documentation",
@@ -4877,6 +4896,25 @@
     "directories_to_remove": [
       "Logs",
       "logs"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\.pi\\agent",
+    "class": "AI",
+    "category": "LastActivity",
+    "sub_category": "Conversations",
+    "program": "Pi",
+    "directories_to_remove": [
+      "sessions"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\.pi\\agent",
+    "class": "AI",
+    "category": "Accounts",
+    "program": "Pi",
+    "files_to_remove": [
+      "auth.json"
     ]
   },
   {
@@ -7399,44 +7437,6 @@
     "program": "ССleaner",
     "directories_to_remove": [
       "LOGS"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\.pi\\agent",
-    "class": "AI",
-    "category": "LastActivity",
-    "sub_category": "Conversations",
-    "program": "Pi",
-    "directories_to_remove": [
-      "sessions"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\.pi\\agent",
-    "class": "AI",
-    "category": "Accounts",
-    "program": "Pi",
-    "files_to_remove": [
-      "auth.json"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Local\\Microsoft\\WinGet\\Packages\\JesseDuffield.lazygit_Microsoft.Winget.Source_*",
-    "class": "Git",
-    "category": "Documentation",
-    "sub_category": "Licenses",
-    "program": "LazyGit",
-    "files_to_remove": [
-      "LICENSE"
-    ]
-  },
-  {
-    "path": "{drive}Users\\*\\AppData\\Local\\Microsoft\\WinGet\\Packages\\JesseDuffield.lazygit_Microsoft.Winget.Source_*",
-    "class": "Git",
-    "category": "Documentation",
-    "program": "LazyGit",
-    "files_to_remove": [
-      "README.md"
     ]
   }
 ]
