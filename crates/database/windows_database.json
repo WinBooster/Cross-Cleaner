@@ -7419,5 +7419,24 @@
     "files_to_remove": [
       "auth.json"
     ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\Microsoft\\WinGet\\Packages\\JesseDuffield.lazygit_Microsoft.Winget.Source_*",
+    "class": "Git",
+    "category": "Documentation",
+    "sub_category": "Licenses",
+    "program": "LazyGit",
+    "files_to_remove": [
+      "LICENSE"
+    ]
+  },
+  {
+    "path": "{drive}Users\\*\\AppData\\Local\\Microsoft\\WinGet\\Packages\\JesseDuffield.lazygit_Microsoft.Winget.Source_*",
+    "class": "Git",
+    "category": "Documentation",
+    "program": "LazyGit",
+    "files_to_remove": [
+      "README.md"
+    ]
   }
 ]
