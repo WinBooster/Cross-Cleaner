@@ -86,7 +86,7 @@ Before finishing work, run:
 ```bash
 cargo fmt
 cargo test
-cargo build
+cargo build --no-default-features
 ```
 
 ## 🚫 Forbidden edits — cleaning databases
