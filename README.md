@@ -1,7 +1,7 @@
 <div align="center">
 <h1>🌟 Cross Cleaner 🌟</h1>
 <br>
-An addon-style <a href="https://github.com/Cross-Cleaner/Cross-Cleaner">system cleanup tool</a> that removes temporary files, cache and other system junk from your computer.
+An addon-style, bloat-free <a href="https://github.com/Cross-Cleaner/Cross-Cleaner">system cleanup tool</a> that removes temporary files, cache and other system junk from your computer.
 <br>
 <a href="https://www.rust-lang.org"><img src="https://img.shields.io/static/v1?label=Made%20with&message=Rust&logo=rust&labelColor=e82833&color=b11522" alt="Made with Rust"></a>
 <a href="https://github.com/Cross-Cleaner/Cross-Cleaner/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Cross-Cleaner/Cross-Cleaner?logo=mdBook" alt="Github License"></a>
